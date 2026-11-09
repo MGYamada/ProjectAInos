@@ -30,3 +30,5 @@ Project AInos aims to formalize the whole of theoretical physics in Lean 4. Its 
 3. **Electrodynamics**
 
 The order of subsequent topics is yet to be determined.
+
+See the [Landau–Lifshitz correspondence](docs/landau-lifshitz.md) for the Mechanics proof targets and the reference volumes for Electrodynamics and later topics.
