@@ -1,0 +1,5 @@
+# Local source material for formalization
+/tex/
+
+# macOS Finder metadata
+.DS_Store
