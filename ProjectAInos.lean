@@ -64,3 +64,14 @@ public import ProjectAInos.Thermodynamics.ThermalStrips
 public import ProjectAInos.Thermodynamics.UniqueThermalSplit
 public import ProjectAInos.Thermodynamics.UniversalJoinCalibration
 public import ProjectAInos.Thermodynamics.UniversalThermalClass
+public import ProjectAInos.Variational.Action
+public import ProjectAInos.Variational.EulerLagrange
+public import ProjectAInos.Variational.Examples
+public import ProjectAInos.Variational.IntegrationByParts
+public import ProjectAInos.Variational.Local
+public import ProjectAInos.Variational.Regularity
+public import ProjectAInos.Variational.SmoothAlgebra.Basic
+public import ProjectAInos.Variational.SmoothAlgebra.Differential
+public import ProjectAInos.Variational.SmoothAlgebra.Hom
+public import ProjectAInos.Variational.SmoothAlgebra.Models
+public import ProjectAInos.Variational.SmoothAlgebra.Operations
