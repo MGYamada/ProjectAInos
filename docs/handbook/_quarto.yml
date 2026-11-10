@@ -26,9 +26,12 @@ website:
           - thermodynamics-notes.qmd
           - thermodynamics-status.qmd
           - thermodynamics-join-audit.qmd
-      - section: Shared variational calculus
+      - section: Shared smooth geometry
         contents:
           - smooth-algebra.qmd
+          - smooth-geometry.qmd
+      - section: Shared variational calculus
+        contents:
           - variational.qmd
           - variational-notes.qmd
       - section: Mechanics

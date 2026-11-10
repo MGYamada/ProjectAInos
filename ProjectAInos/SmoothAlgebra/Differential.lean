@@ -1,6 +1,10 @@
+/-
+Copyright (c) 2026 Masahiko G. Yamada. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+-/
 module
 
-public import ProjectAInos.Variational.SmoothAlgebra.Models
+public import ProjectAInos.SmoothAlgebra.Models
 public import Mathlib.Analysis.Calculus.FDeriv.Prod
 import Mathlib.Tactic.NormNum
 
@@ -13,7 +17,7 @@ point satisfies the chain rule for every finite smooth operation.
 
 @[expose] public section
 
-namespace ProjectAInos.Variational.SmoothAlgebra.SmoothOperation
+namespace ProjectAInos.SmoothAlgebra.SmoothOperation
 
 variable {n m : ℕ}
 
@@ -34,4 +38,4 @@ theorem directionalEvaluation_op (f : SmoothOperation m) (g : Fin m → SmoothOp
   have h := hf.hasFDerivAt.comp x (hasFDerivAt_pi.mpr fun i => (hg i).hasFDerivAt)
   exact congrArg (fun D : (Fin n → ℝ) →L[ℝ] ℝ => D v) h.fderiv
 
-end ProjectAInos.Variational.SmoothAlgebra.SmoothOperation
+end ProjectAInos.SmoothAlgebra.SmoothOperation

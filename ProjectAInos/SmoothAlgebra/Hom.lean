@@ -1,6 +1,10 @@
+/-
+Copyright (c) 2026 Masahiko G. Yamada. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+-/
 module
 
-public import ProjectAInos.Variational.SmoothAlgebra.Basic
+public import ProjectAInos.SmoothAlgebra.Basic
 
 /-!
 # Morphisms of C-infinity rings
@@ -14,7 +18,7 @@ assumption. No topology on the source or target ring is used.
 
 noncomputable section
 
-namespace ProjectAInos.Variational.SmoothAlgebra
+namespace ProjectAInos.SmoothAlgebra
 
 open SmoothRing
 
@@ -104,4 +108,4 @@ theorem comp_assoc (h : SmoothRingHom C D) (g : SmoothRingHom B C)
   simp [exp, map_op, Matrix.vec_single_eq_const]
 
 end SmoothRingHom
-end ProjectAInos.Variational.SmoothAlgebra
+end ProjectAInos.SmoothAlgebra
