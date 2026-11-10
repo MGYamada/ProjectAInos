@@ -77,7 +77,7 @@ The reaction development defines direct, chained, and catalytic transition costs
 
 The current physical endpoints use A1–A7, S1–S3 and T1–T4, with M added for reactions. Every admitted primitive simple system satisfies transversality T4; no extra T5 assumption is needed for this scope. Extending the theory to systems without T4, or proving temperature regularity, belongs to subsequent work. The ideal-gas phase-volume derivation remains in the statistical-mechanics stage of the research plan.
 
-The public physical endpoints are in [PhysicalEntropyPrinciple](ProjectAInos/Thermodynamics/PhysicalEntropyPrinciple.lean); [AtomicSystems](ProjectAInos/Thermodynamics/AtomicSystems.lean) specializes them to canonical coordinate atoms. The [implementation checklist](docs/thermodynamics-status.md) maps the eight planned stages to their proof modules and scope.
+The public physical endpoints are in [PhysicalEntropyPrinciple](ProjectAInos/Thermodynamics/PhysicalEntropyPrinciple.lean); [AtomicSystems](ProjectAInos/Thermodynamics/AtomicSystems.lean) specializes them to canonical coordinate atoms. The [mathematical guide](docs/thermodynamics.md) presents the algebraic theory, physical comparison, reactions, and models with proof links. The [implementation checklist](docs/thermodynamics-status.md) maps the eight planned stages to their proof modules and scope.
 
 Every completed stage must pass the warning-free Lean build, root-import check, and transitive axiom audit. Physical premises remain explicit in theorem statements. [Lean library entry point](ProjectAInos.lean)
 

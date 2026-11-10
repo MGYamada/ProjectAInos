@@ -1,7 +1,9 @@
 # Thermodynamics Implementation Checklist
 
 This checklist maps the eight-stage implementation plan to machine-checked
-results. The research outline remains in the [README](../README.md), and
+results. The [mathematical guide](thermodynamics.md) gives the statements,
+proof explanations, and the L01–L12 map from the former specification.
+The research outline remains in the [README](../README.md), and
 mathematical distinctions exposed by the proofs are recorded in the
 [formalization notes](thermodynamics-notes.md).
 
