@@ -110,6 +110,33 @@ theorem directCost_add_same [AddCommMonoid Γ] [∀ a, Nonempty (State a)]
   simpa only [hentropy, add_sub_add_right_eq_sub] using
     directCost_le State entropy accessible (hcompose x y w hxy)
 
+/-- Parallel composition makes direct costs subadditive. Unreachable inputs
+may have cost `+∞`; only `-∞` is excluded, as supplied below by cycle consistency
+and absence of sinks. This avoids the indeterminate mixed-infinity case. -/
+theorem directCost_subadditive [AddCommMonoid Γ]
+    (compose : ∀ {a b}, State a → State b → State (a + b))
+    (hentropy : ∀ {a b} (x : State a) (y : State b),
+      entropy (a + b) (compose x y) = entropy a x + entropy b y)
+    (hcompose : ∀ {a b c d} (x : State a) (y : State b) (u : State c) (v : State d),
+      accessible ⟨a, x⟩ ⟨b, y⟩ → accessible ⟨c, u⟩ ⟨d, v⟩ →
+      accessible ⟨a + c, compose x u⟩ ⟨b + d, compose y v⟩)
+    (a b c d : Γ)
+    (hab : directCost State entropy accessible a b ≠ ⊥)
+    (hcd : directCost State entropy accessible c d ≠ ⊥) :
+    directCost State entropy accessible (a + c) (b + d) ≤
+      directCost State entropy accessible a b + directCost State entropy accessible c d := by
+  apply EReal.le_add_of_forall_gt (.inl hab) (.inr hcd)
+  intro r hr s hs
+  obtain ⟨r', ⟨x, y, hxy, rfl⟩, hrr⟩ := sInf_lt_iff.mp hr
+  obtain ⟨s', ⟨u, v, huv, rfl⟩, hss⟩ := sInf_lt_iff.mp hs
+  have hsum := directCost_le State entropy accessible (hcompose x y u v hxy huv)
+  have heq : entropy (b + d) (compose y v) - entropy (a + c) (compose x u) =
+      (entropy b y - entropy a x) + (entropy d v - entropy c u) := by
+    rw [hentropy, hentropy]
+    abel
+  rw [heq, EReal.coe_add] at hsum
+  exact hsum.trans (add_le_add hrr.le hss.le)
+
 /-- Reversible state scaling carries the infimum of transition costs to its scaled value. -/
 theorem directCost_scale_equiv {a b a' b' : Γ} (r : ℝ) (hr : 0 < r)
     (ea : State a ≃ State a') (eb : State b ≃ State b')
@@ -194,6 +221,13 @@ theorem CostChain.smul [AddCommMonoid Γ] [Module ℝ≥0 Γ]
 def chainCost (D : Γ → Γ → EReal) (a b : Γ) : EReal :=
   sInf {r | CostChain D a b r}
 
+/-- Cycle consistency normalizes the infimum over self-chains to zero. -/
+theorem chainCost_self (D : Γ → Γ → EReal)
+    (hcycle : ∀ a r, CostChain D a a r → 0 ≤ r) (a : Γ) :
+    chainCost D a a = 0 := by
+  apply le_antisymm (sInf_le CostChain.nil)
+  exact le_sInf fun r hr => hcycle a r hr
+
 theorem chainCost_map_le (D : Γ → Γ → EReal) (f : Γ → Γ)
     (hf : ∀ a b, D (f a) (f b) ≤ D a b) (a b : Γ) :
     chainCost D (f a) (f b) ≤ chainCost D a b := by
@@ -211,6 +245,28 @@ theorem chainCost_triangle (D : Γ → Γ → EReal) (a b c : Γ)
   obtain ⟨s', hs', hss⟩ := sInf_lt_iff.mp hs
   exact (sInf_le (CostChain.append hr' hs')).trans (add_le_add hrr.le hss.le)
 
+/-- Chain costs are subadditive under composition. A common spectator may
+lower the direct cost, which suffices to compose two chains successively.
+The statement includes unreachable `+∞` inputs. -/
+theorem chainCost_subadditive [AddCommMonoid Γ] (D : Γ → Γ → EReal)
+    (hshift : ∀ a b z, D (a + z) (b + z) ≤ D a b) (a b c d : Γ)
+    (hab : chainCost D a b ≠ ⊥) (hcd : chainCost D c d ≠ ⊥) :
+    chainCost D (a + c) (b + d) ≤ chainCost D a b + chainCost D c d := by
+  by_cases hatop : chainCost D a b = ⊤
+  · rw [hatop, EReal.top_add_of_ne_bot hcd]
+    exact le_top
+  by_cases hctop : chainCost D c d = ⊤
+  · rw [hctop, EReal.add_top_of_ne_bot hab]
+    exact le_top
+  have hleft : chainCost D (a + c) (b + c) ≤ chainCost D a b :=
+    chainCost_map_le D (fun x => x + c) (fun x y => hshift x y c) a b
+  have hright : chainCost D (b + c) (b + d) ≤ chainCost D c d := by
+    simpa only [add_comm b] using
+      chainCost_map_le D (fun x => x + b) (fun x y => hshift x y b) c d
+  exact (chainCost_triangle D (a + c) (b + c) (b + d)
+    (hleft.trans_lt (lt_top_iff_ne_top.mpr hatop))
+    (hright.trans_lt (lt_top_iff_ne_top.mpr hctop))).trans (add_le_add hleft hright)
+
 theorem chainCost_smul_le [AddCommMonoid Γ] [Module ℝ≥0 Γ]
     (D : Γ → Γ → EReal) (r : ℝ≥0) (hr : 0 < r)
     (hscale : ∀ a b, D (r • a) (r • b) = costScale r (NNReal.coe_pos.mpr hr) (D a b)) (a b : Γ) :
@@ -220,6 +276,21 @@ theorem chainCost_smul_le [AddCommMonoid Γ] [Module ℝ≥0 Γ]
   apply le_iInf₂
   intro c hc
   exact sInf_le (hc.smul r hr hscale)
+
+/-- Invertible positive scaling preserves the full chain infimum, including
+unreachable costs and costs that have not yet been shown bounded below. -/
+theorem chainCost_smul [AddCommMonoid Γ] [Module ℝ≥0 Γ]
+    (D : Γ → Γ → EReal)
+    (hscale : ∀ (r : ℝ≥0) (hr : 0 < r) a b,
+      D (r • a) (r • b) = costScale r (NNReal.coe_pos.mpr hr) (D a b))
+    (r : ℝ≥0) (hr : 0 < r) (a b : Γ) :
+    chainCost D (r • a) (r • b) =
+      costScale r (NNReal.coe_pos.mpr hr) (chainCost D a b) := by
+  apply le_antisymm (chainCost_smul_le D r hr (hscale r hr) a b)
+  have h := (costScale r (NNReal.coe_pos.mpr hr)).monotone
+    (chainCost_smul_le D r⁻¹ (inv_pos.mpr hr) (hscale r⁻¹ (inv_pos.mpr hr))
+      (r • a) (r • b))
+  simpa only [inv_smul_smul₀ hr.ne', NNReal.coe_inv, costScale_inv] using h
 
 theorem chainCost_le_direct (D : Γ → Γ → EReal) (a b : Γ) :
     chainCost D a b ≤ D a b := by
@@ -321,6 +392,106 @@ theorem catalystCost_self [AddCommMonoid Γ] (D : Γ → Γ → EReal)
   · apply le_iInf
     intro z
     exact le_sInf fun r hr => hcycle (a + z) r hr
+
+/-- Cycles and absence of sinks exclude negative infinity for catalytic cost,
+without assuming that every pair of labels is reachable. -/
+theorem catalystCost_ne_bot_of_noSinks [AddCommMonoid Γ] (D : Γ → Γ → EReal)
+    (hshift : ∀ a b z, D (a + z) (b + z) ≤ D a b)
+    (hcycle : ∀ a r, CostChain D a a r → 0 ≤ r) (hM : NoSinks D) (a b : Γ) :
+    catalystCost D a b ≠ ⊥ := by
+  intro hbot
+  have hab : catalystCost D a b < ⊤ := hbot ▸ bot_lt_top
+  have hba := hM.cost_symmetry a b hab
+  have h := catalystCost_triangle D hshift a b a hab hba
+  rw [catalystCost_self D hcycle, hbot, EReal.bot_add] at h
+  exact (show ¬ (0 : EReal) ≤ ⊥ by simp) h
+
+/-- The lower catalytic bound excludes negative infinity for chain costs too. -/
+theorem chainCost_ne_bot_of_noSinks [AddCommMonoid Γ] (D : Γ → Γ → EReal)
+    (hshift : ∀ a b z, D (a + z) (b + z) ≤ D a b)
+    (hcycle : ∀ a r, CostChain D a a r → 0 ≤ r) (hM : NoSinks D) (a b : Γ) :
+    chainCost D a b ≠ ⊥ := by
+  intro hbot
+  apply catalystCost_ne_bot_of_noSinks D hshift hcycle hM a b
+  exact bot_unique (hbot ▸ catalystCost_le_chain D a b)
+
+/-- Direct costs also retain `+∞` but cannot equal `-∞` under the physical
+cycle and no-sinks premises. -/
+theorem directCost_ne_bot_of_noSinks [AddCommMonoid Γ] (D : Γ → Γ → EReal)
+    (hshift : ∀ a b z, D (a + z) (b + z) ≤ D a b)
+    (hcycle : ∀ a r, CostChain D a a r → 0 ≤ r) (hM : NoSinks D) (a b : Γ) :
+    D a b ≠ ⊥ := by
+  intro hbot
+  apply catalystCost_ne_bot_of_noSinks D hshift hcycle hM a b
+  exact bot_unique (hbot ▸ catalystCost_le_direct D a b)
+
+/-- Direct composition subadditivity with its lower-bound obligations derived
+from cycles and absence of sinks. No reachability or finite-cost assumption is
+made on either pair of input labels. -/
+theorem directCost_subadditive_of_noSinks [AddCommMonoid Γ]
+    (compose : ∀ {a b}, State a → State b → State (a + b))
+    (hentropy : ∀ {a b} (x : State a) (y : State b),
+      entropy (a + b) (compose x y) = entropy a x + entropy b y)
+    (hcompose : ∀ {a b c d} (x : State a) (y : State b) (u : State c) (v : State d),
+      accessible ⟨a, x⟩ ⟨b, y⟩ → accessible ⟨c, u⟩ ⟨d, v⟩ →
+      accessible ⟨a + c, compose x u⟩ ⟨b + d, compose y v⟩)
+    (hshift : ∀ a b z, directCost State entropy accessible (a + z) (b + z) ≤
+      directCost State entropy accessible a b)
+    (hcycle : ∀ a r, CostChain (directCost State entropy accessible) a a r → 0 ≤ r)
+    (hM : NoSinks (directCost State entropy accessible)) (a b c d : Γ) :
+    directCost State entropy accessible (a + c) (b + d) ≤
+      directCost State entropy accessible a b + directCost State entropy accessible c d :=
+  directCost_subadditive State entropy accessible compose hentropy hcompose a b c d
+    (directCost_ne_bot_of_noSinks _ hshift hcycle hM a b)
+    (directCost_ne_bot_of_noSinks _ hshift hcycle hM c d)
+
+/-- The chain triangle inequality includes unreachable costs once absence of
+sinks has excluded negative infinity. -/
+theorem chainCost_triangle_of_noSinks [AddCommMonoid Γ] (D : Γ → Γ → EReal)
+    (hshift : ∀ a b z, D (a + z) (b + z) ≤ D a b)
+    (hcycle : ∀ a r, CostChain D a a r → 0 ≤ r) (hM : NoSinks D) (a b c : Γ) :
+    chainCost D a c ≤ chainCost D a b + chainCost D b c := by
+  by_cases hab : chainCost D a b = ⊤
+  · rw [hab, EReal.top_add_of_ne_bot (chainCost_ne_bot_of_noSinks D hshift hcycle hM b c)]
+    exact le_top
+  by_cases hbc : chainCost D b c = ⊤
+  · rw [hbc, EReal.add_top_of_ne_bot (chainCost_ne_bot_of_noSinks D hshift hcycle hM a b)]
+    exact le_top
+  exact chainCost_triangle D a b c (lt_top_iff_ne_top.mpr hab) (lt_top_iff_ne_top.mpr hbc)
+
+/-- Catalytic triangle inequalities retain the unreachable `+∞` cases. -/
+theorem catalystCost_triangle_of_noSinks [AddCommMonoid Γ] (D : Γ → Γ → EReal)
+    (hshift : ∀ a b z, D (a + z) (b + z) ≤ D a b)
+    (hcycle : ∀ a r, CostChain D a a r → 0 ≤ r) (hM : NoSinks D) (a b c : Γ) :
+    catalystCost D a c ≤ catalystCost D a b + catalystCost D b c := by
+  by_cases hab : catalystCost D a b = ⊤
+  · rw [hab, EReal.top_add_of_ne_bot (catalystCost_ne_bot_of_noSinks D hshift hcycle hM b c)]
+    exact le_top
+  by_cases hbc : catalystCost D b c = ⊤
+  · rw [hbc, EReal.add_top_of_ne_bot (catalystCost_ne_bot_of_noSinks D hshift hcycle hM a b)]
+    exact le_top
+  exact catalystCost_triangle D hshift a b c
+    (lt_top_iff_ne_top.mpr hab) (lt_top_iff_ne_top.mpr hbc)
+
+/-- Under absence of sinks, chain subadditivity needs no finite-cost premise. -/
+theorem chainCost_subadditive_of_noSinks [AddCommMonoid Γ] (D : Γ → Γ → EReal)
+    (hshift : ∀ a b z, D (a + z) (b + z) ≤ D a b)
+    (hcycle : ∀ a r, CostChain D a a r → 0 ≤ r) (hM : NoSinks D) (a b c d : Γ) :
+    chainCost D (a + c) (b + d) ≤ chainCost D a b + chainCost D c d :=
+  chainCost_subadditive D hshift a b c d
+    (chainCost_ne_bot_of_noSinks D hshift hcycle hM a b)
+    (chainCost_ne_bot_of_noSinks D hshift hcycle hM c d)
+
+/-- Catalytic composition subadditivity without finite-reachability premises. -/
+theorem catalystCost_subadditive_of_noSinks [AddCommMonoid Γ] (D : Γ → Γ → EReal)
+    (hshift : ∀ a b z, D (a + z) (b + z) ≤ D a b)
+    (hcycle : ∀ a r, CostChain D a a r → 0 ≤ r) (hM : NoSinks D) (a b c d : Γ) :
+    catalystCost D (a + c) (b + d) ≤ catalystCost D a b + catalystCost D c d := by
+  have hleft := catalystCost_add_same D hshift a b c
+  have hright : catalystCost D (b + c) (b + d) = catalystCost D c d := by
+    simpa only [add_comm b] using catalystCost_add_same D hshift c d b
+  simpa only [hleft, hright] using
+    catalystCost_triangle_of_noSinks D hshift hcycle hM (a + c) (b + c) (b + d)
 
 theorem catalystCost_smul_le [AddCommMonoid Γ] [Module ℝ≥0 Γ]
     (D : Γ → Γ → EReal) (r : ℝ≥0) (hr : 0 < r)

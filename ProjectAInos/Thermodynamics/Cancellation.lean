@@ -45,6 +45,11 @@ theorem Stability.le_of_add_le_add_right (hS : Stability M) {x y z : M}
     simpa only [smul_add, ← Nat.cast_smul_eq_nsmul ℝ≥0, Nat.cast_add,
       Nat.cast_one, smul_smul, one_div_mul_cancel hn, one_smul] using hscaled
 
+/-- Equality cancellation follows from the two order-cancellation directions. -/
+theorem Stability.eq_of_add_eq_add_right (hS : Stability M) {x y z : M}
+    (h : x + z = y + z) : x = y :=
+  le_antisymm (hS.le_of_add_le_add_right h.le) (hS.le_of_add_le_add_right h.ge)
+
 /-- Stability supplies the standard ordered cancellation structure. -/
 theorem Stability.isOrderedCancelAddMonoid (hS : Stability M) :
     IsOrderedCancelAddMonoid M where

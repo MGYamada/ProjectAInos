@@ -1,11 +1,14 @@
 module  -- shake: keep-all --deprecated_module: ignore
 
 public import ProjectAInos.Thermodynamics.AdiabatUniqueness
+public import ProjectAInos.Thermodynamics.AtomicSystems
 public import ProjectAInos.Thermodynamics.Basic
 public import ProjectAInos.Thermodynamics.BoundaryDifferentiability
 public import ProjectAInos.Thermodynamics.BoundaryGraph
 public import ProjectAInos.Thermodynamics.BoundaryReversibility
+public import ProjectAInos.Thermodynamics.CalibratedEntropy
 public import ProjectAInos.Thermodynamics.Calibration
+public import ProjectAInos.Thermodynamics.CalibratorDirections
 public import ProjectAInos.Thermodynamics.CalibratorExistence
 public import ProjectAInos.Thermodynamics.Cancellation
 public import ProjectAInos.Thermodynamics.CommonProducts
@@ -20,7 +23,9 @@ public import ProjectAInos.Thermodynamics.DegenerateModel
 public import ProjectAInos.Thermodynamics.EnergyOrientation
 public import ProjectAInos.Thermodynamics.EnergyReflection
 public import ProjectAInos.Thermodynamics.Entropy
+public import ProjectAInos.Thermodynamics.FamilyCalibration
 public import ProjectAInos.Thermodynamics.ForwardSector
+public import ProjectAInos.Thermodynamics.HasCalibratorsOfAxioms
 public import ProjectAInos.Thermodynamics.IdealGas
 public import ProjectAInos.Thermodynamics.IdealGasModel
 public import ProjectAInos.Thermodynamics.LocalLines
@@ -29,7 +34,9 @@ public import ProjectAInos.Thermodynamics.Models
 public import ProjectAInos.Thermodynamics.Nonreactive
 public import ProjectAInos.Thermodynamics.Physical
 public import ProjectAInos.Thermodynamics.PhysicalComparison
+public import ProjectAInos.Thermodynamics.PhysicalEntropyPrinciple
 public import ProjectAInos.Thermodynamics.PhysicalReactions
+public import ProjectAInos.Thermodynamics.ReactionCalibration
 public import ProjectAInos.Thermodynamics.ReactionCycles
 public import ProjectAInos.Thermodynamics.ReactionModels
 public import ProjectAInos.Thermodynamics.Reactions
@@ -42,8 +49,16 @@ public import ProjectAInos.Thermodynamics.SimpleEntropy
 public import ProjectAInos.Thermodynamics.SimpleSystem
 public import ProjectAInos.Thermodynamics.Stoichiometry
 public import ProjectAInos.Thermodynamics.SupportingSlopes
+public import ProjectAInos.Thermodynamics.ThermalClassOrder
+public import ProjectAInos.Thermodynamics.ThermalClasses
 public import ProjectAInos.Thermodynamics.ThermalEquilibrium
 public import ProjectAInos.Thermodynamics.ThermalFamily
+public import ProjectAInos.Thermodynamics.ThermalJoinCoherence
 public import ProjectAInos.Thermodynamics.ThermalMaximizers
+public import ProjectAInos.Thermodynamics.ThermalOrientation
 public import ProjectAInos.Thermodynamics.ThermalSlopes
+public import ProjectAInos.Thermodynamics.ThermalSplitExample
 public import ProjectAInos.Thermodynamics.ThermalStrips
+public import ProjectAInos.Thermodynamics.UniqueThermalSplit
+public import ProjectAInos.Thermodynamics.UniversalJoinCalibration
+public import ProjectAInos.Thermodynamics.UniversalThermalClass
