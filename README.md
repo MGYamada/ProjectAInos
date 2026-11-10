@@ -87,6 +87,14 @@ Every completed stage must pass the warning-free Lean build, root-import check, 
 
 See the [Landau–Lifshitz correspondence](docs/landau-lifshitz.md) for the Mechanics proof targets and reference volumes for the other subjects.
 
+## Shared Variational Foundation
+
+The first shared layer for Mechanics and Electrodynamics formalizes C∞-rings: finite smooth operations, their substitution laws, and compatibility with an existing commutative real algebra. Morphisms preserve every smooth operation; their real-algebra homomorphisms are derived. The concrete models are ℝ and C∞(ℝⁿ), including dimension zero. The smooth-function ring is proved free on its coordinate functions, with evaluation and pullback as morphisms. A nonpolynomial check proves `exp(a + b) = exp(a) * exp(b)` in every C∞-ring.
+
+The shared variational calculus uses sections of a trivial bundle over a finite-dimensional real coordinate space. For a jointly C² Lagrangian and a C² field with integrable density, Lean proves the action derivative for smooth variations with compact support inside an open region. It then proves that stationarity is equivalent to the pointwise Euler–Lagrange equation. The theorem covers time and four-dimensional bases and keeps the choice of Haar measure explicit. The interval integration-by-parts identity also retains the endpoint term for fixed-endpoint applications.
+
+This supplies the common local foundation for [issue #7](https://github.com/MGYamada/ProjectAInos/issues/7), building on [PR #29](https://github.com/MGYamada/ProjectAInos/pull/29). The [variational guide](docs/variational.md) describes the endpoint and its hypotheses. The [smooth-algebra guide](docs/smooth-algebra.md) describes the free smooth-function rings and their directional chain rule. Global bundle geometry, abstract smooth cotangent modules, and theory-specific equations are subsequent stages.
+
 See the [documentation index](docs/README.md) for the Lean API reference build instructions.
 
 ## License
