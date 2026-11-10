@@ -120,4 +120,34 @@ theorem hasDerivAt_action_of_compactSupport
   · exact (integrable_indicator_iff hK.measurableSet).2
       (continuousOn_const.integrableOn_compact hK)
 
+/-- On a compact base region, joint C² regularity supplies every domination and
+integrability hypothesis for the action derivative. No support condition on the
+variation is needed; in particular this applies to fixed-endpoint variations. -/
+theorem hasDerivAt_action_restrict_compact {K : Set E} (hK : IsCompact K)
+    (hL : ContDiff ℝ 2 (Function.uncurry L)) (hu : ContDiff ℝ 2 u)
+    (hη : ContDiff ℝ 2 η) :
+    Integrable (firstVariationDensity L u η) (μ.restrict K) ∧
+      HasDerivAt (fun ε => action (μ.restrict K) L (perturb u η ε))
+        (firstVariation (μ.restrict K) L u η) 0 := by
+  have hD := continuous_variedFirstVariation hL hu hη
+  obtain ⟨C, hC⟩ := (isCompact_Icc.prod hK :
+    IsCompact (Icc (-1 : ℝ) 1 ×ˢ K)).exists_bound_of_continuousOn hD.continuousOn
+  refine hasDerivAt_action (s := Icc (-1) 1) (bound := fun _ => C)
+    (Icc_mem_nhds (by norm_num) (by norm_num))
+    (.of_forall (hu.differentiable (by norm_num)))
+    (.of_forall (hη.differentiable (by norm_num)))
+    (.of_forall fun x _ _ => differentiable_lagrangian_fiber hL x _) ?_ ?_ ?_ ?_ ?_
+  · exact .of_forall fun ε =>
+      (hL.continuous.comp (continuous_id.prodMk
+        (contDiff_jet (hu.add (hη.const_smul ε))).continuous)).aestronglyMeasurable
+  · exact (hL.continuous.comp (continuous_id.prodMk
+      (contDiff_jet hu).continuous)).continuousOn.integrableOn_compact hK
+  · have h0 : Continuous (fun x => firstVariationDensity L (perturb u η 0) η x) :=
+      hD.comp (continuous_const (y := (0 : ℝ)) |>.prodMk continuous_id)
+    exact (by simpa only [perturb_zero] using h0 :
+      Continuous (firstVariationDensity L u η)).aestronglyMeasurable
+  · filter_upwards [ae_restrict_mem hK.measurableSet] with x hx
+    exact fun ε hε => hC (ε, x) ⟨hε, hx⟩
+  · exact continuousOn_const.integrableOn_compact hK
+
 end ProjectAInos.Variational

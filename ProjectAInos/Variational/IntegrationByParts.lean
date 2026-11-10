@@ -3,6 +3,7 @@ module
 public import Mathlib.MeasureTheory.Integral.IntervalIntegral.IntegrationByParts
 public import Mathlib.Analysis.Calculus.LineDeriv.IntegrationByParts
 import Mathlib.Tactic.Ring
+import Mathlib.Tactic.Linarith
 
 /-!
 # Analytic interfaces for integration by parts
@@ -16,6 +17,26 @@ open MeasureTheory
 open scoped Interval
 
 namespace ProjectAInos.Variational
+
+/-- First variation with covector-valued coefficients and vector-valued
+variations. This retains the endpoint pairing for any real normed fibre. -/
+theorem interval_firstVariation_pairing
+    {F : Type*} [NormedAddCommGroup F] [NormedSpace ℝ F]
+    {a b : ℝ} {A P P' : ℝ → F →L[ℝ] ℝ} {η η' : ℝ → F}
+    (hP : ∀ t ∈ Set.uIcc a b, HasDerivAt P (P' t) t)
+    (hη : ∀ t ∈ Set.uIcc a b, HasDerivAt η (η' t) t)
+    (hAη : IntervalIntegrable (fun t => A t (η t)) volume a b)
+    (hP'η : IntervalIntegrable (fun t => P' t (η t)) volume a b)
+    (hPη' : IntervalIntegrable (fun t => P t (η' t)) volume a b) :
+    (∫ t in a..b, A t (η t) + P t (η' t)) =
+      (P b (η b) - P a (η a)) + ∫ t in a..b, (A t - P' t) (η t) := by
+  have hparts := intervalIntegral.integral_eq_sub_of_hasDerivAt
+    (fun t ht => (hP t ht).clm_apply (hη t ht)) (hP'η.add hPη')
+  simp only [sub_apply]
+  rw [intervalIntegral.integral_add hAη hPη',
+    intervalIntegral.integral_sub hAη hP'η]
+  rw [intervalIntegral.integral_add hP'η hPη'] at hparts
+  linarith
 
 /-- Scalar one-dimensional first-variation identity, including its boundary term.
 The supplied derivatives are certified on the full closed interval. -/

@@ -7,6 +7,10 @@ higher-dimensional base. Its fibre is any real normed space, including a
 tuple of field components. The pointwise and integral derivative results build
 on the prototype in [PR #29](https://github.com/MGYamada/ProjectAInos/pull/29).
 
+The [shared formalization notes](variational-notes.md) record the distinctions
+between ambient and restricted measures, the two compactness arguments for
+action derivatives, and the scope of the algebraic and analytic interfaces.
+
 For a field `u`, the local first jet is the pair of its value and its Fréchet
 derivative. A Lagrangian `L x (u x, Du x)` can depend explicitly on the base
 point. The affine variation `u + ε • η` changes the field at a fixed base
@@ -49,7 +53,7 @@ open sets gives pointwise vanishing.
 | --- | --- |
 | [Local](../ProjectAInos/Variational/Local.lean) | First jet and the pointwise chain rule along an affine variation |
 | [Action](../ProjectAInos/Variational/Action.lean) | `hasDerivAt_action`, with explicit measurability, integrability and uniform domination |
-| [Regularity](../ProjectAInos/Variational/Regularity.lean) | Compact support supplies domination and preserves integrability of every perturbed density |
+| [Regularity](../ProjectAInos/Variational/Regularity.lean) | Compact support supplies domination; `hasDerivAt_action_restrict_compact` instead uses a compact base region, with no support condition on the variation |
 | [IntegrationByParts](../ProjectAInos/Variational/IntegrationByParts.lean) | Interval identity with endpoint pairing, fixed-endpoint specialization, and directional Haar identities |
 | [EulerLagrange](../ProjectAInos/Variational/EulerLagrange.lean) | Covector decomposition, derivative as the residual pairing, and `stationary_iff_eulerLagrange` |
 | [Examples](../ProjectAInos/Variational/Examples.lean) | Nonzero variations on time and four-dimensional bases, and a base-dependent momentum with a nonzero divergence residual |
@@ -58,9 +62,13 @@ The interval result keeps the term `[P η]ₐᵇ` and removes it when the variat
 vanishes at both endpoints. The stationarity theorem uses interior variations.
 The action derivative is a derivative along the specified real parameter.
 
-The next stages can specialize these theorems to Mechanics or Electrodynamics,
-and develop coordinate changes and global jet bundles. Smooth algebra provides
-the concrete directional chain rule separately. [Smooth algebra](smooth-algebra.md)
+The [Mechanics specialization](mechanics.md) now derives the fixed-endpoint
+Euler–Lagrange equations on a real time interval. It uses compactness of the
+interval to justify the action derivative and `interval_firstVariation_pairing`
+for the covector-valued boundary term. The Electrodynamics specialization,
+coordinate changes and global jet bundles remain subsequent stages.
+[Smooth algebra](smooth-algebra.md) supplies the smooth observables used by
+`Mechanics.ofSmoothOperation` and their concrete directional chain rule.
 
 Run the warning-free library build, root-import check, and transitive axiom
 audit from the repository root:
