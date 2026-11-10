@@ -11,8 +11,10 @@ public import Mathlib.Algebra.BigOperators.Field
 
 Labels evaluate finite composite expressions in a semimodule of amounts.
 Comparison on common scaled products transfers to exchange comparison of
-adiabatic classes. The common-product and comparison premises are explicit
-until their physical realizations have been established.
+adiabatic classes. These intermediate interfaces keep common-product and
+comparison premises explicit. Later modules discharge them with
+`ProjectAInos.Thermodynamics.Physical.Nonreactive.common_product_of_equal_label`
+and `ProjectAInos.Thermodynamics.Physical.ThermalFamily.product_comparison`.
 -/
 
 @[expose] public section

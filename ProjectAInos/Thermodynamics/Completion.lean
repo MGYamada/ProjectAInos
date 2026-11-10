@@ -74,7 +74,8 @@ noncomputable def nnrealEndHom : ℝ≥0 →+* AddMonoid.End (Completion M) wher
     change nnrealEnd (a * b) (of x) = nnrealEnd a (nnrealEnd b (of x))
     simp only [nnrealEnd_of, mul_smul]
 
-private theorem positive_difference (r : ℝ) :
+/-- Every real scalar is the difference of its nonnegative positive and negative parts. -/
+theorem positive_part_difference (r : ℝ) :
     (r.toNNReal : ℝ) - ((-r).toNNReal : ℝ) = r := by
   by_cases hr : 0 ≤ r
   · simp [Real.coe_toNNReal r hr, Real.toNNReal_of_nonpos (neg_nonpos.mpr hr)]
@@ -90,7 +91,7 @@ private theorem extendScalars_sub {R : Type*} [Ring R] (f : ℝ≥0 →+* R)
   have h : ((a : ℝ) - b).toNNReal + b = (-((a : ℝ) - b)).toNNReal + a := by
     apply NNReal.coe_injective
     simp only [NNReal.coe_add]
-    linarith [positive_difference ((a : ℝ) - b)]
+    linarith [positive_part_difference ((a : ℝ) - b)]
   have hf := congrArg f h
   simp only [map_add] at hf
   exact (sub_eq_sub_iff_add_eq_add).mpr (by simpa only [add_comm] using hf)
@@ -103,8 +104,8 @@ noncomputable def extendScalarsHom {R : Type*} [Ring R] (f : ℝ≥0 →+* R) :
   map_one' := by
     simp [extendScalars, Real.toNNReal_of_nonpos (by norm_num : (-1 : ℝ) ≤ 0)]
   map_add' r s := by
-    have hr := positive_difference r
-    have hs := positive_difference s
+    have hr := positive_part_difference r
+    have hs := positive_part_difference s
     have hrs : r + s = ((r.toNNReal + s.toNNReal : ℝ≥0) : ℝ) -
         (((-r).toNNReal + (-s).toNNReal : ℝ≥0) : ℝ) := by
       simp only [NNReal.coe_add]
@@ -119,7 +120,7 @@ noncomputable def extendScalarsHom {R : Type*} [Ring R] (f : ℝ≥0 →+* R) :
       calc
         r * s = ((r.toNNReal : ℝ) - ((-r).toNNReal : ℝ)) *
             ((s.toNNReal : ℝ) - ((-s).toNNReal : ℝ)) := by
-          rw [positive_difference, positive_difference]
+          rw [positive_part_difference, positive_part_difference]
         _ = _ := by ring
     rw [hrs, extendScalars_sub]
     simp only [map_add, map_mul, extendScalars]
@@ -162,17 +163,16 @@ theorem realEndHom_unique (f : ℝ →+* AddMonoid.End (Completion M))
       rw [coe_smul_eq_nnrealEnd, nnrealEnd_of])
   apply RingHom.ext
   intro r
-  rw [← positive_difference r, map_sub, map_sub, hnonneg, hnonneg]
+  rw [← positive_part_difference r, map_sub, map_sub, hnonneg, hnonneg]
 
-set_option backward.isDefEq.respectTransparency false in
 /-- The real module structure extending the state's scaling is unique. -/
 theorem module_unique (action : Module ℝ (Completion M))
     (h : ∀ (a : ℝ≥0) (x : M),
       (letI := action; (a : ℝ) • (of x : Completion M)) = of (a • x)) :
     action = instModuleReal := by
-  have hEnd : (letI := action; Module.toAddMonoidEnd ℝ (Completion M)) = realEndHom :=
+  have hEnd : @Module.toAddMonoidEnd ℝ (Completion M) _ _ action = realEndHom :=
     realEndHom_unique _ h
-  apply Module.ext'
+  apply Module.ext' action instModuleReal
   intro r v
   exact congrArg (fun f : ℝ →+* AddMonoid.End (Completion M) => f r v) hEnd
 
@@ -205,7 +205,7 @@ noncomputable def liftLinear {V : Type*} [AddCommGroup V] [Module ℝ V]
       simp only [g, lift_add_of, LinearMap.toAddMonoidHom_coe,
         map_smul, NNReal.smul_def]
     change g (r • v) = r • g v
-    rw [← positive_difference r, sub_smul, map_sub, hnn, hnn, sub_smul]
+    rw [← positive_part_difference r, sub_smul, map_sub, hnn, hnn, sub_smul]
 
 @[simp]
 theorem liftLinear_of {V : Type*} [AddCommGroup V] [Module ℝ V]

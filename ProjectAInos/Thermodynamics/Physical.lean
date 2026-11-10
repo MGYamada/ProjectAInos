@@ -10,7 +10,10 @@ public import Mathlib.Algebra.Order.Monoid.Defs
 Finite expressions provide a strict composition and scaling interface after
 quotienting by structural coherence. Splitting and recombination are additional
 accessibility premises. They become scalar additivity only after quotienting by
-mutual accessibility. The physical premises are fields of `Accessibility`.
+mutual accessibility. `Accessibility` records the physical premises A1–A6
+alongside the carrier law `Accessibility.zero_scale`. That law concerns the
+composition model, not the accessibility relation; `CompositeState.zero_scale`
+proves it for formal composites.
 -/
 
 @[expose] public section
@@ -119,13 +122,18 @@ theorem splitting_of_normalized {X : Type*} [AddCommMonoid X]
   simpa only [smul_smul, hfirst, hsecond] using h
 
 /-- A1–A6 on a coherent composition model. The splitting field includes zero
-endpoints, whose identities are supplied by the formal empty system. -/
+endpoints, whose identities are supplied by the formal empty system.
+
+`zero_scale` is an algebraic law of the carrier, not an additional physical
+accessibility premise. `DistribMulAction` does not include this law;
+`CompositeState.zero_scale` supplies it for formal composite states. -/
 structure Accessibility (X : Type*) [AddCommMonoid X] [DistribMulAction ℝ≥0 X] where
   relation : X → X → Prop
   refl : ∀ x, relation x x
   trans : ∀ {x y z}, relation x y → relation y z → relation x z
   add_mono : ∀ {x y z w}, relation x y → relation z w → relation (x + z) (y + w)
   scale_mono : ∀ (a : ℝ≥0) {x y}, relation x y → relation (a • x) (a • y)
+  /-- Zero scaling is the empty state, independently of `relation`. -/
   zero_scale : ∀ x : X, (0 : ℝ≥0) • x = 0
   split : ∀ (a b : ℝ≥0) (x : X),
     relation ((a + b) • x) (a • x + b • x) ∧ relation (a • x + b • x) ((a + b) • x)

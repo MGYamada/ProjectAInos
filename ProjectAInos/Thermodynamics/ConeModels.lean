@@ -69,8 +69,7 @@ of SC even though the cone is salient and total on its span. -/
 theorem lexicographicCone_not_sequentialOrderClosed :
     ¬ SequentialOrderClosed lexicographicCone := by
   intro h
-  have hbad := h (0, -1) (1, 0) (fun n => 1 / ((n : ℝ≥0) + 1))
-    (fun n => by positivity) tendsto_one_div_add_atTop_nhds_zero_nat
+  have hbad := h.of_reciprocalNatSucc (0, -1) (1, 0)
     (fun n => by
       apply Or.inl
       change 0 < (0 : ℝ) + (1 / ((n : ℝ≥0) + 1) : ℝ≥0) * 1

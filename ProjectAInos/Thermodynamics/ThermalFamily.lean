@@ -12,8 +12,12 @@ Thermal contact joins two represented simple systems, with one energy coordinate
 and the concatenated work coordinates. Positive scaling acts on both the physical
 state and its extensive coordinates. Thermal premises concern represented simple
 states only; they do not impose thermal equilibrium on arbitrary composites or
-on the empty system. Simple-system comparison is an explicit intermediate theorem
-premise, separate from the thermal axioms.
+on the empty system. Intermediate lemmas take simple-system comparison and
+open strict strips as explicit inputs.
+`ProjectAInos.Thermodynamics.Physical.ThermalFamily.simpleComparison` and
+`ProjectAInos.Thermodynamics.Physical.ThermalFamily.localMixtureIntervals_of_axioms` in
+`ProjectAInos.Thermodynamics.SimpleComparison` discharge those inputs from the
+geometric premises of the admitted systems, including thermal joins.
 -/
 
 @[expose] public section
@@ -63,8 +67,11 @@ def thermalJoinCoordinates (n m : ℕ) :
   left_inv z := by rcases z with ⟨U, V, W⟩; simp
   right_inv z := by rcases z with ⟨U, V⟩; simp only [Fin.append_castAdd_natAdd]
 
-/-- T1 and the ordinary splitting clause of T2, with the thermal join carrying
-actual simple-system geometry in the canonical finite coordinate space. -/
+/-- T1 and the ordinary splitting clause of T2, with a geometrically regular
+joined simple system. The `system` field includes all A7/S1--S3 premises;
+contact and splitting alone do not provide unique support, locally Lipschitz
+pressure, or path-connected relative boundaries. The weaker `ThermalJoin`
+layer retains contact/splitting without this geometric requirement. -/
 structure SimpleThermalJoin {n m : ℕ} (S : SimpleSystem P n) (T : SimpleSystem P m) where
   thermalJoin : ThermalJoin P S.domain T.domain (fun x => S.represent x) (fun y => T.represent y)
   system : SimpleSystem P (n + m)
@@ -142,9 +149,21 @@ namespace ThermalFamily
 
 variable (F : ThermalFamily P)
 
+/-- A nonvacuous thermal family has an admitted simple system with at least
+one equilibrium state. Conditional theorems need not assume this predicate. -/
+def Nontrivial : Prop :=
+  ∃ n, ∃ S : SimpleSystem P n, F.admitted S ∧ S.domain.Nonempty
+
 /-- A physical state represented in some simple member of the thermal family. -/
 def IsState (x : X) : Prop :=
   ∃ n, ∃ S : SimpleSystem P n, F.admitted S ∧ ∃ z : S.domain, x = S.represent z
+
+theorem nontrivial_iff_exists_isState : F.Nontrivial ↔ ∃ x, F.IsState x := by
+  constructor
+  · rintro ⟨n, S, hS, x, hx⟩
+    exact ⟨S.represent x, n, S, hS, ⟨x, hx⟩, rfl⟩
+  · rintro ⟨x, n, S, hS, z, _⟩
+    exact ⟨n, S, hS, z.val, z.property⟩
 
 theorem isState_represent {n : ℕ} (S : SimpleSystem P n) (hS : F.admitted S)
     (x : S.domain) : F.IsState (S.represent x) := ⟨n, S, hS, x, rfl⟩
@@ -249,8 +268,11 @@ theorem mixture_comparable (hsimpleCH : F.SimpleComparison)
     (fun h => Or.inr (P.trans hsplit.1 h))
 
 /-- T4 supplies the reference pair, while typed thermal joining supplies all
-mixture comparisons. Openness of strict strips is kept as a separate geometric
-obligation, alongside simple-system comparison. -/
+mixture comparisons. This intermediate lemma takes comparison and strict-strip
+openness explicitly;
+`ProjectAInos.Thermodynamics.Physical.ThermalFamily.localMixtureIntervals_of_axioms` in
+`ProjectAInos.Thermodynamics.SimpleComparison` supplies both from the admitted
+simple systems' geometric axioms. -/
 theorem localMixtureIntervals (hsimpleCH : F.SimpleComparison)
     {n : ℕ} (S : SimpleSystem P n) (hS : F.admitted S)
     (hopen : ∀ a b : S.domain, IsOpen {y : S.domain |

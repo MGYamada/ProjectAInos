@@ -2,7 +2,6 @@ module
 
 public import ProjectAInos.Thermodynamics.Basic
 public import Mathlib.Algebra.Order.Module.Defs
-public import Mathlib.Analysis.SpecificLimits.Basic
 
 /-!
 # Cancellation of spectator systems
@@ -34,16 +33,13 @@ theorem Stability.le_of_add_le_add_right (hS : Stability M) {x y z : M}
         _ = y + (n • x + z) := by ac_rfl
         _ ≤ y + (n • y + z) := add_le_add le_rfl ih
         _ = (n + 1) • y + z := by simp [add_smul, add_comm, add_left_comm]
-  apply hS x y z z (fun n => 1 / ((n : ℝ≥0) + 1))
-  · intro n
-    positivity
-  · exact tendsto_one_div_add_atTop_nhds_zero_nat
-  · intro n
-    have hn : (n : ℝ≥0) + 1 ≠ 0 := by positivity
-    have hscaled := smul_le_smul_of_nonneg_left (copies (n + 1))
-      (show (0 : ℝ≥0) ≤ 1 / ((n : ℝ≥0) + 1) from zero_le)
-    simpa only [smul_add, ← Nat.cast_smul_eq_nsmul ℝ≥0, Nat.cast_add,
-      Nat.cast_one, smul_smul, one_div_mul_cancel hn, one_smul] using hscaled
+  apply hS.of_reciprocalNatSucc x y z z
+  intro n
+  have hn : (n : ℝ≥0) + 1 ≠ 0 := by positivity
+  have hscaled := smul_le_smul_of_nonneg_left (copies (n + 1))
+    (reciprocalNatSucc_pos n).le
+  simpa only [reciprocalNatSucc, smul_add, ← Nat.cast_smul_eq_nsmul ℝ≥0, Nat.cast_add,
+    Nat.cast_one, smul_smul, one_div_mul_cancel hn, one_smul] using hscaled
 
 /-- Equality cancellation follows from the two order-cancellation directions. -/
 theorem Stability.eq_of_add_eq_add_right (hS : Stability M) {x y z : M}

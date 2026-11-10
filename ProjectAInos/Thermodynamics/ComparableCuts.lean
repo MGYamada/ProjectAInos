@@ -32,47 +32,6 @@ theorem smul_mem_cone_iff_nonneg (P : PointedCone ℝ V)
   rw [smul_smul, hcoeff, neg_one_smul] at hminus
   exact hP e he hne hminus
 
-/-- Sequential closedness recovers a vector from its lower cut when only its
-comparisons with the reference line are known. -/
-theorem entropyCut_sSup_smul_of_comparable (P : PointedCone ℝ V)
-    (hSC : SequentialOrderClosed P) (hP : (P : ConvexCone ℝ V).Salient)
-    {e w : V} (he : e ∈ P) (hne : e ≠ 0)
-    (hnonempty : (entropyCut P e w).Nonempty)
-    (hcompare : ∀ r : ℝ, w - r • e ∈ P ∨ -(w - r • e) ∈ P) :
-    sSup (entropyCut P e w) • e = w := by
-  let α := sSup (entropyCut P e w)
-  have hbound := entropyCut_bddAbove P hSC hP he hne w
-  have hbelow {r : ℝ} (hr : r < α) : w - r • e ∈ P := by
-    obtain ⟨t, ht, hrt⟩ := exists_lt_of_lt_csSup hnonempty hr
-    exact entropyCut_mono P he hrt.le ht
-  have habove {r : ℝ} (hr : α < r) : -(w - r • e) ∈ P := by
-    exact (hcompare r).resolve_left (fun h =>
-      (not_le_of_gt hr) (le_csSup hbound h))
-  have hleft : w - α • e ∈ P := by
-    apply hSC (w - α • e) e (fun n => 1 / ((n : ℝ≥0) + 1))
-    · intro n; positivity
-    · exact tendsto_one_div_add_atTop_nhds_zero_nat
-    · intro n
-      have h := hbelow (r := α - 1 / ((n : ℝ) + 1))
-        (sub_lt_self _ (by positivity))
-      convert h using 1
-      simp only [NNReal.coe_div, NNReal.coe_one, NNReal.coe_add, NNReal.coe_natCast]
-      module
-  have hright : -(w - α • e) ∈ P := by
-    apply hSC (-(w - α • e)) e (fun n => 1 / ((n : ℝ≥0) + 1))
-    · intro n; positivity
-    · exact tendsto_one_div_add_atTop_nhds_zero_nat
-    · intro n
-      have h := habove (r := α + 1 / ((n : ℝ) + 1))
-        (lt_add_of_pos_right _ (by positivity))
-      convert h using 1
-      simp only [NNReal.coe_div, NNReal.coe_one, NNReal.coe_add, NNReal.coe_natCast]
-      module
-  have hzero : w - α • e = 0 := by
-    by_contra hne'
-    exact hP _ hleft hne' hright
-  exact (sub_eq_zero.mp hzero).symm
-
 /-- Comparing a state with the mixtures of ordered references determines an
 actual affine coordinate in the unit interval. -/
 theorem exists_smul_eq_of_comparable_interval (P : PointedCone ℝ V)
