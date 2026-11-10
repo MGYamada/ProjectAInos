@@ -526,6 +526,15 @@ assert physical realizability of negative species amounts.
 
 ## Scope and entry points
 
+The public entropy endpoints share the predicates in
+[EntropyPrinciples.lean](../ProjectAInos/Thermodynamics/EntropyPrinciples.lean).
+`CalibratedEntropyPrinciple` records `extensive` and the equal-label
+`criterion`. `WeakEntropyPrinciple` records the `decomposition`, the
+`calibrated` and `total` instances of that same predicate, and `monotone` for
+all accessible pairs. Additivity is part of the bundled entropy maps. Thus
+the thermal-family and canonical-atom endpoints expose the same named
+conclusions without repeating conjunctions or adding hypotheses.
+
 | Public API | Assumptions and conclusion |
 | --- | --- |
 | `ThermalFamily.product_comparison` | Admitted simple systems; comparison on every finite scaled product |

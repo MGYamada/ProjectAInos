@@ -100,15 +100,9 @@ theorem exists_weak_entropy_of_calibrators (hcal : F.HasCalibrators)
     (hM : Reactions.RawNoSinks (Nonreactive.compositionLabel State) P.relation) :
     ∃ (entropy totalEntropy : CompositeState (Σ g, State g) →+ ℝ)
       (B : (Γ →₀ ℝ≥0) →ₗ[ℝ≥0] ℝ),
-      (∀ x, totalEntropy x = entropy x + B (Nonreactive.compositionLabel State x)) ∧
-      (∀ (r : ℝ≥0) x, entropy (r • x) = (r : ℝ) * entropy x) ∧
-      (∀ x y, Nonreactive.compositionLabel State x = Nonreactive.compositionLabel State y →
-        (P.relation x y ↔ entropy x ≤ entropy y)) ∧
-      (∀ (r : ℝ≥0) x, totalEntropy (r • x) = (r : ℝ) * totalEntropy x) ∧
-      (∀ x y, P.relation x y → totalEntropy x ≤ totalEntropy y) ∧
-      (∀ x y, Nonreactive.compositionLabel State x = Nonreactive.compositionLabel State y →
-        (P.relation x y ↔ totalEntropy x ≤ totalEntropy y)) := by
-  obtain ⟨entropy, hscale, hcriterion⟩ :=
+      WeakEntropyPrinciple (Nonreactive.compositionLabel State) P.relation
+        entropy totalEntropy B := by
+  obtain ⟨entropy, hentropy⟩ :=
     F.exists_calibrated_entropy hcal n S hS hnonempty chart hrepresent
   have hscaleRelation (r : ℝ≥0) (hr : 0 < r) (x y : CompositeState (Σ g, State g)) :
       P.relation (r • x) (r • y) ↔ P.relation x y := by
@@ -119,13 +113,13 @@ theorem exists_weak_entropy_of_calibrators (hcal : F.HasCalibrators)
   obtain ⟨B, totalEntropy, htotal, hext, hmono⟩ :=
     Reactions.exists_weak_entropy_from_raw_states (Nonreactive.compositionLabel State)
       entropy P.relation (Nonreactive.compositionLabel_surjective State hstate)
-      (Nonreactive.compositionLabel_scale State) hscale P.refl P.add_mono hscaleRelation
-      (fun {x y} hxy hlabel => (hcriterion x y hlabel).mp hxy)
+      (Nonreactive.compositionLabel_scale State) hentropy.extensive P.refl P.add_mono hscaleRelation
+      (fun {x y} hxy hlabel => (hentropy.criterion x y hlabel).mp hxy)
       (hM.costChain_reverse entropy)
-  refine ⟨entropy, totalEntropy, B, htotal, hscale, hcriterion, hext, hmono, ?_⟩
+  refine ⟨entropy, totalEntropy, B, ⟨htotal, hentropy, ⟨hext, ?_⟩, hmono⟩⟩
   intro x y hlabel
   rw [htotal x, htotal y, hlabel, add_le_add_iff_right]
-  exact hcriterion x y hlabel
+  exact hentropy.criterion x y hlabel
 
 end Physical.ThermalFamily
 

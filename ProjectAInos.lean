@@ -23,6 +23,7 @@ public import ProjectAInos.Thermodynamics.DegenerateModel
 public import ProjectAInos.Thermodynamics.EnergyOrientation
 public import ProjectAInos.Thermodynamics.EnergyReflection
 public import ProjectAInos.Thermodynamics.Entropy
+public import ProjectAInos.Thermodynamics.EntropyPrinciples
 public import ProjectAInos.Thermodynamics.FamilyCalibration
 public import ProjectAInos.Thermodynamics.ForwardSector
 public import ProjectAInos.Thermodynamics.HasCalibratorsOfAxioms

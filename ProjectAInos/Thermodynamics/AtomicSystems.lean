@@ -122,8 +122,7 @@ theorem exists_calibrated_entropy (F : ThermalFamily P)
     (hrepresent : ∀ g, (S g).represent = D.represent g)
     (hnonempty : ∀ g, (D.domain g).Nonempty) :
     ∃ entropy : D.Raw →+ ℝ,
-      (∀ (r : ℝ≥0) x, entropy (r • x) = (r : ℝ) * entropy x) ∧
-      ∀ x y, D.label x = D.label y → (P.relation x y ↔ entropy x ≤ entropy y) :=
+      CalibratedEntropyPrinciple D.label P.relation entropy :=
   F.exists_calibrated_entropy F.hasCalibrators_of_axioms D.dimension S hS
     (fun g => D.simpleSystem_nonempty g (S g) (hdomain g) (hnonempty g))
     (fun g => D.chart g (S g) (hdomain g))
@@ -139,12 +138,7 @@ theorem exists_weak_entropy (F : ThermalFamily P)
     (hnonempty : ∀ g, (D.domain g).Nonempty)
     (hM : Reactions.RawNoSinks D.label P.relation) :
     ∃ (entropy totalEntropy : D.Raw →+ ℝ) (B : (Γ →₀ ℝ≥0) →ₗ[ℝ≥0] ℝ),
-      (∀ x, totalEntropy x = entropy x + B (D.label x)) ∧
-      (∀ (r : ℝ≥0) x, entropy (r • x) = (r : ℝ) * entropy x) ∧
-      (∀ x y, D.label x = D.label y → (P.relation x y ↔ entropy x ≤ entropy y)) ∧
-      (∀ (r : ℝ≥0) x, totalEntropy (r • x) = (r : ℝ) * totalEntropy x) ∧
-      (∀ x y, P.relation x y → totalEntropy x ≤ totalEntropy y) ∧
-      (∀ x y, D.label x = D.label y → (P.relation x y ↔ totalEntropy x ≤ totalEntropy y)) :=
+      WeakEntropyPrinciple D.label P.relation entropy totalEntropy B :=
   F.exists_weak_entropy_of_calibrators F.hasCalibrators_of_axioms D.dimension S hS
     (fun g => D.simpleSystem_nonempty g (S g) (hdomain g) (hnonempty g))
     (fun g => D.state_nonempty (hnonempty g))
