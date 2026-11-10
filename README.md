@@ -2,7 +2,9 @@
 
 *Final answer to Hilbert's sixth problem*
 
-Project AInos aims to formalize the whole of theoretical physics in Lean 4. Its planned proof library will make each theory's assumptions explicit, derive its central results, and formalize how theories relate through special cases and limits.
+P⊗AI is pronounced `poai`.
+
+**P⊗AI (Project AInos)** aims to formalize the whole of theoretical physics in Lean 4. Its planned proof library will make each theory's assumptions explicit, derive its central results, and formalize how theories relate through special cases and limits.
 
 ## Table of Contents
 
@@ -61,51 +63,9 @@ Project AInos aims to formalize the whole of theoretical physics in Lean 4. Its 
 
 The order of subsequent topics is yet to be determined.
 
-## Thermodynamics Proof Development
+See the [proof development record](docs/proof-development.md) for the history of the Lean formalization.
 
-The Lean library derives spectator cancellation from A6, constructs the real Grothendieck completion and its process cone, and proves order reflection and sequential order closedness. Under exchange comparison and a nonzero process direction, the real-cut construction gives an entropy coordinate. Linear extension then gives the entropy principle on matched conservation sectors, the relative cutoff formula, and the classification of entropy extensions by conserved linear quantities.
-
-Concrete models cover nonnegative real states, two independent monotones, lexicographic failure of sequential order closedness, equality-only accessibility, and a conserved amount coordinate. The ideal-gas development proves homogeneity, concavity, and the fixed-amount operational entropy principle. Its composite algebraic consistency model identifies the completion with entropy-amount pairs and the conservation quotient with amount. Composition in this model uses the sum of separate-box entropies; this construction does not supply a geometric simple system or thermal family.
-
-The [reservoir model](ProjectAInos/Thermodynamics/ReservoirModel.lean) supplies a nonempty family satisfying the full simple-system and thermal interfaces, closed under positive scaling and thermal joins. Entropy equals energy and pressure is zero, so it exercises the universal-isotherm case. The [join assumption audit](docs/thermodynamics-join-audit.md) distinguishes contact and splitting from the geometric regularity required of joined systems.
-
-The physical development constructs coherent finite composites and their adiabatic quotient. It proves composition-label conservation for the A1–A6 closure of nonreactive elementary processes and constructs common scaled products for states with equal composition labels. Forward sectors are convex and relatively closed in an open convex finite-dimensional equilibrium domain. Irreversibility and unique finite-slope support imply nonempty interior; the supporting plane is inherited at every relative-boundary point. Energy orientation is constant throughout each simple system, giving the fixed-work accessibility criterion. The boundary is a differentiable graph whose derivative is the negative pressure form. Locally Lipschitz pressure gives local uniqueness of these graphs, and boundary connectedness propagates reversibility. These results establish simple-system comparison, strict nesting of distinct forward sectors, and openness of strict reference strips. Energy reflection handles the opposite orientation without changing the physical premises.
-
-Typed thermal families connect actual scaled coordinate domains, thermal joins, and the positive scaled-copy clause of T2. Thermal contact fixes a common energy orientation across systems, and the zeroth law gives independent scaling invariance. Simple-system comparison and transversality establish local mixture intervals; connectedness joins their affine reference lines. These results give single-system product comparison and normalized concave continuous entropy. Thermal equilibrium between two copies is equivalent to fixed-total-energy entropy maximization, or intersection of their supporting-slope intervals. This criterion requires no extra differentiability assumption on entropy.
-
-The location-of-isotherms dichotomy and crossed-calibrator existence are proved, including the universal-isotherm case. A concrete splitting and mixing cycle establishes thermal equilibrium between a joined state and each component. Pairwise calibrators align all simple-system reference directions, giving comparison in every finite scaled product. Canonical coordinate atoms provide the finite composite presentation and fixed-composition labels. Common-product realization then gives ECH for nonreactive accessibility. The final physical entropy endpoints take the explicit geometric and thermal premises, with no CH, ECH, or calibrator-existence assumption.
-
-The reaction development defines direct, chained, and catalytic transition costs, proves their positive homogeneity, and selects compatible entropy constants by Hahn–Banach. The physical entropy theorem supplies the required calibrated monotonicity within each composition label. Absence of sinks is expressed using actual transitions, independently of entropy or costs. The resulting total entropy is additive, extensive, monotone for all accessible transformations, and characterizes accessibility when composition labels match. Infinite costs for unreachable labels remain allowed, including after adding catalysts.
-
-The current physical endpoints use A1–A7, S1–S3 and T1–T4, with M added for reactions. Every admitted primitive simple system satisfies transversality T4; no extra T5 assumption is needed for this scope. Extending the theory to systems without T4, or proving temperature regularity, belongs to subsequent work. The ideal-gas phase-volume derivation remains in the statistical-mechanics stage of the research plan.
-
-The public physical endpoints are in [PhysicalEntropyPrinciple](ProjectAInos/Thermodynamics/PhysicalEntropyPrinciple.lean); [AtomicSystems](ProjectAInos/Thermodynamics/AtomicSystems.lean) specializes them to canonical coordinate atoms. The [mathematical guide](docs/thermodynamics.md) presents the algebraic theory, physical comparison, reactions, and models with proof links. The [implementation checklist](docs/thermodynamics-status.md) maps the eight planned stages to their proof modules and scope.
-
-Every completed stage must pass the warning-free Lean build, root-import check, and transitive axiom audit. Physical premises remain explicit in theorem statements. [Lean library entry point](ProjectAInos.lean)
-
-[Thermodynamics formalization notes](docs/thermodynamics-notes.md) record the mathematical distinctions and modeling decisions exposed by the proofs, together with their current proof status.
-
-See the [Landau–Lifshitz correspondence](docs/landau-lifshitz.md) for the Mechanics proof targets and reference volumes for the other subjects.
-
-## Shared Variational Foundation
-
-The first shared layer for Mechanics and Electrodynamics formalizes C∞-rings: finite smooth operations, their substitution laws, and compatibility with an existing commutative real algebra. Morphisms preserve every smooth operation; their real-algebra homomorphisms are derived. The concrete models are ℝ and C∞(ℝⁿ), including dimension zero. The smooth-function ring is proved free on its coordinate functions, with evaluation and pullback as morphisms. A nonpolynomial check proves `exp(a + b) = exp(a) * exp(b)` in every C∞-ring.
-
-The shared variational calculus uses sections of a trivial bundle over a finite-dimensional real coordinate space. For a jointly C² Lagrangian and a C² field with integrable density, Lean proves the action derivative for smooth variations with compact support inside an open region. It then proves that stationarity is equivalent to the pointwise Euler–Lagrange equation. The theorem covers time and four-dimensional bases and keeps the choice of Haar measure explicit. The interval integration-by-parts identity also retains the endpoint term for fixed-endpoint applications.
-
-This supplies the common local foundation for [issue #7](https://github.com/MGYamada/ProjectAInos/issues/7), building on [PR #29](https://github.com/MGYamada/ProjectAInos/pull/29). The [variational guide](docs/variational.md) describes the endpoint and its hypotheses. The [smooth-algebra guide](docs/smooth-algebra.md) describes the free smooth-function rings and their directional chain rule. Compact base regions now also supply domination without a support condition on the variation, and the interval identity handles covector–vector pairings.
-
-[Shared variational formalization notes](docs/variational-notes.md) record the measure, regularity, and smooth-algebra distinctions exposed by these proofs.
-
-## Mechanics Proof Development
-
-The [C∞ mechanics research plan](docs/cinfty-mechanics.md) preserves the mathematical blueprint, the 52 Landau–Lifshitz targets, proposed proofs, experiment ledger, and references from the former local TeX manuscript. It distinguishes the implemented real analytic model from the planned abstract C∞-ring constructions.
-
-`ProjectAInos/Mechanics` uses the shared foundation for a real time interval and a real normed position space, including any finite number of generalized coordinates. For a jointly C² Lagrangian `L(t,q,v)` and a C² path, Lean proves the derivative of the actual action, its first-variation formula with the endpoint momentum pairing, and the equivalence between fixed-endpoint stationarity and the Euler–Lagrange equations on `(a,b)` for `a < b`. Variations may have nonzero derivatives at the endpoints. Smooth operations from the shared C∞-ring give mechanical Lagrangians with the required regularity automatically. The natural scalar Lagrangian yields `m q'' = −V'(q)`.
-
-The [mechanics guide](docs/mechanics.md) gives the assumptions and proof map. [Mechanics formalization notes](docs/mechanics-notes.md) record distinctions and design decisions exposed by the proofs, following the thermodynamics notes. The next stages are total derivatives and conservation identities, Noether's theorem, and concrete mechanical models. Abstract quotients, dual numbers, cotangent modules and jet rings, followed by Poisson and Hamiltonian mechanics, remain research-plan stages.
-
-See the [documentation index](docs/README.md) for the Lean API reference build instructions.
+The documentation index links to the guides and the build instructions for the HTML handbook and Lean API reference. [Documentation index](docs/README.md)
 
 ## License
 

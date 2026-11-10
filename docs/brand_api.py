@@ -13,7 +13,7 @@ def replace_once(html: str, anchor: str, replacement: str) -> str:
     return html.replace(anchor, replacement, 1)
 
 
-def brand_api(directory: Path) -> None:
+def brand_api(directory: Path, *, handbook: bool = False) -> None:
     project = '<a href="./ProjectAInos.html">Project API</a>'
     thermo = '<a href="./ProjectAInos/Thermodynamics/Basic.html">Thermodynamics</a>'
     homepage = (
@@ -40,6 +40,16 @@ def brand_api(directory: Path) -> None:
         branded_index, "<h1>Welcome to the documentation page </h1>", homepage
     )
     branded_sidebar = replace_once(original_sidebar, general_heading, navigation)
+    if handbook:
+        handbook_home = '<p><a href="../index.html">Documentation handbook</a></p>'
+        handbook_nav = (
+            '<div class="nav_link"><a href="../index.html" target="_top">'
+            'Documentation handbook</a></div>'
+        )
+        branded_index = replace_once(
+            branded_index, homepage, homepage + handbook_home
+        )
+        branded_sidebar = replace_once(branded_sidebar, navigation, handbook_nav + navigation)
 
     for path, original, branded in (
         (index, original_index, branded_index),
