@@ -139,4 +139,11 @@ For every total energy `E`, the unique maximizer is `u = 1`, and the joined entr
 
 ## Scope of the current physical derivation
 
+The [thermal-join assumption audit](thermodynamics-join-audit.md) separates
+the weaker contact/splitting interface from the full geometric regularity of
+admitted joins. [ReservoirModel](../ProjectAInos/Thermodynamics/ReservoirModel.lean)
+now witnesses a nonempty family satisfying that complete interface, including
+scaling and joining. Its thermal relation is universal; nonconstant-temperature
+models and canonical atomic realizations have separate proof obligations.
+
 Simple-system comparison, thermal join coherence, the location-of-isotherms dichotomy, and calibrator existence are proved. The final endpoints derive finite-product comparison, ECH for nonreactive labels, and calibrated additive entropy directly from the stated physical premises. The reaction theorem adds absence of sinks and derives the corrected entropy; it does not assume calibrated monotonicity separately. All primitive systems in this interface satisfy T4. T5 is not needed for that scope; extensions to systems without T4 and later temperature regularity are separate topics. [Physical entropy endpoints](../ProjectAInos/Thermodynamics/PhysicalEntropyPrinciple.lean) · [Canonical atomic presentation](../ProjectAInos/Thermodynamics/AtomicSystems.lean) · [Implementation checklist](thermodynamics-status.md)

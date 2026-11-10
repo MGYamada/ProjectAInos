@@ -43,6 +43,7 @@ public import ProjectAInos.Thermodynamics.ReactionModels
 public import ProjectAInos.Thermodynamics.Reactions
 public import ProjectAInos.Thermodynamics.ReferenceIntervals
 public import ProjectAInos.Thermodynamics.Representation
+public import ProjectAInos.Thermodynamics.ReservoirModel
 public import ProjectAInos.Thermodynamics.SectorGeometry
 public import ProjectAInos.Thermodynamics.SectorModel
 public import ProjectAInos.Thermodynamics.SimpleComparison

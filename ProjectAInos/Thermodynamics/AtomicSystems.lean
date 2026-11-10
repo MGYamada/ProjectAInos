@@ -145,9 +145,10 @@ theorem exists_weak_entropy (F : ThermalFamily P)
     (fun g => D.chart g (S g) (hdomain g))
     (fun g => D.chart_represent g (S g) (hdomain g) (hrepresent g)) hM
 
-/-- The canonical nonreactive presentation satisfies ECH. Physical comparison
-and common realization are already proved; only actual label conservation is
-required here, and is supplied by the generated nonreactive relation. -/
+/-- The canonical presentation satisfies ECH when accessibility preserves
+labels. Physical comparison and common realization are already proved;
+`exchangeComparison_nonreactive` discharges conservation for the generated
+nonreactive relation. -/
 theorem exchangeComparison (F : ThermalFamily P)
     (S : ∀ g, SimpleSystem P (D.dimension g)) (hS : ∀ g, F.admitted (S g))
     (hdomain : ∀ g, (S g).domain = D.domain g)
@@ -157,6 +158,20 @@ theorem exchangeComparison (F : ThermalFamily P)
   F.exchangeComparison_of_calibrators F.hasCalibrators_of_axioms D.dimension S hS
     (fun g => D.chart g (S g) (hdomain g))
     (fun g => D.chart_represent g (S g) (hdomain g) (hrepresent g)) hpreserved
+
+/-- The A1–A6 closure of within-system atomic transformations satisfies ECH
+from the physical family premises, with no label-conservation hypothesis.
+`Nonreactive.accessibility_label_eq` supplies conservation. -/
+theorem exchangeComparison_nonreactive
+    (elementary : ∀ g, D.State g → D.State g → Prop)
+    (F : ThermalFamily (Nonreactive.accessibility D.State elementary))
+    (S : ∀ g, SimpleSystem (Nonreactive.accessibility D.State elementary) (D.dimension g))
+    (hS : ∀ g, F.admitted (S g))
+    (hdomain : ∀ g, (S g).domain = D.domain g)
+    (hrepresent : ∀ g, (S g).represent = D.represent g) :
+    ExchangeComparison (Nonreactive.accessibility D.State elementary).StateSpace :=
+  D.exchangeComparison F S hS hdomain hrepresent
+    (Nonreactive.accessibility_label_eq D.State elementary)
 
 end AtomicDomains
 

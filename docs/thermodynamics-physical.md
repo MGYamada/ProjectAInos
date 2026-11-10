@@ -84,6 +84,11 @@ give the result. `splitting_of_normalized` derives the homogeneous A5 form
 from $x\sim_A tx+(1-t)x$, $0<t<1$, together with scaling and the empty
 identities. No negative physical amounts are introduced.
 
+The additional structure field `zero_scale` is a carrier law, independent of
+the accessibility relation: zero scaling gives the empty state. The weaker
+`DistribMulAction` typeclass does not supply it. Formal composite states
+prove it as `CompositeState.zero_scale`, so it is not a further physical axiom.
+
 A `SimpleSystem` has an open convex domain
 $\Gamma\subseteq\mathbb R\times(\operatorname{Fin}n\to\mathbb R)$, an
 ambient representation $j$ into raw states, and the following additional
@@ -129,6 +134,13 @@ These fields are defined in
 [SimpleSystem.lean](../ProjectAInos/Thermodynamics/SimpleSystem.lean).
 S1 is kept explicit for the geometric development, although T4 below supplies
 irreversible successors in the full thermal family.
+
+The [join assumption audit](thermodynamics-join-audit.md) classifies these
+fields for joined systems: the weaker `ThermalJoin` carries contact and
+splitting, while `SimpleThermalJoin` also supplies a full geometrically
+regular `SimpleSystem`. The [reservoir example](thermodynamics-models.md#a-populated-smooth-thermal-family)
+proves these requirements in a nonempty family. General comparison results
+remain conditional on this regularity for the admitted systems and joins.
 
 ## Thermal assumptions and positive scaling
 
@@ -350,6 +362,12 @@ compare those cross sums, giving exchange comparison on `P.StateSpace`.
 conservation explicit. It connects the physical proof to the algebraic ECH
 criterion and entropy theorem.
 
+For canonical atoms, `AtomicDomains.exchangeComparison_nonreactive`
+specializes directly to `Nonreactive.accessibility D.State elementary` and
+discharges conservation with `Nonreactive.accessibility_label_eq`. Its caller
+supplies the admitted physical systems and their matching domains and
+representations, with no CH, ECH, or conservation hypothesis.
+
 There is also a direct calibrated entropy construction. For nonempty
 primitive systems, `exists_entropy_of_physical_axioms` returns an additive
 extensive function $S_0$ with
@@ -542,6 +560,7 @@ conclusions without repeating conjunctions or adding hypotheses.
 | `ThermalFamily.exists_entropy_of_physical_axioms` | Nonempty primitive domains and matching atomic presentation; additive extensive entropy with the equal-label criterion |
 | `ThermalFamily.exists_weak_entropy_of_physical_axioms` | The preceding physical calibration data, represented label fibers, and `RawNoSinks`; corrected entropy monotone for all processes |
 | `AtomicDomains.exchangeComparison`, `.exists_calibrated_entropy`, `.exists_weak_entropy` | Canonical coordinate atoms supply the chart and full-domain label laws |
+| `AtomicDomains.exchangeComparison_nonreactive` | The generated nonreactive relation supplies conservation; the physical family supplies comparison |
 
 All admitted simple systems used in the comparison proof, including the
 necessary scaled systems and joins, satisfy the stated geometric and thermal

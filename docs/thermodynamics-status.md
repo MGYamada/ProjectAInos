@@ -21,18 +21,24 @@ mathematical distinctions exposed by the proofs are recorded in the
 ## Public physical endpoints
 
 - `ThermalFamily.product_comparison` derives finite-product CH. It does not take CH, ECH, or calibrator existence as a premise.
-- `ThermalFamily.exchangeComparison_of_physical_axioms` derives ECH for conserved primitive composition labels. Generated nonreactive accessibility supplies label conservation.
+- `ThermalFamily.exchangeComparison_of_physical_axioms` derives ECH when accessibility preserves primitive composition labels. `AtomicDomains.exchangeComparison_nonreactive` specializes to the generated nonreactive relation and proves ECH without a conservation hypothesis.
 - `ThermalFamily.exists_entropy_of_physical_axioms` gives an additive extensive entropy and the complete accessibility criterion within each composition label.
 - `ThermalFamily.exists_weak_entropy_of_physical_axioms` adds `RawNoSinks` and returns the corrected entropy, monotone for all accessible processes and still a complete criterion within matching labels.
 - `AtomicDomains` constructs actual coordinate atoms, their finite composites, and their labels before an accessibility relation is supplied. Its entropy endpoints derive the charts and full-domain label laws from the coordinate presentation.
+- `ThermalFamily.Nontrivial` asserts existence of a represented member state. [ReservoirModel](../ProjectAInos/Thermodynamics/ReservoirModel.lean) constructs a nontrivial smooth family with positive scaling and thermal joins, and proves its `family_nontrivial` witness. The thermal relation is universal in this example.
 
 The physical premises remain explicit in `Accessibility`, `SimpleSystem`,
 `ThermalFamily`, and `RawNoSinks`. All primitive systems in these endpoints
 satisfy transversality T4, so T1–T4 suffice; adding T5 is unnecessary for this
 scope. Entropy extension to systems without T4 and temperature regularity are
-subsequent topics. The ideal-gas composite construction is the requested
-consistency model; a microscopic phase-volume derivation belongs to README
+subsequent topics. The ideal-gas composite construction is an algebraic
+consistency model for stability and ECH, not a model of the full geometric and
+thermal-family premises; a microscopic phase-volume derivation belongs to README
 item 4, statistical mechanics.
+
+The [join assumption audit](thermodynamics-join-audit.md) lists the geometric
+premises required of every admitted join. Contact and splitting alone do not
+imply all those regularity properties.
 
 ## Boundary cases
 

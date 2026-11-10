@@ -6,11 +6,13 @@ public import ProjectAInos.Thermodynamics.Entropy
 public import Mathlib.LinearAlgebra.Isomorphisms
 
 /-!
-# The extensive ideal-gas consistency model
+# The extensive ideal-gas algebraic consistency model
 
 Composite states are represented by total entropy and positive total amount,
 together with the empty state. Its order compares total entropy at equal amount.
-The single-box map preserves and reflects accessibility in this consistency model.
+The single-box map preserves and reflects accessibility in this algebraic model.
+It witnesses stability and exchange comparison, not a `SimpleSystem` or
+`ThermalFamily` satisfying the geometric and thermal premises.
 -/
 
 @[expose] public section

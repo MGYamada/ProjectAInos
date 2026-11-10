@@ -119,6 +119,45 @@ Adding $bn$ does not change entropy differences inside a fixed amount sector. It
 
 [SectorModel.lean](../ProjectAInos/Thermodynamics/SectorModel.lean) proves stability, ECH, and `different_amounts_incomparable`. [ModelConnections.lean](../ProjectAInos/Thermodynamics/ModelConnections.lean) proves `sector_mem_processCone_iff`, `sector_processSpan_eq_ker`, the quotient equivalence `sectorConservationEquiv`, the process-space equivalence `sectorEntropyEquiv`, and `sector_entropyCoordinate_eq`. `sectorEntropyExtension_classification` establishes existence and uniqueness of the coefficient $b$, rather than merely constructing examples of extensions.
 
+## A populated smooth thermal family
+
+The sector order also supports a concrete family satisfying the geometric and
+thermal interfaces. [ReservoirModel.lean](../ProjectAInos/Thermodynamics/ReservoirModel.lean)
+defines, for every finite work dimension $n$ and positive amount $r$,
+
+$$
+\Gamma_{n,r}=\{(U,V)\in\mathbb R\times\mathbb R^n:U>0\},\qquad
+j_{n,r}(U,V)=(U,r),\qquad P(U,V)=0.
+$$
+
+Accessibility compares energy at equal amount. Its forward sectors are
+halfspaces $U'\ge U$; their relative boundaries are the path-connected
+hyperplanes $U'=U$. Supporting forms have the unique energy-normal kernel,
+and the constant pressure field is locally Lipschitz. Energy increases give
+irreversible processes. Thus these are actual nonempty `SimpleSystem`s.
+
+Scaling by $s>0$ gives amount $sr$, with the exact scaled domain and
+representation. Joining amounts $r,q$ gives amount $r+q$, total energy
+$U_1+U_2$, and the concatenated work coordinates. Any positive joined energy
+splits into two positive energies, and contact and splitting preserve the
+represented sector state. Every pair is therefore in thermal equilibrium.
+Transversality brackets $U$ by $U/2$ and $2U$ in the same thermal class.
+
+`Reservoir.family_nontrivial` proves `ThermalFamily.Nontrivial`, meaning that
+some admitted system has a nonempty domain. `Reservoir.represented_state`
+exhibits the represented state $(1,1)$. The general
+`ThermalFamily.nontrivial_iff_exists_isState` identifies this witness with
+existence of a represented member state. Conditional comparison theorems
+retain their original hypotheses; they do not require nonvacuity when it is
+mathematically unnecessary.
+
+This model checks populated scaling, joining, support geometry and thermal
+equilibrium together. Its thermal relation is universal, so it exercises the
+universal-isotherm branch. A varying-temperature example and a canonical
+`AtomicDomains` realization remain separate constructions. The
+[join assumption audit](thermodynamics-join-audit.md) records which geometric
+facts are explicit inputs in a general family and proved here for reservoirs.
+
 ## Reaction bookkeeping and unreachable labels
 
 For the idealized reaction
