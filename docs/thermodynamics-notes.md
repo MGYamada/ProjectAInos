@@ -2,7 +2,7 @@
 
 These notes record mathematical distinctions and modeling decisions made explicit by the Lean development. Each entry gives the argument, its effect on the public interface, and the proof status. A known theorem becoming visible in a formal interface is distinct from a new physical result.
 
-The research roadmap remains in [README](../README.md#thermodynamics-proof-development). New observations should be added here with links to the relevant definitions and proofs; unresolved claims should be marked as such.
+The research roadmap remains in [README](../README.md#thermodynamics-proof-development). The [mathematical guide](thermodynamics.md) presents the implemented theory and proof dependencies. New observations should be added here with links to the relevant definitions and proofs; unresolved claims should be marked as such.
 
 ## T01. The empty system and thermal equilibrium
 

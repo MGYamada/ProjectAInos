@@ -1,6 +1,7 @@
 module
 
 public import ProjectAInos.Thermodynamics.FamilyCalibration
+public import ProjectAInos.Thermodynamics.EntropyPrinciples
 public import Mathlib.LinearAlgebra.Dual.Lemmas
 
 /-!
@@ -65,13 +66,11 @@ theorem exists_calibrated_entropy (hcal : F.HasCalibrators)
     (chart : ∀ g, State g → (S g).domain)
     (hrepresent : ∀ g z, (S g).represent (chart g z) = CompositeState.mk (.atom ⟨g, z⟩)) :
     ∃ entropy : CompositeState (Σ g, State g) →+ ℝ,
-      (∀ (r : ℝ≥0) x, entropy (r • x) = (r : ℝ) * entropy x) ∧
-      ∀ x y, Nonreactive.compositionLabel State x = Nonreactive.compositionLabel State y →
-        (P.relation x y ↔ entropy x ≤ entropy y) := by
+      CalibratedEntropyPrinciple (Nonreactive.compositionLabel State) P.relation entropy := by
   classical
   rcases isEmpty_or_nonempty Γ with hempty | hΓ
   · let := hempty
-    refine ⟨0, by simp, ?_⟩
+    refine ⟨0, ⟨by simp, ?_⟩⟩
     intro x y _
     have hz (z : CompositeState (Σ g, State g)) : P.stateClass z = 0 := by
       simpa using Nonreactive.atom_normal_form State P z
@@ -102,7 +101,7 @@ theorem exists_calibrated_entropy (hcal : F.HasCalibrators)
         (fun i => coordinate (p.system i) (chart (p.system i) (u i)))
         (fun i => coordinate (p.system i) (chart (p.system i) (v i))) e hu hv rfl
     exact P.relation_iff_completedEntropy_le L he hne hL _ _ r hdiff
-  refine ⟨entropy, P.completedEntropy_scale L, ?_⟩
+  refine ⟨entropy, ⟨P.completedEntropy_scale L, ?_⟩⟩
   intro x y hlabel
   obtain ⟨p, u, v, hx, hy⟩ := Nonreactive.common_product_of_equal_label State P x y hlabel
   have hsx : entropy x = entropy (p.realize State u) :=

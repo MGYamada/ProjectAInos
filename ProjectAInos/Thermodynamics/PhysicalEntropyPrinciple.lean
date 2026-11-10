@@ -65,9 +65,7 @@ theorem exists_entropy_of_physical_axioms
     (chart : ∀ g, State g → (S g).domain)
     (hrepresent : ∀ g z, (S g).represent (chart g z) = CompositeState.mk (.atom ⟨g, z⟩)) :
     ∃ entropy : CompositeState (Σ g, State g) →+ ℝ,
-      (∀ (r : ℝ≥0) x, entropy (r • x) = (r : ℝ) * entropy x) ∧
-      ∀ x y, Nonreactive.compositionLabel State x = Nonreactive.compositionLabel State y →
-        (P.relation x y ↔ entropy x ≤ entropy y) :=
+      CalibratedEntropyPrinciple (Nonreactive.compositionLabel State) P.relation entropy :=
   F.exists_calibrated_entropy F.hasCalibrators_of_axioms n S hS hnonempty chart hrepresent
 
 /-- A weak entropy principle for mixtures and reactions, from the physical
@@ -82,14 +80,8 @@ theorem exists_weak_entropy_of_physical_axioms
     (hM : Reactions.RawNoSinks (Nonreactive.compositionLabel State) P.relation) :
     ∃ (entropy totalEntropy : CompositeState (Σ g, State g) →+ ℝ)
       (B : (Γ →₀ ℝ≥0) →ₗ[ℝ≥0] ℝ),
-      (∀ x, totalEntropy x = entropy x + B (Nonreactive.compositionLabel State x)) ∧
-      (∀ (r : ℝ≥0) x, entropy (r • x) = (r : ℝ) * entropy x) ∧
-      (∀ x y, Nonreactive.compositionLabel State x = Nonreactive.compositionLabel State y →
-        (P.relation x y ↔ entropy x ≤ entropy y)) ∧
-      (∀ (r : ℝ≥0) x, totalEntropy (r • x) = (r : ℝ) * totalEntropy x) ∧
-      (∀ x y, P.relation x y → totalEntropy x ≤ totalEntropy y) ∧
-      (∀ x y, Nonreactive.compositionLabel State x = Nonreactive.compositionLabel State y →
-        (P.relation x y ↔ totalEntropy x ≤ totalEntropy y)) :=
+      WeakEntropyPrinciple (Nonreactive.compositionLabel State) P.relation
+        entropy totalEntropy B :=
   F.exists_weak_entropy_of_calibrators F.hasCalibrators_of_axioms n S hS hnonempty
     hstate chart hrepresent hM
 
