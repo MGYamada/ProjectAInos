@@ -1,0 +1,37 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lean:
+    name: Lean build
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - name: Build and audit Lean
+        uses: leanprover/lean-action@ba3fdfe5c4476c925da13bf11a005ddb47e47aee # v1
+        env:
+          MATHLIB_CACHE_GET_URL: ""
+        with:
+          build: "true"
+          build-args: --wfail ProjectAInos
+          use-mathlib-cache: "true"
+          axiom-audit: "true"
+          axiom-audit-root: ProjectAInos
+          axiom-audit-allow: propext,Classical.choice,Quot.sound
+      - name: Check the root module imports
+        run: lake exe mk_all --check --lib ProjectAInos

@@ -5,7 +5,10 @@
 /.lake/
 /docbuild/
 
-# Python bytecode
+# Python build output and bytecode
+/experiments/.venv/
+/experiments/build/
+/experiments/*.egg-info/
 __pycache__/
 *.pyc
 
