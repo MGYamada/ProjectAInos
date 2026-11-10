@@ -1,6 +1,7 @@
 module
 
 public import ProjectAInos.Thermodynamics.Conservation
+public import ProjectAInos.Thermodynamics.Completion
 
 /-!
 # The signed reference-state cutoff formula
@@ -26,14 +27,6 @@ def signedReferenceLE (x₀ x₁ x : M) (r : ℝ) : Prop :=
   (1 - r).toNNReal • x₀ + r.toNNReal • x₁ ≤
     x + (-(1 - r)).toNNReal • x₀ + (-r).toNNReal • x₁
 
-private theorem positive_part_difference (r : ℝ) :
-    (r.toNNReal : ℝ) - ((-r).toNNReal : ℝ) = r := by
-  rcases le_total 0 r with hr | hr
-  · rw [Real.coe_toNNReal r hr, Real.toNNReal_of_nonpos (neg_nonpos.mpr hr)]
-    simp
-  · rw [Real.toNNReal_of_nonpos hr, Real.coe_toNNReal (-r) (neg_nonneg.mpr hr)]
-    simp
-
 /-- Signed physical mixtures agree with subtraction in the completed space. -/
 theorem signedReferenceLE_iff (P : PointedCone ℝ V) (i : M →ₗ[ℝ≥0] V)
     (horder : ∀ x y, x ≤ y ↔ i y - i x ∈ P) (x₀ x₁ x : M) (r : ℝ) :
@@ -42,9 +35,9 @@ theorem signedReferenceLE_iff (P : PointedCone ℝ V) (i : M →ₗ[ℝ≥0] V)
   rw [signedReferenceLE, horder]
   simp only [map_add, map_smul, NNReal.smul_def]
   have h₀ : ((-(1 - r)).toNNReal : ℝ) = ((1 - r).toNNReal : ℝ) - (1 - r) := by
-    linarith [positive_part_difference (1 - r)]
+    linarith [Completion.positive_part_difference (1 - r)]
   have h₁ : ((-r).toNNReal : ℝ) = (r.toNNReal : ℝ) - r := by
-    linarith [positive_part_difference r]
+    linarith [Completion.positive_part_difference r]
   rw [h₀, h₁]
   have hvec : i x + ((↑(1 - r).toNNReal : ℝ) - (1 - r)) • i x₀ +
       ((↑r.toNNReal : ℝ) - r) • i x₁ -

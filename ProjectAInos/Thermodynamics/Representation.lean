@@ -1,7 +1,7 @@
 module
 
+public import ProjectAInos.Thermodynamics.Basic
 public import Mathlib.Geometry.Convex.Cone.Pointed
-public import Mathlib.Analysis.SpecificLimits.Basic
 public import Mathlib.LinearAlgebra.Basis.VectorSpace
 public import Mathlib.Tactic.Linarith
 public import Mathlib.Tactic.Module
@@ -33,6 +33,12 @@ def SequentialOrderClosed (P : PointedCone ℝ V) : Prop :=
     (∀ n, 0 < ε n) → Tendsto ε atTop (𝓝 0) →
       (∀ n, v + (ε n : ℝ) • w ∈ P) → v ∈ P
 
+/-- Apply sequential order closedness along the fixed scales `1 / (n + 1)`. -/
+theorem SequentialOrderClosed.of_reciprocalNatSucc {P : PointedCone ℝ V}
+    (hSC : SequentialOrderClosed P) (v w : V)
+    (h : ∀ n, v + (reciprocalNatSucc n : ℝ) • w ∈ P) : v ∈ P :=
+  hSC v w reciprocalNatSucc reciprocalNatSucc_pos tendsto_reciprocalNatSucc h
+
 /-- Every vector in the real process span has one of its signs in the cone. -/
 def ConeTotalOnSpan (P : PointedCone ℝ V) : Prop :=
   ∀ w ∈ Submodule.span ℝ (P : Set V), w ∈ P ∨ -w ∈ P
@@ -52,16 +58,13 @@ bounded above by one fixed vector. -/
 theorem SequentialOrderClosed.archimedean (P : PointedCone ℝ V)
     (hSC : SequentialOrderClosed P) (v w : V)
     (h : ∀ n : ℕ, 0 < n → w - (n : ℝ) • v ∈ P) : -v ∈ P := by
-  apply hSC (-v) w (fun n => 1 / ((n : ℝ≥0) + 1))
-  · intro n
-    positivity
-  · exact tendsto_one_div_add_atTop_nhds_zero_nat
-  · intro n
-    have hn : (n : ℝ) + 1 ≠ 0 := by positivity
-    have hscaled := P.smul_mem (show 0 ≤ 1 / ((n : ℝ) + 1) by positivity)
-      (h (n + 1) (Nat.succ_pos n))
-    simpa [smul_sub, smul_smul, Nat.cast_add, Nat.cast_one, hn,
-      sub_eq_add_neg, add_comm] using hscaled
+  apply hSC.of_reciprocalNatSucc (-v) w
+  intro n
+  have hn : (n : ℝ) + 1 ≠ 0 := by positivity
+  have hscaled := P.smul_mem (show 0 ≤ 1 / ((n : ℝ) + 1) by positivity)
+    (h (n + 1) (Nat.succ_pos n))
+  simpa [reciprocalNatSucc, smul_sub, smul_smul, Nat.cast_add, Nat.cast_one, hn,
+    sub_eq_add_neg, add_comm] using hscaled
 
 /-- The cone induces a linear order on its span when exchange comparison
 supplies totality. This is installed locally by callers. -/
@@ -149,14 +152,11 @@ theorem entropyCut_bddAbove (P : PointedCone ℝ V)
     obtain ⟨t, ht, hnt⟩ := not_bddAbove_iff.mp hbound ((n : ℝ) + 1)
     exact entropyCut_mono P he hnt.le ht
   have hneg : -e ∈ P := by
-    apply hSC (-e) w (fun n => 1 / ((n : ℝ≥0) + 1))
-    · intro n
-      positivity
-    · exact tendsto_one_div_add_atTop_nhds_zero_nat
-    · intro n
-      have h := P.smul_mem (show 0 ≤ 1 / ((n : ℝ) + 1) by positivity) (hnat n)
-      have hn : (n : ℝ) + 1 ≠ 0 := by positivity
-      simpa [smul_sub, smul_smul, hn, sub_eq_add_neg, add_comm] using h
+    apply hSC.of_reciprocalNatSucc (-e) w
+    intro n
+    have h := P.smul_mem (show 0 ≤ 1 / ((n : ℝ) + 1) by positivity) (hnat n)
+    have hn : (n : ℝ) + 1 ≠ 0 := by positivity
+    simpa [reciprocalNatSucc, smul_sub, smul_smul, hn, sub_eq_add_neg, add_comm] using h
   exact hP e he hne hneg
 
 theorem entropyCut_nonempty (P : PointedCone ℝ V)
@@ -178,46 +178,50 @@ theorem entropyCut_nonempty (P : PointedCone ℝ V)
   convert h using 1
   module
 
+/-- Sequential closedness recovers a vector from its lower cut when only its
+comparisons with the reference line are known. -/
+theorem entropyCut_sSup_smul_of_comparable (P : PointedCone ℝ V)
+    (hSC : SequentialOrderClosed P) (hP : (P : ConvexCone ℝ V).Salient)
+    {e w : V} (he : e ∈ P) (hne : e ≠ 0)
+    (hnonempty : (entropyCut P e w).Nonempty)
+    (hcompare : ∀ r : ℝ, w - r • e ∈ P ∨ -(w - r • e) ∈ P) :
+    sSup (entropyCut P e w) • e = w := by
+  let α := sSup (entropyCut P e w)
+  have hbound := entropyCut_bddAbove P hSC hP he hne w
+  have hbelow {r : ℝ} (hr : r < α) : w - r • e ∈ P := by
+    obtain ⟨t, ht, hrt⟩ := exists_lt_of_lt_csSup hnonempty hr
+    exact entropyCut_mono P he hrt.le ht
+  have habove {r : ℝ} (hr : α < r) : -(w - r • e) ∈ P := by
+    exact (hcompare r).resolve_left (fun h =>
+      (not_le_of_gt hr) (le_csSup hbound h))
+  have hleft : w - α • e ∈ P := by
+    apply hSC.of_reciprocalNatSucc (w - α • e) e
+    intro n
+    have h := hbelow (r := α - 1 / ((n : ℝ) + 1))
+      (sub_lt_self _ (by positivity))
+    convert h using 1
+    simp only [reciprocalNatSucc, NNReal.coe_div, NNReal.coe_one, NNReal.coe_add, NNReal.coe_natCast]
+    module
+  have hright : -(w - α • e) ∈ P := by
+    apply hSC.of_reciprocalNatSucc (-(w - α • e)) e
+    intro n
+    have h := habove (r := α + 1 / ((n : ℝ) + 1))
+      (lt_add_of_pos_right _ (by positivity))
+    convert h using 1
+    simp only [reciprocalNatSucc, NNReal.coe_div, NNReal.coe_one, NNReal.coe_add, NNReal.coe_natCast]
+    module
+  exact (sub_eq_zero.mp (salient_eq_zero P hP hleft hright)).symm
+
 /-- The supremum of the lower cut recovers the vector itself. -/
 theorem entropyCut_sSup_smul (P : PointedCone ℝ V)
     (hSC : SequentialOrderClosed P) (hP : (P : ConvexCone ℝ V).Salient)
     (hTotal : ConeTotalOnSpan P) {e w : V} (he : e ∈ P) (hne : e ≠ 0)
     (hw : w ∈ Submodule.span ℝ (P : Set V)) :
-    sSup (entropyCut P e w) • e = w := by
-  let α := sSup (entropyCut P e w)
-  have hbound := entropyCut_bddAbove P hSC hP he hne w
-  have hnonempty := entropyCut_nonempty P hSC hP hTotal he hne hw
-  have hbelow {r : ℝ} (hr : r < α) : w - r • e ∈ P := by
-    obtain ⟨t, ht, hrt⟩ := exists_lt_of_lt_csSup hnonempty hr
-    exact entropyCut_mono P he hrt.le ht
-  have habove {r : ℝ} (hr : α < r) : -(w - r • e) ∈ P := by
-    have hnot : w - r • e ∉ P := fun h =>
-      (not_le_of_gt hr) (le_csSup hbound h)
-    exact (hTotal _ (Submodule.sub_mem _ hw
-      (Submodule.smul_mem _ _ (Submodule.subset_span he)))).resolve_left hnot
-  have hleft : w - α • e ∈ P := by
-    apply hSC (w - α • e) e (fun n => 1 / ((n : ℝ≥0) + 1))
-    · intro n
-      positivity
-    · exact tendsto_one_div_add_atTop_nhds_zero_nat
-    · intro n
-      have h := hbelow (r := α - 1 / ((n : ℝ) + 1))
-        (sub_lt_self _ (by positivity))
-      convert h using 1
-      simp only [NNReal.coe_div, NNReal.coe_one, NNReal.coe_add, NNReal.coe_natCast]
-      module
-  have hright : -(w - α • e) ∈ P := by
-    apply hSC (-(w - α • e)) e (fun n => 1 / ((n : ℝ≥0) + 1))
-    · intro n
-      positivity
-    · exact tendsto_one_div_add_atTop_nhds_zero_nat
-    · intro n
-      have h := habove (r := α + 1 / ((n : ℝ) + 1))
-        (lt_add_of_pos_right _ (by positivity))
-      convert h using 1
-      simp only [NNReal.coe_div, NNReal.coe_one, NNReal.coe_add, NNReal.coe_natCast]
-      module
-  exact (sub_eq_zero.mp (salient_eq_zero P hP hleft hright)).symm
+    sSup (entropyCut P e w) • e = w :=
+  entropyCut_sSup_smul_of_comparable P hSC hP he hne
+    (entropyCut_nonempty P hSC hP hTotal he hne hw)
+    (fun r => hTotal _ (Submodule.sub_mem _ hw
+      (Submodule.smul_mem _ r (Submodule.subset_span he))))
 
 /-- The normalized real entropy coordinate on the process span. -/
 noncomputable def coneEntropyEquiv (P : PointedCone ℝ V)
