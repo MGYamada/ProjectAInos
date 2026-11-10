@@ -1,28 +1,28 @@
-# C∞環による古典力学の研究計画
+# Research Plan for Classical Mechanics over C∞-Rings
 
-Landau–Lifshitz, *Mechanics* 全52節のLean形式化に向けて。
+A Lean formalization plan for all 52 sections of Landau and Lifshitz’s *Mechanics*.
 
-原稿: “Classical Mechanics over C∞-Rings”, Draft 0.1（2026年11月10日）。
-2026年11月11日に `tex/cinfty_mechanics.tex` の本文・数式・定理と証明案・52節の対応表・設計スケッチ・実験台帳・参考文献をMarkdownへ移行した。以下の英語本文は原稿の研究構想であり、記載された定理がすべて形式化済みであることは意味しない。依存図は同じ節点・辺を持つMermaid図へ置き換えた。
+The original manuscript, *Classical Mechanics over C∞-Rings*, was dated 10 November 2026 and labeled Draft 0.1. On 11 November 2026, its text, formulas, proposed theorems and proofs, section map, design sketches, experiment ledger, and references were migrated from `tex/cinfty_mechanics.tex` to Markdown. The Mermaid dependency diagram preserves the original nodes and edges. The manuscript below records the research programme, and the implementation summary gives the current proof status.
 
-## 実装計画と現在の到達点
+## Implementation plan and current progress
 
-- 共通層は `ProjectAInos/Variational/` に置く。issue #7の `SmoothAlgebra` は有限項滑らかな演算、C∞環、射、自由生成性、具体的な方向微分の連鎖律を実装した。既存の環・実代数構造を追加構造 `SmoothRing` で拡張する。
-- 共通の解析層は局所第一ジェット、作用の方向微分、部分積分、内部にコンパクトな台を持つ変分によるEuler–Lagrange同値を実装した。
-- **証明済みの今回の段階:** `ProjectAInos/Mechanics/` で実時間区間 `[a,b]`、経路 `q : ℝ → Q`、固定端点の変分を扱う。作用の実際の導関数、境界項を含む第一変分、停留性とEuler–Lagrange方程式の同値を証明した。解析的仮定はLagrangianと経路のC²正則性、`a < b`。一般化座標 `Q = Fin n → ℝ` を含む。自然LagrangianについてはNewton方程式 `m q'' = −V'(q)` を導いた。
-- 続いて全微分の追加、エネルギー・Noether恒等式、自然Lagrangianのモデルを進める。抽象C∞環の商・双対数・普遍余接加群・ジェット環と解析モデルの同一視は別段階として実装する。
-- Poisson構造、Legendre変換、拘束と還元、Hamilton–Jacobi、各古典モデルは後続段階。一般の非被約係数環における基本補題と解の表現可能性は、原稿自身が未検証としている研究課題として保持する。
+- The common layer lives in `ProjectAInos/Variational/`. The `SmoothAlgebra` work for issue #7 implemented finite-arity smooth operations, C∞-rings and their morphisms, free generation, and the chain rule for concrete directional derivatives. `SmoothRing` adds structure to an existing commutative real algebra.
+- The common analytic layer implements local first jets, directional derivatives of the action, integration by parts, and the Euler–Lagrange equivalence for compactly supported interior variations.
+- **Fixed-endpoint mechanics.** `ProjectAInos/Mechanics/` treats paths `q : ℝ → Q` on a real time interval `[a,b]`. It proves the derivative of the action, the first variation with the boundary term, and the equivalence between fixed-endpoint stationarity and the Euler–Lagrange equations for C² Lagrangians and paths with `a < b`. This includes the generalized coordinates `Q = Fin n → ℝ`. The scalar natural Lagrangian yields Newton’s equation `m q'' = −V'(q)`.
+- **Total time derivatives.** In the real first-order model, adding the total time derivative of `F(t,q)` changes the action by `F(b,q(b)) − F(a,q(a))` and preserves fixed-endpoint stationarity and the pointwise Euler–Lagrange residual. Energy and Noether identities and further natural Lagrangian models are next. Quotients of abstract C∞-rings, dual numbers, universal cotangent modules, and the comparison between abstract jet rings and the analytic model are separate stages.
+- Later stages include Poisson structures, the Legendre transformation, constraints and reduction, Hamilton–Jacobi theory, and the remaining classical models. The fundamental lemma over general nonreduced coefficient rings and representability of solutions remain open targets in the manuscript.
 
-本文中の `Cinfty/...` などのファイル名とLeanコードは原案の設計スケッチである。実装の名前・仮定・証明状況は[共有変分法のガイド](variational.md)、[C∞環のガイド](smooth-algebra.md)、[Mechanicsの証明対応表](mechanics.md#proof-map)を優先する。形式化から得た区別と設計判断は[Mechanics形式化ノート](mechanics-notes.md)へ記録する。古いMathlib実装状況の記述は原稿時点の調査記録として読む。
+Paths such as `Cinfty/...` and Lean listings in the manuscript are design sketches. The current guides give the implemented names, assumptions, and proof status. Earlier descriptions of Mathlib record the state of the library at the time of the manuscript. [Shared variational calculus](variational.md) · [C∞-rings](smooth-algebra.md) · [Mechanics proof map](mechanics.md#proof-map) · [Mechanics formalization notes](mechanics-notes.md)
 
-| 原稿の対象 | 現在の状態 | Leanとの対応 |
+| Manuscript target | Status | Lean implementation or research target |
 | --- | --- | --- |
-| C∞環・射・自由生成性 | 実装済み | `Variational.SmoothAlgebra`。既存実代数上の追加構造として実装 |
-| 第一変分と固定端点のEuler–Lagrange方程式 | 実数係数の解析モデルで証明済み | `Mechanics.FirstVariation`、`Mechanics.EulerLagrange` |
-| 滑らかな観測量と解析モデルの接続 | 実装済み | `Mechanics.ofSmoothOperation`、`stationary_ofSmoothOperation_iff` |
-| 商・双対数・普遍余接加群・抽象ジェット環 | 未実装 | 以下の基礎・ジェット節に研究目標を保存 |
-| 一般の係数環上の作用・臨界部分関手・解の表現可能性 | 未検証の研究構想 | 実数係数の証明から一般係数環へは昇格しない |
-| Noether、Poisson、Hamilton形式、還元、残りのモデル | 後続段階 | 以下の52節対応表を維持 |
+| C∞-rings, morphisms, and free generation | Implemented | `Variational.SmoothAlgebra` adds structure to an existing real algebra |
+| First variation and fixed-endpoint Euler–Lagrange equations | Proved in the real analytic model | `Mechanics.FirstVariation` and `Mechanics.EulerLagrange` |
+| Addition of a total time derivative and the boundary term | Proved for `F(t,q)` in the real first-order model | `Mechanics.TotalTimeDerivative`. The abstract jet-ring statement remains a research target |
+| Connection between smooth observables and the analytic model | Implemented | `Mechanics.ofSmoothOperation` and `stationary_ofSmoothOperation_iff` |
+| Quotients, dual numbers, universal cotangent modules, and abstract jet rings | Planned | Foundation and jet-ring sections below |
+| Action, critical subfunctors, and representability of solutions over general coefficient rings | Open research targets | The available variational proofs apply to real coefficients |
+| Noether theory, Poisson structures, Hamiltonian mechanics, reduction, and remaining models | Later stages | Section-by-section map below |
 
 <a id="abstract"></a>
 

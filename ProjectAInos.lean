@@ -5,6 +5,7 @@ public import ProjectAInos.Mechanics.EulerLagrange
 public import ProjectAInos.Mechanics.Examples
 public import ProjectAInos.Mechanics.FirstVariation
 public import ProjectAInos.Mechanics.SmoothLagrangian
+public import ProjectAInos.Mechanics.TotalTimeDerivative
 public import ProjectAInos.Thermodynamics.AdiabatUniqueness
 public import ProjectAInos.Thermodynamics.AtomicSystems
 public import ProjectAInos.Thermodynamics.Basic

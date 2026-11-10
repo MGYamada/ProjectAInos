@@ -1,0 +1,49 @@
+project:
+  type: website
+  output-dir: _site
+  render:
+    - "*.qmd"
+
+website:
+  title: "P⊗AI (Project AInos)"
+  search: true
+  navbar:
+    right:
+      - text: Lean API
+        href: api/index.html
+  sidebar:
+    style: docked
+    contents:
+      - index.qmd
+      - research-plan.qmd
+      - proof-development.qmd
+      - section: Thermodynamics
+        contents:
+          - thermodynamics.qmd
+          - thermodynamics-algebra.qmd
+          - thermodynamics-models.qmd
+          - thermodynamics-physical.qmd
+          - thermodynamics-notes.qmd
+          - thermodynamics-status.qmd
+          - thermodynamics-join-audit.qmd
+      - section: Shared variational calculus
+        contents:
+          - smooth-algebra.qmd
+          - variational.qmd
+          - variational-notes.qmd
+      - section: Mechanics
+        contents:
+          - mechanics.qmd
+          - cinfty-mechanics.qmd
+          - mechanics-notes.qmd
+          - mechanics-experiments.qmd
+          - landau-lifshitz.qmd
+      - build.qmd
+
+format:
+  html:
+    toc: true
+    html-math-method: mathjax
+from: markdown+gfm_auto_identifiers
+filters:
+  - links.lua
