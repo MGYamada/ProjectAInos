@@ -64,3 +64,7 @@ public import ProjectAInos.Thermodynamics.ThermalStrips
 public import ProjectAInos.Thermodynamics.UniqueThermalSplit
 public import ProjectAInos.Thermodynamics.UniversalJoinCalibration
 public import ProjectAInos.Thermodynamics.UniversalThermalClass
+public import ProjectAInos.Variational.Action
+public import ProjectAInos.Variational.Examples
+public import ProjectAInos.Variational.IntegrationByParts
+public import ProjectAInos.Variational.Local
