@@ -25,6 +25,9 @@ jobs:
       - name: Build and audit Lean
         uses: leanprover/lean-action@ba3fdfe5c4476c925da13bf11a005ddb47e47aee # v1
         env:
+          # This lean-action revision otherwise exports a fixed flat cache URL.
+          # Its get-cache step unsets an explicitly empty value, allowing the
+          # pinned Mathlib client to select its own default cache routing.
           MATHLIB_CACHE_GET_URL: ""
         with:
           build: "true"

@@ -7,11 +7,11 @@ the local preview.
 
 ## Build the library
 
-From the repository root, fetch cached artifacts for the initial module's
-Mathlib imports and build the library.
+From the repository root, fetch the full Mathlib cache for the pinned dependency
+revision and build the library.
 
 ```sh
-lake exe cache get Mathlib.Algebra.Module.Defs Mathlib.Topology.UniformSpace.Real
+lake exe cache get
 lake build ProjectAInos
 ```
 
