@@ -1,4 +1,4 @@
-# Project AInos
+# P⊗AI (Project AInos)
 
 *Final answer to Hilbert's sixth problem*
 
