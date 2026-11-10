@@ -1,3 +1,7 @@
+/-
+Copyright (c) 2026 Masahiko G. Yamada. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+-/
 module
 
 public import Mathlib.Geometry.Manifold.Algebra.SmoothFunctions
@@ -18,7 +22,7 @@ noncomputable section
 
 open scoped Manifold ContDiff
 
-namespace ProjectAInos.Variational.SmoothAlgebra
+namespace ProjectAInos.SmoothAlgebra
 
 /-- An `n`-ary smooth operation, with Mathlib's pointwise real algebra structure. -/
 abbrev SmoothOperation (n : ℕ) := C^∞⟮𝓘(ℝ, Fin n → ℝ), (Fin n → ℝ); ℝ⟯
@@ -105,4 +109,4 @@ theorem exponential_addition :
   simp [Real.exp_add]
 
 end SmoothOperation
-end ProjectAInos.Variational.SmoothAlgebra
+end ProjectAInos.SmoothAlgebra

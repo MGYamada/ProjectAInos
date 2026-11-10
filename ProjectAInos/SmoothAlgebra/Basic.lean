@@ -1,6 +1,10 @@
+/-
+Copyright (c) 2026 Masahiko G. Yamada. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+-/
 module
 
-public import ProjectAInos.Variational.SmoothAlgebra.Operations
+public import ProjectAInos.SmoothAlgebra.Operations
 
 /-!
 # C-infinity rings compatible with a real algebra
@@ -15,7 +19,7 @@ No topology or nontriviality is required on the carrier.
 
 noncomputable section
 
-namespace ProjectAInos.Variational.SmoothAlgebra
+namespace ProjectAInos.SmoothAlgebra
 
 /-- A real algebra equipped with compatible finite smooth operations.
 Nullary operations are included in both the operation and substitution laws. -/
@@ -100,4 +104,4 @@ theorem exp_add (a b : A) : exp (a + b) = exp a * exp b := by
   simpa [op_comp, exp, Matrix.vec_single_eq_const] using h
 
 end SmoothRing
-end ProjectAInos.Variational.SmoothAlgebra
+end ProjectAInos.SmoothAlgebra

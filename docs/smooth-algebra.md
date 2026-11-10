@@ -1,12 +1,16 @@
-# Shared Variational Foundation: Smooth Algebra
+# Shared Mathematical Foundation: Smooth Algebra
 
 This is the first shared algebraic stage of [issue #7](https://github.com/MGYamada/ProjectAInos/issues/7).
-It provides C∞-rings, morphisms, and concrete smooth-function models alongside
-the [shared local variational calculus](variational.md).
+It provides C∞-rings, morphisms, and concrete smooth-function models for
+[smooth geometry](smooth-geometry.md), mechanics, and classical field theory.
 
-All declarations are in `ProjectAInos.Variational.SmoothAlgebra`. The dependency
-order is `Operations` → `Basic` → `Hom` → `Models` → `Differential`. All five
-modules are publicly imported by the library root.
+All declarations are in `ProjectAInos.SmoothAlgebra`. The original dependency
+order is `Operations` → `Basic` → `Hom` → `Models` → `Differential`.
+`Category` bundles smooth rings and their morphisms. `Congruence` constructs
+quotients by smooth congruences; `LocalInverse` and `Localization` construct
+localization at real points and prove its C∞ universal property. The library
+root imports all these modules. This layer has no dependency on `Variational`,
+`Mechanics`, or a particular physical theory.
 
 ## Smooth operations and real-algebra compatibility
 
@@ -63,11 +67,13 @@ preservation of constants, addition, and multiplication. Identity, composition,
 extensionality, and compatibility of `toAlgHom` with identity and composition
 are proved. Smooth-ring morphisms also preserve the exponential operation.
 
-There are two concrete instances:
+The concrete instances include:
 
 - On ℝ, `op f a = f a`.
 - On `SmoothOperation m = C∞(ℝᵐ)`, `op f g = SmoothOperation.comp f g`, so
   `(op f g)(x) = f (fun i => g i x)`.
+- On any dependent product of C∞-rings, operations are pointwise. The empty
+  product gives the zero ring used by the empty C∞ scheme.
 
 For any C∞-ring `A` and tuple `a : Fin n → A`, `SmoothOperation.lift a`
 sends a smooth function `f` to `op f a`. It is a smooth-ring morphism and sends
@@ -85,11 +91,15 @@ at the image point.
 
 | Module | Main checked results |
 | --- | --- |
-| [Operations](../ProjectAInos/Variational/SmoothAlgebra/Operations.lean) | `proj_comp`, `comp_proj`, `comp_assoc`, `exponential_addition` |
-| [Basic](../ProjectAInos/Variational/SmoothAlgebra/Basic.lean) | `op_const`, `op_add`, `op_mul`, `op_neg`, `op_sub`, `op_smul`, `exp_add` |
-| [Hom](../ProjectAInos/Variational/SmoothAlgebra/Hom.lean) | `toAlgHom`, identity/composition laws, `map_exp` |
-| [Models](../ProjectAInos/Variational/SmoothAlgebra/Models.lean) | Real and function-ring instances; `hom_ext`, `lift_unique`, `existsUnique_lift`, `pullback_comp`, `eval_comp_pullback` |
-| [Differential](../ProjectAInos/Variational/SmoothAlgebra/Differential.lean) | `directionalEvaluation_op`, the chain rule for every finite smooth operation on the concrete model |
+| [Operations](../ProjectAInos/SmoothAlgebra/Operations.lean) | `proj_comp`, `comp_proj`, `comp_assoc`, `exponential_addition` |
+| [Basic](../ProjectAInos/SmoothAlgebra/Basic.lean) | `op_const`, `op_add`, `op_mul`, `op_neg`, `op_sub`, `op_smul`, `exp_add` |
+| [Hom](../ProjectAInos/SmoothAlgebra/Hom.lean) | `toAlgHom`, identity/composition laws, `map_exp` |
+| [Models](../ProjectAInos/SmoothAlgebra/Models.lean) | Real and function-ring instances; `hom_ext`, `lift_unique`, `existsUnique_lift`, `pullback_comp`, `eval_comp_pullback` |
+| [Differential](../ProjectAInos/SmoothAlgebra/Differential.lean) | `directionalEvaluation_op`, the chain rule for every finite smooth operation on the concrete model |
+| [Category](../ProjectAInos/SmoothAlgebra/Category.lean) | `SmoothRingCat`, faithful forgetful functor to real algebras |
+| [Congruence](../ProjectAInos/SmoothAlgebra/Congruence.lean) | Smooth quotients, projection, factorization, generated smooth congruences |
+| [LocalInverse](../ProjectAInos/SmoothAlgebra/LocalInverse.lean) | `exists_localInverse`, a smooth inverse on the support of a cutoff |
+| [Localization](../ProjectAInos/SmoothAlgebra/Localization.lean) | Point localization, `existsUnique_lift`, real residue, local-ring property, induced local maps |
 
 The models module also checks dimension zero (`nullary_eq_const`), nonlinear
 evaluation in dimension one (`eval_exp_square`), and a two-variable exponential
@@ -119,7 +129,9 @@ substitution in terms of the values and derivatives of the substituted
 functions. This connects smooth operations to the same ordinary calculus used
 for local jets and first variations in the [variational guide](variational.md).
 
-The next algebraic stages are quotients and abstract smooth derivations, which
-must satisfy the chain rule for every smooth operation. Their cotangent and
-infinitesimal constructions require their own universal properties and
-comparison theorems with ordinary local jets.
+Smooth congruence quotients and localizations at real points now support the
+[C∞ scheme construction](smooth-geometry.md). Subsequent algebraic stages
+include quotients by arbitrary ordinary ideals, general C∞ localizations, and
+abstract smooth derivations satisfying the chain rule for every smooth
+operation. Cotangent and infinitesimal constructions require their own
+universal properties and comparison theorems with ordinary local jets.

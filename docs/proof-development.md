@@ -28,9 +28,13 @@ Every completed stage must pass the warning-free Lean build, root-import check, 
 
 See the [Landau–Lifshitz correspondence](landau-lifshitz.md) for the Mechanics proof targets and reference volumes for the other subjects.
 
-## Shared Variational Foundation
+## Shared Smooth Algebra and Geometry
 
-The first shared layer for Mechanics and Electrodynamics formalizes C∞-rings: finite smooth operations, their substitution laws, and compatibility with an existing commutative real algebra. Morphisms preserve every smooth operation; their real-algebra homomorphisms are derived. The concrete models are ℝ and C∞(ℝⁿ), including dimension zero. The smooth-function ring is proved free on its coordinate functions, with evaluation and pullback as morphisms. A nonpolynomial check proves `exp(a + b) = exp(a) * exp(b)` in every C∞-ring.
+The shared mathematical layers for Mechanics and the Classical Theory of Fields (Landau–Lifshitz) live in `ProjectAInos/SmoothAlgebra` and `ProjectAInos/SmoothGeometry`, independently of the physics and variational calculus. C∞-rings have finite smooth operations, substitution laws, and compatibility with a commutative real algebra. Morphisms preserve every smooth operation; their real-algebra homomorphisms are derived. The concrete models are ℝ, products, and C∞(ℝⁿ), including dimension zero. The smooth-function ring is proved free on its coordinate functions, with evaluation and pullback as morphisms. A nonpolynomial check proves `exp(a + b) = exp(a) * exp(b)` in every C∞-ring.
+
+The geometry follows mathlib's progression from ringed spaces through `Spec` to `Scheme`, with Joyce's real points and C∞ operations. Smooth congruence quotients and cutoff functions construct point localizations with their universal property. Locally represented sections form the structure sheaf, and its stalks are identified with the localizations. The resulting spectrum functor supplies the actual affine models in the local-affine definition of a C∞ scheme. Affine schemes are the essential image of this functor. Examples include affine spaces and the empty scheme. The [smooth-geometry guide](smooth-geometry.md) records the construction and the remaining stages, including general localizations, gluing, the Γ–Spec adjunction, and manifold comparison.
+
+## Shared Variational Foundation
 
 The shared variational calculus uses sections of a trivial bundle over a finite-dimensional real coordinate space. For a jointly C² Lagrangian and a C² field with integrable density, Lean proves the action derivative for smooth variations with compact support inside an open region. It then proves that stationarity is equivalent to the pointwise Euler–Lagrange equation. The theorem covers time and four-dimensional bases and keeps the choice of Haar measure explicit. The interval integration-by-parts identity also retains the endpoint term for fixed-endpoint applications.
 

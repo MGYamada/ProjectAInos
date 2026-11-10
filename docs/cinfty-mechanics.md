@@ -6,7 +6,7 @@ The original manuscript, *Classical Mechanics over C∞-Rings*, was dated 10 Nov
 
 ## Implementation plan and current progress
 
-- The common layer lives in `ProjectAInos/Variational/`. The `SmoothAlgebra` work for issue #7 implemented finite-arity smooth operations, C∞-rings and their morphisms, free generation, and the chain rule for concrete directional derivatives. `SmoothRing` adds structure to an existing commutative real algebra.
+- The common mathematical foundation lives in `ProjectAInos/SmoothAlgebra/` and `ProjectAInos/SmoothGeometry/`; `ProjectAInos/Variational/` contains variational calculus. The `SmoothAlgebra` work for issue #7 implemented finite-arity smooth operations, C∞-rings and their morphisms, free generation, and the chain rule for concrete directional derivatives. `SmoothRing` adds structure to an existing commutative real algebra. The [shared geometry guide](smooth-geometry.md) records the subsequent spectrum and scheme construction.
 - The common analytic layer implements local first jets, directional derivatives of the action, integration by parts, and the Euler–Lagrange equivalence for compactly supported interior variations.
 - **Fixed-endpoint mechanics.** `ProjectAInos/Mechanics/` treats paths `q : ℝ → Q` on a real time interval `[a,b]`. It proves the derivative of the action, the first variation with the boundary term, and the equivalence between fixed-endpoint stationarity and the Euler–Lagrange equations for C² Lagrangians and paths with `a < b`. This includes the generalized coordinates `Q = Fin n → ℝ`. The scalar natural Lagrangian yields Newton’s equation `m q'' = −V'(q)`.
 - **Total time derivatives.** In the real first-order model, adding the total time derivative of `F(t,q)` changes the action by `F(b,q(b)) − F(a,q(a))` and preserves fixed-endpoint stationarity and the pointwise Euler–Lagrange residual. Energy and Noether identities and further natural Lagrangian models are next. Quotients of abstract C∞-rings, dual numbers, universal cotangent modules, and the comparison between abstract jet rings and the analytic model are separate stages.
@@ -16,7 +16,7 @@ Paths such as `Cinfty/...` and Lean listings in the manuscript are design sketch
 
 | Manuscript target | Status | Lean implementation or research target |
 | --- | --- | --- |
-| C∞-rings, morphisms, and free generation | Implemented | `Variational.SmoothAlgebra` adds structure to an existing real algebra |
+| C∞-rings, morphisms, and free generation | Implemented | `SmoothAlgebra` adds structure to an existing real algebra |
 | First variation and fixed-endpoint Euler–Lagrange equations | Proved in the real analytic model | `Mechanics.FirstVariation` and `Mechanics.EulerLagrange` |
 | Addition of a total time derivative and the boundary term | Proved for `F(t,q)` in the real first-order model | `Mechanics.TotalTimeDerivative`. The abstract jet-ring statement remains a research target |
 | Connection between smooth observables and the analytic model | Implemented | `Mechanics.ofSmoothOperation` and `stationary_ofSmoothOperation_iff` |

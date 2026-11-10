@@ -1,7 +1,7 @@
 module
 
 public import ProjectAInos.Mechanics.EulerLagrange
-public import ProjectAInos.Variational.SmoothAlgebra.Differential
+public import ProjectAInos.SmoothAlgebra.Differential
 import Mathlib.Tactic.NormNum
 
 /-!
@@ -21,7 +21,7 @@ open scoped ContDiff
 
 namespace ProjectAInos.Mechanics
 
-open Variational.SmoothAlgebra
+open SmoothAlgebra
 
 /-- Evaluate a smooth observable in time, position and velocity coordinates. -/
 def ofSmoothOperation {n : ℕ} (f : SmoothOperation (n + n + 1)) :

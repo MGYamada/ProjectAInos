@@ -1,6 +1,10 @@
+/-
+Copyright (c) 2026 Masahiko G. Yamada. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+-/
 module
 
-public import ProjectAInos.Variational.SmoothAlgebra.Hom
+public import ProjectAInos.SmoothAlgebra.Hom
 
 /-!
 # Real and smooth-function C-infinity rings
@@ -15,7 +19,7 @@ family when `n = 0`. Evaluation and pullback are smooth-ring morphisms.
 
 noncomputable section
 
-namespace ProjectAInos.Variational.SmoothAlgebra
+namespace ProjectAInos.SmoothAlgebra
 
 open SmoothRing
 
@@ -27,6 +31,16 @@ instance instSmoothRingReal : SmoothRing ℝ where
   op_nullary _ _ := rfl
   op_addition _ := rfl
   op_multiplication _ := rfl
+
+/-- Products of C∞-rings have pointwise smooth operations, including the empty product. -/
+instance instSmoothRingPi {ι : Type*} {A : ι → Type*} [∀ i, CommRing (A i)]
+    [∀ i, Algebra ℝ (A i)] [∀ i, SmoothRing (A i)] : SmoothRing ((i : ι) → A i) where
+  op f a i := op f (fun j => a j i)
+  op_proj i a := funext fun k => op_proj i (fun j => a j k)
+  op_comp f g a := funext fun k => op_comp f g (fun j => a j k)
+  op_nullary r a := funext fun k => op_nullary r (fun j => a j k)
+  op_addition a := funext fun k => op_addition (fun j => a j k)
+  op_multiplication a := funext fun k => op_multiplication (fun j => a j k)
 
 /-- Smooth functions with pointwise operations, in any finite dimension. -/
 instance instSmoothRingOperation (m : ℕ) : SmoothRing (SmoothOperation m) where
@@ -126,4 +140,4 @@ theorem eval_four_dimensional (x : Fin 4 → ℝ) :
       (comp exponential ![addition])) = Real.exp (x 0 * x 1 + x 2 * x 3) := rfl
 
 end SmoothOperation
-end ProjectAInos.Variational.SmoothAlgebra
+end ProjectAInos.SmoothAlgebra
