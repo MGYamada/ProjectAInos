@@ -26,9 +26,41 @@ Project AInos aims to formalize the whole of theoretical physics in Lean 4. Its 
       1. Physical states, adiabatic equivalence, and the ordered semimodule
       2. Composition sectors and the passage from physical comparison (CH) to ECH
       3. Mixing, chemical reactions, and the weak entropy principle
+   5. **The Ideal Gas as an Entropy Model**
+      1. The monatomic ideal-gas entropy `S(U, V, N)` on equilibrium states
+      2. Extensivity, concavity, and entropy additivity for separate subsystems
+      3. Entropy level sets and comparison at fixed particle number
 2. **Mechanics**
+   1. **Smooth Algebra and Infinitesimal Geometry**
+      1. Smooth operations, C∞-rings, and quotients
+      2. Dual numbers, tangent functors, derivations, and differential forms
+   2. **Variational Mechanics and Conservation Laws**
+      1. Jet rings, total derivatives, and null Lagrangians
+      2. Action, first variation, and the Euler–Lagrange equations
+      3. Galilean symmetry and Noether's theorem for energy, momentum, and angular momentum
+   3. **Hamiltonian Mechanics and Reduction**
+      1. Poisson brackets, symplectic structures, and cotangent bundles
+      2. Legendre transforms, constraints, and Dirac brackets
+      3. Canonical transformations, Hamilton–Jacobi theory, and action–angle variables
+      4. Momentum maps and reduction at regular and singular values
+   4. **Classical Models and Analytic Extensions**
+      1. Quadratures, central forces, Kepler motion, and scattering
+      2. Oscillations, resonance, rigid bodies, and rotating frames
+      3. Averaging and mechanical adiabatic invariants
+      4. Dissipation and nonholonomic constraints
 3. **Electrodynamics**
+4. **Classical Statistical Mechanics**
+   1. **Ensembles and Thermodynamic Limits**
+      1. Liouville measure, regular energy shells, and conditioning
+      2. Microcanonical and canonical ensembles, independent products, and thermal contact
+      3. Coarse-graining, thermodynamic limits, and ensemble equivalence
+   2. **The Bridge to Thermodynamics**
+      1. Derivation of the ideal-gas entropy from phase volume in the thermodynamic limit
+      2. Macroscopic adiabatic protocols, stability, and comparison within composition sectors
+      3. Identification of statistical entropy with the thermodynamic entropy on matched sectors
 
 The order of subsequent topics is yet to be determined.
 
 See the [Landau–Lifshitz correspondence](docs/landau-lifshitz.md) for the Mechanics proof targets and the reference volumes for Electrodynamics and later topics.
+
+See the [documentation index](docs/README.md) for the Lean API reference build instructions.

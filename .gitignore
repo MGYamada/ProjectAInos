@@ -1,5 +1,13 @@
 # Local source material for formalization
 /tex/
 
+# Lake build output and local documentation workspace
+/.lake/
+/docbuild/
+
+# Python bytecode
+__pycache__/
+*.pyc
+
 # macOS Finder metadata
 .DS_Store
