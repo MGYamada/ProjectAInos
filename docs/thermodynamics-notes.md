@@ -95,8 +95,22 @@ Its energy coefficient is one, but the forward sector may initially lie on eithe
 
 **Interface decision.** S2 supplies a supporting choice of `f_X` or `−f_X`, uniqueness of the supporting kernel, and local Lipschitz continuity of the pressure field. S3 concerns path-connectedness of the boundary *inside the open equilibrium domain*. Including the exterior boundary of that domain, or replacing path-connectedness with connectedness without a proof, would change the hypothesis. [Lieb–Yngvason, §III, S2–S3](https://arxiv.org/html/cond-mat/9708200v2)
 
-**Proof status.** `SimpleSystem.forwardSector_interior_nonempty` proves nonempty interior using irreversibility, finite-slope unique support, and the earlier collinear accessibility lemma. Common orientation, supporting-graph regularity, and the final comparison theorem remain open obligations. [Simple-system geometry](../ProjectAInos/Thermodynamics/SimpleSystem.lean)
+**Proof status.** `SimpleSystem.forwardSector_interior_nonempty` proves nonempty interior using irreversibility, finite-slope unique support, and the earlier collinear accessibility lemma. Support inheritance at relative-boundary points, common energy orientation, and a differentiable boundary graph are proved. Its derivative is the negative pressure form. Grönwall's inequality gives local uniqueness; S3 propagates boundary reversibility, and convex segment crossing gives `SimpleSystem.comparison_of_mem`. Strict forward sectors are nested, and strict reference strips are open. Reflection preserves every simple-system premise, so none of these final results assumes a preferred energy orientation. [Energy orientation](../ProjectAInos/Thermodynamics/EnergyOrientation.lean) · [Energy reflection](../ProjectAInos/Thermodynamics/EnergyReflection.lean) · [Boundary derivative](../ProjectAInos/Thermodynamics/BoundaryDifferentiability.lean) · [Local uniqueness](../ProjectAInos/Thermodynamics/AdiabatUniqueness.lean) · [Simple-system comparison](../ProjectAInos/Thermodynamics/SimpleComparison.lean)
+
+## T07. Thermal equilibrium can be expressed before entropy is differentiable
+
+**Observation.** Concavity alone need not give a unique energy derivative. At an interior energy, it gives a nonempty interval of supporting slopes,
+
+\[
+\partial^+ s(U)=[s'_+(U),s'_-(U)].
+\]
+
+For two concave energy functions on open convex domains, an allocation maximizes `s₁(u) + s₂(E − u)` exactly when the two supporting-slope intervals intersect. A common slope bounds both entropy changes, which cancel at fixed total energy. Conversely, the one-sided derivatives at a maximum give the cross inequalities needed for the intervals to intersect.
+
+**Interface decision.** The early thermal criterion uses an interval of slopes rather than assuming a differentiable entropy or a unique inverse temperature. Its physical specialization currently compares two copies of the same simple system, with a common entropy normalization. Extending this to different systems requires the separate calibration argument.
+
+**Proof status.** `supportingSlopes_eq_Icc` identifies the interval, and `isMaxOn_add_reflection_iff_inter_supportingSlopes` proves the generic maximum criterion. `ThermalFamily.thermal_iff_entropySlopes_inter` connects it to actual thermal equilibrium through the entropy representation and thermal join. These proofs do not establish the full location-of-isotherms dichotomy or existence of calibrators in every case. [Supporting slopes](../ProjectAInos/Thermodynamics/SupportingSlopes.lean) · [Entropy maximization](../ProjectAInos/Thermodynamics/ThermalMaximizers.lean) · [Thermal criterion](../ProjectAInos/Thermodynamics/ThermalSlopes.lean) · [Calibrator branch](../ProjectAInos/Thermodynamics/CalibratorExistence.lean)
 
 ## Scope of the current physical derivation
 
-The algebraic entropy theorem assumes exchange comparison. Deriving that comparison from the complete simple-system geometry and thermal axioms remains separate work. Likewise, the weak reaction entropy theorem takes calibrated additive entropy and its monotonicity within each label as inputs. Its existence theorem does not by itself establish those physical calibration premises.
+Simple-system comparison is now derived from the geometric premises. The algebraic entropy theorem still assumes exchange comparison: completing its physical derivation requires heterogeneous-product calibration and coherent thermal joins. In particular, thermal compatibility of an equilibrated joined state with its components must be justified; adiabatic equivalence alone is not a premise allowing transport of the thermal relation. Likewise, the weak reaction entropy theorem takes calibrated additive entropy and its monotonicity within each label as inputs. Its existence theorem does not by itself establish those physical calibration premises.

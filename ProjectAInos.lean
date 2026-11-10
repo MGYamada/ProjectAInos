@@ -1,7 +1,15 @@
 module  -- shake: keep-all --deprecated_module: ignore
 
+public import ProjectAInos.Thermodynamics.AdiabatUniqueness
 public import ProjectAInos.Thermodynamics.Basic
+public import ProjectAInos.Thermodynamics.BoundaryDifferentiability
+public import ProjectAInos.Thermodynamics.BoundaryGraph
+public import ProjectAInos.Thermodynamics.BoundaryReversibility
+public import ProjectAInos.Thermodynamics.Calibration
+public import ProjectAInos.Thermodynamics.CalibratorExistence
 public import ProjectAInos.Thermodynamics.Cancellation
+public import ProjectAInos.Thermodynamics.CommonProducts
+public import ProjectAInos.Thermodynamics.ComparableCuts
 public import ProjectAInos.Thermodynamics.Comparison
 public import ProjectAInos.Thermodynamics.Completion
 public import ProjectAInos.Thermodynamics.Cone
@@ -9,10 +17,13 @@ public import ProjectAInos.Thermodynamics.ConeModels
 public import ProjectAInos.Thermodynamics.Conservation
 public import ProjectAInos.Thermodynamics.Cutoff
 public import ProjectAInos.Thermodynamics.DegenerateModel
+public import ProjectAInos.Thermodynamics.EnergyOrientation
+public import ProjectAInos.Thermodynamics.EnergyReflection
 public import ProjectAInos.Thermodynamics.Entropy
 public import ProjectAInos.Thermodynamics.ForwardSector
 public import ProjectAInos.Thermodynamics.IdealGas
 public import ProjectAInos.Thermodynamics.IdealGasModel
+public import ProjectAInos.Thermodynamics.LocalLines
 public import ProjectAInos.Thermodynamics.ModelConnections
 public import ProjectAInos.Thermodynamics.Models
 public import ProjectAInos.Thermodynamics.Nonreactive
@@ -22,8 +33,17 @@ public import ProjectAInos.Thermodynamics.PhysicalReactions
 public import ProjectAInos.Thermodynamics.ReactionCycles
 public import ProjectAInos.Thermodynamics.ReactionModels
 public import ProjectAInos.Thermodynamics.Reactions
+public import ProjectAInos.Thermodynamics.ReferenceIntervals
 public import ProjectAInos.Thermodynamics.Representation
+public import ProjectAInos.Thermodynamics.SectorGeometry
 public import ProjectAInos.Thermodynamics.SectorModel
+public import ProjectAInos.Thermodynamics.SimpleComparison
+public import ProjectAInos.Thermodynamics.SimpleEntropy
 public import ProjectAInos.Thermodynamics.SimpleSystem
 public import ProjectAInos.Thermodynamics.Stoichiometry
+public import ProjectAInos.Thermodynamics.SupportingSlopes
 public import ProjectAInos.Thermodynamics.ThermalEquilibrium
+public import ProjectAInos.Thermodynamics.ThermalFamily
+public import ProjectAInos.Thermodynamics.ThermalMaximizers
+public import ProjectAInos.Thermodynamics.ThermalSlopes
+public import ProjectAInos.Thermodynamics.ThermalStrips
