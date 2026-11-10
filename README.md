@@ -88,3 +88,10 @@ Every completed stage must pass the warning-free Lean build, root-import check, 
 See the [Landau–Lifshitz correspondence](docs/landau-lifshitz.md) for the Mechanics proof targets and reference volumes for the other subjects.
 
 See the [documentation index](docs/README.md) for the Lean API reference build instructions.
+
+## License
+
+Copyright 2026 Masahiko G. Yamada.
+
+Licensed under the [Apache License, Version 2.0](LICENSE). See [NOTICE](NOTICE)
+for the copyright notice.
