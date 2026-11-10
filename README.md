@@ -93,7 +93,17 @@ The first shared layer for Mechanics and Electrodynamics formalizes C∞-rings: 
 
 The shared variational calculus uses sections of a trivial bundle over a finite-dimensional real coordinate space. For a jointly C² Lagrangian and a C² field with integrable density, Lean proves the action derivative for smooth variations with compact support inside an open region. It then proves that stationarity is equivalent to the pointwise Euler–Lagrange equation. The theorem covers time and four-dimensional bases and keeps the choice of Haar measure explicit. The interval integration-by-parts identity also retains the endpoint term for fixed-endpoint applications.
 
-This supplies the common local foundation for [issue #7](https://github.com/MGYamada/ProjectAInos/issues/7), building on [PR #29](https://github.com/MGYamada/ProjectAInos/pull/29). The [variational guide](docs/variational.md) describes the endpoint and its hypotheses. The [smooth-algebra guide](docs/smooth-algebra.md) describes the free smooth-function rings and their directional chain rule. Global bundle geometry, abstract smooth cotangent modules, and theory-specific equations are subsequent stages.
+This supplies the common local foundation for [issue #7](https://github.com/MGYamada/ProjectAInos/issues/7), building on [PR #29](https://github.com/MGYamada/ProjectAInos/pull/29). The [variational guide](docs/variational.md) describes the endpoint and its hypotheses. The [smooth-algebra guide](docs/smooth-algebra.md) describes the free smooth-function rings and their directional chain rule. Compact base regions now also supply domination without a support condition on the variation, and the interval identity handles covector–vector pairings.
+
+[Shared variational formalization notes](docs/variational-notes.md) record the measure, regularity, and smooth-algebra distinctions exposed by these proofs.
+
+## Mechanics Proof Development
+
+The [C∞ mechanics research plan](docs/cinfty-mechanics.md) preserves the mathematical blueprint, the 52 Landau–Lifshitz targets, proposed proofs, experiment ledger, and references from the former local TeX manuscript. It distinguishes the implemented real analytic model from the planned abstract C∞-ring constructions.
+
+`ProjectAInos/Mechanics` uses the shared foundation for a real time interval and a real normed position space, including any finite number of generalized coordinates. For a jointly C² Lagrangian `L(t,q,v)` and a C² path, Lean proves the derivative of the actual action, its first-variation formula with the endpoint momentum pairing, and the equivalence between fixed-endpoint stationarity and the Euler–Lagrange equations on `(a,b)` for `a < b`. Variations may have nonzero derivatives at the endpoints. Smooth operations from the shared C∞-ring give mechanical Lagrangians with the required regularity automatically. The natural scalar Lagrangian yields `m q'' = −V'(q)`.
+
+The [mechanics guide](docs/mechanics.md) gives the assumptions and proof map. [Mechanics formalization notes](docs/mechanics-notes.md) record distinctions and design decisions exposed by the proofs, following the thermodynamics notes. The next stages are total derivatives and conservation identities, Noether's theorem, and concrete mechanical models. Abstract quotients, dual numbers, cotangent modules and jet rings, followed by Poisson and Hamiltonian mechanics, remain research-plan stages.
 
 See the [documentation index](docs/README.md) for the Lean API reference build instructions.
 

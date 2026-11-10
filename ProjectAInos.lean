@@ -1,5 +1,10 @@
 module  -- shake: keep-all --deprecated_module: ignore
 
+public import ProjectAInos.Mechanics.Basic
+public import ProjectAInos.Mechanics.EulerLagrange
+public import ProjectAInos.Mechanics.Examples
+public import ProjectAInos.Mechanics.FirstVariation
+public import ProjectAInos.Mechanics.SmoothLagrangian
 public import ProjectAInos.Thermodynamics.AdiabatUniqueness
 public import ProjectAInos.Thermodynamics.AtomicSystems
 public import ProjectAInos.Thermodynamics.Basic
