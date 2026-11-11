@@ -43,12 +43,12 @@ example {g : GaugeGroup} {C : WilsonFamily g} {T : Hierarchy C} {order : ℕ →
   h.selectedWilson
 
 example {g : GaugeGroup} {C : WilsonFamily g} {T : Hierarchy C}
-    (h : T.CorrelatorAlgebra) (hR : T.Reconstructed) {n : ℕ}
+    (h : T.CorrelatorAlgebra) {n : ℕ}
     (s : Option T.Character) (a b : Fin n → T.Tag) (x : Points n)
     (hx : x ∈ WilsonFamily.separated n)
     (heq : ∀ i, T.toLabel (a i).1 (a i).2 = T.toLabel (b i).1 (b i).2) :
     T.correlation s a x = T.correlation s b x :=
-  h.correlation_eq_of_labels hR s a b x hx heq
+  h.correlation_eq_of_labels s a b x hx heq
 
 example (β : Velocity 3) (x : FourVector) :
     (properLorentz (boostProperOrthochronous β)).val.val (pointLinear x) =
@@ -58,6 +58,7 @@ example (β : Velocity 3) (x : FourVector) :
 #check Hierarchy.selectedWilsonLimit_iff
 #check Hierarchy.CorrelatorAlgebra.correlation_eq_zero
 #check Hierarchy.CorrelatorAlgebra.weight_eq
+#check Hierarchy.CorrelatorAlgebra.sum_not_tag
 #check poincare_apply
 #check poincare_pullback_point
 #check physicalMomentum_futureCausal

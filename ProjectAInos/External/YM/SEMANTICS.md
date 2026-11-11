@@ -54,11 +54,16 @@ The imported `Properties` and `JointExistence` retain their upstream meanings.
   Extremality and clustering require their own hypotheses and results.
 - **Correlator algebra (P1).** `CorrelatorAlgebra` requires complex
   multilinearity at separated points for each fixed degree profile, in
-  each phase and in the average. It also requires a unique degree for any
-  nonzero Wightman label. The derived lemmas prove vanishing for a zero
-  insertion, label independence using the upstream degreewise injectivity,
-  and independence of the OPE weight for tuples with nonzero labels.
-  The zero label may be represented in multiple degrees.
+  each phase and in the average. The canonical map `labelSum` from the
+  algebraic direct sum of the degree spaces to Wightman labels must be
+  bijective. This gives degreewise injectivity, a unique degree for each
+  nonzero homogeneous label, and well-defined OPE weights for tuples of
+  such labels. The derived correlator lemmas prove zero-insertion vanishing
+  and equality for tagged tuples representing the same labels.
+  `sum_not_tag` proves that a sum of nonzero fields in distinct degrees
+  cannot be represented by a single tag. The graded contract therefore
+  uses coverage by finite sums. It does not inherit the upstream
+  `Reconstructed.covers` premise, which asks for single-tag coverage.
 - **Trace identification (P2).** `TraceTest.shortDistance` constrains the
   two-point evaluation of the designated `centeredTrace : Field 4` tag.
   `TraceTest.excludes` rules out eventual exact equality near zero with each
