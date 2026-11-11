@@ -126,4 +126,3 @@ theorem turn_paint (s : Ortho) (u : G.El) (A : Taylor G j) :
   apply value_ext; funext i x; simp [turn_value]
 end Taylor
 end YM.Labels
-

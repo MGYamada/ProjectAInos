@@ -234,4 +234,3 @@ def potential : Labels.Taylor G j ≃ₗ[ℝ] ↥(formSpace j G.Color) where
   map_smul' u A := by apply Subtype.ext; funext i l; ext1 z; simp [takeCurl,smul_sub,smul_comm u]
 
 end YM.Maxwell
-

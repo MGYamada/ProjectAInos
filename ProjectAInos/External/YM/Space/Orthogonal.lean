@@ -168,4 +168,3 @@ def plane (i j : Axis) : Skew := ⟨Matrix.single i j 1 - Matrix.single j i 1, b
 end Ortho
 
 end YM
-

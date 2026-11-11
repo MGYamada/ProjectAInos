@@ -194,4 +194,3 @@ def casimir : ℝ :=
 def slopeConstant : ℝ := 11 * G.casimir / (24 * Real.pi ^ 2)
 
 end YM.Gauge
-

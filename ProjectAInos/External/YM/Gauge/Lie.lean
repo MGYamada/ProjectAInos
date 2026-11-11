@@ -194,4 +194,3 @@ def Simple : Prop :=
     I = ⊥ ∨ I = G.lie
 
 end YM.Gauge
-

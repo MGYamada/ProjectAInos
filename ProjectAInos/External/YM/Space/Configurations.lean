@@ -190,4 +190,3 @@ theorem volume_product (n : ℕ) :
     exact hw
 end Points
 end YM
-
