@@ -71,6 +71,8 @@ public import ProjectAInos.SmoothGeometry.Gluing
 public import ProjectAInos.SmoothGeometry.Localization
 public import ProjectAInos.SmoothGeometry.LocallyRingedSpace
 public import ProjectAInos.SmoothGeometry.Lorentzian
+public import ProjectAInos.SmoothGeometry.Lorentzian.ChartExamples
+public import ProjectAInos.SmoothGeometry.Lorentzian.Dual
 public import ProjectAInos.SmoothGeometry.Manifold.Charts
 public import ProjectAInos.SmoothGeometry.Manifold.Euclidean
 public import ProjectAInos.SmoothGeometry.Manifold.Germs
@@ -102,6 +104,7 @@ public import ProjectAInos.SmoothGeometry.SmoothPresheaf
 public import ProjectAInos.SmoothGeometry.SmoothSheaf
 public import ProjectAInos.SmoothGeometry.Spec
 public import ProjectAInos.SmoothGeometry.StructureSheaf
+public import ProjectAInos.SmoothGeometry.Tensor.Bilinear
 public import ProjectAInos.SmoothGeometry.YangMillsCoordinates
 public import ProjectAInos.SpecialRelativity.Boost
 public import ProjectAInos.SpecialRelativity.Examples

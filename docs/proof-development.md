@@ -46,6 +46,23 @@ Free C∞-rings on arbitrary sets give general localizations with their smooth u
 
 `LorentzMetric` equips the actual tangent bundle with a smooth bilinear form of Lorentz signature, without requiring a global frame. `LorentzManifold.toScheme` uses the same manifold construction for every such metric. Minkowski space is an instance with constant coefficients, a proved affine scheme comparison, and proved local inertial coordinates. The [smooth-geometry guide](smooth-geometry.md) and [formalization notes](smooth-geometry-notes.md) record these constructions and their scope. The Γ–Spec adjunction, full faithfulness of the manifold construction, universal cotangent modules, and curvature are subsequent stages.
 
+The first GR 5.1 increment adds metric duality on tangent/cotangent fibres.
+Bijectivity follows from the existing pointwise Lorentz signature. The
+inverse metric's smoothness is proved by expressing it as inversion in
+hom-bundle coordinates, so no smooth frame is an extra hypothesis.
+Smooth section lowering/raising, inverse pairing, coordinate naturality,
+and compatibility with the flat API and sign reversal are proved.
+Fibrewise bilinear pullback and contraction supply the initial tensor API.
+
+For the chart regression, the shear `(t,x) ↦ (t,x+t²)` and its inverse are
+proved smooth and turned into an actual chart in the maximal atlas.
+Pulling back the Minkowski metric constructs a smooth `LorentzMetric` with
+nonconstant coefficients. Lean verifies its derivative, coefficient
+transformation, duality and opposite-sign covariance. Typed API examples
+are required CI checks; exact SymPy computations run separately. This
+increment addresses #43 within #52; the general tensor and connection
+construction and all later 5.1 stages remain subsequent work.
+
 ## Minkowski Geometry and Relativistic Kinematics
 
 Section 3.1 now has an explicit two-signature geometry layer and a `(-+++)`,

@@ -172,6 +172,72 @@ metric-independent flat calculus and the exterior-power comparison. The
 [Minkowski guide](special-relativity.md) describes the oriented Hodge operator
 and its use by `SpecialRelativity`; shared geometry does not import physics.
 
+## GR 5.1: metric duality and the first chart regression
+
+`Lorentzian/Dual.lean` constructs `LorentzMetric.flat` and `sharp` as
+continuous linear equivalences on each actual tangent fibre and its
+continuous dual. `flat_apply` identifies the forward map with the metric;
+`sharp_flat` and `flat_sharp` prove the inverse laws. `flat_smooth` and
+`sharp_smooth` assert smoothness as sections of the corresponding hom
+bundles. The inverse proof uses smooth inversion in bundle charts and
+pointwise nondegeneracy, without selecting a smooth orthonormal frame.
+
+`lower` and `raise` act on smooth sections, with inverse laws
+`raise_lower` and `lower_raise`. `inversePairing` produces a smooth scalar
+from two smooth covectors. `flat_naturality` and `sharp_naturality` state
+the transformation rules under a metric-preserving tangent equivalence:
+covectors pull back, while raised vectors transform by its inverse.
+Negating the metric negates both dual maps. On Minkowski space they agree
+with the existing `Minkowski.flat` and `Minkowski.sharp`.
+
+`Tensor/Bilinear.lean` provides fibrewise pullback of covariant bilinear
+tensors, its identity/composition laws and symmetry preservation, and
+smoothness of pullback and contraction against vectors. This is a
+rank-two foundation; arbitrary tensor bundles and their contractions
+remain part of the subsequent work in [#52](https://github.com/MGYamada/ProjectAInos/issues/52).
+
+`Lorentzian/ChartExamples.lean` addresses [#43](https://github.com/MGYamada/ProjectAInos/issues/43)
+on the plane. The standard chart has coordinates `(t,x)`; `inertialChart`
+uses `(T,X) = (t,x+t²)`. They are actual open partial homeomorphisms in the
+smooth maximal atlas, their overlap is the whole plane, and their
+transition Jacobian is nonconstant. Pulling back `-dT²+dX²` gives
+
+\[
+g=(-1+4t^2)\,dt^2+4t\,dt\,dx+dx^2.
+\]
+
+The off-diagonal matrix entry is `2t`; the line element contains two
+equal mixed terms. `metric_covariance` uses `mfderiv` of the actual
+transition, and the component theorems evaluate the constructed metric.
+`metric_nonconstant` and `jacobian_nonconstant` compare `(0,0)` and `(1,0)`.
+The example also checks lowering, raising, and `opposite` across charts.
+Its `spacetime` instance uses `LorentzManifold.toScheme`, with the same
+underlying smooth scheme as the standard Minkowski plane.
+This is a coordinate presentation of flat spacetime, not a curvature
+calculation or an assumption that an arbitrary Lorentz metric is flat.
+
+The conventions agree with [Tong, §§3.1.2–3.1.3](https://davidtong.org/teaching/general-relativity/grhtml/S3):
+time is index zero, `timeNegative` has signature `(-,+,…)`, and lowering
+means `v ↦ g(v,·)`. The shared API also supports `timePositive` by metric
+negation. The positive-definite inner-product identification of a space
+with its dual is not used to define the Lorentz musical maps.
+
+`checks/LorentzGeometryAPI.lean` fixes the hypotheses and conclusions of
+these interfaces in typed examples with default elaborator options. It
+runs in required CI alongside the root-import and transitive axiom checks.
+The separate Experiments workflow runs exact SymPy checks of the inverse
+chart, Jacobian, metric, inverse metric, duality and sign reversal:
+
+```sh
+experiments/.venv/bin/python -m pip install ./experiments
+experiments/.venv/bin/python -m ainos_experiments.verify_lorentz_geometry
+```
+
+These computations use exact real symbolic expressions, with no random
+parameters or numerical tolerances. The formal acceptance evidence is
+the Lean proofs. Connections, curvature, parallel transport, geodesics,
+curved differential forms and the Newtonian motion limit remain open.
+
 ## Scope and next stages
 
 These definitions impose neither finite generation nor global Hausdorffness
