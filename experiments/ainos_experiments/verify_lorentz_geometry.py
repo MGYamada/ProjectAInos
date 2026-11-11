@@ -50,12 +50,40 @@ def verify():
     check_zero("opposite metric", jacobian.T * (-eta) * jacobian + metric)
     check_zero("opposite sharp", (-metric).inv() + inverse_metric)
 
+    # An arbitrary two-tensor, without assuming symmetry, tests all slots.
+    tensor = sp.Matrix(2, 2, sp.symbols("B_tt B_tx B_xt B_xx", real=True))
+    pulled_tensor = jacobian.T * tensor * jacobian
+    check_zero("metric contraction covariance", sp.trace(inverse_metric * pulled_tensor)
+               - sp.trace(eta.inv() * tensor))
+    spatial_tensor = jacobian.T * sp.diag(0, 1) * jacobian
+    check_zero("nonconstant spatial tensor", spatial_tensor
+               - sp.Matrix([[4*t**2, 2*t], [2*t, 1]]))
+    check_zero("spatial tensor contraction", sp.trace(inverse_metric * spatial_tensor) - 1)
+    check_zero("metric self contraction", sp.trace(inverse_metric * metric) - 2)
+
+    # T^i_jk transforms in all three indices; contracting i with k leaves j.
+    mixed = sp.MutableDenseNDimArray(sp.symbols("R:8", real=True), (2, 2, 2))
+    transformed = sp.MutableDenseNDimArray.zeros(2, 2, 2)
+    for i in range(2):
+        for j in range(2):
+            for k in range(2):
+                transformed[i, j, k] = sum(
+                    jacobian[i, a] * inverse_jacobian[b, j] * inverse_jacobian[c, k]
+                    * mixed[a, b, c]
+                    for a in range(2) for b in range(2) for c in range(2))
+    contracted = sp.Matrix([sum(mixed[i, j, i] for i in range(2)) for j in range(2)])
+    transformed_contraction = sp.Matrix([
+        sum(transformed[i, j, i] for i in range(2)) for j in range(2)])
+    check_zero("partial tensor contraction covariance",
+               transformed_contraction - inverse_jacobian.T * contracted)
+
     if metric.subs(t, 0) == metric.subs(t, 1):
         raise AssertionError("metric regression must have nonconstant coefficients")
     if jacobian.subs(t, 0) == jacobian.subs(t, 1):
         raise AssertionError("chart regression must have nonconstant Jacobian")
     print("Lorentz geometry exact checks passed: nonlinear charts, metric covariance, "
-          "inverse metric, raising/lowering, and both signature conventions.")
+          "inverse metric, raising/lowering, full/partial tensor contraction, "
+          "and both signature conventions.")
 
 
 def main():

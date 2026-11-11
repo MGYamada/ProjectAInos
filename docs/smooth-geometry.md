@@ -192,9 +192,43 @@ with the existing `Minkowski.flat` and `Minkowski.sharp`.
 
 `Tensor/Bilinear.lean` provides fibrewise pullback of covariant bilinear
 tensors, its identity/composition laws and symmetry preservation, and
-smoothness of pullback and contraction against vectors. This is a
-rank-two foundation; arbitrary tensor bundles and their contractions
-remain part of the subsequent work in [#52](https://github.com/MGYamada/ProjectAInos/issues/52).
+smoothness of pullback and contraction against vectors.
+
+`Tensor/Bundle.lean` builds arbitrary finite tangent/cotangent tensor types
+by iterated native hom bundles. `Shape.mixed r s` has `r` contravariant
+and `s` covariant slots, represented as multilinear maps on covectors and
+vectors, respectively. `SmoothBundle` retains the model, actual fibres,
+topology, and proved smooth-bundle instances needed by this recursion.
+Only the local model is normed; no preferred norm on tangent fibres or
+global trivialization is introduced. `LorentzMetric.toTensor` uses the
+same smooth-section type as the constructed covariant two-tensor bundle.
+
+`Shape.map` transports all slots through an invertible tangent map;
+`pullback` uses its inverse. Identity, composition and inverse laws are
+proved. These are fibrewise maps, including between different manifolds
+with the same model. `coefficients` extracts local representations from
+geometric smooth sections; their smoothness and transition rule hold in
+every atlas trivialization on its domain. Pullback of arbitrary smooth
+tensor **fields** along diffeomorphisms, and a full slot-permutation and
+tensor-product API, remain subsequent work in [#52](https://github.com/MGYamada/ProjectAInos/issues/52).
+
+`Tensor/BundleOperations.lean` proves that fibrewise composition of smooth
+bundle homomorphisms is smooth: the intermediate coordinate maps cancel.
+`Tensor/Contraction.lean` constructs intrinsic trace contraction and proves
+coordinate invariance. The fibre trace functional is itself a smooth
+section, permitting `SmoothBundle.partialContract` to retain other tensor
+arguments. For example, it contracts a `(1,2)` tensor to a covector, and
+`Shape.partialTrace_map` proves that the remaining slot transforms correctly.
+
+`Lorentzian/Tensor.lean` raises and lowers an index of smooth covariant
+two-tensors/tangent endomorphisms, with inverse laws. `contractField` is
+the smooth scalar obtained by raising an index and taking the trace.
+`contract_eq_sum_components` proves its coordinate expression
+`∑ i, ∑ j, Bᵢⱼ gⁱʲ`, with inverse coefficients derived from `sharp`, not
+supplied as separate arrays. Contraction commutes with metric-preserving
+tangent coordinate maps. Contracting the metric gives `d+1`; contracting
+an elementary covector tensor gives the inverse-metric pairing. Negating
+the metric negates contraction of a fixed covariant tensor.
 
 `Lorentzian/ChartExamples.lean` addresses [#43](https://github.com/MGYamada/ProjectAInos/issues/43)
 on the plane. The standard chart has coordinates `(t,x)`; `inertialChart`
@@ -213,6 +247,10 @@ transition, and the component theorems evaluate the constructed metric.
 The example also checks lowering, raising, and `opposite` across charts.
 Its `spacetime` instance uses `LorentzManifold.toScheme`, with the same
 underlying smooth scheme as the standard Minkowski plane.
+The smooth tensor `spatialTensor`, the pullback of `dX ⊗ dX`, has the
+nonconstant coefficient matrix `[[4t²,2t],[2t,1]]`; its contraction with
+the inverse metric is proved to be 1 in both charts. The arbitrary-tensor
+contraction covariance theorem does not require symmetry of the tensor.
 This is a coordinate presentation of flat spacetime, not a curvature
 calculation or an assumption that an arbitrary Lorentz metric is flat.
 
@@ -226,7 +264,8 @@ with its dual is not used to define the Lorentz musical maps.
 these interfaces in typed examples with default elaborator options. It
 runs in required CI alongside the root-import and transitive axiom checks.
 The separate Experiments workflow runs exact SymPy checks of the inverse
-chart, Jacobian, metric, inverse metric, duality and sign reversal:
+chart, Jacobian, metric, inverse metric, duality, full/partial tensor
+contraction and sign reversal:
 
 ```sh
 experiments/.venv/bin/python -m pip install ./experiments

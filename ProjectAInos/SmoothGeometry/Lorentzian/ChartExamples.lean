@@ -5,6 +5,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 module
 
 public import ProjectAInos.SmoothGeometry.Lorentzian.Dual
+public import ProjectAInos.SmoothGeometry.Lorentzian.Tensor
 public import ProjectAInos.SmoothGeometry.Tensor.Bilinear
 public import Mathlib.Analysis.Calculus.FDeriv.Pi
 public import Mathlib.Analysis.Calculus.ContDiff.Operations
@@ -186,6 +187,42 @@ theorem sharp_covariance (p : Plane) (α : Plane →L[ℝ] ℝ) :
   rw [ContinuousLinearEquiv.apply_symm_apply]
   exact congrArg (fun β : Plane →L[ℝ] ℝ => β (shearLinear (2 * p 0) w))
     (Minkowski.flat_sharp .timeNegative α)
+
+/-- An arbitrary covariant tensor has the same contraction in both charts. -/
+theorem contract_covariance (p : Plane) (B : Plane →L[ℝ] Plane →L[ℝ] ℝ) :
+    metric.contract p (BilinearTensor.pullback B
+      (shearLinear (2 * p 0)).toContinuousLinearMap) =
+      (minkowskiMetric .timeNegative 1).contract (shear p) B :=
+  metric.contract_naturality (minkowskiMetric .timeNegative 1) p (shear p)
+    (shearLinear (2 * p 0)) (fun _ _ => rfl) _ B (fun _ _ => rfl)
+
+/-- The pullback of `dX ⊗ dX`; its components vary although its contraction is one. -/
+def spatialTensorCoefficients (p : Plane) : Plane →L[ℝ] Plane →L[ℝ] ℝ :=
+  BilinearTensor.pullback ((proj 1 : Plane →L[ℝ] ℝ).smulRight (proj 1))
+    (shearLinear (2 * p 0)).toContinuousLinearMap
+
+def spatialTensor : CovariantTwoTensor 1 Plane :=
+  ⟨spatialTensorCoefficients, by
+    have h : ContDiff ℝ ∞ spatialTensorCoefficients :=
+      BilinearTensor.contDiff_pullback contDiff_const
+        (shearLinear_contDiff.comp (contDiff_const.mul (contDiff_apply ℝ _ 0)))
+    intro x
+    rw [contMDiffAt_section]
+    convert h.contMDiff.contMDiffAt (x := x) using 1
+    funext y
+    ext v w
+    simp [hom_trivializationAt_apply, ContinuousLinearMap.inCoordinates]
+    rfl⟩
+
+theorem spatialTensor_coordinates (p v w : Plane) :
+    spatialTensor p v w = (v 1 + 2 * p 0 * v 0) * (w 1 + 2 * p 0 * w 0) := rfl
+
+theorem spatialTensor_contract (p : Plane) : metric.contractField spatialTensor p = 1 := by
+  change metric.contract p (spatialTensorCoefficients p) = 1
+  rw [spatialTensorCoefficients, contract_covariance, LorentzMetric.contract_smulRight,
+    LorentzMetric.minkowskiMetric_sharp]
+  change Minkowski.sharp .timeNegative (proj 1 : Plane →L[ℝ] ℝ) 1 = 1
+  simp [Minkowski.sharp_apply, lorentzSign]
 
 def standardChart : OpenPartialHomeomorph Plane Plane :=
   (Homeomorph.refl Plane).toOpenPartialHomeomorph

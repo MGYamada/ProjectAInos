@@ -178,7 +178,9 @@ and QFT remain outside this implementation.
 
 Section 5.1 has begun with smooth metric duality on the actual tangent and
 cotangent bundles: `flat`, `sharp`, smooth lowering/raising of sections, and
-their coordinate compatibility. A two-chart regression uses
+their coordinate compatibility. Iterated hom bundles construct finite mixed
+tensor types; full/partial trace contraction and inverse-metric contraction
+are smooth and coordinate compatible. A two-chart regression uses
 `(T,X) = (t,x+t²)` to obtain nonconstant coefficients for the Minkowski
 metric and proves covariance using the manifold derivative. Both charts
 belong to the smooth maximal atlas. The [shared geometry guide](docs/smooth-geometry.md)

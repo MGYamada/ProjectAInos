@@ -6,6 +6,7 @@ module
 
 import ProjectAInos.SmoothGeometry.Lorentzian.Dual
 import ProjectAInos.SmoothGeometry.Lorentzian.ChartExamples
+import ProjectAInos.SmoothGeometry.Tensor.Bundle
 
 /-! Typed contracts for GR 5.1's shared metric foundation. These examples use
 default elaborator options and do not assume a global frame or flatness. -/
@@ -106,6 +107,90 @@ example {B : X → E →L[ℝ] E →L[ℝ] ℝ} {v w : X → E}
 
 end Bilinear
 
+section TensorBundles
+
+variable {d : ℕ} {M : Type} [TopologicalSpace M]
+  [ChartedSpace (MinkowskiModel d) M] [IsManifold 𝓘(ℝ, MinkowskiModel d) ∞ M]
+
+open Tensor
+
+example (r s : ℕ) :
+    ContMDiffVectorBundle ∞
+      ((Shape.mixed r s).bundle 𝓘(ℝ, MinkowskiModel d) (M := M)).Model
+      ((Shape.mixed r s).bundle 𝓘(ℝ, MinkowskiModel d) (M := M)).Fiber
+      𝓘(ℝ, MinkowskiModel d) := inferInstance
+
+example {σ : LorentzConvention} (g : LorentzMetric σ d M) :
+    ((Shape.mixed 0 2).bundle 𝓘(ℝ, MinkowskiModel d) (M := M)).Section 𝓘(ℝ, MinkowskiModel d) :=
+  g.toTensor
+
+example (A : SmoothBundle 𝓘(ℝ, MinkowskiModel d) (M := M))
+    (L : (SmoothBundle.hom 𝓘(ℝ, MinkowskiModel d) A A).Section 𝓘(ℝ, MinkowskiModel d)) :
+    C^∞⟮𝓘(ℝ, MinkowskiModel d), M; ℝ⟯ := A.contract 𝓘(ℝ, MinkowskiModel d) L
+
+example (A B : SmoothBundle 𝓘(ℝ, MinkowskiModel d) (M := M))
+    (L : (SmoothBundle.hom 𝓘(ℝ, MinkowskiModel d) A
+      (SmoothBundle.hom 𝓘(ℝ, MinkowskiModel d) B B)).Section 𝓘(ℝ, MinkowskiModel d))
+    (x : M) (v : A.Fiber x) :
+    SmoothBundle.partialContract 𝓘(ℝ, MinkowskiModel d) A B L x v =
+      LinearMap.trace ℝ (B.Fiber x) (L x v).toLinearMap :=
+  SmoothBundle.partialContract_apply 𝓘(ℝ, MinkowskiModel d) A B L x v
+
+example (A : SmoothBundle 𝓘(ℝ, MinkowskiModel d) (M := M))
+    (e : Bundle.Trivialization A.Model
+      (Bundle.TotalSpace.proj : Bundle.TotalSpace A.Model A.Fiber → M))
+    [MemTrivializationAtlas e] (T : A.Section 𝓘(ℝ, MinkowskiModel d)) :
+    ContMDiffOn 𝓘(ℝ, MinkowskiModel d) 𝓘(ℝ, A.Model) ∞
+      (A.coefficients 𝓘(ℝ, MinkowskiModel d) e T) e.baseSet :=
+  A.coefficients_contMDiffOn 𝓘(ℝ, MinkowskiModel d) e T
+
+example (s : Shape) {x y z : M}
+    (e : TangentSpace 𝓘(ℝ, MinkowskiModel d) x ≃L[ℝ] TangentSpace 𝓘(ℝ, MinkowskiModel d) y)
+    (f : TangentSpace 𝓘(ℝ, MinkowskiModel d) y ≃L[ℝ] TangentSpace 𝓘(ℝ, MinkowskiModel d) z) :
+    s.pullback 𝓘(ℝ, MinkowskiModel d) (e.trans f) =
+      (s.pullback 𝓘(ℝ, MinkowskiModel d) f).trans (s.pullback 𝓘(ℝ, MinkowskiModel d) e) :=
+  s.pullback_trans 𝓘(ℝ, MinkowskiModel d) e f
+
+example (a b : Shape) {x y : M}
+    (e : TangentSpace 𝓘(ℝ, MinkowskiModel d) x ≃L[ℝ] TangentSpace 𝓘(ℝ, MinkowskiModel d) y)
+    (L : (a.bundle 𝓘(ℝ, MinkowskiModel d)).Fiber x →L[ℝ]
+      (b.bundle 𝓘(ℝ, MinkowskiModel d)).Fiber x →L[ℝ]
+        (b.bundle 𝓘(ℝ, MinkowskiModel d)).Fiber x)
+    (v : (a.bundle 𝓘(ℝ, MinkowskiModel d)).Fiber y) :
+    LinearMap.trace ℝ ((b.bundle 𝓘(ℝ, MinkowskiModel d)).Fiber y)
+        ((Shape.map 𝓘(ℝ, MinkowskiModel d) (.hom a (.hom b b)) e L) v).toLinearMap =
+      LinearMap.trace ℝ ((b.bundle 𝓘(ℝ, MinkowskiModel d)).Fiber x)
+        (L ((a.map 𝓘(ℝ, MinkowskiModel d) e).symm v)).toLinearMap :=
+  Shape.partialTrace_map 𝓘(ℝ, MinkowskiModel d) a b e L v
+
+variable {σ : LorentzConvention} (g : LorentzMetric σ d M)
+
+example (B : CovariantTwoTensor d M) : g.lowerIndex (g.raiseIndex B) = B :=
+  g.lowerIndex_raiseIndex B
+
+example (A : TangentEndomorphism d M) : g.raiseIndex (g.lowerIndex A) = A :=
+  g.raiseIndex_lowerIndex A
+
+example (B : CovariantTwoTensor d M) : C^∞⟮𝓘(ℝ, MinkowskiModel d), M; ℝ⟯ :=
+  g.contractField B
+
+example (x : M) : g.contract x (g.form x) = d + 1 := g.contract_metric x
+
+example (x : M)
+    (B : TangentSpace 𝓘(ℝ, MinkowskiModel d) x →L[ℝ]
+      TangentSpace 𝓘(ℝ, MinkowskiModel d) x →L[ℝ] ℝ) :
+    g.opposite.contract x B = -g.contract x B := g.contract_opposite x B
+
+example (x : M)
+    (e : TangentSpace 𝓘(ℝ, MinkowskiModel d) x ≃L[ℝ] MinkowskiModel d)
+    (B : TangentSpace 𝓘(ℝ, MinkowskiModel d) x →L[ℝ]
+      TangentSpace 𝓘(ℝ, MinkowskiModel d) x →L[ℝ] ℝ) :
+    g.contract x B = ∑ i, ∑ j,
+      B (e.symm (Pi.single i 1)) (e.symm (Pi.single j 1)) * g.inverseComponent x e i j :=
+  g.contract_eq_sum_components x e B
+
+end TensorBundles
+
 section Charts
 
 open LorentzianCharts
@@ -153,5 +238,7 @@ example (p v w : Plane) :
     metric.opposite.form p v w = (minkowskiMetric .timePositive 1).form (shear p)
       (mfderiv 𝓘(ℝ, Plane) 𝓘(ℝ, Plane) shear p v)
       (mfderiv 𝓘(ℝ, Plane) 𝓘(ℝ, Plane) shear p w) := opposite_metric_covariance p v w
+
+example (p : Plane) : metric.contractField spatialTensor p = 1 := spatialTensor_contract p
 
 end Charts

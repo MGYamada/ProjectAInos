@@ -53,15 +53,25 @@ hom-bundle coordinates, so no smooth frame is an extra hypothesis.
 Smooth section lowering/raising, inverse pairing, coordinate naturality,
 and compatibility with the flat API and sign reversal are proved.
 Fibrewise bilinear pullback and contraction supply the initial tensor API.
+Finite mixed tensors are constructed by recursively taking native smooth
+hom bundles, retaining the actual tangent/cotangent fibres. Coordinate
+coefficients come from geometric sections and obey the atlas transition
+law. Composition and intrinsic trace have smooth-bundle proofs; the trace
+functional itself is smooth, so partial contraction retains uncontracted
+arguments. Coordinate naturality of partial contraction and the
+inverse-metric component formula are proved. Smooth field pullback along
+diffeomorphisms and general slot permutation/tensor-product APIs remain
+subsequent work.
 
 For the chart regression, the shear `(t,x) ↦ (t,x+t²)` and its inverse are
 proved smooth and turned into an actual chart in the maximal atlas.
 Pulling back the Minkowski metric constructs a smooth `LorentzMetric` with
 nonconstant coefficients. Lean verifies its derivative, coefficient
-transformation, duality and opposite-sign covariance. Typed API examples
+transformation, duality and opposite-sign covariance. A nonconstant
+`dX ⊗ dX` tensor has metric contraction 1 in both charts. Typed API examples
 are required CI checks; exact SymPy computations run separately. This
-increment addresses #43 within #52; the general tensor and connection
-construction and all later 5.1 stages remain subsequent work.
+increment addresses #43 within #52; the remaining tensor operations,
+connection construction and all later 5.1 stages remain subsequent work.
 
 ## Minkowski Geometry and Relativistic Kinematics
 
