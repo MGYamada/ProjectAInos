@@ -16,8 +16,18 @@ import ProjectAInos
 #check YM.Kernel.host
 #check YM.Wilson.law
 #check YM.Wilson.law_gauge
+#check YangMills.GaugeGroup.core
+#check YangMills.wilsonEnergy_eq_core
+#check YangMills.wilsonLaw_eq_core
+#check YangMills.WilsonFamily.haar_eq_core
+#check YangMills.WilsonFamily.law_eq_core
+#check YangMills.WilsonFamily.finiteMoment_eq_core
 #check YangMills.WilsonFamily.Converges
 #check YangMills.JointExistence
 #check ProjectAInos.Variational.jet_derivative_eq_ym_directional
+#check ProjectAInos.SmoothGeometry.YangMillsCoordinates.pointLinear
+#check ProjectAInos.SmoothGeometry.YangMillsCoordinates.time_eq
+#check ProjectAInos.SmoothGeometry.YangMillsCoordinates.minkowskiSquare_eq
+#check ProjectAInos.SmoothGeometry.YangMillsCoordinates.configurations_injective
 
 example : YangMills.JointExistence → YangMills.JointExistence := id

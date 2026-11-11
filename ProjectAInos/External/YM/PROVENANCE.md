@@ -34,6 +34,25 @@ approximately 9,500-file upstream proof are imported. In particular,
 `YangMills.JointExistence` is currently a **proposition**, not a theorem
 proved in P⊗AI. This import does not assert mass-gap positivity.
 
+## Post-import semantic bridges
+
+`WilsonLawBridge.lean` adapts only the **finite** energy and probability-law
+comparison from upstream [`WilsonBridge.lean`](https://github.com/yang-mills-group/OpenAI-YM-20261028/blob/main/WilsonBridge.lean)
+at the pinned source commit. Its `wilsonEnergy_eq_core` and
+`wilsonLaw_eq_core` identify the public challenge definitions with the
+already proved finite-lattice Wilson law for canonical probability Haar.
+For an arbitrary public `WilsonFamily`, `WilsonFamily.haar_eq_core` derives
+canonical Haar from its normalized Haar hypotheses using measure uniqueness,
+and `WilsonFamily.law_eq_core` and `finiteMoment_eq_core` transfer the result
+to the actual lattice moments. The remaining upstream extraction and
+continuum construction are not imported.
+
+`ProjectAInos/SmoothGeometry/YangMillsCoordinates.lean` is a project-authored
+linear-equivalence adapter between the time-first and time-last conventions.
+It identifies time, the `(+---)` Minkowski quadratic form, and configurations,
+not full Wightman analytic continuation.
+See [SEMANTICS.md](SEMANTICS.md) for the open physical integration conditions.
+
 ## Integration boundaries
 
 - Original declaration namespaces (`YM`, `YM.Analysis`, `YM.Wilson`, and
@@ -45,10 +64,13 @@ proved in P⊗AI. This import does not assert mass-gap positivity.
   `Variational/YangMillsBridge.lean` proves that the shared first-jet
   derivative agrees with the imported directional derivative.
 - P⊗AI's shared Lorentz model uses **time first**, while the imported
-  public Yang--Mills spacetime uses **time last**. Any bridge must implement
-  an explicit coordinate permutation and prove sign compatibility.
+  public Yang--Mills spacetime uses **time last**. The new point equivalence
+  proves preservation of the flat Minkowski square, but not of the entire
+  Poincaré action or Fourier dual-momentum representation.
 - The upstream `YM.Gauge.Gauge` and public `YangMills.GaugeGroup` remain
-  distinct. No unproved equivalence between their representations is assumed.
+  distinct types; the project now proves the concrete forgetful map and
+  finite Wilson-action/law comparison for the probability Haar in each
+  `WilsonFamily`, without assuming a full equivalence of representations.
 - The Wilson-law results cover the stated finite-lattice setting. They do
   not establish thermodynamic-limit uniqueness or a positive mass gap.
 - The original project targets Lean 4.32.0; P⊗AI targets Lean 4.35.0.

@@ -20,3 +20,9 @@ ProjectAInos.External.YM, their imports rewritten to use that path,
 and Lean 4.35 public-module declarations introduced. Minor source adaptations
 resolve mathlib import and API changes, module visibility, and new lint rules.
 The mathematical specification remains unchanged pending validation.
+
+The finite Wilson-law comparison in
+ProjectAInos/External/YM/WilsonLawBridge.lean is adapted from upstream
+WilsonBridge.lean at the same commit. Its finite-action and measure equality
+proofs are extracted separately from the larger upstream continuum-limit
+construction. The new P⊗AI coordinate bridge is project-authored.

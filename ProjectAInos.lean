@@ -18,6 +18,7 @@ public import ProjectAInos.External.YM.PublicWilson
 public import ProjectAInos.External.YM.Space.Index
 public import ProjectAInos.External.YM.Wilson.Law
 public import ProjectAInos.External.YM.Wilson.Symmetry
+public import ProjectAInos.External.YM.WilsonLawBridge
 public import ProjectAInos.Mechanics.Basic
 public import ProjectAInos.Mechanics.EulerLagrange
 public import ProjectAInos.Mechanics.Examples
@@ -61,6 +62,7 @@ public import ProjectAInos.SmoothGeometry.SmoothPresheaf
 public import ProjectAInos.SmoothGeometry.SmoothSheaf
 public import ProjectAInos.SmoothGeometry.Spec
 public import ProjectAInos.SmoothGeometry.StructureSheaf
+public import ProjectAInos.SmoothGeometry.YangMillsCoordinates
 public import ProjectAInos.Thermodynamics.AdiabatUniqueness
 public import ProjectAInos.Thermodynamics.AtomicSystems
 public import ProjectAInos.Thermodynamics.Basic
