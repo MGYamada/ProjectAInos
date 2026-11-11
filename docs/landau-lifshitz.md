@@ -113,8 +113,10 @@ also records the Lorentz Levi-Civita construction: metric compatibility,
 vanishing torsion, uniqueness on differentiable sections, finite and smooth
 regularity, and metric-sign invariance are proved. The coordinate-model
 Christoffel formula and the nonlinear shear's connection and Hessian
-transformation are also proved. General chart-transformation and restriction
-laws, curvature and motion remain in the
+transformation are also proved. Metric pullback, intrinsic connection
+naturality under smooth metric-preserving maps and compatibility with open
+restriction are proved. The general coefficient chart-transformation law,
+curvature and motion remain in the
 work tracked by [#52](https://github.com/MGYamada/ProjectAInos/issues/52).
 Einstein equations and their Newtonian field-equation limit remain in 5.2;
 the Maxwell field action remains in 4.2.

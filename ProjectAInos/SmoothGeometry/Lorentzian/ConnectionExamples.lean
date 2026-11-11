@@ -6,6 +6,7 @@ module
 
 public import ProjectAInos.SmoothGeometry.Lorentzian.Christoffel
 public import ProjectAInos.SmoothGeometry.Lorentzian.ChartExamples
+public import ProjectAInos.SmoothGeometry.Lorentzian.Naturality
 
 /-! # Native connection checks in nonlinear Minkowski coordinates
 
@@ -101,5 +102,28 @@ theorem connection_shear_transformation (p v w : Plane) :
     (hasFDerivAt_shear p).fderiv, shear_hessian]
   ext i
   fin_cases i <;> simp
+
+/-- The earlier concrete metric agrees with the general pullback construction. -/
+theorem metric_eq_pullback :
+    metric = (minkowskiMetric .timeNegative 1).pullback shearDiffeomorph
+      shearDiffeomorph.contMDiff (fun x =>
+        shearDiffeomorph.isInvertible_mfderiv (x := x) (by simp)) := by
+  apply LorentzMetric.ext
+  intro p v w
+  rw [pullback_form]
+  exact metric_covariance p v w
+
+/-- The general connection naturality theorem applies to this actual nonlinear
+chart for every target field differentiable at the evaluation point. -/
+theorem leviCivita_shear_naturality
+    {Y : ∀ y : Plane, TangentSpace 𝓘(ℝ, Plane) y} {p : Plane}
+    (hY : MDifferentiableAt 𝓘(ℝ, Plane) (𝓘(ℝ, Plane).prod 𝓘(ℝ, Plane))
+      (T% Y) (shear p)) (v : TangentSpace 𝓘(ℝ, Plane) p) :
+    mfderiv 𝓘(ℝ, Plane) 𝓘(ℝ, Plane) shear p
+      (metric.leviCivita (VectorField.mpullback 𝓘(ℝ, Plane) 𝓘(ℝ, Plane) shear Y) p v) =
+      (minkowskiMetric .timeNegative 1).leviCivita Y (shear p)
+        (mfderiv 𝓘(ℝ, Plane) 𝓘(ℝ, Plane) shear p v) :=
+  metric.leviCivita_naturality_of_metric (minkowskiMetric .timeNegative 1)
+    shear_contDiff.contMDiff metric_covariance hY v
 
 end ProjectAInos.SmoothGeometry.LorentzianCharts

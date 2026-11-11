@@ -77,12 +77,16 @@ public import ProjectAInos.SmoothGeometry.Lorentzian.Connection
 public import ProjectAInos.SmoothGeometry.Lorentzian.ConnectionExamples
 public import ProjectAInos.SmoothGeometry.Lorentzian.Dual
 public import ProjectAInos.SmoothGeometry.Lorentzian.LeviCivita
+public import ProjectAInos.SmoothGeometry.Lorentzian.Naturality
+public import ProjectAInos.SmoothGeometry.Lorentzian.Pullback
 public import ProjectAInos.SmoothGeometry.Lorentzian.Regularity
+public import ProjectAInos.SmoothGeometry.Lorentzian.Restriction
 public import ProjectAInos.SmoothGeometry.Lorentzian.Tensor
 public import ProjectAInos.SmoothGeometry.Manifold.Charts
 public import ProjectAInos.SmoothGeometry.Manifold.Euclidean
 public import ProjectAInos.SmoothGeometry.Manifold.Germs
 public import ProjectAInos.SmoothGeometry.Manifold.LocallyRingedSpace
+public import ProjectAInos.SmoothGeometry.Manifold.OpenSubset
 public import ProjectAInos.SmoothGeometry.Manifold.Scheme
 public import ProjectAInos.SmoothGeometry.Minkowski.Affine
 public import ProjectAInos.SmoothGeometry.Minkowski.Basic

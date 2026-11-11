@@ -193,10 +193,15 @@ smoothness, and invariance under metric-sign reversal. On the coordinate
 model, the Christoffel formula and the coordinate action on differentiable
 fields are proved. The nonlinear chart has `Γˣ_tt = 2`; Lean verifies the
 second-derivative term in this chart transition.
+Smooth metric-preserving maps intertwine the native connections; derivative
+invertibility follows from equal dimension and nondegeneracy. Pullback
+metrics and restriction to open submanifolds preserve the Lorentz signature,
+and the restricted connection agrees with the ambient connection on
+restricted differentiable fields.
 The [shared geometry guide](docs/smooth-geometry.md)
 records the public API and exact checks. [Issue #52](https://github.com/MGYamada/ProjectAInos/issues/52)
-tracks the remaining tensor operations, general connection chart-transformation
-and restriction laws, curvature, motion, curved-form,
+tracks the remaining tensor operations, general connection coefficient
+chart-transformation laws, curvature, motion, curved-form,
 and time-dependent Newton-limit stages; [#43](https://github.com/MGYamada/ProjectAInos/issues/43)
 is the first chart-regression gate. Einstein dynamics belongs to 5.2.
 

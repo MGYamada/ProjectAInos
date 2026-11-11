@@ -8,6 +8,7 @@ import ProjectAInos.SmoothGeometry.Lorentzian.Dual
 import ProjectAInos.SmoothGeometry.Lorentzian.ChartExamples
 import ProjectAInos.SmoothGeometry.Lorentzian.ConnectionExamples
 import ProjectAInos.SmoothGeometry.Lorentzian.Regularity
+import ProjectAInos.SmoothGeometry.Lorentzian.Restriction
 import ProjectAInos.SmoothGeometry.Tensor.Bundle
 
 /-! Typed contracts for GR 5.1's shared metric and connection foundation. These examples use
@@ -96,6 +97,66 @@ example (hY : ContMDiffAt 𝓘(ℝ, MinkowskiModel d)
         y (g.leviCivita Y y)) x := g.contMDiffAt_leviCivita hY
 
 end Connection
+
+section ConnectionNaturality
+
+variable {σ : LorentzConvention} {d : ℕ} {M N : Type}
+  [TopologicalSpace M] [ChartedSpace (MinkowskiModel d) M]
+  [IsManifold 𝓘(ℝ, MinkowskiModel d) ∞ M]
+  [TopologicalSpace N] [ChartedSpace (MinkowskiModel d) N]
+  [IsManifold 𝓘(ℝ, MinkowskiModel d) ∞ N]
+  (g : LorentzMetric σ d M) (h : LorentzMetric σ d N)
+
+example (x : M) (y : N)
+    (L : TangentSpace 𝓘(ℝ, MinkowskiModel d) x →L[ℝ] TangentSpace 𝓘(ℝ, MinkowskiModel d) y)
+    (hL : ∀ v w, g.form x v w = h.form y (L v) (L w)) : L.IsInvertible :=
+  g.isInvertible_of_metric h x y L hL
+
+example {f : M → N}
+    (hf : ContMDiff 𝓘(ℝ, MinkowskiModel d) 𝓘(ℝ, MinkowskiModel d) ∞ f)
+    (hmetric : ∀ y v w, g.form y v w = h.form (f y)
+      (mfderiv 𝓘(ℝ, MinkowskiModel d) 𝓘(ℝ, MinkowskiModel d) f y v)
+      (mfderiv 𝓘(ℝ, MinkowskiModel d) 𝓘(ℝ, MinkowskiModel d) f y w))
+    {Y : ∀ y : N, TangentSpace 𝓘(ℝ, MinkowskiModel d) y} {x : M}
+    (hY : MDifferentiableAt 𝓘(ℝ, MinkowskiModel d)
+      (𝓘(ℝ, MinkowskiModel d).prod 𝓘(ℝ, MinkowskiModel d)) (T% Y) (f x))
+    (v : TangentSpace 𝓘(ℝ, MinkowskiModel d) x) :
+    mfderiv 𝓘(ℝ, MinkowskiModel d) 𝓘(ℝ, MinkowskiModel d) f x
+      (g.leviCivita (VectorField.mpullback 𝓘(ℝ, MinkowskiModel d)
+        𝓘(ℝ, MinkowskiModel d) f Y) x v) =
+      h.leviCivita Y (f x)
+        (mfderiv 𝓘(ℝ, MinkowskiModel d) 𝓘(ℝ, MinkowskiModel d) f x v) :=
+  g.leviCivita_naturality_of_metric h hf hmetric hY v
+
+example (f : M → N)
+    (hf : ContMDiff 𝓘(ℝ, MinkowskiModel d) 𝓘(ℝ, MinkowskiModel d) ∞ f)
+    (hinv : ∀ x, (mfderiv 𝓘(ℝ, MinkowskiModel d) 𝓘(ℝ, MinkowskiModel d) f x).IsInvertible)
+    (x : M) (v w : TangentSpace 𝓘(ℝ, MinkowskiModel d) x) :
+    (h.pullback f hf hinv).form x v w = h.form (f x)
+      (mfderiv 𝓘(ℝ, MinkowskiModel d) 𝓘(ℝ, MinkowskiModel d) f x v)
+      (mfderiv 𝓘(ℝ, MinkowskiModel d) 𝓘(ℝ, MinkowskiModel d) f x w) :=
+  h.pullback_form f hf hinv x v w
+
+example (U : TopologicalSpace.Opens M) : LorentzMetric σ d U := g.restrict U
+
+example (U : TopologicalSpace.Opens M) :
+    IsLocalDiffeomorph 𝓘(ℝ, MinkowskiModel d) 𝓘(ℝ, MinkowskiModel d) ∞
+      (Subtype.val : U → M) := Manifold.isLocalDiffeomorph_subtype_val _ U
+
+example (U : TopologicalSpace.Opens M) {x : U}
+    {Y : ∀ y : M, TangentSpace 𝓘(ℝ, MinkowskiModel d) y}
+    (hY : MDifferentiableAt 𝓘(ℝ, MinkowskiModel d)
+      (𝓘(ℝ, MinkowskiModel d).prod 𝓘(ℝ, MinkowskiModel d)) (T% Y) x.val)
+    (v : TangentSpace 𝓘(ℝ, MinkowskiModel d) x) :
+    mfderiv 𝓘(ℝ, MinkowskiModel d) 𝓘(ℝ, MinkowskiModel d) (Subtype.val : U → M) x
+      ((g.restrict U).leviCivita
+        (VectorField.mpullback 𝓘(ℝ, MinkowskiModel d) 𝓘(ℝ, MinkowskiModel d)
+          (Subtype.val : U → M) Y) x v) =
+      g.leviCivita Y x.val
+        (mfderiv 𝓘(ℝ, MinkowskiModel d) 𝓘(ℝ, MinkowskiModel d) (Subtype.val : U → M) x v) :=
+  g.leviCivita_restrict U hY v
+
+end ConnectionNaturality
 
 section CoordinateConnection
 
@@ -427,5 +488,18 @@ example (p v w : Plane) :
       (NormedSpace.fromTangentSpace p
         (metric.leviCivita (LorentzMetric.modelField w) p (LorentzMetric.modelField v p))) =
       fderiv ℝ (fun q => fderiv ℝ shear q w) p v := connection_shear_transformation p v w
+
+example : metric = (minkowskiMetric .timeNegative 1).pullback shearDiffeomorph
+    shearDiffeomorph.contMDiff (fun x =>
+      shearDiffeomorph.isInvertible_mfderiv (x := x) (by simp)) :=
+  metric_eq_pullback
+
+example {Y : ∀ y : Plane, TangentSpace 𝓘(ℝ, Plane) y} {p : Plane}
+    (hY : MDifferentiableAt 𝓘(ℝ, Plane) (𝓘(ℝ, Plane).prod 𝓘(ℝ, Plane))
+      (T% Y) (shear p)) (v : TangentSpace 𝓘(ℝ, Plane) p) :
+    mfderiv 𝓘(ℝ, Plane) 𝓘(ℝ, Plane) shear p
+      (metric.leviCivita (VectorField.mpullback 𝓘(ℝ, Plane) 𝓘(ℝ, Plane) shear Y) p v) =
+      (minkowskiMetric .timeNegative 1).leviCivita Y (shear p)
+        (mfderiv 𝓘(ℝ, Plane) 𝓘(ℝ, Plane) shear p v) := leviCivita_shear_naturality hY v
 
 end Charts

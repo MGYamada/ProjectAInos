@@ -344,6 +344,26 @@ that the Jacobian carries the connection term to this Hessian, as required
 when the inertial connection coefficients vanish. This is the concrete
 shear case; a general manifold-chart transformation theorem remains open.
 
+`Lorentzian/Pullback.lean` constructs a Lorentz metric from a smooth map
+with invertible tangent derivatives. It proves smoothness and signature on
+the actual fibres, and identity, composition and sign-reversal laws. Global
+bijectivity of the map is unnecessary. `Lorentzian/Naturality.lean` proves
+`koszul_naturality` by the scalar chain rule and Lie-bracket naturality.
+`leviCivita_naturality_of_metric` then states that a smooth metric-preserving
+map intertwines the two constructed connections on pulled-back fields
+differentiable at the target point. Its derivative invertibility is derived
+from metric nondegeneracy and equal dimension. The input fields are total
+sections with only local differentiability hypotheses.
+
+`Manifold/OpenSubset.lean` proves an open inclusion is a smooth local
+diffeomorphism with invertible tangent derivative. `Lorentzian/Restriction.lean`
+uses this to construct `restrict U`, and `leviCivita_restrict` identifies its
+connection with the ambient connection on restricted differentiable fields.
+Both the metric and connection statements use the derivative of the
+inclusion to identify the actual tangent fibres. The nonlinear metric agrees
+with the general metric pullback, and `leviCivita_shear_naturality` verifies
+the native connection identity for arbitrary differentiable target fields.
+
 The construction works for either Lorentz convention with the existing
 smooth metric interface. It assumes no Hausdorffness, orientation, time
 orientation, global frame or positive-definite tangent metric. The
@@ -354,9 +374,11 @@ The regularity proof is supplied separately here.
 Typed contracts in `checks/LorentzGeometryAPI.lean` cover the carrier,
 compatibility equation, full Koszul formula, torsion, uniqueness, sign
 reversal, local/native finite and smooth regularity, the full coordinate
-formula and the nonlinear connection example at default elaborator settings.
-Stage B is still open for the general second-derivative chart transformation
-law and restriction compatibility. Curvature, parallel transport,
+formula, metric pullback, naturality, open restriction and the nonlinear
+connection example at default elaborator settings. Stage B is still open
+for the general coefficient transformation law with second derivatives on
+arbitrary chart overlaps; the intrinsic naturality and open restriction
+theorems supply its geometric foundation. Curvature, parallel transport,
 geodesics, curved forms and the Newtonian motion limit remain later work.
 
 ## Scope and next stages
