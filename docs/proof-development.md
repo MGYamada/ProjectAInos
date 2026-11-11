@@ -44,7 +44,7 @@ The geometry follows mathlib's progression from ringed spaces through `Spec` to 
 
 Free C∞-rings on arbitrary sets give general localizations with their smooth universal property. Their spectra are identified with the surviving-point subspaces; principal localizations give open immersions. These supply open subschemes and pullbacks along open immersions. Open gluing data construct actual C∞ schemes, with descent and uniqueness of compatible morphisms proved as a categorical colimit. The manifold comparison identifies the Euclidean smooth-function sheaf with its affine spectrum, then proves local affineness for boundaryless finite-dimensional smooth manifolds using coordinate charts. Smooth maps induce scheme morphisms with identity and composition laws.
 
-`LorentzMetric` equips the actual tangent bundle with a smooth bilinear form of Lorentz signature, without requiring a global frame. `LorentzManifold.toScheme` uses the same manifold construction for every such metric. Minkowski space is an instance with constant coefficients, a proved affine scheme comparison, and proved local inertial coordinates. The [smooth-geometry guide](smooth-geometry.md) and [formalization notes](smooth-geometry-notes.md) record these constructions and their scope. The Γ–Spec adjunction, full faithfulness of the manifold construction, universal cotangent modules, and curvature are subsequent stages.
+`LorentzMetric` equips the actual tangent bundle with a smooth bilinear form of Lorentz signature, without requiring a global frame. `LorentzManifold.toScheme` uses the same manifold construction for every such metric. Minkowski space is an instance with constant coefficients, a proved affine scheme comparison, and proved local inertial coordinates. The [smooth-geometry guide](smooth-geometry.md) and [formalization notes](smooth-geometry-notes.md) record these constructions and their scope. The Γ–Spec adjunction, full faithfulness of the manifold construction and universal cotangent modules are subsequent stages; connection and curvature progress is recorded below.
 
 The first GR 5.1 increment adds metric duality on tangent/cotangent fibres.
 Bijectivity follows from the existing pointwise Lorentz signature. The
@@ -118,8 +118,29 @@ actual transition Hessian. The nonlinear two-chart regression specializes
 this general theorem: the standard chart has `Γˣ_tt = 2`, while the same
 metric has zero coefficients in the inertial chart. Typed API examples fix
 the full law with only atlas and overlap hypotheses. Stage B's proof endpoints
-are implemented and awaiting PR review/merge; curvature and stages D–G remain
-subsequent work.
+are implemented and awaiting PR review/merge.
+
+The stage C increment constructs `LorentzMetric.curvature` as a continuous
+trilinear map on the actual tangent fibre. The generic
+`Tensor.ContMDiffTensorialAt` API proves that linearity over locally `Cⁿ`
+scalar germs forces dependence only on the fibre value. This handles the
+two derivatives in curvature without requiring global smooth extensions.
+The local `C²` commutator formula, first-pair antisymmetry and algebraic
+first Bianchi identity are proved. Testing on local smooth fields establishes
+native hom-bundle smoothness. Metric-preserving smooth maps intertwine
+curvature; invertibility follows from the metric, and global bijectivity is
+unnecessary. Ricci uses `trace (w ↦ R(w,u)v)` and scalar curvature uses the
+inverse metric. Their smoothness, tangent-coordinate contraction formulas,
+coordinate naturality and sign-reversal laws are proved. The standard and
+nonlinear Minkowski metrics have zero Riemann, Ricci and scalar curvature
+in Lean. Exact SymPy checks add curvature symmetries, the conformal scalar
+`-4 exp(-2x²)`, and covariance of nonzero curvature under the shear.
+
+Stage C remains incomplete: the Christoffel curvature formula on arbitrary
+charts, metric last-pair/pair-interchange symmetries, Ricci symmetry, and the
+conformal Lean example remain. The SymPy checks do not discharge those Lean
+obligations. Stages D–G remain subsequent work; differential/contracted
+Bianchi and Einstein dynamics belong to 5.2.
 
 ## Minkowski Geometry and Relativistic Kinematics
 

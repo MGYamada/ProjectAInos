@@ -129,23 +129,27 @@ Negating the metric changes `σ` to `σ.opposite` and preserves this local
 condition, as well as smoothness, symmetry and nondegeneracy. The underlying
 C∞ scheme is definitionally unchanged. The [flat-spacetime extension](special-relativity.md)
 keeps time orientation separate from spacetime orientation.
-Local Minkowski coordinates are not a premise on general Lorentz manifolds. Equivalence with vanishing
-curvature is not asserted: a connection and curvature tensor have not yet
-been constructed.
+Local Minkowski coordinates are not a premise on general Lorentz manifolds.
+The Lorentz Levi-Civita connection and smooth curvature tensor are now
+constructed; equivalence of `IsLocallyMinkowski` with vanishing curvature
+still requires the local flat-frame/integration arguments in stage D.
 
 The localization construction follows [Joyce, *Algebraic Geometry over
 C∞-rings*, §2.3](https://arxiv.org/pdf/1001.0023). The requested general
 localization, open gluing, and manifold comparison are now constructed.
 The Γ–Spec adjunction, complete/fair rings, full faithfulness of the manifold
-construction, universal cotangent modules, and curvature remain separate
-research stages. In particular, no claim that `A ≅ Γ(Spec A)` for arbitrary
+construction and universal cotangent modules remain separate research
+stages. The curvature proof status is recorded in the
+[API guide](smooth-geometry.md#gr-51-curvature-and-intrinsic-contractions).
+In particular, no claim that `A ≅ Γ(Spec A)` for arbitrary
 C∞-rings is used in this continuation.
 
 ## Verification
 
 The warning-free full build (`lake build --wfail ProjectAInos`), root-import
 check, external API regression check, and transitive axiom audit pass.
-The audit covers 2,857 project declarations, including 453 in smooth algebra and 713 in smooth geometry,
+The current curvature increment's audit covers 6,432 project declarations,
+including 453 in smooth algebra and 2,267 in smooth geometry,
 with only `propext`, `Classical.choice`, and `Quot.sound` allowed.
 `git diff --check` also passes. The existing `README.md` contents, including
 the earlier subject-numbering changes, were preserved throughout this work.

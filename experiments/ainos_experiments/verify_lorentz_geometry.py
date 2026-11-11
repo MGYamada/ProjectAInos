@@ -1,4 +1,4 @@
-"""Exact checks for GR 5.1's metric, connection and nonlinear-chart examples.
+"""Exact checks for GR 5.1's metric, connection and curvature examples.
 
 Time first, c=1, signature (-+). The coordinate change is (T,X)=(t,x+t²).
 All computations are symbolic over the reals; no tolerances or random seeds
@@ -9,7 +9,8 @@ import sympy as sp
 
 
 def check_zero(name, expression):
-    entries = list(expression) if isinstance(expression, sp.MatrixBase) else [expression]
+    entries = (list(expression) if isinstance(expression, (sp.MatrixBase, list, tuple))
+               else [expression])
     if any(sp.simplify(entry) != 0 for entry in entries):
         raise AssertionError(f"{name}: exact residual is nonzero: {expression}")
 
@@ -40,6 +41,51 @@ def verify_connection(metric, coordinates):
                                  + gamma[ell][k, j] * metric[i, ell]
                                  for ell in range(size)))
     return gamma
+
+
+def curvature(gamma, coordinates):
+    """Return R^a_bcd, with R(e_b,e_c)e_d as the vector being expanded."""
+    size = len(coordinates)
+    riemann = sp.MutableDenseNDimArray.zeros(size, size, size, size)
+    for a in range(size):
+        for b in range(size):
+            for c in range(size):
+                for d in range(size):
+                    riemann[a, b, c, d] = sp.simplify(
+                        sp.diff(gamma[a][c, d], coordinates[b])
+                        - sp.diff(gamma[a][b, d], coordinates[c])
+                        + sum(gamma[a][b, k] * gamma[k][c, d]
+                              - gamma[a][c, k] * gamma[k][b, d]
+                              for k in range(size)))
+    return riemann
+
+
+def verify_curvature(metric, coordinates, gamma):
+    riemann = curvature(gamma, coordinates)
+    size = len(coordinates)
+
+    def lowered(b, c, d, e):
+        return sum(metric[e, a] * riemann[a, b, c, d] for a in range(size))
+
+    for a in range(size):
+        for b in range(size):
+            for c in range(size):
+                for d in range(size):
+                    check_zero("first-pair antisymmetry",
+                               riemann[a, b, c, d] + riemann[a, c, b, d])
+                    check_zero("algebraic first Bianchi",
+                               riemann[a, b, c, d] + riemann[a, c, d, b]
+                               + riemann[a, d, b, c])
+                    check_zero("last-pair antisymmetry", lowered(a, b, c, d)
+                               + lowered(a, b, d, c))
+                    check_zero("pair interchange", lowered(a, b, c, d)
+                               - lowered(c, d, a, b))
+    # Ric(u,v) = tr(w -> R(w,u)v), matching the Lean contraction order.
+    ricci = sp.Matrix(size, size, lambda b, c: sp.simplify(sum(
+        riemann[a, a, b, c] for a in range(size))))
+    check_zero("Ricci symmetry", ricci - ricci.T)
+    scalar = sp.simplify(sp.trace(metric.inv() * ricci))
+    return riemann, ricci, scalar
 
 
 def verify():
@@ -118,9 +164,53 @@ def verify():
             for a in range(2)), sp.zeros(2))
         check_zero("connection Hessian transformation", gamma[k] - transformed_gamma)
 
-    curved_gamma = verify_connection(sp.exp(2*x**2) * eta, coordinates)
+    curved_metric = sp.exp(2*x**2) * eta
+    curved_gamma = verify_connection(curved_metric, coordinates)
     check_zero("conformal time connection", curved_gamma[0] - sp.Matrix([[0, 2*x], [2*x, 0]]))
     check_zero("conformal spatial connection", curved_gamma[1] - sp.diag(2*x, 2*x))
+
+    for name, flat_metric, flat_coords, coefficients in [
+            ("standard Minkowski", eta, inertial, flat_gamma),
+            ("nonlinear Minkowski", metric, coordinates, gamma)]:
+        riemann, ricci, scalar = verify_curvature(flat_metric, flat_coords, coefficients)
+        check_zero(name + " Riemann", list(sp.flatten(riemann.tolist())))
+        check_zero(name + " Ricci", ricci)
+        check_zero(name + " scalar curvature", scalar)
+
+    riemann, ricci, scalar = verify_curvature(curved_metric, coordinates, curved_gamma)
+    check_zero("conformal Ricci", ricci - sp.diag(2, -2))
+    check_zero("conformal scalar curvature", scalar + 4*sp.exp(-2*x**2))
+    for component in curved_gamma:
+        check_zero("connection vanishes at origin", component.subs({t: 0, x: 0}))
+    check_zero("curvature at origin is nonzero", scalar.subs({t: 0, x: 0}) + 4)
+    opposite_riemann, opposite_ricci, opposite_scalar = verify_curvature(
+        -curved_metric, coordinates, christoffel(-curved_metric, coordinates))
+    check_zero("curvature metric-sign reversal", list(sp.flatten(
+        (opposite_riemann - riemann).tolist())))
+    check_zero("Ricci metric-sign reversal", opposite_ricci - ricci)
+    check_zero("scalar curvature metric-sign reversal", opposite_scalar + scalar)
+
+    # Check a nonzero curvature tensor in both nonlinear charts as well.
+    substitution = {t: shear[0], x: shear[1]}
+    pulled_metric = sp.exp(2*shear[1]**2) * metric
+    pulled_riemann, pulled_ricci, pulled_scalar = verify_curvature(
+        pulled_metric, coordinates, christoffel(pulled_metric, coordinates))
+    for a in range(2):
+        for b in range(2):
+            for c in range(2):
+                for d in range(2):
+                    expected = sum(
+                        inverse_jacobian[a, k] * jacobian[ell, b] * jacobian[m, c]
+                        * jacobian[n, d] * riemann[k, ell, m, n].subs(
+                            substitution, simultaneous=True)
+                        for k in range(2) for ell in range(2)
+                        for m in range(2) for n in range(2))
+                    check_zero("nonzero curvature coordinate covariance",
+                               pulled_riemann[a, b, c, d] - expected)
+    check_zero("Ricci coordinate covariance", pulled_ricci
+               - jacobian.T * ricci.subs(substitution, simultaneous=True) * jacobian)
+    check_zero("scalar curvature coordinate covariance",
+               pulled_scalar - scalar.subs(substitution, simultaneous=True))
 
     if metric.subs(t, 0) == metric.subs(t, 1):
         raise AssertionError("metric regression must have nonconstant coefficients")
@@ -128,7 +218,8 @@ def verify():
         raise AssertionError("chart regression must have nonconstant Jacobian")
     print("Lorentz geometry exact checks passed: nonlinear charts, metric covariance, "
           "inverse metric, raising/lowering, full/partial tensor contraction, "
-          "Levi-Civita coefficients, Hessian transformation, and both signature conventions.")
+          "Levi-Civita coefficients, Hessian transformation, curvature/Bianchi, "
+          "Ricci/scalar contractions, nonzero curvature covariance, and both signatures.")
 
 
 def main():

@@ -116,8 +116,13 @@ smoothness and coefficient transformation law with the transition Hessian
 hold on arbitrary smooth manifold charts. The nonlinear shear verifies this
 general law in two actual charts. Metric pullback, intrinsic connection
 naturality under smooth metric-preserving maps and compatibility with open
-restriction are proved. Connection-stage review, curvature and motion remain in the
-work tracked by [#52](https://github.com/MGYamada/ProjectAInos/issues/52).
+restriction are proved. The curvature increment constructs the smooth native
+Riemann tensor, proves local `C²` extension independence, first-pair
+antisymmetry, algebraic first Bianchi and naturality, and constructs smooth
+Ricci/scalar contractions. Both Minkowski presentations have proved zero
+curvature. The Christoffel curvature formula, remaining metric symmetries,
+the conformal Lean example and motion remain in the work tracked by
+[#52](https://github.com/MGYamada/ProjectAInos/issues/52); stage C is incomplete.
 Einstein equations and their Newtonian field-equation limit remain in 5.2;
 the Maxwell field action remains in 4.2.
 
