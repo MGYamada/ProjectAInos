@@ -21,7 +21,7 @@ mathematical distinctions exposed by the proofs are recorded in the
 ## Public physical endpoints
 
 - `ThermalFamily.product_comparison` derives finite-product CH. It does not take CH, ECH, or calibrator existence as a premise.
-- `ThermalFamily.exchangeComparison_of_physical_axioms` derives ECH when accessibility preserves primitive composition labels. `AtomicDomains.exchangeComparison_nonreactive` specializes to the generated nonreactive relation and proves ECH without a conservation hypothesis.
+- `ThermalFamily.exchangeComparison_of_physical_axioms` derives ECH when accessibility preserves primitive composition labels. `AtomicDomains.exchangeComparison_nonreactive` accepts composite generators and their label-preservation proof; conservation for the full closure and physical ECH are derived. `AtomicReservoir.exchangeComparison` instantiates it with a nonempty canonical-atomic thermal family. The old restricted endpoint is named `exchangeComparison_atomicOnly`.
 - `ThermalFamily.exists_entropy_of_physical_axioms` gives an additive extensive entropy and the complete accessibility criterion within each composition label.
 - `ThermalFamily.exists_weak_entropy_of_physical_axioms` adds `RawNoSinks` and returns the corrected entropy, monotone for all accessible processes and still a complete criterion within matching labels.
 - `AtomicDomains` constructs actual coordinate atoms, their finite composites, and their labels before an accessibility relation is supplied. Its entropy endpoints derive the charts and full-domain label laws from the coordinate presentation.

@@ -72,6 +72,9 @@ public import ProjectAInos.SpecialRelativity.Rapidity
 public import ProjectAInos.SpecialRelativity.Spacetime
 public import ProjectAInos.SpecialRelativity.Velocity
 public import ProjectAInos.Thermodynamics.AdiabatUniqueness
+public import ProjectAInos.Thermodynamics.AtomicObstruction
+public import ProjectAInos.Thermodynamics.AtomicProcesses
+public import ProjectAInos.Thermodynamics.AtomicReservoir
 public import ProjectAInos.Thermodynamics.AtomicSystems
 public import ProjectAInos.Thermodynamics.Basic
 public import ProjectAInos.Thermodynamics.BoundaryDifferentiability

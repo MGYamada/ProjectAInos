@@ -159,10 +159,26 @@ theorem exchangeComparison (F : ThermalFamily P)
     (fun g => D.chart g (S g) (hdomain g))
     (fun g => D.chart_represent g (S g) (hdomain g) (hrepresent g)) hpreserved
 
-/-- The A1–A6 closure of within-system atomic transformations satisfies ECH
-from the physical family premises, with no label-conservation hypothesis.
-`Nonreactive.accessibility_label_eq` supplies conservation. -/
+/-- Composite generators may include mixing and thermal contact. Conservation
+is required only for generators; it is proved for their A1–A6 closure. Physical
+comparison follows from the thermal family, without assuming CH or ECH. -/
 theorem exchangeComparison_nonreactive
+    (elementary : D.Raw → D.Raw → Prop)
+    (hbasic : ∀ {x y}, elementary x y → D.label x = D.label y)
+    (F : ThermalFamily (Nonreactive.generatedAccessibility elementary CompositeState.zero_scale))
+    (S : ∀ g, SimpleSystem
+      (Nonreactive.generatedAccessibility elementary CompositeState.zero_scale) (D.dimension g))
+    (hS : ∀ g, F.admitted (S g))
+    (hdomain : ∀ g, (S g).domain = D.domain g)
+    (hrepresent : ∀ g, (S g).represent = D.represent g) :
+    ExchangeComparison (Nonreactive.generatedAccessibility elementary CompositeState.zero_scale).StateSpace :=
+  D.exchangeComparison F S hS hdomain hrepresent
+    (Nonreactive.Generated.label_eq D.label D.label_scale hbasic)
+
+/-- The restricted atomic-only specialization. Its premises do not provide an
+inhabited physical model: atomic-only generators obstruct convex mixing on a
+nonempty open primitive domain (issue #27). Use composite generators above. -/
+theorem exchangeComparison_atomicOnly
     (elementary : ∀ g, D.State g → D.State g → Prop)
     (F : ThermalFamily (Nonreactive.accessibility D.State elementary))
     (S : ∀ g, SimpleSystem (Nonreactive.accessibility D.State elementary) (D.dimension g))
