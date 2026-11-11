@@ -100,7 +100,7 @@ examples fix the finite-regularity and coordinate contracts. Exact SymPy
 checks also cover the conformal metric's coefficients; that curved example
 still needs Lean proofs.
 
-The next connection increment proves Koszul and Levi-Civita naturality under
+Koszul and Levi-Civita naturality hold under
 smooth metric-preserving maps, without global bijectivity. The native
 connection theorem derives tangent invertibility from nondegeneracy and equal
 dimension, and needs only pointwise differentiability of the target field.
@@ -108,9 +108,18 @@ Pullback metrics have proved smoothness, signature and identity/composition/sign
 laws. Open inclusions are proved local diffeomorphisms, yielding an actual
 restricted metric and the compatibility of its connection with the ambient
 one. The nonlinear shear metric and arbitrary-field connection identity now
-also instantiate these general results. Stage B remains open for the explicit
-coefficient transformation law on arbitrary chart overlaps. Curvature and
-stages D–G remain subsequent work.
+also instantiate these general results.
+
+The manifold-chart interface now derives the inverse-metric Christoffel
+formula, smoothness, lower-index symmetry and sign invariance in every smooth
+chart. Local coordinate-field expansions and the Leibniz rule prove the
+coefficient transformation law on arbitrary chart overlaps, including the
+actual transition Hessian. The nonlinear two-chart regression specializes
+this general theorem: the standard chart has `Γˣ_tt = 2`, while the same
+metric has zero coefficients in the inertial chart. Typed API examples fix
+the full law with only atlas and overlap hypotheses. Stage B's proof endpoints
+are implemented and awaiting PR review/merge; curvature and stages D–G remain
+subsequent work.
 
 ## Minkowski Geometry and Relativistic Kinematics
 

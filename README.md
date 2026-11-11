@@ -189,10 +189,12 @@ belong to the smooth maximal atlas. The Lorentz Levi-Civita connection is
 constructed on the actual tangent bundle using Koszul and `sharp`, with
 proved metric compatibility, vanishing torsion, uniqueness on differentiable
 sections, finite regularity (`C^(n+1)` fields give `C^n` derivatives),
-smoothness, and invariance under metric-sign reversal. On the coordinate
-model, the Christoffel formula and the coordinate action on differentiable
-fields are proved. The nonlinear chart has `Γˣ_tt = 2`; Lean verifies the
-second-derivative term in this chart transition.
+smoothness, and invariance under metric-sign reversal. On arbitrary smooth
+manifold charts, the inverse-metric Christoffel formula, smooth coefficients,
+and the coordinate action on differentiable fields are proved. The coefficient
+transformation law on chart overlaps includes the actual second derivative
+of the transition. The nonlinear chart has `Γˣ_tt = 2`, while the same metric
+has zero coefficients in its inertial chart; both instantiate the general law.
 Smooth metric-preserving maps intertwine the native connections; derivative
 invertibility follows from equal dimension and nondegeneracy. Pullback
 metrics and restriction to open submanifolds preserve the Lorentz signature,
@@ -200,8 +202,8 @@ and the restricted connection agrees with the ambient connection on
 restricted differentiable fields.
 The [shared geometry guide](docs/smooth-geometry.md)
 records the public API and exact checks. [Issue #52](https://github.com/MGYamada/ProjectAInos/issues/52)
-tracks the remaining tensor operations, general connection coefficient
-chart-transformation laws, curvature, motion, curved-form,
+tracks review of the connection stage and the remaining tensor operations,
+curvature, motion, curved-form,
 and time-dependent Newton-limit stages; [#43](https://github.com/MGYamada/ProjectAInos/issues/43)
 is the first chart-regression gate. Einstein dynamics belongs to 5.2.
 

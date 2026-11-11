@@ -71,6 +71,7 @@ public import ProjectAInos.SmoothGeometry.Gluing
 public import ProjectAInos.SmoothGeometry.Localization
 public import ProjectAInos.SmoothGeometry.LocallyRingedSpace
 public import ProjectAInos.SmoothGeometry.Lorentzian
+public import ProjectAInos.SmoothGeometry.Lorentzian.ChartConnection
 public import ProjectAInos.SmoothGeometry.Lorentzian.ChartExamples
 public import ProjectAInos.SmoothGeometry.Lorentzian.Christoffel
 public import ProjectAInos.SmoothGeometry.Lorentzian.Connection

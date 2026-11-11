@@ -336,13 +336,33 @@ differentiable coordinate vector field as its ordinary derivative plus
 the Christoffel sum. `minkowski_christoffel` proves zero coefficients for
 both flat signatures in every dimension.
 
+`Lorentzian/ChartConnection.lean` extends these interfaces to arbitrary smooth
+maximal-atlas charts. `chartTangentMap` and `chartField` use the actual tangent
+derivative and its inverse on the chart source. `chartChristoffel_eq` derives
+the inverse-metric formula, with scalar derivatives in the chart basis;
+`chartChristoffel_contMDiffAt`, `chartChristoffel_symmetric`, and
+`chartChristoffel_opposite` prove smoothness, lower-index symmetry and sign
+invariance. `leviCivita_chart_coordinates` gives the derivative plus coefficient
+formula for locally differentiable coordinate components. The standard model
+chart agrees with `christoffel` via `chartChristoffel_model`.
+
+For `τ = e' ∘ e.symm` and a point in both chart sources,
+`chartChristoffel_transformation` proves
+`∑ₗ Dτᵏₗ Γₑˡᵢⱼ = D²τᵏᵢⱼ + ∑ₐᵦ Γₑ'ᵏₐᵦ Dτᵃᵢ Dτᵇⱼ`.
+The proof uses coordinate-field changes, locality of the native connection,
+the Leibniz rule and the chain rule. Its hypotheses require only smooth atlas
+membership and overlap membership, with no global chart or frame assumption.
+
 `Lorentzian/ConnectionExamples.lean` computes the actual connection for
 the two-chart shear example. `christoffel_shear` gives all eight
 coefficients, with only `Γˣ_tt = 2` nonzero. `shear_hessian` differentiates
 the actual transition Jacobian; `connection_shear_transformation` proves
 that the Jacobian carries the connection term to this Hessian, as required
-when the inertial connection coefficients vanish. This is the concrete
-shear case; a general manifold-chart transformation theorem remains open.
+when the inertial connection coefficients vanish. `chartChristoffel_standard`
+recovers those coefficients in the actual standard chart;
+`chartChristoffel_inertial` proves zero coefficients for the same metric in
+the actual inertial chart. `chart_transformation_shear` applies the general
+overlap law to these two charts and recovers the Hessian identity.
 
 `Lorentzian/Pullback.lean` constructs a Lorentz metric from a smooth map
 with invertible tangent derivatives. It proves smoothness and signature on
@@ -374,12 +394,12 @@ The regularity proof is supplied separately here.
 Typed contracts in `checks/LorentzGeometryAPI.lean` cover the carrier,
 compatibility equation, full Koszul formula, torsion, uniqueness, sign
 reversal, local/native finite and smooth regularity, the full coordinate
-formula, metric pullback, naturality, open restriction and the nonlinear
-connection example at default elaborator settings. Stage B is still open
-for the general coefficient transformation law with second derivatives on
-arbitrary chart overlaps; the intrinsic naturality and open restriction
-theorems supply its geometric foundation. Curvature, parallel transport,
-geodesics, curved forms and the Newtonian motion limit remain later work.
+formula on models and manifold charts, the complete overlap transformation
+law, metric pullback, naturality, open restriction and the nonlinear
+connection examples at default elaborator settings. The stage B connection
+proof endpoints are implemented; its PR still requires review and merge.
+Curvature, parallel transport, geodesics, curved forms and the Newtonian
+motion limit remain later work.
 
 ## Scope and next stages
 

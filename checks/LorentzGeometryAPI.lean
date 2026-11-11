@@ -6,6 +6,7 @@ module
 
 import ProjectAInos.SmoothGeometry.Lorentzian.Dual
 import ProjectAInos.SmoothGeometry.Lorentzian.ChartExamples
+import ProjectAInos.SmoothGeometry.Lorentzian.ChartConnection
 import ProjectAInos.SmoothGeometry.Lorentzian.ConnectionExamples
 import ProjectAInos.SmoothGeometry.Lorentzian.Regularity
 import ProjectAInos.SmoothGeometry.Lorentzian.Restriction
@@ -423,6 +424,65 @@ example (s t : Shape)
 
 end FieldPullback
 
+section ManifoldChartConnection
+
+open LorentzMetric
+
+variable {σ : LorentzConvention} {d : ℕ} {M : Type} [TopologicalSpace M]
+  [ChartedSpace (MinkowskiModel d) M] [IsManifold 𝓘(ℝ, MinkowskiModel d) ∞ M]
+  (g : LorentzMetric σ d M) {e e' : OpenPartialHomeomorph M (MinkowskiModel d)}
+  (he : e ∈ IsManifold.maximalAtlas 𝓘(ℝ, MinkowskiModel d) ∞ M)
+  (he' : e' ∈ IsManifold.maximalAtlas 𝓘(ℝ, MinkowskiModel d) ∞ M)
+  {x : M} (hx : x ∈ e.source) (hx' : x ∈ e'.source)
+
+example (v : MinkowskiModel d) : chartTangentMap e x (chartField e v x) = v :=
+  chartTangentMap_field he hx v
+
+example (k i j : Fin (d + 1)) :
+    ContMDiffAt 𝓘(ℝ, MinkowskiModel d) 𝓘(ℝ) ∞
+      (fun y => g.chartChristoffel e y k i j) x :=
+  g.chartChristoffel_contMDiffAt he hx k i j
+
+example (k i j : Fin (d + 1)) :
+    g.chartChristoffel e x k i j = ∑ l,
+      g.inverseComponent x (chartTangentEquiv he hx) k l *
+        (mvfderiv 𝓘(ℝ, MinkowskiModel d) (fun y => g.chartComponent e y j l) x
+          (chartField e (Pi.single i 1) x) +
+         mvfderiv 𝓘(ℝ, MinkowskiModel d) (fun y => g.chartComponent e y l i) x
+          (chartField e (Pi.single j 1) x) -
+         mvfderiv 𝓘(ℝ, MinkowskiModel d) (fun y => g.chartComponent e y i j) x
+          (chartField e (Pi.single l 1) x)) / 2 :=
+  g.chartChristoffel_eq he hx k i j
+
+example {V : M → MinkowskiModel d}
+    (hV : MDifferentiableAt 𝓘(ℝ, MinkowskiModel d) 𝓘(ℝ, MinkowskiModel d) V x)
+    (v : MinkowskiModel d) (k : Fin (d + 1)) :
+    chartTangentMap e x
+      (g.leviCivita (fun y => chartField e (V y) y) x (chartField e v x)) k =
+      mvfderiv 𝓘(ℝ, MinkowskiModel d) V x (chartField e v x) k +
+        ∑ i, ∑ j, g.chartChristoffel e x k i j * v i * V x j :=
+  g.leviCivita_chart_coordinates he hx hV v k
+
+example (k i j : Fin (d + 1)) :
+    (∑ l, fderiv ℝ (e' ∘ e.symm) (e x) (Pi.single l 1) k *
+      g.chartChristoffel e x l i j) =
+      fderiv ℝ (fun z => fderiv ℝ (e' ∘ e.symm) z (Pi.single j 1))
+        (e x) (Pi.single i 1) k +
+      ∑ a, ∑ b, g.chartChristoffel e' x k a b *
+        fderiv ℝ (e' ∘ e.symm) (e x) (Pi.single i 1) a *
+        fderiv ℝ (e' ∘ e.symm) (e x) (Pi.single j 1) b :=
+  g.chartChristoffel_transformation he he' hx hx' k i j
+
+example (k i j : Fin (d + 1)) :
+    g.chartChristoffel e x k i j = g.chartChristoffel e x k j i :=
+  g.chartChristoffel_symmetric he hx k i j
+
+example (k i j : Fin (d + 1)) :
+    g.opposite.chartChristoffel e x k i j = g.chartChristoffel e x k i j :=
+  g.chartChristoffel_opposite e x k i j
+
+end ManifoldChartConnection
+
 section Charts
 
 open LorentzianCharts
@@ -482,6 +542,18 @@ example (p : Plane) (k i j : Fin 2) :
 
 example (p : Plane) : metric.christoffel p 1 0 0 = 2 := by
   simp [christoffel_shear]
+
+example (p : Plane) (k i j : Fin 2) :
+    metric.chartChristoffel standardChart p k i j =
+      if k = 1 ∧ i = 0 ∧ j = 0 then 2 else 0 := chartChristoffel_standard p k i j
+
+example (p : Plane) (k i j : Fin 2) :
+    metric.chartChristoffel inertialChart p k i j = 0 := chartChristoffel_inertial p k i j
+
+example (p : Plane) (k i j : Fin 2) :
+    (∑ l, fderiv ℝ shear p (Pi.single l 1) k * metric.christoffel p l i j) =
+      fderiv ℝ (fun z => fderiv ℝ shear z (Pi.single j 1)) p (Pi.single i 1) k :=
+  chart_transformation_shear p k i j
 
 example (p v w : Plane) :
     fderiv ℝ shear p

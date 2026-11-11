@@ -5,6 +5,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 module
 
 public import ProjectAInos.SmoothGeometry.Lorentzian.Christoffel
+public import ProjectAInos.SmoothGeometry.Lorentzian.ChartConnection
 public import ProjectAInos.SmoothGeometry.Lorentzian.ChartExamples
 public import ProjectAInos.SmoothGeometry.Lorentzian.Naturality
 
@@ -125,5 +126,48 @@ theorem leviCivita_shear_naturality
         (mfderiv 𝓘(ℝ, Plane) 𝓘(ℝ, Plane) shear p v) :=
   metric.leviCivita_naturality_of_metric (minkowskiMetric .timeNegative 1)
     shear_contDiff.contMDiff metric_covariance hY v
+
+/-- The manifold-chart interface recovers the nonzero coefficients in the
+standard `(t,x)` chart of the nonlinear metric. -/
+theorem chartChristoffel_standard (p : Plane) (k i j : Fin 2) :
+    metric.chartChristoffel standardChart p k i j =
+      if k = 1 ∧ i = 0 ∧ j = 0 then 2 else 0 := by
+  rw [standardChart, chartChristoffel_model, christoffel_shear]
+
+/-- The coefficients of this same metric vanish in its actual inertial chart. -/
+theorem chartChristoffel_inertial (p : Plane) (k i j : Fin 2) :
+    metric.chartChristoffel inertialChart p k i j = 0 := by
+  have hv : mfderiv 𝓘(ℝ, Plane) 𝓘(ℝ, Plane) shear p
+      (chartField inertialChart (Pi.single i 1) p) = modelField (Pi.single i 1) (shear p) := by
+    change mfderiv 𝓘(ℝ, Plane) 𝓘(ℝ, Plane) shear p
+      (VectorField.mpullback 𝓘(ℝ, Plane) 𝓘(ℝ, Plane) shear (modelField (Pi.single i 1)) p) = _
+    have hinv : (mfderiv 𝓘(ℝ, Plane) 𝓘(ℝ, Plane) shear p).IsInvertible :=
+      shearDiffeomorph.isInvertible_mfderiv (x := p) (by simp)
+    exact hinv.self_apply_inverse _
+  have h := leviCivita_shear_naturality
+    ((modelField_contMDiff (Pi.single j 1)).mdifferentiableAt (by simp))
+    (chartField inertialChart (Pi.single i 1) p)
+  rw [hv] at h
+  change NormedSpace.fromTangentSpace (shear p)
+    (mfderiv 𝓘(ℝ, Plane) 𝓘(ℝ, Plane) shear p
+      (metric.leviCivita (VectorField.mpullback 𝓘(ℝ, Plane) 𝓘(ℝ, Plane)
+        shear (modelField (Pi.single j 1))) p (chartField inertialChart (Pi.single i 1) p))) k = 0
+  rw [h]
+  simpa using (minkowskiMetric .timeNegative 1).leviCivita_model_coordinates
+    (x := shear p) (differentiableAt_const (Pi.single j 1)) (Pi.single i 1) k
+
+/-- Regression of the general overlap law on the two actual nonlinear charts.
+The surviving term is the second derivative of their transition map. -/
+theorem chart_transformation_shear (p : Plane) (k i j : Fin 2) :
+    (∑ l, fderiv ℝ shear p (Pi.single l 1) k * metric.christoffel p l i j) =
+      fderiv ℝ (fun z => fderiv ℝ shear z (Pi.single j 1)) p (Pi.single i 1) k := by
+  have h := metric.chartChristoffel_transformation standardChart_mem_maximalAtlas
+    inertialChart_mem_maximalAtlas (x := p) (by simp [standardChart])
+    (by simp [inertialChart]) k i j
+  simp only [chartChristoffel_inertial, zero_mul, Finset.sum_const_zero, add_zero] at h
+  change (∑ l, fderiv ℝ shear p (Pi.single l 1) k *
+      metric.chartChristoffel (Homeomorph.refl Plane).toOpenPartialHomeomorph p l i j) =
+    fderiv ℝ (fun z => fderiv ℝ shear z (Pi.single j 1)) p (Pi.single i 1) k at h
+  simpa only [chartChristoffel_model] using h
 
 end ProjectAInos.SmoothGeometry.LorentzianCharts
