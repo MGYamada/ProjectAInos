@@ -15,6 +15,7 @@ run_cmd do
   let mut smoothCount : Nat := 0
   let mut geometryCount : Nat := 0
   let mut mechanicsCount : Nat := 0
+  let mut relativityCount : Nat := 0
   for (name, _) in env.constants do
     let userName := privateToUserName name
     if (`ProjectAInos).isPrefixOf userName then
@@ -25,10 +26,12 @@ run_cmd do
         geometryCount := geometryCount + 1
       if (`ProjectAInos.Mechanics).isPrefixOf userName then
         mechanicsCount := mechanicsCount + 1
+      if (`ProjectAInos.SpecialRelativity).isPrefixOf userName then
+        relativityCount := relativityCount + 1
       let axioms ← collectAxioms name
       for axiomName in axioms do
         unless allowed.contains axiomName do
           throwError "{name} depends on disallowed axiom {axiomName}"
-  unless count > 0 ∧ smoothCount > 0 ∧ geometryCount > 0 ∧ mechanicsCount > 0 do
-    throwError "Audit found no project, smooth-algebra, smooth-geometry, or mechanics declarations"
-  logInfo m!"Axiom audit passed for {count} project declarations, including {smoothCount} smooth-algebra, {geometryCount} smooth-geometry, and {mechanicsCount} mechanics declarations."
+  unless count > 0 ∧ smoothCount > 0 ∧ geometryCount > 0 ∧ mechanicsCount > 0 ∧ relativityCount > 0 do
+    throwError "Audit found no project, smooth-algebra, smooth-geometry, mechanics, or special-relativity declarations"
+  logInfo m!"Axiom audit passed for {count} project declarations, including {smoothCount} smooth-algebra, {geometryCount} smooth-geometry, {mechanicsCount} mechanics, and {relativityCount} special-relativity declarations."

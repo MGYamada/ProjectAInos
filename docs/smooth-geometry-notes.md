@@ -108,8 +108,8 @@ glued scheme is a theorem of the construction.
 The smooth structure of a spacetime is independent of its Lorentz metric.
 Both Minkowski space and a general Lorentz manifold pass through the same
 `LorentzManifold.toScheme` construction. The metric is additional smooth
-bilinear data on the actual tangent bundle, with signature `(1,d)` and
-convention `(+,-,...,-)`. Symmetry and nondegeneracy are derived from this
+bilinear data on the actual tangent bundle. The explicit parameter
+`σ : LorentzConvention` selects `(+,-,...,-)` or `(-,+,...,+)`. Symmetry and nondegeneracy are derived from this
 signature condition. Pairing smooth vector fields gives a smooth function,
 linking the metric to the same function algebra as the structure sheaf.
 
@@ -119,13 +119,17 @@ charts on the bundle of bilinear maps, rather than arbitrary identifications
 of each tangent fiber with the model space. This distinction allows curved
 spacetimes and tangent bundles without global trivializations.
 
-`minkowski d` supplies the constant form on `Fin (d+1) → ℝ`. Its smoothness,
+`minkowski σ d` supplies the constant form on `Fin (d+1) → ℝ`. Its smoothness,
 symmetry, nondegeneracy, constant coefficients, and affine scheme comparison
 are proved. `LorentzMetric.IsLocallyMinkowski` uses an actual coordinate
 diffeomorphism and its manifold derivative to express local inertial
 coordinates on an open neighbourhood, rather than just a pointwise normal
 form. `minkowski_isLocallyMinkowski` proves this property for Minkowski space.
-It is not a premise on general Lorentz manifolds. Equivalence with vanishing
+Negating the metric changes `σ` to `σ.opposite` and preserves this local
+condition, as well as smoothness, symmetry and nondegeneracy. The underlying
+C∞ scheme is definitionally unchanged. The [flat-spacetime extension](special-relativity.md)
+keeps time orientation separate from spacetime orientation.
+Local Minkowski coordinates are not a premise on general Lorentz manifolds. Equivalence with vanishing
 curvature is not asserted: a connection and curvature tensor have not yet
 been constructed.
 
