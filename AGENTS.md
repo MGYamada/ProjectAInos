@@ -9,7 +9,10 @@
   independent package. Start with SymPy for exact calculations. Add SciPy
   when an experiment needs numerical solvers.
 - Put documentation tooling in `docs/`.
-- Keep `tex/`, `docbuild/`, and `.lake/` local and Git-ignored.
+- Keep `tex/` and `.lake/` local and Git-ignored.
+- Track `docbuild/lakefile.toml`, `docbuild/lean-toolchain`, and
+  `docbuild/lake-manifest.json`. Keep all other `docbuild/` contents local and
+  Git-ignored.
 
 ## Verification
 

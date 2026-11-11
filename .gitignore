@@ -1,9 +1,14 @@
 # Local source material for formalization
 /tex/
 
-# Lake build output and local documentation workspace
+# Lake build output
 /.lake/
-/docbuild/
+
+# Documentation workspace: keep its configuration, ignore generated output
+/docbuild/*
+!/docbuild/lakefile.toml
+!/docbuild/lean-toolchain
+!/docbuild/lake-manifest.json
 
 # Python build output and bytecode
 /experiments/.venv/
