@@ -30,6 +30,7 @@ website:
         contents:
           - smooth-algebra.qmd
           - smooth-geometry.qmd
+          - smooth-geometry-notes.qmd
       - section: Shared variational calculus
         contents:
           - variational.qmd

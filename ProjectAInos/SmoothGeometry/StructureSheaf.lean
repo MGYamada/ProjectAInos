@@ -50,6 +50,29 @@ def isRepresented : PrelocalPredicate (X := TopCat.of (RealSpectrum A)) (Localiz
 def isLocallyRepresented : LocalPredicate (X := TopCat.of (RealSpectrum A)) (Localizations A) :=
   (isRepresented A).sheafify
 
+/-- A neighbourhood-filter formulation of local representability. -/
+theorem locallyRepresented_iff_eventually {U : Opens (RealSpectrum A)}
+    (s : (x : U) → Localizations A x.val) :
+    (isLocallyRepresented A).pred s ↔
+      ∀ x : U, ∃ a : A, ∀ᶠ y : U in 𝓝 x, s y = PointLocalization.of y.val.hom a := by
+  constructor
+  · intro h x
+    obtain ⟨V, hxV, iV, a, ha⟩ := h x
+    refine ⟨a, ?_⟩
+    have hV : ∀ᶠ y : U in 𝓝 x, y.val ∈ V :=
+      continuous_subtype_val.continuousAt (V.isOpen.mem_nhds hxV)
+    filter_upwards [hV] with y hy
+    exact ha ⟨y.val, hy⟩
+  · intro h x
+    obtain ⟨a, ha⟩ := h x
+    obtain ⟨W, hW, hWo, hxW⟩ := mem_nhds_iff.mp ha
+    let V : Opens (RealSpectrum A) :=
+      ⟨Subtype.val '' W, U.isOpen.isOpenMap_subtype_val W hWo⟩
+    have hVU : V ≤ U := by rintro _ ⟨y, _, rfl⟩; exact y.property
+    refine ⟨V, ⟨x, hxW, rfl⟩, homOfLE hVU, a, ?_⟩
+    rintro ⟨y, z, hz, rfl⟩
+    exact hW hz
+
 theorem locally_op {U : Opens (RealSpectrum A)} {n : ℕ} (f : SmoothOperation n)
     (s : Fin n → (x : U) → Localizations A x.val)
     (hs : ∀ i, (isLocallyRepresented A).pred (s i)) :
