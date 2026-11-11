@@ -4,7 +4,9 @@
 
 P⊗AI is pronounced `poai`.
 
-**P⊗AI (Project AInos)** aims to formalize the whole of theoretical physics in Lean 4. Its planned proof library will make each theory's assumptions explicit, derive its central results, and formalize how theories relate through special cases and limits.
+**P⊗AI (Project AInos)** is a *proof of artificial intelligence* project that seeks to demonstrate AI's capacity for rigorous scientific reasoning through machine-checked proofs.
+Taking Hilbert's sixth problem as its starting point, it aims to formalize the whole of theoretical physics in Lean 4.
+Its planned proof library will make each theory's assumptions explicit, derive its central results, and formalize how theories relate through special cases and limits.
 
 ## Table of Contents
 
@@ -52,8 +54,12 @@ P⊗AI is pronounced `poai`.
       4. Dissipation and nonholonomic constraints
 3. **Special Relativity**
    1. **Minkowski Geometry and Relativistic Kinematics**
-      1. Spacetime intervals, proper time, and causal structure
-      2. Lorentz transformations, velocity composition, and four-vectors
+      1. Explicit Lorentz signatures, invariant quadratic form, and metric duality
+      2. Affine spacetime, causal cones, and Lorentz and Poincaré groups
+      3. Observers, rest spaces, boosts, velocity transformations, and rapidity
+      4. Proper time of timelike curves and normalized four-velocity
+      5. Flat differential forms, exterior derivatives, wedge products, and pullbacks
+      6. Oriented Lorentzian Hodge duality and observer decomposition of two-forms
    2. **Dynamics of Relativistic Particles**
       1. Free-particle action, energy, and momentum
       2. Conservation laws and relativistic collision kinematics
@@ -148,6 +154,16 @@ affine models. See [Joyce, Definitions 2.10, 2.13, 4.13, 4.16, 4.23 and §4.6](h
 Each stage is checked by `lake build --wfail ProjectAInos`, the root-import
 check, and the transitive axiom audit. Only `propext`, `Classical.choice`, and
 `Quot.sound` are allowed.
+
+Section 3.1 uses natural units `c = 1` and signature `(-+++)` in the physics
+layer. Shared geometry accepts both Lorentz conventions explicitly; causal
+classification, boosts, and proper time use the convention-independent quadratic
+form. [Issue #40](https://github.com/MGYamada/ProjectAInos/issues/40) tracks this
+foundation for [electrodynamics #8](https://github.com/MGYamada/ProjectAInos/issues/8).
+The [Minkowski geometry and kinematics guide](docs/special-relativity.md) maps the
+formal APIs and exact examples. Particle dynamics remain in 3.2; Maxwell laws
+remain in topic 4, with charged-particle actions also using the shared variational
+foundation.
 
 See the [proof development record](docs/proof-development.md) for the history of the Lean formalization.
 

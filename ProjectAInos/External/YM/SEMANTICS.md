@@ -18,31 +18,63 @@ yet a construction theorem for a specific continuum Yang--Mills model.
    `finiteMoment_eq_core` therefore transport the actual public lattice
    moments into the normalized, gauge-invariant `YM.Wilson.law` API.
 
-2. **Coordinate convention, linear level.**
-   `SmoothGeometry/YangMillsCoordinates.lean` provides an explicit linear
-   equivalence between P⊗AI time-first points and the upstream time-last
-   points. It identifies the time coordinate, preserves the physical
-   Minkowski square with signature `(+---)`, and preserves distinct
-   insertion-point configurations. It does not yet identify the dual
-   momentum action, Poincaré representation or OS/Wightman analytic
-   continuation. Those require additional compatibility theorems.
+2. **Coordinates, affine action, and Fourier phase.**
+   `SmoothGeometry/YangMillsCoordinates.lean` transports time-first points
+   into the upstream time-last convention and preserves the invariant
+   quadratic form, future cone, and distinct insertion points.
+   `properLorentz` conjugates project transformations, including boosts,
+   into the upstream proper orthochronous type. `poincare_apply` and
+   `poincare_pullback_point` identify the affine action and the inverse
+   argument used in the upstream test pullback.
+   `fourierMomentum_pairing` identifies the Euclidean Fourier pairing with
+   the `(+---)` metric pairing after lowering the physical momentum.
+   `fourierMomentum_covariance` proves the inverse-action rule for that
+   covector. The inverse identification preserves the forward cone.
+   `spectralRepresentation_minkowski` rewrites the phase in the existing
+   W0 identity at the same translation argument.
 
 3. **First derivative.**
    `Variational/YangMillsBridge.lean` identifies the project first-jet
    derivative with the upstream totalized directional Fréchet derivative.
-   It does not identify higher polynomial jets or geometric jet bundles.
+   The statement concerns first derivatives.
 
-## Open physical integration conditions
+## Additional premises on candidate hierarchies
 
-| Review gate | Current upstream interface | Required before a stronger claim |
-| --- | --- | --- |
-| Phase selection | `Properties.wilson` controls `correlation none`; the Wightman boundary uses `correlation (some T.selected)` | Prove that the selected vacuum/phase arises from the same Wilson extraction, together with the needed extremality/clustering properties. `mixture`, full support and continuity alone do not suffice. |
-| Correlator algebra | `Hierarchy.correlation` is an unrestricted function on tagged field insertions | Require or prove multilinearity in each fixed-degree insertion, including zero-field vanishing, before treating it as an operator-valued Schwinger hierarchy. |
-| Operator degree | `Reconstructed.injective` is degreewise only, while `toLabel` maps each `Field d` into a common label space | Specify whether engineering degree is a grading or filtration; prohibit contradictory nonzero identifications, or prove that all OPE weights are representation-independent. Zero field can legitimately appear in every degree. |
-| Trace identification | `centeredTrace : Field 4` is a designated field tag | Relate it to a renormalized Wilson plaquette/`tr(F²)` operator before claiming the trace two-point asymptotic is about that physical composite. `TraceTest.excludes` concerns the stated *finite* Wick profiles only. |
-| Wightman spectral convention | Mathlib's `charFun` uses a Euclidean scalar-product Fourier phase | The flat spacetime signature now matches; still prove Minkowski momentum/covector identification and Poincaré-boost compatibility for that character. |
-| Full QFT reconstruction | The imported OS-related file is `Hilbert/Kolmogorov.lean` only | Positive kernels are not an OS reconstruction. Separate reflection-positive Schwinger data, the Hilbert quotient and semigroup, and the Wightman field construction are required. |
-| Coincident-point observables | Imported continuum limits use separated insertions | Diagonal/contact-term extensions and operator renormalization must be stated and proved separately. |
+`SemanticContracts.lean` adds project-owned contracts for the review gates.
+The imported `Properties` and `JointExistence` retain their upstream meanings.
+
+- **Selected phase (P1).** `SelectedWilsonLimit` asks for the selected phase
+  on the same finite Wilson family, order of limits, and separated tests.
+  Given the averaged Wilson limit, `selectedWilsonLimit_iff` proves this is
+  equivalent to equality of the selected and averaged smeared moments.
+  The proof uses uniqueness first at each suitable fixed volume, then along
+  the volume sequence. `IntegratedProperties` requires that equality
+  explicitly. A proof of the equality for a concrete candidate, or a new
+  phase-selecting lattice construction, is a separate existence problem.
+  Extremality and clustering require their own hypotheses and results.
+- **Correlator algebra (P1).** `CorrelatorAlgebra` requires complex
+  multilinearity at separated points for each fixed degree profile, in
+  each phase and in the average. It also requires a unique degree for any
+  nonzero Wightman label. The derived lemmas prove vanishing for a zero
+  insertion, label independence using the upstream degreewise injectivity,
+  and independence of the OPE weight for tuples with nonzero labels.
+  The zero label may be represented in multiple degrees.
+- **Trace identification (P2).** `TraceTest.shortDistance` constrains the
+  two-point evaluation of the designated `centeredTrace : Field 4` tag.
+  `TraceTest.excludes` rules out eventual exact equality near zero with each
+  specified finite Wick profile. Identifying this tag with a renormalized
+  plaquette or tr(F²) composite requires a choice of lattice observable and
+  renormalization and a convergence theorem for that choice.
+
+## Further mathematical work
+
+The coordinate results concern the point action and Fourier pairing.
+Transport of full Wightman representations and Euclidean-to-Minkowski
+analytic continuation are separate. OS reconstruction requires
+reflection-positive Schwinger data, the corresponding Hilbert quotient
+and semigroup, and the Wightman field construction. Coincident-point and
+contact terms require extensions of the separated-point distributions.
+These steps also leave the continuum existence and mass-gap problems open.
 
 ## Honest scope
 

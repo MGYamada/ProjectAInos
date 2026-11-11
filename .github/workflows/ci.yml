@@ -42,3 +42,5 @@ jobs:
         run: lake env lean -DwarningAsError=true checks/SmoothGeometryAPI.lean
       - name: Check the imported Yang--Mills API
         run: lake env lean -DwarningAsError=true checks/YangMillsImportAPI.lean
+      - name: Check the special relativity API
+        run: lake env lean -DwarningAsError=true checks/SpecialRelativityAPI.lean

@@ -38,6 +38,26 @@ Free C∞-rings on arbitrary sets give general localizations with their smooth u
 
 `LorentzMetric` equips the actual tangent bundle with a smooth bilinear form of Lorentz signature, without requiring a global frame. `LorentzManifold.toScheme` uses the same manifold construction for every such metric. Minkowski space is an instance with constant coefficients, a proved affine scheme comparison, and proved local inertial coordinates. The [smooth-geometry guide](smooth-geometry.md) and [formalization notes](smooth-geometry-notes.md) record these constructions and their scope. The Γ–Spec adjunction, full faithfulness of the manifold construction, universal cotangent modules, and curvature are subsequent stages.
 
+## Minkowski Geometry and Relativistic Kinematics
+
+Section 3.1 now has an explicit two-signature geometry layer and a `(-+++)`,
+`c = 1` physics layer. The Lean library proves causal-cone convexity and affine
+causal order, Lorentz matrix and determinant identities, Poincaré scheme
+automorphisms, observer decompositions, passive boosts, velocity composition,
+proper-time invariance, and normalized four-velocity. Regularity and causal
+premises are hypotheses, including local C¹ assumptions for reparameterization.
+
+Flat forms use mathlib's exterior derivative and a proved comparison with
+exterior powers. The wedge normalization, graded Leibniz rule, pullback laws,
+and exterior-derivative locality are proved. Hodge duality has explicit metric
+and orientation parameters, a proved signed-inverse comparison with mathlib's
+operator, square/sign/naturality laws, and observer reconstruction of arbitrary
+two-forms. Exact examples include a nonzero boost, time dilation, `A = t dx`,
+and all six coordinate two-form Hodge signs. The [guide](special-relativity.md)
+records the API, scope, and verification commands for
+[issue #40](https://github.com/MGYamada/ProjectAInos/issues/40), the shared
+prerequisite of [issue #8](https://github.com/MGYamada/ProjectAInos/issues/8).
+
 ## Shared Variational Foundation
 
 The shared variational calculus uses sections of a trivial bundle over a finite-dimensional real coordinate space. For a jointly C² Lagrangian and a C² field with integrable density, Lean proves the action derivative for smooth variations with compact support inside an open region. It then proves that stationarity is equivalent to the pointwise Euler–Lagrange equation. The theorem covers time and four-dimensional bases and keeps the choice of Haar measure explicit. The interval integration-by-parts identity also retains the endpoint term for fixed-endpoint applications.

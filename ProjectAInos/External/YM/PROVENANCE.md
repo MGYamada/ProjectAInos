@@ -48,10 +48,11 @@ to the actual lattice moments. The remaining upstream extraction and
 continuum construction are not imported.
 
 `ProjectAInos/SmoothGeometry/YangMillsCoordinates.lean` is a project-authored
-linear-equivalence adapter between the time-first and time-last conventions.
-It identifies time, the `(+---)` Minkowski quadratic form, and configurations,
-not full Wightman analytic continuation.
-See [SEMANTICS.md](SEMANTICS.md) for the open physical integration conditions.
+adapter between the time-first and time-last conventions. It proves
+compatibility of the affine point action, future cone, and Fourier pairing.
+`SemanticContracts.lean` is a project-authored extension expressing the
+additional selected-limit and correlator-algebra premises.
+See [SEMANTICS.md](SEMANTICS.md) for the precise statements and open conditions.
 
 ## Integration boundaries
 
@@ -64,9 +65,10 @@ See [SEMANTICS.md](SEMANTICS.md) for the open physical integration conditions.
   `Variational/YangMillsBridge.lean` proves that the shared first-jet
   derivative agrees with the imported directional derivative.
 - P⊗AI's shared Lorentz model uses **time first**, while the imported
-  public Yang--Mills spacetime uses **time last**. The new point equivalence
-  proves preservation of the flat Minkowski square, but not of the entire
-  Poincaré action or Fourier dual-momentum representation.
+  public Yang--Mills spacetime uses **time last**. The point equivalence
+  transports the flat affine action and Fourier covector pairing. Full
+  Wightman representation transport and analytic continuation are separate
+  problems.
 - The upstream `YM.Gauge.Gauge` and public `YangMills.GaugeGroup` remain
   distinct types; the project now proves the concrete forgetful map and
   finite Wilson-action/law comparison for the probability Haar in each
