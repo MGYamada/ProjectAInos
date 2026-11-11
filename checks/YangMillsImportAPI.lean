@@ -18,5 +18,6 @@ import ProjectAInos
 #check YM.Wilson.law_gauge
 #check YangMills.WilsonFamily.Converges
 #check YangMills.JointExistence
+#check ProjectAInos.Variational.jet_derivative_eq_ym_directional
 
 example : YangMills.JointExistence → YangMills.JointExistence := id

@@ -41,7 +41,9 @@ proved in P⊗AI. This import does not assert mass-gap positivity.
   theorem statements.
 - P⊗AI's `Variational` first-jet API is preserved. The imported jet tools
   are separate, higher-order analytic results; they are not equivalent to a
-  general smooth jet-bundle theory.
+  general smooth jet-bundle theory. The project-local
+  `Variational/YangMillsBridge.lean` proves that the shared first-jet
+  derivative agrees with the imported directional derivative.
 - P⊗AI's shared Lorentz model uses **time first**, while the imported
   public Yang--Mills spacetime uses **time last**. Any bridge must implement
   an explicit coordinate permutation and prove sign compatibility.

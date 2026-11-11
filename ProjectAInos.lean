@@ -131,3 +131,4 @@ public import ProjectAInos.Variational.Examples
 public import ProjectAInos.Variational.IntegrationByParts
 public import ProjectAInos.Variational.Local
 public import ProjectAInos.Variational.Regularity
+public import ProjectAInos.Variational.YangMillsBridge
