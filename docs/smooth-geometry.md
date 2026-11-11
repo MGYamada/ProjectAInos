@@ -402,7 +402,7 @@ formula on models and manifold charts, the complete overlap transformation
 law, metric pullback, naturality, open restriction and the nonlinear
 connection examples at default elaborator settings. The stage B connection
 proof endpoints are implemented; its PR still requires review and merge.
-The curvature increment below is in progress. Parallel transport, geodesics,
+The curvature endpoints below are implemented. Parallel transport, geodesics,
 curved forms and the Newtonian motion limit remain later work.
 
 ## GR 5.1: curvature and intrinsic contractions
@@ -437,8 +437,31 @@ its proof. Only the model carries a norm; no preferred tangent norm is added.
 and finite regularity. `curvature_naturality_of_metric` states that the
 derivative of a smooth metric-preserving map intertwines the two curvature
 tensors. The map need not be globally bijective. `curvature_pullback` applies
-this to the constructed pullback metric. These are tensor-level statements;
-the full arbitrary-chart Christoffel curvature formula remains to be proved.
+this to the constructed pullback metric.
+
+`ChartCurvature.lean` extracts `Rˡᵢⱼₖ = (R(∂ᵢ,∂ⱼ)∂ₖ)ˡ` from the native tensor.
+The coefficients are smooth on chart sources. `chartCurvature_eq_fderiv`
+proves their Christoffel formula with ordinary derivatives of chart-coordinate
+representatives, including the two quadratic connection terms.
+`chartCurvature_transformation` proves the full overlap law with one output
+Jacobian and three input Jacobians, with no Hessian term. The hypotheses are
+only smooth maximal-atlas membership and membership in the overlap.
+`curvature_model_coordinates` recovers the standard model-coordinate formula.
+
+The operator sign agrees with [Tong, §3.2.2, equations (3.106)–(3.107)](https://davidtong.org/teaching/general-relativity/grhtml/S3).
+The argument order is explicit: `chartCurvature e x l i j k` corresponds to
+Tong's `Rˡₖᵢⱼ`, because his differentiated-vector index comes first among the
+three lower indices. Our trace `Ric(u,v)=tr(w ↦ R(w,u)v)` gives his Ricci
+components with the two arguments exchanged; the proved Ricci symmetry
+identifies them. The scalar contraction therefore has the same sign.
+
+`ChartDerivatives.lean` transports scalar first and mixed second derivatives
+through a smooth chart under local `C¹`/`C²` hypotheses. `CurvatureSymmetry.lean`
+uses differentiated metric compatibility and scalar derivative commutation
+to prove `curvature_skewAdjoint` and `curvature_pair_swap`. Together with the
+algebraic first Bianchi identity these give `curvature_pair_interchange`.
+No normal coordinates, positive-definite tangent metric or global frame
+are assumed in these proofs.
 
 `Ricci.lean` fixes the contraction as
 `Ric(u,v) = trace (w ↦ R(w,u)v)`. `ricciTensor` is a smooth covariant
@@ -447,7 +470,8 @@ two-tensor and `scalarCurvature` its smooth inverse-metric contraction.
 chosen tangent equivalence, while the naturality lemmas prove invariance
 under equivalences intertwining curvature (and preserving the metric for
 the scalar). Metric-sign reversal preserves Ricci and negates scalar
-curvature. Ricci symmetry is a remaining proof obligation.
+curvature. `ricci_symmetric` proves symmetry using curvature pair interchange
+and a Lorentz signature basis chosen only at the evaluation point.
 
 `CurvatureExamples.lean` proves zero Riemann, Ricci and scalar curvature for
 standard Minkowski in every dimension and both signatures, and for the
@@ -456,19 +480,29 @@ constructed tensor, not a separate coordinate array. Typed API examples
 fix the commutator, native carriers, Bianchi, contraction order, naturality,
 signs and these concrete conclusions at default elaborator settings.
 
-Stage C is not complete: arbitrary-chart curvature coefficient formulas,
-metric last-pair antisymmetry/pair interchange, Ricci symmetry and the Lean
-proof for `g = exp(2x²)(-dt²+dx²)` remain. Exact experiments check that
-example, including zero connection at the origin and scalar curvature `-4`
-there, but do not replace formal proofs. Differential and contracted Bianchi
-are explicitly deferred to 5.2.
+`Conformal.lean` constructs `g.conformal φ = exp(2φ) g` for a smooth real
+function on the manifold, preserving either Lorentz signature.
+`ConformalExample.lean` specializes this to `φ(t,x)=x²`. It derives the native
+connection, all sixteen Riemann components, the Ricci matrix `diag(2,-2)`,
+the inverse metric from `sharp`, and scalar curvature `-4 exp(-2x²)`.
+`christoffel_origin`, `curvature_origin_ne_zero` and `scalarCurvature_origin`
+prove zero connection coefficients but nonzero curvature and scalar `-4`
+at the origin. This is pointwise vanishing of the connection coefficients,
+not vanishing on a neighborhood.
 
-The current increment passes the warning-free full Lean build (9,260 jobs),
-root-import check, all six API checks and the transitive audit of 6,432
-declarations (2,267 in smooth geometry), using only `propext`,
+Stage C's proof endpoints are implemented and awaiting review/merge.
+Typed API examples fix the chart formula/overlap hypotheses, all metric
+symmetries, Ricci symmetry, conformal signature construction and curved
+example conclusions. Exact experiments independently check these examples
+and nonzero curvature covariance under the shear. Differential and
+contracted Bianchi are explicitly deferred to 5.2.
+
+The completed stage C increment passes the warning-free full Lean build
+(9,265 jobs), root-import check, all six API checks and the transitive audit
+of 6,541 declarations (2,376 in smooth geometry), using only `propext`,
 `Classical.choice` and `Quot.sound`. The installed-package exact Lorentz
-experiment also passes. These checks validate the endpoints above, not the
-remaining stage C obligations.
+experiment also passes. These checks do not imply completion of the later
+motion, curved-form or Newtonian-limit stages.
 
 ## Scope and next stages
 
@@ -481,8 +515,8 @@ General C∞ localizations, open subschemes, gluing, and the manifold-to-scheme
 construction are implemented. Subsequent stages include quotients by
 arbitrary ordinary ideals, the Γ–Spec adjunction, complete/fair rings,
 full faithfulness of the manifold construction, and universal cotangent
-modules. The Lorentz connection is constructed, and the curvature stage
-above is in progress.
+modules. The Lorentz connection and curvature endpoints above are
+implemented and awaiting review/merge.
 In particular,
 `A ≅ Γ(Spec A)` and full faithfulness of Spec on all C∞-rings are not asserted.
 The essential-image definition of affine schemes does not require either

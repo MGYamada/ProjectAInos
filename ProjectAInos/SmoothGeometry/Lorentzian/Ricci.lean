@@ -5,6 +5,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 module
 
 public import ProjectAInos.SmoothGeometry.Lorentzian.CurvatureRegularity
+public import ProjectAInos.SmoothGeometry.Lorentzian.CurvatureSymmetry
 public import ProjectAInos.SmoothGeometry.Lorentzian.Tensor
 
 /-! # Ricci and scalar curvature by intrinsic contraction
@@ -112,6 +113,24 @@ theorem ricci_eq_sum (x : M) (e : TM x ≃L[ℝ] E) (u v : TM x) :
     exact LinearMap.trace_conj' (g.curvatureEndomorphism x u v).toLinearMap e.toLinearEquiv
   rw [hc] at h
   simpa using h
+
+/-- The Levi-Civita Ricci contraction is symmetric for either Lorentz sign.
+Only a pointwise signature basis is used in this proof. -/
+theorem ricci_symmetric (x : M) (u v : TM x) : g.ricci x u v = g.ricci x v u := by
+  obtain ⟨e, he⟩ := g.signature x
+  rw [g.ricci_eq_sum x e, g.ricci_eq_sum x e]
+  apply Finset.sum_congr rfl
+  intro i _
+  let b := e.symm (Pi.single i 1)
+  have h : g.form x (g.curvature x b u v) b = g.form x (g.curvature x b v u) b := by
+    rw [g.curvature_pair_interchange, g.curvature_pair_swap x v b b u,
+      g.curvature_swap x v b u]
+    simp
+  rw [he, he] at h
+  simp only [b, e.apply_symm_apply, minkowskiForm_apply, Pi.single_apply,
+    mul_ite, mul_one, mul_zero, Finset.sum_ite_eq', Finset.mem_univ, ite_true] at h
+  have hs : lorentzSign σ i ≠ 0 := by simp [lorentzSign]; split <;> norm_num
+  exact mul_left_cancel₀ hs h
 
 theorem contMDiffAt_curvatureEndomorphism {X Y : ∀ x, TM x} {x : M}
     (hX : ContMDiffAt I ((I).prod I) ∞ (T% X) x)

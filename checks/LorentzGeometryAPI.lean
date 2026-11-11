@@ -10,6 +10,7 @@ import ProjectAInos.SmoothGeometry.Lorentzian.ChartConnection
 import ProjectAInos.SmoothGeometry.Lorentzian.ConnectionExamples
 import ProjectAInos.SmoothGeometry.Lorentzian.CurvatureExamples
 import ProjectAInos.SmoothGeometry.Lorentzian.CurvatureNaturality
+import ProjectAInos.SmoothGeometry.Lorentzian.ConformalExample
 import ProjectAInos.SmoothGeometry.Lorentzian.Regularity
 import ProjectAInos.SmoothGeometry.Lorentzian.Restriction
 import ProjectAInos.SmoothGeometry.Tensor.Bundle
@@ -139,6 +140,25 @@ example (x : M) (u v w : TM x) :
 
 example (x : M) : g.opposite.curvature x = g.curvature x := g.curvature_opposite x
 
+example (x : M) (u v w z : TM x) :
+    g.form x (g.curvature x u v w) z + g.form x w (g.curvature x u v z) = 0 :=
+  g.curvature_skewAdjoint x u v w z
+
+example (x : M) (u v w z : TM x) :
+    g.form x (g.curvature x u v w) z = -g.form x (g.curvature x u v z) w :=
+  g.curvature_pair_swap x u v w z
+
+example (x : M) (u v w z : TM x) :
+    g.form x (g.curvature x u v w) z = g.form x (g.curvature x w z u) v :=
+  g.curvature_pair_interchange x u v w z
+
+example (x : M) (u v : TM x) : g.ricci x u v = g.ricci x v u := g.ricci_symmetric x u v
+
+example (φ : C^∞⟮I, M; ℝ⟯) : LorentzMetric σ d M := g.conformal φ
+
+example (φ : C^∞⟮I, M; ℝ⟯) (x : M) :
+    (g.conformal φ).form x = Real.exp (2 * φ x) • g.form x := g.conformal_form φ x
+
 example (x : M) (u v w : TM x) :
     g.curvatureEndomorphism x u v w = g.curvature x w u v :=
   g.curvatureEndomorphism_apply x u v w
@@ -179,6 +199,55 @@ example (p : LorentzianCharts.Plane) : LorentzianCharts.metric.scalarCurvature p
   LorentzianCharts.scalarCurvature_shear p
 
 end Curvature
+
+section ChartCurvature
+
+open LorentzMetric
+
+variable {σ : LorentzConvention} {d : ℕ} {M : Type} [TopologicalSpace M]
+  [ChartedSpace (MinkowskiModel d) M] [IsManifold 𝓘(ℝ, MinkowskiModel d) ∞ M]
+  (g : LorentzMetric σ d M)
+
+local notation "E" => MinkowskiModel d
+local notation "I" => 𝓘(ℝ, MinkowskiModel d)
+
+example {e : OpenPartialHomeomorph M E} (he : e ∈ IsManifold.maximalAtlas I ∞ M)
+    {x : M} (hx : x ∈ e.source) (l i j k : Fin (d + 1)) :
+    g.chartCurvature e x l i j k =
+      fderiv ℝ (fun z => g.chartChristoffel e (e.symm z) l j k) (e x) (Pi.single i 1) -
+      fderiv ℝ (fun z => g.chartChristoffel e (e.symm z) l i k) (e x) (Pi.single j 1) +
+      ∑ a, (g.chartChristoffel e x l i a * g.chartChristoffel e x a j k -
+        g.chartChristoffel e x l j a * g.chartChristoffel e x a i k) :=
+  g.chartCurvature_eq_fderiv he hx l i j k
+
+example {e : OpenPartialHomeomorph M E} (he : e ∈ IsManifold.maximalAtlas I ∞ M)
+    {x : M} (hx : x ∈ e.source) (l i j k : Fin (d + 1)) :
+    ContMDiffAt I 𝓘(ℝ) ∞ (fun y => g.chartCurvature e y l i j k) x :=
+  g.chartCurvature_contMDiffAt he hx l i j k
+
+example {e e' : OpenPartialHomeomorph M E}
+    (he : e ∈ IsManifold.maximalAtlas I ∞ M) (he' : e' ∈ IsManifold.maximalAtlas I ∞ M)
+    {x : M} (hx : x ∈ e.source) (hx' : x ∈ e'.source) (l i j k : Fin (d + 1)) :
+    (∑ a, fderiv ℝ (e' ∘ e.symm) (e x) (Pi.single a 1) l *
+      g.chartCurvature e x a i j k) =
+      ∑ a, ∑ b, ∑ c, g.chartCurvature e' x l a b c *
+        fderiv ℝ (e' ∘ e.symm) (e x) (Pi.single i 1) a *
+        fderiv ℝ (e' ∘ e.symm) (e x) (Pi.single j 1) b *
+        fderiv ℝ (e' ∘ e.symm) (e x) (Pi.single k 1) c :=
+  g.chartCurvature_transformation he he' hx hx' l i j k
+
+example (p : LorentzianConformalExample.Plane) :
+    LorentzianConformalExample.metric.scalarCurvature p = -4 * Real.exp (-(2 * (p 1)^2)) :=
+  LorentzianConformalExample.scalarCurvature_eq p
+
+example : (∀ k i j, LorentzianConformalExample.metric.christoffel 0 k i j = 0) ∧
+    LorentzianConformalExample.metric.curvature 0 ≠ 0 ∧
+    LorentzianConformalExample.metric.scalarCurvature 0 = -4 :=
+  ⟨LorentzianConformalExample.christoffel_origin,
+    LorentzianConformalExample.curvature_origin_ne_zero,
+    LorentzianConformalExample.scalarCurvature_origin⟩
+
+end ChartCurvature
 
 section ConnectionNaturality
 

@@ -148,8 +148,8 @@ C∞-rings is used in this continuation.
 
 The warning-free full build (`lake build --wfail ProjectAInos`), root-import
 check, external API regression check, and transitive axiom audit pass.
-The current curvature increment's audit covers 6,432 project declarations,
-including 453 in smooth algebra and 2,267 in smooth geometry,
+The completed curvature increment's audit covers 6,541 project declarations,
+including 453 in smooth algebra and 2,376 in smooth geometry,
 with only `propext`, `Classical.choice`, and `Quot.sound` allowed.
 `git diff --check` also passes. The existing `README.md` contents, including
 the earlier subject-numbering changes, were preserved throughout this work.

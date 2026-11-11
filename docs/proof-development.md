@@ -133,13 +133,21 @@ unnecessary. Ricci uses `trace (w ↦ R(w,u)v)` and scalar curvature uses the
 inverse metric. Their smoothness, tangent-coordinate contraction formulas,
 coordinate naturality and sign-reversal laws are proved. The standard and
 nonlinear Minkowski metrics have zero Riemann, Ricci and scalar curvature
-in Lean. Exact SymPy checks add curvature symmetries, the conformal scalar
-`-4 exp(-2x²)`, and covariance of nonzero curvature under the shear.
+in Lean.
 
-Stage C remains incomplete: the Christoffel curvature formula on arbitrary
-charts, metric last-pair/pair-interchange symmetries, Ricci symmetry, and the
-conformal Lean example remain. The SymPy checks do not discharge those Lean
-obligations. Stages D–G remain subsequent work; differential/contracted
+The completed stage C endpoints now include the full Christoffel curvature
+formula and tensor overlap law on arbitrary smooth charts. Local scalar
+derivative commutation and differentiated metric compatibility prove
+curvature's skew adjointness, last-pair antisymmetry and pair interchange.
+Pointwise Lorentz signature coordinates then prove Ricci symmetry without
+a global frame. A smooth positive conformal rescaling constructs the native
+metric `exp(2x²)(-dt²+dx²)`; its connection, all curvature components,
+Ricci matrix `diag(2,-2)` and scalar `-4 exp(-2x²)` are proved. At the
+origin its connection coefficients vanish but its curvature does not.
+Exact SymPy checks independently cover the same examples and covariance
+of nonzero conformal curvature under the shear.
+
+Stage C is awaiting review/merge. Stages D–G remain subsequent work; differential/contracted
 Bianchi and Einstein dynamics belong to 5.2.
 
 ## Minkowski Geometry and Relativistic Kinematics
