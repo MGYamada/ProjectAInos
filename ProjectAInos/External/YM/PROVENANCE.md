@@ -16,9 +16,12 @@ which the root `NOTICE` records.
 ## Selected modules
 
 All 18 files below are copied from the upstream source. Their proof bodies
-have not been intentionally altered; P⊗AI changes the module paths and adds
-Lean 4.35 `module`, `public import`, and `@[expose] public section` directives.
-These changes are marked at the top of every imported file.
+have been preserved where Lean 4.35 permits; P⊗AI changes the module paths
+and adds Lean 4.35 `module`, `public import`, and `@[expose] public section`
+directives. Minor compatibility changes (explicit mathlib analytic import,
+public type synonym used in a signature, updated deprecated names, explicit
+namespace qualification and local lint adjustments) are tracked in the diff.
+The import and visibility changes are marked at the top of every file.
 
 | Phase | Imported modules | Scope |
 | --- | --- | --- |

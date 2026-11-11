@@ -10,8 +10,12 @@ See ProjectAInos/External/YM/PROVENANCE.md and the repository NOTICE.
 public import Mathlib.Analysis.Calculus.FDeriv.Analytic
 public import Mathlib.Analysis.Calculus.InverseFunctionTheorem.FDeriv
 public import Mathlib.Analysis.InnerProductSpace.Dual
+public import Mathlib.Analysis.Analytic.Constructions
 
 @[expose] public section
+
+-- Upstream proof uses local Prop-valued instances needed by typeclass search.
+set_option linter.style.haveILetI false
 
 
 

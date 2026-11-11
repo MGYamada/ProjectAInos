@@ -14,6 +14,9 @@ public import Mathlib.LinearAlgebra.Finsupp.LinearCombination
 
 @[expose] public section
 
+-- Preserve upstream local Prop-valued instances used by the completion proof.
+set_option linter.style.haveILetI false
+
 /-!
 # Shared Gram completion and bounded operators
 
@@ -48,7 +51,8 @@ structure Gram (K : X → X → ℂ) where
   dense : Dense ((Submodule.span ℂ (Set.range plant) : Set H))
   measure x y : inner ℂ (plant x) (plant y) = K x y
 
-private abbrev raw (X : Type) := X →₀ ℂ
+-- A public definition cannot expose a private type synonym in Lean 4.35.
+abbrev raw (X : Type) := X →₀ ℂ
 
 @[implicit_reducible]
 def core (H : NNKernel K) : PreInnerProductSpace.Core ℂ (raw X) where

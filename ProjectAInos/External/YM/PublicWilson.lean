@@ -73,7 +73,7 @@ def separated (n : ℕ) : Opens (Points n) :=
     have eqSet : {x : Points n | Function.Injective x.ofLp} =
         ⋂ (i : Fin n) (j : Fin n) (_ : i ≠ j), {x : Points n | x i ≠ x j} := by
       ext x
-      simp only [mem_setOf_eq, mem_iInter]
+      simp only [mem_ofPred_eq, mem_iInter]
       exact ⟨fun h i j hij => fun he => hij (h he), fun h i j he => by_contra fun hij => h i j hij he⟩
     rw [eqSet]
     apply isOpen_iInter_of_finite; intro i

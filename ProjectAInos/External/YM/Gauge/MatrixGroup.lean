@@ -15,6 +15,9 @@ public import Mathlib.MeasureTheory.Measure.Haar.Basic
 
 @[expose] public section
 
+-- Retain upstream typeclass-local proofs without Lean 4.35 style warnings.
+set_option linter.style.haveILetI false
+
 /-!
 # Compact matrix gauge groups
 The gauge input is the closed matrix image in its given unitary representation. Matrix estimates use the Frobenius norm and the group carries probability Haar measure.

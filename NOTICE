@@ -17,5 +17,6 @@ detailed construction. See the upstream NOTICE and THIRD_PARTY.md.
 
 P⊗AI modifications: source files relocated under
 ProjectAInos.External.YM, their imports rewritten to use that path,
-and Lean 4.35 public-module declarations introduced. The definitions
-and proof bodies otherwise retain the upstream form pending validation.
+and Lean 4.35 public-module declarations introduced. Minor source adaptations
+resolve mathlib import and API changes, module visibility, and new lint rules.
+The mathematical specification remains unchanged pending validation.

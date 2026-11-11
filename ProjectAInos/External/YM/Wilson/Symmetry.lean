@@ -26,7 +26,7 @@ set_option autoImplicit false
 noncomputable section
 namespace YM.Wilson
 
-open Lattice MeasureTheory Filter Set
+open _root_.YM.Lattice MeasureTheory Filter Set
 open scoped Matrix.Norms.Frobenius Topology ENNReal
 variable {G : Gauge} {n : Side}
 
@@ -60,7 +60,7 @@ theorem prior_pull (s : Signed) (t : Site n) :
   have he : MeasurePreserving
       (fun U : Config G n => (fun f => U (sendEdge s t f))) (prior G n) (prior G n) := by
     have hm := measurePreserving_piCongrLeft (fun _ : Edge (Site n) => G.probHaar) e.symm
-    convert hm using 1 <;> first | rfl | skip
+    convert hm using 1 <;> try rfl
     funext U k
     change U (e k) = _
     simp [MeasurableEquiv.piCongrLeft, Equiv.piCongrLeft_apply]

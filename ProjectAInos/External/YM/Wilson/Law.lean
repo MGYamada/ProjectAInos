@@ -29,7 +29,7 @@ set_option autoImplicit false
 noncomputable section
 namespace YM.Wilson
 
-open MeasureTheory Set Filter Lattice
+open MeasureTheory Set Filter _root_.YM.Lattice
 open scoped Matrix.Norms.Frobenius ENNReal NNReal Topology
 
 abbrev Config (G : Gauge) (n : Side) := Links (Per n) G.El
