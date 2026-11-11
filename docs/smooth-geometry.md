@@ -143,15 +143,16 @@ countability; the cutoff comparison is applied in Euclidean charts.
 
 ## The common spacetime interface
 
-`LorentzMetric d M` is a smooth section of bilinear forms on the actual
-tangent bundle, with pointwise signature `(1,d)` and sign convention
-`(+,-,...,-)`. Symmetry and nondegeneracy follow from the signature
+`LorentzMetric σ d M` is a smooth section of bilinear forms on the actual
+tangent bundle. `LorentzConvention.timePositive` selects `(+,-,...,-)` and
+`timeNegative` selects `(-,+,...,+)`. The convention is an explicit argument
+to `minkowskiForm`, `LorentzMetric`, and `LorentzManifold`. Symmetry and nondegeneracy follow from the signature
 condition. Pairing smooth vector fields yields a smooth real function in
 the same C∞ algebra used by the structure sheaf. The metric is additional
 data; the underlying smooth scheme does not depend on it.
 
 `LorentzManifold.toScheme` applies the manifold construction uniformly.
-`minkowski d` is a concrete instance of this interface, with one time and
+`minkowski σ d` is a concrete instance of this interface, with one time and
 `d` spatial coordinates. Its constant metric is smooth and nondegenerate;
 `minkowskiSchemeIso` identifies its scheme with `Spec C∞(ℝ^(d+1))`.
 `LorentzMetric.IsLocallyMinkowski` expresses the existence of local inertial
@@ -159,6 +160,17 @@ coordinates using the manifold derivative. Minkowski space satisfies this
 condition by its global inertial coordinates. General Lorentz manifolds
 are not required to satisfy it or to admit a global frame. For physical
 four-dimensional spacetime, take `d = 3`.
+
+Negation is constructed by `LorentzMetric.opposite` and
+`LorentzManifold.opposite`. It preserves smoothness, symmetry, nondegeneracy,
+and local Minkowski coordinates; the underlying scheme is unchanged.
+Existing positive-time uses now pass `.timePositive` explicitly.
+
+The `Minkowski` modules provide affine causal order, Lorentz and Poincaré
+symmetries, observers and metric duality. `DifferentialForm` supplies the
+metric-independent flat calculus and the exterior-power comparison. The
+[Minkowski guide](special-relativity.md) describes the oriented Hodge operator
+and its use by `SpecialRelativity`; shared geometry does not import physics.
 
 ## Scope and next stages
 
