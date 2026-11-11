@@ -13,6 +13,7 @@
 - [Mechanics formalization notes](mechanics-notes.md)
 - [Shared geometry: Joyce C∞ schemes and the mathlib correspondence](smooth-geometry.md)
 - [Minkowski geometry, relativistic kinematics, and flat forms](special-relativity.md)
+- [Charged particles, electromagnetic fields, and polynomial Maxwell jets](electrodynamics.md)
 - [Shared algebra: C∞-rings and smooth operations](smooth-algebra.md)
 - [Shared variational foundation: first variation and Euler–Lagrange equations](variational.md)
 - [Shared variational formalization notes](variational-notes.md)

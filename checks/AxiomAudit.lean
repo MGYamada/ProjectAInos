@@ -16,6 +16,7 @@ run_cmd do
   let mut geometryCount : Nat := 0
   let mut mechanicsCount : Nat := 0
   let mut relativityCount : Nat := 0
+  let mut electrodynamicsCount : Nat := 0
   let mut yangMillsCount : Nat := 0
   for (name, _) in env.constants do
     let userName := privateToUserName name
@@ -32,6 +33,8 @@ run_cmd do
         mechanicsCount := mechanicsCount + 1
       if (`ProjectAInos.SpecialRelativity).isPrefixOf userName then
         relativityCount := relativityCount + 1
+      if (`ProjectAInos.Electrodynamics).isPrefixOf userName then
+        electrodynamicsCount := electrodynamicsCount + 1
       let axioms ← collectAxioms name
       for axiomName in axioms do
         unless allowed.contains axiomName do
@@ -40,4 +43,6 @@ run_cmd do
     throwError "Audit found no project, smooth-algebra, smooth-geometry, mechanics, or special-relativity declarations"
   unless yangMillsCount > 0 do
     throwError "Audit found no Yang–Mills declarations"
-  logInfo m!"Axiom audit passed for {count} project declarations, including {smoothCount} smooth-algebra, {geometryCount} smooth-geometry, {mechanicsCount} mechanics, {relativityCount} special-relativity, and {yangMillsCount} Yang–Mills declarations."
+  unless electrodynamicsCount > 0 do
+    throwError "Audit found no electrodynamics declarations"
+  logInfo m!"Axiom audit passed for {count} project declarations, including {smoothCount} smooth-algebra, {geometryCount} smooth-geometry, {mechanicsCount} mechanics, {relativityCount} special-relativity, {electrodynamicsCount} electrodynamics, and {yangMillsCount} Yang–Mills declarations."

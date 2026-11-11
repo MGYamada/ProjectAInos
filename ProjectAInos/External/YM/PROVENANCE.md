@@ -15,7 +15,7 @@ which the root `NOTICE` records.
 
 ## Selected modules
 
-All 18 files below are copied from the upstream source. Their proof bodies
+All 24 files below are copied from the upstream source. Their proof bodies
 have been preserved where Lean 4.35 permits; P⊗AI changes the module paths
 and adds Lean 4.35 `module`, `public import`, and `@[expose] public section`
 directives. Minor compatibility changes (explicit mathlib analytic import,
@@ -28,6 +28,34 @@ The import and visibility changes are marked at the top of every file.
 | 1: Analysis | `Analytic/Implicit`; `Analysis/{Symmetric,SmoothJets,Homogeneous,Nonnegative}`; `Distribution/Tests`; `Hilbert/Kolmogorov`; `Extraction/Orders` | Higher derivatives and local analytic implicit functions, Schwartz tests, positive kernels, Hilbert reconstruction, limit extraction |
 | 2: Finite Wilson | `Gauge/MatrixGroup`; `Space/Index`; `Lattice/{Site,Path,Faces}`; `Wilson/{Law,Symmetry}` | Compact matrix gauge groups, discrete gauge geometry and Wilson-law invariance |
 | 3: Specification | `PublicTheory`; `PublicWilson`; `ChallengeSpec` | Standalone public Yang--Mills/Wightman/Wilson specifications |
+| 4: Maxwell jets | `Gauge/{Lie,Colors}`; `Space/{Configurations,Orthogonal}`; `Labels/Jet`; `Maxwell/Exterior` | Homogeneous closed curvature jets and radial-gauge potential recovery |
+
+The Maxwell dependency closure has **11 modules**: the six files in phase 4
+and the existing `Analysis/{Symmetric,SmoothJets,Homogeneous}`,
+`Gauge/MatrixGroup`, and `Space/Index`. It is pinned to the same commit above.
+Its Lean 4.35 changes, beyond the import/export wrapper, are:
+
+- `Gauge/Lie`: replace redundant instance-local `haveI` with `have`; make
+  `tangent_generates`' matrix coercion and `map_pow` steps explicit.
+- `Gauge/Colors`: replace redundant instance-local `haveI` with `have`.
+- `Space/Configurations`: replace deprecated `mem_setOf` with `mem_ofPred`.
+- `Space/Orthogonal`: use `have`; prove the reflected coordinate formula
+  explicitly to avoid recursive simplification of `eq_comm`.
+- `Labels/Jet`: unfold `turn`, `value`, and `Tensor.diagonal` explicitly in
+  `turn_value`, replacing a coercion-sensitive simplification.
+- `Maxwell/Exterior`: no mathematical proof-body changes.
+
+The original `YM` namespaces and theorem statements are retained. The
+project-authored `Electrodynamics/PolynomialRadial.lean` adapts the upstream
+`curl_inverse` argument to any real normed target, including ℝ. Its
+`radial_upstream` theorem identifies the original color-valued formula;
+`mapCoefficients_closed` and `radial_map` prove compatibility with linear
+component extraction. `PolynomialBridge.lean` transports coefficient
+evaluation, exterior differentiation, and the coefficient `1/(j+2)` through
+an explicit continuous linear equivalence `(t,x,y,z) ↦ (z,x,y,t)`.
+This is a polynomial differential-form result. It does not assert a global
+potential for arbitrary closed forms or a Euclidean-to-Lorentzian dynamics
+correspondence. Both nonzero degrees 0 and 1 are checked in Lean.
 
 Each phase's dependency-closed set is included; no other modules from the
 approximately 9,500-file upstream proof are imported. In particular,
@@ -87,6 +115,8 @@ Run from the P⊗AI repository root:
 lake exe cache get
 lake build --wfail ProjectAInos
 lake env lean -DwarningAsError=true checks/YangMillsImportAPI.lean
+lake env lean -DwarningAsError=true checks/ElectrodynamicsAPI.lean
+lake env lean -DwarningAsError=true checks/AxiomAudit.lean
 lake exe mk_all --check --lib ProjectAInos
 ```
 

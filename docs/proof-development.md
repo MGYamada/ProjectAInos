@@ -68,6 +68,13 @@ prerequisite of [issue #8](https://github.com/MGYamada/ProjectAInos/issues/8).
 
 ## Shared Variational Foundation
 
+The electrodynamics development adds compact localization for C² Lagrangians
+on open jet domains. A smooth cutoff gives a global representative agreeing
+near the reference jet; a compact tube argument keeps small variations in
+that neighborhood. The actual action derivative and the equivalence between
+fixed-endpoint stationarity and Euler–Lagrange therefore apply to the
+square-root timelike Lagrangian without asserting global C² regularity.
+
 The shared variational calculus uses sections of a trivial bundle over a finite-dimensional real coordinate space. For a jointly C² Lagrangian and a C² field with integrable density, Lean proves the action derivative for smooth variations with compact support inside an open region. It then proves that stationarity is equivalent to the pointwise Euler–Lagrange equation. The theorem covers time and four-dimensional bases and keeps the choice of Haar measure explicit. The interval integration-by-parts identity also retains the endpoint term for fixed-endpoint applications.
 
 This supplies the common local foundation for [issue #7](https://github.com/MGYamada/ProjectAInos/issues/7), building on [PR #29](https://github.com/MGYamada/ProjectAInos/pull/29). The [variational guide](variational.md) describes the endpoint and its hypotheses. The [smooth-algebra guide](smooth-algebra.md) describes the free smooth-function rings and their directional chain rule. Compact base regions now also supply domination without a support condition on the variation, and the interval identity handles covector–vector pairings.
@@ -83,3 +90,24 @@ The [C∞ mechanics research plan](cinfty-mechanics.md) preserves the mathematic
 Adding the total time derivative of a function of time and position changes the action by its endpoint difference. Lean proves that fixed-endpoint stationarity is preserved and that the Euler–Lagrange covector agrees pointwise. [Total time derivatives](mechanics.md#total-time-derivatives)
 
 The mechanics guide gives the assumptions and proof map. The formalization notes record distinctions and design decisions exposed by the proofs. Conservation identities, Noether's theorem, and further mechanical models are the next stages of the plan. Abstract quotients, dual numbers, cotangent modules and jet rings, followed by Poisson and Hamiltonian mechanics, remain research-plan stages. [Mechanics guide](mechanics.md) · [Formalization notes](mechanics-notes.md)
+
+## Electrodynamics 4.1
+
+Local potentials and curvature use the existing flat exterior derivative.
+Gauge invariance, Bianchi in components, Lorentz/Poincaré compatibility,
+observer reconstruction, and both field invariants are proved with time
+first and signature (-+++). The pseudoscalar transforms by the Lorentz
+determinant. The charged action combines the free proper-time action with
+the potential line integral; its actual fixed-endpoint stationarity yields
+the Lorentz force, including the proper-time component equation. The gauge
+action difference is an endpoint term even for locally regular potentials;
+C³ gauge functions preserve the C² assumptions of the local action theorem.
+
+The pinned upstream Maxwell jet closure is independently compiled, preserving
+its `YM` statements and provenance. A generic normed-target radial proof
+specializes to scalars and the original color space, commutes with linear
+component extraction, and connects to the project's exterior derivative
+through the explicit coordinate swap. Nonzero degrees 0 and 1 and the
+hyperbolic charged worldline are regression proofs. The
+[electrodynamics guide](electrodynamics.md) records the full theorem map,
+regularity conditions, experiment runner, and boundaries of §4.1.
