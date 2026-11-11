@@ -60,8 +60,11 @@ law. Composition and intrinsic trace have smooth-bundle proofs; the trace
 functional itself is smooth, so partial contraction retains uncontracted
 arguments. Coordinate naturality of partial contraction and the
 inverse-metric component formula are proved. Smooth field pullback along
-diffeomorphisms and general slot permutation/tensor-product APIs remain
-subsequent work.
+diffeomorphisms is constructed using the actual derivative and smooth
+inversion in bundle charts. Identity/composition/inverse laws and
+commutation with full and partial contraction are proved. General slot
+permutation/tensor-product APIs and covariant pullback along noninvertible
+maps remain subsequent work.
 
 For the chart regression, the shear `(t,x) ↦ (t,x+t²)` and its inverse are
 proved smooth and turned into an actual chart in the maximal atlas.

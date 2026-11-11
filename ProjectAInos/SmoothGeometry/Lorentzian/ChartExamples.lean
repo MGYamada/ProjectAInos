@@ -7,6 +7,7 @@ module
 public import ProjectAInos.SmoothGeometry.Lorentzian.Dual
 public import ProjectAInos.SmoothGeometry.Lorentzian.Tensor
 public import ProjectAInos.SmoothGeometry.Tensor.Bilinear
+public import ProjectAInos.SmoothGeometry.Tensor.Pullback
 public import Mathlib.Analysis.Calculus.FDeriv.Pi
 public import Mathlib.Analysis.Calculus.ContDiff.Operations
 
@@ -223,6 +224,15 @@ theorem spatialTensor_contract (p : Plane) : metric.contractField spatialTensor 
     LorentzMetric.minkowskiMetric_sharp]
   change Minkowski.sharp .timeNegative (proj 1 : Plane →L[ℝ] ℝ) 1 = 1
   simp [Minkowski.sharp_apply, lorentzSign]
+
+/-- The nonlinear metric is the pullback of the Minkowski metric as a smooth
+tensor field, using the general manifold pullback operation. -/
+theorem metric_tensor_pullback :
+    metric.toTensor = CovariantTwoTensor.pullback (d := 1)
+      shearDiffeomorph (minkowskiMetric .timeNegative 1).toTensor := by
+  ext p v w
+  rw [CovariantTwoTensor.pullback_apply (d := 1)]
+  exact metric_covariance p v w
 
 def standardChart : OpenPartialHomeomorph Plane Plane :=
   (Homeomorph.refl Plane).toOpenPartialHomeomorph

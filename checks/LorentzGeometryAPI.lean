@@ -191,6 +191,60 @@ example (x : M)
 
 end TensorBundles
 
+section FieldPullback
+
+open Tensor
+
+variable {d : ℕ} {M N P : Type}
+  [TopologicalSpace M] [ChartedSpace (MinkowskiModel d) M]
+  [IsManifold 𝓘(ℝ, MinkowskiModel d) ∞ M]
+  [TopologicalSpace N] [ChartedSpace (MinkowskiModel d) N]
+  [IsManifold 𝓘(ℝ, MinkowskiModel d) ∞ N]
+  [TopologicalSpace P] [ChartedSpace (MinkowskiModel d) P]
+  [IsManifold 𝓘(ℝ, MinkowskiModel d) ∞ P]
+
+example (s : Shape) (f : M ≃ₘ⟮𝓘(ℝ, MinkowskiModel d), 𝓘(ℝ, MinkowskiModel d)⟯ N)
+    (T : (s.bundle 𝓘(ℝ, MinkowskiModel d) (M := N)).Section 𝓘(ℝ, MinkowskiModel d)) :
+    (s.bundle 𝓘(ℝ, MinkowskiModel d) (M := M)).Section 𝓘(ℝ, MinkowskiModel d) :=
+  s.pullbackField 𝓘(ℝ, MinkowskiModel d) f T
+
+example (s : Shape) (f : M ≃ₘ⟮𝓘(ℝ, MinkowskiModel d), 𝓘(ℝ, MinkowskiModel d)⟯ N)
+    (g : N ≃ₘ⟮𝓘(ℝ, MinkowskiModel d), 𝓘(ℝ, MinkowskiModel d)⟯ P)
+    (T : (s.bundle 𝓘(ℝ, MinkowskiModel d) (M := P)).Section 𝓘(ℝ, MinkowskiModel d)) :
+    s.pullbackField 𝓘(ℝ, MinkowskiModel d) (f.trans g) T =
+      s.pullbackField 𝓘(ℝ, MinkowskiModel d) f (s.pullbackField 𝓘(ℝ, MinkowskiModel d) g T) :=
+  s.pullbackField_trans 𝓘(ℝ, MinkowskiModel d) f g T
+
+example (s : Shape) (f : M ≃ₘ⟮𝓘(ℝ, MinkowskiModel d), 𝓘(ℝ, MinkowskiModel d)⟯ N)
+    (T : (s.bundle 𝓘(ℝ, MinkowskiModel d) (M := M)).Section 𝓘(ℝ, MinkowskiModel d)) :
+    s.pullbackField 𝓘(ℝ, MinkowskiModel d) f
+      (s.pullbackField 𝓘(ℝ, MinkowskiModel d) f.symm T) = T :=
+  s.pullbackField_symm 𝓘(ℝ, MinkowskiModel d) f T
+
+example (f : M ≃ₘ⟮𝓘(ℝ, MinkowskiModel d), 𝓘(ℝ, MinkowskiModel d)⟯ N)
+    (T : CovariantTwoTensor d N) (x : M)
+    (v w : TangentSpace 𝓘(ℝ, MinkowskiModel d) x) :
+    Shape.pullbackField 𝓘(ℝ, MinkowskiModel d) (Shape.mixed 0 2) f T x v w =
+      T (f x) (mfderiv 𝓘(ℝ, MinkowskiModel d) 𝓘(ℝ, MinkowskiModel d) f x v)
+        (mfderiv 𝓘(ℝ, MinkowskiModel d) 𝓘(ℝ, MinkowskiModel d) f x w) :=
+  Shape.pullbackField_covariantTwo_apply 𝓘(ℝ, MinkowskiModel d) f T x v w
+
+example (s t : Shape)
+    (f : M ≃ₘ⟮𝓘(ℝ, MinkowskiModel d), 𝓘(ℝ, MinkowskiModel d)⟯ N)
+    (T : ((Shape.hom s (Shape.hom t t)).bundle 𝓘(ℝ, MinkowskiModel d) (M := N)).Section
+      𝓘(ℝ, MinkowskiModel d)) :
+    SmoothBundle.partialContract 𝓘(ℝ, MinkowskiModel d)
+      (s.bundle 𝓘(ℝ, MinkowskiModel d) (M := M))
+      (t.bundle 𝓘(ℝ, MinkowskiModel d) (M := M))
+      (Shape.pullbackField 𝓘(ℝ, MinkowskiModel d) (Shape.hom s (Shape.hom t t)) f T) =
+    Shape.pullbackField 𝓘(ℝ, MinkowskiModel d) (Shape.hom s Shape.scalar) f
+      (SmoothBundle.partialContract 𝓘(ℝ, MinkowskiModel d)
+        (s.bundle 𝓘(ℝ, MinkowskiModel d) (M := N))
+        (t.bundle 𝓘(ℝ, MinkowskiModel d) (M := N)) T) :=
+  Shape.partialContract_pullbackField 𝓘(ℝ, MinkowskiModel d) s t f T
+
+end FieldPullback
+
 section Charts
 
 open LorentzianCharts
@@ -240,5 +294,8 @@ example (p v w : Plane) :
       (mfderiv 𝓘(ℝ, Plane) 𝓘(ℝ, Plane) shear p w) := opposite_metric_covariance p v w
 
 example (p : Plane) : metric.contractField spatialTensor p = 1 := spatialTensor_contract p
+
+example : metric.toTensor = CovariantTwoTensor.pullback (d := 1)
+    shearDiffeomorph (minkowskiMetric .timeNegative 1).toTensor := metric_tensor_pullback
 
 end Charts

@@ -208,9 +208,20 @@ same smooth-section type as the constructed covariant two-tensor bundle.
 proved. These are fibrewise maps, including between different manifolds
 with the same model. `coefficients` extracts local representations from
 geometric smooth sections; their smoothness and transition rule hold in
-every atlas trivialization on its domain. Pullback of arbitrary smooth
-tensor **fields** along diffeomorphisms, and a full slot-permutation and
-tensor-product API, remain subsequent work in [#52](https://github.com/MGYamada/ProjectAInos/issues/52).
+every atlas trivialization on its domain.
+
+`Tensor/HomMap.lean` proves smoothness of inversion and induced hom maps
+in local bundle coordinates. `Tensor/Pullback.lean` uses these results
+recursively to construct `Shape.pullbackField` for every tensor shape
+along a smooth diffeomorphism between manifolds with the same model.
+The tangent map is the actual manifold derivative; its inverse is proved
+smooth rather than assumed. Pullback preserves smooth sections, reverses
+composition, respects identity and inverse diffeomorphisms, and commutes
+with full and partial contraction. Covector and covariant two-tensor
+evaluation formulas explicitly use `mfderiv`. No isometry or global
+frame is required. Pullback of covariant tensors along noninvertible
+smooth maps, and a full slot-permutation and tensor-product API, remain
+subsequent work in [#52](https://github.com/MGYamada/ProjectAInos/issues/52).
 
 `Tensor/BundleOperations.lean` proves that fibrewise composition of smooth
 bundle homomorphisms is smooth: the intermediate coordinate maps cancel.
@@ -245,6 +256,8 @@ equal mixed terms. `metric_covariance` uses `mfderiv` of the actual
 transition, and the component theorems evaluate the constructed metric.
 `metric_nonconstant` and `jacobian_nonconstant` compare `(0,0)` and `(1,0)`.
 The example also checks lowering, raising, and `opposite` across charts.
+`metric_tensor_pullback` identifies the nonlinear metric with the
+pullback of the Minkowski metric as an equality of smooth tensor fields.
 Its `spacetime` instance uses `LorentzManifold.toScheme`, with the same
 underlying smooth scheme as the standard Minkowski plane.
 The smooth tensor `spatialTensor`, the pullback of `dX ⊗ dX`, has the

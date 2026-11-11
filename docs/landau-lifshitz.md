@@ -105,7 +105,8 @@ radiation, and cosmology.
 | Vol. 2, Ch. XIV | 5.4: Relativistic cosmology |
 
 The first 5.1 implementation provides smooth metric duality on the actual
-tangent bundle, finite mixed tensor bundles with smooth contraction, and
+tangent bundle, finite mixed tensor bundles with smooth contraction and
+field pullback along diffeomorphisms, and
 a nonlinear two-chart Minkowski regression. Its
 [API and proof map](smooth-geometry.md#gr-51-metric-duality-and-the-first-chart-regression)
 distinguishes the proved foundation from the remaining tensor, connection,

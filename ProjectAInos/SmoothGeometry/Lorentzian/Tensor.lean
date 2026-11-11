@@ -6,6 +6,7 @@ module
 
 public import ProjectAInos.SmoothGeometry.Lorentzian.Dual
 public import ProjectAInos.SmoothGeometry.Tensor.Contraction
+public import ProjectAInos.SmoothGeometry.Tensor.Pullback
 
 /-! # Raising tensor indices and metric contraction
 
@@ -28,15 +29,37 @@ variable (d : ℕ) (M : Type) [TopologicalSpace M] [ChartedSpace (MinkowskiModel
 
 /-- Smooth covariant two-tensors on the tangent bundle. -/
 abbrev CovariantTwoTensor :=
-  Cₛ^∞⟮𝓘(ℝ, MinkowskiModel d); MinkowskiModel d →L[ℝ] MinkowskiModel d →L[ℝ] ℝ,
-    (fun x : M => TangentSpace 𝓘(ℝ, MinkowskiModel d) x →L[ℝ]
-      TangentSpace 𝓘(ℝ, MinkowskiModel d) x →L[ℝ] ℝ)⟯
+  ((Tensor.Shape.mixed 0 2).bundle 𝓘(ℝ, MinkowskiModel d) (M := M)).Section
+    𝓘(ℝ, MinkowskiModel d)
 
 /-- Smooth tensors with one tangent output and one tangent input. -/
 abbrev TangentEndomorphism :=
   Cₛ^∞⟮𝓘(ℝ, MinkowskiModel d); MinkowskiModel d →L[ℝ] MinkowskiModel d,
     (fun x : M => TangentSpace 𝓘(ℝ, MinkowskiModel d) x →L[ℝ]
       TangentSpace 𝓘(ℝ, MinkowskiModel d) x)⟯
+
+namespace CovariantTwoTensor
+
+variable {d M} {N : Type} [TopologicalSpace N] [ChartedSpace (MinkowskiModel d) N]
+  [IsManifold 𝓘(ℝ, MinkowskiModel d) ∞ N]
+
+/-- The two-tensor interface to the general smooth tensor-field pullback. -/
+def pullback (f : M ≃ₘ⟮𝓘(ℝ, MinkowskiModel d), 𝓘(ℝ, MinkowskiModel d)⟯ N)
+    (T : CovariantTwoTensor d N) : CovariantTwoTensor d M :=
+  Tensor.Shape.pullbackField (E := MinkowskiModel d) (H := MinkowskiModel d)
+    (M := M) (N := N) 𝓘(ℝ, MinkowskiModel d) (Tensor.Shape.mixed 0 2) f T
+
+theorem pullback_apply (f : M ≃ₘ⟮𝓘(ℝ, MinkowskiModel d), 𝓘(ℝ, MinkowskiModel d)⟯ N)
+    (T : CovariantTwoTensor d N) (x : M)
+    (v w : TangentSpace 𝓘(ℝ, MinkowskiModel d) x) :
+    pullback (d := d) f T x v w =
+      T (f x) (mfderiv 𝓘(ℝ, MinkowskiModel d) 𝓘(ℝ, MinkowskiModel d) f x v)
+        (mfderiv 𝓘(ℝ, MinkowskiModel d) 𝓘(ℝ, MinkowskiModel d) f x w) := by
+  unfold pullback
+  convert! Tensor.Shape.pullbackField_covariantTwo_apply (E := MinkowskiModel d)
+    (H := MinkowskiModel d) (M := M) (N := N) 𝓘(ℝ, MinkowskiModel d) f T x v w using 1
+
+end CovariantTwoTensor
 
 namespace Tensor
 

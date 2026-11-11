@@ -109,6 +109,8 @@ public import ProjectAInos.SmoothGeometry.Tensor.Bilinear
 public import ProjectAInos.SmoothGeometry.Tensor.Bundle
 public import ProjectAInos.SmoothGeometry.Tensor.BundleOperations
 public import ProjectAInos.SmoothGeometry.Tensor.Contraction
+public import ProjectAInos.SmoothGeometry.Tensor.HomMap
+public import ProjectAInos.SmoothGeometry.Tensor.Pullback
 public import ProjectAInos.SmoothGeometry.YangMillsCoordinates
 public import ProjectAInos.SpecialRelativity.Boost
 public import ProjectAInos.SpecialRelativity.Examples
