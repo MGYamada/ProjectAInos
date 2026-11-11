@@ -44,6 +44,8 @@ jobs:
         run: lake env lean -DwarningAsError=true checks/YangMillsImportAPI.lean
       - name: Check the special relativity API
         run: lake env lean -DwarningAsError=true checks/SpecialRelativityAPI.lean
+      - name: Check the canonical atomic process API
+        run: lake env lean -DwarningAsError=true checks/AtomicNonreactiveAPI.lean
       - name: Check the electrodynamics API
         run: lake env lean -DwarningAsError=true checks/ElectrodynamicsAPI.lean
       - name: Audit project and imported YM declarations transitively

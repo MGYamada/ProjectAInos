@@ -153,10 +153,34 @@ mathematically unnecessary.
 
 This model checks populated scaling, joining, support geometry and thermal
 equilibrium together. Its thermal relation is universal, so it exercises the
-universal-isotherm branch. A varying-temperature example and a canonical
-`AtomicDomains` realization remain separate constructions. The
+universal-isotherm branch. A varying-temperature example remains separate. The
 [join assumption audit](thermodynamics-join-audit.md) records which geometric
 facts are explicit inputs in a general family and proved here for reservoirs.
+
+## Canonical atoms with genuine mixing
+
+`AtomicProcesses`, `AtomicReservoir`, and `AtomicObstruction` implement the
+canonical `AtomicDomains` realization required by issue #27. The primitive
+domain is positive energy with no work coordinates. Raw states are finite
+formal composites. Heating, weighted mixing, and reversible separation are
+elementary processes, and accessibility is their A1–A6 closure.
+
+`normal_form` constructs reversible equilibration of every finite composite
+to one weighted atom, including the zero-amount case. `relation_iff` then
+derives equality of total amount and monotonicity of total energy as the exact
+accessibility criterion. The thermal family has positive amounts, arbitrary
+finite work dimensions with zero pressure, positive scaling, thermal joins,
+and transversality. `canonical_represent` identifies the unit primitive system
+with the actual atomic presentation, and `exchangeComparison` invokes the
+repaired physical endpoint without a CH/ECH premise.
+
+The checked regression `atomicOnly_mixing_impossible` excludes
+`(1/2)[1] + (1/2)[3] → [2]` for the old atomic-only heating relation: the
+extensive observable `max(U - 5/2, 0)` would decrease from `1/4` to `0`.
+`mixing_example` proves this process for the new relation, while
+`mixing_raw_distinct` proves its endpoints are distinct raw states and
+`heating_irreversible` proves `[1] → [2]` but not the reverse. This is a
+constant-temperature reservoir example, not a varying-temperature model.
 
 ## Reaction bookkeeping and unreachable labels
 
