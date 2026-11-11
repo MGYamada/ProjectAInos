@@ -16,10 +16,14 @@ run_cmd do
   let mut geometryCount : Nat := 0
   let mut mechanicsCount : Nat := 0
   let mut relativityCount : Nat := 0
+  let mut yangMillsCount : Nat := 0
   for (name, _) in env.constants do
     let userName := privateToUserName name
-    if (`ProjectAInos).isPrefixOf userName then
+    let isYangMills := (`YM).isPrefixOf userName || (`YangMills).isPrefixOf userName
+    if (`ProjectAInos).isPrefixOf userName || isYangMills then
       count := count + 1
+      if isYangMills then
+        yangMillsCount := yangMillsCount + 1
       if (`ProjectAInos.SmoothAlgebra).isPrefixOf userName then
         smoothCount := smoothCount + 1
       if (`ProjectAInos.SmoothGeometry).isPrefixOf userName then
@@ -34,4 +38,6 @@ run_cmd do
           throwError "{name} depends on disallowed axiom {axiomName}"
   unless count > 0 ∧ smoothCount > 0 ∧ geometryCount > 0 ∧ mechanicsCount > 0 ∧ relativityCount > 0 do
     throwError "Audit found no project, smooth-algebra, smooth-geometry, mechanics, or special-relativity declarations"
-  logInfo m!"Axiom audit passed for {count} project declarations, including {smoothCount} smooth-algebra, {geometryCount} smooth-geometry, {mechanicsCount} mechanics, and {relativityCount} special-relativity declarations."
+  unless yangMillsCount > 0 do
+    throwError "Audit found no Yang–Mills declarations"
+  logInfo m!"Axiom audit passed for {count} project declarations, including {smoothCount} smooth-algebra, {geometryCount} smooth-geometry, {mechanicsCount} mechanics, {relativityCount} special-relativity, and {yangMillsCount} Yang–Mills declarations."
