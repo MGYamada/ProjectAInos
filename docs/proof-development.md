@@ -4,6 +4,14 @@ This record traces the development of the Lean proofs. The research plan and sub
 
 ## Thermodynamics Proof Development
 
+Issue #27 replaces the physical atomic-only ECH specialization with composite
+generators whose label conservation survives A1–A6. `AtomicProcesses` proves
+normal forms and the exact energy/amount accessibility criterion for heating,
+mixing and separation. `AtomicReservoir` constructs all simple-system and
+thermal-family premises on the canonical atoms and invokes that specialization.
+`AtomicObstruction` proves the old relation cannot perform the explicit A7
+mixing example. Build success alone was not the nonvacuity criterion.
+
 The Lean library derives spectator cancellation from A6, constructs the real Grothendieck completion and its process cone, and proves order reflection and sequential order closedness. Under exchange comparison and a nonzero process direction, the real-cut construction gives an entropy coordinate. Linear extension then gives the entropy principle on matched conservation sectors, the relative cutoff formula, and the classification of entropy extensions by conserved linear quantities.
 
 Concrete models cover nonnegative real states, two independent monotones, lexicographic failure of sequential order closedness, equality-only accessibility, and a conserved amount coordinate. The ideal-gas development proves homogeneity, concavity, and the fixed-amount operational entropy principle. Its composite algebraic consistency model identifies the completion with entropy-amount pairs and the conservation quotient with amount. Composition in this model uses the sum of separate-box entropies; this construction does not supply a geometric simple system or thermal family.

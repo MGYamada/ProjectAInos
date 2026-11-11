@@ -363,10 +363,23 @@ conservation explicit. It connects the physical proof to the algebraic ECH
 criterion and entropy theorem.
 
 For canonical atoms, `AtomicDomains.exchangeComparison_nonreactive`
-specializes directly to `Nonreactive.accessibility D.State elementary` and
-discharges conservation with `Nonreactive.accessibility_label_eq`. Its caller
-supplies the admitted physical systems and their matching domains and
-representations, with no CH, ECH, or conservation hypothesis.
+accepts elementary **composite-to-composite** processes and their
+composition-label preservation proof. `Generated.label_eq` proves conservation
+for the entire A1–A6 closure, including stability. Its caller supplies the
+admitted physical systems and their matching domains and representations;
+CH and ECH are derived, not assumed.
+
+The previous atom-replacement-only specialization is now named
+`exchangeComparison_atomicOnly`. It remains a conditional theorem, but must
+not be interpreted as an inhabited physical simple-system construction.
+`AtomicReservoir.atomicOnly_mixing_impossible` in `AtomicObstruction` checks
+the obstruction from issue #27 using the extensive
+observable `max(U - 5/2, 0)`.
+
+`AtomicReservoir.exchangeComparison` applies the repaired endpoint to
+canonical positive-energy atoms with heating, weighted mixing, and reversible
+separation. The model proves its full thermal family and a nonempty member;
+its raw state space is still the formal composite quotient, not `SectorState`.
 
 There is also a direct calibrated entropy construction. For nonempty
 primitive systems, `exists_entropy_of_physical_axioms` returns an additive

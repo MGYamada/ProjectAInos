@@ -70,6 +70,31 @@ theorem Generated.least {elementary : X → X → Prop} (P : Accessibility X)
   | recombine a b x => exact (P.split a b x).2
   | stable x y z₀ z₁ ε hpos hlim _ ih => exact P.stable x y z₀ z₁ ε hpos hlim ih
 
+/-- An additive extensive real observable that increases on generators increases
+on their full A1–A6 closure. No topology on the atomic states is needed. -/
+theorem Generated.eval_le {elementary : X → X → Prop} (f : X →+ ℝ)
+    (hscale : ∀ (r : ℝ≥0) x, f (r • x) = r • f x)
+    (hbasic : ∀ {x y}, elementary x y → f x ≤ f y)
+    {x y : X} (h : Generated elementary x y) : f x ≤ f y := by
+  induction h with
+  | basic h => exact hbasic h
+  | refl => exact le_rfl
+  | trans _ _ ih₁ ih₂ => exact ih₁.trans ih₂
+  | add _ _ ih₁ ih₂ => simpa only [map_add] using add_le_add ih₁ ih₂
+  | scale r _ ih =>
+    simpa only [hscale, NNReal.smul_def, smul_eq_mul] using
+      mul_le_mul_of_nonneg_left ih r.coe_nonneg
+  | split a b x => simp only [map_add, hscale, add_smul, le_refl]
+  | recombine a b x => simp only [map_add, hscale, add_smul, le_refl]
+  | stable x y z₀ z₁ ε _ hlim _ ih =>
+    have he : Tendsto (fun n => (ε n : ℝ)) atTop (𝓝 0) :=
+      NNReal.continuous_coe.tendsto 0 |>.comp hlim
+    apply le_of_tendsto_of_tendsto'
+      (by simpa using tendsto_const_nhds.add (he.mul_const (f z₀)))
+      (by simpa using tendsto_const_nhds.add (he.mul_const (f z₁)))
+    intro n
+    simpa only [map_add, hscale, NNReal.smul_def, smul_eq_mul] using ih n
+
 /-- Conservation of elementary system amounts survives the entire generated
 relation. The stability case uses both inequalities in each amount coordinate. -/
 theorem Generated.label_eq {Γ : Type*} {elementary : X → X → Prop}
