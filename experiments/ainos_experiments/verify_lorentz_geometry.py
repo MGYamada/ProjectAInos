@@ -1,4 +1,4 @@
-"""Exact checks for GR 5.1's metric and nonlinear-chart foundation.
+"""Exact checks for GR 5.1's metric, connection and nonlinear-chart examples.
 
 Time first, c=1, signature (-+). The coordinate change is (T,X)=(t,x+t²).
 All computations are symbolic over the reals; no tolerances or random seeds
@@ -12,6 +12,34 @@ def check_zero(name, expression):
     entries = list(expression) if isinstance(expression, sp.MatrixBase) else [expression]
     if any(sp.simplify(entry) != 0 for entry in entries):
         raise AssertionError(f"{name}: exact residual is nonzero: {expression}")
+
+
+def christoffel(metric, coordinates):
+    """Return Gamma^k_ij as one symmetric matrix per upper index k."""
+    inverse = metric.inv()
+    size = len(coordinates)
+    return [sp.Matrix(size, size, lambda i, j: sp.simplify(sum(
+        inverse[k, ell] * (
+            sp.diff(metric[ell, j], coordinates[i])
+            + sp.diff(metric[ell, i], coordinates[j])
+            - sp.diff(metric[i, j], coordinates[ell])) / 2
+        for ell in range(size)))) for k in range(size)]
+
+
+def verify_connection(metric, coordinates):
+    gamma = christoffel(metric, coordinates)
+    opposite = christoffel(-metric, coordinates)
+    size = len(coordinates)
+    for k in range(size):
+        check_zero("torsion-free", gamma[k] - gamma[k].T)
+        check_zero("connection metric-sign reversal", gamma[k] - opposite[k])
+        for i in range(size):
+            for j in range(size):
+                check_zero("metric compatibility", sp.diff(metric[i, j], coordinates[k])
+                           - sum(gamma[ell][k, i] * metric[ell, j]
+                                 + gamma[ell][k, j] * metric[i, ell]
+                                 for ell in range(size)))
+    return gamma
 
 
 def verify():
@@ -77,13 +105,30 @@ def verify():
     check_zero("partial tensor contraction covariance",
                transformed_contraction - inverse_jacobian.T * contracted)
 
+    # The nonlinear Christoffel term is the second derivative of the chart.
+    flat_gamma = verify_connection(eta, inertial)
+    for component in flat_gamma:
+        check_zero("inertial connection", component)
+    gamma = verify_connection(metric, coordinates)
+    check_zero("nonlinear time connection", gamma[0])
+    check_zero("nonlinear spatial connection", gamma[1] - sp.Matrix([[2, 0], [0, 0]]))
+    for k in range(2):
+        transformed_gamma = sum((
+            inverse_jacobian[k, a] * sp.hessian(shear[a], coordinates)
+            for a in range(2)), sp.zeros(2))
+        check_zero("connection Hessian transformation", gamma[k] - transformed_gamma)
+
+    curved_gamma = verify_connection(sp.exp(2*x**2) * eta, coordinates)
+    check_zero("conformal time connection", curved_gamma[0] - sp.Matrix([[0, 2*x], [2*x, 0]]))
+    check_zero("conformal spatial connection", curved_gamma[1] - sp.diag(2*x, 2*x))
+
     if metric.subs(t, 0) == metric.subs(t, 1):
         raise AssertionError("metric regression must have nonconstant coefficients")
     if jacobian.subs(t, 0) == jacobian.subs(t, 1):
         raise AssertionError("chart regression must have nonconstant Jacobian")
     print("Lorentz geometry exact checks passed: nonlinear charts, metric covariance, "
           "inverse metric, raising/lowering, full/partial tensor contraction, "
-          "and both signature conventions.")
+          "Levi-Civita coefficients, Hessian transformation, and both signature conventions.")
 
 
 def main():

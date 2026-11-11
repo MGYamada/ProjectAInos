@@ -6,15 +6,78 @@ module
 
 import ProjectAInos.SmoothGeometry.Lorentzian.Dual
 import ProjectAInos.SmoothGeometry.Lorentzian.ChartExamples
+import ProjectAInos.SmoothGeometry.Lorentzian.Regularity
 import ProjectAInos.SmoothGeometry.Tensor.Bundle
 
-/-! Typed contracts for GR 5.1's shared metric foundation. These examples use
+/-! Typed contracts for GR 5.1's shared metric and connection foundation. These examples use
 default elaborator options and do not assume a global frame or flatness. -/
 
 open ProjectAInos.SmoothGeometry
 open scoped Manifold ContDiff
 
 noncomputable section
+
+section Connection
+
+variable {σ : LorentzConvention} {d : ℕ} {M : Type} [TopologicalSpace M]
+  [ChartedSpace (MinkowskiModel d) M] [IsManifold 𝓘(ℝ, MinkowskiModel d) ∞ M]
+  (g : LorentzMetric σ d M)
+  {X Y Z : ∀ x : M, TangentSpace 𝓘(ℝ, MinkowskiModel d) x} {x : M}
+
+example : CovariantDerivative 𝓘(ℝ, MinkowskiModel d) (MinkowskiModel d)
+    (TangentSpace 𝓘(ℝ, MinkowskiModel d) (M := M)) := g.leviCivita
+
+example : g.IsLeviCivita g.leviCivita := g.isLeviCivita_leviCivita
+
+example : g.leviCivita.torsion = 0 := g.leviCivita_torsion
+
+example
+    (hY : MDifferentiableAt 𝓘(ℝ, MinkowskiModel d)
+      (𝓘(ℝ, MinkowskiModel d).prod 𝓘(ℝ, MinkowskiModel d)) (T% Y) x)
+    (hZ : MDifferentiableAt 𝓘(ℝ, MinkowskiModel d)
+      (𝓘(ℝ, MinkowskiModel d).prod 𝓘(ℝ, MinkowskiModel d)) (T% Z) x)
+    (v : TangentSpace 𝓘(ℝ, MinkowskiModel d) x) :
+    mvfderiv 𝓘(ℝ, MinkowskiModel d) (fun y => g.form y (Y y) (Z y)) x v =
+      g.form x (g.leviCivita Y x v) (Z x) + g.form x (Y x) (g.leviCivita Z x v) :=
+  g.leviCivita_metricCompatible v hY hZ
+
+example
+    (hX : MDifferentiableAt 𝓘(ℝ, MinkowskiModel d)
+      (𝓘(ℝ, MinkowskiModel d).prod 𝓘(ℝ, MinkowskiModel d)) (T% X) x)
+    (hY : MDifferentiableAt 𝓘(ℝ, MinkowskiModel d)
+      (𝓘(ℝ, MinkowskiModel d).prod 𝓘(ℝ, MinkowskiModel d)) (T% Y) x)
+    (hZ : MDifferentiableAt 𝓘(ℝ, MinkowskiModel d)
+      (𝓘(ℝ, MinkowskiModel d).prod 𝓘(ℝ, MinkowskiModel d)) (T% Z) x) :
+    g.form x (g.leviCivita Y x (X x)) (Z x) =
+      (mvfderiv 𝓘(ℝ, MinkowskiModel d) (fun y => g.form y (Y y) (Z y)) x (X x) +
+       mvfderiv 𝓘(ℝ, MinkowskiModel d) (fun y => g.form y (Z y) (X y)) x (Y x) -
+       mvfderiv 𝓘(ℝ, MinkowskiModel d) (fun y => g.form y (X y) (Y y)) x (Z x) -
+       g.form x (Y x) (VectorField.mlieBracket 𝓘(ℝ, MinkowskiModel d) X Z x) -
+       g.form x (Z x) (VectorField.mlieBracket 𝓘(ℝ, MinkowskiModel d) Y X x) +
+       g.form x (X x) (VectorField.mlieBracket 𝓘(ℝ, MinkowskiModel d) Z Y x)) / 2 :=
+  g.leviCivita_pairing hX hY hZ
+
+example
+    (cov cov' : CovariantDerivative 𝓘(ℝ, MinkowskiModel d) (MinkowskiModel d)
+      (TangentSpace 𝓘(ℝ, MinkowskiModel d) (M := M)))
+    (h : g.IsLeviCivita cov) (h' : g.IsLeviCivita cov')
+    (hY : MDifferentiableAt 𝓘(ℝ, MinkowskiModel d)
+      (𝓘(ℝ, MinkowskiModel d).prod 𝓘(ℝ, MinkowskiModel d)) (T% Y) x)
+    (v : TangentSpace 𝓘(ℝ, MinkowskiModel d) x) : cov Y x v = cov' Y x v :=
+  h.uniqueness g h' hY v
+
+example : g.opposite.leviCivita = g.leviCivita := g.leviCivita_opposite
+
+example : CovariantDerivative.ContMDiffCovariantDerivative g.leviCivita ∞ := inferInstance
+
+example (hY : ContMDiffAt 𝓘(ℝ, MinkowskiModel d)
+    (𝓘(ℝ, MinkowskiModel d).prod 𝓘(ℝ, MinkowskiModel d)) ∞ (T% Y) x) :
+    ContMDiffAt 𝓘(ℝ, MinkowskiModel d)
+      (𝓘(ℝ, MinkowskiModel d).prod 𝓘(ℝ, MinkowskiModel d →L[ℝ] MinkowskiModel d)) ∞
+      (fun y => Bundle.TotalSpace.mk' (MinkowskiModel d →L[ℝ] MinkowskiModel d)
+        y (g.leviCivita Y y)) x := g.contMDiffAt_leviCivita hY
+
+end Connection
 
 section Duality
 

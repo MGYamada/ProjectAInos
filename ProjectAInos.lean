@@ -72,7 +72,10 @@ public import ProjectAInos.SmoothGeometry.Localization
 public import ProjectAInos.SmoothGeometry.LocallyRingedSpace
 public import ProjectAInos.SmoothGeometry.Lorentzian
 public import ProjectAInos.SmoothGeometry.Lorentzian.ChartExamples
+public import ProjectAInos.SmoothGeometry.Lorentzian.Connection
 public import ProjectAInos.SmoothGeometry.Lorentzian.Dual
+public import ProjectAInos.SmoothGeometry.Lorentzian.LeviCivita
+public import ProjectAInos.SmoothGeometry.Lorentzian.Regularity
 public import ProjectAInos.SmoothGeometry.Lorentzian.Tensor
 public import ProjectAInos.SmoothGeometry.Manifold.Charts
 public import ProjectAInos.SmoothGeometry.Manifold.Euclidean
@@ -111,6 +114,7 @@ public import ProjectAInos.SmoothGeometry.Tensor.BundleOperations
 public import ProjectAInos.SmoothGeometry.Tensor.Contraction
 public import ProjectAInos.SmoothGeometry.Tensor.HomMap
 public import ProjectAInos.SmoothGeometry.Tensor.Pullback
+public import ProjectAInos.SmoothGeometry.Tensor.Regularity
 public import ProjectAInos.SmoothGeometry.YangMillsCoordinates
 public import ProjectAInos.SpecialRelativity.Boost
 public import ProjectAInos.SpecialRelativity.Examples

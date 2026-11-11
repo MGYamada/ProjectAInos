@@ -73,8 +73,27 @@ nonconstant coefficients. Lean verifies its derivative, coefficient
 transformation, duality and opposite-sign covariance. A nonconstant
 `dX ⊗ dX` tensor has metric contraction 1 in both charts. Typed API examples
 are required CI checks; exact SymPy computations run separately. This
-increment addresses #43 within #52; the remaining tensor operations,
-connection construction and all later 5.1 stages remain subsequent work.
+increment addresses #43 within #52.
+
+The next increment constructs the Lorentz Levi-Civita connection from the
+Koszul formula and `sharp`, using mathlib's native `CovariantDerivative`.
+Tensoriality of Koszul in its direction/test fields supplies the continuous
+linear map on each actual tangent fibre. Covariant-derivative laws, metric
+compatibility and vanishing torsion are proved. Nondegeneracy and local
+extensions of arbitrary tangent vectors prove uniqueness on differentiable
+sections. No positive-definite metric or global frame is introduced.
+
+Smoothness is proved separately: local smooth-field tests characterize
+smoothness of finite-rank hom sections, the Koszul terms are smooth, and
+the smooth inverse metric raises the result. The connection satisfies
+mathlib's `ContMDiffCovariantDerivative` at order ∞. Negating the metric
+leaves the constructed connection unchanged. Typed examples fix these
+contracts. Exact SymPy checks include the nonlinear-chart value
+`Γˣ_tt = 2`, the Hessian term in the transformation, and the conformal
+metric's coefficients; these coordinate claims still need Lean proofs.
+Stage B remains open for Christoffel/transformation and restriction laws,
+finite regularity and concrete Lean connection examples. Curvature and
+stages D–G remain subsequent work.
 
 ## Minkowski Geometry and Relativistic Kinematics
 

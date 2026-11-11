@@ -278,7 +278,9 @@ these interfaces in typed examples with default elaborator options. It
 runs in required CI alongside the root-import and transitive axiom checks.
 The separate Experiments workflow runs exact SymPy checks of the inverse
 chart, Jacobian, metric, inverse metric, duality, full/partial tensor
-contraction and sign reversal:
+contraction and sign reversal. It also checks Levi-Civita coefficients,
+torsion and metric compatibility for the standard, nonlinear and conformal
+examples, and the nonlinear chart's Hessian transformation term:
 
 ```sh
 experiments/.venv/bin/python -m pip install ./experiments
@@ -287,8 +289,56 @@ experiments/.venv/bin/python -m ainos_experiments.verify_lorentz_geometry
 
 These computations use exact real symbolic expressions, with no random
 parameters or numerical tolerances. The formal acceptance evidence is
-the Lean proofs. Connections, curvature, parallel transport, geodesics,
-curved differential forms and the Newtonian motion limit remain open.
+the Lean proofs. The connection construction below is proved; its concrete
+coordinate examples are still experimental checks at this point.
+
+## GR 5.1: Lorentz Levi-Civita construction
+
+`Lorentzian/Connection.lean` expresses metric compatibility directly with
+`LorentzMetric.form` and mathlib's `CovariantDerivative`. A native connection
+acts as `cov Y x v`, meaning differentiation of `Y` in direction `v` at `x`.
+`IsLeviCivita` requires this compatibility and zero intrinsic torsion.
+`IsLeviCivita.koszul_eq` derives the Koszul formula; `uniqueness` states
+equality of action on fields differentiable at the evaluation point.
+This qualification is necessary: the carrier does not constrain values on
+nondifferentiable fields.
+
+`Lorentzian/LeviCivita.lean` constructs `LorentzMetric.leviCivita`. Koszul
+is proved tensorial in its first and third arguments, and `sharp` turns
+the resulting covector into the connection's value. Local differentiable
+extensions test nondegeneracy without a global frame. The construction
+chooses zero at points where the differentiated field is not differentiable.
+`isLeviCivita_leviCivita` proves metric compatibility and zero torsion;
+`IsLeviCivita.eq_leviCivita` identifies any other such connection on
+differentiable fields. `leviCivita_opposite` is equality of the constructed
+connections under whole-metric sign reversal, since both use the same
+zero extension.
+
+`Tensor/Regularity.lean` proves that a finite-rank hom-bundle section is
+smooth at a point if it sends every locally smooth section to a locally
+smooth section. The proof uses bundle trivializations on neighborhoods,
+with norms only on the models. `Lorentzian/Regularity.lean` applies this
+criterion to the metric dual of the connection. Smooth directional
+derivatives and Lie brackets make every Koszul term smooth; the smooth
+`sharp` then recovers the connection. `contMDiffAt_leviCivita` states the
+local theorem, and `leviCivita_contMDiff` registers the native
+`CovariantDerivative.ContMDiffCovariantDerivative` instance at order ∞.
+Smoothness is proved, not added to the metric as a hypothesis.
+
+The construction works for either Lorentz convention with the existing
+smooth metric interface. It assumes no Hausdorffness, orientation, time
+orientation, global frame or positive-definite tangent metric. The
+Koszul existence/uniqueness argument adapts mathlib's Riemannian proof,
+replacing its positive-definite duality with proved Lorentz `flat`/`sharp`.
+The regularity proof is supplied separately here.
+
+Typed contracts in `checks/LorentzGeometryAPI.lean` cover the carrier,
+compatibility equation, full Koszul formula, torsion, uniqueness, sign
+reversal and local/native smoothness at default elaborator settings.
+Stage B is still open: Christoffel formulas, their second-derivative
+transformation law, restriction compatibility, finite regularity and
+concrete Lean connection examples remain. Curvature, parallel transport,
+geodesics, curved forms and the Newtonian motion limit remain later work.
 
 ## Scope and next stages
 

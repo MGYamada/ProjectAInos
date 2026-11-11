@@ -185,9 +185,14 @@ diffeomorphisms preserves smoothness and commutes with contraction.
 A two-chart regression uses
 `(T,X) = (t,x+t²)` to obtain nonconstant coefficients for the Minkowski
 metric and proves covariance using the manifold derivative. Both charts
-belong to the smooth maximal atlas. The [shared geometry guide](docs/smooth-geometry.md)
+belong to the smooth maximal atlas. The Lorentz Levi-Civita connection is
+constructed on the actual tangent bundle using Koszul and `sharp`, with
+proved metric compatibility, vanishing torsion, uniqueness on differentiable
+sections, smoothness, and invariance under metric-sign reversal.
+The [shared geometry guide](docs/smooth-geometry.md)
 records the public API and exact checks. [Issue #52](https://github.com/MGYamada/ProjectAInos/issues/52)
-tracks the remaining tensor, connection, curvature, motion, curved-form,
+tracks the remaining tensor operations, connection coordinate formulas and
+finite regularity, curvature, motion, curved-form,
 and time-dependent Newton-limit stages; [#43](https://github.com/MGYamada/ProjectAInos/issues/43)
 is the first chart-regression gate. Einstein dynamics belongs to 5.2.
 
