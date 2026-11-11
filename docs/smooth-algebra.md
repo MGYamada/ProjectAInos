@@ -9,7 +9,10 @@ order is `Operations` → `Basic` → `Hom` → `Models` → `Differential`.
 `Category` bundles smooth rings and their morphisms. `Congruence` constructs
 quotients by smooth congruences; `LocalInverse` and `Localization` construct
 localization at real points and prove its C∞ universal property. The library
-root imports all these modules. This layer has no dependency on `Variational`,
+also constructs free rings on arbitrary sets, general C∞ localizations,
+and limits. `SmoothFunctions` provides the smooth-function algebras on
+manifolds used by the geometric layer. The library root imports all these
+modules. This layer has no dependency on `Variational`,
 `Mechanics`, or a particular physical theory.
 
 ## Smooth operations and real-algebra compatibility
@@ -74,6 +77,8 @@ The concrete instances include:
   `(op f g)(x) = f (fun i => g i x)`.
 - On any dependent product of C∞-rings, operations are pointwise. The empty
   product gives the zero ring used by the empty C∞ scheme.
+- On the smooth real functions on a manifold, operations are pointwise smooth
+  substitution; evaluation and pullback are C∞ morphisms.
 
 For any C∞-ring `A` and tuple `a : Fin n → A`, `SmoothOperation.lift a`
 sends a smooth function `f` to `op f a`. It is a smooth-ring morphism and sends
@@ -87,6 +92,28 @@ it to a smooth map represented by its component functions
 composition of the underlying maps. Evaluation after pullback equals evaluation
 at the image point.
 
+## Free rings, general localization, and limits
+
+`FreeSmoothRing ι` consists of smooth cylinder functions on real assignments
+to `ι`, with finite coordinate dependence. Interpretation is independent of
+the chosen finite presentation in every C∞-ring. This gives a unique smooth
+lift of any assignment of the generators, including into higher universes.
+The function representation applies to the free ring; it does not identify
+arbitrary C∞-rings with functions on their real points.
+
+`SmoothLocalization S` is a smooth congruence quotient of the free ring on
+`A ⊕ S`. The relations preserve the original smooth operations and make the
+generator corresponding to each `s : S` an inverse of `s`. Its existence
+and uniqueness theorem supplies the localization universal property in
+C∞-rings. This works for arbitrary sets, including the empty set and sets
+containing zero. `LocalizationComparison` proves that localization at a
+surviving real point recovers the original point-local ring.
+
+`Limits` constructs compatible families in products with pointwise smooth
+operations and proves their limiting property. The forgetful functor to
+commutative rings preserves these limits, so the geometric layer can pass
+between C∞-valued sheaves and their underlying ring-valued sheaves.
+
 ## Proof map and verification
 
 | Module | Main checked results |
@@ -96,10 +123,15 @@ at the image point.
 | [Hom](../ProjectAInos/SmoothAlgebra/Hom.lean) | `toAlgHom`, identity/composition laws, `map_exp` |
 | [Models](../ProjectAInos/SmoothAlgebra/Models.lean) | Real and function-ring instances; `hom_ext`, `lift_unique`, `existsUnique_lift`, `pullback_comp`, `eval_comp_pullback` |
 | [Differential](../ProjectAInos/SmoothAlgebra/Differential.lean) | `directionalEvaluation_op`, the chain rule for every finite smooth operation on the concrete model |
-| [Category](../ProjectAInos/SmoothAlgebra/Category.lean) | `SmoothRingCat`, faithful forgetful functor to real algebras |
+| [Category](../ProjectAInos/SmoothAlgebra/Category.lean) | `SmoothRingCat`, faithful forgetful functors, isomorphisms from bijective morphisms |
 | [Congruence](../ProjectAInos/SmoothAlgebra/Congruence.lean) | Smooth quotients, projection, factorization, generated smooth congruences |
 | [LocalInverse](../ProjectAInos/SmoothAlgebra/LocalInverse.lean) | `exists_localInverse`, a smooth inverse on the support of a cutoff |
 | [Localization](../ProjectAInos/SmoothAlgebra/Localization.lean) | Point localization, `existsUnique_lift`, real residue, local-ring property, induced local maps |
+| [Free](../ProjectAInos/SmoothAlgebra/Free.lean) | Free C∞-rings on arbitrary generators, presentation independence, lift and uniqueness |
+| [GeneralLocalization](../ProjectAInos/SmoothAlgebra/GeneralLocalization.lean) | General C∞ localization, `existsUnique_lift`, `hom_ext`, induction on smooth expressions |
+| [LocalizationComparison](../ProjectAInos/SmoothAlgebra/LocalizationComparison.lean) | Point-local ring isomorphism after general localization |
+| [Limits](../ProjectAInos/SmoothAlgebra/Limits.lean) | Compatible-family limits and preservation by the forgetful functor |
+| [SmoothFunctions](../ProjectAInos/SmoothAlgebra/SmoothFunctions.lean) | Smooth operations, evaluation, and pullback on manifold function algebras |
 
 The models module also checks dimension zero (`nullary_eq_const`), nonlinear
 evaluation in dimension one (`eval_exp_square`), and a two-variable exponential
@@ -113,13 +145,16 @@ lake exe cache get
 lake build --wfail ProjectAInos
 lake exe mk_all --check --lib ProjectAInos
 lake env lean -DwarningAsError=true checks/AxiomAudit.lean
+lake env lean -DwarningAsError=true checks/SmoothGeometryAPI.lean
 git diff --check
 ```
 
 The local audit inspects transitive axiom dependencies of every imported
 declaration in the `ProjectAInos` namespace. Its allowlist is `propext`,
 `Classical.choice`, and `Quot.sound`, matching the existing required Lean CI job.
-No workflow or dependency change is needed for this stage.
+The required Lean CI job also checks the external smooth-geometry API,
+including open immersions and categorical gluing. No dependency change is
+needed.
 
 ## Ordinary differentials and further algebraic stages
 
@@ -129,9 +164,9 @@ substitution in terms of the values and derivatives of the substituted
 functions. This connects smooth operations to the same ordinary calculus used
 for local jets and first variations in the [variational guide](variational.md).
 
-Smooth congruence quotients and localizations at real points now support the
+Smooth congruence quotients and general localizations now support the
 [C∞ scheme construction](smooth-geometry.md). Subsequent algebraic stages
-include quotients by arbitrary ordinary ideals, general C∞ localizations, and
+include quotients by arbitrary ordinary ideals and
 abstract smooth derivations satisfying the chain rule for every smooth
 operation. Cotangent and infinitesimal constructions require their own
 universal properties and comparison theorems with ordinary local jets.

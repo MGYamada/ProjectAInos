@@ -50,11 +50,38 @@ P⊗AI is pronounced `poai`.
       2. Oscillations, resonance, rigid bodies, and rotating frames
       3. Averaging and mechanical adiabatic invariants
       4. Dissipation and nonholonomic constraints
-3. **Classical Theory of Fields (Landau–Lifshitz)**
-   1. Spacetime and fields over the shared smooth-geometry foundation
-   2. Relativistic mechanics and electrodynamics
-   3. Gravitation and general relativity
-4. **Classical Statistical Mechanics**
+3. **Special Relativity**
+   1. **Minkowski Geometry and Relativistic Kinematics**
+      1. Spacetime intervals, proper time, and causal structure
+      2. Lorentz transformations, velocity composition, and four-vectors
+   2. **Dynamics of Relativistic Particles**
+      1. Free-particle action, energy, and momentum
+      2. Conservation laws and relativistic collision kinematics
+4. **Electrodynamics**
+   1. **Charged Particles and Electromagnetic Fields**
+      1. Electromagnetic potentials, gauge symmetry, and the field tensor
+      2. Charged-particle action and Lorentz-force dynamics
+   2. **Maxwell Theory and Conservation Laws**
+      1. Field action, Maxwell equations, and charge conservation
+      2. Stress-energy and energy-momentum exchange between fields and matter
+   3. **Static Fields, Waves, and Optics**
+      1. Electrostatics and magnetostatics
+      2. Vacuum wave propagation, polarization, and geometric optics
+   4. **Moving Sources and Radiation**
+      1. Retarded fields of moving charges
+      2. Radiation flux, radiated power, and radiation-reaction models
+5. **General Relativity**
+   1. **Geometry and Motion in Gravitational Fields**
+      1. Lorentzian metrics, covariant derivatives, and curvature
+      2. Geodesic motion and the weak-field limit
+   2. **Einstein Dynamics and Gravitating Systems**
+      1. Gravitational action, Einstein equations, and energy-momentum
+      2. Fields of gravitating bodies and spherically symmetric solutions
+   3. **Gravitational Radiation**
+      1. Linearized gravity, wave propagation, and gravitational-wave emission
+   4. **Relativistic Cosmology**
+      1. Cosmological models, their evolution, and singularities
+6. **Classical Statistical Mechanics**
    1. **Ensembles and Thermodynamic Limits**
       1. Liouville measure, regular energy shells, and conditioning
       2. Microcanonical and canonical ensembles, independent products, and thermal contact
@@ -64,12 +91,15 @@ P⊗AI is pronounced `poai`.
       2. Macroscopic adiabatic protocols, stability, and comparison within composition sectors
       3. Identification of statistical entropy with the thermodynamic entropy on matched sectors
 
-The order of subsequent topics is yet to be determined.
+Topics 3, 4, and 5 follow Chapters I–II, III–IX, and X–XIV, respectively, of
+Landau–Lifshitz Volume 2, *The Classical Theory of Fields*. See the
+[chapter correspondence](docs/landau-lifshitz.md#special-relativity).
+The order of topics after 6 is yet to be determined.
 
 ## Shared smooth algebra and geometry
 
 `ProjectAInos/SmoothAlgebra/` and `ProjectAInos/SmoothGeometry/` are independent
-mathematical foundations shared by topics 2 and 3. They must not import
+mathematical foundations shared by topics 2–5. They must not import
 `Mechanics`, `Variational`, or a field-theory module. `Variational` contains
 variational calculus; physical models belong to their respective topics.
 

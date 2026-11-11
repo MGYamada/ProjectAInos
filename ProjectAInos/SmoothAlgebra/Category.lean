@@ -6,10 +6,14 @@ module
 
 public import ProjectAInos.SmoothAlgebra.Models
 public import Mathlib.Algebra.Category.CommAlgCat.Basic
+public import Mathlib.CategoryTheory.ConcreteCategory.EpiMono
 
 /-! # The category of C∞-rings -/
 
 @[expose] public section
+
+set_option backward.isDefEq.respectTransparency false
+set_option backward.defeqAttrib.useBackward true
 
 universe u
 
@@ -56,6 +60,26 @@ instance : forgetToCommAlgCat.Faithful where
 /-- Forget to ordinary commutative rings. -/
 def forgetToCommRingCat : SmoothRingCat.{u} ⥤ CommRingCat.{u} :=
   forgetToCommAlgCat ⋙ forget₂ _ _
+
+/-- A bijective smooth-ring morphism has a smooth inverse. -/
+noncomputable def isoOfBijective {A B : SmoothRingCat.{u}} (f : A ⟶ B)
+    (hf : Function.Bijective f) : A ≅ B where
+  hom := f
+  inv :=
+    { toFun := Function.invFun f
+      map_op' g a := by
+        apply hf.injective
+        rw [Function.rightInverse_invFun hf.surjective]
+        refine Eq.trans ?_ (f.map_op g (fun i => Function.invFun f (a i))).symm
+        congr 1
+        funext i
+        exact (Function.rightInverse_invFun hf.surjective (a i)).symm }
+  hom_inv_id := SmoothRingHom.ext (Function.leftInverse_invFun hf.injective)
+  inv_hom_id := SmoothRingHom.ext (Function.rightInverse_invFun hf.surjective)
+
+instance : forgetToCommRingCat.ReflectsIsomorphisms where
+  reflects f _ := (isoOfBijective f (ConcreteCategory.bijective_of_isIso
+    (forgetToCommRingCat.map f))).isIso_hom
 
 end SmoothRingCat
 end ProjectAInos.SmoothAlgebra

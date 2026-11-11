@@ -65,25 +65,51 @@ The tiers describe proof prerequisites. **A** uses abstract algebra, **A\*** use
 
 Momentum-map reduction at singular values and Dirac brackets for second-class constraints extend the Mechanics plan beyond the Volume 1 section map. E7 checks Poisson identities in examples of singular reduction, and E8 checks Dirac bracket identities for a particle constrained to a circle. [Symbolic checks](../experiments/ainos_experiments/verify_identities.py)
 
+## Special Relativity
+
+Topic 3 follows Volume 2, *The Classical Theory of Fields*, fourth edition,
+Chapters I–II. Topics 4 and 5 continue with Chapters III–IX and X–XIV,
+respectively. [Volume 2 contents](https://shop.elsevier.com/books/the-classical-theory-of-fields/landau/978-0-08-025072-4)
+
+| Landau–Lifshitz reference | Research-plan topic |
+| --- | --- |
+| Vol. 2, Ch. I | 3.1: Minkowski geometry, Lorentz transformations, and relativistic kinematics |
+| Vol. 2, Ch. II | 3.2: Relativistic particle dynamics, energy, momentum, and conservation laws |
+
 ## Electrodynamics
 
-Volume 2, *The Classical Theory of Fields*, fourth edition, supplies the relativistic and vacuum field theory. Volume 8, *Electrodynamics of Continuous Media*, second edition, supplies macroscopic electromagnetism in matter. [Volume 2 contents](https://shop.elsevier.com/books/the-classical-theory-of-fields/landau/978-0-08-025072-4) · [Volume 8 contents](https://www.sciencedirect.com/book/monograph/9780080302751/electrodynamics-of-continuous-media)
+Topic 4 follows Volume 2, Chapters III–IX, using Special Relativity from topic 3.
+Volume 8, *Electrodynamics of Continuous Media*, second edition, supplies the
+additional macroscopic-matter extension proposed in [issue #8](https://github.com/MGYamada/ProjectAInos/issues/8).
+[Volume 8 contents](https://www.sciencedirect.com/book/monograph/9780080302751/electrodynamics-of-continuous-media)
 
 | Landau–Lifshitz reference | Candidate formalization topics |
 | --- | --- |
-| Vol. 2, Ch. I–II | Lorentz transformations and relativistic particle mechanics as prerequisites |
-| Vol. 2, Ch. III–IV | Charged-particle action, electromagnetic field tensor, Maxwell equations, and conservation laws |
-| Vol. 2, Ch. V–VII | Static fields, vacuum waves, and optics |
-| Vol. 2, Ch. VIII–IX | Fields of moving charges and radiation |
+| Vol. 2, Ch. III | 4.1: Charged-particle action, electromagnetic potentials, field tensor, and Lorentz force |
+| Vol. 2, Ch. IV | 4.2: Maxwell equations and conservation laws |
+| Vol. 2, Ch. V–VII | 4.3: Static fields, vacuum waves, and optics |
+| Vol. 2, Ch. VIII–IX | 4.4: Fields of moving charges and radiation |
 | Vol. 8 | Macroscopic Maxwell equations, constitutive relations, and propagation in matter |
+
+## General Relativity
+
+Topic 5 follows Volume 2, Chapters X–XIV. It treats the metric as a dynamical
+field and develops gravitational motion, Einstein's equations, gravitational
+radiation, and cosmology.
+
+| Landau–Lifshitz reference | Research-plan topic |
+| --- | --- |
+| Vol. 2, Ch. X | 5.1: Geometry and particle motion in gravitational fields |
+| Vol. 2, Ch. XI–XII | 5.2: Einstein dynamics and fields of gravitating systems |
+| Vol. 2, Ch. XIII | 5.3: Gravitational radiation |
+| Vol. 2, Ch. XIV | 5.4: Relativistic cosmology |
 
 ## Thermodynamics, Statistical Mechanics, and Later Topics
 
-Thermodynamics and Classical Statistical Mechanics are items 1 and 4 in the research plan. The other subjects in this table have an open implementation order. [Elsevier series catalogue](https://legacyfileshare.elsevier.com/assets/pdf_file/0006/796479/Landau_CTP_180529.pdf) · [Volume 5 contents](https://www.sciencedirect.com/book/monograph/9780080570464/statistical-physics) · [Volume 9 contents](https://www.sciencedirect.com/book/9780080503509/statistical-physics)
+Thermodynamics and Classical Statistical Mechanics are items 1 and 6 in the research plan. The other subjects in this table have an open implementation order after topic 6. [Elsevier series catalogue](https://legacyfileshare.elsevier.com/assets/pdf_file/0006/796479/Landau_CTP_180529.pdf) · [Volume 5 contents](https://www.sciencedirect.com/book/monograph/9780080570464/statistical-physics) · [Volume 9 contents](https://www.sciencedirect.com/book/9780080503509/statistical-physics)
 
 | Landau–Lifshitz reference | Subject |
 | --- | --- |
-| Vol. 2, *The Classical Theory of Fields*, Ch. X–XIV | Gravitation and relativistic cosmology |
 | Vol. 3, *Quantum Mechanics* | Nonrelativistic quantum mechanics |
 | Vol. 4, *Quantum Electrodynamics* | Quantum electrodynamics |
 | Vol. 5, *Statistical Physics*, Part 1, Ch. II (background) | Thermodynamics. The Lean development follows the Lieb–Yngvason approach, starting with the stability axiom for adiabatic accessibility. |
