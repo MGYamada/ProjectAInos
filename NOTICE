@@ -1,2 +1,21 @@
 P⊗AI (Project AInos)
 Copyright 2026 Masahiko G. Yamada
+
+Yang--Mills formalization modules in ProjectAInos/External/YM/
+Adapted from yang-mills-group/OpenAI-YM-20261028, commit
+3456e5e75cf8d4cd558955a5c7638fba2d68f464.
+The upstream project is licensed under Apache License, Version 2.0.
+Source: https://github.com/yang-mills-group/OpenAI-YM-20261028
+
+The upstream public gauge, Wightman and operator-product-expansion
+interfaces (PublicTheory.lean and ChallengeSpec.lean) are adapted from
+earlier challenge and solution sources at revision
+eea94292e31734d46498be7836d7e8fa50ca8cd2.
+The upstream changes include the explicit Wilson limit, geometric
+Poincare action, shared spectator hierarchy, and projection of the
+detailed construction. See the upstream NOTICE and THIRD_PARTY.md.
+
+P⊗AI modifications: source files relocated under
+ProjectAInos.External.YM, their imports rewritten to use that path,
+and Lean 4.35 public-module declarations introduced. The definitions
+and proof bodies otherwise retain the upstream form pending validation.

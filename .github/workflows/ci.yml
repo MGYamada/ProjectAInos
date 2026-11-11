@@ -40,3 +40,5 @@ jobs:
         run: lake exe mk_all --check --lib ProjectAInos
       - name: Check the smooth geometry API
         run: lake env lean -DwarningAsError=true checks/SmoothGeometryAPI.lean
+      - name: Check the imported Yang--Mills API
+        run: lake env lean -DwarningAsError=true checks/YangMillsImportAPI.lean

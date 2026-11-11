@@ -1,5 +1,23 @@
 module  -- shake: keep-all --deprecated_module: ignore
 
+public import ProjectAInos.External.YM.Analysis.Homogeneous
+public import ProjectAInos.External.YM.Analysis.Nonnegative
+public import ProjectAInos.External.YM.Analysis.SmoothJets
+public import ProjectAInos.External.YM.Analysis.Symmetric
+public import ProjectAInos.External.YM.Analytic.Implicit
+public import ProjectAInos.External.YM.ChallengeSpec
+public import ProjectAInos.External.YM.Distribution.Tests
+public import ProjectAInos.External.YM.Extraction.Orders
+public import ProjectAInos.External.YM.Gauge.MatrixGroup
+public import ProjectAInos.External.YM.Hilbert.Kolmogorov
+public import ProjectAInos.External.YM.Lattice.Faces
+public import ProjectAInos.External.YM.Lattice.Path
+public import ProjectAInos.External.YM.Lattice.Site
+public import ProjectAInos.External.YM.PublicTheory
+public import ProjectAInos.External.YM.PublicWilson
+public import ProjectAInos.External.YM.Space.Index
+public import ProjectAInos.External.YM.Wilson.Law
+public import ProjectAInos.External.YM.Wilson.Symmetry
 public import ProjectAInos.Mechanics.Basic
 public import ProjectAInos.Mechanics.EulerLagrange
 public import ProjectAInos.Mechanics.Examples
