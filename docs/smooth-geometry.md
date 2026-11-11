@@ -315,15 +315,34 @@ connections under whole-metric sign reversal, since both use the same
 zero extension.
 
 `Tensor/Regularity.lean` proves that a finite-rank hom-bundle section is
-smooth at a point if it sends every locally smooth section to a locally
-smooth section. The proof uses bundle trivializations on neighborhoods,
+`C^n` at a point if it sends every locally smooth section to a locally
+`C^n` section. The proof uses bundle trivializations on neighborhoods,
 with norms only on the models. `Lorentzian/Regularity.lean` applies this
-criterion to the metric dual of the connection. Smooth directional
-derivatives and Lie brackets make every Koszul term smooth; the smooth
-`sharp` then recovers the connection. `contMDiffAt_leviCivita` states the
-local theorem, and `leviCivita_contMDiff` registers the native
-`CovariantDerivative.ContMDiffCovariantDerivative` instance at order ∞.
-Smoothness is proved, not added to the metric as a hypothesis.
+criterion to the metric dual of the connection. Directional derivatives
+and Lie brackets lose at most one derivative; the smooth `sharp` recovers
+the connection. `contMDiffAt_leviCivita` maps locally `C^(n+1)` vector fields
+to locally `C^n` hom sections for `n : ℕ∞`, including the smooth case.
+`leviCivita_contMDiff` registers the native
+`CovariantDerivative.ContMDiffCovariantDerivative` instance at each of these
+orders. These regularity conclusions are proved from the smooth metric.
+
+`Lorentzian/Christoffel.lean` works on the coordinate model, using its
+canonical identification with its actual tangent bundle. `christoffel`
+evaluates the constructed connection on constant coordinate fields;
+`christoffel_eq` proves the inverse-metric formula. The coefficients are
+smooth, symmetric in the lower indices and invariant under metric-sign
+reversal. `leviCivita_model_coordinates` expresses the connection on any
+differentiable coordinate vector field as its ordinary derivative plus
+the Christoffel sum. `minkowski_christoffel` proves zero coefficients for
+both flat signatures in every dimension.
+
+`Lorentzian/ConnectionExamples.lean` computes the actual connection for
+the two-chart shear example. `christoffel_shear` gives all eight
+coefficients, with only `Γˣ_tt = 2` nonzero. `shear_hessian` differentiates
+the actual transition Jacobian; `connection_shear_transformation` proves
+that the Jacobian carries the connection term to this Hessian, as required
+when the inertial connection coefficients vanish. This is the concrete
+shear case; a general manifold-chart transformation theorem remains open.
 
 The construction works for either Lorentz convention with the existing
 smooth metric interface. It assumes no Hausdorffness, orientation, time
@@ -334,10 +353,10 @@ The regularity proof is supplied separately here.
 
 Typed contracts in `checks/LorentzGeometryAPI.lean` cover the carrier,
 compatibility equation, full Koszul formula, torsion, uniqueness, sign
-reversal and local/native smoothness at default elaborator settings.
-Stage B is still open: Christoffel formulas, their second-derivative
-transformation law, restriction compatibility, finite regularity and
-concrete Lean connection examples remain. Curvature, parallel transport,
+reversal, local/native finite and smooth regularity, the full coordinate
+formula and the nonlinear connection example at default elaborator settings.
+Stage B is still open for the general second-derivative chart transformation
+law and restriction compatibility. Curvature, parallel transport,
 geodesics, curved forms and the Newtonian motion limit remain later work.
 
 ## Scope and next stages

@@ -134,6 +134,21 @@ def leviCivita : CovariantDerivative I (MinkowskiModel d) TM where
   toFun := g.leviCivitaAction
   isCovariantDerivativeOnUniv := g.isCovariantDerivativeOn_leviCivitaAction
 
+/-- Finite sums of locally differentiable fields may be differentiated termwise. -/
+theorem leviCivita_sum {ι : Type*} (s : Finset ι)
+    (V : ι → ∀ y : M, TangentSpace 𝓘(ℝ, MinkowskiModel d) y)
+    (hV : ∀ i ∈ s, MDifferentiableAt I ((I).prod I) (T% (V i)) x) :
+    g.leviCivita (∑ i ∈ s, V i) x = ∑ i ∈ s, g.leviCivita (V i) x := by
+  classical
+  induction s using Finset.induction_on with
+  | empty => simp
+  | @insert a s ha ih =>
+    rw [Finset.forall_mem_insert] at hV
+    have hs : MDifferentiableAt I ((I).prod I) (T% (∑ i ∈ s, V i)) x := by
+      simpa only [Finset.sum_apply] using MDifferentiableAt.sum_section hV.2
+    rw [Finset.sum_insert ha, Finset.sum_insert ha,
+      g.leviCivita.isCovariantDerivativeOnUniv.add hV.1 hs, ih hV.2]
+
 /-- The constructed connection satisfies the Koszul formula. -/
 theorem leviCivita_pairing
     (hX : MDifferentiableAt I ((I).prod I) (T% X) x)

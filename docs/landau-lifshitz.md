@@ -110,9 +110,11 @@ field pullback along diffeomorphisms, and
 a nonlinear two-chart Minkowski regression. Its
 [API and proof map](smooth-geometry.md#gr-51-metric-duality-and-the-first-chart-regression)
 also records the Lorentz Levi-Civita construction: metric compatibility,
-vanishing torsion, uniqueness on differentiable sections, smoothness, and
-metric-sign invariance are proved. Coordinate Christoffel/transformation
-formulas, finite regularity, curvature and motion remain in the
+vanishing torsion, uniqueness on differentiable sections, finite and smooth
+regularity, and metric-sign invariance are proved. The coordinate-model
+Christoffel formula and the nonlinear shear's connection and Hessian
+transformation are also proved. General chart-transformation and restriction
+laws, curvature and motion remain in the
 work tracked by [#52](https://github.com/MGYamada/ProjectAInos/issues/52).
 Einstein equations and their Newtonian field-equation limit remain in 5.2;
 the Maxwell field action remains in 4.2.

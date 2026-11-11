@@ -72,7 +72,9 @@ public import ProjectAInos.SmoothGeometry.Localization
 public import ProjectAInos.SmoothGeometry.LocallyRingedSpace
 public import ProjectAInos.SmoothGeometry.Lorentzian
 public import ProjectAInos.SmoothGeometry.Lorentzian.ChartExamples
+public import ProjectAInos.SmoothGeometry.Lorentzian.Christoffel
 public import ProjectAInos.SmoothGeometry.Lorentzian.Connection
+public import ProjectAInos.SmoothGeometry.Lorentzian.ConnectionExamples
 public import ProjectAInos.SmoothGeometry.Lorentzian.Dual
 public import ProjectAInos.SmoothGeometry.Lorentzian.LeviCivita
 public import ProjectAInos.SmoothGeometry.Lorentzian.Regularity

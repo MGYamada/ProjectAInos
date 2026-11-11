@@ -6,6 +6,7 @@ module
 
 import ProjectAInos.SmoothGeometry.Lorentzian.Dual
 import ProjectAInos.SmoothGeometry.Lorentzian.ChartExamples
+import ProjectAInos.SmoothGeometry.Lorentzian.ConnectionExamples
 import ProjectAInos.SmoothGeometry.Lorentzian.Regularity
 import ProjectAInos.SmoothGeometry.Tensor.Bundle
 
@@ -70,6 +71,23 @@ example : g.opposite.leviCivita = g.leviCivita := g.leviCivita_opposite
 
 example : CovariantDerivative.ContMDiffCovariantDerivative g.leviCivita ∞ := inferInstance
 
+example (n : ℕ∞) : CovariantDerivative.ContMDiffCovariantDerivative g.leviCivita n :=
+  inferInstance
+
+example (n : ℕ∞) (hY : ContMDiffAt 𝓘(ℝ, MinkowskiModel d)
+    (𝓘(ℝ, MinkowskiModel d).prod 𝓘(ℝ, MinkowskiModel d)) (n + 1) (T% Y) x) :
+    ContMDiffAt 𝓘(ℝ, MinkowskiModel d)
+      (𝓘(ℝ, MinkowskiModel d).prod 𝓘(ℝ, MinkowskiModel d →L[ℝ] MinkowskiModel d)) n
+      (fun y => Bundle.TotalSpace.mk' (MinkowskiModel d →L[ℝ] MinkowskiModel d)
+        y (g.leviCivita Y y)) x := g.contMDiffAt_leviCivita hY
+
+example (hY : ContMDiffAt 𝓘(ℝ, MinkowskiModel d)
+    (𝓘(ℝ, MinkowskiModel d).prod 𝓘(ℝ, MinkowskiModel d)) 2 (T% Y) x) :
+    ContMDiffAt 𝓘(ℝ, MinkowskiModel d)
+      (𝓘(ℝ, MinkowskiModel d).prod 𝓘(ℝ, MinkowskiModel d →L[ℝ] MinkowskiModel d)) 1
+      (fun y => Bundle.TotalSpace.mk' (MinkowskiModel d →L[ℝ] MinkowskiModel d)
+        y (g.leviCivita Y y)) x := g.contMDiffAt_leviCivita hY
+
 example (hY : ContMDiffAt 𝓘(ℝ, MinkowskiModel d)
     (𝓘(ℝ, MinkowskiModel d).prod 𝓘(ℝ, MinkowskiModel d)) ∞ (T% Y) x) :
     ContMDiffAt 𝓘(ℝ, MinkowskiModel d)
@@ -78,6 +96,42 @@ example (hY : ContMDiffAt 𝓘(ℝ, MinkowskiModel d)
         y (g.leviCivita Y y)) x := g.contMDiffAt_leviCivita hY
 
 end Connection
+
+section CoordinateConnection
+
+open LorentzMetric
+
+variable {σ : LorentzConvention} {d : ℕ} (g : LorentzMetric σ d (MinkowskiModel d))
+
+example (x : MinkowskiModel d) (k i j : Fin (d + 1)) :
+    g.christoffel x k i j = ∑ l,
+      g.inverseComponent x (NormedSpace.fromTangentSpace x) k l *
+        (fderiv ℝ (fun y => g.modelComponent y j l) x (Pi.single i 1) +
+         fderiv ℝ (fun y => g.modelComponent y l i) x (Pi.single j 1) -
+         fderiv ℝ (fun y => g.modelComponent y i j) x (Pi.single l 1)) / 2 :=
+  g.christoffel_eq x k i j
+
+example (k i j : Fin (d + 1)) : ContDiff ℝ ∞ (fun x => g.christoffel x k i j) :=
+  g.christoffel_contDiff k i j
+
+example (x : MinkowskiModel d) (k i j : Fin (d + 1)) :
+    g.christoffel x k i j = g.christoffel x k j i := g.christoffel_symmetric x k i j
+
+example {Y : MinkowskiModel d → MinkowskiModel d} {x : MinkowskiModel d}
+    (hY : DifferentiableAt ℝ Y x) (v : MinkowskiModel d) (k : Fin (d + 1)) :
+    NormedSpace.fromTangentSpace x
+      (g.leviCivita (fun y => modelField (Y y) y) x (modelField v x)) k =
+        fderiv ℝ Y x v k + ∑ i, ∑ j, g.christoffel x k i j * v i * Y x j :=
+  g.leviCivita_model_coordinates hY v k
+
+example (x : MinkowskiModel d) (k i j : Fin (d + 1)) :
+    g.opposite.christoffel x k i j = g.christoffel x k i j :=
+  g.christoffel_opposite x k i j
+
+example (x : MinkowskiModel d) (k i j : Fin (d + 1)) :
+    (minkowskiMetric σ d).christoffel x k i j = 0 := minkowski_christoffel σ d x k i j
+
+end CoordinateConnection
 
 section Duality
 
@@ -360,5 +414,18 @@ example (p : Plane) : metric.contractField spatialTensor p = 1 := spatialTensor_
 
 example : metric.toTensor = CovariantTwoTensor.pullback (d := 1)
     shearDiffeomorph (minkowskiMetric .timeNegative 1).toTensor := metric_tensor_pullback
+
+example (p : Plane) (k i j : Fin 2) :
+    metric.christoffel p k i j = if k = 1 ∧ i = 0 ∧ j = 0 then 2 else 0 :=
+  christoffel_shear p k i j
+
+example (p : Plane) : metric.christoffel p 1 0 0 = 2 := by
+  simp [christoffel_shear]
+
+example (p v w : Plane) :
+    fderiv ℝ shear p
+      (NormedSpace.fromTangentSpace p
+        (metric.leviCivita (LorentzMetric.modelField w) p (LorentzMetric.modelField v p))) =
+      fderiv ℝ (fun q => fderiv ℝ shear q w) p v := connection_shear_transformation p v w
 
 end Charts

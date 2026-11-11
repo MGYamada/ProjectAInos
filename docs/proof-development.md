@@ -83,17 +83,23 @@ compatibility and vanishing torsion are proved. Nondegeneracy and local
 extensions of arbitrary tangent vectors prove uniqueness on differentiable
 sections. No positive-definite metric or global frame is introduced.
 
-Smoothness is proved separately: local smooth-field tests characterize
-smoothness of finite-rank hom sections, the Koszul terms are smooth, and
-the smooth inverse metric raises the result. The connection satisfies
-mathlib's `ContMDiffCovariantDerivative` at order ∞. Negating the metric
-leaves the constructed connection unchanged. Typed examples fix these
-contracts. Exact SymPy checks include the nonlinear-chart value
-`Γˣ_tt = 2`, the Hessian term in the transformation, and the conformal
-metric's coefficients; these coordinate claims still need Lean proofs.
-Stage B remains open for Christoffel/transformation and restriction laws,
-finite regularity and concrete Lean connection examples. Curvature and
-stages D–G remain subsequent work.
+Regularity is proved separately: local smooth-field tests characterize
+`C^n` finite-rank hom sections, the Koszul terms lose at most one derivative,
+and the smooth inverse metric raises the result. The connection takes
+`C^(n+1)` fields to `C^n` hom sections and satisfies mathlib's
+`ContMDiffCovariantDerivative` at every finite order and at ∞. Negating the
+metric leaves the constructed connection unchanged.
+
+On the coordinate model, Lean derives the Christoffel formula from this
+connection and proves its smoothness, symmetry and action on arbitrary
+differentiable fields. The standard Minkowski coefficients vanish. The
+nonlinear two-chart example now has Lean proofs of all eight connection
+coefficients (`Γˣ_tt = 2` is the only nonzero one), the actual transition's
+Hessian, and the corresponding connection transformation identity. Typed
+examples fix the finite-regularity and coordinate contracts. Exact SymPy
+checks also cover the conformal metric's coefficients; that curved example
+still needs Lean proofs. Stage B remains open for general chart-transformation
+and restriction laws. Curvature and stages D–G remain subsequent work.
 
 ## Minkowski Geometry and Relativistic Kinematics
 

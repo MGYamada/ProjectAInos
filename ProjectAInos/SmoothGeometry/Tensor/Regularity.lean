@@ -7,10 +7,10 @@ module
 public import ProjectAInos.SmoothGeometry.Tensor.Bundle
 public import Mathlib.Analysis.Calculus.ContDiff.FiniteDimension
 
-/-! # Testing smoothness of finite-rank bundle maps
+/-! # Testing regularity of finite-rank bundle maps
 
-Smoothness of a hom-bundle section can be tested on local smooth sections of
-its domain. Local trivializations provide the test fields; no global frame
+C^n regularity of a hom-bundle section can be tested on local smooth sections
+of its domain. Local trivializations provide the test fields; no global frame
 or norm on the actual fibres is needed.
 -/
 
@@ -40,14 +40,14 @@ theorem contMDiffAt_clm_iff
 
 namespace SmoothBundle
 
-/-- A hom-bundle section is smooth at a point if it carries every locally
-smooth section of its domain to a locally smooth section of its codomain. -/
-theorem contMDiffAt_of_apply (A B : SmoothBundle I (M := M))
+/-- A hom-bundle section is `C^n` at a point if it carries every locally
+smooth section of its domain to a locally `C^n` section of its codomain. -/
+theorem contMDiffAt_of_apply (A B : SmoothBundle I (M := M)) {n : ℕ∞}
     {L : ∀ x, A.Fiber x →L[ℝ] B.Fiber x} {x : M}
     (h : ∀ (v : ∀ x, A.Fiber x),
       ContMDiffAt I (I.prod 𝓘(ℝ, A.Model)) ∞ (fun y => TotalSpace.mk' A.Model y (v y)) x →
-      ContMDiffAt I (I.prod 𝓘(ℝ, B.Model)) ∞ (fun y => TotalSpace.mk' B.Model y (L y (v y))) x) :
-    ContMDiffAt I (I.prod 𝓘(ℝ, A.Model →L[ℝ] B.Model)) ∞ (fun y => TotalSpace.mk' (A.Model →L[ℝ] B.Model) y (L y)) x := by
+      ContMDiffAt I (I.prod 𝓘(ℝ, B.Model)) n (fun y => TotalSpace.mk' B.Model y (L y (v y))) x) :
+    ContMDiffAt I (I.prod 𝓘(ℝ, A.Model →L[ℝ] B.Model)) n (fun y => TotalSpace.mk' (A.Model →L[ℝ] B.Model) y (L y)) x := by
   rw [contMDiffAt_section]
   simp only [hom_trivializationAt_apply]
   apply contMDiffAt_clm_iff.mpr
