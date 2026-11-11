@@ -1,5 +1,16 @@
 module  -- shake: keep-all --deprecated_module: ignore
 
+public import ProjectAInos.Electrodynamics.Components
+public import ProjectAInos.Electrodynamics.Covariance
+public import ProjectAInos.Electrodynamics.Examples
+public import ProjectAInos.Electrodynamics.Field
+public import ProjectAInos.Electrodynamics.GaugeAction
+public import ProjectAInos.Electrodynamics.Invariants
+public import ProjectAInos.Electrodynamics.LorentzForce
+public import ProjectAInos.Electrodynamics.ParticleAction
+public import ProjectAInos.Electrodynamics.PolynomialBridge
+public import ProjectAInos.Electrodynamics.PolynomialExamples
+public import ProjectAInos.Electrodynamics.PolynomialRadial
 public import ProjectAInos.External.YM.Analysis.Homogeneous
 public import ProjectAInos.External.YM.Analysis.Nonnegative
 public import ProjectAInos.External.YM.Analysis.SmoothJets
@@ -8,15 +19,21 @@ public import ProjectAInos.External.YM.Analytic.Implicit
 public import ProjectAInos.External.YM.ChallengeSpec
 public import ProjectAInos.External.YM.Distribution.Tests
 public import ProjectAInos.External.YM.Extraction.Orders
+public import ProjectAInos.External.YM.Gauge.Colors
+public import ProjectAInos.External.YM.Gauge.Lie
 public import ProjectAInos.External.YM.Gauge.MatrixGroup
 public import ProjectAInos.External.YM.Hilbert.Kolmogorov
+public import ProjectAInos.External.YM.Labels.Jet
 public import ProjectAInos.External.YM.Lattice.Faces
 public import ProjectAInos.External.YM.Lattice.Path
 public import ProjectAInos.External.YM.Lattice.Site
+public import ProjectAInos.External.YM.Maxwell.Exterior
 public import ProjectAInos.External.YM.PublicTheory
 public import ProjectAInos.External.YM.PublicWilson
 public import ProjectAInos.External.YM.SemanticContracts
+public import ProjectAInos.External.YM.Space.Configurations
 public import ProjectAInos.External.YM.Space.Index
+public import ProjectAInos.External.YM.Space.Orthogonal
 public import ProjectAInos.External.YM.Wilson.Law
 public import ProjectAInos.External.YM.Wilson.Symmetry
 public import ProjectAInos.External.YM.WilsonLawBridge
@@ -24,6 +41,7 @@ public import ProjectAInos.Mechanics.Basic
 public import ProjectAInos.Mechanics.EulerLagrange
 public import ProjectAInos.Mechanics.Examples
 public import ProjectAInos.Mechanics.FirstVariation
+public import ProjectAInos.Mechanics.OpenDomain
 public import ProjectAInos.Mechanics.SmoothLagrangian
 public import ProjectAInos.Mechanics.TotalTimeDerivative
 public import ProjectAInos.SmoothAlgebra.Basic
@@ -88,6 +106,7 @@ public import ProjectAInos.SmoothGeometry.YangMillsCoordinates
 public import ProjectAInos.SpecialRelativity.Boost
 public import ProjectAInos.SpecialRelativity.Examples
 public import ProjectAInos.SpecialRelativity.FormExamples
+public import ProjectAInos.SpecialRelativity.ParticleAction
 public import ProjectAInos.SpecialRelativity.ProperTime
 public import ProjectAInos.SpecialRelativity.Rapidity
 public import ProjectAInos.SpecialRelativity.Spacetime
@@ -161,5 +180,6 @@ public import ProjectAInos.Variational.EulerLagrange
 public import ProjectAInos.Variational.Examples
 public import ProjectAInos.Variational.IntegrationByParts
 public import ProjectAInos.Variational.Local
+public import ProjectAInos.Variational.LocalExtension
 public import ProjectAInos.Variational.Regularity
 public import ProjectAInos.Variational.YangMillsBridge

@@ -26,3 +26,11 @@ ProjectAInos/External/YM/WilsonLawBridge.lean is adapted from upstream
 WilsonBridge.lean at the same commit. Its finite-action and measure equality
 proofs are extracted separately from the larger upstream continuum-limit
 construction. The new P⊗AI coordinate bridge is project-authored.
+
+The Maxwell homogeneous-jet dependency closure additionally includes
+Gauge/{Lie,Colors}, Space/{Configurations,Orthogonal}, Labels/Jet, and
+Maxwell/Exterior from the same pinned upstream revision. Lean 4.35
+compatibility changes are listed in ProjectAInos/External/YM/PROVENANCE.md.
+ProjectAInos/Electrodynamics/PolynomialRadial.lean adapts the radial-recovery
+argument from YM/Maxwell/Exterior.lean to scalar and general real normed
+targets. Its source attribution and Apache-2.0 license are retained here.

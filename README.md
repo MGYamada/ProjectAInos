@@ -161,9 +161,20 @@ classification, boosts, and proper time use the convention-independent quadratic
 form. [Issue #40](https://github.com/MGYamada/ProjectAInos/issues/40) tracks this
 foundation for [electrodynamics #8](https://github.com/MGYamada/ProjectAInos/issues/8).
 The [Minkowski geometry and kinematics guide](docs/special-relativity.md) maps the
-formal APIs and exact examples. Particle dynamics remain in 3.2; Maxwell laws
-remain in topic 4, with charged-particle actions also using the shared variational
-foundation.
+formal APIs and exact examples.
+
+Section 4.1 now includes local electromagnetic potentials, gauge invariance,
+the homogeneous Bianchi identity, observer reconstruction, and both Lorentz
+invariants with their orientation signs. The charged-particle action uses the
+minimal free-particle action from 3.2 and a compact-interval variational theorem
+on open timelike jet domains. Its stationarity yields the Lorentz force;
+gauge changes produce the endpoint term. Homogeneous polynomial Maxwell jets
+are connected to the pinned upstream radial-gauge reconstruction through an
+explicit time-first/time-last coordinate equivalence. Nonzero fields, degrees
+0 and 1, and a uniformly accelerated worldline are checked in Lean and SymPy.
+See the [electrodynamics API and proof map](docs/electrodynamics.md).
+The sourced Maxwell equations and field action in 4.2, collision theory,
+and QFT remain outside this implementation.
 
 See the [proof development record](docs/proof-development.md) for the history of the Lean formalization.
 

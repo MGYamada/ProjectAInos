@@ -42,6 +42,10 @@ website:
           - mechanics-notes.qmd
           - mechanics-experiments.qmd
           - landau-lifshitz.qmd
+      - section: Relativity and electrodynamics
+        contents:
+          - special-relativity.qmd
+          - electrodynamics.qmd
       - build.qmd
 
 format:
