@@ -229,8 +229,11 @@ Nonzero null geodesic velocities stay nonzero. A chosen Lorentz basis at any
 point now extends to a smooth local chart with `g = η`, `Γ = 0` and `∂g = 0`
 there, using a quadratic correction and the inverse function theorem.
 The curved conformal example has such a chart at the origin despite nonzero
-curvature. Stage D remains incomplete: the local flatness equivalence still
-requires proof.
+curvature. Local Minkowski geometry now implies zero native curvature.
+A smooth invertible parallel coframe integrates to a Minkowski chart,
+with metric normalization needed only at its base point. Stage D remains
+incomplete: constructing such coframes from zero curvature is still required
+for the converse of the local flatness theorem.
 The [shared geometry guide](docs/smooth-geometry.md)
 records the public API and exact checks. [Issue #52](https://github.com/MGYamada/ProjectAInos/issues/52)
 tracks review of the connection and curvature stages, further tensor operations,

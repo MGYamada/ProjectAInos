@@ -696,18 +696,59 @@ is `-4`. Thus pointwise `IsInertialChartAt` is distinct from the existing
 checks the metric and connection transformations at nonzero base points,
 with a nontrivial Lorentz basis and both metric-sign conventions.
 
-Stage D remains in progress. The local curvature-zero ↔
-`IsLocallyMinkowski` theorem remains open. Particle variation, curved forms
+### Local flatness and parallel coframe integration
+
+`LocalFlatness` proves `IsLocallyMinkowski.curvature_eq_zero`. The proof uses
+`curvature_restrict` on actual tangent fibres and curvature naturality under
+the local metric-preserving diffeomorphism. `Manifold.OpenTangent` proves
+that open-inclusion derivatives are identities in inherited model
+coordinates, constructs diffeomorphisms from arbitrary maximal-atlas charts,
+and supplies restrictions with convex targets. `isLocallyMinkowski_of_charts`
+connects metric normalization on entire chart sources to the original
+open-submanifold definition.
+
+The converse is separated into construction and integration of a parallel
+coframe. The integration step is now proved:
+
+- `ClosedCoframe.exists_smooth_primitive` integrates a smooth closed
+  vector-valued one-form on an open convex coordinate domain using Poincaré's
+  lemma; its derivative is the original form everywhere on that domain.
+- `ClosedCoframe.exists_chart` and `exists_manifoldChart` use invertibility
+  to give actual smooth local charts with the prescribed derivative on
+  their entire sources, including a smooth inverse.
+- `IsParallelChartCoframeOn` states `∂θ(q)(u)(v) = θ(q)(Γ(q)(u,v))`, using
+  the native connection's chart coefficients. Torsion-freeness proves that
+  this coframe is closed.
+- `exists_chart_zeroChristoffel_of_parallelCoframe` integrates a smooth
+  invertible parallel coframe and proves all connection coefficients vanish
+  throughout the resulting chart source.
+- `chartComponent_eq_of_zeroChristoffel` and `chartPairing_eq_of_zeroChristoffel`
+  propagate constancy on a connected chart target via metric compatibility.
+- `exists_minkowskiChart_of_parallelCoframe` needs metric normalization only
+  at the base point and constructs a Minkowski chart on an open neighborhood.
+
+`LocalFlatnessExamples` proves the shear Jacobian is a nonconstant smooth
+parallel coframe and obtains `IsLocallyMinkowski` through this integration
+theorem. It also proves the conformal metric is not locally Minkowski,
+despite having an inertial chart at every point. Exact checks integrate the
+shear coframe from arbitrary base points and evaluate the nonzero conformal
+curvature matrix obstructing an invertible parallel coframe.
+
+Stage D remains in progress: a smooth invertible parallel coframe must still
+be constructed from zero curvature. The conditional integration theorem
+does not supply that existence result or finish the local curvature-zero ↔
+`IsLocallyMinkowski` equivalence. Particle variation, curved forms
 and the Newtonian trajectory limit are the subsequent E–G stages.
 
-This increment passes the warning-free full build (9,283 jobs), root-import
-check, all six API checks and the transitive audit of 6,964 declarations
-(2,799 in smooth geometry). Only `propext`, `Classical.choice` and `Quot.sound`
+This increment passes the warning-free full build (9,288 jobs), root-import
+check, all six API checks and the transitive audit of 7,008 declarations
+(2,843 in smooth geometry). Only `propext`, `Classical.choice` and `Quot.sound`
 are permitted. Typed contracts fix the native along-field carrier, overlap
 and regularity hypotheses, metric and parameter-change formulas, coordinate
 ODE, local initial-value existence/uniqueness, finite-segment transport,
 its laws, piecewise paths and continuous lifts, nonzero-null preservation,
 prescribed-basis inertial charts, their first and second derivative contracts,
+curvature restriction, coframe integration with explicit hypotheses,
 and flat/curved concrete examples at
 default elaborator settings. The installed-package exact Lorentz experiment
 also passes. These checks validate this increment, not the remaining D–G

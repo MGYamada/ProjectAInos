@@ -225,6 +225,27 @@ def verify_inertial_correction(metric, coordinates, gamma, point, linear, normal
                    transformed_metric.diff(coordinate).subs(substitution, simultaneous=True))
 
 
+def verify_parallel_coframe(coordinates, gamma, coframe, primitive):
+    """Check a nonconstant parallel coframe and its Poincaré primitive."""
+    size = len(coordinates)
+    for i in range(size):
+        connection = sp.Matrix(size, size, lambda k, j: gamma[k][i, j])
+        check_zero("parallel coframe equation",
+                   coframe.diff(coordinates[i]) - coframe * connection)
+        for j in range(size):
+            check_zero("parallel coframe closedness",
+                       coframe[:, j].diff(coordinates[i])
+                       - coframe[:, i].diff(coordinates[j]))
+    s = sp.symbols("s", real=True)
+    base = sp.Matrix(sp.symbols(f"a:{size}", real=True))
+    segment = base + s * (coordinates - base)
+    integrand = coframe.subs(dict(zip(coordinates, segment)), simultaneous=True) * (coordinates - base)
+    integrated = integrand.applyfunc(lambda entry: sp.integrate(entry, (s, 0, 1)))
+    check_zero("Poincare primitive of the shear coframe", integrated - primitive
+               + primitive.subs(dict(zip(coordinates, base)), simultaneous=True))
+    check_zero("integrated coframe Jacobian", integrated.jacobian(coordinates) - coframe)
+
+
 def verify():
     t, x, time, space = sp.symbols("t x T X", real=True)
     coordinates = sp.Matrix([t, x])
@@ -302,6 +323,7 @@ def verify():
         check_zero("connection Hessian transformation", gamma[k] - transformed_gamma)
 
     verify_motion(metric, coordinates, gamma, jacobian)
+    verify_parallel_coframe(coordinates, gamma, jacobian, shear)
 
     curved_metric = sp.exp(2*x**2) * eta
     curved_gamma = verify_connection(curved_metric, coordinates)
@@ -335,6 +357,13 @@ def verify():
     for component in curved_gamma:
         check_zero("connection vanishes at origin", component.subs({t: 0, x: 0}))
     check_zero("curvature at origin is nonzero", scalar.subs({t: 0, x: 0}) + 4)
+    # Mixed derivatives of a parallel coframe require theta * R = 0. The
+    # conformal origin has a nonzero curvature matrix, despite Gamma = 0.
+    connection = [sp.Matrix(2, 2, lambda k, j: curved_gamma[k][i, j]) for i in range(2)]
+    obstruction = (connection[1].diff(t) - connection[0].diff(x)
+                   + connection[0] * connection[1] - connection[1] * connection[0])
+    check_zero("curved parallel-coframe integrability obstruction",
+               obstruction.subs({t: 0, x: 0}) - sp.Matrix([[0, -2], [-2, 0]]))
     opposite_riemann, opposite_ricci, opposite_scalar = verify_curvature(
         -curved_metric, coordinates, christoffel(-curved_metric, coordinates))
     check_zero("curvature metric-sign reversal", list(sp.flatten(
@@ -374,7 +403,8 @@ def verify():
           "Ricci/scalar contractions, nonzero curvature covariance, both signatures, "
           "parallel fields, geodesics, metric preservation, endpoint transport, "
           "subdivision/reversal, curved piecewise-path composition, "
-          "nonzero null fields, reparametrization, and quadratic local inertial charts.")
+          "nonzero null fields, reparametrization, quadratic local inertial charts, "
+          "parallel coframe integration, and the curved integrability obstruction.")
 
 
 def main():

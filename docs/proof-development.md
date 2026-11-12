@@ -223,7 +223,25 @@ The shear correction recovers `(t,x+t²)` exactly. The conformal origin is
 an explicit local inertial chart with nonzero native curvature and scalar
 curvature `-4`. Exact calculations also check nonzero base points, a
 nontrivial Lorentz basis and both metric-sign conventions.
-Curvature-zero/local-Minkowski equivalence remains open in D.
+`Manifold.OpenTangent` identifies the derivative of open inclusions in the
+inherited chart coordinates and turns arbitrary smooth maximal-atlas charts
+into diffeomorphisms of open submanifolds. `LocalFlatness` transports native
+curvature through these maps, proving `IsLocallyMinkowski` implies vanishing
+curvature. Consequently the conformal plane is not locally Minkowski,
+although it has a pointwise inertial chart everywhere.
+
+`Manifold.ClosedCoframe` uses the convex-domain Poincaré lemma to integrate
+a smooth closed vector-valued one-form. Its derivative is the original
+form, so the primitive is smooth; invertibility supplies a smooth local
+chart. `ParallelCoframe` derives closedness from torsion-freeness and the
+parallel equation `∂θ = θ Γ`. The connection transformation law then gives
+zero coefficients throughout the constructed chart. Shrinking its target
+to a convex ball and using metric compatibility propagates metric
+normalization from one point. The nonconstant shear coframe instantiates
+the full integration theorem in Lean. Exact checks also integrate it from
+an arbitrary base point and check the conformal curvature obstruction.
+Construction of a smooth invertible parallel coframe from zero curvature
+remains open; the local flatness equivalence is not yet complete.
 Stages E–G remain subsequent work; differential/contracted
 Bianchi and Einstein dynamics belong to 5.2.
 

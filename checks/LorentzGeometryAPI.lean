@@ -12,6 +12,7 @@ import ProjectAInos.SmoothGeometry.Lorentzian.CurvatureExamples
 import ProjectAInos.SmoothGeometry.Lorentzian.CurvatureNaturality
 import ProjectAInos.SmoothGeometry.Lorentzian.ConformalExample
 import ProjectAInos.SmoothGeometry.Lorentzian.LocalInertialExamples
+import ProjectAInos.SmoothGeometry.Lorentzian.LocalFlatnessExamples
 import ProjectAInos.SmoothGeometry.Lorentzian.MotionExamples
 import ProjectAInos.SmoothGeometry.Lorentzian.MotionODE
 import ProjectAInos.SmoothGeometry.Lorentzian.PathExamples
@@ -73,6 +74,64 @@ example : LorentzianConformalExample.metric.IsInertialChartAt
   LorentzianConformalExample.inertial_origin_curved
 
 end LocalInertial
+
+section LocalFlatness
+
+open LorentzMetric
+
+variable {σ : LorentzConvention} {d : ℕ} {M : Type} [TopologicalSpace M]
+  [ChartedSpace (MinkowskiModel d) M] [IsManifold 𝓘(ℝ, MinkowskiModel d) ∞ M]
+  (g : LorentzMetric σ d M)
+
+local notation "E" => MinkowskiModel d
+local notation "I" => 𝓘(ℝ, MinkowskiModel d)
+
+example (h : g.IsLocallyMinkowski) (p : M) : g.curvature p = 0 := h.curvature_eq_zero p
+
+example (U : TopologicalSpace.Opens M) (x : U) (u v w : TangentSpace I x) :
+    mfderiv I I (Subtype.val : U → M) x ((g.restrict U).curvature x u v w) =
+      g.curvature x.val (mfderiv I I (Subtype.val : U → M) x u)
+        (mfderiv I I (Subtype.val : U → M) x v) (mfderiv I I (Subtype.val : U → M) x w) :=
+  g.curvature_restrict U x u v w
+
+example {U : Set E} (hU : IsOpen U) (hconv : Convex ℝ U)
+    {θ : E → E →L[ℝ] E} (hθ : ContDiffOn ℝ ∞ θ U)
+    (hclosed : ∀ x ∈ U, ∀ u v, fderiv ℝ θ x u v = fderiv ℝ θ x v u)
+    (hinv : ∀ x ∈ U, (θ x).IsInvertible) {p : E} (hp : p ∈ U) :
+    ∃ e : OpenPartialHomeomorph E E, p ∈ e.source ∧ e.source ⊆ U ∧ e p = 0 ∧
+      ContDiffOn ℝ ∞ e e.source ∧ ContDiffOn ℝ ∞ e.symm e.target ∧
+      ∀ x ∈ e.source, HasFDerivAt e (θ x) x :=
+  ClosedCoframe.exists_chart hU hconv hθ hclosed hinv hp
+
+example {e : OpenPartialHomeomorph M E} (he : e ∈ IsManifold.maximalAtlas I ∞ M)
+    {U : Set E} (hU : IsOpen U) (hconv : Convex ℝ U) (hUsub : U ⊆ e.target)
+    {θ : E → E →L[ℝ] E} (hθ : ContDiffOn ℝ ∞ θ U)
+    (hparallel : g.IsParallelChartCoframeOn e U θ)
+    (hinv : ∀ q ∈ U, (θ q).IsInvertible) {p : M} (hp : p ∈ e.source) (hpU : e p ∈ U)
+    (hnorm : ∀ v w, g.form p (chartField e v p) (chartField e w p) =
+      minkowskiForm σ d (θ (e p) v) (θ (e p) w)) :
+    ∃ c : OpenPartialHomeomorph M E, c ∈ IsManifold.maximalAtlas I ∞ M ∧
+      p ∈ c.source ∧ ∀ x ∈ c.source, ∀ v w : TangentSpace I x,
+        g.form x v w = minkowskiForm σ d (chartTangentMap c x v) (chartTangentMap c x w) :=
+  g.exists_minkowskiChart_of_parallelCoframe he hU hconv hUsub hθ hparallel hinv hp hpU hnorm
+
+example {e : OpenPartialHomeomorph M E} {U : Set E} {θ : E → E →L[ℝ] E}
+    (h : g.IsParallelChartCoframeOn e U θ) {q : E} (hq : q ∈ U) (u v : E) :
+    fderiv ℝ θ q u v = θ q (g.chartChristoffelBilinear e (e.symm q) u v) := h q hq u v
+
+example : (∀ p : LorentzianConformalExample.Plane,
+    ∃ e : OpenPartialHomeomorph LorentzianConformalExample.Plane LorentzianConformalExample.Plane,
+      LorentzianConformalExample.metric.IsInertialChartAt e p) ∧
+        ¬ LorentzianConformalExample.metric.IsLocallyMinkowski :=
+  LorentzianConformalExample.pointwise_inertial_not_locallyMinkowski
+
+example : LorentzianCharts.metric.IsParallelChartCoframeOn LorentzianCharts.standardChart Set.univ
+    (fderiv ℝ LorentzianCharts.shear) := LorentzianCharts.shearCoframe_parallel
+
+example : LorentzianCharts.metric.IsLocallyMinkowski :=
+  LorentzianCharts.isLocallyMinkowski_via_parallelCoframe
+
+end LocalFlatness
 
 section AlongCurve
 

@@ -92,11 +92,14 @@ public import ProjectAInos.SmoothGeometry.Lorentzian.CurvatureSymmetry
 public import ProjectAInos.SmoothGeometry.Lorentzian.Dual
 public import ProjectAInos.SmoothGeometry.Lorentzian.Geodesic
 public import ProjectAInos.SmoothGeometry.Lorentzian.LeviCivita
+public import ProjectAInos.SmoothGeometry.Lorentzian.LocalFlatness
+public import ProjectAInos.SmoothGeometry.Lorentzian.LocalFlatnessExamples
 public import ProjectAInos.SmoothGeometry.Lorentzian.LocalInertial
 public import ProjectAInos.SmoothGeometry.Lorentzian.LocalInertialExamples
 public import ProjectAInos.SmoothGeometry.Lorentzian.MotionExamples
 public import ProjectAInos.SmoothGeometry.Lorentzian.MotionODE
 public import ProjectAInos.SmoothGeometry.Lorentzian.Naturality
+public import ProjectAInos.SmoothGeometry.Lorentzian.ParallelCoframe
 public import ProjectAInos.SmoothGeometry.Lorentzian.ParallelExtension
 public import ProjectAInos.SmoothGeometry.Lorentzian.ParallelFrame
 public import ProjectAInos.SmoothGeometry.Lorentzian.ParallelLocal
@@ -111,10 +114,12 @@ public import ProjectAInos.SmoothGeometry.Lorentzian.Restriction
 public import ProjectAInos.SmoothGeometry.Lorentzian.Ricci
 public import ProjectAInos.SmoothGeometry.Lorentzian.Tensor
 public import ProjectAInos.SmoothGeometry.Manifold.Charts
+public import ProjectAInos.SmoothGeometry.Manifold.ClosedCoframe
 public import ProjectAInos.SmoothGeometry.Manifold.Euclidean
 public import ProjectAInos.SmoothGeometry.Manifold.Germs
 public import ProjectAInos.SmoothGeometry.Manifold.LocallyRingedSpace
 public import ProjectAInos.SmoothGeometry.Manifold.OpenSubset
+public import ProjectAInos.SmoothGeometry.Manifold.OpenTangent
 public import ProjectAInos.SmoothGeometry.Manifold.QuadraticChart
 public import ProjectAInos.SmoothGeometry.Manifold.Scheme
 public import ProjectAInos.SmoothGeometry.Minkowski.Affine

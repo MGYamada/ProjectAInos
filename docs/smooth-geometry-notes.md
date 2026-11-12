@@ -132,7 +132,9 @@ keeps time orientation separate from spacetime orientation.
 Local Minkowski coordinates are not a premise on general Lorentz manifolds.
 The Lorentz Levi-Civita connection and smooth curvature tensor are now
 constructed; equivalence of `IsLocallyMinkowski` with vanishing curvature
-still requires the local flat-frame/integration arguments in stage D.
+still requires construction of a smooth parallel coframe from zero curvature
+in stage D. The forward implication and the coframe-to-chart integration
+step are now proved.
 
 The localization construction follows [Joyce, *Algebraic Geometry over
 C∞-rings*, §2.3](https://arxiv.org/pdf/1001.0023). The requested general
@@ -156,7 +158,19 @@ smooth. The chosen pointwise Lorentz equivalence determines the first
 derivative, the connection transformation law makes `Γ(p) = 0`, and metric
 compatibility makes `∂g(p) = 0`. No norm is added to native tangent fibres.
 `IsInertialChartAt` concerns one point and admits nonzero curvature, as proved
-for the conformal origin. The local flatness equivalence remains open in D.
+for the conformal origin. The conformal metric is now proved not to satisfy
+`IsLocallyMinkowski`, even though every point admits an inertial chart.
+
+For the local flatness theorem, restriction to open submanifolds preserves
+native curvature, and `IsLocallyMinkowski` implies zero curvature. The
+coordinate equation for a parallel coframe is `∂θ = θ Γ`. Torsion-freeness
+makes it closed; Poincaré's lemma on an open convex coordinate domain gives
+a smooth primitive, and invertibility gives an actual smooth chart. The
+transition law makes the new connection coefficients vanish on the entire
+source. After shrinking to a convex target, metric compatibility propagates
+a normalization at the base point to the whole chart. These conditional
+integration theorems do not construct the parallel coframe from zero
+curvature; that existence theorem remains the missing converse step in D.
 In particular, no claim that `A ≅ Γ(Spec A)` for arbitrary
 C∞-rings is used in this continuation.
 
@@ -164,10 +178,10 @@ C∞-rings is used in this continuation.
 
 The warning-free full build (`lake build --wfail ProjectAInos`), root-import
 check, external API regression check, and transitive axiom audit pass.
-The current motion increment's audit covers 6,964 project declarations,
-including 453 in smooth algebra and 2,799 in smooth geometry,
+The current motion increment's audit covers 7,008 project declarations,
+including 453 in smooth algebra and 2,843 in smooth geometry,
 with only `propext`, `Classical.choice`, and `Quot.sound` allowed.
-The full build has 9,283 jobs. All six API checks and the installed-package
+The full build has 9,288 jobs. All six API checks and the installed-package
 exact Lorentz experiment pass, including the motion examples.
 `git diff --check` also passes. The existing `README.md` contents, including
 the earlier subject-numbering changes, were preserved throughout this work.
