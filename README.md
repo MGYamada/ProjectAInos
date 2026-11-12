@@ -299,12 +299,14 @@ form, independent of the chosen cover. Its absolute value is the density;
 orientation reversal negates the form, while whole-metric sign reversal
 preserves both. Minkowski, nonlinear-chart and curved conformal examples
 fix its normalization. The inverse metric and this volume now construct
-pointwise Lorentz Hodge on native fibres, with its wedge identity, uniqueness,
+Lorentz Hodge on native fibres, with its wedge identity, uniqueness,
 orientation and metric-sign laws, and naturality under metric/volume-preserving
 tangent equivalences proved. Exact Minkowski API agreement, the six
 four-dimensional two-form signs and nonlinear shear transport are proved.
-Hodge regularity on smooth sections, the general Lorentz square identity and
-the Maxwell comparison remain to be implemented.
+The local inverse-metric formula proves smoothness, yielding a linear map
+on smooth native forms. The general Lorentz square identity is proved using
+only pointwise signature witnesses; a curved conformal example verifies it.
+The Maxwell comparison and density divergence remain to be implemented.
 The [GR guide](docs/general-relativity.md)
 records the exact scope and typed contracts.
 The [shared geometry guide](docs/smooth-geometry.md)

@@ -26,6 +26,7 @@ import ProjectAInos.SmoothGeometry.Lorentzian.Regularity
 import ProjectAInos.SmoothGeometry.Lorentzian.Restriction
 import ProjectAInos.SmoothGeometry.Lorentzian.VolumeExamples
 import ProjectAInos.SmoothGeometry.Lorentzian.HodgeExamples
+import ProjectAInos.SmoothGeometry.Lorentzian.HodgeCurvedExamples
 import ProjectAInos.SmoothGeometry.Tensor.Bundle
 import ProjectAInos.SmoothGeometry.ODE.VolterraExamples
 import ProjectAInos.SmoothGeometry.ODE.RadialExamples
@@ -1617,3 +1618,57 @@ example (x : LorentzianCharts.Plane) {k l : ℕ} (hkl : k + l = 2)
   LorentzianHodgeExamples.shear_hodge x hkl β
 
 end NativeHodge
+
+section SmoothHodge
+
+open LorentzMetric DifferentialForm
+
+variable {σ : LorentzConvention} {d : ℕ} {M : Type} [TopologicalSpace M]
+  [ChartedSpace (MinkowskiModel d) M] [IsManifold 𝓘(ℝ, MinkowskiModel d) ∞ M]
+  (g : LorentzMetric σ d M) (o : OrientedAtlas (d + 1) M)
+  {k l : ℕ} (hkl : k + l = d + 1)
+
+example {e : OpenPartialHomeomorph M (MinkowskiModel d)}
+    (he : e ∈ IsManifold.maximalAtlas 𝓘(ℝ, MinkowskiModel d) ∞ M) {x : M} (hx : x ∈ e.source) :
+    ContMDiffAt 𝓘(ℝ, MinkowskiModel d) 𝓘(ℝ, (MinkowskiModel d →L[ℝ] ℝ) →L[ℝ] MinkowskiModel d)
+      ∞ (g.chartSharp e) x := g.chartSharp_contMDiffAt he hx
+
+example (p : M) (α : NativeForm 𝓘(ℝ, MinkowskiModel d) M k) {y : MinkowskiModel d}
+    (hy : y ∈ (o.chart p).target) :
+    chartCoefficients (o.chart p) (g.nativeHodge o hkl α) y =
+      (o.sign p * g.chartDensity (o.chart p) ((o.chart p).symm y)) •
+        Minkowski.hodgeFiber .timeNegative .standard hkl
+          ((chartCoefficients (o.chart p) α y).compContinuousLinearMap
+            ((g.chartSharp (o.chart p) ((o.chart p).symm y)).comp
+              (Minkowski.flat .timeNegative).toContinuousLinearMap)) :=
+  g.chartCoefficients_nativeHodge o p hkl α hy
+
+example {α : NativeForm 𝓘(ℝ, MinkowskiModel d) M k} {x : M}
+    (hα : ContMDiffAt 𝓘(ℝ, MinkowskiModel d)
+      (𝓘(ℝ, MinkowskiModel d).prod 𝓘(ℝ, MinkowskiModel d [⋀^Fin k]→L[ℝ] ℝ)) ∞
+      (fun y => Bundle.TotalSpace.mk' (MinkowskiModel d [⋀^Fin k]→L[ℝ] ℝ) y (α y)) x) :
+    ContMDiffAt 𝓘(ℝ, MinkowskiModel d)
+      (𝓘(ℝ, MinkowskiModel d).prod 𝓘(ℝ, MinkowskiModel d [⋀^Fin l]→L[ℝ] ℝ)) ∞
+      (fun y => Bundle.TotalSpace.mk' (MinkowskiModel d [⋀^Fin l]→L[ℝ] ℝ) y (g.nativeHodge o hkl α y)) x :=
+  g.contMDiffAt_nativeHodge o hkl hα
+
+example : SmoothForm 𝓘(ℝ, MinkowskiModel d) M k →ₗ[ℝ] SmoothForm 𝓘(ℝ, MinkowskiModel d) M l :=
+  g.smoothHodge o hkl
+
+example (x : M) (hlk : l + k = d + 1)
+    (α : TangentSpace 𝓘(ℝ, MinkowskiModel d) x [⋀^Fin k]→L[ℝ] ℝ) :
+    g.hodgeFiber o x hlk (g.hodgeFiber o x hkl α) =
+      (-1 : ℝ) ^ (k * l + σ.negativeIndex d) • α := g.hodgeFiber_square o x hkl hlk α
+
+example (hlk : l + k = d + 1) (α : SmoothForm 𝓘(ℝ, MinkowskiModel d) M k) :
+    g.smoothHodge o hlk (g.smoothHodge o hkl α) =
+      (-1 : ℝ) ^ (k * l + σ.negativeIndex d) • α := g.smoothHodge_square o hkl hlk α
+
+example (p : LorentzianConformalExample.Plane)
+    (α : LorentzianConformalExample.Plane [⋀^Fin 1]→L[ℝ] ℝ) :
+    LorentzianConformalExample.metric.hodgeFiber (OrientedAtlas.standard 2) p
+      (by decide : 1 + 1 = 1 + 1) α =
+      Minkowski.hodgeFiber .timeNegative .standard (by decide : 1 + 1 = 1 + 1) α :=
+  LorentzianHodgeCurvedExamples.conformal_one p α
+
+end SmoothHodge

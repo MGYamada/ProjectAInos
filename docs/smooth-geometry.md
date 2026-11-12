@@ -434,7 +434,7 @@ proof endpoints are implemented; its PR still requires review and merge.
 The curvature endpoints below are implemented. Finite-segment parallel
 transport and local inertial coordinates are described in the motion section.
 Native form bundles, pullback, exterior differentiation, wedge, density and
-oriented volume and pointwise Hodge are described below; smooth Hodge/Maxwell and the Newtonian motion limit
+oriented volume and smooth Hodge are described below; Maxwell and the Newtonian motion limit
 remain incomplete.
 
 ## GR 5.1: curvature and intrinsic contractions
@@ -985,7 +985,7 @@ the same nonlinear and dimension-changing examples and a variable two-form
 under nonlinear composition.
 
 Native exterior differentiation, wedge, volume density and oriented volume
-and pointwise Hodge are described below. Hodge regularity/general square and the curved Maxwell component bridge remain
+and smooth Hodge are described below. The curved Maxwell component bridge remains
 in #52. Maxwell action variation remains in §4.2/#44, and Einstein dynamics
 remains in §5.2.
 
@@ -1122,7 +1122,7 @@ checks a nonlinear chart with nonconstant, negative Jacobian determinant.
 The density divergence formula remains to be implemented with the curved
 Maxwell bridge.
 
-### Pointwise native Lorentz Hodge
+### Native Lorentz Hodge
 
 `FiniteDual.lean` works on finite-dimensional Hausdorff topological real
 vector spaces. These hypotheses hold for each tangent fibre; they impose
@@ -1142,7 +1142,7 @@ the established wedge-normalized algebraic Hodge to continuous forms and
 proves the wedge equation and uniqueness. `finiteDegreeCast` records the
 degree arithmetic. `HodgeTransport` proves naturality between separate
 finite topological fibres and the inverse-metric precomposition identity
-needed for the forthcoming local regularity proof.
+used in the local regularity proof below.
 
 `LorentzMetric.coMetric` is the inverse metric on the algebraic cotangent
 space, derived from the existing `sharp`; its bijectivity and symmetry are
@@ -1156,7 +1156,7 @@ the inverse metric. `hodgeFiber_wedge` and `hodgeFiber_unique` prove
 `hodgeFiber_opposite` multiplies it by `(-1)^k` under whole-metric reversal.
 `hodgeFiber_naturality` applies to tangent equivalences that preserve both
 the metric and the oriented volume; it does not claim that Hodge commutes
-with arbitrary pullback. These are pointwise constructions and proofs.
+with arbitrary pullback.
 
 `HodgeFlat.lean` proves exact agreement with `Minkowski.hodgeFiber` in every
 dimension and either metric convention, including the top-degree casts and
@@ -1169,10 +1169,41 @@ Exact SymPy independently checks all degrees under a nonlinear chart with
 nonconstant Jacobian magnitude, both Jacobian orientations, whole-metric
 reversal, and the conformal plane.
 
-The remaining Hodge work is its local coordinate formula and regularity as
-an operation on smooth native sections, the general Lorentz square identity
-and curved component examples. Those results are required before completing
-the Maxwell component bridge, current conservation and density divergence.
+`HodgeFormula` proves a reference-metric formula on independent finite
+topological fibres. `ChartDuality` identifies the chart metric `G` with native
+metric duality conjugated by the actual chart tangent equivalence.
+`chartSharp` is its inverse, smooth on the chart source by smooth inversion.
+For a selected signed chart, `HodgeCoordinates` proves
+
+```
+⋆g α = sρ ⋆η (α.compContinuousLinearMap (G⁻¹η))
+```
+
+Here `s` is the chart's orientation sign, `ρ = sqrt(abs(det G))`, and `η`
+is the time-negative reference metric even when `g` uses the opposite
+signature. Precomposition acts in every covariant slot. The formula is
+proved both for a lifted form and for the actual inverse-chart coefficients
+of `nativeHodge`. It is valid locally and needs no globally extended chart.
+
+`HodgeSmooth` proves preservation of local smoothness, then bundles
+`smoothHodge` as a linear map between smooth native sections. Its orientation
+and metric-sign laws and flat specialization follow from the pointwise API.
+`HodgeSquare` proves `⋆⋆α = (-1)^(k*l + σ.negativeIndex d) • α` on native
+fibres and as an equality of smooth sections. A pointwise signature witness
+gives a frame whose oriented volume has square one; that sign cancels in
+the square. No global frame, flatness or additional Hausdorff assumption is
+used.
+
+For `g = exp(2x²)(-dt² + dx²)`, `HodgeCurvedExamples` proves the inverse-metric
+chart map is `exp(-2x²)` times the identity and all one-form Hodge values
+agree with flat Hodge. It also proves the smooth-section version and checks
+the square together with scalar curvature `-4 exp(-2x²)`. Typed API examples
+fix the explicit local formula, regularity hypotheses, smooth linear map and
+general square. Exact SymPy additionally checks that local formula in all
+degrees with variable, non-diagonal metrics and either signature.
+
+The Maxwell component bridge, current conservation and density divergence
+remain to be implemented.
 
 ## Scope and next stages
 

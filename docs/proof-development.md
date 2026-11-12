@@ -535,7 +535,21 @@ laws. `HodgeFlat` proves exact agreement with the existing Minkowski API;
 nonlinear shear transport using the actual metric and volume identities.
 Typed contracts use default elaborator settings. Independent exact SymPy
 checks all degrees under nonlinear positive/negative-Jacobian chart changes,
-metric sign reversal, and the conformal plane. The curved square checks guide
-the still-pending general Lean square theorem; smooth-section Hodge regularity,
-the full coordinate formula and Maxwell comparison also remain outstanding. The
+metric sign reversal, and the conformal plane.
+
+`HodgeFormula` proves the native/reference comparison with inverse-metric
+precomposition and a volume coefficient. `ChartDuality` identifies the actual
+coordinate metric with a continuous linear equivalence and proves smooth
+inversion locally. `HodgeCoordinates` derives `⋆g α = sρ ⋆η (α ∘ (G⁻¹η))`,
+where precomposition acts in every slot and `ρ = sqrt(abs(det G))`.
+`HodgeSmooth` uses this formula and smooth chart coefficients to construct
+`smoothHodge` on the actual alternating tangent bundle. No norm is added to
+native fibres. `HodgeSquare` uses a pointwise signature witness and proves
+its volume has square one, transferring the flat square law without a global
+frame or a flatness premise. `HodgeCurvedExamples` proves that the curved
+conformal plane's one-form Hodge equals flat Hodge, including smooth sections,
+and checks its square alongside the known nonzero scalar curvature.
+The exact runner independently checks the inverse-metric formula for all
+degrees in nonconstant coordinates and both metric signs. The curved Maxwell
+component bridge, current conservation and density divergence remain. The
 [geometry guide](smooth-geometry.md) records the public API and this boundary.

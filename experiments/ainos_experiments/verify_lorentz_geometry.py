@@ -312,6 +312,12 @@ def verify_native_hodge():
         metric = change.T * eta * change
         for degree in range(5):
             star = hodge_matrix(metric, degree)
+            for local_metric in (metric, -metric):
+                local_density = sp.sqrt(sp.Abs(sp.simplify(local_metric.det())))
+                check_zero("Hodge local inverse-metric formula",
+                           hodge_matrix(local_metric, degree)
+                           - local_density * hodge_matrix(eta, degree)
+                           * exterior_pullback(local_metric.inv() * eta, degree))
             check_zero("native Hodge chart transport and orientation",
                        star * exterior_pullback(change, degree)
                        - orientation * exterior_pullback(change, 4-degree) * hodge_matrix(eta, degree))
@@ -934,7 +940,8 @@ def verify():
           "endpoint variations, unconstrained null-velocity variations, "
           "massive non-affine Euler–Lagrange equations, the finite proper-time inverse, "
           "mixed covariant derivatives and densities of curve families, "
-          "and native alternating-form pullback examples.")
+          "native alternating-form pullback, graded exterior calculus, "
+          "volume density/orientation, and Hodge local formulas, signs and squares.")
 
 
 def main():
