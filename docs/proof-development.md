@@ -472,3 +472,18 @@ through the explicit coordinate swap. Nonzero degrees 0 and 1 and the
 hyperbolic charged worldline are regression proofs. The
 [electrodynamics guide](electrodynamics.md) records the full theorem map,
 regularity conditions, experiment runner, and boundaries of §4.1.
+
+
+## GR 5.1 native differential-form foundation
+
+The first stage F increment constructs the smooth structure on mathlib's
+native continuous-alternating-map bundle, then proves arbitrary smooth
+pullback, coefficient overlap/recovery and open-cover gluing. No native
+fibre receives an artificial norm, and local gluing representatives only
+need regularity on their own domains. Flat smooth forms and pullback agree
+exactly with the existing API. Nonlinear shear, time-axis and singular
+projection examples are formal proofs, with independent exact SymPy checks.
+Typed contracts cover the general interfaces at default elaborator settings.
+Curved exterior differentiation, wedge, density/Hodge and Maxwell comparison
+are still outstanding. The [geometry guide](smooth-geometry.md) records the
+public API and this boundary.

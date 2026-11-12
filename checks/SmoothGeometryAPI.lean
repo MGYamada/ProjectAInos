@@ -5,6 +5,9 @@ Released under Apache 2.0 license as described in the file LICENSE.
 module
 
 import ProjectAInos.SmoothGeometry.Gluing
+import ProjectAInos.SmoothGeometry.DifferentialForm.NativeCoordinates
+import ProjectAInos.SmoothGeometry.DifferentialForm.NativeGluing
+import ProjectAInos.SmoothGeometry.DifferentialForm.NativeExamples
 
 /-! External API regressions: use the public definitions with default elaborator
 options, without unfolding morphism wrappers or adding local instances. -/
@@ -79,3 +82,70 @@ example (X : Scheme.{u}) (f : ∀ i, D.U i ⟶ X)
   Multicoequalizer.π_desc D.toGlueData.diagram X f h i
 
 end SchemeGluing
+
+
+section NativeDifferentialForms
+
+open Bundle DifferentialForm
+open scoped Manifold ContDiff
+
+variable {E H M F H' N G H'' P : Type*}
+  [NormedAddCommGroup E] [NormedSpace ℝ E] [TopologicalSpace H]
+  (I : ModelWithCorners ℝ E H) [TopologicalSpace M] [ChartedSpace H M]
+  [IsManifold I ∞ M]
+  [NormedAddCommGroup F] [NormedSpace ℝ F] [TopologicalSpace H']
+  (J : ModelWithCorners ℝ F H') [TopologicalSpace N] [ChartedSpace H' N]
+  [IsManifold J ∞ N]
+  [NormedAddCommGroup G] [NormedSpace ℝ G] [TopologicalSpace H'']
+  (K : ModelWithCorners ℝ G H'') [TopologicalSpace P] [ChartedSpace H'' P]
+  [IsManifold K ∞ P]
+
+example (k : ℕ) : ContMDiffVectorBundle ∞ (E [⋀^Fin k]→L[ℝ] ℝ)
+    (fun x : M => TangentSpace I x [⋀^Fin k]→L[ℝ] ℝ) I := inferInstance
+
+example {k : ℕ} (f : C^∞⟮I, M; J, N⟯) (α : SmoothForm J N k)
+    (x : M) (v : Fin k → TangentSpace I x) :
+    smoothPullback I J f α x v = α (f x) (fun i => mfderiv I J f x (v i)) :=
+  smoothPullback_apply I J f α x v
+
+example {k : ℕ} (α : SmoothForm I M k) :
+    smoothPullback I I (ContMDiffMap.id : C^∞⟮I, M; I, M⟯) α = α := smoothPullback_id I α
+
+example {k : ℕ} (f : C^∞⟮I, M; J, N⟯) (g : C^∞⟮J, N; K, P⟯)
+    (α : SmoothForm K P k) :
+    smoothPullback I K (g.comp f) α = smoothPullback I J f (smoothPullback J K g α) :=
+  smoothPullback_comp I J K f g α
+
+example (k : ℕ) (y : N) (α : SmoothForm J N (k + 1)) :
+    smoothPullback I J (ContMDiffMap.const y : C^∞⟮I, M; J, N⟯) α = 0 :=
+  smoothPullback_const I J k y α
+
+example {k : ℕ} (e e' : Trivialization E (π E (fun x : M => TangentSpace I x)))
+    [MemTrivializationAtlas e] [MemTrivializationAtlas e'] (α : NativeForm I M k)
+    {x : M} (hx : x ∈ e.baseSet) (hx' : x ∈ e'.baseSet) :
+    coefficients I e' α x = (coefficients I e α x).compContinuousLinearMap
+      (e'.coordChangeL ℝ e x).toContinuousLinearMap := coefficients_change I e e' α hx hx'
+
+example {k : ℕ} (α : SmoothForm I M k)
+    (e : Trivialization E (π E (fun x : M => TangentSpace I x)))
+    [MemTrivializationAtlas e] {x : M} (hx : x ∈ e.baseSet) :
+    ContMDiffAt I 𝓘(ℝ, E [⋀^Fin k]→L[ℝ] ℝ) ∞
+      (coefficients I e (fun y => α y)) x := α.contMDiffAt_coefficients I e hx
+
+example {k : ℕ} {ι : Type*} (U : ι → Set M) (hopen : ∀ i, IsOpen (U i))
+    (hU : ∀ x, ∃ i, x ∈ U i) (α : ι → NativeForm I M k)
+    (hsmooth : ∀ i, ContMDiffOn I (I.prod 𝓘(ℝ, E [⋀^Fin k]→L[ℝ] ℝ)) ∞
+      (fun x => TotalSpace.mk' (E [⋀^Fin k]→L[ℝ] ℝ) x (α i x)) (U i))
+    (hα : ∀ i j x, x ∈ U i ∩ U j → α i x = α j x) {i : ι} {x : M} (hx : x ∈ U i) :
+    smoothGlue I U hopen hU α hsmooth hα x = α i x :=
+  smoothGlue_apply I U hopen hU α hsmooth hα hx
+
+example {k : ℕ} (f : E → F) (α : Form F k) :
+    nativePullback 𝓘(ℝ, E) 𝓘(ℝ, F) f α = pullback f α := nativePullback_flat f α
+
+example (p v : LorentzianCharts.Plane) :
+    smoothPullback 𝓘(ℝ, LorentzianCharts.Plane) 𝓘(ℝ, LorentzianCharts.Plane)
+      LorentzianCharts.shearDiffeomorph.toContMDiffMap NativeExamples.spatial p ![v] =
+        v 1 + 2 * p 0 * v 0 := NativeExamples.spatial_shear p v
+
+end NativeDifferentialForms

@@ -281,6 +281,11 @@ Nonzero null initial velocity is preserved on the entire closed quadratic-
 stationary segment, with no causal restriction on variations. A smooth compact
 test in the nonlinear chart realizes arbitrary midpoint tangent data.
 The stage E principal endpoints are implemented and awaiting review.
+Stage F now has smooth alternating bundles on actual tangent fibres, local
+coefficient transition laws, open-cover gluing and arbitrary-smooth-map
+pullback, including different dimensions and singular derivatives. Flat API
+agreement and nonlinear one-/two-form examples are proved. Curved exterior
+derivative, wedge, density/Hodge and Maxwell comparison remain to be implemented.
 The [GR guide](docs/general-relativity.md)
 records the exact scope and typed contracts.
 The [shared geometry guide](docs/smooth-geometry.md)

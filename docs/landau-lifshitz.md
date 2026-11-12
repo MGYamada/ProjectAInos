@@ -179,8 +179,11 @@ geodesics for the quadratic action. Actual localized manifold test families
 now prove the converse directions and both complete native equivalences.
 Local affine reparametrization, unit proper speed, one finite proper-time
 inverse and closed-segment preservation of nonzero null initial velocity are
-proved. Stage E's principal endpoints await review. Curved forms and the
-Newtonian motion limit remain in the work
+proved. Stage E's principal endpoints await review. Stage F has a smooth
+native alternating bundle, coefficient overlap laws, open-cover gluing,
+arbitrary smooth pullback and exact flat specialization, with nonlinear and
+singular-map examples. Curved exterior derivative/wedge, density/Hodge,
+Maxwell comparison and the Newtonian motion limit remain in the work
 tracked by [#52](https://github.com/MGYamada/ProjectAInos/issues/52).
 Einstein equations and their Newtonian field-equation limit remain in 5.2;
 the Maxwell field action remains in 4.2.

@@ -432,8 +432,9 @@ law, metric pullback, naturality, open restriction and the nonlinear
 connection examples at default elaborator settings. The stage B connection
 proof endpoints are implemented; its PR still requires review and merge.
 The curvature endpoints below are implemented. Finite-segment parallel
-transport is described in the motion section. Local inertial coordinates,
-curved forms and the Newtonian motion limit remain later work.
+transport and local inertial coordinates are described in the motion section.
+Native form bundles and pullback are described below; curved exterior
+calculus/Maxwell and the Newtonian motion limit remain incomplete.
 
 ## GR 5.1: curvature and intrinsic contractions
 
@@ -918,10 +919,12 @@ shear example proves this equality for arbitrary piecewise paths.
 
 Stage D's principal proof endpoints are implemented, pending review and
 merge. No global frame, global chart, analytic metric, Hausdorff premise or
-geodesic completeness is assumed or concluded. Particle variation, curved
-forms and the Newtonian trajectory limit are the subsequent E–G stages.
+geodesic completeness is assumed or concluded. Stage E's principal particle-
+variation endpoints are now implemented; see the [GR guide](general-relativity.md).
+Curved exterior calculus/Maxwell and the Newtonian trajectory limit remain
+in stages F–G.
 
-This increment passes the warning-free full build (9,302 jobs), root-import
+The stage D checkpoint passed the warning-free full build (9,302 jobs), root-import
 check, all six API checks and the transitive audit of 7,309 declarations
 (3,144 in smooth geometry). Only `propext`, `Classical.choice` and `Quot.sound`
 are permitted. Typed contracts fix the native along-field carrier, overlap
@@ -937,8 +940,55 @@ flatness equation, constructed parallel-coframe existence, native coordinate
 curvature, the near-point Minkowski chart, the full local-flatness equivalence,
 local path independence for actual piecewise paths,
 and flat/curved concrete examples at default elaborator settings. The installed-package
-exact Lorentz experiment also passes. These checks validate this increment, not the remaining E–G
-proof obligations.
+exact Lorentz experiment also passed at that checkpoint. These historical checks
+validate stage D; later stage checks are recorded separately.
+
+## GR 5.1: native differential-form foundation
+
+`DifferentialForm/Bundle.lean` equips mathlib's existing continuous-alternating-
+map bundle topology with a proved smooth vector-bundle structure. Its
+transition maps are polynomial compositions of the original smooth bundle
+transitions. `NativeForm I M k` assigns an alternating covector to each actual
+tangent fibre; `SmoothForm I M k` is a smooth section of that bundle. No norm
+or global frame is installed on native tangent fibres. These constructions
+need neither a metric nor finite-dimensional models.
+
+`NativeCoordinates` extracts `coefficients` in any atlas tangent
+trivialization. `coefficients_change` proves the overlap law,
+`SmoothForm.contMDiffAt_coefficients` proves local smoothness, and
+`coefficients_recover` reconstructs the native value from the coefficients.
+`smoothGlue` in `NativeGluing.lean` glues
+compatible local native forms over any open cover. Each representative only
+needs to be smooth on its own open set; there is no global extension
+hypothesis. `smoothGlue_apply` and `smoothForm_ext_of_cover` prove restriction
+and uniqueness.
+
+`smoothPullback` in `NativePullback.lean` precomposes every slot with `mfderiv I J f x`.
+It is a smooth section for every smooth map, including different source and
+target dimensions and singular derivatives. `smoothPullback_id`,
+`smoothPullback_comp`, `smoothPullbackLinear` and `smoothPullback_const` give
+identity, contravariant composition, linearity and annihilation of positive
+degrees by constant maps. In degree zero `nativePullback_degreeZero` is
+ordinary scalar composition. The names are in `DifferentialForm`, not nested
+module namespaces.
+
+`ofFlat` in `NativeFlat.lean` identifies flat smooth forms with native sections on the
+model manifold. `nativePullback_flat` and `smoothPullback_flat` prove exact
+agreement with the existing flat pullback. `NativeExamples` computes
+`dX = dx + 2t dt` under the nonlinear shear, the preserved area form,
+`2t dt` on the time axis, and the vanishing area pullback under a nonconstant
+singular projection. These are identities of actual smooth native sections.
+Typed contracts in `checks/SmoothGeometryAPI.lean` fix the bundle, pullback,
+coefficient, gluing and flat-comparison interfaces. Exact SymPy checks cover
+the same nonlinear and dimension-changing examples and a variable two-form
+under nonlinear composition.
+
+This is the first stage F increment. Construction of the curved exterior
+derivative and wedge, their identities, volume density versus oriented volume,
+Lorentz Hodge/flat comparison and the curved Maxwell component bridge remain
+in #52. The flat exterior-calculus theorems continue to have their original
+scope. Maxwell action variation remains in §4.2/#44, and Einstein dynamics
+remains in §5.2.
 
 ## Scope and next stages
 

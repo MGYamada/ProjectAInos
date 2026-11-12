@@ -132,6 +132,41 @@ def verify_covariant_pullback(metric, coordinates):
     check_zero("vanishing derivative at origin", direct.subs(s, 0))
 
 
+def verify_native_forms():
+    """Alternating pullback: nonlinear charts, changed dimension and singular maps."""
+    t, x, s, r = sp.symbols("t x s r", real=True)
+    coordinates = sp.Matrix([t, x])
+    shear = sp.Matrix([t, x + t**2])
+    jacobian = shear.jacobian(coordinates)
+    spatial = sp.Matrix([[0, 1]])
+    area = sp.Matrix([[0, 1], [-1, 0]])
+    pulled_spatial = spatial * jacobian
+    check_zero("native spatial shear form", pulled_spatial - sp.Matrix([[2*t, 1]]))
+    check_zero("native normalized shear area", jacobian.T * area * jacobian - area)
+    axis = sp.Matrix([s, 0])
+    check_zero("native dimension-changing one-form", pulled_spatial.subs(
+        {t: s, x: 0}, simultaneous=True) * axis.diff(s) - sp.Matrix([[2*s]]))
+    check_zero("native dimension-changing two-form", axis.diff(s).T * area * axis.diff(s))
+    projection = sp.Matrix([t, 0]).jacobian(coordinates)
+    check_zero("native singular projection area", projection.T * area * projection)
+
+    def pull_two(mapping, source, target, field):
+        derivative = mapping.jacobian(source)
+        return derivative.T * field.subs(
+            dict(zip(target, mapping)), simultaneous=True) * derivative
+
+    # Variable form and nonlinear maps test both evaluation and all covariant slots.
+    f = sp.Matrix([s, r + s**2])
+    g = sp.Matrix([t**2, t*x])
+    variable_area = (1 + t + x**2) * area
+    composite = g.subs({t: f[0], x: f[1]}, simultaneous=True)
+    direct = pull_two(composite, sp.Matrix([s, r]), coordinates, variable_area)
+    iterated = pull_two(f, sp.Matrix([s, r]), coordinates,
+                       pull_two(g, coordinates, coordinates, variable_area))
+    check_zero("native variable two-form composition", direct - iterated)
+    check_zero("native composition at singular point", direct.subs(s, 0))
+
+
 def verify_quadratic_variation(metric, coordinates, gamma):
     """Differentiate the density independently, using force minus d(momentum)/ds."""
     size = len(coordinates)
@@ -640,6 +675,7 @@ def verify():
         check_zero("connection Hessian transformation", gamma[k] - transformed_gamma)
 
     verify_covariant_pullback(metric, coordinates)
+    verify_native_forms()
     verify_motion(metric, coordinates, gamma, jacobian)
     verify_parallel_coframe(coordinates, gamma, jacobian, shear)
 
@@ -737,7 +773,8 @@ def verify():
           "curved proper-time clocks, quadratic Euler–Lagrange/native acceleration, "
           "endpoint variations, unconstrained null-velocity variations, "
           "massive non-affine Euler–Lagrange equations, the finite proper-time inverse, "
-          "and mixed covariant derivatives and densities of curve families.")
+          "mixed covariant derivatives and densities of curve families, "
+          "and native alternating-form pullback examples.")
 
 
 def main():
