@@ -219,9 +219,38 @@ smooth rather than assumed. Pullback preserves smooth sections, reverses
 composition, respects identity and inverse diffeomorphisms, and commutes
 with full and partial contraction. Covector and covariant two-tensor
 evaluation formulas explicitly use `mfderiv`. No isometry or global
-frame is required. Pullback of covariant tensors along noninvertible
-smooth maps, and a full slot-permutation and tensor-product API, remain
-subsequent work in [#52](https://github.com/MGYamada/ProjectAInos/issues/52).
+frame is required.
+
+`Tensor/HomPullback.lean` extends the hom-coordinate argument to arbitrary
+continuous linear input/output maps over independent manifold models. Fixed-map
+`precomp` and `postcomp` are continuous on native fibres; joint smoothness is
+proved in normed bundle coordinates. No fibre norm or inverse map is introduced.
+`Tensor/CovariantPullback.lean` uses this to construct
+`Shape.covariantPullback I J n L` and `Shape.covariantPullbackField I J n f T`
+for every rank `n` and smooth `f : C^∞⟮I, M; J, N⟯`. The source and target may
+have different dimensions, and `mfderiv I J f` may be singular or zero.
+
+- `covariantPullback_succ_apply` applies the tangent map to each successive slot;
+  the one- and two-tensor field formulas explicitly use `mfderiv`.
+- `contMDiffAt_covariantPullback` proves smoothness for smooth tangent-map families
+  over a third manifold, with both bundle base points varying independently.
+- `covariantPullbackField_id` and `covariantPullbackField_comp` prove identity and
+  contravariant composition as equalities of smooth sections.
+- `covariantPullbackField_const` makes every positive rank vanish for a constant map;
+  rank zero is ordinary scalar composition.
+- `covariantPullbackField_diffeomorph` identifies this construction with the existing
+  mixed-tensor pullback on diffeomorphisms.
+
+`Lorentzian/PullbackExamples.lean` restricts the nonlinear-chart metric along
+`t ↦ (t,0)` to `(-1+4t²) dt²`, while standard Minkowski restricts to `-dt²`.
+The induced tensor vanishes at `t=1/2`; this API produces a covariant tensor,
+without asserting it is a Lorentz metric. The nonconstant singular projection
+`(t,x) ↦ (t,0)` retains the time coefficient and kills spatial slots. Constant-map
+pullback is also checked. Typed API examples use independent models and default
+elaborator options. Exact SymPy checks cover these examples and nonlinear,
+noninvertible composition with a nonsymmetric two-tensor. A full slot-permutation
+and tensor-product API remains subsequent work in
+[#52](https://github.com/MGYamada/ProjectAInos/issues/52).
 
 `Tensor/BundleOperations.lean` proves that fibrewise composition of smooth
 bundle homomorphisms is smooth: the intermediate coordinate maps cancel.

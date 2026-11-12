@@ -11,7 +11,7 @@
 - [C∞ mechanics: full research plan and Landau–Lifshitz targets](cinfty-mechanics.md)
 - [Fixed-endpoint mechanics: mathematical guide and proof map](mechanics.md)
 - [Mechanics formalization notes](mechanics-notes.md)
-- [Shared geometry: Joyce C∞ schemes and the mathlib correspondence](smooth-geometry.md)
+- [Shared geometry: C∞ schemes, Lorentz geometry, and tensor pullback](smooth-geometry.md)
 - [Minkowski geometry, relativistic kinematics, and flat forms](special-relativity.md)
 - [Charged particles, electromagnetic fields, and polynomial Maxwell jets](electrodynamics.md)
 - [Shared algebra: C∞-rings and smooth operations](smooth-algebra.md)

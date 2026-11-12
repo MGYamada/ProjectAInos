@@ -182,6 +182,11 @@ their coordinate compatibility. Iterated hom bundles construct finite mixed
 tensor types; full/partial trace contraction and inverse-metric contraction
 are smooth and coordinate compatible. Tensor-field pullback along
 diffeomorphisms preserves smoothness and commutes with contraction.
+Covariant tensors of every finite rank also pull back along arbitrary smooth
+maps, including dimension-changing maps and singular derivatives. Smoothness,
+identity/composition laws, constant-map vanishing in positive rank, and agreement
+with diffeomorphism pullback are proved. The induced two-tensor may be degenerate,
+as checked by restricting the nonlinear metric to a time axis.
 A two-chart regression uses
 `(T,X) = (t,x+t²)` to obtain nonconstant coefficients for the Minkowski
 metric and proves covariance using the manifold derivative. Both charts

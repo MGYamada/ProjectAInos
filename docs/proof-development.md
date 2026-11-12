@@ -62,9 +62,17 @@ arguments. Coordinate naturality of partial contraction and the
 inverse-metric component formula are proved. Smooth field pullback along
 diffeomorphisms is constructed using the actual derivative and smooth
 inversion in bundle charts. Identity/composition/inverse laws and
-commutation with full and partial contraction are proved. General slot
-permutation/tensor-product APIs and covariant pullback along noninvertible
-maps remain subsequent work.
+commutation with full and partial contraction are proved. Covariant pullback
+now also works for arbitrary smooth maps between independent finite-dimensional
+models. Fixed-map pre/postcomposition constructs continuous linear maps on the
+native iterated hom fibres. A coordinate identity proves smoothness without
+putting norms on those fibres or assuming an inverse derivative. Induction gives
+all ranks, identity/composition laws, constant-map vanishing in positive rank,
+and agreement with the diffeomorphism API. Time-axis restriction, its degenerate
+points, a constant map, and a nonconstant singular projection are proved examples.
+Default-option typed examples fix the independent models and the main contracts.
+Exact SymPy checks additionally test nonlinear composition with a nonsymmetric
+tensor. General slot-permutation/tensor-product APIs remain subsequent work.
 
 For the chart regression, the shear `(t,x) ↦ (t,x+t²)` and its inverse are
 proved smooth and turned into an actual chart in the maximal atlas.
