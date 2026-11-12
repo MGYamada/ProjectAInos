@@ -193,8 +193,24 @@ The nonlinear-chart example evaluates this intrinsic map as
 `(v₀,v₁) ↦ (v₀,v₁−2(s₁−s₀)v₀)`.
 Exact SymPy checks also cover endpoint transport, subdivision, reversal,
 a nowhere-zero null parallel field, and the full nonaffine acceleration
-transformation. Piecewise-path concatenation, local inertial coordinates
-and curvature-zero/local-Minkowski equivalence remain open in D.
+transformation.
+
+`RegularPath` packages a `C²` segment with named endpoints and its actual
+continuous `Path`. Canonical equality casts identify tangent fibres.
+`PiecewisePath` retains a finite decomposition and constructs its continuous
+path through ordinary path concatenation. `HasParallelLift` is defined
+independently of transport by native parallel fields on the pieces with
+matching junction values. Its equivalence with the composed endpoint map
+proves existence, endpoint uniqueness and uniqueness of the transport map.
+The fields concatenate to a continuous path in the actual tangent bundle
+projecting exactly to the underlying path. Reversal and regrouping preserve
+the corresponding transport laws, without requiring matching velocities.
+Model affine segments and a time-axis/space-axis corner have native proofs
+for Minkowski geometry. The separate symbolic experiment also checks
+segment ODEs, composition and reversal around a rectangle in the conformal
+curved metric; that rectangle holonomy is not yet a Lean theorem.
+Local inertial coordinates and curvature-zero/local-Minkowski equivalence
+remain open in D.
 Stages E–G remain subsequent work; differential/contracted
 Bianchi and Einstein dynamics belong to 5.2.
 

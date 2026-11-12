@@ -100,7 +100,10 @@ public import ProjectAInos.SmoothGeometry.Lorentzian.ParallelFrame
 public import ProjectAInos.SmoothGeometry.Lorentzian.ParallelLocal
 public import ProjectAInos.SmoothGeometry.Lorentzian.ParallelTransport
 public import ProjectAInos.SmoothGeometry.Lorentzian.ParallelUniqueness
+public import ProjectAInos.SmoothGeometry.Lorentzian.PathExamples
+public import ProjectAInos.SmoothGeometry.Lorentzian.PiecewisePath
 public import ProjectAInos.SmoothGeometry.Lorentzian.Pullback
+public import ProjectAInos.SmoothGeometry.Lorentzian.RegularPath
 public import ProjectAInos.SmoothGeometry.Lorentzian.Regularity
 public import ProjectAInos.SmoothGeometry.Lorentzian.Restriction
 public import ProjectAInos.SmoothGeometry.Lorentzian.Ricci

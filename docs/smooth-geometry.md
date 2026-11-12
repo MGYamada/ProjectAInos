@@ -633,18 +633,49 @@ completeness. `ParallelTransport.lean` exports:
 - `parallelTransport_reparam`: a `C²` parameter map whose image stays in
   the original segment preserves endpoint transport, even with zero speed.
 
-Stage D remains in progress. Piecewise-path concatenation, the local
-inertial-coordinate construction, and the local curvature-zero ↔
+`RegularPath.lean` packages a segment regular on `[0,1]` with named endpoints.
+`toPath` retains its actual continuous path, and `tangentCongr` uses equality
+alone to identify endpoint tangent fibres. `transport_apply_eq`,
+`exists_parallel`, `parallel_unique` and `transport_reverse` compare its
+transport with native parallel fields. `parallelPath` is a continuous path
+in the tangent bundle; `parallelPath_map` proves it projects to `toPath`.
+
+`PiecewisePath.lean` constructs finite concatenations, including corners,
+with their usual half-interval parametrization as continuous paths.
+The type retains the chosen finite decomposition; it is not a quotient
+by homotopy or equality of parametrized paths. `HasParallelLift` is an
+independent predicate: each piece carries a native parallel field, and
+the endpoint vectors agree at every junction. The main endpoints are:
+
+- `hasParallelLift_iff` and `existsUnique_parallelLift`: the composed map
+  gives exactly the possible endpoint of a matching family of parallel fields;
+- `transport_unique`: compatibility with those fields uniquely determines
+  the transport map;
+- `exists_continuous_parallelLift`: matching fields concatenate to an
+  actual continuous tangent-bundle path projecting to the underlying path;
+- `transport_trans`, `transport_assoc`, `transport_reverse` and
+  `transport_metric`: composition, regrouping, inversion and metric preservation;
+- `toPath_reverse`: reversing the pieces reverses the actual continuous path.
+
+`PathExamples.lean` proves component preservation for model affine segments
+and broken lines for both signatures, including the corner from `(0,0)`
+through `(1,0)` to `(1,1)`. Velocities need not match at junctions. The exact
+experiment also verifies segment ODEs and the ordered composition/reversal
+of four transports around a rectangle in `exp(2x²)(-dt²+dx²)`. That curved
+rectangle calculation is an experimental check, not a formal holonomy claim.
+
+Stage D remains in progress. The local inertial-coordinate construction
+and the local curvature-zero ↔
 `IsLocallyMinkowski` theorem remain open. Particle variation, curved forms
 and the Newtonian trajectory limit are the subsequent E–G stages.
 
-This increment passes the warning-free full build (9,277 jobs), root-import
-check, all six API checks and the transitive audit of 6,758 declarations
-(2,593 in smooth geometry). Only `propext`, `Classical.choice` and `Quot.sound`
+This increment passes the warning-free full build (9,280 jobs), root-import
+check, all six API checks and the transitive audit of 6,909 declarations
+(2,744 in smooth geometry). Only `propext`, `Classical.choice` and `Quot.sound`
 are permitted. Typed contracts fix the native along-field carrier, overlap
 and regularity hypotheses, metric and parameter-change formulas, coordinate
 ODE, local initial-value existence/uniqueness, finite-segment transport,
-its laws, nonzero-null preservation and concrete examples at
+its laws, piecewise paths and continuous lifts, nonzero-null preservation and concrete examples at
 default elaborator settings. The installed-package exact Lorentz experiment
 also passes. These checks validate this increment, not the remaining D–G
 proof obligations.

@@ -134,8 +134,10 @@ nonlinear-chart geodesic/parallel-field examples are proved. Parallel fields
 exist uniquely along prescribed finite segments, and endpoint transport
 preserves the metric, composes under subdivision, reverses by inversion,
 and respects parameter changes. Nonzero null velocities are preserved.
-Piecewise-path concatenation, local inertia and local flatness equivalence
-remain in D. Particle variation, curved forms and
+Finite piecewise-path concatenation has matching native parallel fields,
+continuous lifts, uniquely characterized transport and reversal laws;
+the Minkowski right-angle path is a proved example. Local inertia and local
+flatness equivalence remain in D. Particle variation, curved forms and
 the Newtonian motion limit remain in the work
 tracked by [#52](https://github.com/MGYamada/ProjectAInos/issues/52).
 Einstein equations and their Newtonian field-equation limit remain in 5.2;

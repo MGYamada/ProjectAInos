@@ -151,6 +151,46 @@ def verify_motion(metric, coordinates, gamma, jacobian):
                - sp.diff(reparam, s)**2 * acceleration.subs(s, reparam))
 
 
+def verify_piecewise_transport(metric, coordinates, gamma):
+    """Exact segment equations and corner composition in the curved example.
+
+    The rectangle holonomy here is a symbolic check, not a Lean holonomy theorem.
+    """
+    s, t0, x0, duration, distance = sp.symbols("s t0 x0 T X", real=True)
+    horizontal = sp.Matrix([t0 + duration*s, x0])
+    angle = 2*x0*duration*s
+    horizontal_map = sp.Matrix([[sp.cosh(angle), -sp.sinh(angle)],
+                                [-sp.sinh(angle), sp.cosh(angle)]])
+    vertical = sp.Matrix([t0, x0 + distance*s])
+    vertical_map = sp.exp(x0**2 - (x0 + distance*s)**2) * sp.eye(2)
+    for curve, fundamental in [(horizontal, horizontal_map), (vertical, vertical_map)]:
+        check_zero("segment initial transport", fundamental.subs(s, 0) - sp.eye(2))
+        for column in range(2):
+            check_zero("curved segment parallel equation", covariant_along(
+                gamma, coordinates, curve, fundamental[:, column], s))
+        along_metric = metric.subs(dict(zip(coordinates, curve)), simultaneous=True)
+        check_zero("curved segment metric preservation", fundamental.T * along_metric
+                   * fundamental - along_metric.subs(s, 0))
+    # (0,0) -> (T,0) -> (T,X) -> (0,X) -> (0,0), with genuine corners.
+    horizontal_end = horizontal_map.subs(s, 1)
+    vertical_end = vertical_map.subs(s, 1)
+    legs = [horizontal_end.subs(x0, 0), vertical_end.subs(x0, 0),
+            horizontal_end.subs({x0: distance, duration: -duration}, simultaneous=True),
+            vertical_end.subs({x0: distance, distance: -distance}, simultaneous=True)]
+    forward = sp.eye(2)
+    backward = sp.eye(2)
+    for leg in legs:
+        forward = leg * forward
+    for leg in reversed(legs):
+        backward = leg.inv() * backward
+    boost = sp.Matrix([[sp.cosh(2*duration*distance), sp.sinh(2*duration*distance)],
+                       [sp.sinh(2*duration*distance), sp.cosh(2*duration*distance)]])
+    check_zero("curved rectangle composition", forward - boost)
+    check_zero("curved rectangle reversal", backward * forward - sp.eye(2))
+    check_zero("curved rectangle metric preservation", forward.T * sp.diag(-1, 1)
+               * forward - sp.diag(-1, 1))
+
+
 def verify():
     t, x, time, space = sp.symbols("t x T X", real=True)
     coordinates = sp.Matrix([t, x])
@@ -231,6 +271,7 @@ def verify():
 
     curved_metric = sp.exp(2*x**2) * eta
     curved_gamma = verify_connection(curved_metric, coordinates)
+    verify_piecewise_transport(curved_metric, coordinates, curved_gamma)
     check_zero("conformal time connection", curved_gamma[0] - sp.Matrix([[0, 2*x], [2*x, 0]]))
     check_zero("conformal spatial connection", curved_gamma[1] - sp.diag(2*x, 2*x))
 
@@ -286,7 +327,8 @@ def verify():
           "Levi-Civita coefficients, Hessian transformation, curvature/Bianchi, "
           "Ricci/scalar contractions, nonzero curvature covariance, both signatures, "
           "parallel fields, geodesics, metric preservation, endpoint transport, "
-          "subdivision/reversal, nonzero null fields, and reparametrization.")
+          "subdivision/reversal, curved piecewise-path composition, "
+          "nonzero null fields, and reparametrization.")
 
 
 def main():

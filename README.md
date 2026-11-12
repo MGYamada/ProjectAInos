@@ -222,10 +222,11 @@ second-derivative acceleration term; affine changes preserve the geodesic
 equation. Flat lines and the nonlinear-chart parabola have native proofs.
 Parallel fields now have local and finite-segment existence and uniqueness.
 The resulting endpoint linear equivalences preserve the metric and obey
-subdivision, reversal and reparametrization laws. Nonzero null geodesic
-velocities stay nonzero. Stage D remains incomplete: piecewise-path
-concatenation, local inertial construction and the local flatness
-equivalence still require proofs.
+subdivision, reversal and reparametrization laws. Finite concatenations of
+regular segments admit matching parallel fields and continuous tangent-bundle
+lifts, with uniquely characterized transport, composition and reversal.
+Nonzero null geodesic velocities stay nonzero. Stage D remains incomplete:
+local inertial construction and the local flatness equivalence still require proofs.
 The [shared geometry guide](docs/smooth-geometry.md)
 records the public API and exact checks. [Issue #52](https://github.com/MGYamada/ProjectAInos/issues/52)
 tracks review of the connection and curvature stages, further tensor operations,

@@ -13,6 +13,7 @@ import ProjectAInos.SmoothGeometry.Lorentzian.CurvatureNaturality
 import ProjectAInos.SmoothGeometry.Lorentzian.ConformalExample
 import ProjectAInos.SmoothGeometry.Lorentzian.MotionExamples
 import ProjectAInos.SmoothGeometry.Lorentzian.MotionODE
+import ProjectAInos.SmoothGeometry.Lorentzian.PathExamples
 import ProjectAInos.SmoothGeometry.Lorentzian.Regularity
 import ProjectAInos.SmoothGeometry.Lorentzian.Restriction
 import ProjectAInos.SmoothGeometry.Tensor.Bundle
@@ -249,6 +250,65 @@ example (s₀ s₁ : ℝ) (v : LorentzianCharts.Plane) :
   LorentzianCharts.parallelTransport_model s₀ s₁ v
 
 end AlongCurve
+
+section PiecewisePaths
+
+open Bundle
+
+variable {σ : LorentzConvention} {d : ℕ} {M : Type} [TopologicalSpace M]
+  [ChartedSpace (MinkowskiModel d) M] [IsManifold 𝓘(ℝ, MinkowskiModel d) ∞ M]
+  (g : LorentzMetric σ d M) {x y z w : M}
+
+local notation "E" => MinkowskiModel d
+local notation "I" => 𝓘(ℝ, MinkowskiModel d)
+local notation "TM" => TangentSpace I (M := M)
+
+example (p : RegularPath d M x y) : Path x y := p.toPath
+
+example (p : RegularPath d M x y) (v : TM x) :
+    ∃ V : LorentzMetric.AlongField (d := d) p.curve,
+      g.IsParallelOn (Set.Icc (0 : ℝ) 1) V ∧ tangentCongr p.source (V 0) = v ∧
+        tangentCongr p.target (V 1) = p.transport g v := p.exists_parallel g v
+
+example (p : RegularPath d M x y) {V W : LorentzMetric.AlongField (d := d) p.curve}
+    (hV : g.IsParallelOn (Set.Icc (0 : ℝ) 1) V) (hW : g.IsParallelOn (Set.Icc (0 : ℝ) 1) W)
+    (hinit : tangentCongr p.source (V 0) = tangentCongr p.source (W 0))
+    {t : ℝ} (ht : t ∈ Set.Icc (0 : ℝ) 1) : V t = W t := p.parallel_unique g hV hW hinit ht
+
+example (p : PiecewisePath d M x y) : p.reverse.toPath = p.toPath.symm := p.toPath_reverse
+
+example (p : PiecewisePath d M x y) (v : TM x) (w : TM y) :
+    p.HasParallelLift g v w ↔ p.transport g v = w := p.hasParallelLift_iff g v w
+
+example (p : PiecewisePath d M x y) (v : TM x) :
+    ∃! w, p.HasParallelLift g v w := p.existsUnique_parallelLift g v
+
+example (p : PiecewisePath d M x y) (T : TM x → TM y)
+    (hT : ∀ v w, p.HasParallelLift g v w → T v = w) : T = p.transport g := p.transport_unique g T hT
+
+example (p : PiecewisePath d M x y) {v : TM x} {w : TM y} (h : p.HasParallelLift g v w) :
+    ∃ P : Path (TotalSpace.mk' E x v) (TotalSpace.mk' E y w),
+      P.map (FiberBundle.continuous_proj E TM) = p.toPath := p.exists_continuous_parallelLift g h
+
+example (p : PiecewisePath d M x y) (q : PiecewisePath d M y z) :
+    (p.trans q).transport g = (p.transport g).trans (q.transport g) := p.transport_trans g q
+
+example (p : PiecewisePath d M x y) (q : PiecewisePath d M y z) (r : PiecewisePath d M z w) :
+    ((p.trans q).trans r).transport g = (p.trans (q.trans r)).transport g := p.transport_assoc g q r
+
+example (p : PiecewisePath d M x y) : p.reverse.transport g = (p.transport g).symm :=
+  p.transport_reverse g
+
+example (p : PiecewisePath d M x y) (v w : TM x) :
+    g.form y (p.transport g v) (p.transport g w) = g.form x v w := p.transport_metric g v w
+
+example (v : MinkowskiModel 1) :
+    ((PiecewisePath.segment (RegularPath.modelLine (0 : MinkowskiModel 1) ![1, 0])).trans
+      (.segment (RegularPath.modelLine ![1, 0] ![1, 1]))).transport
+        (minkowskiMetric .timeNegative 1) (LorentzMetric.modelField v 0) =
+          LorentzMetric.modelField v ![1, 1] := minkowski_corner_transport v
+
+end PiecewisePaths
 
 section Connection
 

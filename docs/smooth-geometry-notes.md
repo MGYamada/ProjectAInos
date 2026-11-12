@@ -146,8 +146,9 @@ and reparametrization, and derives local geodesic existence and germ
 uniqueness. Parallel transport now exists uniquely on prescribed finite
 regular segments, with metric preservation, subdivision, reversal and
 parameter-change laws. Linear uniqueness also preserves nonzero null
-velocity. Piecewise-path concatenation and the local inertial/flatness
-constructions remain open in stage D.
+velocity. Finite piecewise-path concatenation has independent matching-field
+and continuous-lift proofs, and uniquely characterized endpoint transport.
+The local inertial/flatness constructions remain open in stage D.
 In particular, no claim that `A ≅ Γ(Spec A)` for arbitrary
 C∞-rings is used in this continuation.
 
@@ -155,10 +156,10 @@ C∞-rings is used in this continuation.
 
 The warning-free full build (`lake build --wfail ProjectAInos`), root-import
 check, external API regression check, and transitive axiom audit pass.
-The current motion increment's audit covers 6,758 project declarations,
-including 453 in smooth algebra and 2,593 in smooth geometry,
+The current motion increment's audit covers 6,909 project declarations,
+including 453 in smooth algebra and 2,744 in smooth geometry,
 with only `propext`, `Classical.choice`, and `Quot.sound` allowed.
-The full build has 9,277 jobs. All six API checks and the installed-package
+The full build has 9,280 jobs. All six API checks and the installed-package
 exact Lorentz experiment pass, including the motion examples.
 `git diff --check` also passes. The existing `README.md` contents, including
 the earlier subject-numbering changes, were preserved throughout this work.
