@@ -73,6 +73,7 @@ public import ProjectAInos.SmoothGeometry.LocallyRingedSpace
 public import ProjectAInos.SmoothGeometry.Lorentzian
 public import ProjectAInos.SmoothGeometry.Lorentzian.AlongCurve
 public import ProjectAInos.SmoothGeometry.Lorentzian.AlongCurveMetric
+public import ProjectAInos.SmoothGeometry.Lorentzian.AlongCurveRegularity
 public import ProjectAInos.SmoothGeometry.Lorentzian.AlongCurveReparam
 public import ProjectAInos.SmoothGeometry.Lorentzian.ChartConnection
 public import ProjectAInos.SmoothGeometry.Lorentzian.ChartCurvature
@@ -94,6 +95,11 @@ public import ProjectAInos.SmoothGeometry.Lorentzian.LeviCivita
 public import ProjectAInos.SmoothGeometry.Lorentzian.MotionExamples
 public import ProjectAInos.SmoothGeometry.Lorentzian.MotionODE
 public import ProjectAInos.SmoothGeometry.Lorentzian.Naturality
+public import ProjectAInos.SmoothGeometry.Lorentzian.ParallelExtension
+public import ProjectAInos.SmoothGeometry.Lorentzian.ParallelFrame
+public import ProjectAInos.SmoothGeometry.Lorentzian.ParallelLocal
+public import ProjectAInos.SmoothGeometry.Lorentzian.ParallelTransport
+public import ProjectAInos.SmoothGeometry.Lorentzian.ParallelUniqueness
 public import ProjectAInos.SmoothGeometry.Lorentzian.Pullback
 public import ProjectAInos.SmoothGeometry.Lorentzian.Regularity
 public import ProjectAInos.SmoothGeometry.Lorentzian.Restriction

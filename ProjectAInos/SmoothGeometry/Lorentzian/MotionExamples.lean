@@ -5,6 +5,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 module
 
 public import ProjectAInos.SmoothGeometry.Lorentzian.Geodesic
+public import ProjectAInos.SmoothGeometry.Lorentzian.ParallelTransport
 public import ProjectAInos.SmoothGeometry.Lorentzian.ConnectionExamples
 public import Mathlib.Analysis.Calculus.Deriv.Prod
 
@@ -179,5 +180,31 @@ theorem parallelField_inertial_components (a b s : ℝ) :
   change shearLinear (2 * inertialTimePath s 0) (parallelComponents a b s) = ![a, b]
   ext i
   fin_cases i <;> simp [parallelComponents, inertialTimePath]
+
+/-- Endpoint transport in nonlinear coordinates is the shear matrix with
+lower-left coefficient `-2 (s₁-s₀)`. This evaluates the intrinsic transport
+constructed from existence and uniqueness, not a separate matrix definition. -/
+theorem parallelTransport_model (s₀ s₁ : ℝ) (v : Plane) :
+    metric.parallelTransport (a := s₀) (b := s₁)
+      (fun t _ => (inertialTimePath_contDiff.of_le (by simp)).contMDiff.contMDiffAt (x := t))
+      (modelField v (inertialTimePath s₀)) =
+        modelField ![v 0, v 1 - 2 * (s₁ - s₀) * v 0] (inertialTimePath s₁) := by
+  have h := metric.parallelTransport_apply_eq (a := s₀) (b := s₁)
+    (fun t _ => (inertialTimePath_contDiff.of_le (by simp)).contMDiff.contMDiffAt (x := t))
+    ((parallelField_parallel (v 0) (v 1 + 2 * s₀ * v 0)).mono (Set.subset_univ _))
+  have hinit : parallelField (v 0) (v 1 + 2 * s₀ * v 0) s₀ =
+      modelField v (inertialTimePath s₀) := by
+    unfold parallelField
+    congr 1
+    ext i
+    fin_cases i <;> simp [parallelComponents]
+  have hlast : parallelField (v 0) (v 1 + 2 * s₀ * v 0) s₁ =
+      modelField ![v 0, v 1 - 2 * (s₁ - s₀) * v 0] (inertialTimePath s₁) := by
+    unfold parallelField
+    congr 1
+    ext i
+    fin_cases i <;> simp [parallelComponents]
+    ring
+  rwa [hinit, hlast] at h
 
 end ProjectAInos.SmoothGeometry.LorentzianCharts

@@ -42,6 +42,73 @@ example : AlongField (d := d) γ = (∀ t, TangentSpace I (γ t)) := rfl
 
 example : TangentSpace I (γ t) := g.covariantAlong V t
 
+example {e : OpenPartialHomeomorph M E} (he : e ∈ IsManifold.maximalAtlas I ∞ M)
+    (hx : γ t ∈ e.source) (hγ : MDifferentiableAt 𝓘(ℝ) I γ t) :
+    MDifferentiableAt 𝓘(ℝ) ((I).prod I)
+      (fun s => TotalSpace.mk' E (γ s) (V s)) t ↔
+        DifferentiableAt ℝ (alongComponents e V) t :=
+  alongField_mdifferentiableAt_iff he hx hγ
+
+example (hγ : ContMDiffAt 𝓘(ℝ) I 2 γ t) (v : TangentSpace I (γ t)) :
+    ∃ ε > (0 : ℝ), ∃ V : AlongField (d := d) γ,
+      V t = v ∧ g.IsParallelOn (Set.Ioo (t - ε) (t + ε)) V :=
+  g.exists_parallel_local hγ v
+
+example {s u : Set ℝ} (hs : s ∈ 𝓝 t) (hu : u ∈ 𝓝 t)
+    (hγ : ContMDiffAt 𝓘(ℝ) I 2 γ t) (hV : g.IsParallelOn s V) (hW : g.IsParallelOn u W)
+    (hinit : V t = W t) : V =ᶠ[𝓝 t] W := g.parallel_unique_local hγ hs hu hV hW hinit
+
+example (hγ : ContMDiffAt 𝓘(ℝ) I 2 γ t) :
+    ∃ ε > (0 : ℝ), ∃ P : ∀ r, TangentSpace I (γ t) →L[ℝ] TangentSpace I (γ r),
+      P t = ContinuousLinearMap.id ℝ _ ∧
+      (∀ v, g.IsParallelOn (Set.Ioo (t - ε) (t + ε)) (fun r => P r v)) ∧
+      ∀ r ∈ Set.Ioo (t - ε) (t + ε), (P r).IsInvertible ∧
+        ∀ v w, g.form (γ t) v w = g.form (γ r) (P r v) (P r w) :=
+  g.exists_localParallelFrame hγ
+
+example {s : Set ℝ} (hs : Convex ℝ s)
+    (hγ : ∀ t ∈ s, ContMDiffAt 𝓘(ℝ) I 2 γ t)
+    (hV : g.IsParallelOn s V) (hW : g.IsParallelOn s W)
+    {a b : ℝ} (ha : a ∈ s) (hb : b ∈ s) : V a = W a ↔ V b = W b :=
+  g.parallel_eq_iff hs hγ hV hW ha hb
+
+example {a b : ℝ} (hγ : ∀ t ∈ Set.uIcc a b, ContMDiffAt 𝓘(ℝ) I 2 γ t)
+    (v : TangentSpace I (γ a)) :
+    ∃ V : AlongField (d := d) γ, V a = v ∧ g.IsParallelOn (Set.uIcc a b) V :=
+  g.exists_parallel_on_segment hγ v
+
+example {a b : ℝ} (hγ : ∀ t ∈ Set.uIcc a b, ContMDiffAt 𝓘(ℝ) I 2 γ t) :
+    TangentSpace I (γ a) ≃L[ℝ] TangentSpace I (γ b) := g.parallelTransport hγ
+
+example {a b : ℝ} (hγ : ∀ t ∈ Set.uIcc a b, ContMDiffAt 𝓘(ℝ) I 2 γ t)
+    (hV : g.IsParallelOn (Set.uIcc a b) V) :
+    g.parallelTransport hγ (V a) = V b := g.parallelTransport_apply_eq hγ hV
+
+example {a b : ℝ} (hγ : ∀ t ∈ Set.uIcc a b, ContMDiffAt 𝓘(ℝ) I 2 γ t)
+    (v w : TangentSpace I (γ a)) :
+    g.form (γ b) (g.parallelTransport hγ v) (g.parallelTransport hγ w) =
+      g.form (γ a) v w := g.parallelTransport_metric hγ v w
+
+example {a b : ℝ} (hγ : ∀ t ∈ Set.uIcc a b, ContMDiffAt 𝓘(ℝ) I 2 γ t)
+    (hrev : ∀ t ∈ Set.uIcc b a, ContMDiffAt 𝓘(ℝ) I 2 γ t) :
+    g.parallelTransport hrev = (g.parallelTransport hγ).symm := g.parallelTransport_reverse hγ hrev
+
+example {a b c : ℝ} (hγ : ∀ t ∈ Set.uIcc a c, ContMDiffAt 𝓘(ℝ) I 2 γ t)
+    (hb : b ∈ Set.uIcc a c) :
+    (g.parallelTransport (a := a) (b := b)
+      (fun t ht => hγ t (Set.uIcc_subset_uIcc_left hb ht))).trans
+      (g.parallelTransport (a := b) (b := c)
+        (fun t ht => hγ t (Set.uIcc_subset_uIcc_right hb ht))) = g.parallelTransport hγ :=
+  g.parallelTransport_trans hγ hb
+
+example {r : ℝ → ℝ} {a b : ℝ}
+    (hγ : ∀ t ∈ Set.uIcc (r a) (r b), ContMDiffAt 𝓘(ℝ) I 2 γ t)
+    (hr : ∀ t ∈ Set.uIcc a b, ContDiffAt ℝ 2 r t)
+    (hm : Set.MapsTo r (Set.uIcc a b) (Set.uIcc (r a) (r b))) :
+    g.parallelTransport (γ := γ ∘ r)
+      (fun t ht => (hγ (r t) (hm ht)).comp t (hr t ht).contMDiffAt) = g.parallelTransport hγ :=
+  g.parallelTransport_reparam hγ hr hm
+
 example {e e' : OpenPartialHomeomorph M E}
     (he : e ∈ IsManifold.maximalAtlas I ∞ M) (he' : e' ∈ IsManifold.maximalAtlas I ∞ M)
     (hx : γ t ∈ e.source) (hx' : γ t ∈ e'.source)
@@ -125,6 +192,12 @@ example {s u : Set ℝ} (h : g.IsGeodesicOn u γ) (a b : ℝ)
     (hm : Set.MapsTo (fun t => a * t + b) s u) :
     g.IsGeodesicOn s (fun t => γ (a * t + b)) := h.affine_reparam a b hm
 
+example {s : Set ℝ} (h : g.IsGeodesicOn s γ) (hs : Convex ℝ s)
+    {a b : ℝ} (ha : a ∈ s) (hb : b ∈ s) :
+    (curveVelocity (d := d) γ a ≠ 0 ∧ g.form (γ a) (curveVelocity γ a) (curveVelocity γ a) = 0) ↔
+      (curveVelocity (d := d) γ b ≠ 0 ∧ g.form (γ b) (curveVelocity γ b) (curveVelocity γ b) = 0) :=
+  h.null_iff hs ha hb
+
 example {e : OpenPartialHomeomorph M E} (he : e ∈ IsManifold.maximalAtlas I ∞ M)
     (hx : γ t ∈ e.source) (hγ : ContMDiffAt 𝓘(ℝ) I 2 γ t) :
     g.covariantAlong (curveVelocity γ) t = 0 ↔ ∀ k : Fin (d + 1),
@@ -167,6 +240,13 @@ example : LorentzianCharts.metric.IsGeodesicOn Set.univ LorentzianCharts.inertia
 example (a b s : ℝ) : alongComponents LorentzianCharts.inertialChart
     (LorentzianCharts.parallelField a b) s = ![a, b] :=
   LorentzianCharts.parallelField_inertial_components a b s
+
+example (s₀ s₁ : ℝ) (v : LorentzianCharts.Plane) :
+    LorentzianCharts.metric.parallelTransport (a := s₀) (b := s₁)
+      (fun t _ => (LorentzianCharts.inertialTimePath_contDiff.of_le (by simp)).contMDiff.contMDiffAt
+        (x := t)) (modelField v (LorentzianCharts.inertialTimePath s₀)) =
+      modelField ![v 0, v 1 - 2 * (s₁ - s₀) * v 0] (LorentzianCharts.inertialTimePath s₁) :=
+  LorentzianCharts.parallelTransport_model s₀ s₁ v
 
 end AlongCurve
 

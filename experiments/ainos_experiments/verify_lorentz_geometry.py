@@ -113,6 +113,24 @@ def verify_motion(metric, coordinates, gamma, jacobian):
     check_zero("parallel metric pairing", (field.T * along_metric * other)[0] + a*c - b*d)
     check_zero("inertial parallel components",
                jacobian.subs(substitution, simultaneous=True) * field - sp.Matrix([a, b]))
+    s0, s1, s2 = sp.symbols("s0 s1 s2", real=True)
+
+    def transport(start, end):
+        return sp.Matrix([[1, 0], [-2*(end-start), 1]])
+
+    check_zero("endpoint transport", transport(s0, s1) * field.subs(s, s0)
+               - field.subs(s, s1))
+    check_zero("transport metric preservation", transport(s0, s1).T
+               * along_metric.subs(s, s1) * transport(s0, s1) - along_metric.subs(s, s0))
+    check_zero("transport subdivision", transport(s1, s2) * transport(s0, s1)
+               - transport(s0, s2))
+    check_zero("transport reversal", transport(s1, s0) * transport(s0, s1) - sp.eye(2))
+    null_field = sp.Matrix([1, 1 - 2*s])
+    check_zero("nonzero null parallel field", covariant_along(
+        gamma, coordinates, curve, null_field, s))
+    check_zero("null field norm", (null_field.T * along_metric * null_field)[0])
+    if null_field[0] != 1:
+        raise AssertionError("null regression must have a nowhere-zero time component")
     # Include a change with zero speed at the origin; no division by r' is used.
     for reparam in [s**2, s + s**3, -s + 1]:
         reparam_curve = curve.subs(s, reparam)
@@ -267,7 +285,8 @@ def verify():
           "inverse metric, raising/lowering, full/partial tensor contraction, "
           "Levi-Civita coefficients, Hessian transformation, curvature/Bianchi, "
           "Ricci/scalar contractions, nonzero curvature covariance, both signatures, "
-          "parallel fields, geodesics, metric preservation, and reparametrization.")
+          "parallel fields, geodesics, metric preservation, endpoint transport, "
+          "subdivision/reversal, nonzero null fields, and reparametrization.")
 
 
 def main():

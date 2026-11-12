@@ -175,10 +175,27 @@ or tangent-trivialization premise is added to the public theorem.
 The standard Minkowski affine lines work for both signatures and all
 dimensions. In the nonlinear shear chart, the path `(s,−s²)` is a geodesic,
 and `(a,b−2sa)` is a parallel field with constant inertial components `(a,b)`.
-Exact SymPy checks also cover the full nonaffine acceleration transformation.
-Transport existence/composition, nonvanishing of null velocities, local
-inertial coordinates and curvature-zero/local-Minkowski equivalence remain
-open in D. Stages E–G remain subsequent work; differential/contracted
+`AlongCurveRegularity` reconstructs native regularity from chart components.
+`ParallelLocal` derives the time-dependent linear equation
+`V' = -Γ(γ)(γ',V)` and its local existence and uniqueness from the ODE API.
+Solving for finitely many basis vectors produces a common local frame for
+all initial vectors. Pairing against this frame propagates equality on
+convex sets without a global Hausdorff premise. In particular, nonzero null
+geodesic velocity cannot become zero.
+
+Overlapping frames agree after matching their initial values. Gluing them
+and using connectedness proves existence along each prescribed finite
+`C²` segment, with regular extensions at its endpoints. The resulting
+`parallelTransport` is a continuous linear equivalence of actual tangent
+fibres. Its characterization by every parallel field proves metric
+preservation, identity, reversal, subdivision and parameter-change laws.
+The nonlinear-chart example evaluates this intrinsic map as
+`(v₀,v₁) ↦ (v₀,v₁−2(s₁−s₀)v₀)`.
+Exact SymPy checks also cover endpoint transport, subdivision, reversal,
+a nowhere-zero null parallel field, and the full nonaffine acceleration
+transformation. Piecewise-path concatenation, local inertial coordinates
+and curvature-zero/local-Minkowski equivalence remain open in D.
+Stages E–G remain subsequent work; differential/contracted
 Bianchi and Einstein dynamics belong to 5.2.
 
 ## Minkowski Geometry and Relativistic Kinematics

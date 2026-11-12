@@ -220,9 +220,12 @@ usual coordinate ODE, constant velocity norm, and a proved local
 initial-value existence/uniqueness theorem. Reparametrization includes the
 second-derivative acceleration term; affine changes preserve the geodesic
 equation. Flat lines and the nonlinear-chart parabola have native proofs.
-Stage D remains incomplete: transport existence and composition, nonzero
-null-velocity preservation, local inertial construction and the local
-flatness equivalence still require proofs.
+Parallel fields now have local and finite-segment existence and uniqueness.
+The resulting endpoint linear equivalences preserve the metric and obey
+subdivision, reversal and reparametrization laws. Nonzero null geodesic
+velocities stay nonzero. Stage D remains incomplete: piecewise-path
+concatenation, local inertial construction and the local flatness
+equivalence still require proofs.
 The [shared geometry guide](docs/smooth-geometry.md)
 records the public API and exact checks. [Issue #52](https://github.com/MGYamada/ProjectAInos/issues/52)
 tracks review of the connection and curvature stages, further tensor operations,

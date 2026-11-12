@@ -118,8 +118,8 @@ theorem IsGeodesicOn.timelike_iff {g : LorentzMetric σ d M}
       (0 < σ.timeSign * g.form (γ b) (curveVelocity γ b) (curveVelocity γ b)) := by
   rw [h.metric_velocity_eq hs ha hb]
 
-/-- Zero metric norm is preserved. Nonvanishing of a null velocity is a
-separate consequence of uniqueness of the geodesic initial-value problem. -/
+/-- Zero metric norm is preserved. `IsGeodesicOn.null_iff` in
+`ParallelUniqueness` additionally proves nonvanishing using linear uniqueness. -/
 theorem IsGeodesicOn.null_norm_iff {g : LorentzMetric σ d M}
     {γ : ℝ → M} {s : Set ℝ} (h : g.IsGeodesicOn s γ) (hs : Convex ℝ s)
     {a b : ℝ} (ha : a ∈ s) (hb : b ∈ s) :

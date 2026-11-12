@@ -402,7 +402,8 @@ formula on models and manifold charts, the complete overlap transformation
 law, metric pullback, naturality, open restriction and the nonlinear
 connection examples at default elaborator settings. The stage B connection
 proof endpoints are implemented; its PR still requires review and merge.
-The curvature endpoints below are implemented. Parallel transport, local inertial coordinates,
+The curvature endpoints below are implemented. Finite-segment parallel
+transport is described in the motion section. Local inertial coordinates,
 curved forms and the Newtonian motion limit remain later work.
 
 ## GR 5.1: curvature and intrinsic contractions
@@ -592,23 +593,58 @@ is an affine geodesic for both signatures. For the nonlinear shear metric,
 `parallelField_parallel` proves that `(a,b−2sa)` is parallel along it, and
 `parallelField_inertial_components` evaluates the field in the actual
 inertial chart to the constant vector `(a,b)`.
+`parallelTransport_model` evaluates the constructed endpoint equivalence as
+`(v₀,v₁) ↦ (v₀,v₁−2(s₁−s₀)v₀)` in the nonlinear coordinates.
 The separate exact experiment checks these equations, metric preservation,
-and both terms in the acceleration reparametrization formula, including
-a change with zero parameter speed.
+transport subdivision/reversal, a nonzero null parallel field, and both
+terms in the acceleration reparametrization formula, including a change
+with zero parameter speed.
 
-Stage D remains in progress. Parallel-transport existence and uniqueness
-along prescribed segments, the resulting linear isometries and
-concatenation/reversal laws, nonzero null-velocity preservation, the local
+`AlongCurveRegularity.lean` proves that native along-field differentiability
+is equivalent to differentiability of components in any admissible chart,
+assuming a differentiable base curve. It also reconstructs `Cⁿ` fields for
+`n : ℕ∞`; smooth charts do not silently supply analytic regularity.
+`ParallelLocal.lean` constructs the linear operator
+`A(t)v = -Γ(γ(t))(q'(t),v)` and proves the equivalence of parallelism with
+`V' = A(t)V`. For a `C²` curve, the operator is locally `C¹`. The augmented
+ODE `(τ,w)' = (1,A(τ)w)` gives `exists_parallel_local`, and local operator
+bounds give `parallel_unique_local`. Neither existence nor a Lipschitz
+bound is an extra public hypothesis.
+
+`exists_localParallelFrame` solves for a finite chart basis and takes a
+common interval for all initial vectors. Pairing with its columns and
+nondegeneracy prove `parallel_eq_iff` on arbitrary convex parameter sets.
+`IsParallelOn.eq_zero_iff` and `IsGeodesicOn.null_iff` then preserve
+nonvanishing as well as zero metric norm. These proofs do not assume a
+global frame, global chart, or global Hausdorffness of the manifold.
+
+`ParallelExtension.lean` glues local frames using this uniqueness and
+propagates the construction along connected parameter intervals.
+`exists_parallelFrameOn_segment` and `exists_parallel_on_segment` provide
+solutions on the whole `uIcc a b` of a prescribed `C²` curve, with regularity
+at each point (including endpoint extensions). They do not assert geodesic
+completeness. `ParallelTransport.lean` exports:
+
+- `parallelTransport hγ : TangentSpace I (γ a) ≃L[ℝ] TangentSpace I (γ b)`;
+- `parallelTransport_apply_eq`: every parallel field computes that map;
+- `parallelTransport_metric` and `parallelTransport_self`;
+- `parallelTransport_reverse`: exchanging endpoints gives the inverse;
+- `parallelTransport_trans`: subdivision at `b ∈ uIcc a c` composes maps;
+- `parallelTransport_reparam`: a `C²` parameter map whose image stays in
+  the original segment preserves endpoint transport, even with zero speed.
+
+Stage D remains in progress. Piecewise-path concatenation, the local
 inertial-coordinate construction, and the local curvature-zero ↔
 `IsLocallyMinkowski` theorem remain open. Particle variation, curved forms
 and the Newtonian trajectory limit are the subsequent E–G stages.
 
-This increment passes the warning-free full build (9,271 jobs), root-import
-check, all six API checks and the transitive audit of 6,676 declarations
-(2,511 in smooth geometry). Only `propext`, `Classical.choice` and `Quot.sound`
+This increment passes the warning-free full build (9,277 jobs), root-import
+check, all six API checks and the transitive audit of 6,758 declarations
+(2,593 in smooth geometry). Only `propext`, `Classical.choice` and `Quot.sound`
 are permitted. Typed contracts fix the native along-field carrier, overlap
 and regularity hypotheses, metric and parameter-change formulas, coordinate
-ODE, local initial-value existence/uniqueness and concrete examples at
+ODE, local initial-value existence/uniqueness, finite-segment transport,
+its laws, nonzero-null preservation and concrete examples at
 default elaborator settings. The installed-package exact Lorentz experiment
 also passes. These checks validate this increment, not the remaining D–G
 proof obligations.

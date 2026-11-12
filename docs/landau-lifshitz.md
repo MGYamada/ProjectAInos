@@ -130,9 +130,12 @@ curves, proves metric preservation for parallel fields and geodesic
 velocity, and derives the coordinate geodesic ODE. The local geodesic
 initial-value problem has proved existence and uniqueness on the actual
 tangent bundle. Reparametrization, both-signature Minkowski lines and the
-nonlinear-chart geodesic/parallel-field examples are proved. Transport
-existence/composition, nonzero null velocities, local inertia and local
-flatness equivalence remain in D. Particle variation, curved forms and
+nonlinear-chart geodesic/parallel-field examples are proved. Parallel fields
+exist uniquely along prescribed finite segments, and endpoint transport
+preserves the metric, composes under subdivision, reverses by inversion,
+and respects parameter changes. Nonzero null velocities are preserved.
+Piecewise-path concatenation, local inertia and local flatness equivalence
+remain in D. Particle variation, curved forms and
 the Newtonian motion limit remain in the work
 tracked by [#52](https://github.com/MGYamada/ProjectAInos/issues/52).
 Einstein equations and their Newtonian field-equation limit remain in 5.2;
