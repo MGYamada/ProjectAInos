@@ -568,6 +568,17 @@ metric compatibility and the product rule to obtain the chart-density
 derivative and `div V = ρ⁻¹ ∂ᵢ(ρVⁱ)`. A curved conformal constant field has
 proved nonzero divergence `4x`; exact calculations also check nonconstant
 fields in curved, time-dependent, non-diagonal metrics of either signature.
-The Maxwell covariant component bridge and the identification of `dJ=0`
-with vector divergence remain. The [geometry guide](smooth-geometry.md) and
+
+`Interior` constructs first-slot contraction on native topological fibres and
+proves linear-map naturality without native norms. `Minkowski/HodgeCurrent`
+derives all one-form signs and the coordinate volume contraction identity;
+`Lorentzian/HodgeCurrent` transfers it through pointwise signature witnesses.
+`Current` obtains the signed chart-density expression and proves the actual
+native equality `dJ=(div j) vol`. Nonvanishing volume makes current closedness
+equivalent to vanishing vector divergence. The sourced Maxwell equation alone
+therefore gives covariant current conservation. `CurrentExamples` proves the
+nonzero source vector `-∂x` and its divergence. Exact checks include curved
+mixed-coordinate metrics and nonzero current divergence in both signatures
+and orientations. The Maxwell covariant component bridge remains. The
+[geometry guide](smooth-geometry.md) and
 [electrodynamics guide](electrodynamics.md) record this boundary.

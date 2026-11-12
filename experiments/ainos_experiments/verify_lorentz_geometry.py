@@ -356,6 +356,30 @@ def verify_native_hodge():
     check_zero("conformal plane Hodge on one-forms",
                hodge_matrix(curved, 1) - sp.Matrix([[0, -1], [-1, 0]]))
 
+    # A curved four-dimensional metric with mixed coefficients tests the native current identity.
+    curved_four = sp.exp(2*y**2) * jacobian.T * eta * jacobian
+    rho = sp.sqrt(sp.Abs(sp.simplify(curved_four.det())))
+    t, x, y, z = coords
+    vector = sp.Matrix([t*x, z*y, t**2+x, 1+y**2])
+    gamma = christoffel(curved_four, coords)
+    divergence = sum(sp.diff(vector[i], coords[i]) for i in range(4)) + sum(
+        gamma[i][i, j] * vector[j] for i in range(4) for j in range(4))
+    check_zero("nonzero curved current divergence example",
+               divergence.subs({t: 0, x: 1, y: 0, z: 0}) - 2)
+    for metric_sign in (1, -1):
+        current = hodge_matrix(metric_sign * curved_four, 1) * (metric_sign * curved_four) * vector
+        for orientation in (1, -1):
+            expected_volume_contraction = sp.zeros(4, 1)
+            for i in range(4):
+                complement = tuple(j for j in range(4) if j != i)
+                expected_volume_contraction[indices(4, 3).index(complement)] = (
+                    orientation * (-1)**i * rho * vector[i])
+            check_zero("curved current is volume contraction",
+                       orientation * current - expected_volume_contraction)
+            check_zero("current derivative is divergence times volume",
+                       exterior_derivative(orientation * current, 3)
+                       - sp.Matrix([orientation * rho * divergence]))
+
 
 def verify_density_divergence():
     """Compare actual connection trace and density differentiation in curved charts."""
@@ -990,7 +1014,8 @@ def verify():
           "mixed covariant derivatives and densities of curve families, "
           "native alternating-form pullback, graded exterior calculus, "
           "volume density/orientation and divergence, Hodge local formulas, signs and squares, "
-          "and the time-dependent Maxwell current and constitutive sign.")
+          "the time-dependent Maxwell current and constitutive sign, "
+          "and curved current/volume/divergence identities in both signatures and orientations.")
 
 
 def main():

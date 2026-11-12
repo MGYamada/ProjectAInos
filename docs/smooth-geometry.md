@@ -1239,8 +1239,22 @@ alternating one-forms on native fibres. Its coordinate regularity theorem
 constructs `smoothOneFormEquiv` between the existing smooth cotangent and
 alternating-section bundles, without adding fibre norms. This supports the
 [fixed-background Maxwell form API](electrodynamics.md#fixed-background-maxwell-forms).
-The covariant Maxwell component bridge and the identification of `dJ=0`
-with vector-current divergence remain to be implemented.
+`Interior.lean` inserts a vector in the first slot of a continuous form on
+any topological real module. Its continuity proof uses no norm or finite-basis
+choice; naturality holds even for singular continuous linear maps.
+`InteriorDerivative.lean` proves the four-coordinate trace formula for the
+exterior derivative of contraction with coordinate volume. The chart-direction
+chain-rule API now also accepts vector-space-valued functions.
+
+`Minkowski/HodgeCurrent.lean` proves all four one-form Hodge signs, a general
+coordinate-volume cofactor expansion and `⋆(v♭)=ιᵥ vol` in four dimensions.
+`Lorentzian/HodgeCurrent.lean` transports this identity to every actual tangent
+fibre, in either signature, using only a pointwise Lorentz frame. The physical
+current API then proves `dJ=(div j) vol`, so closedness is equivalent to zero
+vector divergence. A directly computed Maxwell field has native vector source
+`-∂x`. SymPy also tests current contraction and nonzero divergence in curved
+mixed-coordinate metrics with either signature/orientation. The covariant
+Maxwell component bridge remains to be implemented.
 
 ## Scope and next stages
 

@@ -8,6 +8,7 @@ import ProjectAInos.SmoothGeometry.Lorentzian.AccelerationRegularity
 import ProjectAInos.SmoothGeometry.Lorentzian.LocalizedVariation
 import ProjectAInos.SmoothGeometry.Lorentzian.Dual
 import ProjectAInos.SmoothGeometry.Lorentzian.DivergenceExamples
+import ProjectAInos.SmoothGeometry.Lorentzian.HodgeCurrent
 import ProjectAInos.SmoothGeometry.Lorentzian.PullbackExamples
 import ProjectAInos.SmoothGeometry.Lorentzian.ChartExamples
 import ProjectAInos.SmoothGeometry.Lorentzian.ChartConnection
@@ -1711,3 +1712,11 @@ example (p : LorentzianConformalExample.Plane) :
   LorentzianDivergenceExamples.conformal_spatial_divergence p
 
 end NativeDivergence
+
+open DifferentialForm in
+example {σ : LorentzConvention} {M : Type} [TopologicalSpace M]
+    [ChartedSpace (MinkowskiModel 3) M] [IsManifold 𝓘(ℝ, MinkowskiModel 3) ∞ M]
+    (g : LorentzMetric σ 3 M) (o : OrientedAtlas 4 M) (x : M)
+    (v : TangentSpace 𝓘(ℝ, MinkowskiModel 3) x) :
+    g.hodgeFiber o x (by decide : 1 + 3 = 3 + 1) (oneFormEquiv (g.flat x v)) =
+      DifferentialForm.interior v (g.volumeForm o x) := g.hodge_flat_one o x v

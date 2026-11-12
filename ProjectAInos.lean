@@ -2,6 +2,8 @@ module  -- shake: keep-all --deprecated_module: ignore
 
 public import ProjectAInos.Electrodynamics.Components
 public import ProjectAInos.Electrodynamics.Covariance
+public import ProjectAInos.Electrodynamics.Current
+public import ProjectAInos.Electrodynamics.CurrentExamples
 public import ProjectAInos.Electrodynamics.Curved
 public import ProjectAInos.Electrodynamics.CurvedExamples
 public import ProjectAInos.Electrodynamics.Examples
@@ -91,6 +93,8 @@ public import ProjectAInos.SmoothGeometry.DifferentialForm.Hodge
 public import ProjectAInos.SmoothGeometry.DifferentialForm.HodgeBasis
 public import ProjectAInos.SmoothGeometry.DifferentialForm.HodgeFormula
 public import ProjectAInos.SmoothGeometry.DifferentialForm.HodgeTransport
+public import ProjectAInos.SmoothGeometry.DifferentialForm.Interior
+public import ProjectAInos.SmoothGeometry.DifferentialForm.InteriorDerivative
 public import ProjectAInos.SmoothGeometry.DifferentialForm.NativeChart
 public import ProjectAInos.SmoothGeometry.DifferentialForm.NativeCoordinates
 public import ProjectAInos.SmoothGeometry.DifferentialForm.NativeExamples
@@ -142,6 +146,7 @@ public import ProjectAInos.SmoothGeometry.Lorentzian.FlatFrameExamples
 public import ProjectAInos.SmoothGeometry.Lorentzian.FlatTransport
 public import ProjectAInos.SmoothGeometry.Lorentzian.Geodesic
 public import ProjectAInos.SmoothGeometry.Lorentzian.HodgeCoordinates
+public import ProjectAInos.SmoothGeometry.Lorentzian.HodgeCurrent
 public import ProjectAInos.SmoothGeometry.Lorentzian.HodgeCurvedExamples
 public import ProjectAInos.SmoothGeometry.Lorentzian.HodgeExamples
 public import ProjectAInos.SmoothGeometry.Lorentzian.HodgeFiber
@@ -197,6 +202,7 @@ public import ProjectAInos.SmoothGeometry.Minkowski.Causal
 public import ProjectAInos.SmoothGeometry.Minkowski.Convention
 public import ProjectAInos.SmoothGeometry.Minkowski.Dual
 public import ProjectAInos.SmoothGeometry.Minkowski.Hodge
+public import ProjectAInos.SmoothGeometry.Minkowski.HodgeCurrent
 public import ProjectAInos.SmoothGeometry.Minkowski.HodgeFour
 public import ProjectAInos.SmoothGeometry.Minkowski.HodgeNaturality
 public import ProjectAInos.SmoothGeometry.Minkowski.Isometry

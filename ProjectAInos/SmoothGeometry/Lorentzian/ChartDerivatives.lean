@@ -6,7 +6,7 @@ module
 
 public import ProjectAInos.SmoothGeometry.Lorentzian.ChartConnection
 
-/-! # Scalar differentiation in manifold chart directions -/
+/-! # Differentiation in manifold chart directions -/
 
 @[expose] public section
 noncomputable section
@@ -20,24 +20,26 @@ namespace ProjectAInos.SmoothGeometry.LorentzMetric
 variable {d : ℕ} {M : Type} [TopologicalSpace M]
   [ChartedSpace (MinkowskiModel d) M] [IsManifold 𝓘(ℝ, MinkowskiModel d) ∞ M]
 
+variable {F : Type*} [NormedAddCommGroup F] [NormedSpace ℝ F]
+
 local notation "E" => MinkowskiModel d
 local notation "I" => 𝓘(ℝ, MinkowskiModel d)
 
 omit [IsManifold I ∞ M] in
-/-- Local equality suffices for equality of scalar manifold derivatives. -/
-theorem mvfderiv_congr_of_eventuallyEq {f h : M → ℝ} {x : M}
+/-- Local equality suffices for equality of vector-space-valued manifold derivatives. -/
+theorem mvfderiv_congr_of_eventuallyEq {f h : M → F} {x : M}
     (hfh : f =ᶠ[𝓝 x] h) : mvfderiv I f x = mvfderiv I h x := by
   simp only [mvfderiv, hfh.mfderiv_eq]
   rfl
 
 omit [IsManifold I ∞ M] in
-/-- Scalar differentiation along a pulled-back constant chart direction is
+/-- Differentiation along a pulled-back constant chart direction is
 ordinary differentiation of the coordinate representative. -/
 theorem mvfderiv_chartField {e : OpenPartialHomeomorph M E}
     (he : e ∈ IsManifold.maximalAtlas I ∞ M) {x : M} (hx : x ∈ e.source)
-    {f : M → ℝ} (hf : MDifferentiableAt I 𝓘(ℝ) f x) (v : E) :
+    {f : M → F} (hf : MDifferentiableAt I 𝓘(ℝ, F) f x) (v : E) :
     mvfderiv I f x (chartField e v x) = fderiv ℝ (f ∘ e.symm) (e x) v := by
-  have hF : MDifferentiableAt I 𝓘(ℝ) (f ∘ e.symm) (e x) :=
+  have hF : MDifferentiableAt I 𝓘(ℝ, F) (f ∘ e.symm) (e x) :=
     hf.comp_of_eq (e x) ((contMDiffAt_symm_of_mem_maximalAtlas he (e.map_source hx)).mdifferentiableAt
       (by simp)) (e.left_inv hx)
   have heq : (f ∘ e.symm) ∘ e =ᶠ[𝓝 x] f := by

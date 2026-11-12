@@ -304,9 +304,10 @@ general square identity requires no flatness or global frame. The curved
 conformal plane verifies the native and smooth operators. Intrinsic divergence
 and its density formula are also proved in every smooth chart. Fixed-background
 Maxwell forms now have invertible current identification, sourced current
-closedness, orientation invariance and a nonzero-current example. The
+closedness, orientation invariance and a nonzero-current example. Volume
+contraction and `dJ = (div j) vol` identify that closedness with vanishing
+covariant vector divergence. The
 [geometry guide](smooth-geometry.md) and [electrodynamics guide](electrodynamics.md)
-record these proofs. The covariant Maxwell component bridge and identification
-of current closedness with vector divergence (F), together with the controlled
-time-dependent Newtonian motion/trajectory limit (G), remain. Einstein dynamics
+record these proofs. The covariant Maxwell component bridge (F), together with
+the controlled time-dependent Newtonian motion/trajectory limit (G), remain. Einstein dynamics
 belongs to §5.2 and the Maxwell field action to §4.2 / #44.

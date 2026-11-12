@@ -62,15 +62,32 @@ exact agreement with minus the existing flat physical star.
 
 `CurvedExamples.lean` computes `F=t dt∧dx`, `H=t dy∧dz`, and
 `J=dt∧dy∧dz` directly, proves `dF=0` and proves the resulting source is nonzero.
-The corresponding SymPy calculation also checks the vector sign `j=-∂x`.
+`CurrentExamples.lean` now proves the actual vector sign `j=-∂x`, using the
+injective current identification and volume contraction, and its divergence
+vanishes. The corresponding SymPy calculation agrees.
 Typed API examples fix the current roundtrips, the sole source-equation premise
 for conservation, orientation independence and exact flat normalization.
 
-The shared geometry now proves the intrinsic trace/divergence density formula.
-Identifying `J` with contraction of the oriented volume, proving the covariant
-Maxwell component equations, and translating `dJ=0` to vector divergence are
-still pending in stage F. The Maxwell action and its variational derivation
-belong to §4.2 / #44.
+`Electrodynamics/Current.lean` proves `currentForm_volume`: the physical
+three-form is `ιⱼ vol` on the actual tangent fibre. The shared geometric
+identity holds for either Lorentz sign, using only a pointwise signature
+witness and its orientation sign. `currentForm_chart` derives the signed,
+positive-density coordinate expression. The actual native exterior derivative
+and the proved density formula then give `exteriorDerivative_currentForm`:
+
+\[
+dJ=(\operatorname{div}j)\,\mathrm{vol}_g.
+\]
+
+Since the volume form is nowhere zero, `current_closed_iff_divergence` is an
+equivalence, and `divergence_zero_of_source` needs only the sourced Maxwell
+equation. No flatness or globally extended chart is assumed. Typed contracts
+fix these premises and conclusions. Exact SymPy checks a curved four-dimensional
+metric with mixed coefficients, a vector field with nonzero divergence, both
+metric signatures and both orientations.
+
+The covariant Maxwell component equations remain pending in stage F. The
+Maxwell action and its variational derivation belong to §4.2 / #44.
 
 ## Actual action and admissible variations
 

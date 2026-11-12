@@ -203,8 +203,9 @@ Intrinsic divergence and its positive-density formula are now proved in all
 smooth charts, including a nonzero curved example. Fixed-background Maxwell
 forms, invertible vector/three-form current identification, sourced current
 closedness and orientation invariance are implemented. A time-dependent
-nonzero-current example fixes the physical sign. The covariant Maxwell
-component bridge, its vector-divergence conservation statement, and the
+nonzero-current example fixes the physical vector sign. Pointwise volume
+contraction and `dJ = (div j) vol` now prove vector-divergence conservation.
+The covariant Maxwell component bridge and the
 Newtonian motion limit remain in the work
 tracked by [#52](https://github.com/MGYamada/ProjectAInos/issues/52).
 Einstein equations and their Newtonian field-equation limit remain in 5.2;

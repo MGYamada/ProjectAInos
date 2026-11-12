@@ -9,6 +9,7 @@ import ProjectAInos.SmoothGeometry.DifferentialForm.NativeCoordinates
 import ProjectAInos.SmoothGeometry.DifferentialForm.NativeGluing
 import ProjectAInos.SmoothGeometry.DifferentialForm.NativeExteriorExamples
 import ProjectAInos.SmoothGeometry.DifferentialForm.NativeWedgeExamples
+import ProjectAInos.SmoothGeometry.DifferentialForm.InteriorDerivative
 
 /-! External API regressions: use the public definitions with default elaborator
 options, without unfolding morphism wrappers or adding local instances. -/
@@ -283,3 +284,23 @@ example : smoothExteriorDerivative (smoothWedge NativeExamples.axisZero NativeEx
     -NativeExamples.standardVolume := NativeExamples.negative_leibniz_example
 
 end NativeExteriorProduct
+
+section NativeInterior
+
+open DifferentialForm
+variable {V W : Type*} [AddCommGroup V] [Module ℝ V] [TopologicalSpace V]
+  [AddCommGroup W] [Module ℝ W] [TopologicalSpace W] {k : ℕ}
+
+example (v : V) (α : V [⋀^Fin (k + 1)]→L[ℝ] ℝ) (w : Fin k → V) :
+    DifferentialForm.interior v α w = α (Matrix.vecCons v w) := interior_apply v α w
+
+example (L : V →L[ℝ] W) (v : V) (α : W [⋀^Fin (k + 1)]→L[ℝ] ℝ) :
+    DifferentialForm.interior v (α.compContinuousLinearMap L) =
+      (DifferentialForm.interior (L v) α).compContinuousLinearMap L := interior_comp L v α
+
+example {V : (Fin 4 → ℝ) → (Fin 4 → ℝ)} {x : Fin 4 → ℝ} (hV : DifferentiableAt ℝ V x) :
+    extDeriv (fun y => DifferentialForm.interior (V y) (coordinateForm id)) x =
+      (∑ i : Fin 4, fderiv ℝ V x (Pi.single i 1) i) • coordinateForm id :=
+  extDeriv_interior_volume_four hV
+
+end NativeInterior

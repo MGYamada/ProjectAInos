@@ -100,4 +100,23 @@ example : Curved.currentForm (minkowskiMetric .timeNegative 3) (OrientedAtlas.st
 example : Curved.source (minkowskiMetric .timeNegative 3) (OrientedAtlas.standard 4)
     Curved.Examples.electric ≠ 0 := Curved.Examples.electric_source_nonzero
 
+example (j : Curved.CurrentVector (M := M)) (x : M) :
+    Curved.currentForm g o j x = DifferentialForm.interior (j x) (g.volumeForm o x) :=
+  Curved.currentForm_volume g o j x
+
+example (j : Curved.CurrentVector (M := M)) (x : M) :
+    smoothExteriorDerivative (Curved.currentForm g o j) x =
+      g.divergence j x • g.volumeForm o x := Curved.exteriorDerivative_currentForm g o j x
+
+example (j : Curved.CurrentVector (M := M)) :
+    smoothExteriorDerivative (Curved.currentForm g o j) = 0 ↔ ∀ x, g.divergence j x = 0 :=
+  Curved.current_closed_iff_divergence g o j
+
+example (F : Curved.Field (M := M)) (j : Curved.CurrentVector (M := M))
+    (h : smoothExteriorDerivative (Curved.excitation g o F) = Curved.currentForm g o j) :
+    ∀ x, g.divergence j x = 0 := Curved.divergence_zero_of_source g o F j h
+
+example : Curved.source (minkowskiMetric .timeNegative 3) (OrientedAtlas.standard 4)
+    Curved.Examples.electric = Curved.Examples.negativeSpatial := Curved.Examples.electric_source
+
 end CurvedMaxwell

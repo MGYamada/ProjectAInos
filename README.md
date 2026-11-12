@@ -312,9 +312,11 @@ The actual connection trace now defines smooth divergence and yields
 On a fixed four-dimensional `(-+++)` background, Maxwell forms use
 `H = -⋆F` and `J = ⋆(j♭)`. The current identification is invertible;
 the sourced equation implies `dJ = 0`, and orientation reversal preserves
-the equations. A time-dependent field verifies the constitutive sign and
-nonzero source. The covariant Maxwell component bridge and its identification
-of current closedness with vector divergence remain to be implemented.
+the equations. Pointwise Lorentz frames prove `⋆(j♭) = ιⱼ vol` with no flatness
+or global-frame assumption. Chart differentiation proves `dJ = (div j) vol`,
+so current closedness is equivalent to vanishing covariant vector divergence.
+A time-dependent field has the proved nonzero vector source `j = -∂x`, fixing
+the physical sign. The covariant Maxwell component bridge remains to be implemented.
 The [GR guide](docs/general-relativity.md)
 records the exact scope and typed contracts.
 The [shared geometry guide](docs/smooth-geometry.md)
