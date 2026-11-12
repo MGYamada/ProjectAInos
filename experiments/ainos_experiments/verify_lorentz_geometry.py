@@ -311,6 +311,43 @@ def verify_family_variations(metric, coordinates, gamma, *, shear=False):
                    sp.integrate(sp.diff(-mass*sp.sqrt(-nonlinear_q), epsilon).subs(epsilon, 0), (s, 0, 1)))
 
 
+def verify_localized_variations(metric, coordinates):
+    """C² compact chart tests and a nonstationary curved clock, all exact."""
+    s, epsilon, u, v = sp.symbols("s epsilon u v", real=True)
+    left, right = sp.Rational(1, 4), sp.Rational(3, 4)
+    cutoff = 4096*(s-left)**3*(right-s)**3
+    # Extending by zero has matching derivatives through order two.
+    check_zero("localized cutoff C2 gluing",
+               [sp.diff(cutoff, s, k).subs(s, end)
+                for k in range(3) for end in (left, right)])
+    check_zero("localized cutoff midpoint", cutoff.subs(s, sp.Rational(1, 2))-1)
+    time, space = s + epsilon*cutoff*u, epsilon*cutoff*v
+    family = sp.Matrix([time, space-time**2])
+    reference = sp.Matrix([s, -s**2])
+    check_zero("localized chart reference", family.subs(epsilon, 0)-reference)
+    check_zero("localized chart native test velocity",
+               sp.diff(family, epsilon).subs(epsilon, 0)
+               - cutoff*sp.Matrix([u, v-2*s*u]))
+    along_metric = metric.subs(dict(zip(coordinates, family)), simultaneous=True)
+    velocity = sp.diff(family, s)
+    density = sp.simplify((velocity.T*along_metric*velocity)[0]/2)
+    check_zero("localized chart quadratic stationarity",
+               sp.integrate(sp.diff(density, epsilon).subs(epsilon, 0), (s, left, right)))
+
+    # At x=1, a supported spatial test detects the conformal clock's acceleration.
+    curved_family = sp.Matrix([s, 1+epsilon*cutoff])
+    curved_metric = sp.exp(2*curved_family[1]**2)*sp.diag(-1, 1)
+    curved_velocity = sp.diff(curved_family, s)
+    norm = (curved_velocity.T*curved_metric*curved_velocity)[0]
+    total = sp.integrate(cutoff, (s, left, right))
+    assert total > 0
+    quadratic = sp.integrate(sp.diff(norm/2, epsilon).subs(epsilon, 0), (s, left, right))
+    massive = sp.integrate(sp.diff(-sp.sqrt(-norm), epsilon).subs(epsilon, 0), (s, left, right))
+    check_zero("curved clock localized quadratic variation", quadratic+2*sp.exp(2)*total)
+    check_zero("curved clock localized massive variation", massive+2*sp.E*total)
+    assert quadratic < 0 and massive < 0
+
+
 def verify_motion(metric, coordinates, gamma, jacobian):
     s, a, b, c, d = sp.symbols("s a b c d", real=True)
     curve = sp.Matrix([s, -s**2])
@@ -615,6 +652,7 @@ def verify():
     verify_clocks(metric, curved_metric, coordinates)
     verify_family_variations(eta, inertial, flat_gamma)
     verify_family_variations(metric, coordinates, gamma, shear=True)
+    verify_localized_variations(metric, coordinates)
     verify_family_variations(curved_metric, coordinates, curved_gamma)
     check_zero("conformal time connection", curved_gamma[0] - sp.Matrix([[0, 2*x], [2*x, 0]]))
     check_zero("conformal spatial connection", curved_gamma[1] - sp.diag(2*x, 2*x))

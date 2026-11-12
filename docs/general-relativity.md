@@ -1,6 +1,6 @@
-# General relativity: intrinsic clocks and quadratic variation
+# General relativity: intrinsic clocks and particle variation
 
-This is the physics-layer work in progress for stage E in
+This is the implemented physics layer for stage E in
 [§5.1 / issue #52](https://github.com/MGYamada/ProjectAInos/issues/52).
 The shared connection, curvature and motion APIs are described in the
 [smooth-geometry guide](smooth-geometry.md). Definitions here use the actual
@@ -89,12 +89,9 @@ the native affine geodesic equation on `(a,b)`, using nondegeneracy of the
 Lorentz metric. No geodesic equation or desired variation formula is
 assumed as part of a data structure.
 
-The intrinsic clock/action constructions work on arbitrary smooth
-manifolds. The above geodesic **variational equivalence currently requires
-the model manifold**. The open-domain calculus supplies local tools but
-does not yet prove the general-manifold converse from stationarity to motion.
-Native manifold-family action derivatives, subdivision and the forward
-direction are now proved below.
+The coordinate theorem remains available for the model manifold. The native
+`QuadraticStationary` theorem below proves the equivalence for arbitrary
+Lorentz manifolds and actual fixed-endpoint families crossing chart boundaries.
 
 ## Massive stationarity and constructed proper-time parameters
 
@@ -200,8 +197,39 @@ endpoint variation fields. It proves that every affine geodesic is stationary
 under these manifold families for the quadratic action, with no causal
 restriction on variations. Timelike tangential acceleration likewise implies
 massive stationarity; metric compatibility determines the speed factor.
-The **converse** implications on arbitrary manifolds still require localized
-test-family constructions and are not yet claimed.
+
+[ManifoldCurve](../ProjectAInos/Variational/ManifoldCurve.lean) defines
+`ManifoldCurveVariation`: an actual two-parameter family through the reference
+curve, jointly C² near each point of the finite reference segment, fixing both
+endpoints for nearby parameters. `chartCurveVariation` constructs one from a
+C² coordinate perturbation whose topological support lies in an interior time
+patch mapped into a smooth chart. Outside the patch it is the reference curve;
+the support condition proves smooth gluing.
+
+`LocalizedVariation` proves that the actual native variation field is exactly
+the prescribed chart field. `VariationTesting` applies the fundamental lemma
+to compact scalar tests in a small chart near each time. Metric nondegeneracy
+forces the residual to vanish. Realizability of tests is proved, not supplied
+as a premise. `AccelerationRegularity` derives continuous native acceleration
+from C² curve regularity.
+
+[ManifoldStationary](../ProjectAInos/GeneralRelativity/ManifoldStationary.lean)
+quantifies `QuadraticStationary` and `FreeStationary` over all such families.
+For `a < b` and local C² regularity along `[a,b]`:
+
+- `quadraticStationary_iff_geodesic` proves equivalence to affine motion on `(a,b)`.
+- `freeStationary_iff_acceleration`, for positive mass and a timelike reference
+  segment, proves `∇tT = (s'/s)T`; `freeStationary_iff_tangential` is equivalent.
+- [ManifoldMotion](../ProjectAInos/GeneralRelativity/ManifoldMotion.lean) proves
+  equivalence to actual regular local affine reparametrization. Unit proper
+  speed gives the affine equation, and `freeStationary_finite_properTime`
+  constructs one inverse of the actual clock integral over the full segment.
+- The affine equation extends to finite endpoints by continuity.
+  `QuadraticStationary.null_initial` preserves both nonvanishing and zero
+  metric norm on the closed segment. The family space has no null constraint.
+
+These results require no global chart, global frame, orientation, time
+orientation, completeness, or global Hausdorff hypothesis.
 
 ## Proved examples and validation
 
@@ -235,6 +263,11 @@ endpoints for every parameter. The native manifold theorems prove zero
 derivatives of both actual actions on `[0,1]`; this family is nonlinear in
 both time and the variation parameter.
 
+The same module constructs a smooth compact chart test supported in
+`[1/4,3/4]`, fixing the endpoints `0,1` and realizing any prescribed chart
+tangent vector at `1/2`. It also proves massive stationarity and failure of
+quadratic stationarity for the exponential clock under all native families.
+
 A clock at a fixed spatial coordinate is not claimed to be a geodesic.
 Typed contracts in
 [GeneralRelativityAPI](../checks/GeneralRelativityAPI.lean) use default
@@ -253,20 +286,16 @@ two-parameter families test the mixed covariant derivative law and both density
 derivatives independently in flat, shear and curved conformal metrics.
 They also verify the endpoint/residual identities, subdivision with a nonzero
 junction pairing, and stationarity of the nonlinear fixed-endpoint family.
-It runs in the existing non-required Experiments workflow. These exact
+Localized C² polynomial cutoffs independently check zero-extension gluing,
+chart test velocities and stationarity. A supported spatial test detects the
+nonzero quadratic and massive first variations of the accelerated conformal
+clock at `x=1`. It runs in the existing non-required Experiments workflow. These exact
 calculations test conventions; Lean establishes the formal claims.
 
-## Remaining stage E obligations
+## Scope after stage E
 
-- Construct localized fixed-endpoint manifold families testing arbitrary
-  compactly supported variation fields.
-- Prove the converse from stationarity under all such families to the native
-  motion equations, completing both general-manifold equivalences and their
-  local-reparametrization/unit-rate corollaries.
-- Connect null initial-data preservation to the full manifold variational
-  result, without restricting variations to null curves.
-
-This increment does not complete stage E or #52. Curved exterior
+The stage E principal proof endpoints are implemented and awaiting review.
+Curved exterior
 calculus/Hodge/Maxwell (F) and the controlled time-dependent Newtonian
 motion/trajectory limit (G) remain. Einstein dynamics belongs to §5.2 and
 the Maxwell field action to §4.2 / #44.

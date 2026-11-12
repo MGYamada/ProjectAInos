@@ -288,6 +288,101 @@ example (g : LorentzMetric .timeNegative d M) (m : ℝ)
 
 end NativeFiniteAndFamilies
 
+section NativeStationarity
+
+open Variational
+variable {d : ℕ} {M : Type} [TopologicalSpace M]
+  [ChartedSpace (MinkowskiModel d) M] [IsManifold 𝓘(ℝ, MinkowskiModel d) ∞ M]
+local notation "E" => MinkowskiModel d
+local notation "I" => 𝓘(ℝ, MinkowskiModel d)
+
+example (g : LorentzMetric .timeNegative d M)
+    {γ : ℝ → M} {a b : ℝ} (V : ManifoldCurveVariation («E» := E) γ a b) :
+    HasDerivAt (fun ε => quadraticAction g (fun t => V.family (ε, t)) a b)
+      (∫ t in a..b, -g.form (γ t) (variationField V t)
+        (g.covariantAlong (curveVelocity γ) t)) 0 :=
+  quadraticAction_variation_hasDerivAt g V
+
+example (g : LorentzMetric .timeNegative d M) (m : ℝ)
+    {γ : ℝ → M} {a b : ℝ} (V : ManifoldCurveVariation («E» := E) γ a b)
+    (hv : ∀ t ∈ uIcc a b, Timelike g (curveVelocity γ t)) :
+    HasDerivAt (fun ε => freeAction g m (fun t => V.family (ε, t)) a b)
+      (∫ t in a..b, -(m / speedAlong g γ t) * g.form (γ t) (variationField V t)
+        (g.covariantAlong (curveVelocity γ) t -
+          (deriv (speedAlong g γ) t / speedAlong g γ t) • curveVelocity γ t)) 0 :=
+  freeAction_variation_hasDerivAt g m V hv
+
+example (g : LorentzMetric .timeNegative d M)
+    {γ : ℝ → M} {a b : ℝ} (hab : a < b)
+    (hγ : ∀ t ∈ uIcc a b, ContMDiffAt 𝓘(ℝ) I 2 γ t) :
+    QuadraticStationary g γ a b ↔ g.IsGeodesicOn (Ioo a b) γ :=
+  quadraticStationary_iff_geodesic g hab hγ
+
+example (g : LorentzMetric .timeNegative d M)
+    {m : ℝ} (hm : 0 < m) {γ : ℝ → M} {a b : ℝ} (hab : a < b)
+    (hγ : ∀ t ∈ uIcc a b, ContMDiffAt 𝓘(ℝ) I 2 γ t)
+    (hv : ∀ t ∈ uIcc a b, Timelike g (curveVelocity γ t)) :
+    FreeStationary g m γ a b ↔ ∀ t ∈ Ioo a b,
+      g.covariantAlong (curveVelocity γ) t =
+        (deriv (speedAlong g γ) t / speedAlong g γ t) • curveVelocity γ t :=
+  freeStationary_iff_acceleration g hm hab hγ hv
+
+example (g : LorentzMetric .timeNegative d M)
+    {m : ℝ} (hm : 0 < m) {γ : ℝ → M} {a b : ℝ} (hab : a < b)
+    (hγ : ∀ t ∈ uIcc a b, ContMDiffAt 𝓘(ℝ) I 2 γ t)
+    (hv : ∀ t ∈ uIcc a b, Timelike g (curveVelocity γ t)) :
+    FreeStationary g m γ a b ↔ ∀ t ∈ Ioo a b, ∃ k : ℝ,
+      g.covariantAlong (curveVelocity γ) t = k • curveVelocity γ t :=
+  freeStationary_iff_tangential g hm hab hγ hv
+
+example (g : LorentzMetric .timeNegative d M)
+    {m : ℝ} (hm : 0 < m) {γ : ℝ → M} {a b : ℝ} (hab : a < b)
+    (hγ : ∀ t ∈ uIcc a b, ContMDiffAt 𝓘(ℝ) I 2 γ t)
+    (hunit : ∀ t ∈ uIcc a b, speedAlong g γ t = 1) :
+    FreeStationary g m γ a b ↔ g.IsGeodesicOn (Ioo a b) γ :=
+  freeStationary_iff_geodesic_of_unitSpeed g hm hab hγ hunit
+
+example (g : LorentzMetric .timeNegative d M)
+    {m : ℝ} (hm : 0 < m) {γ : ℝ → M} {a b : ℝ} (hab : a < b)
+    (hγ : ∀ t ∈ uIcc a b, ContMDiffAt 𝓘(ℝ) I 2 γ t)
+    (hv : ∀ t ∈ uIcc a b, Timelike g (curveVelocity γ t)) :
+    FreeStationary g m γ a b ↔
+      ∀ t₀ ∈ Ioo a b, ∃ e : OpenPartialHomeomorph ℝ ℝ,
+        t₀ ∈ e.source ∧ e.source ⊆ Ioo a b ∧
+        (∀ τ ∈ e.target, ContDiffAt ℝ 2 e.symm τ ∧ 0 < deriv e.symm τ) ∧
+        g.IsGeodesicOn e.target (γ ∘ e.symm) :=
+  freeStationary_iff_localGeodesic g hm hab hγ hv
+
+example (g : LorentzMetric .timeNegative d M)
+    {m : ℝ} (hm : 0 < m) {γ : ℝ → M} {a b : ℝ} (hab : a < b)
+    (hγ : ∀ t ∈ uIcc a b, ContMDiffAt 𝓘(ℝ) I 2 γ t)
+    (hv : ∀ t ∈ uIcc a b, Timelike g (curveVelocity γ t))
+    (hs : FreeStationary g m γ a b) :
+    ∃ r : ℝ → ℝ,
+      r 0 = a ∧ r (properTime g γ a b) = b ∧
+      MapsTo r (Icc 0 (properTime g γ a b)) (Icc a b) ∧
+      (∀ τ ∈ Icc 0 (properTime g γ a b),
+        ContDiffAt ℝ 2 r τ ∧ HasDerivAt r (speedAlong g γ (r τ))⁻¹ τ ∧
+        properTime g γ a (r τ) = τ ∧ speedAlong g (γ ∘ r) τ = 1) ∧
+      g.IsGeodesicOn (Ioo 0 (properTime g γ a b)) (γ ∘ r) :=
+  freeStationary_finite_properTime g hm hab hγ hv hs
+
+example {g : LorentzMetric .timeNegative d M}
+    {γ : ℝ → M} {a b : ℝ} (hs : QuadraticStationary g γ a b) (hab : a < b)
+    (hγ : ∀ t ∈ uIcc a b, ContMDiffAt 𝓘(ℝ) I 2 γ t)
+    (hnull : curveVelocity (d := d) γ a ≠ 0 ∧
+      g.form (γ a) (curveVelocity γ a) (curveVelocity γ a) = 0) :
+    ∀ t ∈ Icc a b, curveVelocity (d := d) γ t ≠ 0 ∧
+      g.form (γ t) (curveVelocity γ t) (curveVelocity γ t) = 0 :=
+  hs.null_initial hab hγ hnull
+
+example (g : LorentzMetric .timeNegative d M) (γ : ℝ → M) (a b : ℝ) :
+    QuadraticStationary g γ a b ↔
+      ∀ V : ManifoldCurveVariation («E» := E) γ a b,
+        HasDerivAt (fun ε => quadraticAction g (fun t => V.family (ε, t)) a b) 0 0 := Iff.rfl
+
+end NativeStationarity
+
 section CoordinateVariation
 
 variable {E : Type} [NormedAddCommGroup E] [NormedSpace ℝ E] [FiniteDimensional ℝ E]
@@ -452,5 +547,18 @@ example (m : ℝ) :
     HasDerivAt (fun ε => freeAction LorentzianCharts.metric m
       (fun t => VariationExamples.nonlinearFamily (ε, t)) 0 1) 0 0 :=
   VariationExamples.nonlinearFamily_free_stationary m
+
+example (w : LorentzianCharts.Plane) :
+    variationField (VariationExamples.localTest w) (1 / 2) =
+      chartField LorentzianCharts.inertialChart w (LorentzianCharts.inertialTimePath (1 / 2)) :=
+  VariationExamples.localTest_field_center w
+
+example {m a b : ℝ} (hm : 0 < m) (hab : a < b) :
+    FreeStationary LorentzianCharts.metric m ParticleExamples.exponentialClock a b :=
+  VariationExamples.exponentialClock_native_free_stationary hm hab
+
+example {a b : ℝ} (hab : a < b) :
+    ¬QuadraticStationary LorentzianCharts.metric ParticleExamples.exponentialClock a b :=
+  VariationExamples.exponentialClock_not_native_quadratic_stationary hab
 
 end Examples

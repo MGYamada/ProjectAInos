@@ -332,7 +332,7 @@ then proves quadratic stationarity iff the native affine geodesic equation,
 without restricting variations to any causal class.
 
 This is a model-manifold variational endpoint, with an arbitrary curved metric;
-it does not yet prove the result for general manifold variations across charts.
+the native manifold equivalences proved below now remove that restriction.
 Those variation gluing arguments remain in E. F–G are subsequent work.
 The [GR guide](general-relativity.md) records the hypotheses. New typed GR
 contracts run under default elaborator settings in the required Lean job;
@@ -348,7 +348,7 @@ with `-(m/s)` times the metric dual of acceleration minus `(s'/s)` velocity.
 For positive mass and timelike reference curves, stationarity is equivalent
 to tangential native acceleration and to regular local affine-geodesic
 reparametrization. The unit-speed specialization is affine in the given
-parameter. These variational results currently require the model manifold.
+parameter. These coordinate results remain available alongside the native results below.
 
 `ProperTimeParameter` works on arbitrary Lorentz manifolds. C² timelike curves
 have C¹ clock rates; the actual clock integral is C² with positive derivative.
@@ -394,8 +394,15 @@ derivatives add over subdivisions, including across chart changes.
 `VariationStationary` derives vanishing endpoint variation fields from actual
 locally fixed endpoints. Affine geodesics are stationary for all such quadratic
 families without causal restrictions, and timelike tangential acceleration
-implies massive stationarity. The reverse directions, requiring localized
-manifold test families, are still outstanding. `VariationExamples` verifies a
+implies massive stationarity. `ManifoldCurve` now constructs actual localized
+chart families; `LocalizedVariation` identifies their native test vectors.
+`VariationTesting` applies the fundamental lemma on small interior time
+patches and metric nondegeneracy. `ManifoldStationary` consequently proves both
+full native equivalences, with positive mass and timelikeness only for the
+massive action. `ManifoldMotion` supplies local reparametrization, unit-rate,
+finite proper-time and closed-segment nonzero null preservation corollaries.
+`AccelerationRegularity` proves C² curves have continuous native acceleration
+and extends the affine equation to interval endpoints. `VariationExamples` verifies a
 genuine nonlinear fixed-endpoint family in the shear chart using the native
 theorems. Exact checks additionally test curved endpoint/residual terms and
 subdivision with a nonzero junction pairing.

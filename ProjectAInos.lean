@@ -41,6 +41,8 @@ public import ProjectAInos.GeneralRelativity.ClockExamples
 public import ProjectAInos.GeneralRelativity.FiniteProperTime
 public import ProjectAInos.GeneralRelativity.FreeGeodesic
 public import ProjectAInos.GeneralRelativity.FreeLagrangian
+public import ProjectAInos.GeneralRelativity.ManifoldMotion
+public import ProjectAInos.GeneralRelativity.ManifoldStationary
 public import ProjectAInos.GeneralRelativity.ParticleAction
 public import ProjectAInos.GeneralRelativity.ParticleExamples
 public import ProjectAInos.GeneralRelativity.ProperTime
@@ -87,6 +89,7 @@ public import ProjectAInos.SmoothGeometry.Gluing
 public import ProjectAInos.SmoothGeometry.Localization
 public import ProjectAInos.SmoothGeometry.LocallyRingedSpace
 public import ProjectAInos.SmoothGeometry.Lorentzian
+public import ProjectAInos.SmoothGeometry.Lorentzian.AccelerationRegularity
 public import ProjectAInos.SmoothGeometry.Lorentzian.AlongCurve
 public import ProjectAInos.SmoothGeometry.Lorentzian.AlongCurveMetric
 public import ProjectAInos.SmoothGeometry.Lorentzian.AlongCurveRegularity
@@ -117,6 +120,7 @@ public import ProjectAInos.SmoothGeometry.Lorentzian.LocalFlatnessConverse
 public import ProjectAInos.SmoothGeometry.Lorentzian.LocalFlatnessExamples
 public import ProjectAInos.SmoothGeometry.Lorentzian.LocalInertial
 public import ProjectAInos.SmoothGeometry.Lorentzian.LocalInertialExamples
+public import ProjectAInos.SmoothGeometry.Lorentzian.LocalizedVariation
 public import ProjectAInos.SmoothGeometry.Lorentzian.MotionExamples
 public import ProjectAInos.SmoothGeometry.Lorentzian.MotionODE
 public import ProjectAInos.SmoothGeometry.Lorentzian.Naturality
@@ -136,6 +140,7 @@ public import ProjectAInos.SmoothGeometry.Lorentzian.Regularity
 public import ProjectAInos.SmoothGeometry.Lorentzian.Restriction
 public import ProjectAInos.SmoothGeometry.Lorentzian.Ricci
 public import ProjectAInos.SmoothGeometry.Lorentzian.Tensor
+public import ProjectAInos.SmoothGeometry.Lorentzian.VariationTesting
 public import ProjectAInos.SmoothGeometry.Manifold.Charts
 public import ProjectAInos.SmoothGeometry.Manifold.ClosedCoframe
 public import ProjectAInos.SmoothGeometry.Manifold.Euclidean
@@ -273,6 +278,7 @@ public import ProjectAInos.Variational.IntegrationByParts
 public import ProjectAInos.Variational.IntervalParameter
 public import ProjectAInos.Variational.Local
 public import ProjectAInos.Variational.LocalExtension
+public import ProjectAInos.Variational.ManifoldCurve
 public import ProjectAInos.Variational.Parameter
 public import ProjectAInos.Variational.Regularity
 public import ProjectAInos.Variational.YangMillsBridge

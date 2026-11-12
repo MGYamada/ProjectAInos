@@ -58,13 +58,17 @@ open sets gives pointwise vanishing.
 | [EulerLagrange](../ProjectAInos/Variational/EulerLagrange.lean) | Covector decomposition, derivative as the residual pairing, and `stationary_iff_eulerLagrange` |
 | [Parameter](../ProjectAInos/Variational/Parameter.lean) | A positive derivative gives one open interval chart with a constructed C² inverse; endpoint neighborhoods extend closed-interval predicates |
 | [IntervalParameter](../ProjectAInos/Variational/IntervalParameter.lean) | Local joint C¹ regularity along a compact reference segment gives differentiation of the actual parameter integral, with domination derived; intrinsic boundary/residual splitting |
+| [ManifoldCurve](../ProjectAInos/Variational/ManifoldCurve.lean) | Actual fixed-endpoint C² manifold families and construction of supported chart perturbations, with gluing and coordinate velocity |
 | [Examples](../ProjectAInos/Variational/Examples.lean) | Nonzero variations on time and four-dimensional bases, and a base-dependent momentum with a nonzero divergence residual |
 
 The interval result keeps the term `[P η]ₐᵇ` and removes it when the variation
 vanishes at both endpoints. The stationarity theorem uses interior variations.
 The action derivative is a derivative along the specified real parameter.
 
-The scalar parameter lemmas have no geometry or physics imports. GR uses them
+The scalar parameter lemmas have no geometry or physics imports.
+`ManifoldCurve` uses generic manifold calculus but no Lorentz metric or physics;
+its constructor proves that localized chart tests are admissible families.
+GR uses the parameter lemmas
 to construct a single proper-time inverse over a finite timelike segment,
 including the endpoint correspondence; see the [GR guide](general-relativity.md).
 

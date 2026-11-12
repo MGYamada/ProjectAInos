@@ -164,8 +164,8 @@ Curved stationary-clock rates and integrals are proved. For an arbitrary smooth
 Lorentz metric on the model manifold, the actual quadratic-action first
 variation retains the endpoint term, and fixed-endpoint stationarity is
 equivalent to the native affine geodesic equation. Causal constraints are not
-imposed on variations. The [GR guide](general-relativity.md) distinguishes this
-result from the remaining general-manifold variation/gluing. Massive timelike
+imposed on variations. The [GR guide](general-relativity.md) records the native
+manifold generalizations below. Massive timelike
 stationarity in model coordinates is now equivalent to regular local
 affine-geodesic reparametrization. A single C² proper-time inverse now covers
 the full finite timelike segment on arbitrary Lorentz manifolds, with both
@@ -175,8 +175,12 @@ expected logarithmic inverse. Genuine C² manifold curve families now have
 proved actual-action derivatives, intrinsic endpoint formulas, and subdivision
 laws. Fixed endpoints eliminate the boundary terms, proving the motion-to-
 stationarity direction on arbitrary manifolds, including null reference
-geodesics for the quadratic action. The converse directions using localized
-manifold test families, curved forms and the Newtonian motion limit remain in the work
+geodesics for the quadratic action. Actual localized manifold test families
+now prove the converse directions and both complete native equivalences.
+Local affine reparametrization, unit proper speed, one finite proper-time
+inverse and closed-segment preservation of nonzero null initial velocity are
+proved. Stage E's principal endpoints await review. Curved forms and the
+Newtonian motion limit remain in the work
 tracked by [#52](https://github.com/MGYamada/ProjectAInos/issues/52).
 Einstein equations and their Newtonian field-equation limit remain in 5.2;
 the Maxwell field action remains in 4.2.

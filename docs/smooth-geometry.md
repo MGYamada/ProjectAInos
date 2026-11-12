@@ -583,8 +583,12 @@ the finite regularity of arbitrary native fields along a curve.
 The theorem supports both Lorentz conventions and introduces no physical
 imports. Its typed contracts are in `LorentzGeometryAPI`; the
 [GR guide](general-relativity.md) describes the resulting actual action
-derivatives, intrinsic boundary terms, subdivision and forward stationarity
-results, as well as the remaining converse proofs.
+derivatives, intrinsic boundary terms, subdivision and both stationarity
+equivalences. `AccelerationRegularity` derives continuous native acceleration
+and extension of the geodesic equation to closures. `LocalizedVariation`
+identifies actual chart-family velocities with the specified test fields;
+`VariationTesting` proves the nondegenerate fundamental lemma by local scalar
+tests realized by those families. These shared modules import no physics.
 
 `AlongCurveReparam.lean` proves `C^(n+1)` velocity regularity, the chain rule
 for `curveVelocity`, and both reparametrization identities:

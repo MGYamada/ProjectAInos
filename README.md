@@ -273,13 +273,20 @@ actions now have intrinsic first-variation formulas with endpoint terms,
 derived from local C² regularity on the finite reference segment. Their
 derivatives glue over subdivisions, and fixed-endpoint families make affine
 geodesics stationary for the quadratic action and timelike tangential motion
-stationary for the massive action. The converse implications on general
-manifolds, using localized test families, remain. The [GR guide](docs/general-relativity.md)
+stationary for the massive action. Localized chart families now realize the
+compact test fields used in the fundamental lemma. Both variational
+equivalences are proved on arbitrary Lorentz manifolds, including regular
+local reparametrization, unit proper speed, and one finite proper-time inverse.
+Nonzero null initial velocity is preserved on the entire closed quadratic-
+stationary segment, with no causal restriction on variations. A smooth compact
+test in the nonlinear chart realizes arbitrary midpoint tangent data.
+The stage E principal endpoints are implemented and awaiting review.
+The [GR guide](docs/general-relativity.md)
 records the exact scope and typed contracts.
 The [shared geometry guide](docs/smooth-geometry.md)
 records the public API and exact checks. [Issue #52](https://github.com/MGYamada/ProjectAInos/issues/52)
-tracks review of the shared geometry stages and completion of curved particle
-variation, curved forms, and time-dependent Newton-limit stages;
+tracks review of the geometry and particle-variation stages, and completion of
+curved forms and the time-dependent Newton-limit stages;
 [#43](https://github.com/MGYamada/ProjectAInos/issues/43)
 is the first chart-regression gate. Einstein dynamics belongs to 5.2.
 
