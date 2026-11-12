@@ -93,7 +93,11 @@ public import ProjectAInos.SmoothGeometry.DifferentialForm.NativeFlat
 public import ProjectAInos.SmoothGeometry.DifferentialForm.NativeGluing
 public import ProjectAInos.SmoothGeometry.DifferentialForm.NativeNaturality
 public import ProjectAInos.SmoothGeometry.DifferentialForm.NativePullback
+public import ProjectAInos.SmoothGeometry.DifferentialForm.NativeWedge
+public import ProjectAInos.SmoothGeometry.DifferentialForm.NativeWedgeCalculus
+public import ProjectAInos.SmoothGeometry.DifferentialForm.NativeWedgeExamples
 public import ProjectAInos.SmoothGeometry.DifferentialForm.Naturality
+public import ProjectAInos.SmoothGeometry.DifferentialForm.WedgeAlgebra
 public import ProjectAInos.SmoothGeometry.Examples
 public import ProjectAInos.SmoothGeometry.Gluing
 public import ProjectAInos.SmoothGeometry.Localization

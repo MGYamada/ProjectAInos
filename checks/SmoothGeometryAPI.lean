@@ -8,6 +8,7 @@ import ProjectAInos.SmoothGeometry.Gluing
 import ProjectAInos.SmoothGeometry.DifferentialForm.NativeCoordinates
 import ProjectAInos.SmoothGeometry.DifferentialForm.NativeGluing
 import ProjectAInos.SmoothGeometry.DifferentialForm.NativeExteriorExamples
+import ProjectAInos.SmoothGeometry.DifferentialForm.NativeWedgeExamples
 
 /-! External API regressions: use the public definitions with default elaborator
 options, without unfolding morphism wrappers or adding local instances. -/
@@ -206,3 +207,79 @@ example : smoothExteriorDerivative NativeExamples.potential = NativeExamples.are
 example : smoothExteriorDerivative NativeExamples.area = 0 := NativeExamples.area_closed
 
 end NativeExteriorCalculus
+
+section NativeExteriorProduct
+
+open DifferentialForm
+open scoped Manifold ContDiff
+
+variable {n m k l q : ℕ} {M N : Type*}
+  [TopologicalSpace M] [ChartedSpace (Fin n → ℝ) M] [IsManifold 𝓘(ℝ, Fin n → ℝ) ∞ M]
+  [TopologicalSpace N] [ChartedSpace (Fin m → ℝ) N] [IsManifold 𝓘(ℝ, Fin m → ℝ) ∞ N]
+
+example (α : SmoothForm 𝓘(ℝ, Fin n → ℝ) M k) (β : SmoothForm 𝓘(ℝ, Fin n → ℝ) M l) :
+    SmoothForm 𝓘(ℝ, Fin n → ℝ) M (k + l) := smoothWedge α β
+
+example : SmoothForm 𝓘(ℝ, Fin n → ℝ) M k →ₗ[ℝ]
+    SmoothForm 𝓘(ℝ, Fin n → ℝ) M l →ₗ[ℝ] SmoothForm 𝓘(ℝ, Fin n → ℝ) M (k + l) :=
+  smoothWedgeLinear
+
+example (α : NativeForm 𝓘(ℝ, Fin n → ℝ) M k) (β : NativeForm 𝓘(ℝ, Fin n → ℝ) M l)
+    {e : OpenPartialHomeomorph M (Fin n → ℝ)}
+    (he : e ∈ IsManifold.maximalAtlas 𝓘(ℝ, Fin n → ℝ) ∞ M) {x : M} (hx : x ∈ e.source) :
+    nativeWedge α β x = chartLift e (wedge (chartCoefficients e α) (chartCoefficients e β)) x :=
+  nativeWedge_eq_chart α β he hx
+
+example (α : SmoothForm 𝓘(ℝ, Fin n → ℝ) M k) (β : SmoothForm 𝓘(ℝ, Fin n → ℝ) M l)
+    {e : OpenPartialHomeomorph M (Fin n → ℝ)}
+    (he : e ∈ IsManifold.maximalAtlas 𝓘(ℝ, Fin n → ℝ) ∞ M) {y : Fin n → ℝ} (hy : y ∈ e.target) :
+    chartCoefficients e (fun x => smoothWedge α β x) y =
+      wedge (chartCoefficients e (fun x => α x)) (chartCoefficients e (fun x => β x)) y :=
+  chartCoefficients_smoothWedge α β he hy
+
+example (f : C^∞⟮𝓘(ℝ, Fin n → ℝ), M; 𝓘(ℝ, Fin m → ℝ), N⟯)
+    (α : SmoothForm 𝓘(ℝ, Fin m → ℝ) N k) (β : SmoothForm 𝓘(ℝ, Fin m → ℝ) N l) :
+    smoothPullback 𝓘(ℝ, Fin n → ℝ) 𝓘(ℝ, Fin m → ℝ) f (smoothWedge α β) =
+      smoothWedge (smoothPullback 𝓘(ℝ, Fin n → ℝ) 𝓘(ℝ, Fin m → ℝ) f α)
+        (smoothPullback 𝓘(ℝ, Fin n → ℝ) 𝓘(ℝ, Fin m → ℝ) f β) := smoothPullback_wedge f α β
+
+example (α : SmoothForm 𝓘(ℝ, Fin n → ℝ) M k) (β : SmoothForm 𝓘(ℝ, Fin n → ℝ) M l)
+    (γ : SmoothForm 𝓘(ℝ, Fin n → ℝ) M q) :
+    smoothDegreeCast (Nat.add_assoc k l q) (smoothWedge (smoothWedge α β) γ) =
+      smoothWedge α (smoothWedge β γ) := smoothWedge_assoc α β γ
+
+example (α : SmoothForm 𝓘(ℝ, Fin n → ℝ) M k) (β : SmoothForm 𝓘(ℝ, Fin n → ℝ) M l) :
+    smoothWedge α β = (-1 : ℝ) ^ (k * l) •
+      smoothDegreeCast (Nat.add_comm l k) (smoothWedge β α) := smoothWedge_comm α β
+
+example (α : SmoothForm 𝓘(ℝ, Fin n → ℝ) M k) :
+    smoothDegreeCast (Nat.zero_add k) (smoothWedge smoothOne α) = α := smoothWedge_one_left α
+
+example (α : SmoothForm 𝓘(ℝ, Fin n → ℝ) M k) :
+    smoothWedge α smoothOne = α := smoothWedge_one_right α
+
+example : smoothExteriorDerivative (smoothOne : SmoothForm 𝓘(ℝ, Fin n → ℝ) M 0) = 0 :=
+  smoothExteriorDerivative_one
+
+example (α : SmoothForm 𝓘(ℝ, Fin n → ℝ) M k) (β : SmoothForm 𝓘(ℝ, Fin n → ℝ) M l) :
+    smoothExteriorDerivative (smoothWedge α β) =
+      smoothDegreeCast (by omega : (k + 1) + l = (k + l) + 1)
+        (smoothWedge (smoothExteriorDerivative α) β) +
+      (-1 : ℝ) ^ k • smoothDegreeCast (Nat.add_assoc k l 1).symm
+        (smoothWedge α (smoothExteriorDerivative β)) := smoothExteriorDerivative_wedge α β
+
+example (α : Form (Fin n → ℝ) k) (β : Form (Fin n → ℝ) l)
+    (hα : ContDiff ℝ ∞ α) (hβ : ContDiff ℝ ∞ β) :
+    (fun x => smoothWedge (ofFlat α hα) (ofFlat β hβ) x) = wedge α β := smoothWedge_flat α β hα hβ
+
+example (f : (Fin m → ℝ) → (Fin n → ℝ))
+    (α : Form (Fin n → ℝ) k) (β : Form (Fin n → ℝ) l) :
+    pullback f (wedge α β) = wedge (pullback f α) (pullback f β) := pullback_wedge f α β
+
+example : smoothWedge NativeExamples.temporal NativeExamples.spatial = NativeExamples.area :=
+  NativeExamples.temporal_wedge_spatial
+
+example : smoothExteriorDerivative (smoothWedge NativeExamples.axisZero NativeExamples.secondPotential) =
+    -NativeExamples.standardVolume := NativeExamples.negative_leibniz_example
+
+end NativeExteriorProduct

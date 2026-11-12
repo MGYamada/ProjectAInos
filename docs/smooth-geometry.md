@@ -433,8 +433,8 @@ connection examples at default elaborator settings. The stage B connection
 proof endpoints are implemented; its PR still requires review and merge.
 The curvature endpoints below are implemented. Finite-segment parallel
 transport and local inertial coordinates are described in the motion section.
-Native form bundles, pullback and exterior differentiation are described
-below; native wedge, density/Hodge/Maxwell and the Newtonian motion limit
+Native form bundles, pullback, exterior differentiation and wedge are described
+below; density/Hodge/Maxwell and the Newtonian motion limit
 remain incomplete.
 
 ## GR 5.1: curvature and intrinsic contractions
@@ -984,8 +984,8 @@ coefficient, gluing and flat-comparison interfaces. Exact SymPy checks cover
 the same nonlinear and dimension-changing examples and a variable two-form
 under nonlinear composition.
 
-The next increment constructs native exterior differentiation, described
-below. Native wedge and its identities, volume density versus oriented volume,
+Native exterior differentiation and wedge are described below.
+Volume density versus oriented volume,
 Lorentz Hodge/flat comparison and the curved Maxwell component bridge remain
 in #52. Maxwell action variation remains in §4.2/#44, and Einstein dynamics
 remains in §5.2.
@@ -1034,6 +1034,45 @@ nonlinear two-to-three-dimensional pullback of a nonconstant potential.
 Typed contracts in `checks/SmoothGeometryAPI.lean` fix local regularity,
 chart independence, the coordinate formula, linearity/locality, `d²`, general
 pullback naturality and flat specialization.
+
+### Native exterior product and graded calculus
+
+`NativeWedge.lean` works on boundaryless smooth manifolds modeled on
+`Fin n → ℝ`, including the Lorentz manifolds used by GR. This is a local
+coordinate-model requirement, not a global chart or frame. The preceding
+native derivative and pullback API still supports arbitrary normed models.
+
+`nativeWedge` lifts the existing normalized coordinate product through an
+actual chart. `chartWedge_transition`, `chartLift_wedge_independent` and
+`nativeWedge_eq_chart` prove chart independence even for nonsmooth native
+forms. Local coefficient regularity and `wedge_contDiffAt` prove smoothness
+before bundling `smoothWedge`. `chartCoefficients_smoothWedge` gives the
+coordinate formula in every smooth chart. No native tangent norm, metric,
+orientation, global frame or Hausdorff hypothesis is introduced.
+
+`smoothWedgeLinear` supplies bilinearity. `smoothPullback_wedge` holds for
+every smooth map, including noninvertible maps and different source/target
+dimensions. The flat `pullback_wedge` was generalized to these dimensions
+without changing its name or existing specializations. `smoothWedge_flat`
+proves exact agreement with the established determinant normalization.
+
+`NativeWedgeCalculus.lean` proves `smoothWedge_assoc`, `smoothWedge_comm`,
+`smoothWedge_one_left`, `smoothWedge_one_right` and
+`smoothExteriorDerivative_wedge`. These are equalities of smooth native
+sections. `smoothDegreeCast` explicitly transports degrees such as
+`(k+1)+l = (k+l)+1`; it does not introduce a premise about the forms.
+The commutation sign is `(-1)^(k*l)` and the Leibniz sign is `(-1)^k`.
+`smoothOne` is the constant degree-zero scalar one, whose derivative is zero.
+
+`NativeWedgeExamples.lean` identifies the wedge of the temporal/spatial
+covectors with the previously constructed nonzero area form. It checks the
+actual nonlinear maximal-atlas chart, the shear, a nonconstant singular
+projection and the one-dimensional time-axis inclusion. A direct
+three-dimensional derivative proves
+`d(dx⁰ ∧ x¹ dx²) = -dx⁰ ∧ dx¹ ∧ dx²`, detecting the minus sign with a
+nonzero result. Default-option typed API examples cover the full product
+interfaces. Exact SymPy additionally tests variable one-forms, graded
+Leibniz and wedge naturality under a nonlinear two-to-three-dimensional map.
 
 ## Scope and next stages
 

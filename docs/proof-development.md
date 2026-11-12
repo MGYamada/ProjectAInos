@@ -491,6 +491,18 @@ chart independence, linearity, locality, `d² = 0`, arbitrary smooth pullback
 naturality across different model spaces and exact flat specialization are
 proved. The nonzero exact plane area form, nonlinear shear and time-axis
 inclusion are Lean examples; exact SymPy also checks mixed-partial cancellation
-and a nonlinear two-to-three-dimensional pullback. Native wedge, density/Hodge
-and Maxwell comparison are still outstanding. The
+and a nonlinear two-to-three-dimensional pullback.
+
+`NativeWedge` lifts the established normalized coordinate product through
+actual charts on manifolds modeled on `Fin n → ℝ`. Its overlap theorem is
+proved for arbitrary native forms, before the smooth product is bundled.
+The flat pullback law now allows different source and target dimensions;
+the native law inherits this generality. Bilinearity, associativity, graded
+commutativity, a degree-zero unit and graded Leibniz are section equalities.
+`smoothDegreeCast` makes degree arithmetic explicit in these identities.
+No norm is introduced on native fibres. Lean examples cover nonlinear
+charts, singular and dimension-changing maps, and the nonzero signed identity
+`d(dx⁰ ∧ x¹ dx²) = -dx⁰ ∧ dx¹ ∧ dx²`. Independent exact SymPy checks use
+variable forms and a nonlinear immersion. Density/Hodge and Maxwell
+comparison are still outstanding. The
 [geometry guide](smooth-geometry.md) records the public API and this boundary.

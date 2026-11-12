@@ -184,6 +184,32 @@ def verify_native_forms():
                d_one(source_potential, coordinates) - immersion_jacobian.T
                * target_field.subs(substitution, simultaneous=True) * immersion_jacobian)
 
+    def wedge_one(a, b):
+        return a.T * b - b.T * a
+
+    def d_two_three(form):
+        return sp.diff(form[1, 2], u) + sp.diff(form[2, 0], v) + sp.diff(form[0, 1], w)
+
+    def wedge_two_one(two, one):
+        return two[0, 1]*one[2] - two[0, 2]*one[1] + two[1, 2]*one[0]
+
+    alpha = sp.Matrix([[u*v, w, u]])
+    beta = sp.Matrix([[v, w*u, v**2]])
+    product = wedge_one(alpha, beta)
+    check_zero("native wedge graded commutation", product + wedge_one(beta, alpha))
+    check_zero("native wedge graded Leibniz",
+               d_two_three(product) - wedge_two_one(d_one(alpha, target), beta)
+               + wedge_two_one(d_one(beta, target), alpha))
+    check_zero("native wedge negative Leibniz example",
+               d_two_three(wedge_one(sp.Matrix([[1, 0, 0]]), sp.Matrix([[0, 0, v]]))) + 1)
+    pulled_alpha = alpha.subs(substitution, simultaneous=True) * immersion_jacobian
+    pulled_beta = beta.subs(substitution, simultaneous=True) * immersion_jacobian
+    check_zero("native wedge dimension-changing naturality",
+               wedge_one(pulled_alpha, pulled_beta) - immersion_jacobian.T
+               * product.subs(substitution, simultaneous=True) * immersion_jacobian)
+    check_zero("native wedge nonlinear-chart normalization",
+               wedge_one(sp.Matrix([[1, 0]]) * jacobian, spatial * jacobian) - area)
+
     # Variable form and nonlinear maps test both evaluation and all covariant slots.
     f = sp.Matrix([s, r + s**2])
     g = sp.Matrix([t**2, t*x])

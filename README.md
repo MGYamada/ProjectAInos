@@ -287,8 +287,12 @@ pullback, including different dimensions and singular derivatives. Flat API
 agreement and nonlinear one-/two-form examples are proved. Native exterior
 differentiation is now chart-independent, linear and local, squares to zero,
 and commutes with arbitrary smooth pullback. Its flat specialization and
-nonzero nonlinear-chart examples are proved. Wedge, density/Hodge and Maxwell
-comparison remain to be implemented.
+nonzero nonlinear-chart examples are proved. On finite coordinate models,
+native wedge is chart-independent and smooth, preserves arbitrary smooth
+pullback, and satisfies bilinearity, associativity, graded commutativity,
+unit laws and graded Leibniz. Exact flat normalization, nonlinear/singular
+and dimension-changing examples, and a nonzero three-form sign check are
+proved. Density/Hodge and Maxwell comparison remain to be implemented.
 The [GR guide](docs/general-relativity.md)
 records the exact scope and typed contracts.
 The [shared geometry guide](docs/smooth-geometry.md)

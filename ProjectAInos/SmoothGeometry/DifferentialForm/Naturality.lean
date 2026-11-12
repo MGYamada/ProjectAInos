@@ -20,8 +20,8 @@ def exteriorEquiv (A : M ≃ₗ[ℝ] M) (k : ℕ) : ⋀[ℝ]^k M ≃ₗ[ℝ] ⋀
     ⟨exteriorPower.map_injective A.symm (by ext; simp), exteriorPower.map_surjective A.surjective⟩
 
 omit [FiniteDimensional ℝ M] in
-theorem wedge_map (A : M →ₗ[ℝ] M) (α : ⋀[ℝ]^k M) (β : ⋀[ℝ]^l M) :
-    exteriorPower.wedge ℝ M k l (exteriorPower.map k A α) (exteriorPower.map l A β) =
+theorem wedge_map {N : Type*} [AddCommGroup N] [Module ℝ N] (A : M →ₗ[ℝ] N) (α : ⋀[ℝ]^k M) (β : ⋀[ℝ]^l M) :
+    exteriorPower.wedge ℝ N k l (exteriorPower.map k A α) (exteriorPower.map l A β) =
       exteriorPower.map (k+l) A (exteriorPower.wedge ℝ M k l α β) := by
   apply Subtype.ext
   simp only [DirectSum.gMulLHom_apply_apply, SetLike.coe_gMul, coe_map, map_mul]
@@ -81,33 +81,33 @@ theorem hodge_isometry (B : LinearMap.BilinForm ℝ M) (hB : Function.Bijective 
         (exteriorPower.map l A.toLinearMap b) = _
       rw [wedgePairing_map, hd, one_mul]) α
 
-theorem fromExterior_map_dual {n k : ℕ} (L : (Fin n → ℝ) →L[ℝ] (Fin n → ℝ))
+theorem fromExterior_map_dual {m n k : ℕ} (L : (Fin m → ℝ) →L[ℝ] (Fin n → ℝ))
     (α : ExteriorCovector n k) :
     toExterior.symm (exteriorPower.map k L.toLinearMap.dualMap α) =
       (toExterior.symm α).compContinuousLinearMap L := by
   ext v
   rw [fromExterior_apply]
-  change pairingDual ℝ (Fin n → ℝ) k (exteriorPower.map k L.toLinearMap.dualMap α) (ιMulti ℝ k v) =
+  change pairingDual ℝ (Fin m → ℝ) k (exteriorPower.map k L.toLinearMap.dualMap α) (ιMulti ℝ k v) =
     toExterior.symm α (L ∘ v)
   rw [fromExterior_apply]
-  suffices H : ((pairingDual ℝ (Fin n → ℝ) k).flip (ιMulti ℝ k v)).comp
+  suffices H : ((pairingDual ℝ (Fin m → ℝ) k).flip (ιMulti ℝ k v)).comp
       (exteriorPower.map k L.toLinearMap.dualMap) =
       (pairingDual ℝ (Fin n → ℝ) k).flip (ιMulti ℝ k (L ∘ v)) from congrArg (fun f => f α) H
   apply exteriorPower.linearMap_ext
   apply AlternatingMap.ext
   intro a
-  change pairingDual ℝ (Fin n → ℝ) k (exteriorPower.map k L.toLinearMap.dualMap (ιMulti ℝ k a))
+  change pairingDual ℝ (Fin m → ℝ) k (exteriorPower.map k L.toLinearMap.dualMap (ιMulti ℝ k a))
     (ιMulti ℝ k v) = pairingDual ℝ (Fin n → ℝ) k (ιMulti ℝ k a) (ιMulti ℝ k (L ∘ v))
   rw [exteriorPower.map_apply_ιMulti, pairingDual_ιMulti_ιMulti, pairingDual_ιMulti_ιMulti]
   rfl
 
-theorem toExterior_comp {n k : ℕ} (L : (Fin n → ℝ) →L[ℝ] (Fin n → ℝ))
+theorem toExterior_comp {m n k : ℕ} (L : (Fin m → ℝ) →L[ℝ] (Fin n → ℝ))
     (ω : (Fin n → ℝ) [⋀^Fin k]→L[ℝ] ℝ) :
     toExterior (ω.compContinuousLinearMap L) = exteriorPower.map k L.toLinearMap.dualMap (toExterior ω) := by
   apply toExterior.symm.injective
   rw [LinearEquiv.symm_apply_apply, fromExterior_map_dual, LinearEquiv.symm_apply_apply]
 
-theorem pullback_wedge {n k l : ℕ} (f : (Fin n → ℝ) → (Fin n → ℝ))
+theorem pullback_wedge {m n k l : ℕ} (f : (Fin m → ℝ) → (Fin n → ℝ))
     (α : Form (Fin n → ℝ) k) (β : Form (Fin n → ℝ) l) :
     pullback f (wedge α β) = wedge (pullback f α) (pullback f β) := by
   funext x
