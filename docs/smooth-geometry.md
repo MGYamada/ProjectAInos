@@ -707,8 +707,8 @@ and supplies restrictions with convex targets. `isLocallyMinkowski_of_charts`
 connects metric normalization on entire chart sources to the original
 open-submanifold definition.
 
-The converse is separated into construction and integration of a parallel
-coframe. The integration step is now proved:
+The converse separates construction and integration of a parallel
+coframe. Both steps are now proved; the integration API is:
 
 - `ClosedCoframe.exists_smooth_primitive` integrates a smooth closed
   vector-valued one-form on an open convex coordinate domain using Poincaré's
@@ -824,15 +824,57 @@ theorem; it does not divide by time at the center.
   theorem. The exact experiment checks both directions of the frame and
   coframe equations and the curvature term's sign for a curved example.
 
-Stage D remains in progress: native curvature must still be identified with
-the bundled coordinate condition, and the normalized coframe must be passed
-to the integration theorem. Thus the local curvature-zero ↔
-`IsLocallyMinkowski` equivalence is not yet complete. Particle variation, curved forms
-and the Newtonian trajectory limit are the subsequent E–G stages.
+### Native curvature and the local flatness equivalence
 
-This increment passes the warning-free full build (9,298 jobs), root-import
-check, all six API checks and the transitive audit of 7,233 declarations
-(3,068 in smooth geometry). Only `propext`, `Classical.choice` and `Quot.sound`
+`ODE.CoordinateCurvature` bundles the coefficient expression as the trilinear
+map `coefficientCurvature`. A finite coordinate basis tests its vanishing,
+and agreement of coefficient germs preserves it. `Lorentzian.FlatConnection`
+proves `coefficientCurvature_basis`: these components equal the native
+`chartCurvature`, in the established `R(∂ᵢ,∂ⱼ)∂ₖ` order. Differentiating the
+bundled Christoffel coefficients commutes with evaluation on fixed basis
+vectors and output coordinates. The existing native component formula then
+supplies the equality, including its derivative and quadratic terms.
+`isFlatConnectionOn_of_curvature_eq_zero` derives the full coordinate flatness
+condition from native curvature, without an extra compatibility premise.
+
+`LocalFlatnessConverse` supplies
+`LorentzMetric.exists_minkowskiChart_of_curvature_eq_zero_near`, requiring
+only `∀ᶠ x in 𝓝 p, g.curvature x = 0`.
+It starts from an inertial chart at `p`, whose center is zero and whose metric
+there is already normalized. A smooth extension preserves the connection
+germ, and a sufficiently small ball lies inside the flat neighborhood. The
+radial construction gives a smooth invertible parallel coframe with identity
+at the center. Its normalization therefore comes from the chosen inertial
+chart, and integration supplies an actual smooth maximal-atlas chart whose
+metric is Minkowski on its entire source.
+
+`isLocallyMinkowski_of_curvature_eq_zero` and
+`isLocallyMinkowski_iff_curvature_eq_zero` finish the converse and equivalence:
+`g.IsLocallyMinkowski ↔ ∀ p, g.curvature p = 0`. The shear example obtains
+local Minkowski geometry directly from native zero curvature. Standard
+Minkowski in every dimension and both signatures also specializes the
+criterion; the curved conformal example remains an obstruction.
+
+`FlatTransport` proves the path-independence consequence explicitly. Metric
+normalization throughout a chart makes all its Christoffel coefficients
+zero. `RegularPath.transport_eq_chart` and `PiecewisePath.transport_eq_chart`
+identify intrinsic transport with the endpoint chart tangent equivalences.
+The latter includes corners and uses containment of the actual continuous
+path, not a premise on a chosen parallel lift. Two finite piecewise paths
+in the same flat chart with the same endpoints therefore have equal
+transport, regardless of their decompositions.
+`LorentzMetric.exists_pathIndependent_neighborhood` derives such an open
+neighborhood from native curvature zero near the point. The nonlinear
+shear example proves this equality for arbitrary piecewise paths.
+
+Stage D's principal proof endpoints are implemented, pending review and
+merge. No global frame, global chart, analytic metric, Hausdorff premise or
+geodesic completeness is assumed or concluded. Particle variation, curved
+forms and the Newtonian trajectory limit are the subsequent E–G stages.
+
+This increment passes the warning-free full build (9,302 jobs), root-import
+check, all six API checks and the transitive audit of 7,309 declarations
+(3,144 in smooth geometry). Only `propext`, `Classical.choice` and `Quot.sound`
 are permitted. Typed contracts fix the native along-field carrier, overlap
 and regularity hypotheses, metric and parameter-change formulas, coordinate
 ODE, local initial-value existence/uniqueness, finite-segment transport,
@@ -842,9 +884,11 @@ curvature restriction, coframe integration with explicit hypotheses,
 the Volterra equation, ODE uniqueness, norm bound and smooth dependence,
 compact-family smoothness, radial rescaling and differentiation, local
 connection-coefficient extension, full parallelness under the explicit
-flatness equation, constructed parallel-coframe existence, and flat/curved
-concrete examples at default elaborator settings. The installed-package exact Lorentz experiment
-also passes. These checks validate this increment, not the remaining D–G
+flatness equation, constructed parallel-coframe existence, native coordinate
+curvature, the near-point Minkowski chart, the full local-flatness equivalence,
+local path independence for actual piecewise paths,
+and flat/curved concrete examples at default elaborator settings. The installed-package
+exact Lorentz experiment also passes. These checks validate this increment, not the remaining E–G
 proof obligations.
 
 ## Scope and next stages

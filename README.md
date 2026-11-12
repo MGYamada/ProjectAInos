@@ -241,10 +241,13 @@ differential equation proved. Native chart coefficients admit smooth local
 extensions for this construction. Zero coordinate curvature now makes the
 radial frame parallel in every direction and constructs a smooth invertible
 parallel coframe on a smaller ball. The nonzero shear connection has a
-proved inverse-Jacobian endpoint formula. Stage D remains incomplete:
-identifying native curvature with this bundled coordinate condition and
-applying the coframe integration theorem are still required for the converse
-of the local flatness theorem.
+proved inverse-Jacobian endpoint formula. Native curvature is now identified
+with the coordinate condition, and the constructed coframe integrates to a
+Minkowski chart wherever curvature vanishes on a neighborhood. This proves
+`IsLocallyMinkowski ↔ ∀ p, curvature p = 0` and completes stage D's principal
+proof endpoints, pending review and merge. Transport is proved independent
+of the piecewise path inside a flat neighborhood. The conclusion is local; it
+does not assert a global inertial chart or geodesic completeness.
 The [shared geometry guide](docs/smooth-geometry.md)
 records the public API and exact checks. [Issue #52](https://github.com/MGYamada/ProjectAInos/issues/52)
 tracks review of the connection and curvature stages, further tensor operations,

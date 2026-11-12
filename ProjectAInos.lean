@@ -90,10 +90,13 @@ public import ProjectAInos.SmoothGeometry.Lorentzian.CurvatureNaturality
 public import ProjectAInos.SmoothGeometry.Lorentzian.CurvatureRegularity
 public import ProjectAInos.SmoothGeometry.Lorentzian.CurvatureSymmetry
 public import ProjectAInos.SmoothGeometry.Lorentzian.Dual
+public import ProjectAInos.SmoothGeometry.Lorentzian.FlatConnection
 public import ProjectAInos.SmoothGeometry.Lorentzian.FlatFrameExamples
+public import ProjectAInos.SmoothGeometry.Lorentzian.FlatTransport
 public import ProjectAInos.SmoothGeometry.Lorentzian.Geodesic
 public import ProjectAInos.SmoothGeometry.Lorentzian.LeviCivita
 public import ProjectAInos.SmoothGeometry.Lorentzian.LocalFlatness
+public import ProjectAInos.SmoothGeometry.Lorentzian.LocalFlatnessConverse
 public import ProjectAInos.SmoothGeometry.Lorentzian.LocalFlatnessExamples
 public import ProjectAInos.SmoothGeometry.Lorentzian.LocalInertial
 public import ProjectAInos.SmoothGeometry.Lorentzian.LocalInertialExamples
@@ -140,6 +143,7 @@ public import ProjectAInos.SmoothGeometry.Minkowski.Reflection
 public import ProjectAInos.SmoothGeometry.Minkowski.ReflectionDeterminant
 public import ProjectAInos.SmoothGeometry.Minkowski.TwoForm
 public import ProjectAInos.SmoothGeometry.ODE.ContinuousFamily
+public import ProjectAInos.SmoothGeometry.ODE.CoordinateCurvature
 public import ProjectAInos.SmoothGeometry.ODE.FlatFrame
 public import ProjectAInos.SmoothGeometry.ODE.Radial
 public import ProjectAInos.SmoothGeometry.ODE.RadialExamples

@@ -149,8 +149,13 @@ curve-valued families; radial frames and their inverses are smooth near
 the center, with rescaling and the radial differential equation proved.
 Native chart coefficients admit suitable local extensions. Zero coordinate
 curvature now gives parallelness in every direction and a smooth invertible
-parallel coframe. The remaining D step connects native curvature to this
-coordinate condition and integrates the resulting normalized coframe.
+parallel coframe. Native curvature now supplies that coordinate condition,
+and integrating the constructed normalized coframe gives a Minkowski chart
+wherever curvature vanishes near a point. The equivalence
+`IsLocallyMinkowski ↔ ∀ p, curvature p = 0` is proved. Stage D's principal
+proof endpoints, including path independence for finite piecewise paths
+inside a flat neighborhood, are implemented, pending review and merge; global inertial
+coordinates and geodesic completeness are not conclusions.
 Particle variation, curved forms and
 the Newtonian motion limit remain in the work
 tracked by [#52](https://github.com/MGYamada/ProjectAInos/issues/52).

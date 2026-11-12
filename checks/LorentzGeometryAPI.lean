@@ -208,6 +208,34 @@ example {e : OpenPartialHomeomorph M E} (he : e ∈ IsManifold.maximalAtlas I �
 
 example (h : g.IsLocallyMinkowski) (p : M) : g.curvature p = 0 := h.curvature_eq_zero p
 
+example : g.IsLocallyMinkowski ↔ ∀ p, g.curvature p = 0 :=
+  g.isLocallyMinkowski_iff_curvature_eq_zero
+
+example (p : M) (hR : ∀ᶠ x in 𝓝 p, g.curvature x = 0) :
+    ∃ c : OpenPartialHomeomorph M E, c ∈ IsManifold.maximalAtlas I ∞ M ∧
+      p ∈ c.source ∧ ∀ x ∈ c.source, ∀ v w : TangentSpace I x,
+        g.form x v w = minkowskiForm σ d (chartTangentMap c x v) (chartTangentMap c x w) :=
+  g.exists_minkowskiChart_of_curvature_eq_zero_near p hR
+
+example (p : M) (hR : ∀ᶠ x in 𝓝 p, g.curvature x = 0) :
+    ∃ U : TopologicalSpace.Opens M, p ∈ U ∧ ∀ {x y : M} (a b : PiecewisePath d M x y),
+      Set.range a.toPath ⊆ U → Set.range b.toPath ⊆ U → a.transport g = b.transport g :=
+  g.exists_pathIndependent_neighborhood p hR
+
+example {e : OpenPartialHomeomorph M E} (he : e ∈ IsManifold.maximalAtlas I ∞ M)
+    {q : E} (hq : q ∈ e.target) (l i j k : Fin (d + 1)) :
+    LinearODE.coefficientCurvature (fun z => g.chartChristoffelBilinear e (e.symm z)) q
+      (Pi.single i 1) (Pi.single j 1) (Pi.single k 1) l =
+        g.chartCurvature e (e.symm q) l i j k := g.coefficientCurvature_basis he hq l i j k
+
+example {e : OpenPartialHomeomorph M E} (he : e ∈ IsManifold.maximalAtlas I ∞ M)
+    (hR : ∀ x ∈ e.source, g.curvature x = 0) :
+    LinearODE.IsFlatConnectionOn (fun q => g.chartChristoffelBilinear e (e.symm q)) e.target :=
+  g.isFlatConnectionOn_of_curvature_eq_zero he hR
+
+example : (minkowskiMetric σ d).IsLocallyMinkowski :=
+  (minkowskiMetric σ d).isLocallyMinkowski_of_curvature_eq_zero (minkowski_curvature σ d)
+
 example (U : TopologicalSpace.Opens M) (x : U) (u v w : TangentSpace I x) :
     mfderiv I I (Subtype.val : U → M) x ((g.restrict U).curvature x u v w) =
       g.curvature x.val (mfderiv I I (Subtype.val : U → M) x u)
@@ -250,6 +278,13 @@ example : LorentzianCharts.metric.IsParallelChartCoframeOn LorentzianCharts.stan
 
 example : LorentzianCharts.metric.IsLocallyMinkowski :=
   LorentzianCharts.isLocallyMinkowski_via_parallelCoframe
+
+example : LorentzianCharts.metric.IsLocallyMinkowski :=
+  LorentzianCharts.isLocallyMinkowski_via_curvature
+
+example {x y : LorentzianCharts.Plane} (p q : PiecewisePath 1 LorentzianCharts.Plane x y) :
+    p.transport LorentzianCharts.metric = q.transport LorentzianCharts.metric :=
+  LorentzianCharts.piecewise_transport_path_independent p q
 
 end LocalFlatness
 

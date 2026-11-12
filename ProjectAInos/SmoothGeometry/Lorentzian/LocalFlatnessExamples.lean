@@ -5,6 +5,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 module
 
 public import ProjectAInos.SmoothGeometry.Lorentzian.LocalFlatness
+public import ProjectAInos.SmoothGeometry.Lorentzian.LocalFlatnessConverse
+public import ProjectAInos.SmoothGeometry.Lorentzian.FlatTransport
 public import ProjectAInos.SmoothGeometry.Lorentzian.LocalInertialExamples
 public import ProjectAInos.SmoothGeometry.Lorentzian.ParallelCoframe
 
@@ -37,6 +39,20 @@ end ProjectAInos.SmoothGeometry.LorentzianConformalExample
 namespace ProjectAInos.SmoothGeometry.LorentzianCharts
 
 open LorentzMetric
+
+/-- The native curvature criterion constructs local Minkowski geometry for
+the nonlinear shear metric without supplying its known coframe as input. -/
+theorem isLocallyMinkowski_via_curvature : metric.IsLocallyMinkowski :=
+  metric.isLocallyMinkowski_of_curvature_eq_zero curvature_shear
+
+/-- The nonlinear shear presentation has path-independent transport even
+for arbitrary finite piecewise regular paths with corners. -/
+theorem piecewise_transport_path_independent {x y : Plane}
+    (p q : PiecewisePath 1 Plane x y) : p.transport metric = q.transport metric := by
+  apply p.transport_eq_of_same_endpoints_in_flatChart metric inertialChart_mem_maximalAtlas
+    (fun z _ k i j => chartChristoffel_inertial z k i j) q
+  · exact Set.subset_univ _
+  · exact Set.subset_univ _
 
 theorem shearCoframe_contDiff : ContDiff ℝ ∞ (fderiv ℝ shear) := by
   change ContDiff ℝ ∞ (fun p => fderiv ℝ shear p)

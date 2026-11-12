@@ -274,9 +274,26 @@ on a smaller ball inside any flat neighborhood, with identity at the center.
 `FlatFrameExamples` verifies the native nonzero shear coefficients and the
 constructed endpoint `P(x)v = (v₀, v₁ - 2x₀v₀)` in Lean. Exact checks also
 test both coordinate directions and retain the curvature term in the
-defect identity for the curved conformal example. The native curvature
-bridge and metric normalization/integration remain; the local flatness
-equivalence is not yet complete.
+defect identity for the curved conformal example.
+`ODE.CoordinateCurvature` bundles the coordinate expression as a trilinear
+map and proves basis tests and germ locality. `Lorentzian.FlatConnection`
+identifies its basis coefficients with the native curvature tensor using
+the existing arbitrary-chart Christoffel formula. Thus native zero curvature
+gives the precise compatibility condition of the radial construction.
+`LocalFlatnessConverse` uses a pointwise inertial chart to normalize the
+center, extends its coefficients without changing their germ, and constructs
+the parallel coframe on a ball inside the flat neighborhood. The coframe
+integration theorem yields a Minkowski chart on its whole source.
+The local theorem assumes only curvature zero near the selected point;
+the global predicate equivalence is `IsLocallyMinkowski ↔ ∀ p, curvature p = 0`.
+The shear example now invokes this construction directly from its native
+curvature theorem. Stage D's principal proof endpoints are implemented,
+pending review and merge. `FlatTransport` identifies transport in a flat
+chart with its endpoint tangent equivalences, first for regular segments,
+then for finite piecewise paths using their actual path ranges. Native zero
+curvature near a point consequently yields an open neighborhood with
+path-independent transport; arbitrary nonlinear-shear piecewise paths
+instantiate the theorem. No global inertial chart or completeness follows.
 Stages E–G remain subsequent work; differential/contracted
 Bianchi and Einstein dynamics belong to 5.2.
 

@@ -131,10 +131,10 @@ C∞ scheme is definitionally unchanged. The [flat-spacetime extension](special-
 keeps time orientation separate from spacetime orientation.
 Local Minkowski coordinates are not a premise on general Lorentz manifolds.
 The Lorentz Levi-Civita connection and smooth curvature tensor are now
-constructed; equivalence of `IsLocallyMinkowski` with vanishing curvature
-still requires connecting native curvature to the constructed coordinate
-parallel coframe in stage D. The forward implication, coordinate flat-frame
-construction and coframe-to-chart integration step are now proved.
+constructed; equivalence of `IsLocallyMinkowski` with vanishing native
+curvature is now proved. Both implications, coordinate flat-frame
+construction and coframe-to-chart integration are implemented in stage D,
+pending review and merge.
 
 The localization construction follows [Joyce, *Algebraic Geometry over
 C∞-rings*, §2.3](https://arxiv.org/pdf/1001.0023). The requested general
@@ -170,8 +170,9 @@ transition law makes the new connection coefficients vanish on the entire
 source. After shrinking to a convex target, metric compatibility propagates
 a normalization at the base point to the whole chart. These conditional
 integration theorems take a parallel coframe as input. A separate coordinate
-construction now supplies one under an explicit zero-curvature equation;
-the native curvature bridge remains part of the converse step in D.
+construction now supplies one under an explicit zero-curvature equation.
+The native curvature bridge and the application of this construction are
+also proved.
 The supporting linear-ODE solver now uses the Banach space of continuous
 coordinate curves on `[0,1]`. If the coefficient supremum norm is less than
 one, the integral equation has an invertible operator, yielding the unique
@@ -191,8 +192,18 @@ radial equation. Along each ray, `t Q(t x)(u)v` solves the original transport
 equation with zero initial value, so uniqueness makes it zero. Inverting
 the frame yields `Dθ(u)v = θ(Γ(u)v)`. This constructs an invertible smooth
 parallel coframe on a smaller ball, normalized to identity at its center.
-Relating the bundled coordinate flatness equation to native curvature and
-normalizing for the Lorentz metric remain necessary to finish the converse.
+`FlatConnection` identifies the bundled trilinear expression with the native
+curvature components on every smooth chart, with basis tests giving full
+coordinate flatness. `LocalFlatnessConverse` starts with an inertial chart
+at the chosen point, which already fixes its center and metric normalization.
+Curvature zero on a neighborhood passes to a smaller coordinate ball;
+smooth extension preserves the coefficient germ. The radial coframe has
+identity value at the center and integrates to a Minkowski chart. This proves
+the converse, using only local data and the native tangent bundle.
+Inside the resulting flat neighborhood, transport depends only on endpoint
+chart identifications. This is proved for arbitrary finite piecewise regular
+paths, including corners and different decompositions; it makes no global
+path-independence assertion for the original manifold.
 In particular, no claim that `A ≅ Γ(Spec A)` for arbitrary
 C∞-rings is used in this continuation.
 
@@ -200,10 +211,10 @@ C∞-rings is used in this continuation.
 
 The warning-free full build (`lake build --wfail ProjectAInos`), root-import
 check, external API regression check, and transitive axiom audit pass.
-The current motion increment's audit covers 7,233 project declarations,
-including 453 in smooth algebra and 3,068 in smooth geometry,
+The current motion increment's audit covers 7,309 project declarations,
+including 453 in smooth algebra and 3,144 in smooth geometry,
 with only `propext`, `Classical.choice`, and `Quot.sound` allowed.
-The full build has 9,298 jobs. All six API checks and the installed-package
+The full build has 9,302 jobs. All six API checks and the installed-package
 exact Lorentz experiment pass, including the motion examples.
 `git diff --check` also passes. The existing `README.md` contents, including
 the earlier subject-numbering changes, were preserved throughout this work.
