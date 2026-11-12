@@ -48,7 +48,11 @@ public import ProjectAInos.GeneralRelativity.ProperTimeParameter
 public import ProjectAInos.GeneralRelativity.QuadraticGeodesic
 public import ProjectAInos.GeneralRelativity.QuadraticLagrangian
 public import ProjectAInos.GeneralRelativity.SpecialRelativity
+public import ProjectAInos.GeneralRelativity.VariationAction
+public import ProjectAInos.GeneralRelativity.VariationBoundary
 public import ProjectAInos.GeneralRelativity.VariationDensity
+public import ProjectAInos.GeneralRelativity.VariationExamples
+public import ProjectAInos.GeneralRelativity.VariationStationary
 public import ProjectAInos.Mechanics.Basic
 public import ProjectAInos.Mechanics.EulerLagrange
 public import ProjectAInos.Mechanics.Examples
@@ -266,6 +270,7 @@ public import ProjectAInos.Variational.Action
 public import ProjectAInos.Variational.EulerLagrange
 public import ProjectAInos.Variational.Examples
 public import ProjectAInos.Variational.IntegrationByParts
+public import ProjectAInos.Variational.IntervalParameter
 public import ProjectAInos.Variational.Local
 public import ProjectAInos.Variational.LocalExtension
 public import ProjectAInos.Variational.Parameter

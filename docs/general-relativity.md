@@ -92,8 +92,9 @@ assumed as part of a data structure.
 The intrinsic clock/action constructions work on arbitrary smooth
 manifolds. The above geodesic **variational equivalence currently requires
 the model manifold**. The open-domain calculus supplies local tools but
-does not yet constitute a theorem for general manifold variations or
-first-variation gluing across chart boundaries.
+does not yet prove the general-manifold converse from stationarity to motion.
+Native manifold-family action derivatives, subdivision and the forward
+direction are now proved below.
 
 ## Massive stationarity and constructed proper-time parameters
 
@@ -150,7 +151,7 @@ Tangential acceleration throughout `(a,b)` yields affine motion throughout
 `(0,T)`. The model-manifold stationarity theorem consequently supplies this
 single finite-segment parameter. No geodesic completeness is asserted.
 
-## Native manifold-family density variations
+## Native manifold-family first variations
 
 [CurveFamily](../ProjectAInos/SmoothGeometry/Lorentzian/CurveFamily.lean)
 defines the velocities of a genuine two-parameter family `Γ : ℝ × ℝ → M`
@@ -165,9 +166,42 @@ uses this interchange law and metric compatibility to differentiate the actual
 scalar densities for signature `(-+++)`. Writing `T = ∂t Γ` and `V = ∂ε Γ`,
 their derivatives in the first parameter are `g(∇t V,T)` for `½g(T,T)` and
 `(m/s) g(∇t V,T)` for `-m s`. The latter requires timelikeness only at the
-point of differentiation. These are native manifold statements; passing the
-derivative through the finite action integral and proving general-manifold
-stationarity remain separate obligations.
+point of differentiation.
+
+[VariationAction](../ProjectAInos/GeneralRelativity/VariationAction.lean)
+now differentiates the actual finite action integrals. Joint C² regularity is
+required only at points `(ε₀,t)` of the closed reference segment, with
+timelikeness there for the massive action. `Variational.IntervalParameter`
+localizes the scalar integrand near this compact set to a globally C¹
+representative. Compactness bounds its parameter derivative on a common
+parameter neighborhood, justifying differentiation under the integral.
+Domination and global regularity are derived, not supplied by the caller.
+This construction uses scalar functions on the parameter plane and requires
+no chart containing the full spacetime curve.
+
+[VariationBoundary](../ProjectAInos/GeneralRelativity/VariationBoundary.lean)
+uses metric compatibility to prove the intrinsic endpoint formulas
+
+\[
+\delta S_2=[g(V,T)]_a^b-\int_a^b g(V,\nabla_tT)\,dt,
+\qquad
+\delta S_m=[(m/s)g(V,T)]_a^b
+-\int_a^b (m/s)g\bigl(V,\nabla_tT-(s'/s)T\bigr)\,dt.
+\]
+
+`quadraticAction_family_deriv_add` and `freeAction_family_deriv_add` prove
+that actual derivatives add over subdivisions. These native formulas use the
+same endpoint pairing at a junction, so internal boundary terms cancel even
+when adjacent segments use different coordinate charts.
+
+[VariationStationary](../ProjectAInos/GeneralRelativity/VariationStationary.lean)
+takes actual fixed endpoints for nearby variation parameters and derives zero
+endpoint variation fields. It proves that every affine geodesic is stationary
+under these manifold families for the quadratic action, with no causal
+restriction on variations. Timelike tangential acceleration likewise implies
+massive stationarity; metric compatibility determines the speed factor.
+The **converse** implications on arbitrary manifolds still require localized
+test-family constructions and are not yet claimed.
 
 ## Proved examples and validation
 
@@ -194,6 +228,13 @@ action is not stationary in that parameter. The constructed finite-segment
 inverse is explicitly `r(τ) = log(τ + exp(a))`, maps both endpoints correctly,
 has unit rate and gives affine motion on the full proper-time interior.
 
+[VariationExamples](../ProjectAInos/GeneralRelativity/VariationExamples.lean)
+constructs the family with inertial coordinates `T=t+εt(1-t)`, `X=ε²t(1-t)`
+and evaluates it in the nonlinear shear chart. It is smooth and fixes both
+endpoints for every parameter. The native manifold theorems prove zero
+derivatives of both actual actions on `[0,1]`; this family is nonlinear in
+both time and the variation parameter.
+
 A clock at a fixed spatial coordinate is not claimed to be a geodesic.
 Typed contracts in
 [GeneralRelativityAPI](../checks/GeneralRelativityAPI.lean) use default
@@ -210,16 +251,18 @@ metrics and checks the exponential clock's non-affine term and its explicit
 proper-time inverse, including both finite-segment endpoints. Genuine
 two-parameter families test the mixed covariant derivative law and both density
 derivatives independently in flat, shear and curved conformal metrics.
+They also verify the endpoint/residual identities, subdivision with a nonzero
+junction pairing, and stationarity of the nonlinear fixed-endpoint family.
 It runs in the existing non-required Experiments workflow. These exact
 calculations test conventions; Lean establishes the formal claims.
 
 ## Remaining stage E obligations
 
-- Integrate the proved manifold-family density derivatives to obtain actual
-  action derivatives, then prove chart-crossing gluing and boundary cancellation.
-- Extend both model-coordinate stationarity theorems to general manifold
-  variations; the massive local-reparametrization and unit-rate results are
-  now proved in model coordinates.
+- Construct localized fixed-endpoint manifold families testing arbitrary
+  compactly supported variation fields.
+- Prove the converse from stationarity under all such families to the native
+  motion equations, completing both general-manifold equivalences and their
+  local-reparametrization/unit-rate corollaries.
 - Connect null initial-data preservation to the full manifold variational
   result, without restricting variations to null curves.
 

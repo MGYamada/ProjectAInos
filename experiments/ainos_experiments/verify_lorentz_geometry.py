@@ -270,6 +270,45 @@ def verify_family_variations(metric, coordinates, gamma, *, shear=False):
     actual = sp.diff(-mass*speed, epsilon).subs(epsilon, 0)
     expected = (mass/speed * (mixed.T * along_metric * velocity)[0]).subs(epsilon, 0)
     check_zero("native massive family density derivative", actual - expected)
+    base_curve = timelike_family.subs(epsilon, 0)
+    base_velocity = velocity.subs(epsilon, 0)
+    base_field = field.subs(epsilon, 0)
+    base_metric = along_metric.subs(epsilon, 0)
+    base_speed = sp.simplify(speed.subs(epsilon, 0))
+    acceleration = covariant_along(gamma, coordinates, base_curve, base_velocity, s)
+    pairing = (base_field.T * base_metric * base_velocity)[0]
+    quadratic_actual = sp.diff(q/2, epsilon).subs(epsilon, 0)
+    quadratic_residual = -(base_field.T * base_metric * acceleration)[0]
+    massive_boundary = mass/base_speed * pairing
+    massive_residual = -mass/base_speed * (base_field.T * base_metric * (
+        acceleration - sp.diff(base_speed, s)/base_speed * base_velocity))[0]
+    for label, derivative, boundary, residual in [
+        ("quadratic", quadratic_actual, pairing, quadratic_residual),
+        ("massive", actual, massive_boundary, massive_residual),
+    ]:
+        derivative, boundary, residual = map(sp.simplify, (derivative, boundary, residual))
+        check_zero(f"native {label} endpoint formula", derivative - sp.diff(boundary, s) - residual)
+        integral = sp.integrate(derivative, (s, 0, 1))
+        middle = sp.Rational(1, 2)
+        left = boundary.subs(s, middle) - boundary.subs(s, 0) + sp.integrate(residual, (s, 0, middle))
+        right = boundary.subs(s, 1) - boundary.subs(s, middle) + sp.integrate(residual, (s, middle, 1))
+        check_zero(f"native {label} first-variation subdivision", integral - left - right)
+
+    if shear:
+        # Same genuinely nonlinear fixed-endpoint family proved in Lean.
+        bump = s*(1-s)
+        time = s + epsilon*bump
+        nonlinear = sp.Matrix([time, epsilon**2*bump - time**2])
+        nonlinear_metric = metric.subs(dict(zip(coordinates, nonlinear)), simultaneous=True)
+        nonlinear_v = sp.diff(nonlinear, s)
+        nonlinear_q = sp.simplify((nonlinear_v.T * nonlinear_metric * nonlinear_v)[0])
+        check_zero("nonlinear family endpoint fixing",
+                   [entry for endpoint in (0, 1)
+                    for entry in nonlinear.subs(s, endpoint) - nonlinear.subs({s: endpoint, epsilon: 0})])
+        check_zero("nonlinear family quadratic stationarity",
+                   sp.integrate(sp.diff(nonlinear_q/2, epsilon).subs(epsilon, 0), (s, 0, 1)))
+        check_zero("nonlinear family massive stationarity",
+                   sp.integrate(sp.diff(-mass*sp.sqrt(-nonlinear_q), epsilon).subs(epsilon, 0), (s, 0, 1)))
 
 
 def verify_motion(metric, coordinates, gamma, jacobian):

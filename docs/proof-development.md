@@ -379,9 +379,26 @@ and the mixed covariant derivative interchange law for jointly C² families.
 The proof uses local second-derivative symmetry and zero torsion, with no
 immersion or global chart assumption. `VariationDensity` differentiates both
 actual particle densities on arbitrary manifolds. Timelikeness is local at the
-point of the square-root density derivative. Integrating these derivatives and
-the general-manifold stationarity equivalences still remain. Typed contracts
-and exact flat, shear and conformal family calculations cover these new laws.
+point of the square-root density derivative. Typed contracts and exact flat,
+shear and conformal family calculations cover these new laws.
+
+`VariationAction` now differentiates the actual actions on arbitrary Lorentz
+manifolds from joint C² regularity only along the finite reference segment.
+`Variational.IntervalParameter` localizes the scalar parameter-plane density
+and obtains domination from compactness. No single chart for the full curve,
+global family regularity or caller-supplied integral bound is required.
+`VariationBoundary` uses metric compatibility to retain the intrinsic endpoint
+pairings and the massive residual's full proper-speed derivative. Actual
+derivatives add over subdivisions, including across chart changes.
+
+`VariationStationary` derives vanishing endpoint variation fields from actual
+locally fixed endpoints. Affine geodesics are stationary for all such quadratic
+families without causal restrictions, and timelike tangential acceleration
+implies massive stationarity. The reverse directions, requiring localized
+manifold test families, are still outstanding. `VariationExamples` verifies a
+genuine nonlinear fixed-endpoint family in the shear chart using the native
+theorems. Exact checks additionally test curved endpoint/residual terms and
+subdivision with a nonzero junction pairing.
 
 ## Minkowski Geometry and Relativistic Kinematics
 

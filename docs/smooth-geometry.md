@@ -576,10 +576,15 @@ tangent bundle. `curveVelocity_family` identifies them with differentiation
 along parameter paths, and `covariantAlong_family_interchange` proves
 `D_ε ∂t Γ = D_t ∂ε Γ` using symmetry of second derivatives and zero torsion.
 Parameter velocities may vanish and the family need not be an immersion.
+Slice regularity and C¹ variation-field regularity are proved. An actual
+endpoint fixed for nearby variation parameters has zero native variation
+field there, by locality of `mfderiv`. `contDiffAt_pairing_along` preserves
+the finite regularity of arbitrary native fields along a curve.
 The theorem supports both Lorentz conventions and introduces no physical
 imports. Its typed contracts are in `LorentzGeometryAPI`; the
-[GR guide](general-relativity.md) describes the resulting particle-density
-derivatives and the remaining action-level variation work.
+[GR guide](general-relativity.md) describes the resulting actual action
+derivatives, intrinsic boundary terms, subdivision and forward stationarity
+results, as well as the remaining converse proofs.
 
 `AlongCurveReparam.lean` proves `C^(n+1)` velocity regularity, the chain rule
 for `curveVelocity`, and both reparametrization identities:

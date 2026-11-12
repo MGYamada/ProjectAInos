@@ -311,6 +311,12 @@ example (g : LorentzMetric σ d M) {Γ : ℝ × ℝ → M} {a b : ℝ}
       (fun t => familyVelocity Γ (1, 0) (a, t)) b :=
   g.covariantAlong_family_interchange hΓ
 
+example {Γ : ℝ × ℝ → M} {ε₀ t : ℝ}
+    (hΓ : MDifferentiableAt 𝓘(ℝ, ℝ × ℝ) 𝓘(ℝ, MinkowskiModel d) Γ (ε₀, t))
+    (hfixed : ∀ᶠ ε in 𝓝 ε₀, Γ (ε, t) = Γ (ε₀, t)) :
+    familyVelocity (d := d) Γ (1, 0) (ε₀, t) = 0 :=
+  familyVelocity_fst_eq_zero_of_eventually_const hΓ hfixed
+
 end CurveFamilies
 
 section AlongCurve

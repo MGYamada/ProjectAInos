@@ -32,6 +32,26 @@ local notation "E" => MinkowskiModel d
 local notation "I" => 𝓘(ℝ, MinkowskiModel d)
 local notation "J" => 𝓘(ℝ, ℝ × ℝ)
 
+/-- Joint C² family regularity makes the actual sliced metric square C¹. -/
+theorem familyMetricVelocity_contDiffAt (g : LorentzMetric .timeNegative d M)
+    {Γ : ℝ × ℝ → M} {z : ℝ × ℝ} (hΓ : ContMDiffAt J I 2 Γ z) :
+    ContDiffAt ℝ 1 (fun p : ℝ × ℝ => g.form (Γ p)
+      (curveVelocity (fun t => Γ (p.1, t)) p.2)
+      (curveVelocity (fun t => Γ (p.1, t)) p.2)) z := by
+  apply (g.familyPairing_contDiffAt (0, 1) (0, 1) hΓ).congr_of_eventuallyEq
+  have hn := (contMDiffAt_iff_contMDiffAt_nhds (n := 1) (by norm_num)).mp
+    (hΓ.of_le (by norm_num))
+  filter_upwards [hn] with p hp
+  rw [curveVelocity_family_snd (hp.mdifferentiableAt (by norm_num))]
+
+/-- The physical square-root density is jointly C¹ near any timelike family jet. -/
+theorem freeFamilyDensity_contDiffAt (g : LorentzMetric .timeNegative d M) (m : ℝ)
+    {Γ : ℝ × ℝ → M} {z : ℝ × ℝ} (hΓ : ContMDiffAt J I 2 Γ z)
+    (hv : Timelike g (curveVelocity (fun t => Γ (z.1, t)) z.2)) :
+    ContDiffAt ℝ 1 (fun p : ℝ × ℝ => -m * speedAlong g (fun t => Γ (p.1, t)) p.2) z :=
+  contDiffAt_const.mul
+    ((familyMetricVelocity_contDiffAt g hΓ).neg.sqrt (ne_of_gt (neg_pos.mpr hv)))
+
 /-- Differentiate the actual curve-velocity density of a manifold family.
 The variation field is the native derivative in the first parameter. -/
 theorem quadraticDensity_hasDerivAt (g : LorentzMetric .timeNegative d M)

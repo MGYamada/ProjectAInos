@@ -78,6 +78,64 @@ theorem curveVelocity_family {Γ : P → M} {ρ : ℝ → P} {t : ℝ} {v : P}
   change (NormedSpace.fromTangentSpace (ρ t)).symm (deriv ρ t) = _
   rw [hρ.deriv]
 
+omit [IsManifold I ∞ M] in
+/-- The second parameter velocity is the native velocity of its curve slice. -/
+theorem curveVelocity_family_snd {Γ : P → M} {z : P}
+    (hΓ : MDifferentiableAt J I Γ z) :
+    curveVelocity (d := d) (fun t => Γ (z.1, t)) z.2 =
+      familyVelocity (d := d) Γ (0, 1) z := by
+  have hp : HasDerivAt (fun t : ℝ => (z.1, t)) (0, 1) z.2 :=
+    (hasDerivAt_const z.2 z.1).prodMk (hasDerivAt_id z.2)
+  simpa only [Function.comp_def, Prod.mk.eta] using!
+    (curveVelocity_family (ρ := fun t => (z.1, t)) hΓ hp)
+
+/-- Pairing the native velocities of a C² family gives a jointly C¹ scalar. -/
+theorem familyPairing_contDiffAt (g : LorentzMetric σ d M)
+    {Γ : P → M} {z : P} (v w : P) (hΓ : ContMDiffAt J I 2 Γ z) :
+    ContDiffAt ℝ 1 (fun p => g.form (Γ p)
+      (familyVelocity Γ v p) (familyVelocity Γ w p)) z := by
+  have hp : ContMDiffAt J ((I).prod 𝓘(ℝ)) 1
+      (fun p => (⟨Γ p, g.form (Γ p) (familyVelocity Γ v p) (familyVelocity Γ w p)⟩ :
+        TotalSpace ℝ (Bundle.Trivial M ℝ))) z :=
+    (((g.smooth (Γ z)).of_le (by simp)).comp z (hΓ.of_le (by norm_num))).clm_bundle_apply₂
+      (familyVelocity_contMDiffAt v hΓ) (familyVelocity_contMDiffAt w hΓ)
+  rw [contMDiffAt_totalSpace] at hp
+  exact hp.2.contDiffAt
+
+omit [IsManifold I ∞ M] in
+/-- Fixing a curve endpoint for nearby variation parameters forces the
+native variation field to vanish at that endpoint. -/
+theorem familyVelocity_fst_eq_zero_of_eventually_const {Γ : P → M} {ε₀ t : ℝ}
+    (hΓ : MDifferentiableAt J I Γ (ε₀, t))
+    (hfixed : ∀ᶠ ε in 𝓝 ε₀, Γ (ε, t) = Γ (ε₀, t)) :
+    familyVelocity (d := d) Γ (1, 0) (ε₀, t) = 0 := by
+  have hp : HasDerivAt (fun ε : ℝ => (ε, t)) (1, 0) ε₀ :=
+    (hasDerivAt_id ε₀).prodMk (hasDerivAt_const ε₀ t)
+  have hvel := curveVelocity_family (d := d) (ρ := fun ε => (ε, t)) hΓ hp
+  rw [← hvel]
+  unfold curveVelocity
+  have heq : (fun ε => Γ (ε, t)) =ᶠ[𝓝 ε₀] (fun _ => Γ (ε₀, t)) := hfixed
+  have hd := heq.mfderiv_eq («I» := 𝓘(ℝ)) (I' := I)
+  simp only [mfderiv_const, comp_zero] at hd
+  simp only [Function.comp_def, hd]
+  rfl
+
+omit [IsManifold I ∞ M] in
+/-- The reference slice inherits joint regularity of the family. -/
+theorem familySlice_contMDiffAt {Γ : ℝ × ℝ → M} {ε₀ t : ℝ}
+    (hΓ : ContMDiffAt J I 2 Γ (ε₀, t)) :
+    ContMDiffAt 𝓘(ℝ) I 2 (fun s => Γ (ε₀, s)) t :=
+  hΓ.comp t ((contDiff_const.prodMk contDiff_id).contMDiff.contMDiffAt)
+
+/-- The variation field along the reference slice is C¹. -/
+theorem familyVariation_contMDiffAt {Γ : ℝ × ℝ → M} {ε₀ t : ℝ}
+    (hΓ : ContMDiffAt J I 2 Γ (ε₀, t)) :
+    ContMDiffAt 𝓘(ℝ) ((I).prod I) 1
+      (fun s => TotalSpace.mk' E (Γ (ε₀, s))
+        (familyVelocity (d := d) Γ (1, 0) (ε₀, s))) t :=
+  (familyVelocity_contMDiffAt (1, 0) hΓ).comp t
+    ((contDiff_const.prodMk contDiff_id).contMDiff.contMDiffAt)
+
 /-- Coordinate derivatives of a native parameter velocity are the ordinary
 second derivatives of the coordinate representative. -/
 theorem familyVelocity_components_hasDerivAt {Γ : P → M} {ρ : ℝ → P} {t : ℝ}

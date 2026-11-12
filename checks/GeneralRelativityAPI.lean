@@ -11,9 +11,19 @@ variation are checked separately so their hypotheses cannot silently change. -/
 
 noncomputable section
 open MeasureTheory Set
-open scoped Manifold ContDiff
+open scoped Manifold ContDiff Topology
 open ProjectAInos ProjectAInos.SmoothGeometry ProjectAInos.GeneralRelativity
 open ProjectAInos.SmoothGeometry.LorentzMetric
+
+section ScalarIntegral
+
+example {F : ℝ × ℝ → ℝ} {D : ℝ → ℝ} {ε₀ a b : ℝ}
+    (hF : ∀ t ∈ uIcc a b, ContDiffAt ℝ 1 F (ε₀, t))
+    (hD : ∀ t ∈ uIcc a b, HasDerivAt (fun ε => F (ε, t)) (D t) ε₀) :
+    HasDerivAt (fun ε => ∫ t in a..b, F (ε, t)) (∫ t in a..b, D t) ε₀ :=
+  Variational.hasDerivAt_intervalIntegral_of_contDiffAt hF hD
+
+end ScalarIntegral
 
 section Native
 
@@ -186,6 +196,96 @@ example (g : LorentzMetric .timeNegative d M) (m : ℝ)
         (curveVelocity (fun s => Γ (a, s)) t)) a :=
   freeDensity_hasDerivAt g m hΓ hv
 
+example (g : LorentzMetric .timeNegative d M)
+    {Γ : ℝ × ℝ → M} {ε₀ a b : ℝ}
+    (hΓ : ∀ t ∈ uIcc a b, ContMDiffAt J I 2 Γ (ε₀, t)) :
+    HasDerivAt (fun ε => quadraticAction g (fun t => Γ (ε, t)) a b)
+      (∫ t in a..b, g.form (Γ (ε₀, t))
+        (g.covariantAlong (γ := fun s => Γ (ε₀, s))
+          (fun s => familyVelocity Γ (1, 0) (ε₀, s)) t)
+        (curveVelocity (fun s => Γ (ε₀, s)) t)) ε₀ :=
+  quadraticAction_family_hasDerivAt g hΓ
+
+example (g : LorentzMetric .timeNegative d M) (m : ℝ)
+    {Γ : ℝ × ℝ → M} {ε₀ a b : ℝ}
+    (hΓ : ∀ t ∈ uIcc a b, ContMDiffAt J I 2 Γ (ε₀, t))
+    (hv : ∀ t ∈ uIcc a b, Timelike g (curveVelocity (fun s => Γ (ε₀, s)) t)) :
+    HasDerivAt (fun ε => freeAction g m (fun t => Γ (ε, t)) a b)
+      (∫ t in a..b, (m / speedAlong g (fun s => Γ (ε₀, s)) t) * g.form (Γ (ε₀, t))
+        (g.covariantAlong (γ := fun s => Γ (ε₀, s))
+          (fun s => familyVelocity Γ (1, 0) (ε₀, s)) t)
+        (curveVelocity (fun s => Γ (ε₀, s)) t)) ε₀ :=
+  freeAction_family_hasDerivAt g m hΓ hv
+
+example (g : LorentzMetric .timeNegative d M)
+    {Γ : ℝ × ℝ → M} {ε₀ a b : ℝ}
+    (hΓ : ∀ t ∈ uIcc a b, ContMDiffAt J I 2 Γ (ε₀, t)) :
+    HasDerivAt (fun ε => quadraticAction g (fun t => Γ (ε, t)) a b)
+      ((g.form (Γ (ε₀, b)) (familyVelocity Γ (1, 0) (ε₀, b))
+          (curveVelocity (fun s => Γ (ε₀, s)) b) -
+        g.form (Γ (ε₀, a)) (familyVelocity Γ (1, 0) (ε₀, a))
+          (curveVelocity (fun s => Γ (ε₀, s)) a)) +
+        ∫ t in a..b, -g.form (Γ (ε₀, t)) (familyVelocity Γ (1, 0) (ε₀, t))
+          (g.covariantAlong (curveVelocity (fun s => Γ (ε₀, s))) t)) ε₀ :=
+  quadraticAction_family_firstVariation g hΓ
+
+example (g : LorentzMetric .timeNegative d M) (m : ℝ)
+    {Γ : ℝ × ℝ → M} {ε₀ a b : ℝ}
+    (hΓ : ∀ t ∈ uIcc a b, ContMDiffAt J I 2 Γ (ε₀, t))
+    (hv : ∀ t ∈ uIcc a b, Timelike g (curveVelocity (fun s => Γ (ε₀, s)) t)) :
+    HasDerivAt (fun ε => freeAction g m (fun t => Γ (ε, t)) a b)
+      (((m / speedAlong g (fun s => Γ (ε₀, s)) b) *
+          g.form (Γ (ε₀, b)) (familyVelocity Γ (1, 0) (ε₀, b))
+            (curveVelocity (fun s => Γ (ε₀, s)) b) -
+        (m / speedAlong g (fun s => Γ (ε₀, s)) a) *
+          g.form (Γ (ε₀, a)) (familyVelocity Γ (1, 0) (ε₀, a))
+            (curveVelocity (fun s => Γ (ε₀, s)) a)) +
+        ∫ t in a..b, -(m / speedAlong g (fun s => Γ (ε₀, s)) t) *
+          g.form (Γ (ε₀, t)) (familyVelocity Γ (1, 0) (ε₀, t))
+            (g.covariantAlong (curveVelocity (fun s => Γ (ε₀, s))) t -
+              (deriv (speedAlong g (fun s => Γ (ε₀, s))) t /
+                speedAlong g (fun s => Γ (ε₀, s)) t) •
+                curveVelocity (fun s => Γ (ε₀, s)) t)) ε₀ :=
+  freeAction_family_firstVariation g m hΓ hv
+
+example (g : LorentzMetric .timeNegative d M)
+    {Γ : ℝ × ℝ → M} {ε₀ a b : ℝ} (hab : a ≤ b)
+    (hΓ : ∀ t ∈ uIcc a b, ContMDiffAt J I 2 Γ (ε₀, t))
+    (ha : ∀ᶠ ε in 𝓝 ε₀, Γ (ε, a) = Γ (ε₀, a))
+    (hb : ∀ᶠ ε in 𝓝 ε₀, Γ (ε, b) = Γ (ε₀, b))
+    (hg : g.IsGeodesicOn (Ioo a b) (fun s => Γ (ε₀, s))) :
+    HasDerivAt (fun ε => quadraticAction g (fun t => Γ (ε, t)) a b) 0 ε₀ :=
+  quadraticAction_family_stationary_of_geodesic g hab hΓ ha hb hg
+
+example (g : LorentzMetric .timeNegative d M) (m : ℝ)
+    {Γ : ℝ × ℝ → M} {ε₀ a b : ℝ} (hab : a ≤ b)
+    (hΓ : ∀ t ∈ uIcc a b, ContMDiffAt J I 2 Γ (ε₀, t))
+    (hv : ∀ t ∈ uIcc a b, Timelike g (curveVelocity (fun s => Γ (ε₀, s)) t))
+    (ha : ∀ᶠ ε in 𝓝 ε₀, Γ (ε, a) = Γ (ε₀, a))
+    (hb : ∀ᶠ ε in 𝓝 ε₀, Γ (ε, b) = Γ (ε₀, b))
+    (hacc : ∀ t ∈ Ioo a b, ∃ k : ℝ,
+      g.covariantAlong (curveVelocity (fun s => Γ (ε₀, s))) t =
+        k • curveVelocity (fun s => Γ (ε₀, s)) t) :
+    HasDerivAt (fun ε => freeAction g m (fun t => Γ (ε, t)) a b) 0 ε₀ :=
+  freeAction_family_stationary_of_tangential g m hab hΓ hv ha hb hacc
+
+example (g : LorentzMetric .timeNegative d M)
+    {Γ : ℝ × ℝ → M} {ε₀ a b c : ℝ} (hab : a ≤ b) (hbc : b ≤ c)
+    (hΓ : ∀ t ∈ uIcc a c, ContMDiffAt J I 2 Γ (ε₀, t)) :
+    deriv (fun ε => quadraticAction g (fun t => Γ (ε, t)) a b) ε₀ +
+      deriv (fun ε => quadraticAction g (fun t => Γ (ε, t)) b c) ε₀ =
+      deriv (fun ε => quadraticAction g (fun t => Γ (ε, t)) a c) ε₀ :=
+  quadraticAction_family_deriv_add g hab hbc hΓ
+
+example (g : LorentzMetric .timeNegative d M) (m : ℝ)
+    {Γ : ℝ × ℝ → M} {ε₀ a b c : ℝ} (hab : a ≤ b) (hbc : b ≤ c)
+    (hΓ : ∀ t ∈ uIcc a c, ContMDiffAt J I 2 Γ (ε₀, t))
+    (hv : ∀ t ∈ uIcc a c, Timelike g (curveVelocity (fun s => Γ (ε₀, s)) t)) :
+    deriv (fun ε => freeAction g m (fun t => Γ (ε, t)) a b) ε₀ +
+      deriv (fun ε => freeAction g m (fun t => Γ (ε, t)) b c) ε₀ =
+      deriv (fun ε => freeAction g m (fun t => Γ (ε, t)) a c) ε₀ :=
+  freeAction_family_deriv_add g m hab hbc hΓ hv
+
 end NativeFiniteAndFamilies
 
 section CoordinateVariation
@@ -342,5 +442,15 @@ example {a b : ℝ} (hab : a < b) :
         speedAlong LorentzianCharts.metric (ParticleExamples.exponentialClock ∘ r) τ = 1) ∧
       LorentzianCharts.metric.IsGeodesicOn (Ioo 0 (Real.exp b - Real.exp a)) (ParticleExamples.exponentialClock ∘ r) :=
   ParticleExamples.exponentialClock_finite_parameter hab
+
+example :
+    HasDerivAt (fun ε => quadraticAction LorentzianCharts.metric
+      (fun t => VariationExamples.nonlinearFamily (ε, t)) 0 1) 0 0 :=
+  VariationExamples.nonlinearFamily_quadratic_stationary
+
+example (m : ℝ) :
+    HasDerivAt (fun ε => freeAction LorentzianCharts.metric m
+      (fun t => VariationExamples.nonlinearFamily (ε, t)) 0 1) 0 0 :=
+  VariationExamples.nonlinearFamily_free_stationary m
 
 end Examples

@@ -171,10 +171,12 @@ affine-geodesic reparametrization. A single C² proper-time inverse now covers
 the full finite timelike segment on arbitrary Lorentz manifolds, with both
 endpoints, unit rate and affine-geodesic consequences proved. An exponential
 shear clock distinguishes massive from quadratic stationarity and has the
-expected logarithmic inverse. Mixed covariant derivatives and first variations
-of both densities are proved for genuine C² manifold curve families.
-General manifold action differentiation and stationarity, including boundary
-cancellation across charts, curved forms and the Newtonian motion limit remain in the work
+expected logarithmic inverse. Genuine C² manifold curve families now have
+proved actual-action derivatives, intrinsic endpoint formulas, and subdivision
+laws. Fixed endpoints eliminate the boundary terms, proving the motion-to-
+stationarity direction on arbitrary manifolds, including null reference
+geodesics for the quadratic action. The converse directions using localized
+manifold test families, curved forms and the Newtonian motion limit remain in the work
 tracked by [#52](https://github.com/MGYamada/ProjectAInos/issues/52).
 Einstein equations and their Newtonian field-equation limit remain in 5.2;
 the Maxwell field action remains in 4.2.

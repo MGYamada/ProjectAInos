@@ -268,10 +268,13 @@ finite timelike segment on arbitrary Lorentz manifolds. Both endpoints, unit
 rate and the removal of tangential acceleration are proved. An exponentially
 parametrized shear worldline is stationary for the massive action but not for
 the quadratic action; its finite inverse is logarithmic. For genuine C²
-manifold-valued curve families, mixed covariant derivatives commute and both
-particle densities have intrinsic first-variation formulas. Integrating those
-formulas, chart-crossing boundary cancellation and the general-manifold
-stationarity equivalences remain. The [GR guide](docs/general-relativity.md)
+manifold-valued curve families, mixed covariant derivatives commute. The actual
+actions now have intrinsic first-variation formulas with endpoint terms,
+derived from local C² regularity on the finite reference segment. Their
+derivatives glue over subdivisions, and fixed-endpoint families make affine
+geodesics stationary for the quadratic action and timelike tangential motion
+stationary for the massive action. The converse implications on general
+manifolds, using localized test families, remain. The [GR guide](docs/general-relativity.md)
 records the exact scope and typed contracts.
 The [shared geometry guide](docs/smooth-geometry.md)
 records the public API and exact checks. [Issue #52](https://github.com/MGYamada/ProjectAInos/issues/52)
