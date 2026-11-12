@@ -278,9 +278,41 @@ def verify_radial_family():
     check_zero("one-dimensional parallel coframe", sp.diff(coframe, x) - coframe * connection)
 
 
+def verify_flat_frame_defect():
+    """Check both coordinate directions and the curvature term's sign."""
+    t, x = sp.symbols("t x", real=True)
+    coords = (t, x)
+    shear_connection = (sp.Matrix([[0, 0], [2, 0]]), sp.zeros(2))
+    frame = sp.Matrix([[1, 0], [-2*t, 1]])
+    coframe = sp.Matrix([[1, 0], [2*t, 1]])
+    check_zero("shear radial frame inverse", coframe * frame - sp.eye(2))
+    for i, coord in enumerate(coords):
+        check_zero(f"shear full parallel frame direction {i}",
+                   frame.diff(coord) + shear_connection[i] * frame)
+        check_zero(f"shear full parallel coframe direction {i}",
+                   coframe.diff(coord) - coframe * shear_connection[i])
+
+    # The conformal metric exp(2*x**2) * diag(-1, 1) is curved. Its
+    # curvature term must remain in the defect identity for arbitrary P.
+    curved_connection = (sp.Matrix([[0, 2*x], [2*x, 0]]), 2*x*sp.eye(2))
+    trial_frame = sp.Matrix([[1+t*x, t], [x, 1]])
+    defect = tuple(trial_frame.diff(coord) + gamma * trial_frame
+                   for coord, gamma in zip(coords, curved_connection))
+    curvature = (curved_connection[1].diff(t) - curved_connection[0].diff(x)
+                 + curved_connection[0] * curved_connection[1]
+                 - curved_connection[1] * curved_connection[0])
+    check_zero("curved defect compatibility sign",
+               defect[1].diff(t) - defect[0].diff(x)
+               - curved_connection[1] * defect[0] + curved_connection[0] * defect[1]
+               - curvature * trial_frame)
+    if curvature == sp.zeros(2):
+        raise AssertionError("curved defect regression requires nonzero curvature")
+
+
 def verify():
     verify_volterra_solution()
     verify_radial_family()
+    verify_flat_frame_defect()
     t, x, time, space = sp.symbols("t x T X", real=True)
     coordinates = sp.Matrix([t, x])
     inertial = sp.Matrix([time, space])
@@ -440,7 +472,8 @@ def verify():
           "nonzero null fields, reparametrization, quadratic local inertial charts, "
           "parallel coframe integration, the curved integrability obstruction, "
           "a nonconstant Volterra solution/parameter variation, "
-          "and a smooth radial family with rescaling and endpoint derivative.")
+          "a smooth radial family with rescaling and endpoint derivative, "
+          "and full flat-frame/coframe equations with the curved defect sign.")
 
 
 def main():

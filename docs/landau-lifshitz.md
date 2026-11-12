@@ -147,8 +147,10 @@ small continuous coefficient curves and initial values, including a
 time-dependent exact example. Smooth coordinate coefficients lift to
 curve-valued families; radial frames and their inverses are smooth near
 the center, with rescaling and the radial differential equation proved.
-Native chart coefficients admit suitable local extensions. The flat-curvature
-argument giving parallelness in every direction remains in D.
+Native chart coefficients admit suitable local extensions. Zero coordinate
+curvature now gives parallelness in every direction and a smooth invertible
+parallel coframe. The remaining D step connects native curvature to this
+coordinate condition and integrates the resulting normalized coframe.
 Particle variation, curved forms and
 the Newtonian motion limit remain in the work
 tracked by [#52](https://github.com/MGYamada/ProjectAInos/issues/52).

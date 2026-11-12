@@ -262,10 +262,21 @@ has endpoint `exp(x²/4)v` on all prefixes of the unit ray.
 `Manifold.SmoothExtension` supplies vector-valued cutoffs near compact sets;
 `Lorentzian.RadialFrame` proves bundled native chart coefficients are smooth
 and have an extension agreeing near any selected chart point. No global
-chart or analyticity of the metric is required. The flat-curvature
-compatibility argument giving parallelness in all directions remains needed.
-Construction of a smooth invertible parallel coframe from zero curvature
-remains open; the local flatness equivalence is not yet complete.
+chart or analyticity of the metric is required.
+`ODE.FlatFrame` proves that zero coordinate curvature makes the constructed
+radial frame parallel in every direction. The defect `Q = DP + ΓP` obeys
+an antisymmetric derivative identity from Hessian symmetry and flatness.
+Differentiating `Q(x)(x) = 0` then makes `t Q(t x)(u)v` a transport solution
+with zero initial value. Uniqueness kills the defect, without division by
+time at the center. Differentiating the inverse gives the coframe equation.
+`exists_parallel_radialCoframe` supplies a smooth invertible parallel coframe
+on a smaller ball inside any flat neighborhood, with identity at the center.
+`FlatFrameExamples` verifies the native nonzero shear coefficients and the
+constructed endpoint `P(x)v = (v₀, v₁ - 2x₀v₀)` in Lean. Exact checks also
+test both coordinate directions and retain the curvature term in the
+defect identity for the curved conformal example. The native curvature
+bridge and metric normalization/integration remain; the local flatness
+equivalence is not yet complete.
 Stages E–G remain subsequent work; differential/contracted
 Bianchi and Einstein dynamics belong to 5.2.
 

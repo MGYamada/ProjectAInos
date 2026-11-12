@@ -238,9 +238,13 @@ with an exact time-dependent example. Jointly smooth coefficients now lift
 to smooth curve-valued families. Radial endpoint maps and their inverses are
 smooth and invertible near the base point, with rescaling and the radial
 differential equation proved. Native chart coefficients admit smooth local
-extensions for this construction. Stage D remains incomplete: constructing
-such coframes from zero curvature is still required for the converse of the
-local flatness theorem.
+extensions for this construction. Zero coordinate curvature now makes the
+radial frame parallel in every direction and constructs a smooth invertible
+parallel coframe on a smaller ball. The nonzero shear connection has a
+proved inverse-Jacobian endpoint formula. Stage D remains incomplete:
+identifying native curvature with this bundled coordinate condition and
+applying the coframe integration theorem are still required for the converse
+of the local flatness theorem.
 The [shared geometry guide](docs/smooth-geometry.md)
 records the public API and exact checks. [Issue #52](https://github.com/MGYamada/ProjectAInos/issues/52)
 tracks review of the connection and curvature stages, further tensor operations,

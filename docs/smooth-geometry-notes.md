@@ -132,9 +132,9 @@ keeps time orientation separate from spacetime orientation.
 Local Minkowski coordinates are not a premise on general Lorentz manifolds.
 The Lorentz Levi-Civita connection and smooth curvature tensor are now
 constructed; equivalence of `IsLocallyMinkowski` with vanishing curvature
-still requires construction of a smooth parallel coframe from zero curvature
-in stage D. The forward implication and the coframe-to-chart integration
-step are now proved.
+still requires connecting native curvature to the constructed coordinate
+parallel coframe in stage D. The forward implication, coordinate flat-frame
+construction and coframe-to-chart integration step are now proved.
 
 The localization construction follows [Joyce, *Algebraic Geometry over
 C∞-rings*, §2.3](https://arxiv.org/pdf/1001.0023). The requested general
@@ -169,8 +169,9 @@ a smooth primitive, and invertibility gives an actual smooth chart. The
 transition law makes the new connection coefficients vanish on the entire
 source. After shrinking to a convex target, metric compatibility propagates
 a normalization at the base point to the whole chart. These conditional
-integration theorems do not construct the parallel coframe from zero
-curvature; that existence theorem remains the missing converse step in D.
+integration theorems take a parallel coframe as input. A separate coordinate
+construction now supplies one under an explicit zero-curvature equation;
+the native curvature bridge remains part of the converse step in D.
 The supporting linear-ODE solver now uses the Banach space of continuous
 coordinate curves on `[0,1]`. If the coefficient supremum norm is less than
 one, the integral equation has an invertible operator, yielding the unique
@@ -183,8 +184,15 @@ small coefficients and smooth invertible endpoint maps. Their inverses give
 smooth radial coframes. ODE uniqueness identifies shorter-ray endpoints
 with intermediate solution values, proving the radial differential equation.
 A vector-valued cutoff extends native chart coefficients without changing
-their germ. Curvature compatibility is still needed to show parallelness in
-all directions and complete the parallel-coframe existence theorem.
+their germ. For coordinate coefficients satisfying zero curvature,
+`ODE.FlatFrame` now proves parallelness in all directions. Writing the
+defect as `Q = DP + ΓP`, Hessian symmetry and flatness give a homogeneous
+radial equation. Along each ray, `t Q(t x)(u)v` solves the original transport
+equation with zero initial value, so uniqueness makes it zero. Inverting
+the frame yields `Dθ(u)v = θ(Γ(u)v)`. This constructs an invertible smooth
+parallel coframe on a smaller ball, normalized to identity at its center.
+Relating the bundled coordinate flatness equation to native curvature and
+normalizing for the Lorentz metric remain necessary to finish the converse.
 In particular, no claim that `A ≅ Γ(Spec A)` for arbitrary
 C∞-rings is used in this continuation.
 
@@ -192,10 +200,10 @@ C∞-rings is used in this continuation.
 
 The warning-free full build (`lake build --wfail ProjectAInos`), root-import
 check, external API regression check, and transitive axiom audit pass.
-The current motion increment's audit covers 7,008 project declarations,
-including 453 in smooth algebra and 2,843 in smooth geometry,
+The current motion increment's audit covers 7,233 project declarations,
+including 453 in smooth algebra and 3,068 in smooth geometry,
 with only `propext`, `Classical.choice`, and `Quot.sound` allowed.
-The full build has 9,288 jobs. All six API checks and the installed-package
+The full build has 9,298 jobs. All six API checks and the installed-package
 exact Lorentz experiment pass, including the motion examples.
 `git diff --check` also passes. The existing `README.md` contents, including
 the earlier subject-numbering changes, were preserved throughout this work.

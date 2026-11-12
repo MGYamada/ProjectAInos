@@ -13,6 +13,7 @@ import ProjectAInos.SmoothGeometry.Lorentzian.CurvatureNaturality
 import ProjectAInos.SmoothGeometry.Lorentzian.ConformalExample
 import ProjectAInos.SmoothGeometry.Lorentzian.LocalInertialExamples
 import ProjectAInos.SmoothGeometry.Lorentzian.LocalFlatnessExamples
+import ProjectAInos.SmoothGeometry.Lorentzian.FlatFrameExamples
 import ProjectAInos.SmoothGeometry.Lorentzian.RadialFrame
 import ProjectAInos.SmoothGeometry.Lorentzian.MotionExamples
 import ProjectAInos.SmoothGeometry.Lorentzian.MotionODE
@@ -106,6 +107,37 @@ example (Γ : E → E →L[ℝ] E →L[ℝ] E) (hΓ : ContDiff ℝ ∞ Γ) (p : 
 example (x : unitInterval) (v : ℝ) :
     radialEndpoint quadraticConnection quadraticConnection_contDiff 0 (x : ℝ) v =
       Real.exp ((x : ℝ) ^ 2 / 4) * v := quadratic_radialEndpoint x v
+
+example (Γ : E → E →L[ℝ] E →L[ℝ] E) (hΓ : ContDiff ℝ ∞ Γ)
+    {r : ℝ} (hr : 0 < r)
+    (hsmall : ∀ x ∈ Metric.ball (0 : E) r, ‖radialCoefficient Γ hΓ 0 x‖ < 1)
+    (hflat : IsFlatConnectionOn Γ (Metric.ball (0 : E) r))
+    {x : E} (hx : x ∈ Metric.ball (0 : E) r) (u v : E) :
+    fderiv ℝ (radialEndpoint Γ hΓ 0) x u v =
+      -(Γ x u (radialEndpoint Γ hΓ 0 x v)) :=
+  radialEndpoint_fderiv_of_flat Γ hΓ hr hsmall hflat hx u v
+
+example (Γ : E → E →L[ℝ] E →L[ℝ] E) (hΓ : ContDiff ℝ ∞ Γ)
+    {U : Set E} (hU : U ∈ 𝓝 (0 : E)) (hflat : IsFlatConnectionOn Γ U) :
+    ∃ r : ℝ, 0 < r ∧ Metric.ball (0 : E) r ⊆ U ∧
+      ContDiffOn ℝ ∞ (radialCoframe Γ hΓ 0) (Metric.ball 0 r) ∧
+      (∀ x ∈ Metric.ball (0 : E) r, (radialCoframe Γ hΓ 0 x).IsInvertible) ∧
+      radialCoframe Γ hΓ 0 0 = ContinuousLinearMap.id ℝ E ∧
+      ∀ x ∈ Metric.ball (0 : E) r, ∀ u v,
+        fderiv ℝ (radialCoframe Γ hΓ 0) x u v = radialCoframe Γ hΓ 0 x (Γ x u v) :=
+  exists_parallel_radialCoframe Γ hΓ hU hflat
+
+example {Γ : E → E →L[ℝ] E →L[ℝ] E} {U : Set E}
+    (hflat : IsFlatConnectionOn Γ U) {x : E} (hx : x ∈ U) (u v w : E) :
+    fderiv ℝ Γ x u v w - fderiv ℝ Γ x v u w +
+      Γ x u (Γ x v w) - Γ x v (Γ x u w) = 0 := hflat x hx u v w
+
+example (x v : LorentzianCharts.Plane)
+    (hx : ‖radialCoefficient LorentzianCharts.shearRadialConnection
+      LorentzianCharts.shearRadialConnection_contDiff 0 x‖ < 1) :
+    radialEndpoint LorentzianCharts.shearRadialConnection
+      LorentzianCharts.shearRadialConnection_contDiff 0 x v =
+        ![v 0, v 1 - 2 * x 0 * v 0] := LorentzianCharts.shear_radialEndpoint x v hx
 
 end LinearODE
 

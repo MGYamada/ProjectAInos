@@ -799,19 +799,40 @@ connection `Γ(q)(u,v) = -(q/2)uv` has endpoint `exp(x²/4)v` for every prefix
 of the unit ray. Exact SymPy checks also verify the radial ODE, rescaling,
 radial endpoint derivative, inverse coframe and its one-dimensional equation.
 
-These radial families exist for curved connections too. The remaining
-flat-curvature argument must show parallelness in **all** directions;
-the radial differential equation alone does not supply that conclusion.
+### Flat radial frames and parallel coframe existence
 
-Stage D remains in progress: a smooth invertible parallel coframe must still
-be constructed from zero curvature. The conditional integration theorem
-does not supply that existence result or finish the local curvature-zero ↔
-`IsLocallyMinkowski` equivalence. Particle variation, curved forms
+`ODE.FlatFrame` supplies the curvature argument. `IsFlatConnectionOn Γ U`
+fixes the coordinate convention
+`DᵤΓ(v)w - DᵥΓ(u)w + Γ(u)(Γ(v)w) - Γ(v)(Γ(u)w) = 0` on `U`.
+`frameDefect Γ P = DP + ΓP` measures parallelness. Its antisymmetric
+derivative follows from Hessian symmetry and flatness. The radial condition
+then gives a homogeneous equation for `t Q(t x)(u)v`, with zero initial
+value. `eq_zero_of_radial_equation` applies the existing ODE uniqueness
+theorem; it does not divide by time at the center.
+
+- `radialEndpoint_fderiv_of_flat` proves `DP(x)(u)v = -Γ(x)(u, P(x)v)`
+  in **every** direction on a ball with small radial coefficients.
+- `inverse_fderiv_of_parallel` differentiates the inverse frame;
+  `radialCoframe_fderiv_of_flat` gives `Dθ(x)(u)v = θ(x)(Γ(x)(u,v))`.
+- `exists_parallel_radialCoframe` constructs a positive smaller ball inside
+  any neighborhood where the coordinate curvature vanishes. On that ball
+  the coframe is smooth, invertible, parallel and identity at the center.
+  No parallelness or invertibility premise is imposed on an unconstructed frame.
+- `Lorentzian.FlatFrameExamples` identifies the nonzero native shear
+  coefficients with a flat coordinate connection, proves its constructed
+  endpoint is `P(x)v = (v₀, v₁ - 2x₀v₀)`, and applies the general existence
+  theorem. The exact experiment checks both directions of the frame and
+  coframe equations and the curvature term's sign for a curved example.
+
+Stage D remains in progress: native curvature must still be identified with
+the bundled coordinate condition, and the normalized coframe must be passed
+to the integration theorem. Thus the local curvature-zero ↔
+`IsLocallyMinkowski` equivalence is not yet complete. Particle variation, curved forms
 and the Newtonian trajectory limit are the subsequent E–G stages.
 
-This increment passes the warning-free full build (9,296 jobs), root-import
-check, all six API checks and the transitive audit of 7,186 declarations
-(3,021 in smooth geometry). Only `propext`, `Classical.choice` and `Quot.sound`
+This increment passes the warning-free full build (9,298 jobs), root-import
+check, all six API checks and the transitive audit of 7,233 declarations
+(3,068 in smooth geometry). Only `propext`, `Classical.choice` and `Quot.sound`
 are permitted. Typed contracts fix the native along-field carrier, overlap
 and regularity hypotheses, metric and parameter-change formulas, coordinate
 ODE, local initial-value existence/uniqueness, finite-segment transport,
@@ -820,8 +841,9 @@ prescribed-basis inertial charts, their first and second derivative contracts,
 curvature restriction, coframe integration with explicit hypotheses,
 the Volterra equation, ODE uniqueness, norm bound and smooth dependence,
 compact-family smoothness, radial rescaling and differentiation, local
-connection-coefficient extension, and flat/curved concrete examples at
-default elaborator settings. The installed-package exact Lorentz experiment
+connection-coefficient extension, full parallelness under the explicit
+flatness equation, constructed parallel-coframe existence, and flat/curved
+concrete examples at default elaborator settings. The installed-package exact Lorentz experiment
 also passes. These checks validate this increment, not the remaining D–G
 proof obligations.
 
