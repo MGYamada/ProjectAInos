@@ -147,6 +147,21 @@ def verify_quadratic_variation(metric, coordinates, gamma):
     check_zero("quadratic EL equals minus lowered acceleration",
                residual + metric * covariant_acceleration)
 
+    # On the open timelike cone the speed is positive. Differentiate the
+    # square-root density itself, retaining the full speed derivative.
+    mass = sp.symbols("m", positive=True)
+    speed = sp.sqrt(-(velocity.T * metric * velocity)[0])
+    free_density = -mass * speed
+    free_force = sp.Matrix([sp.diff(free_density, q) for q in coordinates])
+    free_momentum = sp.Matrix([sp.diff(free_density, v) for v in velocity])
+    free_residual = (free_force - free_momentum.jacobian(coordinates) * velocity
+                     - free_momentum.jacobian(velocity) * acceleration)
+    speed_derivative = (sp.Matrix([speed]).jacobian(coordinates) * velocity
+                        + sp.Matrix([speed]).jacobian(velocity) * acceleration)[0]
+    check_zero("massive EL includes the non-affine speed term",
+               free_residual + mass/speed * metric *
+               (covariant_acceleration - speed_derivative/speed * velocity))
+
     # Nonzero endpoint variations exercise the boundary term. A stationary
     # coordinate clock in the conformal metric need not be a geodesic.
     s, x0, epsilon = sp.symbols("s x0 epsilon", real=True)
@@ -190,6 +205,35 @@ def verify_clocks(metric, curved_metric, coordinates):
     check_zero("unconstrained variation at a null velocity",
                sp.diff((varied.T * curved_metric * varied)[0]/2, epsilon).subs(epsilon, 0)
                - sp.exp(2*coordinates[1]**2))
+
+    # The exponential clock is a stationary massive worldline with nonzero
+    # native acceleration. The proper-time inverse is log(tau + exp(s0)).
+    exponential_curve = sp.Matrix([sp.exp(s), -sp.exp(2*s)])
+    exponential_velocity = sp.diff(exponential_curve, s)
+    gamma = christoffel(metric, coordinates)
+    native_acceleration = covariant_along(gamma, coordinates, exponential_curve,
+                                        exponential_velocity, s)
+    check_zero("exponential-clock tangential acceleration",
+               native_acceleration - exponential_velocity)
+    along_exponential = metric.subs(dict(zip(coordinates, exponential_curve)), simultaneous=True)
+    exponential_speed = sp.sqrt(-(exponential_velocity.T * along_exponential * exponential_velocity)[0])
+    check_zero("exponential-clock proper speed", exponential_speed - sp.exp(s))
+    check_zero("exponential-clock massive residual",
+               native_acceleration - sp.diff(exponential_speed, s)/exponential_speed
+               * exponential_velocity)
+    if sp.simplify((along_exponential * native_acceleration)[0]) == 0:
+        raise AssertionError("non-affine clock must have a nonzero quadratic residual")
+    check_zero("exponential-clock proper time",
+               sp.integrate(exponential_speed, (s, a, b)) - sp.exp(b) + sp.exp(a))
+    p = sp.symbols("p", positive=True)  # p = tau + exp(s0)
+    inverse = sp.log(p)
+    inverse_curve = exponential_curve.subs(s, inverse)
+    check_zero("proper-time inverse derivative", sp.diff(inverse, p) - 1/sp.exp(inverse))
+    check_zero("proper-time inverse yields affine motion",
+               covariant_along(gamma, coordinates, inverse_curve, sp.diff(inverse_curve, p), p))
+    inverse_metric = metric.subs(dict(zip(coordinates, inverse_curve)), simultaneous=True)
+    check_zero("proper-time inverse gives unit speed",
+               (sp.diff(inverse_curve, p).T * inverse_metric * sp.diff(inverse_curve, p))[0] + 1)
 
 
 def verify_motion(metric, coordinates, gamma, jacobian):
@@ -575,7 +619,8 @@ def verify():
           "a smooth radial family with rescaling and endpoint derivative, "
           "full flat-frame/coframe equations with the curved defect sign, "
           "curved proper-time clocks, quadratic Euler–Lagrange/native acceleration, "
-          "endpoint variations, and unconstrained null-velocity variations.")
+          "endpoint variations, unconstrained null-velocity variations, "
+          "massive non-affine Euler–Lagrange equations and the proper-time inverse.")
 
 
 def main():

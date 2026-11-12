@@ -165,8 +165,12 @@ Lorentz metric on the model manifold, the actual quadratic-action first
 variation retains the endpoint term, and fixed-endpoint stationarity is
 equivalent to the native affine geodesic equation. Causal constraints are not
 imposed on variations. The [GR guide](general-relativity.md) distinguishes this
-result from the remaining general-manifold variation/gluing and massive
-square-root-action theorems. Those obligations, curved forms and
+result from the remaining general-manifold variation/gluing. Massive timelike
+stationarity in model coordinates is now equivalent to regular local
+affine-geodesic reparametrization. Actual local C² proper-time inverses and their
+affine-geodesic consequence are constructed on arbitrary Lorentz manifolds.
+An exponential shear clock distinguishes massive from quadratic stationarity.
+General manifold variation and finite-segment parameter gluing, curved forms and
 the Newtonian motion limit remain in the work
 tracked by [#52](https://github.com/MGYamada/ProjectAInos/issues/52).
 Einstein equations and their Newtonian field-equation limit remain in 5.2;

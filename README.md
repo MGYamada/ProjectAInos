@@ -261,9 +261,13 @@ time `(b-a) exp(x²)`. On the model manifold with an arbitrary smooth Lorentz
 metric, the actual quadratic action has the first-variation formula including
 endpoint terms; fixed-endpoint stationarity is equivalent to the native affine
 geodesic equation. This theorem allows null reference velocities and imposes
-no causal constraint on variations. Manifold variations across charts, the
-massive square-root action's stationarity theorem and construction of a proper-time
-parameter remain. The [GR guide](docs/general-relativity.md) records the exact
+no causal constraint on variations. Positive-mass timelike stationarity is now
+equivalent to local affine-geodesic reparametrization in model coordinates.
+The actual proper-time integral has a constructed local C² inverse on arbitrary
+Lorentz manifolds, and this inverse removes tangential acceleration. An
+exponentially parametrized shear worldline is stationary for the massive action
+but not for the quadratic action. General manifold variations across charts
+and full finite-segment parameter gluing remain. The [GR guide](docs/general-relativity.md) records the exact
 scope and typed contracts.
 The [shared geometry guide](docs/smooth-geometry.md)
 records the public API and exact checks. [Issue #52](https://github.com/MGYamada/ProjectAInos/issues/52)

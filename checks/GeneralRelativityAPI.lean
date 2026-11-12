@@ -99,6 +99,31 @@ example (h : LorentzMetric .timeNegative d' N) (f : M → N) (γ : ℝ → M) (a
           (mfderiv 𝓘(ℝ, MinkowskiModel d) 𝓘(ℝ, MinkowskiModel d') f (γ t) (curveVelocity γ t))) :
     properTime h (f ∘ γ) a b = properTime g γ a b := properTime_map g h f γ a b hf hγ hmetric
 
+example {γ : ℝ → M} {a b t₀ : ℝ}
+    (hγ : ∀ s ∈ Ioo a b, ContMDiffAt 𝓘(ℝ) 𝓘(ℝ, MinkowskiModel d) 2 γ s)
+    (hv : ∀ s ∈ Ioo a b, Timelike g (curveVelocity γ s)) (ht₀ : t₀ ∈ Ioo a b) :
+    ∃ e : OpenPartialHomeomorph ℝ ℝ,
+      (e : ℝ → ℝ) = properTime g γ t₀ ∧ t₀ ∈ e.source ∧ e.source ⊆ Ioo a b ∧
+      e t₀ = 0 ∧ ∀ τ ∈ e.target,
+        ContDiffAt ℝ 2 e.symm τ ∧
+        HasDerivAt e.symm (speedAlong g γ (e.symm τ))⁻¹ τ ∧
+        speedAlong g (γ ∘ e.symm) τ = 1 := exists_properTime_parameter g hγ hv ht₀
+
+example {γ : ℝ → M} {a b t₀ : ℝ}
+    (hγ : ∀ s ∈ Ioo a b, ContMDiffAt 𝓘(ℝ) 𝓘(ℝ, MinkowskiModel d) 2 γ s)
+    (hv : ∀ s ∈ Ioo a b, Timelike g (curveVelocity γ s))
+    (ha : ∀ s ∈ Ioo a b, ∃ k : ℝ,
+      g.covariantAlong (curveVelocity γ) s = k • curveVelocity γ s)
+    (ht₀ : t₀ ∈ Ioo a b) :
+    ∃ e : OpenPartialHomeomorph ℝ ℝ,
+      (e : ℝ → ℝ) = properTime g γ t₀ ∧ t₀ ∈ e.source ∧ e.source ⊆ Ioo a b ∧
+      e t₀ = 0 ∧
+      (∀ τ ∈ e.target, ContDiffAt ℝ 2 e.symm τ ∧
+        HasDerivAt e.symm (speedAlong g γ (e.symm τ))⁻¹ τ ∧
+        speedAlong g (γ ∘ e.symm) τ = 1) ∧
+      g.IsGeodesicOn e.target (γ ∘ e.symm) :=
+  exists_properTime_geodesic_parameter g hγ hv ha ht₀
+
 end Native
 
 section CoordinateVariation
@@ -121,6 +146,16 @@ example (B : E → E →L[ℝ] E →L[ℝ] ℝ) {U : Set E}
       ∀ t ∈ Ioo a b, Mechanics.eulerLagrange (quadraticLagrangian B) q t = 0 :=
   quadratic_stationary_iff B hU hB hab hq hstay
 
+example (B : E → E →L[ℝ] E →L[ℝ] ℝ) (m : ℝ) {U : Set E}
+    (hU : IsOpen U) (hB : ContDiffOn ℝ 2 B U)
+    {q η : ℝ → E} {a b : ℝ} (hab : a ≤ b) (hq : ContDiff ℝ 2 q)
+    (hη : ContDiff ℝ 2 η) (hstay : ∀ t ∈ Icc a b, q t ∈ U)
+    (hv : ∀ t ∈ Icc a b, B (q t) (deriv q t) (deriv q t) < 0) :
+    HasDerivAt (fun ε => Mechanics.action a b (freeLagrangian B m)
+      (Variational.perturb q η ε))
+      (Mechanics.firstVariation a b (freeLagrangian B m) q η) 0 :=
+  free_hasDerivAt_action B m hU hB hab hq hη hstay hv
+
 variable {d : ℕ} (g : LorentzMetric .timeNegative d (MinkowskiModel d))
 
 example {γ : ℝ → MinkowskiModel d} {t : ℝ} (hγ : ContDiffAt ℝ 2 γ t) (w : MinkowskiModel d) :
@@ -140,6 +175,42 @@ example {γ : ℝ → MinkowskiModel d} {a b : ℝ} (hab : a < b) (hγ : ContDif
     (∀ η : ℝ → MinkowskiModel d, Mechanics.FixedEndpointVariation a b η →
       HasDerivAt (fun ε => quadraticAction g (Variational.perturb γ η ε) a b) 0 0) ↔
       g.IsGeodesicOn (Ioo a b) γ := quadraticAction_stationary_iff_geodesic g hab hγ
+
+example (m : ℝ) {γ : ℝ → MinkowskiModel d} {t : ℝ}
+    (hγ : ContDiffAt ℝ 2 γ t) (hv : Timelike g (curveVelocity γ t)) (w : MinkowskiModel d) :
+    Mechanics.eulerLagrange (freeLagrangian (modelMetric g) m) γ t w =
+      -(m / speedAlong g γ t) * g.form (γ t)
+        (g.covariantAlong (curveVelocity γ) t -
+          (deriv (speedAlong g γ) t / speedAlong g γ t) • curveVelocity γ t)
+        (modelField w (γ t)) := free_eulerLagrange_native g m hγ hv w
+
+example {m : ℝ} (hm : 0 < m) {γ : ℝ → MinkowskiModel d} {a b : ℝ}
+    (hab : a < b) (hγ : ContDiff ℝ 2 γ)
+    (hv : ∀ t ∈ Icc a b, Timelike g (curveVelocity γ t)) :
+    (∀ η : ℝ → MinkowskiModel d, Mechanics.FixedEndpointVariation a b η →
+      HasDerivAt (fun ε => freeAction g m (Variational.perturb γ η ε) a b) 0 0) ↔
+      ∀ t ∈ Ioo a b, g.covariantAlong (curveVelocity γ) t =
+        (deriv (speedAlong g γ) t / speedAlong g γ t) • curveVelocity γ t :=
+  freeAction_stationary_iff_acceleration g hm hab hγ hv
+
+example {m : ℝ} (hm : 0 < m) {γ : ℝ → MinkowskiModel d} {a b : ℝ}
+    (hab : a < b) (hγ : ContDiff ℝ 2 γ)
+    (hv : ∀ t ∈ Icc a b, Timelike g (curveVelocity γ t)) :
+    (∀ η : ℝ → MinkowskiModel d, Mechanics.FixedEndpointVariation a b η →
+      HasDerivAt (fun ε => freeAction g m (Variational.perturb γ η ε) a b) 0 0) ↔
+      ∀ t₀ ∈ Ioo a b, ∃ e : OpenPartialHomeomorph ℝ ℝ,
+        t₀ ∈ e.source ∧ e.source ⊆ Ioo a b ∧
+        (∀ τ ∈ e.target, ContDiffAt ℝ 2 e.symm τ ∧ 0 < deriv e.symm τ) ∧
+        g.IsGeodesicOn e.target (γ ∘ e.symm) :=
+  freeAction_stationary_iff_localGeodesic g hm hab hγ hv
+
+example {m : ℝ} (hm : 0 < m) {γ : ℝ → MinkowskiModel d} {a b : ℝ}
+    (hab : a < b) (hγ : ContDiff ℝ 2 γ)
+    (hunit : ∀ t ∈ Icc a b, speedAlong g γ t = 1) :
+    (∀ η : ℝ → MinkowskiModel d, Mechanics.FixedEndpointVariation a b η →
+      HasDerivAt (fun ε => freeAction g m (Variational.perturb γ η ε) a b) 0 0) ↔
+      g.IsGeodesicOn (Ioo a b) γ :=
+  freeAction_stationary_iff_geodesic_of_unitSpeed g hm hab hγ hunit
 
 end CoordinateVariation
 
@@ -169,5 +240,21 @@ example (x a b : ℝ) :
 example (x a b : ℝ) :
     quadraticAction LorentzianConformalExample.metric (ClockExamples.stationaryClock x) a b =
       -(b - a) / 2 * Real.exp (2 * x ^ 2) := ClockExamples.conformal_clock_quadraticAction x a b
+
+example {m a b : ℝ} (hm : 0 < m) (hab : a < b) :
+    ∀ η : ℝ → LorentzianCharts.Plane, Mechanics.FixedEndpointVariation a b η →
+      HasDerivAt (fun ε => freeAction LorentzianCharts.metric m
+        (Variational.perturb ParticleExamples.exponentialClock η ε) a b) 0 0 :=
+  ParticleExamples.exponentialClock_free_stationary hm hab
+
+example {a b : ℝ} (hab : a < b) :
+    ¬(∀ η : ℝ → LorentzianCharts.Plane, Mechanics.FixedEndpointVariation a b η →
+      HasDerivAt (fun ε => quadraticAction LorentzianCharts.metric
+        (Variational.perturb ParticleExamples.exponentialClock η ε) a b) 0 0) :=
+  ParticleExamples.exponentialClock_not_quadratic_stationary hab
+
+example (a b : ℝ) :
+    properTime LorentzianCharts.metric ParticleExamples.exponentialClock a b =
+      Real.exp b - Real.exp a := ParticleExamples.exponentialClock_properTime a b
 
 end Examples

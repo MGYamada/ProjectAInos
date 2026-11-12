@@ -1,6 +1,6 @@
 # General relativity: intrinsic clocks and quadratic variation
 
-This is the first physics-layer increment of stage E in
+This is the physics-layer work in progress for stage E in
 [§5.1 / issue #52](https://github.com/MGYamada/ProjectAInos/issues/52).
 The shared connection, curvature and motion APIs are described in the
 [smooth-geometry guide](smooth-geometry.md). Definitions here use the actual
@@ -95,6 +95,49 @@ the model manifold**. The open-domain calculus supplies local tools but
 does not yet constitute a theorem for general manifold variations or
 first-variation gluing across chart boundaries.
 
+## Massive stationarity and constructed proper-time parameters
+
+[FreeLagrangian](../ProjectAInos/GeneralRelativity/FreeLagrangian.lean)
+works on the open jet domain `q ∈ U` and `B(q)(v,v) < 0`. It proves
+smoothness there, differentiates the actual action using
+`Mechanics.OpenDomain`, and derives the full Euler–Lagrange covector.
+Differentiating the factor `m/s` in the momentum retains the proper-speed
+derivative. No global smoothness across the null cone is asserted.
+
+[FreeGeodesic](../ProjectAInos/GeneralRelativity/FreeGeodesic.lean) proves,
+for a native smooth metric on the model manifold and locally C² timelike
+curves,
+
+\[
+\operatorname{EL}_{\rm free}(w)=-\frac{m}{s}
+ g\left(\nabla_{\dot\gamma}\dot\gamma-\frac{s'}s\dot\gamma,w\right).
+\]
+
+For `m > 0`, `a < b`, a C² reference curve and timelikeness throughout
+`[a,b]`, stationarity of the actual free action is equivalent to this
+non-affine acceleration equation on `(a,b)`. Equivalently, it is tangential
+acceleration, with its coefficient derived by metric compatibility.
+`freeAction_stationary_iff_localGeodesic` proves both directions of
+stationarity iff each interior point has a regular C² local parameter
+change making the curve an affine geodesic. Its conclusion uses actual
+open partial homeomorphisms, positive inverse derivative and the native
+geodesic predicate on the whole parameter target. At unit proper-speed
+rate, stationarity is equivalent to the affine equation in the given
+parameter.
+
+The parameter is constructed in
+[ProperTimeParameter](../ProjectAInos/GeneralRelativity/ProperTimeParameter.lean),
+which works on **arbitrary Lorentz manifolds**. For a C² timelike curve on
+an open parameter interval, the fundamental theorem of calculus gives
+`d(properTime g γ t₀)/dt = speedAlong g γ t`; the clock is C² with positive
+derivative. The inverse function theorem constructs a local C² inverse
+with derivative `1/s`, and the reparametrized curve has unit rate.
+Tangential native acceleration is equivalent to the required speed factor;
+the full second-derivative parameter law proves that the constructed
+inverse removes it. The converse parameter law is also proved. The
+construction is local, not a single inverse covering the whole finite
+segment or a completeness claim.
+
 ## Proved examples and validation
 
 [SpecialRelativity](../ProjectAInos/GeneralRelativity/SpecialRelativity.lean)
@@ -103,14 +146,20 @@ functionals on Minkowski space, and with the four-dimensional free action
 and its Mechanics formulation. These are functional equalities, not only
 evaluations on inertial lines.
 
-[ClockExamples](../ProjectAInos/GeneralRelativity/ClockExamples.lean)
-contains the following Lean proofs:
+The [clock examples](../ProjectAInos/GeneralRelativity/ClockExamples.lean)
+and particle examples below include the following Lean proofs:
 
 | Metric and curve | Result |
 | --- | --- |
 | Nonlinear flat metric, `γ(s)=(s,-s²)` | Proper-speed rate `1`, proper time `b-a`, free action `-m(b-a)`. |
 | `exp(2x²)(-dt²+dx²)`, clock at fixed spatial `x` | Timelike, rate `exp(x²)`, proper time `(b-a) exp(x²)`. |
 | Same curved clock | Quadratic action `-(b-a) exp(2x²)/2`. |
+| Nonlinear flat metric, `γ(s)=(exp(s),-exp(2s))` | Timelike, native acceleration equals velocity, rate `exp(s)`, proper time `exp(b)-exp(a)`. |
+
+[ParticleExamples](../ProjectAInos/GeneralRelativity/ParticleExamples.lean)
+proves that the exponential clock makes the massive action stationary for
+positive mass on every nontrivial finite interval, while its quadratic
+action is not stationary in that parameter.
 
 A clock at a fixed spatial coordinate is not claimed to be a geodesic.
 Typed contracts in
@@ -123,6 +172,9 @@ audit covers the new namespace and rejects an absent GR import. Only
 The independent Lorentz SymPy entry point checks the flat, shear and curved
 Euler–Lagrange/acceleration identities, nonvanishing endpoint variations,
 clock rates and integrals, and unconstrained directions at a null velocity.
+It also differentiates the square-root density independently in all three
+metrics and checks the exponential clock's non-affine term and its explicit
+proper-time inverse.
 It runs in the existing non-required Experiments workflow. These exact
 calculations test conventions; Lean establishes the formal claims.
 
@@ -130,9 +182,11 @@ calculations test conventions; Lean establishes the formal claims.
 
 - Construct manifold curve variations and prove first-variation covariance,
   chart-crossing gluing and boundary cancellation.
-- Prove stationarity of the massive square-root action iff the timelike
-  curve is a geodesic up to regular reparametrization, with `m > 0`.
-- Construct a proper-time parameter and prove its affine-geodesic consequence.
+- Extend both model-coordinate stationarity theorems to general manifold
+  variations; the massive local-reparametrization and unit-rate results are
+  now proved in model coordinates.
+- Extend the constructed local proper-time inverses to the full finite
+  timelike segment with its endpoint correspondence.
 - Connect null initial-data preservation to the full manifold variational
   result, without restricting variations to null curves.
 

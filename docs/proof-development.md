@@ -333,13 +333,39 @@ without restricting variations to any causal class.
 
 This is a model-manifold variational endpoint, with an arbitrary curved metric;
 it does not yet prove the result for general manifold variations across charts.
-Those gluing arguments, stationarity of the massive square-root action and
-construction of a proper-time parameter remain in E. F–G are subsequent work.
+Those variation gluing arguments remain in E. F–G are subsequent work.
 The [GR guide](general-relativity.md) records the hypotheses. New typed GR
 contracts run under default elaborator settings in the required Lean job;
 the audit includes the namespace. Exact SymPy checks independently test the
 clock rates, Euler–Lagrange signs and nonzero endpoint variations in flat,
 nonlinear flat and curved examples.
+
+The massive-action increment now differentiates the square-root density on
+its open timelike jet domain. `FreeLagrangian` proves the momentum's speed-factor
+derivative and actual-action stationarity equivalence using the existing
+open-domain calculus. `FreeGeodesic` identifies the Euler–Lagrange covector
+with `-(m/s)` times the metric dual of acceleration minus `(s'/s)` velocity.
+For positive mass and timelike reference curves, stationarity is equivalent
+to tangential native acceleration and to regular local affine-geodesic
+reparametrization. The unit-speed specialization is affine in the given
+parameter. These variational results currently require the model manifold.
+
+`ProperTimeParameter` works on arbitrary Lorentz manifolds. C² timelike curves
+have C¹ clock rates; the actual clock integral is C² with positive derivative.
+The inverse function theorem constructs a local C² parameter inverse with
+derivative `1/s` and unit proper-speed rate. Metric compatibility determines
+the tangential acceleration factor, and the full second-derivative parameter
+law proves that this inverse yields an affine geodesic. The converse law also
+proves that regular reparametrization of affine motion forces tangential
+acceleration. The parameter construction is local; finite-segment inverse
+gluing and endpoint correspondence remain.
+
+`ParticleExamples` proves that the exponential shear worldline has nonzero
+covariant acceleration equal to velocity. Its massive action is stationary
+on every nontrivial finite interval; its quadratic action is not. Proper time
+is `exp(b)-exp(a)`. Typed contracts fix both the native construction and the
+model variational scope. Exact SymPy checks differentiate the massive density
+independently and verify the explicit inverse parameter and cancellation.
 
 ## Minkowski Geometry and Relativistic Kinematics
 

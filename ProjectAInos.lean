@@ -38,8 +38,12 @@ public import ProjectAInos.External.YM.Wilson.Law
 public import ProjectAInos.External.YM.Wilson.Symmetry
 public import ProjectAInos.External.YM.WilsonLawBridge
 public import ProjectAInos.GeneralRelativity.ClockExamples
+public import ProjectAInos.GeneralRelativity.FreeGeodesic
+public import ProjectAInos.GeneralRelativity.FreeLagrangian
 public import ProjectAInos.GeneralRelativity.ParticleAction
+public import ProjectAInos.GeneralRelativity.ParticleExamples
 public import ProjectAInos.GeneralRelativity.ProperTime
+public import ProjectAInos.GeneralRelativity.ProperTimeParameter
 public import ProjectAInos.GeneralRelativity.QuadraticGeodesic
 public import ProjectAInos.GeneralRelativity.QuadraticLagrangian
 public import ProjectAInos.GeneralRelativity.SpecialRelativity
