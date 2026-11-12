@@ -297,8 +297,10 @@ calculations test conventions; Lean establishes the formal claims.
 The stage E principal proof endpoints are implemented and awaiting review.
 Stage F now has native form bundles, pullback, exterior differentiation,
 wedge calculus, positive chart-covariant density and a glued oriented volume
-form. The [geometry guide](smooth-geometry.md) records these proofs and their
-flat, nonlinear-chart and curved examples. Lorentz Hodge and the curved
+form. Pointwise native Hodge now has its wedge identity, uniqueness, sign laws,
+metric/volume-preserving naturality, exact flat comparison and nonlinear shear
+transport. The [geometry guide](smooth-geometry.md) records these proofs and their
+flat, nonlinear-chart and curved examples. Hodge regularity/general square and the curved
 Maxwell comparison (F), together with the controlled time-dependent Newtonian
 motion/trajectory limit (G), remain. Einstein dynamics belongs to §5.2 and
 the Maxwell field action to §4.2 / #44.

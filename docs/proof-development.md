@@ -518,5 +518,24 @@ Exact Lean examples cover either Minkowski convention in every dimension,
 both actual shear charts, a different compatible oriented cover, the curved
 conformal plane, and a basis change with volume `-6` but density `6`.
 Default-option typed contracts and independent exact SymPy checks accompany
-the construction. Lorentz Hodge and Maxwell comparison are still outstanding. The
+the construction.
+
+`FiniteDual` identifies continuous alternating forms on finite topological
+fibres with exterior powers of their algebraic duals, without introducing a
+norm. `FiniteWedge` proves exact agreement with the native chart-based wedge.
+`VolumeNormalization` constructs the top-covector functional as division by
+a nonzero volume vector: scaling the volume by `r` scales the functional by
+`1/r`. `FiniteHodge` and `HodgeTransport` then prove the actual wedge equation,
+uniqueness, volume and metric scaling, and transport between independent
+finite topological fibres. `HodgeFiber` applies these results to the native
+Lorentz inverse metric and constructed volume form. The operator is an actual
+linear equivalence on each fibre, with the expected orientation and metric-sign
+laws. `HodgeFlat` proves exact agreement with the existing Minkowski API;
+`HodgeExamples` transfers all six two-form signs and square `-1`, and proves
+nonlinear shear transport using the actual metric and volume identities.
+Typed contracts use default elaborator settings. Independent exact SymPy
+checks all degrees under nonlinear positive/negative-Jacobian chart changes,
+metric sign reversal, and the conformal plane. The curved square checks guide
+the still-pending general Lean square theorem; smooth-section Hodge regularity,
+the full coordinate formula and Maxwell comparison also remain outstanding. The
 [geometry guide](smooth-geometry.md) records the public API and this boundary.

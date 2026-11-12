@@ -298,8 +298,13 @@ signed local charts now construct a smooth, nowhere-zero oriented volume
 form, independent of the chosen cover. Its absolute value is the density;
 orientation reversal negates the form, while whole-metric sign reversal
 preserves both. Minkowski, nonlinear-chart and curved conformal examples
-fix its normalization. Lorentz Hodge and Maxwell comparison remain to be
-implemented.
+fix its normalization. The inverse metric and this volume now construct
+pointwise Lorentz Hodge on native fibres, with its wedge identity, uniqueness,
+orientation and metric-sign laws, and naturality under metric/volume-preserving
+tangent equivalences proved. Exact Minkowski API agreement, the six
+four-dimensional two-form signs and nonlinear shear transport are proved.
+Hodge regularity on smooth sections, the general Lorentz square identity and
+the Maxwell comparison remain to be implemented.
 The [GR guide](docs/general-relativity.md)
 records the exact scope and typed contracts.
 The [shared geometry guide](docs/smooth-geometry.md)

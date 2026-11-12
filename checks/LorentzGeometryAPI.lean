@@ -25,6 +25,7 @@ import ProjectAInos.SmoothGeometry.Lorentzian.PathExamples
 import ProjectAInos.SmoothGeometry.Lorentzian.Regularity
 import ProjectAInos.SmoothGeometry.Lorentzian.Restriction
 import ProjectAInos.SmoothGeometry.Lorentzian.VolumeExamples
+import ProjectAInos.SmoothGeometry.Lorentzian.HodgeExamples
 import ProjectAInos.SmoothGeometry.Tensor.Bundle
 import ProjectAInos.SmoothGeometry.ODE.VolterraExamples
 import ProjectAInos.SmoothGeometry.ODE.RadialExamples
@@ -1549,3 +1550,70 @@ example (x : LorentzianCharts.Plane) :
   LorentzianVolumeExamples.scaled_reversed_density x
 
 end DensityAndVolume
+
+section NativeHodge
+
+open LorentzMetric DifferentialForm
+
+variable {σ : LorentzConvention} {d : ℕ} {M : Type} [TopologicalSpace M]
+  [ChartedSpace (MinkowskiModel d) M] [IsManifold 𝓘(ℝ, MinkowskiModel d) ∞ M]
+  (g : LorentzMetric σ d M) (o : OrientedAtlas (d + 1) M) (x : M)
+  {k l : ℕ} (hkl : k + l = d + 1)
+
+example : Function.Bijective (g.coMetric x) := g.coMetric_bijective x
+
+example : LinearMap.IsSymm (g.coMetric x) := g.coMetric_symmetric x
+
+example : (TangentSpace 𝓘(ℝ, MinkowskiModel d) x [⋀^Fin k]→L[ℝ] ℝ) ≃ₗ[ℝ]
+    (TangentSpace 𝓘(ℝ, MinkowskiModel d) x [⋀^Fin l]→L[ℝ] ℝ) := g.hodgeFiber o x hkl
+
+example (α β : TangentSpace 𝓘(ℝ, MinkowskiModel d) x [⋀^Fin k]→L[ℝ] ℝ) :
+    finiteDegreeCast hkl (finiteWedge α (g.hodgeFiber o x hkl β)) =
+      g.formPairing x α β • g.volumeForm o x := g.hodgeFiber_wedge o x hkl α β
+
+example (β : TangentSpace 𝓘(ℝ, MinkowskiModel d) x [⋀^Fin k]→L[ℝ] ℝ)
+    (γ : TangentSpace 𝓘(ℝ, MinkowskiModel d) x [⋀^Fin l]→L[ℝ] ℝ)
+    (h : ∀ α : TangentSpace 𝓘(ℝ, MinkowskiModel d) x [⋀^Fin k]→L[ℝ] ℝ,
+      finiteDegreeCast hkl (finiteWedge α γ) = g.formPairing x α β • g.volumeForm o x) :
+    γ = g.hodgeFiber o x hkl β := g.hodgeFiber_unique o x hkl β γ h
+
+example (α β : NativeForm 𝓘(ℝ, MinkowskiModel d) M k) :
+    finiteDegreeCast hkl (nativeWedge α (g.nativeHodge o hkl β) x) =
+      g.formPairing x (α x) (β x) • g.volumeForm o x := g.nativeHodge_wedge o hkl α β x
+
+example (α : TangentSpace 𝓘(ℝ, MinkowskiModel d) x [⋀^Fin k]→L[ℝ] ℝ) :
+    g.hodgeFiber o.reverse x hkl α = -g.hodgeFiber o x hkl α := g.hodgeFiber_reverse o x hkl α
+
+example (α : TangentSpace 𝓘(ℝ, MinkowskiModel d) x [⋀^Fin k]→L[ℝ] ℝ) :
+    g.opposite.hodgeFiber o x hkl α = (-1 : ℝ) ^ k • g.hodgeFiber o x hkl α :=
+  g.hodgeFiber_opposite o x hkl α
+
+example {N : Type} [TopologicalSpace N] [ChartedSpace (MinkowskiModel d) N]
+    [IsManifold 𝓘(ℝ, MinkowskiModel d) ∞ N] (h : LorentzMetric σ d N)
+    (o' : OrientedAtlas (d + 1) N) (y : N)
+    (L : TangentSpace 𝓘(ℝ, MinkowskiModel d) x ≃L[ℝ] TangentSpace 𝓘(ℝ, MinkowskiModel d) y)
+    (hmetric : ∀ v w, g.form x v w = h.form y (L v) (L w))
+    (hvolume : (h.volumeForm o' y).compContinuousLinearMap L.toContinuousLinearMap = g.volumeForm o x)
+    (β : TangentSpace 𝓘(ℝ, MinkowskiModel d) y [⋀^Fin k]→L[ℝ] ℝ) :
+    (h.hodgeFiber o' y hkl β).compContinuousLinearMap L.toContinuousLinearMap =
+      g.hodgeFiber o x hkl (β.compContinuousLinearMap L.toContinuousLinearMap) :=
+  g.hodgeFiber_naturality h o o' x y L hmetric hvolume hkl β
+
+example (σ : LorentzConvention) (d : ℕ) (x : MinkowskiModel d)
+    {k l : ℕ} (hkl : k + l = d + 1) (α : MinkowskiModel d [⋀^Fin k]→L[ℝ] ℝ) :
+    (minkowskiMetric σ d).hodgeFiber (OrientedAtlas.standard (d + 1)) x hkl α =
+      Minkowski.hodgeFiber σ .standard hkl α := minkowskiMetric_hodgeFiber σ d x hkl α
+
+example (σ : LorentzConvention) (x : MinkowskiModel 3) :
+    (minkowskiMetric σ 3).hodgeFiber (OrientedAtlas.standard 4) x (by decide : 2 + 2 = 3 + 1)
+      (coordinateForm ![0, 1]) = -coordinateForm ![2, 3] := LorentzianHodgeExamples.flat_dt_dx σ x
+
+example (x : LorentzianCharts.Plane) {k l : ℕ} (hkl : k + l = 2)
+    (β : LorentzianCharts.Plane [⋀^Fin k]→L[ℝ] ℝ) :
+    LorentzianCharts.metric.hodgeFiber (OrientedAtlas.standard 2) x hkl
+      (β.compContinuousLinearMap (LorentzianCharts.shearLinear (2 * x 0)).toContinuousLinearMap) =
+    (Minkowski.hodgeFiber .timeNegative .standard hkl β).compContinuousLinearMap
+      (LorentzianCharts.shearLinear (2 * x 0)).toContinuousLinearMap :=
+  LorentzianHodgeExamples.shear_hodge x hkl β
+
+end NativeHodge

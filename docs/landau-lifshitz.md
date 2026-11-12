@@ -193,7 +193,10 @@ fix normalization and signs. Intrinsic volume density now has positive,
 smooth chart coefficients with absolute-Jacobian covariance. Signed local
 orientations glue a smooth nonzero volume form, with proved cover independence,
 orientation reversal and exact flat/nonlinear/conformal normalizations.
-Lorentz Hodge, Maxwell comparison and the Newtonian motion limit remain in the work
+Pointwise native Hodge now has a proved wedge identity, uniqueness, sign laws,
+metric/volume-preserving naturality and exact flat API agreement. Native
+four-dimensional signs and nonlinear shear transport test its normalization.
+Hodge regularity/general square, Maxwell comparison and the Newtonian motion limit remain in the work
 tracked by [#52](https://github.com/MGYamada/ProjectAInos/issues/52).
 Einstein equations and their Newtonian field-equation limit remain in 5.2;
 the Maxwell field action remains in 4.2.

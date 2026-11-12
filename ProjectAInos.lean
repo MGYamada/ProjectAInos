@@ -81,9 +81,13 @@ public import ProjectAInos.SmoothGeometry.DifferentialForm.Bundle
 public import ProjectAInos.SmoothGeometry.DifferentialForm.Calculus
 public import ProjectAInos.SmoothGeometry.DifferentialForm.Coordinates
 public import ProjectAInos.SmoothGeometry.DifferentialForm.Exterior
+public import ProjectAInos.SmoothGeometry.DifferentialForm.FiniteDual
+public import ProjectAInos.SmoothGeometry.DifferentialForm.FiniteHodge
+public import ProjectAInos.SmoothGeometry.DifferentialForm.FiniteWedge
 public import ProjectAInos.SmoothGeometry.DifferentialForm.Flat
 public import ProjectAInos.SmoothGeometry.DifferentialForm.Hodge
 public import ProjectAInos.SmoothGeometry.DifferentialForm.HodgeBasis
+public import ProjectAInos.SmoothGeometry.DifferentialForm.HodgeTransport
 public import ProjectAInos.SmoothGeometry.DifferentialForm.NativeChart
 public import ProjectAInos.SmoothGeometry.DifferentialForm.NativeCoordinates
 public import ProjectAInos.SmoothGeometry.DifferentialForm.NativeExamples
@@ -97,6 +101,7 @@ public import ProjectAInos.SmoothGeometry.DifferentialForm.NativeWedge
 public import ProjectAInos.SmoothGeometry.DifferentialForm.NativeWedgeCalculus
 public import ProjectAInos.SmoothGeometry.DifferentialForm.NativeWedgeExamples
 public import ProjectAInos.SmoothGeometry.DifferentialForm.Naturality
+public import ProjectAInos.SmoothGeometry.DifferentialForm.VolumeNormalization
 public import ProjectAInos.SmoothGeometry.DifferentialForm.WedgeAlgebra
 public import ProjectAInos.SmoothGeometry.Examples
 public import ProjectAInos.SmoothGeometry.Gluing
@@ -128,6 +133,9 @@ public import ProjectAInos.SmoothGeometry.Lorentzian.FlatConnection
 public import ProjectAInos.SmoothGeometry.Lorentzian.FlatFrameExamples
 public import ProjectAInos.SmoothGeometry.Lorentzian.FlatTransport
 public import ProjectAInos.SmoothGeometry.Lorentzian.Geodesic
+public import ProjectAInos.SmoothGeometry.Lorentzian.HodgeExamples
+public import ProjectAInos.SmoothGeometry.Lorentzian.HodgeFiber
+public import ProjectAInos.SmoothGeometry.Lorentzian.HodgeFlat
 public import ProjectAInos.SmoothGeometry.Lorentzian.LeviCivita
 public import ProjectAInos.SmoothGeometry.Lorentzian.LocalFlatness
 public import ProjectAInos.SmoothGeometry.Lorentzian.LocalFlatnessConverse

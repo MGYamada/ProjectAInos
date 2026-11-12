@@ -5,6 +5,8 @@ All computations are symbolic over the reals; no tolerances or random seeds
 are needed. Formal claims are established separately in Lean.
 """
 
+from itertools import combinations
+
 import sympy as sp
 
 
@@ -263,6 +265,64 @@ def verify_volume_density():
     check_zero("general Gram determinant covariance",
                (arbitrary_basis.T * curved * arbitrary_basis).det()
                - arbitrary_basis.det()**2 * curved.det())
+
+
+def verify_native_hodge():
+    """Wedge-normalized Hodge signs and transport, with exact variable metrics."""
+    def indices(n, degree):
+        return list(combinations(range(n), degree))
+
+    def sign(order):
+        return (-1)**sum(a > b for i, a in enumerate(order) for b in order[i+1:])
+
+    def hodge_matrix(metric, degree):
+        n = metric.rows
+        inverse = metric.inv()
+        rho = sp.sqrt(sp.Abs(sp.simplify(metric.det())))
+        source, target = indices(n, degree), indices(n, n-degree)
+        result = sp.zeros(len(target), len(source))
+        for j in source:
+            complement = tuple(i for i in range(n) if i not in j)
+            for column, i in enumerate(source):
+                result[target.index(complement), column] = sp.simplify(
+                    rho * sign(j + complement) * inverse.extract(j, i).det())
+        return result
+
+    def exterior_pullback(jacobian, degree):
+        basis = indices(jacobian.rows, degree)
+        return sp.Matrix(len(basis), len(basis), lambda i, j:
+                         jacobian.extract(basis[j], basis[i]).det())
+
+    eta = sp.diag(-1, 1, 1, 1)
+    two_basis = indices(4, 2)
+    expected = sp.zeros(6)
+    for source, target, coefficient in (
+            ((0, 1), (2, 3), -1), ((0, 2), (1, 3), 1), ((0, 3), (1, 2), -1),
+            ((2, 3), (0, 1), 1), ((1, 3), (0, 2), -1), ((1, 2), (0, 3), 1)):
+        expected[two_basis.index(target), two_basis.index(source)] = coefficient
+    check_zero("native Hodge six flat signs", hodge_matrix(eta, 2) - expected)
+    check_zero("native Hodge opposite flat signature", hodge_matrix(-eta, 2) - expected)
+
+    t, y = sp.symbols("t y", real=True)
+    # Derivative of (t,x,y,z) -> (t,x+t^2,exp(y),z), a genuine local chart.
+    jacobian = sp.Matrix([[1, 0, 0, 0], [2*t, 1, 0, 0],
+                          [0, 0, sp.exp(y), 0], [0, 0, 0, 1]])
+    for orientation in (1, -1):
+        change = jacobian * sp.diag(1, 1, 1, orientation)
+        metric = change.T * eta * change
+        for degree in range(5):
+            star = hodge_matrix(metric, degree)
+            check_zero("native Hodge chart transport and orientation",
+                       star * exterior_pullback(change, degree)
+                       - orientation * exterior_pullback(change, 4-degree) * hodge_matrix(eta, degree))
+            check_zero("native Hodge metric sign reversal",
+                       hodge_matrix(-metric, degree) - (-1)**degree * star)
+            check_zero("native Hodge square in variable coordinates",
+                       hodge_matrix(metric, 4-degree) * star
+                       - (-1)**(degree*(4-degree)+1) * sp.eye(len(indices(4, degree))))
+    curved = sp.exp(2*y**2) * sp.diag(-1, 1)
+    check_zero("conformal plane Hodge on one-forms",
+               hodge_matrix(curved, 1) - sp.Matrix([[0, -1], [-1, 0]]))
 
 
 def verify_quadratic_variation(metric, coordinates, gamma):
@@ -775,6 +835,7 @@ def verify():
     verify_covariant_pullback(metric, coordinates)
     verify_native_forms()
     verify_volume_density()
+    verify_native_hodge()
     verify_motion(metric, coordinates, gamma, jacobian)
     verify_parallel_coframe(coordinates, gamma, jacobian, shear)
 
