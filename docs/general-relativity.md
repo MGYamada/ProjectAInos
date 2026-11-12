@@ -134,9 +134,40 @@ derivative. The inverse function theorem constructs a local C² inverse
 with derivative `1/s`, and the reparametrized curve has unit rate.
 Tangential native acceleration is equivalent to the required speed factor;
 the full second-derivative parameter law proves that the constructed
-inverse removes it. The converse parameter law is also proved. The
-construction is local, not a single inverse covering the whole finite
-segment or a completeness claim.
+inverse removes it. The converse parameter law is also proved.
+
+[FiniteProperTime](../ProjectAInos/GeneralRelativity/FiniteProperTime.lean)
+extends this construction to one inverse covering an entire finite timelike
+segment. Its hypotheses are C² regularity at every point of `[a,b]`, including
+the endpoints, and timelikeness there. These give a slightly larger open
+interval. [Variational.Parameter](../ProjectAInos/Variational/Parameter.lean)
+constructs an open partial homeomorphism on that interval from positivity of
+the clock derivative; inverse C² regularity follows from the inverse function
+theorem. The forward and inverse images of the closed intervals are proved,
+as are `r(0)=a`, `r(T)=b`, inverse derivative `1/s` and unit rate at both
+endpoints. Here `T = properTime g γ a b`, positive when `a < b`.
+Tangential acceleration throughout `(a,b)` yields affine motion throughout
+`(0,T)`. The model-manifold stationarity theorem consequently supplies this
+single finite-segment parameter. No geodesic completeness is asserted.
+
+## Native manifold-family density variations
+
+[CurveFamily](../ProjectAInos/SmoothGeometry/Lorentzian/CurveFamily.lean)
+defines the velocities of a genuine two-parameter family `Γ : ℝ × ℝ → M`
+by `mfderiv`, in actual tangent fibres. C² joint regularity implies C¹
+bundle regularity of these velocities. Zero torsion and symmetry of second
+coordinate derivatives prove `∇ε ∂t Γ = ∇t ∂ε Γ`. The statement imposes no
+immersion, nonzero parameter velocity or global chart assumption, and supports
+both Lorentz conventions.
+
+[VariationDensity](../ProjectAInos/GeneralRelativity/VariationDensity.lean)
+uses this interchange law and metric compatibility to differentiate the actual
+scalar densities for signature `(-+++)`. Writing `T = ∂t Γ` and `V = ∂ε Γ`,
+their derivatives in the first parameter are `g(∇t V,T)` for `½g(T,T)` and
+`(m/s) g(∇t V,T)` for `-m s`. The latter requires timelikeness only at the
+point of differentiation. These are native manifold statements; passing the
+derivative through the finite action integral and proving general-manifold
+stationarity remain separate obligations.
 
 ## Proved examples and validation
 
@@ -159,7 +190,9 @@ and particle examples below include the following Lean proofs:
 [ParticleExamples](../ProjectAInos/GeneralRelativity/ParticleExamples.lean)
 proves that the exponential clock makes the massive action stationary for
 positive mass on every nontrivial finite interval, while its quadratic
-action is not stationary in that parameter.
+action is not stationary in that parameter. The constructed finite-segment
+inverse is explicitly `r(τ) = log(τ + exp(a))`, maps both endpoints correctly,
+has unit rate and gives affine motion on the full proper-time interior.
 
 A clock at a fixed spatial coordinate is not claimed to be a geodesic.
 Typed contracts in
@@ -174,19 +207,19 @@ Euler–Lagrange/acceleration identities, nonvanishing endpoint variations,
 clock rates and integrals, and unconstrained directions at a null velocity.
 It also differentiates the square-root density independently in all three
 metrics and checks the exponential clock's non-affine term and its explicit
-proper-time inverse.
+proper-time inverse, including both finite-segment endpoints. Genuine
+two-parameter families test the mixed covariant derivative law and both density
+derivatives independently in flat, shear and curved conformal metrics.
 It runs in the existing non-required Experiments workflow. These exact
 calculations test conventions; Lean establishes the formal claims.
 
 ## Remaining stage E obligations
 
-- Construct manifold curve variations and prove first-variation covariance,
-  chart-crossing gluing and boundary cancellation.
+- Integrate the proved manifold-family density derivatives to obtain actual
+  action derivatives, then prove chart-crossing gluing and boundary cancellation.
 - Extend both model-coordinate stationarity theorems to general manifold
   variations; the massive local-reparametrization and unit-rate results are
   now proved in model coordinates.
-- Extend the constructed local proper-time inverses to the full finite
-  timelike segment with its endpoint correspondence.
 - Connect null initial-data preservation to the full manifold variational
   result, without restricting variations to null curves.
 

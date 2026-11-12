@@ -56,11 +56,16 @@ open sets gives pointwise vanishing.
 | [Regularity](../ProjectAInos/Variational/Regularity.lean) | Compact support supplies domination; `hasDerivAt_action_restrict_compact` instead uses a compact base region, with no support condition on the variation |
 | [IntegrationByParts](../ProjectAInos/Variational/IntegrationByParts.lean) | Interval identity with endpoint pairing, fixed-endpoint specialization, and directional Haar identities |
 | [EulerLagrange](../ProjectAInos/Variational/EulerLagrange.lean) | Covector decomposition, derivative as the residual pairing, and `stationary_iff_eulerLagrange` |
+| [Parameter](../ProjectAInos/Variational/Parameter.lean) | A positive derivative gives one open interval chart with a constructed C² inverse; endpoint neighborhoods extend closed-interval predicates |
 | [Examples](../ProjectAInos/Variational/Examples.lean) | Nonzero variations on time and four-dimensional bases, and a base-dependent momentum with a nonzero divergence residual |
 
 The interval result keeps the term `[P η]ₐᵇ` and removes it when the variation
 vanishes at both endpoints. The stationarity theorem uses interior variations.
 The action derivative is a derivative along the specified real parameter.
+
+The scalar parameter lemmas have no geometry or physics imports. GR uses them
+to construct a single proper-time inverse over a finite timelike segment,
+including the endpoint correspondence; see the [GR guide](general-relativity.md).
 
 The [Mechanics specialization](mechanics.md) now derives the fixed-endpoint
 Euler–Lagrange equations on a real time interval. It uses compactness of the

@@ -11,6 +11,7 @@ import ProjectAInos.SmoothGeometry.Lorentzian.ChartConnection
 import ProjectAInos.SmoothGeometry.Lorentzian.ConnectionExamples
 import ProjectAInos.SmoothGeometry.Lorentzian.CurvatureExamples
 import ProjectAInos.SmoothGeometry.Lorentzian.CurvatureNaturality
+import ProjectAInos.SmoothGeometry.Lorentzian.CurveFamily
 import ProjectAInos.SmoothGeometry.Lorentzian.ConformalExample
 import ProjectAInos.SmoothGeometry.Lorentzian.LocalInertialExamples
 import ProjectAInos.SmoothGeometry.Lorentzian.LocalFlatnessExamples
@@ -288,6 +289,29 @@ example {x y : LorentzianCharts.Plane} (p q : PiecewisePath 1 LorentzianCharts.P
   LorentzianCharts.piecewise_transport_path_independent p q
 
 end LocalFlatness
+
+section CurveFamilies
+
+open LorentzMetric
+
+variable {σ : LorentzConvention} {d : ℕ} {M : Type} [TopologicalSpace M]
+  [ChartedSpace (MinkowskiModel d) M] [IsManifold 𝓘(ℝ, MinkowskiModel d) ∞ M]
+
+example {Γ : ℝ × ℝ → M} {z : ℝ × ℝ} (v : ℝ × ℝ)
+    (hΓ : ContMDiffAt 𝓘(ℝ, ℝ × ℝ) 𝓘(ℝ, MinkowskiModel d) 2 Γ z) :
+    ContMDiffAt 𝓘(ℝ, ℝ × ℝ) (𝓘(ℝ, MinkowskiModel d).prod 𝓘(ℝ, MinkowskiModel d)) 1
+      (fun q => Bundle.TotalSpace.mk' (MinkowskiModel d) (Γ q)
+        (familyVelocity (d := d) Γ v q)) z := familyVelocity_contMDiffAt v hΓ
+
+example (g : LorentzMetric σ d M) {Γ : ℝ × ℝ → M} {a b : ℝ}
+    (hΓ : ContMDiffAt 𝓘(ℝ, ℝ × ℝ) 𝓘(ℝ, MinkowskiModel d) 2 Γ (a, b)) :
+    g.covariantAlong (γ := fun s => Γ (s, b))
+      (fun s => familyVelocity Γ (0, 1) (s, b)) a =
+    g.covariantAlong (γ := fun t => Γ (a, t))
+      (fun t => familyVelocity Γ (1, 0) (a, t)) b :=
+  g.covariantAlong_family_interchange hΓ
+
+end CurveFamilies
 
 section AlongCurve
 

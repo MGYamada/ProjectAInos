@@ -126,6 +126,68 @@ example {γ : ℝ → M} {a b t₀ : ℝ}
 
 end Native
 
+section NativeFiniteAndFamilies
+
+variable {d : ℕ} {M : Type} [TopologicalSpace M]
+  [ChartedSpace (MinkowskiModel d) M] [IsManifold 𝓘(ℝ, MinkowskiModel d) ∞ M]
+
+local notation "I" => 𝓘(ℝ, MinkowskiModel d)
+local notation "J" => 𝓘(ℝ, ℝ × ℝ)
+
+example (g : LorentzMetric .timeNegative d M)
+    {γ : ℝ → M} {a b : ℝ} (hab : a ≤ b)
+    (hγ : ∀ t ∈ Icc a b, ContMDiffAt 𝓘(ℝ) I 2 γ t)
+    (hv : ∀ t ∈ Icc a b, Timelike g (curveVelocity γ t)) :
+    ∃ e : OpenPartialHomeomorph ℝ ℝ,
+      (e : ℝ → ℝ) = properTime g γ a ∧ Icc a b ⊆ e.source ∧ StrictMonoOn e e.source ∧
+      e '' Icc a b = Icc 0 (properTime g γ a b) ∧
+      e.symm '' Icc 0 (properTime g γ a b) = Icc a b ∧
+      e.symm 0 = a ∧ e.symm (properTime g γ a b) = b ∧
+      ∀ τ ∈ e.target,
+        ContDiffAt ℝ 2 e.symm τ ∧
+        HasDerivAt e.symm (speedAlong g γ (e.symm τ))⁻¹ τ ∧
+        speedAlong g (γ ∘ e.symm) τ = 1 :=
+  exists_finite_properTime_parameter g hab hγ hv
+
+example (g : LorentzMetric .timeNegative d M)
+    {γ : ℝ → M} {a b : ℝ} (hab : a ≤ b)
+    (hγ : ∀ t ∈ Icc a b, ContMDiffAt 𝓘(ℝ) I 2 γ t)
+    (hv : ∀ t ∈ Icc a b, Timelike g (curveVelocity γ t))
+    (ha : ∀ t ∈ Ioo a b, ∃ k : ℝ,
+      g.covariantAlong (curveVelocity γ) t = k • curveVelocity γ t) :
+    ∃ e : OpenPartialHomeomorph ℝ ℝ,
+      (e : ℝ → ℝ) = properTime g γ a ∧ Icc a b ⊆ e.source ∧
+      e '' Icc a b = Icc 0 (properTime g γ a b) ∧
+      e.symm '' Icc 0 (properTime g γ a b) = Icc a b ∧
+      e.symm 0 = a ∧ e.symm (properTime g γ a b) = b ∧
+      (∀ τ ∈ e.target, ContDiffAt ℝ 2 e.symm τ ∧
+        HasDerivAt e.symm (speedAlong g γ (e.symm τ))⁻¹ τ ∧
+        speedAlong g (γ ∘ e.symm) τ = 1) ∧
+      g.IsGeodesicOn (Ioo 0 (properTime g γ a b)) (γ ∘ e.symm) :=
+  exists_finite_properTime_geodesic g hab hγ hv ha
+
+example (g : LorentzMetric .timeNegative d M)
+    {Γ : ℝ × ℝ → M} {a t : ℝ} (hΓ : ContMDiffAt J I 2 Γ (a, t)) :
+    HasDerivAt (fun ε => (1 / 2 : ℝ) * g.form (Γ (ε, t))
+      (curveVelocity (fun s => Γ (ε, s)) t) (curveVelocity (fun s => Γ (ε, s)) t))
+      (g.form (Γ (a, t))
+        (g.covariantAlong (γ := fun s => Γ (a, s))
+          (fun s => familyVelocity Γ (1, 0) (a, s)) t)
+        (curveVelocity (fun s => Γ (a, s)) t)) a :=
+  quadraticDensity_hasDerivAt g hΓ
+
+example (g : LorentzMetric .timeNegative d M) (m : ℝ)
+    {Γ : ℝ × ℝ → M} {a t : ℝ} (hΓ : ContMDiffAt J I 2 Γ (a, t))
+    (hv : Timelike g (curveVelocity (fun s => Γ (a, s)) t)) :
+    HasDerivAt (fun ε => -m * speedAlong g (fun s => Γ (ε, s)) t)
+      ((m / speedAlong g (fun s => Γ (a, s)) t) * g.form (Γ (a, t))
+        (g.covariantAlong (γ := fun s => Γ (a, s))
+          (fun s => familyVelocity Γ (1, 0) (a, s)) t)
+        (curveVelocity (fun s => Γ (a, s)) t)) a :=
+  freeDensity_hasDerivAt g m hΓ hv
+
+end NativeFiniteAndFamilies
+
 section CoordinateVariation
 
 variable {E : Type} [NormedAddCommGroup E] [NormedSpace ℝ E] [FiniteDimensional ℝ E]
@@ -212,6 +274,21 @@ example {m : ℝ} (hm : 0 < m) {γ : ℝ → MinkowskiModel d} {a b : ℝ}
       g.IsGeodesicOn (Ioo a b) γ :=
   freeAction_stationary_iff_geodesic_of_unitSpeed g hm hab hγ hunit
 
+example (g : LorentzMetric .timeNegative d (MinkowskiModel d))
+    {m : ℝ} (hm : 0 < m) {γ : ℝ → (MinkowskiModel d)} {a b : ℝ}
+    (hab : a < b) (hγ : ContDiff ℝ 2 γ)
+    (hv : ∀ t ∈ Icc a b, Timelike g (curveVelocity γ t))
+    (hs : ∀ η : ℝ → (MinkowskiModel d), Mechanics.FixedEndpointVariation a b η →
+      HasDerivAt (fun ε => freeAction g m (Variational.perturb γ η ε) a b) 0 0) :
+    ∃ r : ℝ → ℝ,
+      r 0 = a ∧ r (properTime g γ a b) = b ∧
+      MapsTo r (Icc 0 (properTime g γ a b)) (Icc a b) ∧
+      (∀ τ ∈ Icc 0 (properTime g γ a b),
+        ContDiffAt ℝ 2 r τ ∧ HasDerivAt r (speedAlong g γ (r τ))⁻¹ τ ∧
+        properTime g γ a (r τ) = τ ∧ speedAlong g (γ ∘ r) τ = 1) ∧
+      g.IsGeodesicOn (Ioo 0 (properTime g γ a b)) (γ ∘ r) :=
+  freeAction_stationary_finite_properTime g hm hab hγ hv hs
+
 end CoordinateVariation
 
 section Examples
@@ -256,5 +333,14 @@ example {a b : ℝ} (hab : a < b) :
 example (a b : ℝ) :
     properTime LorentzianCharts.metric ParticleExamples.exponentialClock a b =
       Real.exp b - Real.exp a := ParticleExamples.exponentialClock_properTime a b
+
+example {a b : ℝ} (hab : a < b) :
+    ∃ r : ℝ → ℝ, r 0 = a ∧ r (Real.exp b - Real.exp a) = b ∧
+      MapsTo r (Icc 0 (Real.exp b - Real.exp a)) (Icc a b) ∧
+      (∀ τ ∈ Icc 0 (Real.exp b - Real.exp a),
+        ContDiffAt ℝ 2 r τ ∧ r τ = Real.log (τ + Real.exp a) ∧
+        speedAlong LorentzianCharts.metric (ParticleExamples.exponentialClock ∘ r) τ = 1) ∧
+      LorentzianCharts.metric.IsGeodesicOn (Ioo 0 (Real.exp b - Real.exp a)) (ParticleExamples.exponentialClock ∘ r) :=
+  ParticleExamples.exponentialClock_finite_parameter hab
 
 end Examples

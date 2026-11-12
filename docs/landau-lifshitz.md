@@ -167,11 +167,14 @@ equivalent to the native affine geodesic equation. Causal constraints are not
 imposed on variations. The [GR guide](general-relativity.md) distinguishes this
 result from the remaining general-manifold variation/gluing. Massive timelike
 stationarity in model coordinates is now equivalent to regular local
-affine-geodesic reparametrization. Actual local C² proper-time inverses and their
-affine-geodesic consequence are constructed on arbitrary Lorentz manifolds.
-An exponential shear clock distinguishes massive from quadratic stationarity.
-General manifold variation and finite-segment parameter gluing, curved forms and
-the Newtonian motion limit remain in the work
+affine-geodesic reparametrization. A single C² proper-time inverse now covers
+the full finite timelike segment on arbitrary Lorentz manifolds, with both
+endpoints, unit rate and affine-geodesic consequences proved. An exponential
+shear clock distinguishes massive from quadratic stationarity and has the
+expected logarithmic inverse. Mixed covariant derivatives and first variations
+of both densities are proved for genuine C² manifold curve families.
+General manifold action differentiation and stationarity, including boundary
+cancellation across charts, curved forms and the Newtonian motion limit remain in the work
 tracked by [#52](https://github.com/MGYamada/ProjectAInos/issues/52).
 Einstein equations and their Newtonian field-equation limit remain in 5.2;
 the Maxwell field action remains in 4.2.

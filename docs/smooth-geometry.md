@@ -570,6 +570,17 @@ metric compatibility. Normed structures are confined to the coordinate
 models, with no norm or positive-definite inner product imposed on tangent
 fibres. No orientation, time orientation or global frame is needed.
 
+`CurveFamily.lean` defines directional velocities of a two-parameter manifold
+family by `mfderiv`. A jointly C² family has C¹ velocity fields into the actual
+tangent bundle. `curveVelocity_family` identifies them with differentiation
+along parameter paths, and `covariantAlong_family_interchange` proves
+`D_ε ∂t Γ = D_t ∂ε Γ` using symmetry of second derivatives and zero torsion.
+Parameter velocities may vanish and the family need not be an immersion.
+The theorem supports both Lorentz conventions and introduces no physical
+imports. Its typed contracts are in `LorentzGeometryAPI`; the
+[GR guide](general-relativity.md) describes the resulting particle-density
+derivatives and the remaining action-level variation work.
+
 `AlongCurveReparam.lean` proves `C^(n+1)` velocity regularity, the chain rule
 for `curveVelocity`, and both reparametrization identities:
 

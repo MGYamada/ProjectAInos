@@ -83,4 +83,23 @@ theorem exponentialClock_properTime (a b : ℝ) :
     (fun t _ => by rw [Real.deriv_exp]; exact (Real.exp_pos t).le),
     ClockExamples.shear_properTime]
 
+/-- The single finite-segment inverse is constructed by the variational
+theorem, and its values are the expected logarithmic clock inverse. -/
+theorem exponentialClock_finite_parameter {a b : ℝ} (hab : a < b) :
+    ∃ r : ℝ → ℝ, r 0 = a ∧ r (Real.exp b - Real.exp a) = b ∧
+      MapsTo r (Icc 0 (Real.exp b - Real.exp a)) (Icc a b) ∧
+      (∀ τ ∈ Icc 0 (Real.exp b - Real.exp a),
+        ContDiffAt ℝ 2 r τ ∧ r τ = Real.log (τ + Real.exp a) ∧
+        speedAlong metric (exponentialClock ∘ r) τ = 1) ∧
+      metric.IsGeodesicOn (Ioo 0 (Real.exp b - Real.exp a)) (exponentialClock ∘ r) := by
+  obtain ⟨r, hleft, hright, hmap, hi, hg⟩ := freeAction_stationary_finite_properTime metric
+    (m := 1) (by norm_num) hab (exponentialClock_contDiff.of_le (by simp))
+    (fun t _ => exponentialClock_timelike t) (exponentialClock_free_stationary (by norm_num) hab)
+  simp only [exponentialClock_properTime] at hright hmap hi hg
+  refine ⟨r, hleft, hright, hmap, ?_, hg⟩
+  intro τ hτ
+  refine ⟨(hi τ hτ).1, ?_, (hi τ hτ).2.2.2⟩
+  have he : Real.exp (r τ) = τ + Real.exp a := by linarith [(hi τ hτ).2.2.1]
+  simpa only [Real.log_exp] using congrArg Real.log he
+
 end ProjectAInos.GeneralRelativity.ParticleExamples

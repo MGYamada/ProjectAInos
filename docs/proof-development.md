@@ -357,8 +357,13 @@ derivative `1/s` and unit proper-speed rate. Metric compatibility determines
 the tangential acceleration factor, and the full second-derivative parameter
 law proves that this inverse yields an affine geodesic. The converse law also
 proves that regular reparametrization of affine motion forces tangential
-acceleration. The parameter construction is local; finite-segment inverse
-gluing and endpoint correspondence remain.
+acceleration. `FiniteProperTime` now extends this to one inverse over a full
+finite timelike segment. C² regularity and timelikeness at all points of the
+closed segment supply a larger open interval, and positive derivative gives
+global injectivity there. The scalar construction belongs to `Variational.Parameter`.
+Both closed-interval images, endpoint correspondence, inverse regularity and
+unit rate are proved; tangential acceleration on the original interior gives
+affine motion on the whole proper-time interior.
 
 `ParticleExamples` proves that the exponential shear worldline has nonzero
 covariant acceleration equal to velocity. Its massive action is stationary
@@ -366,6 +371,17 @@ on every nontrivial finite interval; its quadratic action is not. Proper time
 is `exp(b)-exp(a)`. Typed contracts fix both the native construction and the
 model variational scope. Exact SymPy checks differentiate the massive density
 independently and verify the explicit inverse parameter and cancellation.
+The finite-segment example now proves the logarithmic inverse and both
+endpoints in Lean.
+
+`CurveFamily` supplies native parameter velocities, their C¹ bundle regularity,
+and the mixed covariant derivative interchange law for jointly C² families.
+The proof uses local second-derivative symmetry and zero torsion, with no
+immersion or global chart assumption. `VariationDensity` differentiates both
+actual particle densities on arbitrary manifolds. Timelikeness is local at the
+point of the square-root density derivative. Integrating these derivatives and
+the general-manifold stationarity equivalences still remain. Typed contracts
+and exact flat, shear and conformal family calculations cover these new laws.
 
 ## Minkowski Geometry and Relativistic Kinematics
 

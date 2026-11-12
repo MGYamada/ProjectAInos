@@ -38,6 +38,7 @@ public import ProjectAInos.External.YM.Wilson.Law
 public import ProjectAInos.External.YM.Wilson.Symmetry
 public import ProjectAInos.External.YM.WilsonLawBridge
 public import ProjectAInos.GeneralRelativity.ClockExamples
+public import ProjectAInos.GeneralRelativity.FiniteProperTime
 public import ProjectAInos.GeneralRelativity.FreeGeodesic
 public import ProjectAInos.GeneralRelativity.FreeLagrangian
 public import ProjectAInos.GeneralRelativity.ParticleAction
@@ -47,6 +48,7 @@ public import ProjectAInos.GeneralRelativity.ProperTimeParameter
 public import ProjectAInos.GeneralRelativity.QuadraticGeodesic
 public import ProjectAInos.GeneralRelativity.QuadraticLagrangian
 public import ProjectAInos.GeneralRelativity.SpecialRelativity
+public import ProjectAInos.GeneralRelativity.VariationDensity
 public import ProjectAInos.Mechanics.Basic
 public import ProjectAInos.Mechanics.EulerLagrange
 public import ProjectAInos.Mechanics.Examples
@@ -99,6 +101,7 @@ public import ProjectAInos.SmoothGeometry.Lorentzian.CurvatureExamples
 public import ProjectAInos.SmoothGeometry.Lorentzian.CurvatureNaturality
 public import ProjectAInos.SmoothGeometry.Lorentzian.CurvatureRegularity
 public import ProjectAInos.SmoothGeometry.Lorentzian.CurvatureSymmetry
+public import ProjectAInos.SmoothGeometry.Lorentzian.CurveFamily
 public import ProjectAInos.SmoothGeometry.Lorentzian.Dual
 public import ProjectAInos.SmoothGeometry.Lorentzian.FlatConnection
 public import ProjectAInos.SmoothGeometry.Lorentzian.FlatFrameExamples
@@ -265,5 +268,6 @@ public import ProjectAInos.Variational.Examples
 public import ProjectAInos.Variational.IntegrationByParts
 public import ProjectAInos.Variational.Local
 public import ProjectAInos.Variational.LocalExtension
+public import ProjectAInos.Variational.Parameter
 public import ProjectAInos.Variational.Regularity
 public import ProjectAInos.Variational.YangMillsBridge

@@ -234,6 +234,42 @@ def verify_clocks(metric, curved_metric, coordinates):
     inverse_metric = metric.subs(dict(zip(coordinates, inverse_curve)), simultaneous=True)
     check_zero("proper-time inverse gives unit speed",
                (sp.diff(inverse_curve, p).T * inverse_metric * sp.diff(inverse_curve, p))[0] + 1)
+    tau = sp.symbols("tau", nonnegative=True)
+    finite_inverse = sp.log(tau + sp.exp(a))
+    check_zero("finite clock inverse composition", sp.exp(finite_inverse) - sp.exp(a) - tau)
+    check_zero("finite clock left endpoint", finite_inverse.subs(tau, 0) - a)
+    check_zero("finite clock right endpoint",
+               finite_inverse.subs(tau, sp.exp(b) - sp.exp(a)) - b)
+
+
+def verify_family_variations(metric, coordinates, gamma, *, shear=False):
+    """Differentiate genuine two-parameter families and their scalar densities."""
+    epsilon, s, x0, mass = sp.symbols("epsilon s x0 mass", real=True)
+    family = sp.Matrix([s + epsilon*s**2, epsilon + s**2])
+    variation = sp.diff(family, epsilon)
+    velocity = sp.diff(family, s)
+    mixed_et = covariant_along(gamma, coordinates, family, velocity, epsilon)
+    mixed_te = covariant_along(gamma, coordinates, family, variation, s)
+    check_zero("native family mixed covariant derivatives", mixed_et - mixed_te)
+    along_metric = metric.subs(dict(zip(coordinates, family)), simultaneous=True)
+    density = (velocity.T * along_metric * velocity)[0]/2
+    check_zero("native quadratic family density derivative",
+               sp.diff(density, epsilon) - (mixed_te.T * along_metric * velocity)[0])
+
+    # At epsilon=0 this is a timelike clock for every s and x0. The shear
+    # case uses the actual inverse coordinate map, including its second derivative.
+    timelike_family = sp.Matrix([s + epsilon*s**2, x0 + epsilon*(1+s)])
+    if shear:
+        timelike_family[1] -= timelike_family[0]**2
+    field = sp.diff(timelike_family, epsilon)
+    velocity = sp.diff(timelike_family, s)
+    along_metric = metric.subs(dict(zip(coordinates, timelike_family)), simultaneous=True)
+    q = sp.simplify((velocity.T * along_metric * velocity)[0])
+    speed = sp.sqrt(-q)
+    mixed = covariant_along(gamma, coordinates, timelike_family, field, s)
+    actual = sp.diff(-mass*speed, epsilon).subs(epsilon, 0)
+    expected = (mass/speed * (mixed.T * along_metric * velocity)[0]).subs(epsilon, 0)
+    check_zero("native massive family density derivative", actual - expected)
 
 
 def verify_motion(metric, coordinates, gamma, jacobian):
@@ -538,6 +574,9 @@ def verify():
     verify_quadratic_variation(metric, coordinates, gamma)
     verify_quadratic_variation(curved_metric, coordinates, curved_gamma)
     verify_clocks(metric, curved_metric, coordinates)
+    verify_family_variations(eta, inertial, flat_gamma)
+    verify_family_variations(metric, coordinates, gamma, shear=True)
+    verify_family_variations(curved_metric, coordinates, curved_gamma)
     check_zero("conformal time connection", curved_gamma[0] - sp.Matrix([[0, 2*x], [2*x, 0]]))
     check_zero("conformal spatial connection", curved_gamma[1] - sp.diag(2*x, 2*x))
 
@@ -620,7 +659,8 @@ def verify():
           "full flat-frame/coframe equations with the curved defect sign, "
           "curved proper-time clocks, quadratic Euler–Lagrange/native acceleration, "
           "endpoint variations, unconstrained null-velocity variations, "
-          "massive non-affine Euler–Lagrange equations and the proper-time inverse.")
+          "massive non-affine Euler–Lagrange equations, the finite proper-time inverse, "
+          "and mixed covariant derivatives and densities of curve families.")
 
 
 def main():

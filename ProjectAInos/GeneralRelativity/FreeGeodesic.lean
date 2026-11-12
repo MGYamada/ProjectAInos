@@ -6,7 +6,7 @@ module
 
 public import ProjectAInos.GeneralRelativity.FreeLagrangian
 public import ProjectAInos.GeneralRelativity.QuadraticGeodesic
-public import ProjectAInos.GeneralRelativity.ProperTimeParameter
+public import ProjectAInos.GeneralRelativity.FiniteProperTime
 
 /-! # Massive particle stationarity and native acceleration in model coordinates
 
@@ -186,5 +186,37 @@ theorem freeAction_stationary_iff_localGeodesic (g : LorentzMetric .timeNegative
       (hi _ hτ).1 (hi _ hτ).2.ne' (hg _ hτ).2
     have heq : e.symm (e t) = t := e.left_inv he
     exact heq ▸ ha
+
+/-- A stationary massive worldline admits a single C² proper-time inverse
+over its entire finite segment, with explicit endpoints and affine motion
+throughout the proper-time interior. -/
+theorem freeAction_stationary_finite_properTime (g : LorentzMetric .timeNegative d E)
+    {m : ℝ} (hm : 0 < m) {γ : ℝ → E} {a b : ℝ}
+    (hab : a < b) (hγ : ContDiff ℝ 2 γ)
+    (hv : ∀ t ∈ Icc a b, Timelike g (curveVelocity γ t))
+    (hs : ∀ η : ℝ → E, Mechanics.FixedEndpointVariation a b η →
+      HasDerivAt (fun ε => freeAction g m (Variational.perturb γ η ε) a b) 0 0) :
+    ∃ r : ℝ → ℝ,
+      r 0 = a ∧ r (properTime g γ a b) = b ∧
+      MapsTo r (Icc 0 (properTime g γ a b)) (Icc a b) ∧
+      (∀ τ ∈ Icc 0 (properTime g γ a b),
+        ContDiffAt ℝ 2 r τ ∧ HasDerivAt r (speedAlong g γ (r τ))⁻¹ τ ∧
+        properTime g γ a (r τ) = τ ∧ speedAlong g (γ ∘ r) τ = 1) ∧
+      g.IsGeodesicOn (Ioo 0 (properTime g γ a b)) (γ ∘ r) := by
+  have ha := (freeAction_stationary_iff_tangential g hm hab hγ hv).mp hs
+  obtain ⟨e, he, hsource, himage, hinvimage, hleft, hright, hi, hg⟩ :=
+    exists_finite_properTime_geodesic g hab.le (fun _ _ => hγ.contMDiff.contMDiffAt) hv ha
+  have htarget : Icc 0 (properTime g γ a b) ⊆ e.target := by
+    rw [← himage]
+    rintro _ ⟨t, ht, rfl⟩
+    exact e.map_source (hsource ht)
+  refine ⟨e.symm, hleft, hright, ?_, ?_, hg⟩
+  · intro τ hτ
+    rw [← hinvimage]
+    exact ⟨τ, hτ, rfl⟩
+  · intro τ hτ
+    refine ⟨(hi τ (htarget hτ)).1, (hi τ (htarget hτ)).2.1, ?_, (hi τ (htarget hτ)).2.2⟩
+    rw [← he]
+    exact e.right_inv (htarget hτ)
 
 end ProjectAInos.GeneralRelativity
