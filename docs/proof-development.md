@@ -503,6 +503,20 @@ commutativity, a degree-zero unit and graded Leibniz are section equalities.
 No norm is introduced on native fibres. Lean examples cover nonlinear
 charts, singular and dimension-changing maps, and the nonzero signed identity
 `d(dx⁰ ∧ x¹ dx²) = -dx⁰ ∧ dx¹ ∧ dx²`. Independent exact SymPy checks use
-variable forms and a nonlinear immersion. Density/Hodge and Maxwell
-comparison are still outstanding. The
+variable forms and a nonlinear immersion.
+
+`MetricDensity` proves the Gram-determinant density law even for singular
+changes of vector family. `Lorentzian/VolumeDensity` specializes it to actual
+tangent fibres and proves positive basis volumes, the chart formula,
+absolute-Jacobian covariance and local smoothness. The determinant is a
+finite polynomial on the coordinate model; no native fibre norm is added.
+`OrientedAtlas` supplies only signed local chart data. `VolumeForm` proves
+overlap compatibility before gluing, then proves nonvanishing, equality of
+the absolute volume with density, reversal of orientation, invariance under
+whole-metric sign reversal, and independence of compatible chart covers.
+Exact Lean examples cover either Minkowski convention in every dimension,
+both actual shear charts, a different compatible oriented cover, the curved
+conformal plane, and a basis change with volume `-6` but density `6`.
+Default-option typed contracts and independent exact SymPy checks accompany
+the construction. Lorentz Hodge and Maxwell comparison are still outstanding. The
 [geometry guide](smooth-geometry.md) records the public API and this boundary.

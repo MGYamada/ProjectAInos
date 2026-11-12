@@ -222,6 +222,49 @@ def verify_native_forms():
     check_zero("native composition at singular point", direct.subs(s, 0))
 
 
+def verify_volume_density():
+    """Absolute density versus signed volume, including a nonconstant negative Jacobian."""
+    t, x = sp.symbols("t x", real=True)
+    coordinates = sp.Matrix([t, x])
+
+    def density(metric):
+        return sp.sqrt(sp.Abs(sp.simplify(metric.det())))
+
+    eta = sp.diag(-1, 1)
+    for minkowski in (eta, -eta, sp.diag(-1, 1, 1, 1), sp.diag(1, -1, -1, -1)):
+        check_zero("Minkowski density in either convention", density(minkowski) - 1)
+    shear = sp.Matrix([t, x + t**2]).jacobian(coordinates)
+    check_zero("nonlinear shear density", density(shear.T * eta * shear) - 1)
+    curved = sp.exp(2*x**2) * eta
+    check_zero("curved conformal density", density(curved) - sp.exp(2*x**2))
+    check_zero("whole-metric sign reversal density", density(-curved) - density(curved))
+
+    # This chart is a diffeomorphism onto T>0. Its Jacobian reverses
+    # orientation and has nonconstant magnitude, unlike the shear.
+    chart = sp.Matrix([sp.exp(t), -3*x])
+    jacobian = chart.jacobian(coordinates)
+    target_density = density(curved).subs(dict(zip(coordinates, chart)), simultaneous=True)
+    pulled_metric = jacobian.T * curved.subs(
+        dict(zip(coordinates, chart)), simultaneous=True) * jacobian
+    source_density = density(pulled_metric)
+    check_zero("nonconstant absolute-Jacobian density covariance",
+               source_density - 3*sp.exp(t + 18*x**2))
+    signed_volume = jacobian.det() * target_density
+    check_zero("orientation-reversing chart signed volume", signed_volume + source_density)
+    check_zero("absolute volume equals density", sp.Abs(signed_volume) - source_density)
+
+    changed_basis = sp.diag(2, -3)
+    check_zero("rescaled reversed basis signed volume", changed_basis.det() + 6)
+    check_zero("rescaled reversed basis density", density(changed_basis.T * eta * changed_basis) - 6)
+    singular_basis = sp.Matrix([[1, t], [0, 0]])
+    check_zero("singular vector-family density", density(singular_basis.T * curved * singular_basis))
+    a, b, c, d = sp.symbols("a b c d", real=True)
+    arbitrary_basis = sp.Matrix([[a, b], [c, d]])
+    check_zero("general Gram determinant covariance",
+               (arbitrary_basis.T * curved * arbitrary_basis).det()
+               - arbitrary_basis.det()**2 * curved.det())
+
+
 def verify_quadratic_variation(metric, coordinates, gamma):
     """Differentiate the density independently, using force minus d(momentum)/ds."""
     size = len(coordinates)
@@ -731,6 +774,7 @@ def verify():
 
     verify_covariant_pullback(metric, coordinates)
     verify_native_forms()
+    verify_volume_density()
     verify_motion(metric, coordinates, gamma, jacobian)
     verify_parallel_coframe(coordinates, gamma, jacobian, shear)
 

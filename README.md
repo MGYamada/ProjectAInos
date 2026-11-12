@@ -292,7 +292,14 @@ native wedge is chart-independent and smooth, preserves arbitrary smooth
 pullback, and satisfies bilinearity, associativity, graded commutativity,
 unit laws and graded Leibniz. Exact flat normalization, nonlinear/singular
 and dimension-changing examples, and a nonzero three-form sign check are
-proved. Density/Hodge and Maxwell comparison remain to be implemented.
+proved. Intrinsic Gram-determinant volume density is positive on tangent
+bases, smooth in charts and transforms by the absolute Jacobian. Compatible
+signed local charts now construct a smooth, nowhere-zero oriented volume
+form, independent of the chosen cover. Its absolute value is the density;
+orientation reversal negates the form, while whole-metric sign reversal
+preserves both. Minkowski, nonlinear-chart and curved conformal examples
+fix its normalization. Lorentz Hodge and Maxwell comparison remain to be
+implemented.
 The [GR guide](docs/general-relativity.md)
 records the exact scope and typed contracts.
 The [shared geometry guide](docs/smooth-geometry.md)

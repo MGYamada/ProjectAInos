@@ -155,6 +155,9 @@ public import ProjectAInos.SmoothGeometry.Lorentzian.Restriction
 public import ProjectAInos.SmoothGeometry.Lorentzian.Ricci
 public import ProjectAInos.SmoothGeometry.Lorentzian.Tensor
 public import ProjectAInos.SmoothGeometry.Lorentzian.VariationTesting
+public import ProjectAInos.SmoothGeometry.Lorentzian.VolumeDensity
+public import ProjectAInos.SmoothGeometry.Lorentzian.VolumeExamples
+public import ProjectAInos.SmoothGeometry.Lorentzian.VolumeForm
 public import ProjectAInos.SmoothGeometry.Manifold.Charts
 public import ProjectAInos.SmoothGeometry.Manifold.ClosedCoframe
 public import ProjectAInos.SmoothGeometry.Manifold.Euclidean
@@ -162,9 +165,11 @@ public import ProjectAInos.SmoothGeometry.Manifold.Germs
 public import ProjectAInos.SmoothGeometry.Manifold.LocallyRingedSpace
 public import ProjectAInos.SmoothGeometry.Manifold.OpenSubset
 public import ProjectAInos.SmoothGeometry.Manifold.OpenTangent
+public import ProjectAInos.SmoothGeometry.Manifold.OrientedAtlas
 public import ProjectAInos.SmoothGeometry.Manifold.QuadraticChart
 public import ProjectAInos.SmoothGeometry.Manifold.Scheme
 public import ProjectAInos.SmoothGeometry.Manifold.SmoothExtension
+public import ProjectAInos.SmoothGeometry.MetricDensity
 public import ProjectAInos.SmoothGeometry.Minkowski.Affine
 public import ProjectAInos.SmoothGeometry.Minkowski.Basic
 public import ProjectAInos.SmoothGeometry.Minkowski.Causal

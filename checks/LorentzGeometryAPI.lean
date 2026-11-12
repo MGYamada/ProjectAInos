@@ -24,6 +24,7 @@ import ProjectAInos.SmoothGeometry.Lorentzian.MotionODE
 import ProjectAInos.SmoothGeometry.Lorentzian.PathExamples
 import ProjectAInos.SmoothGeometry.Lorentzian.Regularity
 import ProjectAInos.SmoothGeometry.Lorentzian.Restriction
+import ProjectAInos.SmoothGeometry.Lorentzian.VolumeExamples
 import ProjectAInos.SmoothGeometry.Tensor.Bundle
 import ProjectAInos.SmoothGeometry.ODE.VolterraExamples
 import ProjectAInos.SmoothGeometry.ODE.RadialExamples
@@ -1465,3 +1466,86 @@ example {e : OpenPartialHomeomorph M E} {U : Set ℝ}
   variationField_chart he hU hUI hstay hsupport hγ hη ht
 
 end LocalizedManifoldVariation
+
+section DensityAndVolume
+
+open LorentzMetric DifferentialForm
+open scoped BigOperators
+
+variable {σ : LorentzConvention} {d : ℕ} {M : Type} [TopologicalSpace M]
+  [ChartedSpace (MinkowskiModel d) M] [IsManifold 𝓘(ℝ, MinkowskiModel d) ∞ M]
+  (g : LorentzMetric σ d M) (o : OrientedAtlas (d + 1) M)
+
+example (x : M) (v : Fin (d + 1) → TangentSpace 𝓘(ℝ, MinkowskiModel d) x)
+    (A : Matrix (Fin (d + 1)) (Fin (d + 1)) ℝ) :
+    g.volumeDensity x (fun i => ∑ j, A j i • v j) = |A.det| * g.volumeDensity x v :=
+  g.volumeDensity_change x v A
+
+example (x : M) (b : Module.Basis (Fin (d + 1)) ℝ (TangentSpace 𝓘(ℝ, MinkowskiModel d) x)) :
+    0 < g.volumeDensity x b := g.volumeDensity_basis_pos x b
+
+example {N : Type} [TopologicalSpace N] [ChartedSpace (MinkowskiModel d) N]
+    [IsManifold 𝓘(ℝ, MinkowskiModel d) ∞ N] (h : LorentzMetric σ d N) (x : M) (y : N)
+    (L : TangentSpace 𝓘(ℝ, MinkowskiModel d) x →ₗ[ℝ] TangentSpace 𝓘(ℝ, MinkowskiModel d) y)
+    (hL : ∀ u w, h.form y (L u) (L w) = g.form x u w)
+    (v : Fin (d + 1) → TangentSpace 𝓘(ℝ, MinkowskiModel d) x) :
+    h.volumeDensity y (L ∘ v) = g.volumeDensity x v := g.volumeDensity_naturality h x y L hL v
+
+example {e e' : OpenPartialHomeomorph M (MinkowskiModel d)}
+    (he : e ∈ IsManifold.maximalAtlas 𝓘(ℝ, MinkowskiModel d) ∞ M)
+    (he' : e' ∈ IsManifold.maximalAtlas 𝓘(ℝ, MinkowskiModel d) ∞ M)
+    {x : M} (hx : x ∈ e.source) (hx' : x ∈ e'.source) :
+    g.chartDensity e x =
+      |Matrix.det (fun i j => fderiv ℝ (e' ∘ e.symm) (e x) (Pi.single j 1) i)| *
+        g.chartDensity e' x := g.chartDensity_transition he he' hx hx'
+
+example {e : OpenPartialHomeomorph M (MinkowskiModel d)}
+    (he : e ∈ IsManifold.maximalAtlas 𝓘(ℝ, MinkowskiModel d) ∞ M)
+    {x : M} (hx : x ∈ e.source) :
+    ContMDiffAt 𝓘(ℝ, MinkowskiModel d) 𝓘(ℝ) ∞ (g.chartDensity e) x :=
+  g.chartDensity_contMDiffAt he hx
+
+example : SmoothForm 𝓘(ℝ, MinkowskiModel d) M (d + 1) := g.volumeForm o
+
+example (x : M) (v : Fin (d + 1) → TangentSpace 𝓘(ℝ, MinkowskiModel d) x) :
+    |g.volumeForm o x v| = g.volumeDensity x v := g.abs_volumeForm o x v
+
+example (x : M) : g.volumeForm o x ≠ 0 := g.volumeForm_ne_zero o x
+
+example : g.volumeForm o.reverse = -g.volumeForm o := g.volumeForm_reverse o
+
+example : g.opposite.volumeForm o = g.volumeForm o := g.opposite_volumeForm o
+
+example (x : M) (v : Fin (d + 1) → TangentSpace 𝓘(ℝ, MinkowskiModel d) x) :
+    g.opposite.volumeDensity x v = g.volumeDensity x v := g.opposite_volumeDensity x v
+
+example (o' : OrientedAtlas (d + 1) M) (h : o.Compatible o') :
+    g.volumeForm o = g.volumeForm o' := g.volumeForm_eq_of_compatible o o' h
+
+example (p : M) {y : MinkowskiModel d} (hy : y ∈ (o.chart p).target) :
+    chartCoefficients (o.chart p) (fun x => g.volumeForm o x) y =
+      (o.sign p * g.chartDensity (o.chart p) ((o.chart p).symm y)) • coordinateForm id :=
+  g.chartCoefficients_volumeForm o p hy
+
+example (σ : LorentzConvention) (d : ℕ) (x : MinkowskiModel d) :
+    (minkowskiMetric σ d).volumeForm (OrientedAtlas.standard (d + 1)) x = coordinateForm id :=
+  LorentzianVolumeExamples.minkowski_volume σ d x
+
+example (x : LorentzianCharts.Plane) :
+    LorentzianCharts.metric.chartDensity LorentzianCharts.inertialChart x = 1 :=
+  LorentzianVolumeExamples.shear_inertial_density x
+
+example : LorentzianCharts.metric.volumeForm LorentzianVolumeExamples.shearOrientation =
+    LorentzianCharts.metric.volumeForm (OrientedAtlas.standard 2) :=
+  LorentzianVolumeExamples.shear_volume_atlas
+
+example (x : LorentzianCharts.Plane) :
+    LorentzianConformalExample.metric.volumeForm (OrientedAtlas.standard 2) x =
+      Real.exp (2 * (x 1) ^ 2) • NativeExamples.area x :=
+  LorentzianVolumeExamples.conformal_volume x
+
+example (x : LorentzianCharts.Plane) :
+    (minkowskiMetric .timeNegative 1).volumeDensity x ![![2, 0], ![0, -3]] = 6 :=
+  LorentzianVolumeExamples.scaled_reversed_density x
+
+end DensityAndVolume

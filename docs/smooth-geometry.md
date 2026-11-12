@@ -433,8 +433,8 @@ connection examples at default elaborator settings. The stage B connection
 proof endpoints are implemented; its PR still requires review and merge.
 The curvature endpoints below are implemented. Finite-segment parallel
 transport and local inertial coordinates are described in the motion section.
-Native form bundles, pullback, exterior differentiation and wedge are described
-below; density/Hodge/Maxwell and the Newtonian motion limit
+Native form bundles, pullback, exterior differentiation, wedge, density and
+oriented volume are described below; Hodge/Maxwell and the Newtonian motion limit
 remain incomplete.
 
 ## GR 5.1: curvature and intrinsic contractions
@@ -984,9 +984,8 @@ coefficient, gluing and flat-comparison interfaces. Exact SymPy checks cover
 the same nonlinear and dimension-changing examples and a variable two-form
 under nonlinear composition.
 
-Native exterior differentiation and wedge are described below.
-Volume density versus oriented volume,
-Lorentz Hodge/flat comparison and the curved Maxwell component bridge remain
+Native exterior differentiation, wedge, volume density and oriented volume
+are described below. Lorentz Hodge/flat comparison and the curved Maxwell component bridge remain
 in #52. Maxwell action variation remains in §4.2/#44, and Einstein dynamics
 remains in §5.2.
 
@@ -1073,6 +1072,55 @@ three-dimensional derivative proves
 nonzero result. Default-option typed API examples cover the full product
 interfaces. Exact SymPy additionally tests variable one-forms, graded
 Leibniz and wedge naturality under a nonlinear two-to-three-dimensional map.
+
+### Lorentz density and oriented volume
+
+`MetricDensity.value B v` is `sqrt(abs(det(gram B v)))` for a bilinear form
+and an ordered vector family. `value_change` proves multiplication by
+`abs(det A)` under every change matrix, including singular ones. No
+orientation or norm is involved. `LorentzMetric.volumeDensity` applies this
+construction directly to the metric on each actual tangent fibre.
+`volumeDensity_basis_pos` proves positivity on bases from nondegeneracy;
+`volumeDensity_naturality` proves invariance under metric-preserving tangent
+maps, and `opposite_volumeDensity` handles whole-metric sign reversal.
+
+`chartDensity` is the familiar `sqrt(abs(det(g_ij)))`.
+`volumeDensity_eq_chart` expresses intrinsic density using the determinant
+of the input vectors' chart components. `chartDensity_transition` proves
+the absolute-Jacobian change rule between any two actual smooth charts,
+with explicit source membership. `chartDensity_contMDiffAt` proves local
+smoothness using the nonzero determinant and its finite polynomial
+expansion. Only the finite coordinate model carries a norm.
+
+`OrientedAtlas` records a covering chart around each point and a constant
+sign of square one in each chart. Its overlap condition compares those signs
+using the transition Jacobian. This is explicit local orientation data;
+it requires no global frame or chart, metric, or Hausdorff premise.
+`localVolume` multiplies the pulled-back normalized coordinate top form by
+the signed density. `localVolume_compatible` proves equality on overlaps,
+so `volumeForm` uses the existing native gluing theorem to construct a
+`SmoothForm` of degree `d+1`. Neither smoothness nor existence of the global
+volume is an input premise.
+
+`chartCoefficients_volumeForm` gives the signed-density coefficient in every
+selected chart. `volumeForm_ne_zero` and `abs_volumeForm` identify a nonzero
+oriented top form whose absolute value is precisely the intrinsic density.
+`volumeForm_reverse` negates it when the orientation is reversed;
+`opposite_volumeForm` leaves it unchanged when the whole metric is negated.
+`volumeForm_eq_of_compatible` proves that a different signed chart cover
+describing the same orientation gives the same native section.
+
+`VolumeExamples.lean` proves density one and the standard coordinate volume
+for Minkowski metrics in either sign convention and every dimension. The
+nonlinear shear metric has unit density in both actual atlas charts, and a
+cover made from the inertial charts gives the same volume. The conformal
+plane `exp(2x²)(-dt²+dx²)` has density `exp(2x²)` and that coefficient times
+the existing native area form. An orientation-reversing rescaling has
+volume `-6` and density `6`. These interfaces have default-option typed
+examples in `checks/LorentzGeometryAPI.lean`. The exact SymPy runner also
+checks a nonlinear chart with nonconstant, negative Jacobian determinant.
+The Lorentz Hodge construction and density divergence formula remain to be
+implemented with the curved Maxwell bridge.
 
 ## Scope and next stages
 
