@@ -142,7 +142,10 @@ coefficients and zero first metric derivatives. Their quadratic construction
 is compatible with nonzero curvature at the chosen point. Local Minkowski
 geometry implies zero native curvature. Smooth parallel coframes now
 integrate to local Minkowski charts, with normalization propagated from
-one point. Constructing those coframes from zero curvature remains in D.
+one point. The supporting Volterra solver now proves smooth dependence on
+small continuous coefficient curves and initial values, including a
+time-dependent exact example. Constructing those coframes from zero
+curvature remains in D.
 Particle variation, curved forms and
 the Newtonian motion limit remain in the work
 tracked by [#52](https://github.com/MGYamada/ProjectAInos/issues/52).

@@ -246,7 +246,22 @@ def verify_parallel_coframe(coordinates, gamma, coframe, primitive):
     check_zero("integrated coframe Jacobian", integrated.jacobian(coordinates) - coframe)
 
 
+def verify_volterra_solution():
+    """Exact nonconstant-coefficient ODE and parameter-variation checks."""
+    t, a, y0, b, z = sp.symbols("t a y0 b z", real=True)
+    # At a=1 this is the Lean rampCoefficient example, with sup norm <= 1/2.
+    coefficient = a * t / 2
+    solution = sp.exp(a * t**2 / 4) * y0
+    check_zero("Volterra ramp initial value", solution.subs(t, 0) - y0)
+    check_zero("Volterra ramp differential equation", sp.diff(solution, t) - coefficient * solution)
+    variation = b * sp.diff(solution, a) + z * sp.diff(solution, y0)
+    check_zero("Volterra ramp variation initial value", variation.subs(t, 0) - z)
+    check_zero("Volterra ramp variational equation",
+               sp.diff(variation, t) - coefficient * variation - b * t * solution / 2)
+
+
 def verify():
+    verify_volterra_solution()
     t, x, time, space = sp.symbols("t x T X", real=True)
     coordinates = sp.Matrix([t, x])
     inertial = sp.Matrix([time, space])
@@ -404,7 +419,8 @@ def verify():
           "parallel fields, geodesics, metric preservation, endpoint transport, "
           "subdivision/reversal, curved piecewise-path composition, "
           "nonzero null fields, reparametrization, quadratic local inertial charts, "
-          "parallel coframe integration, and the curved integrability obstruction.")
+          "parallel coframe integration, the curved integrability obstruction, "
+          "and a nonconstant Volterra solution/parameter variation.")
 
 
 def main():

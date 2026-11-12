@@ -19,6 +19,7 @@ import ProjectAInos.SmoothGeometry.Lorentzian.PathExamples
 import ProjectAInos.SmoothGeometry.Lorentzian.Regularity
 import ProjectAInos.SmoothGeometry.Lorentzian.Restriction
 import ProjectAInos.SmoothGeometry.Tensor.Bundle
+import ProjectAInos.SmoothGeometry.ODE.VolterraExamples
 
 /-! Typed contracts for GR 5.1's shared metric, connection, curvature and motion APIs. These examples use
 default elaborator options and do not assume a global frame or flatness. -/
@@ -27,6 +28,48 @@ open ProjectAInos.SmoothGeometry
 open scoped Manifold ContDiff Topology
 
 noncomputable section
+
+section LinearODE
+
+open LinearODE
+
+variable {E : Type} [NormedAddCommGroup E] [NormedSpace ℝ E] [CompleteSpace E]
+  {A : Curve (E →L[ℝ] E)} (hA : ‖A‖ < 1) (y : E)
+
+example : (equationOperator A).IsInvertible := equationOperator_isInvertible hA
+
+example (t : unitInterval) : solutionOperator A y t = y +
+    ∫ s in 0..(t : ℝ), extend A s (extend (solutionOperator A y) s) :=
+  solution_integral_eq hA y t
+
+example : solutionOperator A y 0 = y := solution_initial hA y
+
+example (t : unitInterval) :
+    HasDerivWithinAt (extend (solutionOperator A y)) (A t (solutionOperator A y t))
+      (Set.Icc (0 : ℝ) 1) t := solution_hasDerivWithinAt hA y t
+
+example (f : Curve E) (h0 : f 0 = y)
+    (hf : ∀ t ∈ Set.Ioo (0 : ℝ) 1,
+      HasDerivAt (extend f) (extend A t (extend f t)) t) :
+    f = solutionOperator A y := eq_solution_of_hasDerivAt hA y f h0 hf
+
+example : ‖solutionOperator A y‖ ≤ ‖y‖ / (1 - ‖A‖) := solution_norm_le hA y
+
+example : ContDiffAt ℝ ∞
+    (fun p : Curve (E →L[ℝ] E) × E => solutionOperator p.1 p.2) (A, y) :=
+  solution_contDiffAt hA y
+
+example {P : Type} [NormedAddCommGroup P] [NormedSpace ℝ P]
+    {B : P → Curve (E →L[ℝ] E)} {z : P → E} {p : P}
+    (hB : ContDiffAt ℝ ∞ B p) (hz : ContDiffAt ℝ ∞ z p) (hsmall : ‖B p‖ < 1) :
+    ContDiffAt ℝ ∞ (fun q => solutionOperator (B q) (z q)) p :=
+  solution_family_contDiffAt hB hz hsmall
+
+example (t : unitInterval) :
+    solutionOperator (rampCoefficient (E := E)) y t = Real.exp ((t : ℝ) ^ 2 / 4) • y :=
+  solution_ramp y t
+
+end LinearODE
 
 section LocalInertial
 

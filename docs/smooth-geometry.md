@@ -734,21 +734,55 @@ despite having an inertial chart at every point. Exact checks integrate the
 shear coframe from arbitrary base points and evaluate the nonzero conformal
 curvature matrix obstructing an invertible parallel coframe.
 
+### Linear ODE dependence on coefficient curves
+
+`ODE.Volterra`, in namespace `LinearODE`, supplies the analytic step toward
+constructing the parallel coframe. `Curve E` is the Banach space
+`C(unitInterval, E)`. The bounded linear map `volterra` sends a coefficient
+curve `A` to `f ↦ ∫₀ᵗ A(s) f(s) ds`, with `‖volterra A‖ ≤ ‖A‖`.
+
+- `equationOperator_isInvertible` derives invertibility of `id - volterra A`
+  from `‖A‖ < 1`, using a convergent geometric series. Invertibility is a
+  conclusion, not a premise.
+- `solutionOperator A` is continuous and linear in the initial value.
+  `solution_integral_eq`, `solution_initial` and `solution_hasDerivWithinAt`
+  give the integral equation, initial condition and ODE, including one-sided
+  derivatives at the endpoints.
+- `eq_solution_of_hasDerivAt` proves uniqueness from continuity on the closed
+  interval and the differential equation on its interior; no endpoint
+  differentiability assumption is needed.
+- `solution_norm_le` gives `‖solutionOperator A y‖ ≤ ‖y‖ / (1 - ‖A‖)`.
+- `solution_contDiffAt` proves joint smooth dependence on the entire coefficient
+  curve in supremum norm and on the initial value. `solution_family_contDiffAt`
+  composes this with smooth parameter maps; `solution_eval_contDiffAt` evaluates
+  at any fixed time.
+- `VolterraExamples.solution_ramp` proves that the resolvent-defined solution
+  for `A(t) = (t/2) id` is `exp(t²/4) y₀`, in any real Banach space. The zero
+  coefficient specialization is also proved. Exact SymPy checks verify the
+  nonconstant equation and its parameter-variation equation.
+
+The smallness hypothesis is explicit. This is not yet a theorem that arbitrary
+jointly smooth coordinate coefficients define smooth maps into `Curve`, nor
+is it a proof of flat-connection compatibility. Those are the next steps in
+constructing a radial parallel coframe. No norm is added to native tangent
+fibres, and no analytic metric or global frame is assumed.
+
 Stage D remains in progress: a smooth invertible parallel coframe must still
 be constructed from zero curvature. The conditional integration theorem
 does not supply that existence result or finish the local curvature-zero ↔
 `IsLocallyMinkowski` equivalence. Particle variation, curved forms
 and the Newtonian trajectory limit are the subsequent E–G stages.
 
-This increment passes the warning-free full build (9,288 jobs), root-import
-check, all six API checks and the transitive audit of 7,008 declarations
-(2,843 in smooth geometry). Only `propext`, `Classical.choice` and `Quot.sound`
+This increment passes the warning-free full build (9,290 jobs), root-import
+check, all six API checks and the transitive audit of 7,094 declarations
+(2,929 in smooth geometry). Only `propext`, `Classical.choice` and `Quot.sound`
 are permitted. Typed contracts fix the native along-field carrier, overlap
 and regularity hypotheses, metric and parameter-change formulas, coordinate
 ODE, local initial-value existence/uniqueness, finite-segment transport,
 its laws, piecewise paths and continuous lifts, nonzero-null preservation,
 prescribed-basis inertial charts, their first and second derivative contracts,
 curvature restriction, coframe integration with explicit hypotheses,
+the Volterra equation, ODE uniqueness, norm bound and smooth dependence,
 and flat/curved concrete examples at
 default elaborator settings. The installed-package exact Lorentz experiment
 also passes. These checks validate this increment, not the remaining D–G

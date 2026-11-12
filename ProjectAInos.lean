@@ -136,6 +136,8 @@ public import ProjectAInos.SmoothGeometry.Minkowski.Observer
 public import ProjectAInos.SmoothGeometry.Minkowski.Reflection
 public import ProjectAInos.SmoothGeometry.Minkowski.ReflectionDeterminant
 public import ProjectAInos.SmoothGeometry.Minkowski.TwoForm
+public import ProjectAInos.SmoothGeometry.ODE.Volterra
+public import ProjectAInos.SmoothGeometry.ODE.VolterraExamples
 public import ProjectAInos.SmoothGeometry.OpenImmersion
 public import ProjectAInos.SmoothGeometry.OpenPullback
 public import ProjectAInos.SmoothGeometry.RealSpectrum

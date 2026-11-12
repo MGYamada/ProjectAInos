@@ -171,6 +171,13 @@ source. After shrinking to a convex target, metric compatibility propagates
 a normalization at the base point to the whole chart. These conditional
 integration theorems do not construct the parallel coframe from zero
 curvature; that existence theorem remains the missing converse step in D.
+The supporting linear-ODE solver now uses the Banach space of continuous
+coordinate curves on `[0,1]`. If the coefficient supremum norm is less than
+one, the integral equation has an invertible operator, yielding the unique
+solution with smooth dependence on coefficients and initial values. These
+norms belong to coordinate curve spaces, not the native tangent fibres.
+Smooth radial coefficient families and curvature compatibility still need
+to connect this solver to the parallel-coframe existence theorem.
 In particular, no claim that `A ≅ Γ(Spec A)` for arbitrary
 C∞-rings is used in this continuation.
 

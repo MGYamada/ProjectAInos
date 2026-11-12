@@ -240,6 +240,17 @@ to a convex ball and using metric compatibility propagates metric
 normalization from one point. The nonconstant shear coframe instantiates
 the full integration theorem in Lean. Exact checks also integrate it from
 an arbitrary base point and check the conformal curvature obstruction.
+`ODE.Volterra` constructs a bounded linear integral operator on
+`C([0,1], E)`. Its norm is bounded by the coefficient supremum norm. For
+coefficients of norm less than one, a Neumann inverse constructs the unique
+solution; the solution is smooth jointly in the whole coefficient curve and
+initial value. The proof includes the ODE at endpoints as a within derivative,
+uniqueness from the interior differential equation, and a supremum-norm bound.
+`VolterraExamples` proves the constructed solution for `A(t) = (t/2) id` is
+`exp(t²/4) y₀`. The exact Python check also tests its parameter-variation
+equation; the latter is not yet a general Lean variational-equation theorem.
+Lifting smooth coordinate coefficients to smooth maps into the continuous-curve
+space and deriving the flat-connection compatibility equation remain needed.
 Construction of a smooth invertible parallel coframe from zero curvature
 remains open; the local flatness equivalence is not yet complete.
 Stages E–G remain subsequent work; differential/contracted
