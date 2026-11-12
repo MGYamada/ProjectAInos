@@ -402,7 +402,7 @@ formula on models and manifold charts, the complete overlap transformation
 law, metric pullback, naturality, open restriction and the nonlinear
 connection examples at default elaborator settings. The stage B connection
 proof endpoints are implemented; its PR still requires review and merge.
-The curvature endpoints below are implemented. Parallel transport, geodesics,
+The curvature endpoints below are implemented. Parallel transport, local inertial coordinates,
 curved forms and the Newtonian motion limit remain later work.
 
 ## GR 5.1: curvature and intrinsic contractions
@@ -503,6 +503,115 @@ of 6,541 declarations (2,376 in smooth geometry), using only `propext`,
 `Classical.choice` and `Quot.sound`. The installed-package exact Lorentz
 experiment also passes. These checks do not imply completion of the later
 motion, curved-form or Newtonian-limit stages.
+
+## GR 5.1: differentiation along curves and geodesic initial data
+
+`AlongCurve.lean` defines `curveVelocity γ t` using the manifold derivative
+and the canonical unit vector in the parameter line. `AlongField γ` is
+`∀ t, TangentSpace I (γ t)`, including at self-intersections or zero velocity.
+`covariantAlong` takes values in these same native fibres. Its defining
+chart formula is the derivative of the vector components plus the native
+connection acting on the frozen coordinate field in the velocity direction.
+
+`chartCovariantAlong_eq` proves independence of the chart on overlaps,
+assuming only smooth maximal-atlas membership, membership of the curve point
+in both sources, differentiability of the curve and of its source-chart
+vector components. There is no immersion or ambient-extension assumption.
+`covariantAlong_eq_chart` uses intrinsic differentiability of the along
+field as a map into the total tangent bundle. `covariantAlong_ambient`
+recovers the original Levi-Civita derivative for the restriction of a
+differentiable ambient field. `covariantAlong_congr`, `covariantAlong_add`
+and `covariantAlong_smul` give germ locality, additivity and Leibniz.
+`covariantAlong_coordinates` proves, in every admissible chart,
+
+```text
+(D_t V)^k = d(V^k)/dt + Σᵢⱼ Γ^k_ij(q) q̇^i V^j.
+```
+
+`AlongCurveMetric.lean` proves `hasDerivAt_pairing_along` for two arbitrary
+differentiable along fields on a differentiable curve:
+
+```text
+d g(V,W)/dt = g(D_t V,W) + g(V,D_t W).
+```
+
+The proof uses smooth coordinate bilinear forms and the native connection's
+metric compatibility. Normed structures are confined to the coordinate
+models, with no norm or positive-definite inner product imposed on tangent
+fibres. No orientation, time orientation or global frame is needed.
+
+`AlongCurveReparam.lean` proves `C^(n+1)` velocity regularity, the chain rule
+for `curveVelocity`, and both reparametrization identities:
+
+```text
+D_t^(γ∘r)(V∘r) = r' (D_s^γ V)∘r
+D_t^(γ∘r) velocity(γ∘r) = r'' velocity(γ)∘r + (r')² (D_s^γ velocity γ)∘r.
+```
+
+These hold even at zeros of `r'`; neither statement divides by parameter
+speed. General parameter changes have the displayed acceleration term.
+`IsGeodesicOn.affine_reparam` proves preservation of the affine equation for
+`r(t)=at+b`, including reversal and constant maps. `IsParallelOn.reparam`
+preserves parallelism for differentiable parameter maps into the original
+parameter domain.
+
+`Geodesic.lean` defines `IsParallelOn` by native differentiability and zero
+covariant derivative. `IsGeodesicOn` requires local `C²` regularity and
+`D_t velocity γ=0`. Regularity is at each parameter, rather than only within
+the parameter set; closed-interval uses therefore require regular extensions
+at endpoints. `parallel_pairing_eq` proves preservation on convex parameter
+sets. `IsGeodesicOn.metric_velocity_eq`, `timelike_iff` and `null_norm_iff`
+give velocity-norm, timelike and zero-norm preservation for both metric
+conventions. Zero norm alone does not assert that the velocity is nonzero.
+`covariantAcceleration_coordinates` and
+`geodesic_equation_iff_coordinates` prove the arbitrary-chart second-order ODE.
+
+`MotionODE.lean` derives `chartGeodesicField`, the phase field
+`(q,v) ↦ (v,−Γ(q)(v,v))`, from these connection coefficients.
+`chartGeodesicField_contDiffAt` proves smoothness on the chart target.
+`exists_chartGeodesic` uses mathlib's local ODE theorem, shrinks the time
+interval to keep position in the chart, and derives `C²` phase regularity.
+`isGeodesicOn_of_chartPhase` and `hasDerivAt_chartPhase` bridge that phase
+equation to native geodesics. The public intrinsic endpoints are:
+
+- `exists_geodesic g p v t₀`: a positive `ε`, a curve through `p` with the
+  specified actual tangent velocity `v`, and the geodesic equation on
+  `(t₀−ε,t₀+ε)`. The base-point equality transporting the initial vector is
+  explicit in the statement.
+- `geodesic_unique`: geodesics defined near `t₀`, with equal initial positions
+  and transported tangent velocities, agree on a neighborhood of `t₀`.
+  Local Lipschitzness is derived from the smooth phase field.
+
+These are local existence and germ uniqueness. Neither completeness nor a
+common global existence interval is asserted.
+
+`MotionExamples.lean` proves that model-coordinate differentiation agrees
+with ordinary differentiation for standard Minkowski, and every affine line
+is an affine geodesic for both signatures. For the nonlinear shear metric,
+`inertialTimePath_geodesic` proves that `(s,−s²)` is an affine geodesic.
+`parallelField_parallel` proves that `(a,b−2sa)` is parallel along it, and
+`parallelField_inertial_components` evaluates the field in the actual
+inertial chart to the constant vector `(a,b)`.
+The separate exact experiment checks these equations, metric preservation,
+and both terms in the acceleration reparametrization formula, including
+a change with zero parameter speed.
+
+Stage D remains in progress. Parallel-transport existence and uniqueness
+along prescribed segments, the resulting linear isometries and
+concatenation/reversal laws, nonzero null-velocity preservation, the local
+inertial-coordinate construction, and the local curvature-zero ↔
+`IsLocallyMinkowski` theorem remain open. Particle variation, curved forms
+and the Newtonian trajectory limit are the subsequent E–G stages.
+
+This increment passes the warning-free full build (9,271 jobs), root-import
+check, all six API checks and the transitive audit of 6,676 declarations
+(2,511 in smooth geometry). Only `propext`, `Classical.choice` and `Quot.sound`
+are permitted. Typed contracts fix the native along-field carrier, overlap
+and regularity hypotheses, metric and parameter-change formulas, coordinate
+ODE, local initial-value existence/uniqueness and concrete examples at
+default elaborator settings. The installed-package exact Lorentz experiment
+also passes. These checks validate this increment, not the remaining D–G
+proof obligations.
 
 ## Scope and next stages
 

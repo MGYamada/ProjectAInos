@@ -1,4 +1,4 @@
-"""Exact checks for GR 5.1's metric, connection and curvature examples.
+"""Exact checks for GR 5.1's metric, curvature and motion examples.
 
 Time first, c=1, signature (-+). The coordinate change is (T,X)=(t,x+t²).
 All computations are symbolic over the reals; no tolerances or random seeds
@@ -88,6 +88,51 @@ def verify_curvature(metric, coordinates, gamma):
     return riemann, ricci, scalar
 
 
+def covariant_along(gamma, coordinates, curve, field, parameter):
+    """Differentiate coordinate components of a field along a curve."""
+    evaluated = [component.subs(dict(zip(coordinates, curve)), simultaneous=True)
+                 for component in gamma]
+    velocity = sp.diff(curve, parameter)
+    return sp.diff(field, parameter) + sp.Matrix([
+        (velocity.T * component * field)[0] for component in evaluated])
+
+
+def verify_motion(metric, coordinates, gamma, jacobian):
+    s, a, b, c, d = sp.symbols("s a b c d", real=True)
+    curve = sp.Matrix([s, -s**2])
+    velocity = sp.diff(curve, s)
+    substitution = dict(zip(coordinates, curve))
+    along_metric = metric.subs(substitution, simultaneous=True)
+    check_zero("nonlinear affine geodesic", covariant_along(
+        gamma, coordinates, curve, velocity, s))
+    check_zero("timelike velocity norm", (velocity.T * along_metric * velocity)[0] + 1)
+    field = sp.Matrix([a, b - 2*s*a])
+    other = sp.Matrix([c, d - 2*s*c])
+    check_zero("nonlinear parallel field", covariant_along(
+        gamma, coordinates, curve, field, s))
+    check_zero("parallel metric pairing", (field.T * along_metric * other)[0] + a*c - b*d)
+    check_zero("inertial parallel components",
+               jacobian.subs(substitution, simultaneous=True) * field - sp.Matrix([a, b]))
+    # Include a change with zero speed at the origin; no division by r' is used.
+    for reparam in [s**2, s + s**3, -s + 1]:
+        reparam_curve = curve.subs(s, reparam)
+        reparam_velocity = sp.diff(reparam_curve, s)
+        check_zero("acceleration parameter-change term", covariant_along(
+            gamma, coordinates, reparam_curve, reparam_velocity, s)
+                   - sp.diff(reparam, s, 2) * velocity.subs(s, reparam))
+        check_zero("parallel field parameter change", covariant_along(
+            gamma, coordinates, reparam_curve, field.subs(s, reparam), s))
+    # A nongeodesic curve checks the full r'' v + (r')² Dv formula.
+    curve = sp.Matrix([s, s**3])
+    velocity = sp.diff(curve, s)
+    acceleration = covariant_along(gamma, coordinates, curve, velocity, s)
+    reparam = s + s**2
+    check_zero("full covariant acceleration transformation", covariant_along(
+        gamma, coordinates, curve.subs(s, reparam), sp.diff(curve.subs(s, reparam), s), s)
+               - sp.diff(reparam, s, 2) * velocity.subs(s, reparam)
+               - sp.diff(reparam, s)**2 * acceleration.subs(s, reparam))
+
+
 def verify():
     t, x, time, space = sp.symbols("t x T X", real=True)
     coordinates = sp.Matrix([t, x])
@@ -164,6 +209,8 @@ def verify():
             for a in range(2)), sp.zeros(2))
         check_zero("connection Hessian transformation", gamma[k] - transformed_gamma)
 
+    verify_motion(metric, coordinates, gamma, jacobian)
+
     curved_metric = sp.exp(2*x**2) * eta
     curved_gamma = verify_connection(curved_metric, coordinates)
     check_zero("conformal time connection", curved_gamma[0] - sp.Matrix([[0, 2*x], [2*x, 0]]))
@@ -219,7 +266,8 @@ def verify():
     print("Lorentz geometry exact checks passed: nonlinear charts, metric covariance, "
           "inverse metric, raising/lowering, full/partial tensor contraction, "
           "Levi-Civita coefficients, Hessian transformation, curvature/Bianchi, "
-          "Ricci/scalar contractions, nonzero curvature covariance, and both signatures.")
+          "Ricci/scalar contractions, nonzero curvature covariance, both signatures, "
+          "parallel fields, geodesics, metric preservation, and reparametrization.")
 
 
 def main():

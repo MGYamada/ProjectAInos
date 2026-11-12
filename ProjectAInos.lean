@@ -71,6 +71,9 @@ public import ProjectAInos.SmoothGeometry.Gluing
 public import ProjectAInos.SmoothGeometry.Localization
 public import ProjectAInos.SmoothGeometry.LocallyRingedSpace
 public import ProjectAInos.SmoothGeometry.Lorentzian
+public import ProjectAInos.SmoothGeometry.Lorentzian.AlongCurve
+public import ProjectAInos.SmoothGeometry.Lorentzian.AlongCurveMetric
+public import ProjectAInos.SmoothGeometry.Lorentzian.AlongCurveReparam
 public import ProjectAInos.SmoothGeometry.Lorentzian.ChartConnection
 public import ProjectAInos.SmoothGeometry.Lorentzian.ChartCurvature
 public import ProjectAInos.SmoothGeometry.Lorentzian.ChartDerivatives
@@ -86,7 +89,10 @@ public import ProjectAInos.SmoothGeometry.Lorentzian.CurvatureNaturality
 public import ProjectAInos.SmoothGeometry.Lorentzian.CurvatureRegularity
 public import ProjectAInos.SmoothGeometry.Lorentzian.CurvatureSymmetry
 public import ProjectAInos.SmoothGeometry.Lorentzian.Dual
+public import ProjectAInos.SmoothGeometry.Lorentzian.Geodesic
 public import ProjectAInos.SmoothGeometry.Lorentzian.LeviCivita
+public import ProjectAInos.SmoothGeometry.Lorentzian.MotionExamples
+public import ProjectAInos.SmoothGeometry.Lorentzian.MotionODE
 public import ProjectAInos.SmoothGeometry.Lorentzian.Naturality
 public import ProjectAInos.SmoothGeometry.Lorentzian.Pullback
 public import ProjectAInos.SmoothGeometry.Lorentzian.Regularity

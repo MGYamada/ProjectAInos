@@ -125,7 +125,15 @@ arbitrary smooth charts. Both Minkowski presentations have proved zero
 curvature. The curved metric `exp(2x²)(-dt²+dx²)` has proved scalar curvature
 `-4 exp(-2x²)`, including zero connection but nonzero curvature at the origin.
 Stage C's proof endpoints are implemented and awaiting review/merge.
-Motion, curved forms and the Newtonian motion limit remain in the work
+Stage D constructs chart-independent covariant differentiation along
+curves, proves metric preservation for parallel fields and geodesic
+velocity, and derives the coordinate geodesic ODE. The local geodesic
+initial-value problem has proved existence and uniqueness on the actual
+tangent bundle. Reparametrization, both-signature Minkowski lines and the
+nonlinear-chart geodesic/parallel-field examples are proved. Transport
+existence/composition, nonzero null velocities, local inertia and local
+flatness equivalence remain in D. Particle variation, curved forms and
+the Newtonian motion limit remain in the work
 tracked by [#52](https://github.com/MGYamada/ProjectAInos/issues/52).
 Einstein equations and their Newtonian field-equation limit remain in 5.2;
 the Maxwell field action remains in 4.2.

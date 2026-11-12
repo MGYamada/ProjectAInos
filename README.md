@@ -212,6 +212,17 @@ have proved zero Riemann, Ricci and scalar curvature. Ricci is symmetric.
 The curved metric `exp(2x²)(-dt²+dx²)` has proved scalar curvature
 `-4 exp(-2x²)`: all connection coefficients vanish at the origin, while
 the native curvature tensor is nonzero there.
+Covariant differentiation along arbitrary differentiable curves now takes
+values in the actual tangent fibres, with chart independence, the Leibniz
+rule, ambient-field compatibility and metric compatibility proved.
+Parallel fields preserve their metric pairing. Affine geodesics have the
+usual coordinate ODE, constant velocity norm, and a proved local
+initial-value existence/uniqueness theorem. Reparametrization includes the
+second-derivative acceleration term; affine changes preserve the geodesic
+equation. Flat lines and the nonlinear-chart parabola have native proofs.
+Stage D remains incomplete: transport existence and composition, nonzero
+null-velocity preservation, local inertial construction and the local
+flatness equivalence still require proofs.
 The [shared geometry guide](docs/smooth-geometry.md)
 records the public API and exact checks. [Issue #52](https://github.com/MGYamada/ProjectAInos/issues/52)
 tracks review of the connection and curvature stages, further tensor operations,

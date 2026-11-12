@@ -11,17 +11,164 @@ import ProjectAInos.SmoothGeometry.Lorentzian.ConnectionExamples
 import ProjectAInos.SmoothGeometry.Lorentzian.CurvatureExamples
 import ProjectAInos.SmoothGeometry.Lorentzian.CurvatureNaturality
 import ProjectAInos.SmoothGeometry.Lorentzian.ConformalExample
+import ProjectAInos.SmoothGeometry.Lorentzian.MotionExamples
+import ProjectAInos.SmoothGeometry.Lorentzian.MotionODE
 import ProjectAInos.SmoothGeometry.Lorentzian.Regularity
 import ProjectAInos.SmoothGeometry.Lorentzian.Restriction
 import ProjectAInos.SmoothGeometry.Tensor.Bundle
 
-/-! Typed contracts for GR 5.1's shared metric, connection and curvature foundation. These examples use
+/-! Typed contracts for GR 5.1's shared metric, connection, curvature and motion APIs. These examples use
 default elaborator options and do not assume a global frame or flatness. -/
 
 open ProjectAInos.SmoothGeometry
-open scoped Manifold ContDiff
+open scoped Manifold ContDiff Topology
 
 noncomputable section
+
+section AlongCurve
+
+open LorentzMetric Bundle
+
+variable {σ : LorentzConvention} {d : ℕ} {M : Type} [TopologicalSpace M]
+  [ChartedSpace (MinkowskiModel d) M] [IsManifold 𝓘(ℝ, MinkowskiModel d) ∞ M]
+  (g : LorentzMetric σ d M) {γ : ℝ → M}
+
+local notation "E" => MinkowskiModel d
+local notation "I" => 𝓘(ℝ, MinkowskiModel d)
+
+variable {V W : AlongField (d := d) γ} {t : ℝ}
+
+example : AlongField (d := d) γ = (∀ t, TangentSpace I (γ t)) := rfl
+
+example : TangentSpace I (γ t) := g.covariantAlong V t
+
+example {e e' : OpenPartialHomeomorph M E}
+    (he : e ∈ IsManifold.maximalAtlas I ∞ M) (he' : e' ∈ IsManifold.maximalAtlas I ∞ M)
+    (hx : γ t ∈ e.source) (hx' : γ t ∈ e'.source)
+    (hγ : MDifferentiableAt 𝓘(ℝ) I γ t)
+    (hV : DifferentiableAt ℝ (alongComponents e V) t) :
+    g.chartCovariantAlong e V t = g.chartCovariantAlong e' V t :=
+  g.chartCovariantAlong_eq he he' hx hx' hγ hV
+
+example (hγ : MDifferentiableAt 𝓘(ℝ) I γ t)
+    {Y : ∀ x, TangentSpace I x}
+    (hY : MDifferentiableAt I ((I).prod I) (T% Y) (γ t)) :
+    g.covariantAlong (fun s => Y (γ s)) t = g.leviCivita Y (γ t) (curveVelocity γ t) :=
+  g.covariantAlong_ambient hγ hY
+
+example {f : ℝ → ℝ} (hf : DifferentiableAt ℝ f t)
+    (hV : MDifferentiableAt 𝓘(ℝ) ((I).prod I)
+      (fun s => TotalSpace.mk' E (γ s) (V s)) t) :
+    g.covariantAlong (fun s => f s • V s) t =
+      deriv f t • V t + f t • g.covariantAlong V t := g.covariantAlong_smul hf hV
+
+example (hγ : MDifferentiableAt 𝓘(ℝ) I γ t)
+    (hV : MDifferentiableAt 𝓘(ℝ) ((I).prod I)
+      (fun s => TotalSpace.mk' E (γ s) (V s)) t)
+    (hW : MDifferentiableAt 𝓘(ℝ) ((I).prod I)
+      (fun s => TotalSpace.mk' E (γ s) (W s)) t) :
+    HasDerivAt (fun s => g.form (γ s) (V s) (W s))
+      (g.form (γ t) (g.covariantAlong V t) (W t) +
+        g.form (γ t) (V t) (g.covariantAlong W t)) t :=
+  g.hasDerivAt_pairing_along hγ hV hW
+
+example {e : OpenPartialHomeomorph M E} (he : e ∈ IsManifold.maximalAtlas I ∞ M)
+    (hx : γ t ∈ e.source) (hγ : MDifferentiableAt 𝓘(ℝ) I γ t)
+    (hV : MDifferentiableAt 𝓘(ℝ) ((I).prod I)
+      (fun s => TotalSpace.mk' E (γ s) (V s)) t) (k : Fin (d + 1)) :
+    chartTangentMap e (γ t) (g.covariantAlong V t) k =
+      deriv (alongComponents e V) t k + ∑ i, ∑ j,
+        g.chartChristoffel e (γ t) k i j * deriv (e ∘ γ) t i * alongComponents e V t j :=
+  g.covariantAlong_coordinates he hx hγ hV k
+
+example {r : ℝ → ℝ} (hγ : MDifferentiableAt 𝓘(ℝ) I γ (r t))
+    (hr : DifferentiableAt ℝ r t)
+    (hV : MDifferentiableAt 𝓘(ℝ) ((I).prod I)
+      (fun s => TotalSpace.mk' E (γ s) (V s)) (r t)) :
+    g.covariantAlong (γ := γ ∘ r) (fun s => V (r s)) t =
+      deriv r t • g.covariantAlong V (r t) := g.covariantAlong_reparam hγ hr hV
+
+example {r : ℝ → ℝ} (hγ : ContMDiffAt 𝓘(ℝ) I 2 γ (r t))
+    (hr : ContDiffAt ℝ 2 r t) :
+    g.covariantAlong (curveVelocity (γ ∘ r)) t =
+      deriv (deriv r) t • curveVelocity γ (r t) +
+        (deriv r t)^2 • g.covariantAlong (curveVelocity γ) (r t) :=
+  g.covariantAcceleration_reparam hγ hr
+
+example {s : Set ℝ} (hs : Convex ℝ s)
+    (hγ : ∀ t ∈ s, MDifferentiableAt 𝓘(ℝ) I γ t)
+    (hV : g.IsParallelOn s V) (hW : g.IsParallelOn s W) {a b : ℝ}
+    (ha : a ∈ s) (hb : b ∈ s) :
+    g.form (γ a) (V a) (W a) = g.form (γ b) (V b) (W b) :=
+  g.parallel_pairing_eq hs hγ hV hW ha hb
+
+example {s : Set ℝ} : g.IsGeodesicOn s γ ↔
+    ∀ t ∈ s, ContMDiffAt 𝓘(ℝ) I 2 γ t ∧ g.covariantAlong (curveVelocity γ) t = 0 := Iff.rfl
+
+example {s : Set ℝ} (h : g.IsGeodesicOn s γ) (hs : Convex ℝ s)
+    {a b : ℝ} (ha : a ∈ s) (hb : b ∈ s) :
+    g.form (γ a) (curveVelocity γ a) (curveVelocity γ a) =
+      g.form (γ b) (curveVelocity γ b) (curveVelocity γ b) := h.metric_velocity_eq hs ha hb
+
+example {s : Set ℝ} (h : g.IsGeodesicOn s γ) (hs : Convex ℝ s)
+    {a b : ℝ} (ha : a ∈ s) (hb : b ∈ s) :
+    (0 < σ.timeSign * g.form (γ a) (curveVelocity γ a) (curveVelocity γ a)) ↔
+      (0 < σ.timeSign * g.form (γ b) (curveVelocity γ b) (curveVelocity γ b)) :=
+  h.timelike_iff hs ha hb
+
+example {s : Set ℝ} (h : g.IsGeodesicOn s γ) (hs : Convex ℝ s)
+    {a b : ℝ} (ha : a ∈ s) (hb : b ∈ s) :
+    (g.form (γ a) (curveVelocity γ a) (curveVelocity γ a) = 0) ↔
+      (g.form (γ b) (curveVelocity γ b) (curveVelocity γ b) = 0) := h.null_norm_iff hs ha hb
+
+example {s u : Set ℝ} (h : g.IsGeodesicOn u γ) (a b : ℝ)
+    (hm : Set.MapsTo (fun t => a * t + b) s u) :
+    g.IsGeodesicOn s (fun t => γ (a * t + b)) := h.affine_reparam a b hm
+
+example {e : OpenPartialHomeomorph M E} (he : e ∈ IsManifold.maximalAtlas I ∞ M)
+    (hx : γ t ∈ e.source) (hγ : ContMDiffAt 𝓘(ℝ) I 2 γ t) :
+    g.covariantAlong (curveVelocity γ) t = 0 ↔ ∀ k : Fin (d + 1),
+      deriv (deriv (e ∘ γ)) t k + ∑ i, ∑ j,
+        g.chartChristoffel e (γ t) k i j * deriv (e ∘ γ) t i * deriv (e ∘ γ) t j = 0 :=
+  g.geodesic_equation_iff_coordinates he hx hγ
+
+example (p v : E) :
+    (minkowskiMetric σ d).IsGeodesicOn Set.univ (fun t : ℝ => p + t • v) :=
+  minkowski_affine_geodesic σ p v
+
+example {e : OpenPartialHomeomorph M E} (he : e ∈ IsManifold.maximalAtlas I ∞ M)
+    {z : E × E} (hz : z.1 ∈ e.target) :
+    ContDiffAt ℝ ∞ (g.chartGeodesicField e) z := g.chartGeodesicField_contDiffAt he hz
+
+example {e : OpenPartialHomeomorph M E} (he : e ∈ IsManifold.maximalAtlas I ∞ M)
+    {q : E} (hq : q ∈ e.target) (v : E) (t₀ : ℝ) :
+    ∃ ε > (0 : ℝ), ∃ α : ℝ → E × E, α t₀ = (q, v) ∧
+      ContDiffOn ℝ 2 α (Set.Ioo (t₀ - ε) (t₀ + ε)) ∧
+      ∀ t ∈ Set.Ioo (t₀ - ε) (t₀ + ε),
+        (α t).1 ∈ e.target ∧ HasDerivAt α (g.chartGeodesicField e (α t)) t :=
+  g.exists_chartGeodesic he hq v t₀
+
+example (p : M) (v : TangentSpace I p) (t₀ : ℝ) :
+    ∃ ε > (0 : ℝ), ∃ γ : ℝ → M, ∃ hp : γ t₀ = p,
+      (hp ▸ curveVelocity (d := d) γ t₀) = v ∧
+        g.IsGeodesicOn (Set.Ioo (t₀ - ε) (t₀ + ε)) γ := g.exists_geodesic p v t₀
+
+example {β : ℝ → M} {t₀ : ℝ} {s u : Set ℝ} (hs : s ∈ 𝓝 t₀) (hu : u ∈ 𝓝 t₀)
+    (hγ : g.IsGeodesicOn s γ) (hβ : g.IsGeodesicOn u β)
+    (hp : γ t₀ = β t₀) (hv : (hp ▸ curveVelocity (d := d) γ t₀) = curveVelocity β t₀) :
+    γ =ᶠ[𝓝 t₀] β := g.geodesic_unique hs hu hγ hβ hp hv
+
+example (a b : ℝ) : LorentzianCharts.metric.IsParallelOn Set.univ
+    (LorentzianCharts.parallelField a b) := LorentzianCharts.parallelField_parallel a b
+
+example : LorentzianCharts.metric.IsGeodesicOn Set.univ LorentzianCharts.inertialTimePath :=
+  LorentzianCharts.inertialTimePath_geodesic
+
+example (a b s : ℝ) : alongComponents LorentzianCharts.inertialChart
+    (LorentzianCharts.parallelField a b) s = ![a, b] :=
+  LorentzianCharts.parallelField_inertial_components a b s
+
+end AlongCurve
 
 section Connection
 

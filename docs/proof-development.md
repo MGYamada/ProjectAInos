@@ -147,7 +147,38 @@ origin its connection coefficients vanish but its curvature does not.
 Exact SymPy checks independently cover the same examples and covariance
 of nonzero conformal curvature under the shear.
 
-Stage C is awaiting review/merge. Stages D–G remain subsequent work; differential/contracted
+Stage C is awaiting review/merge. The stage D increment constructs
+`covariantAlong` on the actual tangent fibres using chart components and
+the native Levi-Civita connection. A transition-Jacobian product rule and
+the connection's chart decomposition prove chart independence without
+assuming immersion, nonzero velocity or an ambient extension. Locality,
+linearity, Leibniz, ambient compatibility and metric compatibility are
+proved. The metric proof uses normed models only for coordinate bilinear
+forms; it adds no normed or positive-definite structure to tangent fibres.
+
+`IsParallelOn` and `IsGeodesicOn` include regularity at each parameter,
+including regular extensions when a closed interval is used. Parallel
+metric pairings and geodesic velocity norms are constant on convex sets.
+The arbitrary-chart affine ODE equivalence and the full acceleration
+reparametrization formula are proved, including zero parameter speed.
+Affine changes, including reversal, preserve the affine geodesic equation.
+
+`MotionODE` derives a smooth phase field `(q,v) ↦ (v,−Γ(q)(v,v))`
+from the constructed connection. Mathlib's Picard–Lindelöf theorem supplies
+a local solution; a smaller interval keeps it in the chart target.
+The ODE improves its regularity to `C²`, and the inverse chart lifts it
+to a native geodesic with the prescribed actual tangent velocity.
+Local Lipschitzness follows from smoothness, giving germ uniqueness for
+both the phase equation and intrinsic geodesics. No existence, Lipschitz
+or tangent-trivialization premise is added to the public theorem.
+
+The standard Minkowski affine lines work for both signatures and all
+dimensions. In the nonlinear shear chart, the path `(s,−s²)` is a geodesic,
+and `(a,b−2sa)` is a parallel field with constant inertial components `(a,b)`.
+Exact SymPy checks also cover the full nonaffine acceleration transformation.
+Transport existence/composition, nonvanishing of null velocities, local
+inertial coordinates and curvature-zero/local-Minkowski equivalence remain
+open in D. Stages E–G remain subsequent work; differential/contracted
 Bianchi and Einstein dynamics belong to 5.2.
 
 ## Minkowski Geometry and Relativistic Kinematics
