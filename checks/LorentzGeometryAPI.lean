@@ -11,6 +11,7 @@ import ProjectAInos.SmoothGeometry.Lorentzian.ConnectionExamples
 import ProjectAInos.SmoothGeometry.Lorentzian.CurvatureExamples
 import ProjectAInos.SmoothGeometry.Lorentzian.CurvatureNaturality
 import ProjectAInos.SmoothGeometry.Lorentzian.ConformalExample
+import ProjectAInos.SmoothGeometry.Lorentzian.LocalInertialExamples
 import ProjectAInos.SmoothGeometry.Lorentzian.MotionExamples
 import ProjectAInos.SmoothGeometry.Lorentzian.MotionODE
 import ProjectAInos.SmoothGeometry.Lorentzian.PathExamples
@@ -25,6 +26,53 @@ open ProjectAInos.SmoothGeometry
 open scoped Manifold ContDiff Topology
 
 noncomputable section
+
+section LocalInertial
+
+open LorentzMetric
+
+variable {σ : LorentzConvention} {d : ℕ} {M : Type} [TopologicalSpace M]
+  [ChartedSpace (MinkowskiModel d) M] [IsManifold 𝓘(ℝ, MinkowskiModel d) ∞ M]
+  (g : LorentzMetric σ d M) (p : M)
+
+local notation "E" => MinkowskiModel d
+local notation "I" => 𝓘(ℝ, MinkowskiModel d)
+
+example : ∃ e : OpenPartialHomeomorph M E, g.IsInertialChartAt e p :=
+  g.exists_inertialChart p
+
+example (S : TangentSpace I p ≃L[ℝ] E)
+    (hS : ∀ v w, g.form p v w = minkowskiForm σ d (S v) (S w)) :
+    ∃ e : OpenPartialHomeomorph M E, g.IsInertialChartAt e p ∧
+      ∀ v, chartTangentMap e p v = S v := g.exists_inertialChart_for_equiv p S hS
+
+example {e : OpenPartialHomeomorph M E} (h : g.IsInertialChartAt e p) :
+    e ∈ IsManifold.maximalAtlas I ∞ M ∧ p ∈ e.source ∧ e p = 0 ∧
+      (∀ v w, g.form p (chartField e v p) (chartField e w p) = minkowskiForm σ d v w) ∧
+      (∀ k i j, g.chartChristoffel e p k i j = 0) ∧
+      ∀ i j, fderiv ℝ (fun y => g.chartComponent e (e.symm y) i j) (e p) = 0 :=
+  ⟨h.smooth, h.mem_source, h.centered, h.metric, h.christoffel_zero, h.metric_derivative_zero⟩
+
+example {e : OpenPartialHomeomorph M E} (he : e ∈ IsManifold.maximalAtlas I ∞ M)
+    (hp : p ∈ e.source) (L : E ≃L[ℝ] E) (B : E →L[ℝ] E →L[ℝ] E)
+    (hB : ∀ u v, B u v = B v u) :
+    ∃ e' : OpenPartialHomeomorph M E, e' ∈ IsManifold.maximalAtlas I ∞ M ∧
+      p ∈ e'.source ∧ e' p = 0 ∧ fderiv ℝ (e' ∘ e.symm) (e p) = (L : E →L[ℝ] E) ∧
+      ∀ u v, fderiv ℝ (fun y => fderiv ℝ (e' ∘ e.symm) y v) (e p) u = B u v :=
+  QuadraticChart.exists_manifoldChart he hp L B hB
+
+example (q : LorentzianCharts.Plane) :
+    QuadraticChart.correction (ContinuousLinearEquiv.refl ℝ LorentzianCharts.Plane)
+      (LorentzianCharts.metric.chartChristoffelBilinear LorentzianCharts.standardChart 0) 0 q =
+      LorentzianCharts.shear q := LorentzianCharts.quadratic_correction_eq_shear q
+
+example : LorentzianConformalExample.metric.IsInertialChartAt
+    (Homeomorph.refl LorentzianConformalExample.Plane).toOpenPartialHomeomorph 0 ∧
+      LorentzianConformalExample.metric.curvature 0 ≠ 0 ∧
+      LorentzianConformalExample.metric.scalarCurvature 0 = -4 :=
+  LorentzianConformalExample.inertial_origin_curved
+
+end LocalInertial
 
 section AlongCurve
 

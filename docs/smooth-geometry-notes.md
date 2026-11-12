@@ -148,7 +148,15 @@ regular segments, with metric preservation, subdivision, reversal and
 parameter-change laws. Linear uniqueness also preserves nonzero null
 velocity. Finite piecewise-path concatenation has independent matching-field
 and continuous-lift proofs, and uniquely characterized endpoint transport.
-The local inertial/flatness constructions remain open in stage D.
+Pointwise local inertial charts now follow from a quadratic correction with
+prescribed Jacobian and Hessian. The inverse function theorem gives an actual
+chart in the smooth maximal atlas. Analytic regularity is used only for the
+polynomial correction and its local inverse; the manifold and metric remain
+smooth. The chosen pointwise Lorentz equivalence determines the first
+derivative, the connection transformation law makes `Γ(p) = 0`, and metric
+compatibility makes `∂g(p) = 0`. No norm is added to native tangent fibres.
+`IsInertialChartAt` concerns one point and admits nonzero curvature, as proved
+for the conformal origin. The local flatness equivalence remains open in D.
 In particular, no claim that `A ≅ Γ(Spec A)` for arbitrary
 C∞-rings is used in this continuation.
 
@@ -156,10 +164,10 @@ C∞-rings is used in this continuation.
 
 The warning-free full build (`lake build --wfail ProjectAInos`), root-import
 check, external API regression check, and transitive axiom audit pass.
-The current motion increment's audit covers 6,909 project declarations,
-including 453 in smooth algebra and 2,744 in smooth geometry,
+The current motion increment's audit covers 6,964 project declarations,
+including 453 in smooth algebra and 2,799 in smooth geometry,
 with only `propext`, `Classical.choice`, and `Quot.sound` allowed.
-The full build has 9,280 jobs. All six API checks and the installed-package
+The full build has 9,283 jobs. All six API checks and the installed-package
 exact Lorentz experiment pass, including the motion examples.
 `git diff --check` also passes. The existing `README.md` contents, including
 the earlier subject-numbering changes, were preserved throughout this work.

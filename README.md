@@ -225,8 +225,12 @@ The resulting endpoint linear equivalences preserve the metric and obey
 subdivision, reversal and reparametrization laws. Finite concatenations of
 regular segments admit matching parallel fields and continuous tangent-bundle
 lifts, with uniquely characterized transport, composition and reversal.
-Nonzero null geodesic velocities stay nonzero. Stage D remains incomplete:
-local inertial construction and the local flatness equivalence still require proofs.
+Nonzero null geodesic velocities stay nonzero. A chosen Lorentz basis at any
+point now extends to a smooth local chart with `g = η`, `Γ = 0` and `∂g = 0`
+there, using a quadratic correction and the inverse function theorem.
+The curved conformal example has such a chart at the origin despite nonzero
+curvature. Stage D remains incomplete: the local flatness equivalence still
+requires proof.
 The [shared geometry guide](docs/smooth-geometry.md)
 records the public API and exact checks. [Issue #52](https://github.com/MGYamada/ProjectAInos/issues/52)
 tracks review of the connection and curvature stages, further tensor operations,

@@ -191,6 +191,40 @@ def verify_piecewise_transport(metric, coordinates, gamma):
                * forward - sp.diag(-1, 1))
 
 
+def verify_inertial_correction(metric, coordinates, gamma, point, linear, normal_metric):
+    """Check the quadratic chart's first and second jets at a chosen point.
+
+    The inverse function theorem and the actual chart construction are proved
+    in Lean. Here the transformed metric is evaluated along the forward map,
+    so no symbolic inversion of the quadratic polynomial is required.
+    """
+    substitution = dict(zip(coordinates, point))
+    displacement = coordinates - point
+    size = len(coordinates)
+    hessians = [sum((linear[k, ell] * gamma[ell].subs(substitution, simultaneous=True)
+                    for ell in range(size)), sp.zeros(size)) for k in range(size)]
+    correction = linear * displacement + sp.Rational(1, 2) * sp.Matrix([
+        (displacement.T * hessian * displacement)[0] for hessian in hessians])
+    jacobian = correction.jacobian(coordinates)
+    check_zero("inertial chart center", correction.subs(substitution, simultaneous=True))
+    check_zero("inertial chart prescribed Jacobian",
+               jacobian.subs(substitution, simultaneous=True) - linear)
+    inverse_at_point = linear.inv()
+    for k in range(size):
+        actual_hessian = sp.hessian(correction[k], coordinates)
+        transformed_connection = inverse_at_point.T * (
+            hessians[k] - actual_hessian) * inverse_at_point
+        check_zero("inertial chart zero connection", transformed_connection)
+
+    inverse_jacobian = jacobian.inv()
+    transformed_metric = inverse_jacobian.T * metric * inverse_jacobian
+    check_zero("inertial chart metric normalization",
+               transformed_metric.subs(substitution, simultaneous=True) - normal_metric)
+    for coordinate in coordinates:
+        check_zero("inertial chart first metric derivatives",
+                   transformed_metric.diff(coordinate).subs(substitution, simultaneous=True))
+
+
 def verify():
     t, x, time, space = sp.symbols("t x T X", real=True)
     coordinates = sp.Matrix([t, x])
@@ -275,6 +309,18 @@ def verify():
     check_zero("conformal time connection", curved_gamma[0] - sp.Matrix([[0, 2*x], [2*x, 0]]))
     check_zero("conformal spatial connection", curved_gamma[1] - sp.diag(2*x, 2*x))
 
+    # A nontrivial Lorentz basis and a nonzero-curvature point exercise the
+    # general correction, in both metric-sign conventions.
+    boost = sp.Matrix([[sp.Rational(5, 4), sp.Rational(3, 4)],
+                       [sp.Rational(3, 4), sp.Rational(5, 4)]])
+    for local_metric, coefficients, point, linear in [
+            (eta, flat_gamma, sp.Matrix([1, 2]), boost),
+            (metric, gamma, sp.Matrix([1, 2]), boost * jacobian.subs(t, 1)),
+            (curved_metric, curved_gamma, sp.Matrix([1, 1]), sp.exp(1) * boost)]:
+        for sign in [1, -1]:
+            verify_inertial_correction(sign * local_metric, coordinates, coefficients,
+                                       point, linear, sign * eta)
+
     for name, flat_metric, flat_coords, coefficients in [
             ("standard Minkowski", eta, inertial, flat_gamma),
             ("nonlinear Minkowski", metric, coordinates, gamma)]:
@@ -328,7 +374,7 @@ def verify():
           "Ricci/scalar contractions, nonzero curvature covariance, both signatures, "
           "parallel fields, geodesics, metric preservation, endpoint transport, "
           "subdivision/reversal, curved piecewise-path composition, "
-          "nonzero null fields, and reparametrization.")
+          "nonzero null fields, reparametrization, and quadratic local inertial charts.")
 
 
 def main():

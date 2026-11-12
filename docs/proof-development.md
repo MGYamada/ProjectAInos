@@ -209,8 +209,21 @@ Model affine segments and a time-axis/space-axis corner have native proofs
 for Minkowski geometry. The separate symbolic experiment also checks
 segment ODEs, composition and reversal around a rectangle in the conformal
 curved metric; that rectangle holonomy is not yet a Lean theorem.
-Local inertial coordinates and curvature-zero/local-Minkowski equivalence
-remain open in D.
+`Manifold.QuadraticChart` realizes an invertible Jacobian and a symmetric
+Hessian by a polynomial local coordinate change. Its analytic inverse is
+restricted to a common smooth neighborhood, then composed with a manifold
+chart; the manifold itself needs only a smooth structure. `LocalInertial`
+bundles the existing Christoffel coefficients as a bilinear map on the
+coordinate model. A chosen Lorentz basis gives `L`, and the correction
+`L(q-q₀) + ½ L(Γ(q-q₀,q-q₀))` cancels the connection coefficients at the
+center by the proved transition law. Metric compatibility then proves all
+first metric derivatives vanish there. The public existence theorem needs
+no global frame, analytic metric, Hausdorffness or completeness premise.
+The shear correction recovers `(t,x+t²)` exactly. The conformal origin is
+an explicit local inertial chart with nonzero native curvature and scalar
+curvature `-4`. Exact calculations also check nonzero base points, a
+nontrivial Lorentz basis and both metric-sign conventions.
+Curvature-zero/local-Minkowski equivalence remains open in D.
 Stages E–G remain subsequent work; differential/contracted
 Bianchi and Einstein dynamics belong to 5.2.
 

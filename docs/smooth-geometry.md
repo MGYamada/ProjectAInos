@@ -664,18 +664,51 @@ experiment also verifies segment ODEs and the ordered composition/reversal
 of four transports around a rectangle in `exp(2x²)(-dt²+dx²)`. That curved
 rectangle calculation is an experimental check, not a formal holonomy claim.
 
-Stage D remains in progress. The local inertial-coordinate construction
-and the local curvature-zero ↔
-`IsLocallyMinkowski` theorem remain open. Particle variation, curved forms
+### Local inertial coordinates at a point
+
+`QuadraticChart.exists_manifoldChart` in `Manifold/QuadraticChart.lean`
+constructs an actual smooth maximal-atlas chart with a prescribed invertible transition Jacobian and
+symmetric Hessian at the center. The quadratic polynomial and its inverse
+are locally analytic; this does not impose analyticity on the manifold.
+
+`Lorentzian.LocalInertial` obtains the Hessian from the native connection's
+chart coefficients. `chartChristoffelBilinear` is a coordinate bilinear map,
+not a tensor: its transformation includes the transition Hessian. The
+positive quadratic correction `½ L(Γ(q-q₀,q-q₀))` makes the new connection
+coefficients vanish at the base point. The main endpoints are:
+
+- `exists_chart_tangent_christoffel`: a prescribed tangent equivalence is
+  the chart derivative and all Christoffel coefficients vanish at the point;
+- `chartComponent_fderiv_eq_zero`: zero connection coefficients imply zero
+  first coordinate derivatives of the metric, by metric compatibility;
+- `IsInertialChartAt`: a smooth chart centered at the point with `g = η`,
+  `Γ = 0` and `∂g = 0` there;
+- `exists_inertialChart_for_equiv`: realizes any specified Lorentz basis;
+- `exists_inertialChart`: every smooth Lorentz metric has such a chart at
+  each point, in either signature convention and without global-frame,
+  Hausdorffness or completeness assumptions.
+
+`LocalInertialExamples` recovers the exact shear `(t,x+t²)` as the correction
+at the origin. The ordinary chart for `exp(2x²)(-dt²+dx²)` is inertial at the
+origin even though the native curvature is nonzero and the scalar curvature
+is `-4`. Thus pointwise `IsInertialChartAt` is distinct from the existing
+`IsLocallyMinkowski` condition on open neighborhoods. The exact experiment
+checks the metric and connection transformations at nonzero base points,
+with a nontrivial Lorentz basis and both metric-sign conventions.
+
+Stage D remains in progress. The local curvature-zero ↔
+`IsLocallyMinkowski` theorem remains open. Particle variation, curved forms
 and the Newtonian trajectory limit are the subsequent E–G stages.
 
-This increment passes the warning-free full build (9,280 jobs), root-import
-check, all six API checks and the transitive audit of 6,909 declarations
-(2,744 in smooth geometry). Only `propext`, `Classical.choice` and `Quot.sound`
+This increment passes the warning-free full build (9,283 jobs), root-import
+check, all six API checks and the transitive audit of 6,964 declarations
+(2,799 in smooth geometry). Only `propext`, `Classical.choice` and `Quot.sound`
 are permitted. Typed contracts fix the native along-field carrier, overlap
 and regularity hypotheses, metric and parameter-change formulas, coordinate
 ODE, local initial-value existence/uniqueness, finite-segment transport,
-its laws, piecewise paths and continuous lifts, nonzero-null preservation and concrete examples at
+its laws, piecewise paths and continuous lifts, nonzero-null preservation,
+prescribed-basis inertial charts, their first and second derivative contracts,
+and flat/curved concrete examples at
 default elaborator settings. The installed-package exact Lorentz experiment
 also passes. These checks validate this increment, not the remaining D–G
 proof obligations.

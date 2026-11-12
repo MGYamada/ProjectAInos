@@ -136,8 +136,11 @@ preserves the metric, composes under subdivision, reverses by inversion,
 and respects parameter changes. Nonzero null velocities are preserved.
 Finite piecewise-path concatenation has matching native parallel fields,
 continuous lifts, uniquely characterized transport and reversal laws;
-the Minkowski right-angle path is a proved example. Local inertia and local
-flatness equivalence remain in D. Particle variation, curved forms and
+the Minkowski right-angle path is a proved example. Local inertial charts
+now exist at every point with a prescribed Lorentz basis, zero connection
+coefficients and zero first metric derivatives. Their quadratic construction
+is compatible with nonzero curvature at the chosen point. Local flatness
+equivalence remains in D. Particle variation, curved forms and
 the Newtonian motion limit remain in the work
 tracked by [#52](https://github.com/MGYamada/ProjectAInos/issues/52).
 Einstein equations and their Newtonian field-equation limit remain in 5.2;
