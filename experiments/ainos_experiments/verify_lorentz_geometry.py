@@ -155,6 +155,35 @@ def verify_native_forms():
         return derivative.T * field.subs(
             dict(zip(target, mapping)), simultaneous=True) * derivative
 
+    def d_one(form, coords):
+        return sp.Matrix(len(coords), len(coords), lambda i, j:
+                         sp.diff(form[j], coords[i]) - sp.diff(form[i], coords[j]))
+
+    potential = sp.Matrix([[0, t]])
+    check_zero("native nonzero exterior derivative normalization", d_one(potential, coordinates) - area)
+    shear_potential = potential.subs(dict(zip(coordinates, shear)), simultaneous=True) * jacobian
+    check_zero("native nonlinear potential coefficients", shear_potential - sp.Matrix([[2*t**2, t]]))
+    check_zero("native nonlinear exterior derivative", d_one(shear_potential, coordinates) - area)
+    inverse = sp.Matrix([t, x - t**2])
+    inverse_potential = potential.subs(dict(zip(coordinates, inverse)), simultaneous=True) * inverse.jacobian(coordinates)
+    check_zero("native inverse-chart exterior derivative", d_one(inverse_potential, coordinates) - area)
+
+    # A nonlinear map from a plane into three dimensions tests naturality without invertibility.
+    u, v, w = sp.symbols("u v w", real=True)
+    target = sp.Matrix([u, v, w])
+    target_potential = sp.Matrix([[u*v, w*u**2, sp.exp(v)*w]])
+    target_field = d_one(target_potential, target)
+    check_zero("native d-squared mixed-derivative cancellation",
+               sp.diff(target_field[1, 2], u) + sp.diff(target_field[2, 0], v)
+               + sp.diff(target_field[0, 1], w))
+    immersion = sp.Matrix([t, x, t*x])
+    immersion_jacobian = immersion.jacobian(coordinates)
+    substitution = dict(zip(target, immersion))
+    source_potential = target_potential.subs(substitution, simultaneous=True) * immersion_jacobian
+    check_zero("native dimension-changing d-pullback naturality",
+               d_one(source_potential, coordinates) - immersion_jacobian.T
+               * target_field.subs(substitution, simultaneous=True) * immersion_jacobian)
+
     # Variable form and nonlinear maps test both evaluation and all covariant slots.
     f = sp.Matrix([s, r + s**2])
     g = sp.Matrix([t**2, t*x])

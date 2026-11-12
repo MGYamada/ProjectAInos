@@ -84,10 +84,14 @@ public import ProjectAInos.SmoothGeometry.DifferentialForm.Exterior
 public import ProjectAInos.SmoothGeometry.DifferentialForm.Flat
 public import ProjectAInos.SmoothGeometry.DifferentialForm.Hodge
 public import ProjectAInos.SmoothGeometry.DifferentialForm.HodgeBasis
+public import ProjectAInos.SmoothGeometry.DifferentialForm.NativeChart
 public import ProjectAInos.SmoothGeometry.DifferentialForm.NativeCoordinates
 public import ProjectAInos.SmoothGeometry.DifferentialForm.NativeExamples
+public import ProjectAInos.SmoothGeometry.DifferentialForm.NativeExteriorDerivative
+public import ProjectAInos.SmoothGeometry.DifferentialForm.NativeExteriorExamples
 public import ProjectAInos.SmoothGeometry.DifferentialForm.NativeFlat
 public import ProjectAInos.SmoothGeometry.DifferentialForm.NativeGluing
+public import ProjectAInos.SmoothGeometry.DifferentialForm.NativeNaturality
 public import ProjectAInos.SmoothGeometry.DifferentialForm.NativePullback
 public import ProjectAInos.SmoothGeometry.DifferentialForm.Naturality
 public import ProjectAInos.SmoothGeometry.Examples

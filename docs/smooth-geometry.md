@@ -433,8 +433,9 @@ connection examples at default elaborator settings. The stage B connection
 proof endpoints are implemented; its PR still requires review and merge.
 The curvature endpoints below are implemented. Finite-segment parallel
 transport and local inertial coordinates are described in the motion section.
-Native form bundles and pullback are described below; curved exterior
-calculus/Maxwell and the Newtonian motion limit remain incomplete.
+Native form bundles, pullback and exterior differentiation are described
+below; native wedge, density/Hodge/Maxwell and the Newtonian motion limit
+remain incomplete.
 
 ## GR 5.1: curvature and intrinsic contractions
 
@@ -983,12 +984,56 @@ coefficient, gluing and flat-comparison interfaces. Exact SymPy checks cover
 the same nonlinear and dimension-changing examples and a variable two-form
 under nonlinear composition.
 
-This is the first stage F increment. Construction of the curved exterior
-derivative and wedge, their identities, volume density versus oriented volume,
+The next increment constructs native exterior differentiation, described
+below. Native wedge and its identities, volume density versus oriented volume,
 Lorentz Hodge/flat comparison and the curved Maxwell component bridge remain
-in #52. The flat exterior-calculus theorems continue to have their original
-scope. Maxwell action variation remains in §4.2/#44, and Einstein dynamics
+in #52. Maxwell action variation remains in §4.2/#44, and Einstein dynamics
 remains in §5.2.
+
+### Exterior differentiation and chart independence
+
+`NativeChart.lean` works on boundaryless smooth real manifolds with arbitrary
+normed model spaces. `chartCoefficients` pulls a native form through the actual
+inverse chart derivative, and `chartLift` uses the forward derivative.
+Their source/target inverse laws and transition laws are proved only where
+the charts are defined. The supporting `contMDiffAt_nativePullback` theorem
+requires smoothness of the map at the source point and of the native section
+at its image. No global smooth extension of a chart is assumed.
+
+`NativeExteriorDerivative.lean` differentiates those model coefficients using
+mathlib's normalized `extDeriv`. `chartExtDeriv_transition` proves the overlap
+law using the derivative pullback theorem and locality. Then
+`chartLift_extDeriv_independent` identifies the native results on overlaps.
+`nativeExteriorDerivative` chooses a chart at each point, while
+`nativeExteriorDerivative_eq_chart` proves equality with every smooth chart
+containing it. This supplies the regularity proof for the bundled
+`smoothExteriorDerivative`, rather than storing regularity or chart
+independence as assumptions.
+
+`chartCoefficients_smoothExteriorDerivative` is the standard coordinate
+formula in every chart. `smoothExteriorDerivative_squared` proves `d² = 0`;
+`smoothExteriorDerivativeLinear` and `smoothExteriorDerivative_local` give
+linearity and dependence only on the local native section. The construction
+requires no metric, orientation, global frame, finite-dimensional model or
+Hausdorff assumption. The operator API currently acts on smooth sections.
+
+`NativeNaturality.lean` proves `smoothExteriorDerivative_pullback` for every
+smooth map between these manifolds, with independent source and target model
+spaces. In coordinates the proof includes the map derivative and all of its
+second derivatives; the alternating cancellation comes from mathlib's model
+pullback theorem. No inverse derivative is required.
+`smoothExteriorDerivative_flat` is exact agreement with the existing flat
+operator.
+
+`NativeExteriorExamples.lean` proves `d(T dX) = dT ∧ dX` in the plane, with a
+nonzero exact area form and `d(area) = 0`. The nonlinear shear, its actual
+maximal-atlas chart, and the time-axis inclusion test naturality. The SymPy
+runner independently checks forward/inverse shear coefficients and exterior
+derivatives, a three-variable mixed-partial cancellation for `d²`, and a
+nonlinear two-to-three-dimensional pullback of a nonconstant potential.
+Typed contracts in `checks/SmoothGeometryAPI.lean` fix local regularity,
+chart independence, the coordinate formula, linearity/locality, `d²`, general
+pullback naturality and flat specialization.
 
 ## Scope and next stages
 

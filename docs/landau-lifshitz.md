@@ -182,7 +182,10 @@ inverse and closed-segment preservation of nonzero null initial velocity are
 proved. Stage E's principal endpoints await review. Stage F has a smooth
 native alternating bundle, coefficient overlap laws, open-cover gluing,
 arbitrary smooth pullback and exact flat specialization, with nonlinear and
-singular-map examples. Curved exterior derivative/wedge, density/Hodge,
+singular-map examples. The native exterior derivative is constructed and
+proved chart-independent, smooth, linear, local, square-zero and natural
+under every smooth pullback. A nonzero exact two-form, nonlinear charts and
+a dimension-changing map test its normalization. Native wedge, density/Hodge,
 Maxwell comparison and the Newtonian motion limit remain in the work
 tracked by [#52](https://github.com/MGYamada/ProjectAInos/issues/52).
 Einstein equations and their Newtonian field-equation limit remain in 5.2;

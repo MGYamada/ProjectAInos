@@ -7,7 +7,7 @@ module
 import ProjectAInos.SmoothGeometry.Gluing
 import ProjectAInos.SmoothGeometry.DifferentialForm.NativeCoordinates
 import ProjectAInos.SmoothGeometry.DifferentialForm.NativeGluing
-import ProjectAInos.SmoothGeometry.DifferentialForm.NativeExamples
+import ProjectAInos.SmoothGeometry.DifferentialForm.NativeExteriorExamples
 
 /-! External API regressions: use the public definitions with default elaborator
 options, without unfolding morphism wrappers or adding local instances. -/
@@ -149,3 +149,60 @@ example (p v : LorentzianCharts.Plane) :
         v 1 + 2 * p 0 * v 0 := NativeExamples.spatial_shear p v
 
 end NativeDifferentialForms
+
+
+section NativeExteriorCalculus
+
+open Bundle DifferentialForm
+open scoped Manifold ContDiff Topology
+
+variable {E M F N : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+  [TopologicalSpace M] [ChartedSpace E M] [IsManifold 𝓘(ℝ, E) ∞ M]
+  [NormedAddCommGroup F] [NormedSpace ℝ F]
+  [TopologicalSpace N] [ChartedSpace F N] [IsManifold 𝓘(ℝ, F) ∞ N] {k : ℕ}
+
+example {f : M → N} {α : NativeForm 𝓘(ℝ, F) N k} {x : M}
+    (hf : ContMDiffAt 𝓘(ℝ, E) 𝓘(ℝ, F) ∞ f x)
+    (hα : ContMDiffAt 𝓘(ℝ, F) (𝓘(ℝ, F).prod 𝓘(ℝ, F [⋀^Fin k]→L[ℝ] ℝ)) ∞
+      (fun y => TotalSpace.mk' (F [⋀^Fin k]→L[ℝ] ℝ) y (α y)) (f x)) :
+    ContMDiffAt 𝓘(ℝ, E) (𝓘(ℝ, E).prod 𝓘(ℝ, E [⋀^Fin k]→L[ℝ] ℝ)) ∞
+      (fun y => TotalSpace.mk' (E [⋀^Fin k]→L[ℝ] ℝ) y
+        (nativePullback 𝓘(ℝ, E) 𝓘(ℝ, F) f α y)) x :=
+  contMDiffAt_nativePullback 𝓘(ℝ, E) 𝓘(ℝ, F) hf hα
+
+example (α : SmoothForm 𝓘(ℝ, E) M k) :
+    smoothExteriorDerivative (smoothExteriorDerivative α) = 0 := smoothExteriorDerivative_squared α
+
+example (f : C^∞⟮𝓘(ℝ, E), M; 𝓘(ℝ, F), N⟯) (α : SmoothForm 𝓘(ℝ, F) N k) :
+    smoothExteriorDerivative (smoothPullback 𝓘(ℝ, E) 𝓘(ℝ, F) f α) =
+      smoothPullback 𝓘(ℝ, E) 𝓘(ℝ, F) f (smoothExteriorDerivative α) :=
+  smoothExteriorDerivative_pullback f α
+
+example (α : SmoothForm 𝓘(ℝ, E) M k) {e : OpenPartialHomeomorph M E}
+    (he : e ∈ IsManifold.maximalAtlas 𝓘(ℝ, E) ∞ M) {x : M} (hx : x ∈ e.source) :
+    nativeExteriorDerivative (fun y => α y) x =
+      chartLift e (extDeriv (chartCoefficients e (fun y => α y))) x :=
+  nativeExteriorDerivative_eq_chart α he hx
+
+example (α : SmoothForm 𝓘(ℝ, E) M k) {e : OpenPartialHomeomorph M E}
+    (he : e ∈ IsManifold.maximalAtlas 𝓘(ℝ, E) ∞ M) {y : E} (hy : y ∈ e.target) :
+    chartCoefficients e (fun x => smoothExteriorDerivative α x) y =
+      extDeriv (chartCoefficients e (fun x => α x)) y :=
+  chartCoefficients_smoothExteriorDerivative α he hy
+
+example : SmoothForm 𝓘(ℝ, E) M k →ₗ[ℝ] SmoothForm 𝓘(ℝ, E) M (k + 1) :=
+  smoothExteriorDerivativeLinear
+
+example {α β : SmoothForm 𝓘(ℝ, E) M k} {x : M} (h : ∀ᶠ y in 𝓝 x, α y = β y) :
+    smoothExteriorDerivative α x = smoothExteriorDerivative β x := smoothExteriorDerivative_local h
+
+example (α : Form E k) (hα : ContDiff ℝ ∞ α) :
+    (fun x => smoothExteriorDerivative (ofFlat α hα) x) = exteriorDerivative α :=
+  smoothExteriorDerivative_flat α hα
+
+example : smoothExteriorDerivative NativeExamples.potential = NativeExamples.area :=
+  NativeExamples.potential_exteriorDerivative
+
+example : smoothExteriorDerivative NativeExamples.area = 0 := NativeExamples.area_closed
+
+end NativeExteriorCalculus

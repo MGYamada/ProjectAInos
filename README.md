@@ -284,8 +284,11 @@ The stage E principal endpoints are implemented and awaiting review.
 Stage F now has smooth alternating bundles on actual tangent fibres, local
 coefficient transition laws, open-cover gluing and arbitrary-smooth-map
 pullback, including different dimensions and singular derivatives. Flat API
-agreement and nonlinear one-/two-form examples are proved. Curved exterior
-derivative, wedge, density/Hodge and Maxwell comparison remain to be implemented.
+agreement and nonlinear one-/two-form examples are proved. Native exterior
+differentiation is now chart-independent, linear and local, squares to zero,
+and commutes with arbitrary smooth pullback. Its flat specialization and
+nonzero nonlinear-chart examples are proved. Wedge, density/Hodge and Maxwell
+comparison remain to be implemented.
 The [GR guide](docs/general-relativity.md)
 records the exact scope and typed contracts.
 The [shared geometry guide](docs/smooth-geometry.md)

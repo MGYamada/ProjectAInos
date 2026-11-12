@@ -45,21 +45,28 @@ theorem nativePullback_degreeZero (f : M → N) (α : NativeForm J N 0) (x : M)
   funext i
   exact Fin.elim0 i
 
+@[simp] theorem nativePullback_id {k : ℕ} (α : NativeForm I M k) :
+    nativePullback I I id α = α := by
+  funext x
+  ext v
+  simp only [nativePullback_apply, mfderiv_id]
+  rfl
+
 variable [IsManifold I ∞ M] [IsManifold J ∞ N]
 
-/-- A smooth map pulls smooth native forms back to smooth native forms. -/
-theorem contMDiff_nativePullback {k : ℕ} (f : C^∞⟮I, M; J, N⟯)
-    (α : SmoothForm J N k) :
-    ContMDiff I (I.prod 𝓘(ℝ, E [⋀^Fin k]→L[ℝ] ℝ)) ∞
-      (fun x => TotalSpace.mk' (E [⋀^Fin k]→L[ℝ] ℝ) x
-        (nativePullback I J f (fun y => α y) x)) := by
-  intro x
+/-- Pullback regularity is local at the source point and its image. -/
+theorem contMDiffAt_nativePullback {k : ℕ} {f : M → N} {α : NativeForm J N k} {x : M}
+    (hf : ContMDiffAt I J ∞ f x)
+    (hα : ContMDiffAt J (J.prod 𝓘(ℝ, F [⋀^Fin k]→L[ℝ] ℝ)) ∞
+      (fun y => TotalSpace.mk' (F [⋀^Fin k]→L[ℝ] ℝ) y (α y)) (f x)) :
+    ContMDiffAt I (I.prod 𝓘(ℝ, E [⋀^Fin k]→L[ℝ] ℝ)) ∞
+      (fun y => TotalSpace.mk' (E [⋀^Fin k]→L[ℝ] ℝ) y (nativePullback I J f α y)) x := by
   apply (contMDiffAt_form_iff I).mpr
-  have hL := (f.contMDiff x).mfderiv_const (m := ∞) (by simp)
-  have hα := (α.coefficients_contMDiffAt J (f x)).comp x f.contMDiff.contMDiffAt
+  have hL := hf.mfderiv_const (m := ∞) (by simp)
+  have hα := ((contMDiffAt_form_iff J).mp hα).comp x hf
   apply (hL.compContinuousLinearMapCLM.clm_apply hα).congr_of_eventuallyEq
   have hN : ∀ᶠ y in 𝓝 x, f y ∈ (trivializationAt F (TangentSpace J) (f x)).baseSet :=
-    f.contMDiff.continuous.continuousAt
+    hf.continuousAt
       ((trivializationAt F (TangentSpace J) (f x)).open_baseSet.mem_nhds
         (FiberBundle.mem_baseSet_trivializationAt F (TangentSpace J) (f x)))
   filter_upwards [hN] with y hy
@@ -72,6 +79,23 @@ theorem contMDiff_nativePullback {k : ℕ} (f : C^∞⟮I, M; J, N⟯)
   congr 1
   funext i
   exact ((trivializationAt F (TangentSpace J) (f x)).symmL_continuousLinearMapAt hy _).symm
+
+/-- A smooth map pulls smooth native forms back to smooth native forms. -/
+theorem contMDiff_nativePullback {k : ℕ} (f : C^∞⟮I, M; J, N⟯)
+    (α : SmoothForm J N k) :
+    ContMDiff I (I.prod 𝓘(ℝ, E [⋀^Fin k]→L[ℝ] ℝ)) ∞
+      (fun x => TotalSpace.mk' (E [⋀^Fin k]→L[ℝ] ℝ) x
+        (nativePullback I J f (fun y => α y) x)) :=
+  fun x => contMDiffAt_nativePullback I J (f.contMDiff x) (α.contMDiff (f x))
+
+omit [IsManifold I ∞ M] [IsManifold J ∞ N] in
+/-- Native pullback depends only on the germ of its map. -/
+theorem nativePullback_congr_map {k : ℕ} {f g : M → N} {x : M}
+    (h : f =ᶠ[𝓝 x] g) (α : NativeForm J N k) :
+    nativePullback I J f α x = nativePullback I J g α x := by
+  unfold nativePullback
+  rw [h.mfderiv_eq, h.eq_of_nhds]
+  rfl
 
 /-- Bundled smooth pullback, including noninvertible and dimension-changing maps. -/
 def smoothPullback {k : ℕ} (f : C^∞⟮I, M; J, N⟯) (α : SmoothForm J N k) :
@@ -110,6 +134,17 @@ def smoothPullbackLinear {k : ℕ} (f : C^∞⟮I, M; J, N⟯) :
 variable {G H'' P : Type*} [NormedAddCommGroup G] [NormedSpace ℝ G] [TopologicalSpace H'']
   (K : ModelWithCorners ℝ G H'') [TopologicalSpace P] [ChartedSpace H'' P]
   [IsManifold K ∞ P]
+
+omit [IsManifold I ∞ M] [IsManifold J ∞ N] [IsManifold K ∞ P] in
+/-- The native composition law only needs differentiability at the relevant points. -/
+theorem nativePullback_comp_at {k : ℕ} {f : M → N} {g : N → P} {x : M}
+    (hf : MDifferentiableAt I J f x) (hg : MDifferentiableAt J K g (f x))
+    (α : NativeForm K P k) :
+    nativePullback I K (g ∘ f) α x =
+      nativePullback I J f (nativePullback J K g α) x := by
+  ext v
+  simp only [nativePullback_apply, mfderiv_comp x hg hf]
+  rfl
 
 /-- Pullback reverses composition as an equality of smooth sections. -/
 theorem smoothPullback_comp {k : ℕ} (f : C^∞⟮I, M; J, N⟯)

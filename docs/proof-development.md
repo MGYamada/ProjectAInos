@@ -484,6 +484,13 @@ need regularity on their own domains. Flat smooth forms and pullback agree
 exactly with the existing API. Nonlinear shear, time-axis and singular
 projection examples are formal proofs, with independent exact SymPy checks.
 Typed contracts cover the general interfaces at default elaborator settings.
-Curved exterior differentiation, wedge, density/Hodge and Maxwell comparison
-are still outstanding. The [geometry guide](smooth-geometry.md) records the
-public API and this boundary.
+Native exterior differentiation is now constructed by differentiating
+actual chart coefficients and proving the overlap law before assembling the
+global section. Local chart maps need no global smooth extension. Smoothness,
+chart independence, linearity, locality, `d² = 0`, arbitrary smooth pullback
+naturality across different model spaces and exact flat specialization are
+proved. The nonzero exact plane area form, nonlinear shear and time-axis
+inclusion are Lean examples; exact SymPy also checks mixed-partial cancellation
+and a nonlinear two-to-three-dimensional pullback. Native wedge, density/Hodge
+and Maxwell comparison are still outstanding. The
+[geometry guide](smooth-geometry.md) records the public API and this boundary.
