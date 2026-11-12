@@ -7,6 +7,7 @@ module
 import ProjectAInos.SmoothGeometry.Lorentzian.AccelerationRegularity
 import ProjectAInos.SmoothGeometry.Lorentzian.LocalizedVariation
 import ProjectAInos.SmoothGeometry.Lorentzian.Dual
+import ProjectAInos.SmoothGeometry.Lorentzian.DivergenceExamples
 import ProjectAInos.SmoothGeometry.Lorentzian.PullbackExamples
 import ProjectAInos.SmoothGeometry.Lorentzian.ChartExamples
 import ProjectAInos.SmoothGeometry.Lorentzian.ChartConnection
@@ -1672,3 +1673,41 @@ example (p : LorentzianConformalExample.Plane)
   LorentzianHodgeCurvedExamples.conformal_one p α
 
 end SmoothHodge
+
+section NativeDivergence
+
+open LorentzMetric
+variable {σ : LorentzConvention} {d : ℕ} {M : Type} [TopologicalSpace M]
+  [ChartedSpace (MinkowskiModel d) M] [IsManifold 𝓘(ℝ, MinkowskiModel d) ∞ M]
+  (g : LorentzMetric σ d M)
+
+example (V : ∀ x : M, TangentSpace 𝓘(ℝ, MinkowskiModel d) x) (x : M) :
+    g.divergence V x = LinearMap.trace ℝ (TangentSpace 𝓘(ℝ, MinkowskiModel d) x)
+      (g.leviCivita V x).toLinearMap := rfl
+
+example (V : Cₛ^∞⟮𝓘(ℝ, MinkowskiModel d); MinkowskiModel d,
+    (fun x : M => TangentSpace 𝓘(ℝ, MinkowskiModel d) x)⟯) :
+    C^∞⟮𝓘(ℝ, MinkowskiModel d), M; ℝ⟯ := g.smoothDivergence V
+
+example {e : OpenPartialHomeomorph M (MinkowskiModel d)}
+    (he : e ∈ IsManifold.maximalAtlas 𝓘(ℝ, MinkowskiModel d) ∞ M)
+    {x : M} (hx : x ∈ e.source) (k : Fin (d + 1)) :
+    mvfderiv 𝓘(ℝ, MinkowskiModel d) (g.chartDensity e) x (chartField e (Pi.single k 1) x) =
+      (∑ i, g.chartChristoffel e x i i k) * g.chartDensity e x := g.chartDensity_derivative he hx k
+
+example {V : ∀ x : M, TangentSpace 𝓘(ℝ, MinkowskiModel d) x}
+    {e : OpenPartialHomeomorph M (MinkowskiModel d)}
+    (he : e ∈ IsManifold.maximalAtlas 𝓘(ℝ, MinkowskiModel d) ∞ M)
+    {x : M} (hx : x ∈ e.source)
+    (hV : MDifferentiableAt 𝓘(ℝ, MinkowskiModel d)
+      (𝓘(ℝ, MinkowskiModel d).prod 𝓘(ℝ, MinkowskiModel d)) (T% V) x) :
+    g.divergence V x = (g.chartDensity e x)⁻¹ *
+      ∑ i, mvfderiv 𝓘(ℝ, MinkowskiModel d)
+        (fun y => g.chartDensity e y • chartTangentMap e y (V y)) x
+        (chartField e (Pi.single i 1) x) i := g.divergence_density he hx hV
+
+example (p : LorentzianConformalExample.Plane) :
+    LorentzianConformalExample.metric.divergence (modelField (Pi.single 1 1)) p = 4 * p 1 :=
+  LorentzianDivergenceExamples.conformal_spatial_divergence p
+
+end NativeDivergence

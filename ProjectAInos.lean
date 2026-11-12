@@ -2,6 +2,8 @@ module  -- shake: keep-all --deprecated_module: ignore
 
 public import ProjectAInos.Electrodynamics.Components
 public import ProjectAInos.Electrodynamics.Covariance
+public import ProjectAInos.Electrodynamics.Curved
+public import ProjectAInos.Electrodynamics.CurvedExamples
 public import ProjectAInos.Electrodynamics.Examples
 public import ProjectAInos.Electrodynamics.Field
 public import ProjectAInos.Electrodynamics.GaugeAction
@@ -102,6 +104,7 @@ public import ProjectAInos.SmoothGeometry.DifferentialForm.NativeWedge
 public import ProjectAInos.SmoothGeometry.DifferentialForm.NativeWedgeCalculus
 public import ProjectAInos.SmoothGeometry.DifferentialForm.NativeWedgeExamples
 public import ProjectAInos.SmoothGeometry.DifferentialForm.Naturality
+public import ProjectAInos.SmoothGeometry.DifferentialForm.OneForm
 public import ProjectAInos.SmoothGeometry.DifferentialForm.VolumeNormalization
 public import ProjectAInos.SmoothGeometry.DifferentialForm.WedgeAlgebra
 public import ProjectAInos.SmoothGeometry.Examples
@@ -130,6 +133,9 @@ public import ProjectAInos.SmoothGeometry.Lorentzian.CurvatureNaturality
 public import ProjectAInos.SmoothGeometry.Lorentzian.CurvatureRegularity
 public import ProjectAInos.SmoothGeometry.Lorentzian.CurvatureSymmetry
 public import ProjectAInos.SmoothGeometry.Lorentzian.CurveFamily
+public import ProjectAInos.SmoothGeometry.Lorentzian.DensityDerivative
+public import ProjectAInos.SmoothGeometry.Lorentzian.Divergence
+public import ProjectAInos.SmoothGeometry.Lorentzian.DivergenceExamples
 public import ProjectAInos.SmoothGeometry.Lorentzian.Dual
 public import ProjectAInos.SmoothGeometry.Lorentzian.FlatConnection
 public import ProjectAInos.SmoothGeometry.Lorentzian.FlatFrameExamples
@@ -184,6 +190,7 @@ public import ProjectAInos.SmoothGeometry.Manifold.QuadraticChart
 public import ProjectAInos.SmoothGeometry.Manifold.Scheme
 public import ProjectAInos.SmoothGeometry.Manifold.SmoothExtension
 public import ProjectAInos.SmoothGeometry.MetricDensity
+public import ProjectAInos.SmoothGeometry.MetricDensityDerivative
 public import ProjectAInos.SmoothGeometry.Minkowski.Affine
 public import ProjectAInos.SmoothGeometry.Minkowski.Basic
 public import ProjectAInos.SmoothGeometry.Minkowski.Causal

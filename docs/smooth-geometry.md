@@ -1202,8 +1202,45 @@ fix the explicit local formula, regularity hypotheses, smooth linear map and
 general square. Exact SymPy additionally checks that local formula in all
 degrees with variable, non-diagonal metrics and either signature.
 
-The Maxwell component bridge, current conservation and density divergence
-remain to be implemented.
+### Intrinsic divergence and the positive density
+
+`Lorentzian/Divergence.lean` defines `divergence V x` as the intrinsic trace
+of `g.leviCivita V x` on the actual tangent fibre. `smoothDivergence` bundles
+the result for smooth vector fields. `divergence_eq_sum` proves invariance
+under arbitrary pointwise tangent-coordinate equivalences, and
+`divergence_chart` derives `∂ᵢVⁱ + ΓⁱᵢⱼVʲ` for a field differentiable at the
+point in any smooth maximal-atlas chart containing that point. Both metric
+sign conventions are supported; whole-metric sign reversal preserves divergence.
+
+`MetricDensityDerivative.lean` differentiates the row-multilinear determinant
+and proves the trace formula in directions `A G + G Aᵀ`. Differentiating
+`sqrt(abs(det G))` requires only nonzero determinant. This algebraic step
+does not assume positive definiteness. `Lorentzian/DensityDerivative.lean`
+then derives the actual chart-metric derivative from Levi-Civita compatibility,
+and proves
+
+\[
+\partial_k\rho=\rho\sum_i\Gamma^i{}_{ik},\qquad
+\operatorname{div}V=\rho^{-1}\sum_i\partial_i(\rho V^i),
+\quad\rho=\sqrt{|\det g|}.
+\]
+
+`chartDensity_derivative`, `chartDensity_mul_divergence` and
+`divergence_density` express coordinate directions through the native
+`chartField` and `mvfderiv`. They need no orientation or global frame.
+`DivergenceExamples` checks `div(∂x)=4x` for the curved conformal plane,
+and independently differentiates its density to recover the same value.
+Typed contracts fix the actual connection trace, regularity and local
+chart hypotheses. SymPy checks a nonconstant vector field with a curved,
+non-diagonal, time-dependent metric in both overall signatures.
+
+`DifferentialForm/OneForm.lean` identifies continuous covectors with
+alternating one-forms on native fibres. Its coordinate regularity theorem
+constructs `smoothOneFormEquiv` between the existing smooth cotangent and
+alternating-section bundles, without adding fibre norms. This supports the
+[fixed-background Maxwell form API](electrodynamics.md#fixed-background-maxwell-forms).
+The covariant Maxwell component bridge and the identification of `dJ=0`
+with vector-current divergence remain to be implemented.
 
 ## Scope and next stages
 

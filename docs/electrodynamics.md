@@ -1,9 +1,9 @@
 # Charged Particles and Electromagnetic Fields
 
 This implements research-plan §4.1 of [issue #8](https://github.com/MGYamada/ProjectAInos/issues/8),
-with the free-particle action needed from §3.2. The scope is prescribed local
-electromagnetic fields and classical massive-particle motion. The sourced
-Maxwell equations, field action, collision theory, and quantum field theory
+with the free-particle action needed from §3.2, and the fixed-background
+Maxwell form API from §5.1 / [#52](https://github.com/MGYamada/ProjectAInos/issues/52).
+The field-action derivation in §4.2, collision theory and quantum field theory
 remain later stages. Issue #8 is a broader research plan and remains open.
 
 ## Conventions and local fields
@@ -33,6 +33,44 @@ it is the nonnegative Euclidean rest-space norm. Thus the proved formulas are
 The first is invariant under every Lorentz map. The second transforms by
 `det L`, so a transformation reversing spacetime orientation changes its sign.
 Changing only the chosen orientation also changes the Hodge operator's sign.
+
+## Fixed-background Maxwell forms
+
+`Electrodynamics/Curved.lean` works on an arbitrary smooth four-dimensional
+Lorentz manifold with time-first signature `(-+++)`, an explicitly supplied
+orientation, and constitutive normalization one. `CurrentVector` is a smooth
+section of the actual tangent bundle; `Field`, `CurrentForm` and `Potential`
+are native smooth two-, three- and one-forms. The definitions are
+
+\[
+H=-\star F,\qquad J=\star(j^\flat),\qquad dF=0,\quad dH=J.
+\]
+
+`currentOneForm` uses the existing metric `lower` and the proved smooth
+covector/one-form equivalence. `currentVector` constructs the inverse current
+identification using `⋆²=+1` in degrees one and three, then raises the covector.
+Both roundtrip theorems are proved. `Maxwell` states the two physical equations
+as explicit premises. The sourced equation alone implies `dJ=0` by `d²=0`;
+no field-action derivation is assumed.
+
+`source` constructs the unique smooth vector current from the actual `dH`.
+`maxwell_iff` is equivalent to closedness of `F` and equality with this source.
+`potential_maxwell` supplies a field and source from any global potential;
+it does not assert global exactness for all closed fields. Reversing orientation
+negates both `H` and `J`, preserving the equations. `excitation_flat` gives
+exact agreement with minus the existing flat physical star.
+
+`CurvedExamples.lean` computes `F=t dt∧dx`, `H=t dy∧dz`, and
+`J=dt∧dy∧dz` directly, proves `dF=0` and proves the resulting source is nonzero.
+The corresponding SymPy calculation also checks the vector sign `j=-∂x`.
+Typed API examples fix the current roundtrips, the sole source-equation premise
+for conservation, orientation independence and exact flat normalization.
+
+The shared geometry now proves the intrinsic trace/divergence density formula.
+Identifying `J` with contraction of the oriented volume, proving the covariant
+Maxwell component equations, and translating `dJ=0` to vector divergence are
+still pending in stage F. The Maxwell action and its variational derivation
+belong to §4.2 / #44.
 
 ## Actual action and admissible variations
 

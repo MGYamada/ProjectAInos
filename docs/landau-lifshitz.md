@@ -199,7 +199,13 @@ four-dimensional signs and nonlinear shear transport test its normalization.
 The local inverse-metric formula proves smooth-section regularity, and the
 general Lorentz square identity holds without flatness or a global frame.
 The curved conformal plane verifies the one-form operator and its square.
-Maxwell comparison and the Newtonian motion limit remain in the work
+Intrinsic divergence and its positive-density formula are now proved in all
+smooth charts, including a nonzero curved example. Fixed-background Maxwell
+forms, invertible vector/three-form current identification, sourced current
+closedness and orientation invariance are implemented. A time-dependent
+nonzero-current example fixes the physical sign. The covariant Maxwell
+component bridge, its vector-divergence conservation statement, and the
+Newtonian motion limit remain in the work
 tracked by [#52](https://github.com/MGYamada/ProjectAInos/issues/52).
 Einstein equations and their Newtonian field-equation limit remain in 5.2;
 the Maxwell field action remains in 4.2.

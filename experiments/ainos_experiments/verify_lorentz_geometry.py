@@ -303,6 +303,32 @@ def verify_native_hodge():
     check_zero("native Hodge six flat signs", hodge_matrix(eta, 2) - expected)
     check_zero("native Hodge opposite flat signature", hodge_matrix(-eta, 2) - expected)
 
+    # Match the native Maxwell example: F=t dt∧dx, H=t dy∧dz, j=-∂x.
+    coords = sp.symbols("t x y z", real=True)
+
+    def exterior_derivative(coefficients, degree):
+        source_basis = indices(4, degree)
+        return sp.Matrix([sum((-1)**slot * sp.diff(
+            coefficients[source_basis.index(target[:slot] + target[slot+1:])], coords[index])
+            for slot, index in enumerate(target)) for target in indices(4, degree+1)])
+
+    field = sp.zeros(6, 1)
+    field[two_basis.index((0, 1))] = coords[0]
+    excitation = -hodge_matrix(eta, 2) * field
+    expected_excitation = sp.zeros(6, 1)
+    expected_excitation[two_basis.index((2, 3))] = coords[0]
+    check_zero("physical Maxwell excitation sign", excitation - expected_excitation)
+    check_zero("time-dependent homogeneous Maxwell equation", exterior_derivative(field, 2))
+    current_form = exterior_derivative(excitation, 2)
+    expected_current = sp.zeros(4, 1)
+    expected_current[indices(4, 3).index((0, 2, 3))] = 1
+    check_zero("nonzero Maxwell current three-form", current_form - expected_current)
+    current_vector = eta.inv() * hodge_matrix(eta, 3) * current_form
+    check_zero("Maxwell vector current sign", current_vector - sp.Matrix([0, -1, 0, 0]))
+    check_zero("current representation roundtrip", hodge_matrix(eta, 1) * eta * current_vector
+               - current_form)
+    check_zero("Maxwell current closedness", exterior_derivative(current_form, 3))
+
     t, y = sp.symbols("t y", real=True)
     # Derivative of (t,x,y,z) -> (t,x+t^2,exp(y),z), a genuine local chart.
     jacobian = sp.Matrix([[1, 0, 0, 0], [2*t, 1, 0, 0],
@@ -329,6 +355,27 @@ def verify_native_hodge():
     curved = sp.exp(2*y**2) * sp.diag(-1, 1)
     check_zero("conformal plane Hodge on one-forms",
                hodge_matrix(curved, 1) - sp.Matrix([[0, -1], [-1, 0]]))
+
+
+def verify_density_divergence():
+    """Compare actual connection trace and density differentiation in curved charts."""
+    t, x = sp.symbols("t x", real=True)
+    coords = (t, x)
+    jacobian = sp.Matrix([[1, 0], [2*t, 1]])
+    curved = sp.exp(2*x**2) * jacobian.T * sp.diag(-1, 1) * jacobian
+    vector = sp.Matrix([t*x, t**2 + x**2])
+    for metric in (curved, -curved):
+        gamma = christoffel(metric, coords)
+        rho = sp.sqrt(sp.Abs(sp.simplify(metric.det())))
+        for k in range(2):
+            check_zero("Lorentz density derivative", sp.diff(rho, coords[k])
+                       - rho * sum(gamma[i][i, k] for i in range(2)))
+        trace = sum(sp.diff(vector[i], coords[i]) for i in range(2)) + sum(
+            gamma[i][i, j] * vector[j] for i in range(2) for j in range(2))
+        density_divergence = sum(sp.diff(rho * vector[i], coords[i]) for i in range(2)) / rho
+        check_zero("intrinsic trace versus density divergence", trace - density_divergence)
+        check_zero("curved nonconstant divergence", trace
+                   - (x + 2*x + 4*x*(t**2 + x**2)))
 
 
 def verify_quadratic_variation(metric, coordinates, gamma):
@@ -760,6 +807,7 @@ def verify_flat_frame_defect():
 
 
 def verify():
+    verify_density_divergence()
     verify_volterra_solution()
     verify_radial_family()
     verify_flat_frame_defect()
@@ -941,7 +989,8 @@ def verify():
           "massive non-affine Euler–Lagrange equations, the finite proper-time inverse, "
           "mixed covariant derivatives and densities of curve families, "
           "native alternating-form pullback, graded exterior calculus, "
-          "volume density/orientation, and Hodge local formulas, signs and squares.")
+          "volume density/orientation and divergence, Hodge local formulas, signs and squares, "
+          "and the time-dependent Maxwell current and constitutive sign.")
 
 
 def main():

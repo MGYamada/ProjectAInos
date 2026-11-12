@@ -173,8 +173,9 @@ are connected to the pinned upstream radial-gauge reconstruction through an
 explicit time-first/time-last coordinate equivalence. Nonzero fields, degrees
 0 and 1, and a uniformly accelerated worldline are checked in Lean and SymPy.
 See the [electrodynamics API and proof map](docs/electrodynamics.md).
-The sourced Maxwell equations and field action in 4.2, collision theory,
-and QFT remain outside this implementation.
+The Maxwell field-action derivation in 4.2, collision theory, and QFT remain
+outside this implementation. Fixed-background Maxwell forms are part of the
+5.1 progress recorded below.
 
 Section 5.1 has begun with smooth metric duality on the actual tangent and
 cotangent bundles: `flat`, `sharp`, smooth lowering/raising of sections, and
@@ -306,7 +307,14 @@ four-dimensional two-form signs and nonlinear shear transport are proved.
 The local inverse-metric formula proves smoothness, yielding a linear map
 on smooth native forms. The general Lorentz square identity is proved using
 only pointwise signature witnesses; a curved conformal example verifies it.
-The Maxwell comparison and density divergence remain to be implemented.
+The actual connection trace now defines smooth divergence and yields
+`div V = ρ⁻¹ ∂ᵢ(ρ Vⁱ)` in every smooth chart, with `ρ = sqrt(abs(det g))`.
+On a fixed four-dimensional `(-+++)` background, Maxwell forms use
+`H = -⋆F` and `J = ⋆(j♭)`. The current identification is invertible;
+the sourced equation implies `dJ = 0`, and orientation reversal preserves
+the equations. A time-dependent field verifies the constitutive sign and
+nonzero source. The covariant Maxwell component bridge and its identification
+of current closedness with vector divergence remain to be implemented.
 The [GR guide](docs/general-relativity.md)
 records the exact scope and typed contracts.
 The [shared geometry guide](docs/smooth-geometry.md)

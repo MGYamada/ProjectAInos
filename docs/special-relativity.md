@@ -174,8 +174,9 @@ fields remain with electrodynamics. `coordinateField_reconstruction` applies
 it to the nonzero field `d(t dx) = dt ∧ dx`. The gauge check allows any C²
 zero-form χ and proves `d(A+dχ)=dA`.
 
-Forms and Hodge on curved manifolds, connections and curvature remain later
-extensions. No global-frame assumption is added to the manifold interface.
+The [shared geometry guide](smooth-geometry.md) describes the native curved
+extensions for forms, Hodge, connections and curvature. No global-frame
+assumption is added to the manifold interface.
 
 ## Verification
 

@@ -301,8 +301,12 @@ form. Native Hodge now has its wedge identity, uniqueness, sign laws,
 metric/volume-preserving naturality, exact flat comparison and nonlinear shear
 transport. Its local formula proves smooth-section regularity, and the
 general square identity requires no flatness or global frame. The curved
-conformal plane verifies the native and smooth operators. The
-[geometry guide](smooth-geometry.md) records these proofs. The curved
-Maxwell comparison (F), together with the controlled time-dependent Newtonian
-motion/trajectory limit (G), remain. Einstein dynamics belongs to §5.2 and
-the Maxwell field action to §4.2 / #44.
+conformal plane verifies the native and smooth operators. Intrinsic divergence
+and its density formula are also proved in every smooth chart. Fixed-background
+Maxwell forms now have invertible current identification, sourced current
+closedness, orientation invariance and a nonzero-current example. The
+[geometry guide](smooth-geometry.md) and [electrodynamics guide](electrodynamics.md)
+record these proofs. The covariant Maxwell component bridge and identification
+of current closedness with vector divergence (F), together with the controlled
+time-dependent Newtonian motion/trajectory limit (G), remain. Einstein dynamics
+belongs to §5.2 and the Maxwell field action to §4.2 / #44.

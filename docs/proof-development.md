@@ -550,6 +550,24 @@ frame or a flatness premise. `HodgeCurvedExamples` proves that the curved
 conformal plane's one-form Hodge equals flat Hodge, including smooth sections,
 and checks its square alongside the known nonzero scalar curvature.
 The exact runner independently checks the inverse-metric formula for all
-degrees in nonconstant coordinates and both metric signs. The curved Maxwell
-component bridge, current conservation and density divergence remain. The
-[geometry guide](smooth-geometry.md) records the public API and this boundary.
+degrees in nonconstant coordinates and both metric signs.
+
+`OneForm` proves regularity equivalence for native covectors and alternating
+one-forms, giving a smooth linear equivalence. `Electrodynamics.Curved` uses
+it with metric lowering and Hodge to construct `J = ⋆(j♭)` and its inverse,
+sets `H = -⋆F`, and proves current closedness from the sourced equation alone.
+The actual derivative `dH` determines a unique vector source. Orientation
+reversal preserves the equations, and a directly differentiated field
+`F=t dt∧dx` verifies `H=t dy∧dz` and the nonzero source three-form.
+
+`Divergence` defines the intrinsic trace of Levi-Civita and proves smoothness
+and its derivative-plus-Christoffel expression. `MetricDensityDerivative`
+derives determinant/density directional derivatives by row multilinearity,
+transposition and nonzero-determinant calculus. `DensityDerivative` applies
+metric compatibility and the product rule to obtain the chart-density
+derivative and `div V = ρ⁻¹ ∂ᵢ(ρVⁱ)`. A curved conformal constant field has
+proved nonzero divergence `4x`; exact calculations also check nonconstant
+fields in curved, time-dependent, non-diagonal metrics of either signature.
+The Maxwell covariant component bridge and the identification of `dJ=0`
+with vector divergence remain. The [geometry guide](smooth-geometry.md) and
+[electrodynamics guide](electrodynamics.md) record this boundary.
