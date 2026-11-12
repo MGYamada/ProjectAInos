@@ -144,8 +144,11 @@ geometry implies zero native curvature. Smooth parallel coframes now
 integrate to local Minkowski charts, with normalization propagated from
 one point. The supporting Volterra solver now proves smooth dependence on
 small continuous coefficient curves and initial values, including a
-time-dependent exact example. Constructing those coframes from zero
-curvature remains in D.
+time-dependent exact example. Smooth coordinate coefficients lift to
+curve-valued families; radial frames and their inverses are smooth near
+the center, with rescaling and the radial differential equation proved.
+Native chart coefficients admit suitable local extensions. The flat-curvature
+argument giving parallelness in every direction remains in D.
 Particle variation, curved forms and
 the Newtonian motion limit remain in the work
 tracked by [#52](https://github.com/MGYamada/ProjectAInos/issues/52).

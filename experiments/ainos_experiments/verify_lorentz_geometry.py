@@ -260,8 +260,27 @@ def verify_volterra_solution():
                sp.diff(variation, t) - coefficient * variation - b * t * solution / 2)
 
 
+def verify_radial_family():
+    """Exact radial rescaling, endpoint derivative, and coframe checks."""
+    t, x, s, v = sp.symbols("t x s v", real=True)
+    connection = -x / 2
+    radial_coefficient = -connection.subs(x, t*x) * x
+    radial_solution = sp.exp(t**2 * x**2 / 4) * v
+    endpoint = sp.exp(x**2 / 4)
+    coframe = sp.exp(-x**2 / 4)
+    check_zero("radial family ODE", sp.diff(radial_solution, t)
+               - radial_coefficient * radial_solution)
+    check_zero("radial family reparametrization", radial_solution.subs(t, s)
+               - endpoint.subs(x, s*x) * v)
+    check_zero("radial endpoint derivative", x * sp.diff(endpoint, x)
+               + connection * x * endpoint)
+    check_zero("radial frame/coframe inverse", endpoint * coframe - 1)
+    check_zero("one-dimensional parallel coframe", sp.diff(coframe, x) - coframe * connection)
+
+
 def verify():
     verify_volterra_solution()
+    verify_radial_family()
     t, x, time, space = sp.symbols("t x T X", real=True)
     coordinates = sp.Matrix([t, x])
     inertial = sp.Matrix([time, space])
@@ -420,7 +439,8 @@ def verify():
           "subdivision/reversal, curved piecewise-path composition, "
           "nonzero null fields, reparametrization, quadratic local inertial charts, "
           "parallel coframe integration, the curved integrability obstruction, "
-          "and a nonconstant Volterra solution/parameter variation.")
+          "a nonconstant Volterra solution/parameter variation, "
+          "and a smooth radial family with rescaling and endpoint derivative.")
 
 
 def main():

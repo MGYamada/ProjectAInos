@@ -108,6 +108,7 @@ public import ProjectAInos.SmoothGeometry.Lorentzian.ParallelUniqueness
 public import ProjectAInos.SmoothGeometry.Lorentzian.PathExamples
 public import ProjectAInos.SmoothGeometry.Lorentzian.PiecewisePath
 public import ProjectAInos.SmoothGeometry.Lorentzian.Pullback
+public import ProjectAInos.SmoothGeometry.Lorentzian.RadialFrame
 public import ProjectAInos.SmoothGeometry.Lorentzian.RegularPath
 public import ProjectAInos.SmoothGeometry.Lorentzian.Regularity
 public import ProjectAInos.SmoothGeometry.Lorentzian.Restriction
@@ -122,6 +123,7 @@ public import ProjectAInos.SmoothGeometry.Manifold.OpenSubset
 public import ProjectAInos.SmoothGeometry.Manifold.OpenTangent
 public import ProjectAInos.SmoothGeometry.Manifold.QuadraticChart
 public import ProjectAInos.SmoothGeometry.Manifold.Scheme
+public import ProjectAInos.SmoothGeometry.Manifold.SmoothExtension
 public import ProjectAInos.SmoothGeometry.Minkowski.Affine
 public import ProjectAInos.SmoothGeometry.Minkowski.Basic
 public import ProjectAInos.SmoothGeometry.Minkowski.Causal
@@ -136,6 +138,10 @@ public import ProjectAInos.SmoothGeometry.Minkowski.Observer
 public import ProjectAInos.SmoothGeometry.Minkowski.Reflection
 public import ProjectAInos.SmoothGeometry.Minkowski.ReflectionDeterminant
 public import ProjectAInos.SmoothGeometry.Minkowski.TwoForm
+public import ProjectAInos.SmoothGeometry.ODE.ContinuousFamily
+public import ProjectAInos.SmoothGeometry.ODE.Radial
+public import ProjectAInos.SmoothGeometry.ODE.RadialExamples
+public import ProjectAInos.SmoothGeometry.ODE.RadialReparam
 public import ProjectAInos.SmoothGeometry.ODE.Volterra
 public import ProjectAInos.SmoothGeometry.ODE.VolterraExamples
 public import ProjectAInos.SmoothGeometry.OpenImmersion

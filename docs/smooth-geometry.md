@@ -756,16 +756,52 @@ curve `A` to `f ↦ ∫₀ᵗ A(s) f(s) ds`, with `‖volterra A‖ ≤ ‖A‖`
   curve in supremum norm and on the initial value. `solution_family_contDiffAt`
   composes this with smooth parameter maps; `solution_eval_contDiffAt` evaluates
   at any fixed time.
-- `VolterraExamples.solution_ramp` proves that the resolvent-defined solution
+- `VolterraExamples` proves `LinearODE.solution_ramp`: that the resolvent-defined solution
   for `A(t) = (t/2) id` is `exp(t²/4) y₀`, in any real Banach space. The zero
   coefficient specialization is also proved. Exact SymPy checks verify the
   nonconstant equation and its parameter-variation equation.
 
-The smallness hypothesis is explicit. This is not yet a theorem that arbitrary
-jointly smooth coordinate coefficients define smooth maps into `Curve`, nor
-is it a proof of flat-connection compatibility. Those are the next steps in
-constructing a radial parallel coframe. No norm is added to native tangent
-fibres, and no analytic metric or global frame is assumed.
+### Smooth radial families and local coordinate coefficients
+
+`ODE.ContinuousFamily` proves the missing lift into continuous-function
+spaces. `hasStrictFDerivAt` assembles a continuous family of pointwise
+derivatives into a strict Fréchet derivative, using a uniform mean-value
+bound. `slices_contDiff_nat` and `slices_contDiff` show that restricting one
+variable of a jointly regular function to a fixed compact continuous family
+preserves finite regularity and smoothness in the other variable. The target
+carries the supremum norm.
+
+For a smooth coordinate coefficient field `Γ`, `ODE.Radial` defines
+`radialCoefficient Γ hΓ p x t = -Γ(p + t • x) x`. The curve-valued coefficient
+map is smooth and vanishes at zero displacement. `exists_radial_ball` gives
+a positive common radius on which the coefficients have norm less than one,
+the endpoint maps `radialEndpoint` are invertible, and both endpoints and
+inverses `radialCoframe` are smooth. Their value at the center is the identity.
+Each defining solution satisfies the radial vector-transport ODE.
+
+`RadialReparam` supplies `LinearODE.radialEndpoint_on_ray`, which proves
+`P(s • x)v = solution_x(v)(s)` for `s ∈ [0,1]`, including zero, by differential
+equation uniqueness. `radialEndpoint_fderiv_radial` then identifies the
+radial derivative as `DP(x)(x)v = -Γ(p+x)(x, P(x)v)`. This is an equation for
+the constructed smooth endpoint family, not an extra premise.
+
+`SmoothExtension` supplies `Manifold.exists_contDiff_extension_near_compact`,
+which extends
+vector-valued `C^n` functions off an open domain, preserving their values on
+an open neighborhood of a compact subset. `RadialFrame` proves smoothness
+of bundled native chart coefficients and constructs a smooth extension
+agreeing near a chosen point. This makes the radial construction applicable
+to local chart data without a global chart premise. No norm is added to
+native tangent fibres, and no analytic metric or global frame is assumed.
+
+`RadialExamples` proves `LinearODE.quadratic_radialEndpoint`: the nonconstant real
+connection `Γ(q)(u,v) = -(q/2)uv` has endpoint `exp(x²/4)v` for every prefix
+of the unit ray. Exact SymPy checks also verify the radial ODE, rescaling,
+radial endpoint derivative, inverse coframe and its one-dimensional equation.
+
+These radial families exist for curved connections too. The remaining
+flat-curvature argument must show parallelness in **all** directions;
+the radial differential equation alone does not supply that conclusion.
 
 Stage D remains in progress: a smooth invertible parallel coframe must still
 be constructed from zero curvature. The conditional integration theorem
@@ -773,9 +809,9 @@ does not supply that existence result or finish the local curvature-zero ↔
 `IsLocallyMinkowski` equivalence. Particle variation, curved forms
 and the Newtonian trajectory limit are the subsequent E–G stages.
 
-This increment passes the warning-free full build (9,290 jobs), root-import
-check, all six API checks and the transitive audit of 7,094 declarations
-(2,929 in smooth geometry). Only `propext`, `Classical.choice` and `Quot.sound`
+This increment passes the warning-free full build (9,296 jobs), root-import
+check, all six API checks and the transitive audit of 7,186 declarations
+(3,021 in smooth geometry). Only `propext`, `Classical.choice` and `Quot.sound`
 are permitted. Typed contracts fix the native along-field carrier, overlap
 and regularity hypotheses, metric and parameter-change formulas, coordinate
 ODE, local initial-value existence/uniqueness, finite-segment transport,
@@ -783,7 +819,8 @@ its laws, piecewise paths and continuous lifts, nonzero-null preservation,
 prescribed-basis inertial charts, their first and second derivative contracts,
 curvature restriction, coframe integration with explicit hypotheses,
 the Volterra equation, ODE uniqueness, norm bound and smooth dependence,
-and flat/curved concrete examples at
+compact-family smoothness, radial rescaling and differentiation, local
+connection-coefficient extension, and flat/curved concrete examples at
 default elaborator settings. The installed-package exact Lorentz experiment
 also passes. These checks validate this increment, not the remaining D–G
 proof obligations.

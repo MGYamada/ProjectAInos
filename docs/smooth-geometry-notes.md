@@ -176,8 +176,15 @@ coordinate curves on `[0,1]`. If the coefficient supremum norm is less than
 one, the integral equation has an invertible operator, yielding the unique
 solution with smooth dependence on coefficients and initial values. These
 norms belong to coordinate curve spaces, not the native tangent fibres.
-Smooth radial coefficient families and curvature compatibility still need
-to connect this solver to the parallel-coframe existence theorem.
+Jointly smooth coordinate coefficients now lift to smooth curve-valued
+families by a uniform mean-value estimate and induction on derivatives.
+The radial coefficients vanish at zero displacement, so a common ball has
+small coefficients and smooth invertible endpoint maps. Their inverses give
+smooth radial coframes. ODE uniqueness identifies shorter-ray endpoints
+with intermediate solution values, proving the radial differential equation.
+A vector-valued cutoff extends native chart coefficients without changing
+their germ. Curvature compatibility is still needed to show parallelness in
+all directions and complete the parallel-coframe existence theorem.
 In particular, no claim that `A ≅ Γ(Spec A)` for arbitrary
 C∞-rings is used in this continuation.
 

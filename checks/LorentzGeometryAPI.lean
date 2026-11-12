@@ -13,6 +13,7 @@ import ProjectAInos.SmoothGeometry.Lorentzian.CurvatureNaturality
 import ProjectAInos.SmoothGeometry.Lorentzian.ConformalExample
 import ProjectAInos.SmoothGeometry.Lorentzian.LocalInertialExamples
 import ProjectAInos.SmoothGeometry.Lorentzian.LocalFlatnessExamples
+import ProjectAInos.SmoothGeometry.Lorentzian.RadialFrame
 import ProjectAInos.SmoothGeometry.Lorentzian.MotionExamples
 import ProjectAInos.SmoothGeometry.Lorentzian.MotionODE
 import ProjectAInos.SmoothGeometry.Lorentzian.PathExamples
@@ -20,6 +21,7 @@ import ProjectAInos.SmoothGeometry.Lorentzian.Regularity
 import ProjectAInos.SmoothGeometry.Lorentzian.Restriction
 import ProjectAInos.SmoothGeometry.Tensor.Bundle
 import ProjectAInos.SmoothGeometry.ODE.VolterraExamples
+import ProjectAInos.SmoothGeometry.ODE.RadialExamples
 
 /-! Typed contracts for GR 5.1's shared metric, connection, curvature and motion APIs. These examples use
 default elaborator options and do not assume a global frame or flatness. -/
@@ -68,6 +70,42 @@ example {P : Type} [NormedAddCommGroup P] [NormedSpace ℝ P]
 example (t : unitInterval) :
     solutionOperator (rampCoefficient (E := E)) y t = Real.exp ((t : ℝ) ^ 2 / 4) • y :=
   solution_ramp y t
+
+example {K T F : Type} [TopologicalSpace K] [CompactSpace K]
+    [NormedAddCommGroup T] [NormedSpace ℝ T] [NormedAddCommGroup F] [NormedSpace ℝ F]
+    {f : E × T → F} (hf : ContDiff ℝ ∞ f) (g : C(K, T)) :
+    ContDiff ℝ ∞ (ContinuousFamily.slices f hf.continuous g) :=
+  ContinuousFamily.slices_contDiff hf g
+
+example (Γ : E → E →L[ℝ] E →L[ℝ] E) (hΓ : ContDiff ℝ ∞ Γ) (p : E) :
+    ContDiff ℝ ∞ (radialCoefficient Γ hΓ p) := radialCoefficient_contDiff Γ hΓ p
+
+example (Γ : E → E →L[ℝ] E →L[ℝ] E) (hΓ : ContDiff ℝ ∞ Γ) (p : E) :
+    ∃ r : ℝ, 0 < r ∧
+      (∀ x ∈ Metric.ball (0 : E) r, ‖radialCoefficient Γ hΓ p x‖ < 1) ∧
+      (∀ x ∈ Metric.ball (0 : E) r, (radialEndpoint Γ hΓ p x).IsInvertible) ∧
+      ContDiffOn ℝ ∞ (radialEndpoint Γ hΓ p) (Metric.ball 0 r) ∧
+      ContDiffOn ℝ ∞ (radialCoframe Γ hΓ p) (Metric.ball 0 r) ∧
+      radialCoframe Γ hΓ p 0 = ContinuousLinearMap.id ℝ E := exists_radial_ball Γ hΓ p
+
+example (Γ : E → E →L[ℝ] E →L[ℝ] E) (hΓ : ContDiff ℝ ∞ Γ)
+    (p x v : E) (s : unitInterval) (hx : ‖radialCoefficient Γ hΓ p x‖ < 1)
+    (hsx : ‖radialCoefficient Γ hΓ p ((s : ℝ) • x)‖ < 1) :
+    radialEndpoint Γ hΓ p ((s : ℝ) • x) v =
+      solutionOperator (radialCoefficient Γ hΓ p x) v s :=
+  radialEndpoint_on_ray Γ hΓ p x v s hx hsx
+
+example (Γ : E → E →L[ℝ] E →L[ℝ] E) (hΓ : ContDiff ℝ ∞ Γ) (p : E)
+    {r : ℝ} (hr : 0 < r)
+    (hsmall : ∀ x ∈ Metric.ball (0 : E) r, ‖radialCoefficient Γ hΓ p x‖ < 1)
+    {x : E} (hx : x ∈ Metric.ball (0 : E) r) (v : E) :
+    fderiv ℝ (radialEndpoint Γ hΓ p) x x v =
+      -(Γ (p + x) x (radialEndpoint Γ hΓ p x v)) :=
+  radialEndpoint_fderiv_radial Γ hΓ p hr hsmall hx v
+
+example (x : unitInterval) (v : ℝ) :
+    radialEndpoint quadraticConnection quadraticConnection_contDiff 0 (x : ℝ) v =
+      Real.exp ((x : ℝ) ^ 2 / 4) * v := quadratic_radialEndpoint x v
 
 end LinearODE
 
@@ -128,6 +166,13 @@ variable {σ : LorentzConvention} {d : ℕ} {M : Type} [TopologicalSpace M]
 
 local notation "E" => MinkowskiModel d
 local notation "I" => 𝓘(ℝ, MinkowskiModel d)
+
+example {e : OpenPartialHomeomorph M E} (he : e ∈ IsManifold.maximalAtlas I ∞ M)
+    {p : M} (hp : p ∈ e.source) :
+    ∃ Γ : E → E →L[ℝ] E →L[ℝ] E, ContDiff ℝ ∞ Γ ∧
+      ∃ V : Set E, IsOpen V ∧ e p ∈ V ∧ V ⊆ e.target ∧
+        Set.EqOn Γ (fun q => g.chartChristoffelBilinear e (e.symm q)) V :=
+  g.exists_smooth_chartChristoffel_extension he hp
 
 example (h : g.IsLocallyMinkowski) (p : M) : g.curvature p = 0 := h.curvature_eq_zero p
 

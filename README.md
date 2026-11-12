@@ -234,8 +234,13 @@ A smooth invertible parallel coframe integrates to a Minkowski chart,
 with metric normalization needed only at its base point. A Banach-space
 Volterra construction now proves linear-ODE existence, uniqueness and smooth
 dependence on continuous coefficient curves of supremum norm less than one,
-with an exact time-dependent example. Stage D remains incomplete: constructing such coframes from zero curvature is still required
-for the converse of the local flatness theorem.
+with an exact time-dependent example. Jointly smooth coefficients now lift
+to smooth curve-valued families. Radial endpoint maps and their inverses are
+smooth and invertible near the base point, with rescaling and the radial
+differential equation proved. Native chart coefficients admit smooth local
+extensions for this construction. Stage D remains incomplete: constructing
+such coframes from zero curvature is still required for the converse of the
+local flatness theorem.
 The [shared geometry guide](docs/smooth-geometry.md)
 records the public API and exact checks. [Issue #52](https://github.com/MGYamada/ProjectAInos/issues/52)
 tracks review of the connection and curvature stages, further tensor operations,

@@ -249,8 +249,21 @@ uniqueness from the interior differential equation, and a supremum-norm bound.
 `VolterraExamples` proves the constructed solution for `A(t) = (t/2) id` is
 `exp(t²/4) y₀`. The exact Python check also tests its parameter-variation
 equation; the latter is not yet a general Lean variational-equation theorem.
-Lifting smooth coordinate coefficients to smooth maps into the continuous-curve
-space and deriving the flat-connection compatibility equation remain needed.
+`ODE.ContinuousFamily` now lifts joint finite or smooth regularity to the
+supremum-norm space after restriction to a fixed compact continuous family.
+A mean-value estimate uniform over the compact index gives strict
+Fréchet differentiability, and induction supplies higher derivatives.
+`ODE.Radial` applies this to `A_x(t) = -Γ(p + t x)(x, ·)`: its norm is small
+near zero displacement, and endpoint maps and their inverses are smooth and
+invertible on a common ball. `RadialReparam` uses ODE uniqueness to prove
+`P(s x)v = solution_x(v)(s)` and `DP(x)(x)v = -Γ(p+x)(x, P(x)v)`.
+`RadialExamples` proves the nonconstant real connection `Γ(q)(u,v) = -(q/2)uv`
+has endpoint `exp(x²/4)v` on all prefixes of the unit ray.
+`Manifold.SmoothExtension` supplies vector-valued cutoffs near compact sets;
+`Lorentzian.RadialFrame` proves bundled native chart coefficients are smooth
+and have an extension agreeing near any selected chart point. No global
+chart or analyticity of the metric is required. The flat-curvature
+compatibility argument giving parallelness in all directions remains needed.
 Construction of a smooth invertible parallel coframe from zero curvature
 remains open; the local flatness equivalence is not yet complete.
 Stages E–G remain subsequent work; differential/contracted
