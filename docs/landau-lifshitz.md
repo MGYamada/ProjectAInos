@@ -158,7 +158,15 @@ wherever curvature vanishes near a point. The equivalence
 proof endpoints, including path independence for finite piecewise paths
 inside a flat neighborhood, are implemented, pending review and merge; global inertial
 coordinates and geodesic completeness are not conclusions.
-Particle variation, curved forms and
+Stage E now supplies intrinsic proper time and particle actions, subdivision
+and chart formulas, reparametrization invariance and exact SR specialization.
+Curved stationary-clock rates and integrals are proved. For an arbitrary smooth
+Lorentz metric on the model manifold, the actual quadratic-action first
+variation retains the endpoint term, and fixed-endpoint stationarity is
+equivalent to the native affine geodesic equation. Causal constraints are not
+imposed on variations. The [GR guide](general-relativity.md) distinguishes this
+result from the remaining general-manifold variation/gluing and massive
+square-root-action theorems. Those obligations, curved forms and
 the Newtonian motion limit remain in the work
 tracked by [#52](https://github.com/MGYamada/ProjectAInos/issues/52).
 Einstein equations and their Newtonian field-equation limit remain in 5.2;

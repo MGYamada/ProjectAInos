@@ -37,6 +37,12 @@ public import ProjectAInos.External.YM.Space.Orthogonal
 public import ProjectAInos.External.YM.Wilson.Law
 public import ProjectAInos.External.YM.Wilson.Symmetry
 public import ProjectAInos.External.YM.WilsonLawBridge
+public import ProjectAInos.GeneralRelativity.ClockExamples
+public import ProjectAInos.GeneralRelativity.ParticleAction
+public import ProjectAInos.GeneralRelativity.ProperTime
+public import ProjectAInos.GeneralRelativity.QuadraticGeodesic
+public import ProjectAInos.GeneralRelativity.QuadraticLagrangian
+public import ProjectAInos.GeneralRelativity.SpecialRelativity
 public import ProjectAInos.Mechanics.Basic
 public import ProjectAInos.Mechanics.EulerLagrange
 public import ProjectAInos.Mechanics.Examples

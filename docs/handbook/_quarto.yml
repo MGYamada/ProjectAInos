@@ -45,6 +45,7 @@ website:
       - section: Relativity and electrodynamics
         contents:
           - special-relativity.qmd
+          - general-relativity.qmd
           - electrodynamics.qmd
       - build.qmd
 

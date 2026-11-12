@@ -302,8 +302,44 @@ then for finite piecewise paths using their actual path ranges. Native zero
 curvature near a point consequently yields an open neighborhood with
 path-independent transport; arbitrary nonlinear-shear piecewise paths
 instantiate the theorem. No global inertial chart or completeness follows.
-Stages E–G remain subsequent work; differential/contracted
-Bianchi and Einstein dynamics belong to 5.2.
+Differential/contracted Bianchi and Einstein dynamics belong to 5.2.
+
+### Intrinsic clocks and the first quadratic-action variation
+
+The first stage E increment uses the physical negative-time signature.
+`GeneralRelativity.ProperTime` constructs the intrinsic proper-speed rate,
+proper-time integral and normalized timelike velocity. Local C¹ regularity
+gives integrability, including at null velocities. Subdivision and smooth-chart
+formulas are proved without a global chart. Parameter substitution allows zero
+parameter speed. Metric preservation along a curve gives invariance even for
+maps between different dimensions. Metric compatibility supplies the derivative
+of the proper-speed rate for locally C² timelike curves.
+
+`ParticleAction` defines quadratic and square-root actions and proves their
+subdivision, geodesic evaluations and appropriate parameter-change laws.
+`SpecialRelativity` identifies the Minkowski specializations with the existing
+SR functionals. The shear parabola has unit rate; clocks at fixed `x` in the
+curved conformal metric have rate `exp(x²)` and the corresponding exact
+proper-time and quadratic-action integrals.
+
+`QuadraticLagrangian` differentiates the position-dependent metric and velocity
+slots on an open coordinate domain, reusing `Mechanics.OpenDomain` for the
+derivative of the actual action and the stationarity equivalence.
+`QuadraticGeodesic` uses the native metric and Koszul formula on the model
+manifold to identify the Euler–Lagrange covector with minus lowered covariant
+acceleration. The first variation includes its endpoint pairing. Nondegeneracy
+then proves quadratic stationarity iff the native affine geodesic equation,
+without restricting variations to any causal class.
+
+This is a model-manifold variational endpoint, with an arbitrary curved metric;
+it does not yet prove the result for general manifold variations across charts.
+Those gluing arguments, stationarity of the massive square-root action and
+construction of a proper-time parameter remain in E. F–G are subsequent work.
+The [GR guide](general-relativity.md) records the hypotheses. New typed GR
+contracts run under default elaborator settings in the required Lean job;
+the audit includes the namespace. Exact SymPy checks independently test the
+clock rates, Euler–Lagrange signs and nonzero endpoint variations in flat,
+nonlinear flat and curved examples.
 
 ## Minkowski Geometry and Relativistic Kinematics
 

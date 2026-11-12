@@ -253,10 +253,22 @@ Minkowski chart wherever curvature vanishes on a neighborhood. This proves
 proof endpoints, pending review and merge. Transport is proved independent
 of the piecewise path inside a flat neighborhood. The conclusion is local; it
 does not assert a global inertial chart or geodesic completeness.
+The first stage E increment defines proper time and particle actions on the
+actual tangent bundle of a curved spacetime. Integrability, interval
+subdivision, chart formulas, parameter invariance and exact SR specialization
+are proved. Fixed-position clocks in the curved conformal example have proper
+time `(b-a) exp(x²)`. On the model manifold with an arbitrary smooth Lorentz
+metric, the actual quadratic action has the first-variation formula including
+endpoint terms; fixed-endpoint stationarity is equivalent to the native affine
+geodesic equation. This theorem allows null reference velocities and imposes
+no causal constraint on variations. Manifold variations across charts, the
+massive square-root action's stationarity theorem and construction of a proper-time
+parameter remain. The [GR guide](docs/general-relativity.md) records the exact
+scope and typed contracts.
 The [shared geometry guide](docs/smooth-geometry.md)
 records the public API and exact checks. [Issue #52](https://github.com/MGYamada/ProjectAInos/issues/52)
-tracks review of the connection and curvature stages, further tensor operations,
-motion, curved forms, and time-dependent Newton-limit stages;
+tracks review of the shared geometry stages and completion of curved particle
+variation, curved forms, and time-dependent Newton-limit stages;
 [#43](https://github.com/MGYamada/ProjectAInos/issues/43)
 is the first chart-regression gate. Einstein dynamics belongs to 5.2.
 

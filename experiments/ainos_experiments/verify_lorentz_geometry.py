@@ -132,6 +132,66 @@ def verify_covariant_pullback(metric, coordinates):
     check_zero("vanishing derivative at origin", direct.subs(s, 0))
 
 
+def verify_quadratic_variation(metric, coordinates, gamma):
+    """Differentiate the density independently, using force minus d(momentum)/ds."""
+    size = len(coordinates)
+    velocity = sp.Matrix(sp.symbols(f"v0:{size}", real=True))
+    acceleration = sp.Matrix(sp.symbols(f"a0:{size}", real=True))
+    density = (velocity.T * metric * velocity)[0] / 2
+    force = sp.Matrix([sp.diff(density, q) for q in coordinates])
+    momentum = sp.Matrix([sp.diff(density, v) for v in velocity])
+    residual = (force - momentum.jacobian(coordinates) * velocity
+                - momentum.jacobian(velocity) * acceleration)
+    covariant_acceleration = acceleration + sp.Matrix([
+        (velocity.T * component * velocity)[0] for component in gamma])
+    check_zero("quadratic EL equals minus lowered acceleration",
+               residual + metric * covariant_acceleration)
+
+    # Nonzero endpoint variations exercise the boundary term. A stationary
+    # coordinate clock in the conformal metric need not be a geodesic.
+    s, x0, epsilon = sp.symbols("s x0 epsilon", real=True)
+    curve = sp.Matrix([s, x0])
+    variation = sp.Matrix([s**2, 1+s])
+    perturbed = curve + epsilon * variation
+    perturbed_metric = metric.subs(dict(zip(coordinates, perturbed)), simultaneous=True)
+    perturbed_velocity = sp.diff(perturbed, s)
+    action_density = (perturbed_velocity.T * perturbed_metric * perturbed_velocity)[0] / 2
+    variation_density = sp.diff(action_density, epsilon).subs(epsilon, 0)
+    along_metric = metric.subs(dict(zip(coordinates, curve)), simultaneous=True)
+    boundary = (sp.diff(curve, s).T * along_metric * variation)[0]
+    along_acceleration = covariant_along(gamma, coordinates, curve, sp.diff(curve, s), s)
+    interior = -(along_acceleration.T * along_metric * variation)[0]
+    check_zero("first variation with endpoint term",
+               sp.integrate(variation_density, (s, 0, 1))
+               - (boundary.subs(s, 1) - boundary.subs(s, 0))
+               - sp.integrate(interior, (s, 0, 1)))
+
+
+def verify_clocks(metric, curved_metric, coordinates):
+    """Exact native-clock examples and a causal-type check of the quadratic density."""
+    s, x0, a, b = sp.symbols("s x0 a b", real=True)
+    curve = sp.Matrix([s, -s**2])
+    velocity = sp.diff(curve, s)
+    along_metric = metric.subs(dict(zip(coordinates, curve)), simultaneous=True)
+    check_zero("shear proper-speed square", (velocity.T * along_metric * velocity)[0] + 1)
+    check_zero("shear proper time", sp.integrate(sp.Integer(1), (s, a, b)) - (b-a))
+    clock_metric = curved_metric.subs(coordinates[1], x0)
+    speed = sp.sqrt(-clock_metric[0, 0])
+    check_zero("curved stationary-clock rate", speed - sp.exp(x0**2))
+    check_zero("curved stationary-clock proper time",
+               sp.integrate(speed, (s, a, b)) - (b-a) * sp.exp(x0**2))
+    check_zero("curved stationary-clock quadratic action",
+               sp.integrate(clock_metric[0, 0]/2, (s, a, b)) + (b-a)*sp.exp(2*x0**2)/2)
+    null = sp.Matrix([1, 1])
+    check_zero("null quadratic density", (null.T * curved_metric * null)[0])
+    # A null reference velocity still admits arbitrary variation directions.
+    epsilon = sp.symbols("epsilon", real=True)
+    varied = null + epsilon * sp.Matrix([0, 1])
+    check_zero("unconstrained variation at a null velocity",
+               sp.diff((varied.T * curved_metric * varied)[0]/2, epsilon).subs(epsilon, 0)
+               - sp.exp(2*coordinates[1]**2))
+
+
 def verify_motion(metric, coordinates, gamma, jacobian):
     s, a, b, c, d = sp.symbols("s a b c d", real=True)
     curve = sp.Matrix([s, -s**2])
@@ -430,6 +490,10 @@ def verify():
     curved_metric = sp.exp(2*x**2) * eta
     curved_gamma = verify_connection(curved_metric, coordinates)
     verify_piecewise_transport(curved_metric, coordinates, curved_gamma)
+    verify_quadratic_variation(eta, inertial, flat_gamma)
+    verify_quadratic_variation(metric, coordinates, gamma)
+    verify_quadratic_variation(curved_metric, coordinates, curved_gamma)
+    verify_clocks(metric, curved_metric, coordinates)
     check_zero("conformal time connection", curved_gamma[0] - sp.Matrix([[0, 2*x], [2*x, 0]]))
     check_zero("conformal spatial connection", curved_gamma[1] - sp.diag(2*x, 2*x))
 
@@ -509,7 +573,9 @@ def verify():
           "parallel coframe integration, the curved integrability obstruction, "
           "a nonconstant Volterra solution/parameter variation, "
           "a smooth radial family with rescaling and endpoint derivative, "
-          "and full flat-frame/coframe equations with the curved defect sign.")
+          "full flat-frame/coframe equations with the curved defect sign, "
+          "curved proper-time clocks, quadratic Euler–Lagrange/native acceleration, "
+          "endpoint variations, and unconstrained null-velocity variations.")
 
 
 def main():
