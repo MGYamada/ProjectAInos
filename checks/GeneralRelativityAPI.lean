@@ -644,3 +644,58 @@ example {e : OpenPartialHomeomorph M NewtonianCoordinates}
       coordinateTimeAcceleration g e y.1 y.2) z := coordinateTimeAcceleration_contDiffAt g he hz
 
 end PhysicalTime
+
+section NewtonianNativeMetric
+
+open NewtonianMetricFamily
+
+variable {U : TopologicalSpace.Opens NewtonianCoordinates} (f : NewtonianMetricFamily U)
+  {c : ℝ} (hc : 1 ≤ c) (hlarge : 9 * f.bound < c^2)
+
+example (q : U) :
+    ∃ e : NewtonianCoordinates ≃L[ℝ] NewtonianCoordinates,
+      ∀ v w, f.form c q v w = minkowskiForm .timeNegative 3 (e v) (e w) :=
+  f.form_signature hc hlarge q
+
+example (x q : U) (i j : Fin 4) :
+    (f.lorentzMetric c hc hlarge).chartComponent (physicalChart x) q i j =
+      f.coefficient c q i j :=
+  f.lorentzMetric_component hc hlarge x q i j
+
+example (x q : U) (k i j : Fin 4) :
+    (f.lorentzMetric c hc hlarge).chartChristoffel (physicalChart x) q k i j =
+      ∑ l, (f.coefficient c q)⁻¹ k l *
+        (fderiv ℝ (fun z => f.coefficient c z j l) q (Pi.single i 1) +
+         fderiv ℝ (fun z => f.coefficient c z l i) q (Pi.single j 1) -
+         fderiv ℝ (fun z => f.coefficient c z i j) q (Pi.single l 1)) / 2 :=
+  f.lorentzMetric_christoffel hc hlarge x q k i j
+
+example (x q : U) (v : NewtonianSpace) :
+    f.acceleration c q v =
+      coordinateTimeAcceleration (f.lorentzMetric c hc hlarge) (physicalChart x) q v :=
+  f.acceleration_eq_native hc hlarge x q v
+
+example (q : U) {V : ℝ} (hV : 0 ≤ V) (v : NewtonianSpace) (hv : ‖v‖ ≤ V)
+    (hspeed : f.timelikeThreshold V < c^2) :
+    Timelike (f.lorentzMetric c hc hlarge) (x := q) (timeVelocity v) :=
+  f.timelike_timeVelocity hc hlarge q hV hv hspeed
+
+example (hc : 1 ≤ c) (hlarge : 24 * f.bound < c^2) (q : U) :
+    (∀ i : Fin 4, |(f.coefficient c q)⁻¹ i 0| ≤ 2 * epsilon c) ∧
+    (∀ j : Fin 4, |(f.coefficient c q)⁻¹ 0 j| ≤ 2 * epsilon c) ∧
+    (∀ i j : Fin 3,
+      |(f.coefficient c q)⁻¹ i.succ j.succ - (if i = j then 1 else 0)| ≤
+        24 * f.bound * epsilon c) :=
+  f.inverseComponent_bounds hc hlarge q
+
+example {c : ℝ} (hc : NewtonianExamples.family.lorentzThreshold ≤ c) :
+    let q : NewtonianExamples.domain := ⟨NewtonianExamples.sample, NewtonianExamples.sample_mem⟩
+    let g := NewtonianExamples.family.lorentzMetric c
+      (NewtonianExamples.family.one_le_of_lorentzThreshold_le hc)
+      (NewtonianExamples.family.spatialBound_lt_sq_of_lorentzThreshold_le hc)
+    g.chartComponent (physicalChart q) q 0 1 = epsilon c / 4 := by
+  dsimp
+  rw [NewtonianExamples.family.lorentzMetric_component]
+  exact (NewtonianExamples.sample_coefficients c).2.1
+
+end NewtonianNativeMetric

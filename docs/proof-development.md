@@ -639,7 +639,13 @@ geodesic reparametrization implies that equation. Local smoothness follows
 from the actual connection. The polynomial family example has proved compact
 C² bounds and nonzero time/mixed/spatial data.
 
-The signature-to-native-metric construction and quantitative uniform
-acceleration, Lipschitz, existence and trajectory-convergence estimates remain.
+Completing the square along the negative time line yields a positive
+quadratic form on its orthogonal complement. Its Euclidean coordinates
+combine with the normalized time line to give the signature witness. The
+tangent-bundle trivializations of the common open domain identify the smooth
+coefficient form with a native Lorentz metric. The coordinate connection is
+derived from this metric. Rescaling the time row and estimating each inverse
+column gives the uniform temporal and spatial inverse bounds.
+The uniform acceleration, Lipschitz, existence and trajectory estimates remain.
 Typed contracts distinguish these outstanding claims from the proved local
 coordinate-time identity; exact symbolic examples do not discharge them.

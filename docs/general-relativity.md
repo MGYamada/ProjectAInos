@@ -348,14 +348,28 @@ g((1,v),(1,v)) ≤ -c² + 3 K + 6 K V + (3 + 9 K) V².
 Consequently one sufficiently large-`c` tail makes this norm negative
 simultaneously at every point in `U` and every velocity in the prescribed
 range. `form_spatial_pos` proves positive definiteness on the spatial
-hyperplane when `c² > 9 K`. These are consequences of the coefficient data;
-Lorentz signature is not assumed in the family structure.
+hyperplane when `c² > 9 K`. Completing the square along the negative time line gives a positive form on
+its orthogonal complement. The resulting pointwise inertial frame proves
+Lorentz signature for `c ≥ 1` and `c² > 9 K`. The smooth coefficient form
+therefore defines `lorentzMetric` on the actual tangent bundle of `U`.
+`physicalChart` identifies the whole domain with its given open subset of
+physical coordinates. The native metric, its inverse and its Levi-Civita
+coefficients recover the ordinary matrix formulas in this chart.
+`timelike_timeVelocity` applies the velocity estimate to the native metric.
+
+For the stronger threshold `c² > 24 K`, multiplying the time row by
+`-c⁻²` gives a matrix within `12 K c⁻²` of the identity in the induced
+sup norm. The column equations give `|gⁱᵗ|, |gᵗʲ| ≤ 2 c⁻²` and
+`|gⁱʲ - δⁱʲ| ≤ 24 K c⁻²` for spatial `i,j` in the last bound.
+These estimates hold uniformly throughout the common open domain.
 
 For an existing native Lorentz metric in any smooth chart,
 `coordinateTimeAcceleration` is extracted from its actual connection as
 `-Γⁱ(w,w) + vⁱ Γᵗ(w,w)`, `w=(1,v)`. `tangential_iff_coordinateTime` proves
 that this ODE is equivalent to native acceleration being proportional to
 velocity when the chart's time coordinate equals the parameter locally.
+The family-level `acceleration` agrees with this native equation on `U`
+and is smooth in the position and velocity variables there.
 `coordinateTime_of_affine_reparam` derives it from a regular reparametrization
 of an affine geodesic. Smoothness is proved locally from the connection;
 no uniform Lipschitz bound is claimed by that local theorem.
@@ -364,13 +378,11 @@ no uniform Lipschitz bound is claimed by that local theorem.
 `H_ij=t δ_ij` on the coordinate ball of radius two. Compactness of the closed
 ball supplies actual finite C² bounds. Lean checks the mixed/spatial sample
 coefficients and a nonzero time derivative of the potential. Exact SymPy
-checks the same norm and sample coefficients, the sample acceleration limit,
+checks the same norm and sample coefficients, the leading inverse blocks, the sample acceleration limit,
 and non-affine corrections in separate conformal and static calibrations.
 The rational sample limit is not a uniform bound or a trajectory theorem.
 
-**Remaining:** construct the actual Lorentz metric on the common open domain
-from the proved signature bounds; identify its connection with the coefficient
-formula; prove the uniform `O(c⁻²)` acceleration estimate and uniform local
+**Remaining:** prove the uniform `O(c⁻²)` acceleration estimate and uniform local
 Lipschitz bound; establish a common finite existence interval using a compact
 tube away from the boundary; apply Gronwall and derive uniform convergence
 and the rate, including zero Lipschitz constant. This stage remains incomplete.

@@ -968,6 +968,15 @@ def verify_newtonian_family():
         at_point[0, 1] - eps/4, at_point[1, 1] - 1 - eps/2]))
     check_zero("nonstatic potential time derivative", sp.diff(phi, t).subs(point)-sp.Rational(1, 2))
     inverse = at_point.inv()
+    row_scale = sp.diag(-eps, 1, 1, 1)
+    scaled_error = row_scale*at_point-sp.eye(4)
+    check_zero("inverse estimate column identity", inverse-row_scale+scaled_error*inverse)
+    check_zero("temporal inverse column leading coefficient",
+               (inverse[:, 0]/eps).applyfunc(sp.cancel).subs(eps, 0)
+               -sp.Matrix([-1, 0, 0, 0]))
+    check_zero("spatial inverse block leading correction",
+               ((inverse[1:, 1:]-sp.eye(3))/eps).applyfunc(sp.cancel).subs(eps, 0)
+               +sp.eye(3)/2)
     derivatives = [metric.diff(q).subs(point) for q in coords]
     gamma = [sp.Matrix(4, 4, lambda i, j: sp.factor(sum(
         inverse[k, ell]*(derivatives[i][j, ell] + derivatives[j][ell, i]
