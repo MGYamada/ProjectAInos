@@ -204,7 +204,8 @@ generator: the Runge–Lenz identities are proved, and the Runge–Lenz vector i
 constant along smooth solutions of the inverse-square law. The kinematics of a
 rigid body is proved by linear algebra:
 `so(3) ≅ ℝ³`, the angular velocity, and the inertia tensor of point masses with
-its principal moments. Integrals of the motion are constant along
+its principal moments. The algebra of two bodies is proved: the reduced mass,
+disintegration, and elastic collisions. Integrals of the motion are constant along
 trajectories of a Hamiltonian on a free C∞-ring. Symplectic structures,
 the Legendre transformation, Dirac brackets and canonical transformations are
 not implemented. Galilean symmetry as a group action and the topics of 2.1 and

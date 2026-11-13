@@ -242,6 +242,46 @@ of `|L|²` for the rigid body, of the angular momentum in a central field, and
 of `|Γ|²` and `L · Γ` for the heavy top. Existence of trajectories is not
 proved.
 
+## Two bodies and collisions
+
+`Mechanics/TwoBody` covers Landau–Lifshitz §§13, 16 and 17 as algebra of real
+vectors in `Fin 3 → ℝ`.
+
+`reducedMass m₁ m₂` is `m₁ m₂ / (m₁ + m₂)` and `centreOfMassVelocity` is
+`(m₁ v₁ + m₂ v₂) / (m₁ + m₂)`. `kineticEnergy_eq` splits the kinetic energy into
+the centre of mass and the relative motion, and `total_mass_mul_kinetic` is the
+division-free identity
+`(m₁ + m₂)(m₁ v₁² + m₂ v₂²) = (m₁ v₁ + m₂ v₂)² + m₁ m₂ (v₁ − v₂)²`, valid for all
+masses. In the centre-of-mass frame the momenta are `± μ (v₁ − v₂)`.
+
+*Disintegration.* With opposite momenta `p₁ + p₂ = 0` and the energy balance
+`E = E₁ + E₂ + p₁²/2m₁ + p₂²/2m₂`, `disintegration_momentum_sq` gives
+`p² = 2 μ ε` for the disintegration energy `ε = E − E₁ − E₂`, the fragments
+carry the fractions `m₂/M` and `m₁/M` of `ε`, and `ε ≥ 0` for positive masses.
+
+*Elastic collisions.* `IsElastic` says that momentum and kinetic energy are
+conserved. Then the centre of mass keeps its velocity and the relative velocity
+keeps its length (`IsElastic.relative_speed`). `isElastic_iff` is the
+characterization: the velocities after the collision are
+`outgoingOne = V + (m₂/M) w` and `outgoingTwo = V − (m₁/M) w` for some vector `w`
+with the length of the initial relative velocity, and every such `w` occurs. For
+a target at rest, with unit vectors `n` and `n₀` for the incident direction and
+the direction of `w`:
+
+- `outgoingOne_rest_dotProduct_self`: `v₁'² = v² (m₁² + m₂² + 2 m₁ m₂ n·n₀) / M²`;
+- `outgoingTwo_rest_dotProduct_self`: `v₂'² = 2 m₁² v² (1 − n·n₀) / M²`;
+- `outgoingOne_headOn`, `outgoingTwo_headOn`: the head-on velocities
+  `(m₁ − m₂) v / M` and `2 m₁ v / M`;
+- `energy_transfer_le`: the transferred energy is at most `4 m₁ m₂ / M²` times
+  the incident energy;
+- `outgoing_rest_dotProduct_eq_zero`: equal masses separate at a right angle.
+
+`Poisson/TwoBody` works on the canonical phase space of two particles. The
+centre of mass `R`, the relative position `r`, the total momentum `P` and the
+relative momentum `p = (m₂ p₁ − m₁ p₂) / M` satisfy `{Rᵢ, Pⱼ} = {rᵢ, pⱼ} = δᵢⱼ`
+with the mixed brackets zero, and `kineticEnergy_eq_centre` rewrites the kinetic
+energy as `P²/2M + p²/2μ`.
+
 ## Rigid-body kinematics
 
 `Mechanics/Rigid` covers Landau–Lifshitz §§31–32 and the first formula of §33.
@@ -305,6 +345,9 @@ triangle inequality `I₂ ≤ I₀ + I₁`. The basis-free statement behind it i
 | [Poisson/RotatingFrame](../ProjectAInos/Mechanics/Poisson/RotatingFrame.lean) | `angularVelocity`, `canonical_bracket_dot_M`, `hamiltonian`, `velocity`, `canonical_q_hamiltonian`, `canonical_p_hamiltonian`, `canonical_velocity_hamiltonian`, `hamiltonian_eq_velocity` |
 | [Poisson/Virial](../ProjectAInos/Mechanics/Poisson/Virial.lean) | `dilation`, `canonical_dilation_bracket`, `canonical_dilation_bracket_add`, `kineticEnergy`, `virial`, `oscillatorPotential`, `virial_oscillator` |
 | [Poisson/Trajectory](../ProjectAInos/Mechanics/Poisson/Trajectory.lean) | `IsTrajectory`, `IsTrajectory.timeDerivative_lift`, `IsTrajectory.lift_eq_of_isIntegral`, `IsTrajectory.lift_eq_of_bracket_mem`, `IsTrajectory.lift_hamiltonian_eq`, `isTrajectory_canonical_iff`, `RigidBody.lift_casimir_eq`, `AngularMomentum.lift_M_eq`, `HeavyTop.lift_Γ_sq_eq`, `HeavyTop.lift_L_dot_Γ_eq` |
+| [TwoBody/Kinematics](../ProjectAInos/Mechanics/TwoBody/Kinematics.lean) | `reducedMass`, `centreOfMassVelocity`, `total_mass_mul_kinetic`, `kineticEnergy_eq`, `velocity_one_eq`, `velocity_two_eq`, `momentum_one_centreOfMass`, `momentum_two_centreOfMass` |
+| [TwoBody/Collisions](../ProjectAInos/Mechanics/TwoBody/Collisions.lean) | `disintegration_momentum_sq`, `disintegration_kinetic_one`, `disintegration_energy_nonneg`, `IsElastic`, `outgoingOne`, `outgoingTwo`, `IsElastic.relative_speed`, `isElastic_outgoing`, `isElastic_iff`, `outgoingOne_rest_dotProduct_self`, `outgoingTwo_rest_dotProduct_self`, `outgoingOne_headOn`, `energy_transfer_le`, `outgoing_rest_dotProduct_eq_zero` |
+| [Poisson/TwoBody](../ProjectAInos/Mechanics/Poisson/TwoBody.lean) | `centre`, `relative`, `totalMomentum`, `relativeMomentum`, `canonical_centre_totalMomentum`, `canonical_relative_relativeMomentum`, `canonical_centre_relativeMomentum`, `canonical_relative_totalMomentum`, `kineticEnergy_eq_centre` |
 | [Rigid/AngularVelocity](../ProjectAInos/Mechanics/Rigid/AngularVelocity.lean) | `hat`, `vee`, `hat_mulVec`, `hat_cross`, `hat_vee`, `hatEquiv`, `hatEquiv_cross`, `velocityField`, `velocityField_add`, `velocityField_injective`, `velocityField_change_of_origin`, `transpose_deriv_mul_transpose`, `angularVelocity`, `hasDerivAt_rigidMotion` |
 | [Rigid/InertiaTensor](../ProjectAInos/Mechanics/Rigid/InertiaTensor.lean) | `inertia`, `transpose_inertia`, `inertia_mulVec`, `dotProduct_inertia_mulVec`, `dotProduct_inertia_mulVec_nonneg`, `trace_inertia`, `two_mul_dotProduct_inertia_mulVec_le_trace`, `inertia_add_apply`, `principalMoments`, `principalAxes`, `inertia_mulVec_principalAxes`, `principalMoments_nonneg`, `principalMoments_two_le` |
 | [Examples](../ProjectAInos/Mechanics/Examples.lean) | Newton equation, stationary uniform free motion, rejection of accelerated free motion, endpoint-vanishing polynomial variation and its endpoint derivative, zero-length interval and zero-coordinate system |

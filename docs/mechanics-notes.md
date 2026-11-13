@@ -305,3 +305,19 @@ The velocity derivative of the added density is $\partial_q F$, so the momentum 
 **Interface decision.** `KeplerModel.jacobi_generators` splits by `rcases` on the constructor only, closes the trivial cases with a fixed `simp only` set, and reduces the three remaining cases to one lemma, `jacobi_ρ_p_p`, by reordering a sum. No heartbeat limit is raised.
 
 **Proof status.** A proof-engineering observation. The model file compiles in a few seconds.
+
+## M39. An elastic collision is a vector with the length of the relative velocity
+
+**Observation.** Landau–Lifshitz §17 derives the velocities after a collision in the centre-of-mass frame and remarks that the direction `n₀` is not determined by the conservation laws. Both statements are one equivalence: conservation of momentum and of kinetic energy holds if and only if the velocities afterwards are `V + (m₂/M) w` and `V − (m₁/M) w` for a vector `w` with `|w| = |v₁ − v₂|`. The proof needs one identity, `M (m₁ v₁² + m₂ v₂²) = (m₁ v₁ + m₂ v₂)² + m₁ m₂ (v₁ − v₂)²`, which has no denominators and holds for all masses. Applied before and after the collision it gives the length of the relative velocity, with `m₁ m₂ ≠ 0`; applied to the outgoing velocities it gives the converse, with `M ≠ 0`. The same identity divided by `2M` is the splitting of the kinetic energy of §13, and with `p₁ + p₂ = 0` it is the disintegration formula of §16. The angles of the textbook enter only through `n · n₀`, the cosine of the deflection in the centre-of-mass frame; the transferred energy is bounded because `n · n₀ ≥ −1` for unit vectors.
+
+**Interface decision.** `IsElastic` is a structure with the two conservation laws as fields, and `isElastic_iff` is the characterization. `outgoingOne` and `outgoingTwo` are functions of the incoming velocities and of `w`, so the formulas for a target at rest are statements about `outgoingOne m₁ m₂ (v • n) 0 (v • n₀)`. Vectors are `Fin 3 → ℝ` with `⬝ᵥ`, as in the rest of the mechanics models, and unit vectors are given by `n ⬝ᵥ n = 1`. Hypotheses on the masses are exactly those used: `m₁ m₂ ≠ 0`, `m₁ + m₂ ≠ 0`, or positivity for the two inequalities. No angle and no trigonometric function appears.
+
+**Proof status.** Proved: the rows for §16 and §17 are *proved*. Not formalized: the laboratory angles `θ₁`, `θ₂` as angles, the distribution of fragments in direction and energy, disintegration into more than two fragments, and the cross-sections of §§18–20. [Collisions](../ProjectAInos/Mechanics/TwoBody/Collisions.lean)
+
+## M40. The centre-of-mass variables are canonical, but the reduction is not constructed
+
+**Observation.** On the phase space of two particles, `R = (m₁ q₁ + m₂ q₂)/M`, `r = q₁ − q₂`, `P = p₁ + p₂` and `p = (m₂ p₁ − m₁ p₂)/M` have canonical brackets because the two fractions `m₁/M` and `m₂/M` add up to one, and the mixed brackets vanish identically. The kinetic energy becomes `P²/2M + p²/2μ`, which is three identities between real coefficients. The manuscript's target for §13 also names the reduction by translations: the quotient of the functions that commute with `P` by the ideal `(P − P₀)`. That is a quotient by an ideal and is not available (M23).
+
+**Interface decision.** The new variables are elements of the phase space indexed by `Fin 2 × Fin 3`, and the statement is the list of their brackets. A Poisson isomorphism onto a second copy of the phase space is not constructed; it would follow from `FreeSmoothRing.isPoissonHom_of_generators` and an inverse.
+
+**Proof status.** The brackets and the form of the kinetic energy are proved. The row for §13 stays *evidence*. [Canonical variables](../ProjectAInos/Mechanics/Poisson/TwoBody.lean)

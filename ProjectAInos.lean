@@ -102,12 +102,15 @@ public import ProjectAInos.Mechanics.Poisson.KeplerMotion
 public import ProjectAInos.Mechanics.Poisson.RigidBody
 public import ProjectAInos.Mechanics.Poisson.RotatingFrame
 public import ProjectAInos.Mechanics.Poisson.Trajectory
+public import ProjectAInos.Mechanics.Poisson.TwoBody
 public import ProjectAInos.Mechanics.Poisson.Virial
 public import ProjectAInos.Mechanics.Rigid.AngularVelocity
 public import ProjectAInos.Mechanics.Rigid.InertiaTensor
 public import ProjectAInos.Mechanics.SmoothLagrangian
 public import ProjectAInos.Mechanics.TimeFunction
 public import ProjectAInos.Mechanics.TotalTimeDerivative
+public import ProjectAInos.Mechanics.TwoBody.Collisions
+public import ProjectAInos.Mechanics.TwoBody.Kinematics
 public import ProjectAInos.QuantumFieldTheory.SmearedField
 public import ProjectAInos.QuantumMechanics.Pauli
 public import ProjectAInos.QuantumMechanics.Qubit

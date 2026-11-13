@@ -159,7 +159,7 @@ These identities support §§13–14, 39, 44, and 45. Polar-coordinate expressio
 | `E10e` | The rotating-frame acceleration includes the Coriolis and centrifugal terms with the stated signs. |
 | `E10f` | `{g,f(H−E)}−f{g,H}=(H−E){g,f}`, the algebraic identity for Maupertuis reparametrization on the energy surface. |
 
-E10f is now a Lean theorem in every Poisson C∞-ring, `PoissonStructure.bracket_mul_sub_algebraMap`, and `PoissonStructure.maupertuis` is its consequence modulo the ideal `(H − E)`. E10d is `RotatingFrame.canonical_q_hamiltonian`, and E10e is `RotatingFrame.canonical_velocity_hamiltonian`, for every potential that does not depend on the momenta. E10a–c have no Lean counterpart.
+E10f is now a Lean theorem in every Poisson C∞-ring, `PoissonStructure.bracket_mul_sub_algebraMap`, and `PoissonStructure.maupertuis` is its consequence modulo the ideal `(H − E)`. E10c is `TwoBody.kineticEnergy_eq` for real velocities and `TwoBody.kineticEnergy_eq_centre` on the canonical phase space. E10d is `RotatingFrame.canonical_q_hamiltonian`, and E10e is `RotatingFrame.canonical_velocity_hamiltonian`, for every potential that does not depend on the momenta. E10a and E10b have no Lean counterpart.
 
 ## E11: Anharmonic frequency shift
 
