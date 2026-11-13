@@ -88,6 +88,7 @@ public import ProjectAInos.Mechanics.Jet.Basic
 public import ProjectAInos.Mechanics.Jet.Conservation
 public import ProjectAInos.Mechanics.Jet.Euler
 public import ProjectAInos.Mechanics.Jet.Noether
+public import ProjectAInos.Mechanics.Jet.Prolongation
 public import ProjectAInos.Mechanics.Jet.Standard
 public import ProjectAInos.Mechanics.OpenDomain
 public import ProjectAInos.Mechanics.Poisson.AngularMomentum

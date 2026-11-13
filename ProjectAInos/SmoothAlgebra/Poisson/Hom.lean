@@ -26,20 +26,6 @@ open SmoothRing SmoothOperation
 variable {P Q R : Type*} [CommRing P] [Algebra ℝ P] [SmoothRing P]
   [CommRing Q] [Algebra ℝ Q] [SmoothRing Q] [CommRing R] [Algebra ℝ R] [SmoothRing R]
 
-namespace SmoothRingHom
-
-theorem map_neg (φ : SmoothRingHom P Q) (a : P) : φ (-a) = -φ a :=
-  _root_.map_neg φ.toAlgHom a
-
-theorem map_sub (φ : SmoothRingHom P Q) (a b : P) : φ (a - b) = φ a - φ b :=
-  _root_.map_sub φ.toAlgHom a b
-
-theorem map_sum {ι : Type*} (φ : SmoothRingHom P Q) (s : Finset ι) (f : ι → P) :
-    φ (∑ i ∈ s, f i) = ∑ i ∈ s, φ (f i) :=
-  _root_.map_sum φ.toAlgHom f s
-
-end SmoothRingHom
-
 /-- `φ` preserves the bracket. -/
 def IsPoissonHom (π : AlmostPoissonStructure P) (ρ : AlmostPoissonStructure Q)
     (φ : SmoothRingHom P Q) : Prop :=
