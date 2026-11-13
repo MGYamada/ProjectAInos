@@ -82,6 +82,17 @@ theorem almostPoisson_bracket_generator_left (w : κ → κ → FreeSmoothRing �
   · intro h
     exact absurd (Finset.mem_univ c) h
 
+/-- The bracket in terms of the brackets of the generators with the second
+argument: `{f, g} = Σₐ ∂ₐf {xₐ, g}`. -/
+theorem almostPoisson_bracket_eq_sum_left (w : κ → κ → FreeSmoothRing κ)
+    (hw : ∀ a b, w a b = -w b a) (f g : FreeSmoothRing κ) :
+    (almostPoisson w hw).bracket f g =
+      ∑ a, partialDerivation a f * (almostPoisson w hw).bracket (generator a) g := by
+  rw [almostPoisson_bracket]
+  refine Finset.sum_congr rfl fun a _ => ?_
+  rw [almostPoisson_bracket_generator_left, Finset.mul_sum]
+  exact Finset.sum_congr rfl fun b _ => by ring
+
 /-- The prescribed values are the brackets of the generators. -/
 @[simp] theorem almostPoisson_bracket_generator (w : κ → κ → FreeSmoothRing κ)
     (hw : ∀ a b, w a b = -w b a) (a b : κ) :

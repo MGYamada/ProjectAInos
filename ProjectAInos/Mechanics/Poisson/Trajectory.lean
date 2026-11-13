@@ -60,6 +60,16 @@ theorem lift_eq_of_isIntegral (h : IsTrajectory π H c) {f : FreeSmoothRing κ}
   refine TimeFunction.eq_of_timeDerivative_eq_zero ?_ s t
   rw [h.timeDerivative_lift, hf, SmoothRingHom.map_zero]
 
+/-- If the bracket of an observable with the Hamiltonian lies in an ideal that
+vanishes along the trajectory, the observable takes the same value at all
+times. -/
+theorem lift_eq_of_bracket_mem (h : IsTrajectory π H c) {I : Ideal (FreeSmoothRing κ)}
+    (hI : ∀ x ∈ I, FreeSmoothRing.lift c x = 0) {f : FreeSmoothRing κ}
+    (hf : π.bracket f H ∈ I) (s t : Fin 1 → ℝ) :
+    FreeSmoothRing.lift c f s = FreeSmoothRing.lift c f t := by
+  refine TimeFunction.eq_of_timeDerivative_eq_zero ?_ s t
+  rw [h.timeDerivative_lift, hI _ hf]
+
 /-- The Hamiltonian is constant along its trajectories. -/
 theorem lift_hamiltonian_eq (h : IsTrajectory π H c) (s t : Fin 1 → ℝ) :
     FreeSmoothRing.lift c H s = FreeSmoothRing.lift c H t :=

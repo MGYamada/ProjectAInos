@@ -199,7 +199,10 @@ and Maupertuis–Jacobi statements, the canonical bracket with Hamilton's
 equations, the rigid body with Euler's equations, the angular momentum of a
 particle with its momentum map, the heavy top, the Galilei algebra of a free
 particle, the virial identity, and the equations of motion in a uniformly
-rotating frame. The kinematics of a rigid body is proved by linear algebra:
+rotating frame. Kepler's problem is treated with the inverse distance as a
+generator: the Runge–Lenz identities are proved, and the Runge–Lenz vector is
+constant along smooth solutions of the inverse-square law. The kinematics of a
+rigid body is proved by linear algebra:
 `so(3) ≅ ℝ³`, the angular velocity, and the inertia tensor of point masses with
 its principal moments. Integrals of the motion are constant along
 trajectories of a Hamiltonian on a free C∞-ring. Symplectic structures,

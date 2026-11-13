@@ -63,6 +63,16 @@ theorem mem_normalizer {I : Ideal P} {f : P} :
 theorem IsPoissonIdeal.isCoisotropic {I : Ideal P} (h : π.IsPoissonIdeal I) :
     π.IsCoisotropic I := fun f hf g _ => h f hf g
 
+/-- A principal ideal is a Poisson ideal if the brackets of its generator lie
+in it. -/
+theorem isPoissonIdeal_span_singleton {c : P}
+    (h : ∀ g, π.bracket c g ∈ Ideal.span {c}) : π.IsPoissonIdeal (Ideal.span {c}) := by
+  intro f hf g
+  obtain ⟨k, rfl⟩ := Ideal.mem_span_singleton'.mp hf
+  rw [π.toAlmostPoissonStructure.bracket_mul_left]
+  exact add_mem (Ideal.mul_mem_left _ _ (h g))
+    (Ideal.mul_mem_right _ _ (Ideal.subset_span rfl))
+
 /-- A coisotropic ideal lies in its normalizer. -/
 theorem IsCoisotropic.le_normalizer {I : Ideal P} (h : π.IsCoisotropic I) {f : P}
     (hf : f ∈ I) : f ∈ π.normalizer I := fun g hg => h f hf g hg

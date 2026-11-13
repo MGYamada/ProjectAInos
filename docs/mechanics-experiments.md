@@ -90,6 +90,8 @@ For `H=p²/(2m)−α/r`, set `M=q×p` and `A=p×M−mαq/r`, with `r=√(q·q)`.
 | `E5f` | The orbit identity `A·q=|M|²−mαr`. |
 | `E5g` | Rutherford algebra: substituting `E=mv∞²/2` and `M=mρv∞` gives `cot²(χ/2)=e²−1=(mv∞²ρ/α)²`. |
 
+E5a–f are now Lean theorems in every Kepler frame, where `1/r` is an element `ρ` with the brackets of the inverse distance and `ρ²(q·q)=1` is not assumed. E5b, E5d and E5f hold exactly: `Kepler.IsFrame.angularMomentum_rungeLenz`, `Kepler.rungeLenz_dotProduct_angularMomentum`, `Kepler.rungeLenz_dotProduct_q`. E5a, E5c and E5e hold up to explicit multiples of `ρ²(q·q)−1`: `Kepler.IsFrame.rungeLenz_hamiltonian`, `Kepler.IsFrame.rungeLenz_rungeLenz`, `Kepler.rungeLenz_dotProduct_self`. E5g has no Lean counterpart.
+
 ## E6: Rigid-body and heavy-top brackets
 
 The body-frame bracket is `{F,G}=−L·(∇F×∇G)`. These checks support §§33–37 and the planned Poisson-reduction infrastructure.
