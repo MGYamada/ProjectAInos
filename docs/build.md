@@ -17,8 +17,10 @@ lake build ProjectAInos
 
 ## Set up doc-gen4
 
-Create `docbuild/lakefile.toml` with the following contents. Git ignores the
-entire `docbuild/` directory, including its manifest and generated HTML.
+The repository tracks `docbuild/lakefile.toml`, `docbuild/lean-toolchain`, and
+`docbuild/lake-manifest.json`. These pin the documentation toolchain and
+dependencies. All other `docbuild/` contents, including generated HTML and
+Lake build output, are Git-ignored. The tracked Lake configuration is:
 
 ```toml
 name = "docbuild"
@@ -36,11 +38,10 @@ name = "ProjectAInos"
 path = "../"
 ```
 
-From `docbuild/`, resolve the documentation dependencies and build the
+From `docbuild/`, use the pinned documentation dependencies to build the
 reference. The source links in this local build open Lean files in VS Code.
 
 ```sh
-MATHLIB_NO_CACHE_ON_UPDATE=1 lake update doc-gen4
 DOCGEN_SRC=vscode lake build ProjectAInos:docs
 ```
 
@@ -48,9 +49,12 @@ For a standalone API preview, run `python3 docs/brand_api.py` from the
 repository root to add the Project AInos heading and shortcuts. The combined
 handbook build applies the branding to its bundled copy.
 
-When the root package's dependencies change, run
+To update doc-gen4, run `MATHLIB_NO_CACHE_ON_UPDATE=1 lake update doc-gen4`
+from `docbuild/` and commit the updated manifest. When the root package's
+dependencies change, run
 `MATHLIB_NO_CACHE_ON_UPDATE=1 lake update ProjectAInos` from `docbuild/` before
-rebuilding. When upgrading Lean, update the Mathlib and doc-gen4 versions to
+rebuilding, and commit the updated documentation manifest. When upgrading Lean,
+update both tracked `lean-toolchain` files and the Mathlib/doc-gen4 versions to
 the matching release. [doc-gen4 setup for v4.35.0](https://github.com/leanprover/doc-gen4/blob/v4.35.0/README.md)
 
 ## Build the HTML handbook
@@ -73,7 +77,7 @@ handbook before replacing a previous build.
 
 For Markdown edits, rerun the handbook script. For changes to Lean definitions
 or docstrings, rebuild the API reference first. Quarto and doc-gen4 output stay
-under the Git-ignored `docbuild/` directory.
+in ignored subdirectories of `docbuild/`.
 
 ## Preview locally
 

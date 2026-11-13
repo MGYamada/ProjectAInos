@@ -278,7 +278,9 @@ these interfaces in typed examples with default elaborator options. It
 runs in required CI alongside the root-import and transitive axiom checks.
 The separate Experiments workflow runs exact SymPy checks of the inverse
 chart, Jacobian, metric, inverse metric, duality, full/partial tensor
-contraction and sign reversal:
+contraction and sign reversal. It also checks Levi-Civita coefficients,
+torsion and metric compatibility for the standard, nonlinear and conformal
+examples, and the nonlinear chart's Hessian transformation term:
 
 ```sh
 experiments/.venv/bin/python -m pip install ./experiments
@@ -287,8 +289,117 @@ experiments/.venv/bin/python -m ainos_experiments.verify_lorentz_geometry
 
 These computations use exact real symbolic expressions, with no random
 parameters or numerical tolerances. The formal acceptance evidence is
-the Lean proofs. Connections, curvature, parallel transport, geodesics,
-curved differential forms and the Newtonian motion limit remain open.
+the Lean proofs. The connection construction below is proved; its concrete
+coordinate examples are still experimental checks at this point.
+
+## GR 5.1: Lorentz Levi-Civita construction
+
+`Lorentzian/Connection.lean` expresses metric compatibility directly with
+`LorentzMetric.form` and mathlib's `CovariantDerivative`. A native connection
+acts as `cov Y x v`, meaning differentiation of `Y` in direction `v` at `x`.
+`IsLeviCivita` requires this compatibility and zero intrinsic torsion.
+`IsLeviCivita.koszul_eq` derives the Koszul formula; `uniqueness` states
+equality of action on fields differentiable at the evaluation point.
+This qualification is necessary: the carrier does not constrain values on
+nondifferentiable fields.
+
+`Lorentzian/LeviCivita.lean` constructs `LorentzMetric.leviCivita`. Koszul
+is proved tensorial in its first and third arguments, and `sharp` turns
+the resulting covector into the connection's value. Local differentiable
+extensions test nondegeneracy without a global frame. The construction
+chooses zero at points where the differentiated field is not differentiable.
+`isLeviCivita_leviCivita` proves metric compatibility and zero torsion;
+`IsLeviCivita.eq_leviCivita` identifies any other such connection on
+differentiable fields. `leviCivita_opposite` is equality of the constructed
+connections under whole-metric sign reversal, since both use the same
+zero extension.
+
+`Tensor/Regularity.lean` proves that a finite-rank hom-bundle section is
+`C^n` at a point if it sends every locally smooth section to a locally
+`C^n` section. The proof uses bundle trivializations on neighborhoods,
+with norms only on the models. `Lorentzian/Regularity.lean` applies this
+criterion to the metric dual of the connection. Directional derivatives
+and Lie brackets lose at most one derivative; the smooth `sharp` recovers
+the connection. `contMDiffAt_leviCivita` maps locally `C^(n+1)` vector fields
+to locally `C^n` hom sections for `n : ℕ∞`, including the smooth case.
+`leviCivita_contMDiff` registers the native
+`CovariantDerivative.ContMDiffCovariantDerivative` instance at each of these
+orders. These regularity conclusions are proved from the smooth metric.
+
+`Lorentzian/Christoffel.lean` works on the coordinate model, using its
+canonical identification with its actual tangent bundle. `christoffel`
+evaluates the constructed connection on constant coordinate fields;
+`christoffel_eq` proves the inverse-metric formula. The coefficients are
+smooth, symmetric in the lower indices and invariant under metric-sign
+reversal. `leviCivita_model_coordinates` expresses the connection on any
+differentiable coordinate vector field as its ordinary derivative plus
+the Christoffel sum. `minkowski_christoffel` proves zero coefficients for
+both flat signatures in every dimension.
+
+`Lorentzian/ChartConnection.lean` extends these interfaces to arbitrary smooth
+maximal-atlas charts. `chartTangentMap` and `chartField` use the actual tangent
+derivative and its inverse on the chart source. `chartChristoffel_eq` derives
+the inverse-metric formula, with scalar derivatives in the chart basis;
+`chartChristoffel_contMDiffAt`, `chartChristoffel_symmetric`, and
+`chartChristoffel_opposite` prove smoothness, lower-index symmetry and sign
+invariance. `leviCivita_chart_coordinates` gives the derivative plus coefficient
+formula for locally differentiable coordinate components. The standard model
+chart agrees with `christoffel` via `chartChristoffel_model`.
+
+For `τ = e' ∘ e.symm` and a point in both chart sources,
+`chartChristoffel_transformation` proves
+`∑ₗ Dτᵏₗ Γₑˡᵢⱼ = D²τᵏᵢⱼ + ∑ₐᵦ Γₑ'ᵏₐᵦ Dτᵃᵢ Dτᵇⱼ`.
+The proof uses coordinate-field changes, locality of the native connection,
+the Leibniz rule and the chain rule. Its hypotheses require only smooth atlas
+membership and overlap membership, with no global chart or frame assumption.
+
+`Lorentzian/ConnectionExamples.lean` computes the actual connection for
+the two-chart shear example. `christoffel_shear` gives all eight
+coefficients, with only `Γˣ_tt = 2` nonzero. `shear_hessian` differentiates
+the actual transition Jacobian; `connection_shear_transformation` proves
+that the Jacobian carries the connection term to this Hessian, as required
+when the inertial connection coefficients vanish. `chartChristoffel_standard`
+recovers those coefficients in the actual standard chart;
+`chartChristoffel_inertial` proves zero coefficients for the same metric in
+the actual inertial chart. `chart_transformation_shear` applies the general
+overlap law to these two charts and recovers the Hessian identity.
+
+`Lorentzian/Pullback.lean` constructs a Lorentz metric from a smooth map
+with invertible tangent derivatives. It proves smoothness and signature on
+the actual fibres, and identity, composition and sign-reversal laws. Global
+bijectivity of the map is unnecessary. `Lorentzian/Naturality.lean` proves
+`koszul_naturality` by the scalar chain rule and Lie-bracket naturality.
+`leviCivita_naturality_of_metric` then states that a smooth metric-preserving
+map intertwines the two constructed connections on pulled-back fields
+differentiable at the target point. Its derivative invertibility is derived
+from metric nondegeneracy and equal dimension. The input fields are total
+sections with only local differentiability hypotheses.
+
+`Manifold/OpenSubset.lean` proves an open inclusion is a smooth local
+diffeomorphism with invertible tangent derivative. `Lorentzian/Restriction.lean`
+uses this to construct `restrict U`, and `leviCivita_restrict` identifies its
+connection with the ambient connection on restricted differentiable fields.
+Both the metric and connection statements use the derivative of the
+inclusion to identify the actual tangent fibres. The nonlinear metric agrees
+with the general metric pullback, and `leviCivita_shear_naturality` verifies
+the native connection identity for arbitrary differentiable target fields.
+
+The construction works for either Lorentz convention with the existing
+smooth metric interface. It assumes no Hausdorffness, orientation, time
+orientation, global frame or positive-definite tangent metric. The
+Koszul existence/uniqueness argument adapts mathlib's Riemannian proof,
+replacing its positive-definite duality with proved Lorentz `flat`/`sharp`.
+The regularity proof is supplied separately here.
+
+Typed contracts in `checks/LorentzGeometryAPI.lean` cover the carrier,
+compatibility equation, full Koszul formula, torsion, uniqueness, sign
+reversal, local/native finite and smooth regularity, the full coordinate
+formula on models and manifold charts, the complete overlap transformation
+law, metric pullback, naturality, open restriction and the nonlinear
+connection examples at default elaborator settings. The stage B connection
+proof endpoints are implemented; its PR still requires review and merge.
+Curvature, parallel transport, geodesics, curved forms and the Newtonian
+motion limit remain later work.
 
 ## Scope and next stages
 

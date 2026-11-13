@@ -73,8 +73,53 @@ nonconstant coefficients. Lean verifies its derivative, coefficient
 transformation, duality and opposite-sign covariance. A nonconstant
 `dX ⊗ dX` tensor has metric contraction 1 in both charts. Typed API examples
 are required CI checks; exact SymPy computations run separately. This
-increment addresses #43 within #52; the remaining tensor operations,
-connection construction and all later 5.1 stages remain subsequent work.
+increment addresses #43 within #52.
+
+The next increment constructs the Lorentz Levi-Civita connection from the
+Koszul formula and `sharp`, using mathlib's native `CovariantDerivative`.
+Tensoriality of Koszul in its direction/test fields supplies the continuous
+linear map on each actual tangent fibre. Covariant-derivative laws, metric
+compatibility and vanishing torsion are proved. Nondegeneracy and local
+extensions of arbitrary tangent vectors prove uniqueness on differentiable
+sections. No positive-definite metric or global frame is introduced.
+
+Regularity is proved separately: local smooth-field tests characterize
+`C^n` finite-rank hom sections, the Koszul terms lose at most one derivative,
+and the smooth inverse metric raises the result. The connection takes
+`C^(n+1)` fields to `C^n` hom sections and satisfies mathlib's
+`ContMDiffCovariantDerivative` at every finite order and at ∞. Negating the
+metric leaves the constructed connection unchanged.
+
+On the coordinate model, Lean derives the Christoffel formula from this
+connection and proves its smoothness, symmetry and action on arbitrary
+differentiable fields. The standard Minkowski coefficients vanish. The
+nonlinear two-chart example now has Lean proofs of all eight connection
+coefficients (`Γˣ_tt = 2` is the only nonzero one), the actual transition's
+Hessian, and the corresponding connection transformation identity. Typed
+examples fix the finite-regularity and coordinate contracts. Exact SymPy
+checks also cover the conformal metric's coefficients; that curved example
+still needs Lean proofs.
+
+Koszul and Levi-Civita naturality hold under
+smooth metric-preserving maps, without global bijectivity. The native
+connection theorem derives tangent invertibility from nondegeneracy and equal
+dimension, and needs only pointwise differentiability of the target field.
+Pullback metrics have proved smoothness, signature and identity/composition/sign
+laws. Open inclusions are proved local diffeomorphisms, yielding an actual
+restricted metric and the compatibility of its connection with the ambient
+one. The nonlinear shear metric and arbitrary-field connection identity now
+also instantiate these general results.
+
+The manifold-chart interface now derives the inverse-metric Christoffel
+formula, smoothness, lower-index symmetry and sign invariance in every smooth
+chart. Local coordinate-field expansions and the Leibniz rule prove the
+coefficient transformation law on arbitrary chart overlaps, including the
+actual transition Hessian. The nonlinear two-chart regression specializes
+this general theorem: the standard chart has `Γˣ_tt = 2`, while the same
+metric has zero coefficients in the inertial chart. Typed API examples fix
+the full law with only atlas and overlap hypotheses. Stage B's proof endpoints
+are implemented and awaiting PR review/merge; curvature and stages D–G remain
+subsequent work.
 
 ## Minkowski Geometry and Relativistic Kinematics
 

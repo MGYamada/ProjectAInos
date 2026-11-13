@@ -109,8 +109,15 @@ tangent bundle, finite mixed tensor bundles with smooth contraction and
 field pullback along diffeomorphisms, and
 a nonlinear two-chart Minkowski regression. Its
 [API and proof map](smooth-geometry.md#gr-51-metric-duality-and-the-first-chart-regression)
-distinguishes the proved foundation from the remaining tensor, connection,
-curvature and motion work tracked by [#52](https://github.com/MGYamada/ProjectAInos/issues/52).
+also records the Lorentz Levi-Civita construction: metric compatibility,
+vanishing torsion, uniqueness on differentiable sections, finite and smooth
+regularity, and metric-sign invariance are proved. The Christoffel formula,
+smoothness and coefficient transformation law with the transition Hessian
+hold on arbitrary smooth manifold charts. The nonlinear shear verifies this
+general law in two actual charts. Metric pullback, intrinsic connection
+naturality under smooth metric-preserving maps and compatibility with open
+restriction are proved. Connection-stage review, curvature and motion remain in the
+work tracked by [#52](https://github.com/MGYamada/ProjectAInos/issues/52).
 Einstein equations and their Newtonian field-equation limit remain in 5.2;
 the Maxwell field action remains in 4.2.
 
