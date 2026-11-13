@@ -699,3 +699,36 @@ example {c : ℝ} (hc : NewtonianExamples.family.lorentzThreshold ≤ c) :
   exact (NewtonianExamples.sample_coefficients c).2.1
 
 end NewtonianNativeMetric
+
+section NewtonianError
+
+open NewtonianMetricFamily
+
+variable {U : TopologicalSpace.Opens NewtonianCoordinates} (f : NewtonianMetricFamily U)
+
+example {V : ℝ} (hV : 0 ≤ V) :
+    ∀ᶠ c : ℝ in Filter.atTop, ∀ q : U, ∀ v : NewtonianSpace, ‖v‖ ≤ V →
+      ‖f.acceleration c q v + f.spatialGradient q‖ ≤ f.accelerationErrorConstant V / c^2 :=
+  f.eventually_acceleration_error hV
+
+example {c V : ℝ} (hc : 1 ≤ c) (hlarge : 24 * f.bound < c^2)
+    (x q : U) (hV : 0 ≤ V) {v : NewtonianSpace} (hv : ‖v‖ ≤ V) :
+    ‖coordinateTimeAcceleration (f.lorentzMetric c hc
+        (show 9 * f.bound < c^2 by linarith [f.bound_nonneg])) (physicalChart x) q v +
+      (fun k : Fin 3 => fderiv ℝ f.potential q (Pi.single k.succ 1))‖ ≤
+      f.accelerationErrorConstant V / c^2 :=
+  f.native_acceleration_error hc hlarge x q hV hv
+
+example {c a b V δ : ℝ} (hc : 1 ≤ c) (hlarge : 24 * f.bound < c^2)
+    (hV : 0 ≤ V) {z w : ℝ → NewtonianSpace × NewtonianSpace}
+    (hz : ContinuousOn z (Icc a b)) (hw : ContinuousOn w (Icc a b))
+    (hz' : ∀ t ∈ Ico a b, HasDerivWithinAt z (f.relativisticPhaseField c t (z t)) (Ici t) t)
+    (hw' : ∀ t ∈ Ico a b, HasDerivWithinAt w (f.newtonianPhaseField t (w t)) (Ici t) t)
+    (hseg : ∀ t ∈ Ico a b,
+      segment ℝ (Fin.cons t (w t).1 : NewtonianCoordinates) (Fin.cons t (z t).1) ⊆ U)
+    (hspeed : ∀ t ∈ Ico a b, ‖(z t).2‖ ≤ V) (hδ : ‖z a - w a‖ ≤ δ) :
+    ∀ t ∈ Icc a b,
+      ‖z t - w t‖ ≤ gronwallBound δ (max 1 f.bound) (f.accelerationErrorConstant V / c^2) (t - a) :=
+  f.phase_error_gronwall hc hlarge hV hz hw hz' hw' hseg hspeed hδ
+
+end NewtonianError

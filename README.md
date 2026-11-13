@@ -329,8 +329,11 @@ bounded-velocity negativity and spatial positivity, and the native
 coordinate-time equation including its non-affine correction. A polynomial
 family has proved C² bounds and nonzero time/mixed/spatial data. The native
 Lorentz metric and its coordinate connection are constructed.
-Uniform inverse bounds isolate the suppressed time components. The uniform
-acceleration, common existence interval and trajectory-convergence estimates remain.
+Uniform inverse bounds and coefficient derivatives give the uniform
+`O(c⁻²)` acceleration error. A Gronwall estimate controls position and velocity
+on a common interval where both solutions exist and their connecting segments
+stay in the domain. The relativistic Lipschitz estimate and the common
+existence interval for nearby initial data remain.
 The [GR guide](docs/general-relativity.md)
 records the exact scope and typed contracts.
 The [shared geometry guide](docs/smooth-geometry.md)

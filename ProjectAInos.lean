@@ -53,11 +53,13 @@ public import ProjectAInos.GeneralRelativity.FreeGeodesic
 public import ProjectAInos.GeneralRelativity.FreeLagrangian
 public import ProjectAInos.GeneralRelativity.ManifoldMotion
 public import ProjectAInos.GeneralRelativity.ManifoldStationary
+public import ProjectAInos.GeneralRelativity.NewtonianAccelerationBounds
 public import ProjectAInos.GeneralRelativity.NewtonianBounds
 public import ProjectAInos.GeneralRelativity.NewtonianExamples
 public import ProjectAInos.GeneralRelativity.NewtonianInverseBounds
 public import ProjectAInos.GeneralRelativity.NewtonianLorentz
 public import ProjectAInos.GeneralRelativity.NewtonianMetric
+public import ProjectAInos.GeneralRelativity.NewtonianTrajectoryComparison
 public import ProjectAInos.GeneralRelativity.ParticleAction
 public import ProjectAInos.GeneralRelativity.ParticleExamples
 public import ProjectAInos.GeneralRelativity.ProperTime

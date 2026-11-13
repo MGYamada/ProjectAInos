@@ -382,7 +382,22 @@ checks the same norm and sample coefficients, the leading inverse blocks, the sa
 and non-affine corrections in separate conformal and static calibrations.
 The rational sample limit is not a uniform bound or a trajectory theorem.
 
-**Remaining:** prove the uniform `O(c⁻²)` acceleration estimate and uniform local
-Lipschitz bound; establish a common finite existence interval using a compact
-tube away from the boundary; apply Gronwall and derive uniform convergence
-and the rate, including zero Lipschitz constant. This stage remains incomplete.
+The derivative of the time-time coefficient contributes the leading
+spatial gradient. `christoffel_spatial_error` and
+`christoffel_time_abs_le` bound the remaining terms, including time
+derivatives and the mixed and spatial corrections. For `c ≥ 1`, `c² > 24K`
+and `‖v‖ ≤ V`, `native_acceleration_error` bounds
+`‖a_c + ∇ₓΦ‖` by `accelerationErrorConstant V / c²` uniformly on `U`.
+
+On coordinate segments contained in `U`, the potential's second derivative
+gives a Lipschitz constant `max 1 K` for the Newtonian phase field at fixed
+time. `phase_error_gronwall` compares the position and velocity of two
+solutions already defined on `[a,b]`. For initial error at most `δ`, the
+bound at time `t` is `gronwallBound δ (max 1 K) (C/c²) (t-a)`. It uses
+the velocity bound and requires the segment between the two positions at
+each time to stay in `U`.
+
+**Remaining:** prove the uniform local Lipschitz bound for the relativistic
+field and establish a common finite existence interval using a compact
+tube away from the boundary. The final convergence and rate results will
+combine that existence theorem with the comparison estimate.

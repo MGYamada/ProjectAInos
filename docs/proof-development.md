@@ -646,6 +646,12 @@ tangent-bundle trivializations of the common open domain identify the smooth
 coefficient form with a native Lorentz metric. The coordinate connection is
 derived from this metric. Rescaling the time row and estimating each inverse
 column gives the uniform temporal and spatial inverse bounds.
-The uniform acceleration, Lipschitz, existence and trajectory estimates remain.
-Typed contracts distinguish these outstanding claims from the proved local
-coordinate-time identity; exact symbolic examples do not discharge them.
+The lower-index Christoffel formula isolates the potential derivative in
+the leading spatial time-time slot. The inverse bounds control the raised
+components and retain the time-component correction in coordinate time.
+Contracting with bounded physical-time velocities gives a uniform
+`O(c⁻²)` acceleration error. The potential Hessian bound gives the
+Newtonian phase-field Lipschitz estimate along contained segments. These
+results yield the Gronwall phase error on a common interval of existence.
+The uniform relativistic Lipschitz estimate and common existence interval
+for nearby initial data remain.
