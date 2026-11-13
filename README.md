@@ -114,8 +114,8 @@ The order of topics after 6 is yet to be determined.
 
 `ProjectAInos/SmoothAlgebra/` and `ProjectAInos/SmoothGeometry/` are independent
 mathematical foundations shared by topics 2–5. The shared `Variational/`
-layer depends on those foundations. The Lorentzian variation lemmas also
-use generic manifold-variation machinery from `Variational/`. These
+layer currently imports only Mathlib and its own modules. The Lorentzian
+variation lemmas use its generic manifold-variation machinery. These
 shared modules may import one another and external mathematical libraries.
 Their import graph excludes project physics and the vendored Yang–Mills
 theory.
@@ -176,6 +176,20 @@ affine models. See [Joyce, Definitions 2.10, 2.13, 4.13, 4.16, 4.23 and §4.6](h
 Each stage is checked by `lake build --wfail ProjectAInos`, the root-import
 check, and the transitive axiom audit. Only `propext`, `Classical.choice`, and
 `Quot.sound` are allowed.
+
+In `Mechanics/`, Section 2 currently has its first stage only. On a finite real time interval,
+fixed-endpoint stationarity of the actual action is equivalent to the
+Euler–Lagrange equation, including Lagrangians defined on an open jet domain.
+Adding the total time derivative of a boundary function `F(t, q)` changes the
+action by an endpoint difference and leaves the Euler–Lagrange residual
+unchanged. The natural scalar Lagrangian yields Newton's equation, and
+Lagrangians can be taken from the shared C∞-ring of smooth operations. The
+algebraic core of the plan (partial derivatives of smooth operations, dual
+numbers and C∞-derivations) is in the shared algebra layer. Jet rings,
+Galilean symmetry and Noether's theorem, and the topics of 2.1, 2.3 and 2.4
+are research targets with no Lean counterpart yet. See the
+[fixed-endpoint mechanics guide](docs/mechanics.md) and the
+[C∞ mechanics research plan](docs/cinfty-mechanics.md).
 
 Section 3.1 uses natural units `c = 1` and signature `(-+++)` in the physics
 layer. Shared geometry accepts both Lorentz conventions explicitly; causal
@@ -343,7 +357,10 @@ the equations. Pointwise Lorentz frames prove `⋆(j♭) = ιⱼ vol` with no fl
 or global-frame assumption. Chart differentiation proves `dJ = (div j) vol`,
 so current closedness is equivalent to vanishing covariant vector divergence.
 A time-dependent field has the proved nonzero vector source `j = -∂x`, fixing
-the physical sign. Native two-form covariant differentiation is now constructed,
+the sign of the public source convention `∇ᵢFⁱʲ = jʲ`. The matter current
+compatible with the flat particle coupling `+e∫A` is `-j`; that bridge is a
+[recorded proof obligation](docs/cinfty-electrodynamics.md#sourced-variation-and-the-matter-current).
+Native two-form covariant differentiation is now constructed,
 smooth and independent of local extensions. Its chart formula has both
 Christoffel corrections; `dF = 0` is equivalent to the cyclic covariant component
 equation in every smooth chart. The native two-form divergence is a smooth vector,
@@ -379,6 +396,9 @@ The [scalar smeared-field prototype](docs/quantum-field-theory-prototype.md)
 formalizes a common dense domain, operator closability, and positivity of
 finite vacuum words for the prospective QFT program in
 [#46](https://github.com/MGYamada/ProjectAInos/issues/46).
+The [qubit comparison prototype](docs/quantum-mechanics-prototype.md) is a
+provisional finite-dimensional study for
+[#45](https://github.com/MGYamada/ProjectAInos/issues/45).
 
 The documentation index links to the guides and the build instructions for the HTML handbook and Lean API reference. [Documentation index](docs/README.md)
 

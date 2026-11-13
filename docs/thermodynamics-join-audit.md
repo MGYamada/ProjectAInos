@@ -199,7 +199,10 @@ Nondifferentiability of the energy entropy alone is not automatically the
 same as failure of these geometric assumptions: the implemented thermal
 maximum criterion explicitly permits intervals of supporting slopes.
 Conversely, those slope-interval results do not prove that every phase
-transition model meets S2–S3. No general nonsmooth relaxation, preservation
-theorem for arbitrary physical joins, or non-universal-temperature thermal
-family is constructed here. The smooth reservoir witness and the conditional
-entropy theorems have exactly the scopes stated above.
+transition model meets S2–S3. No general nonsmooth relaxation or preservation
+theorem for arbitrary physical joins is constructed here. The smooth reservoir
+witness and the conditional entropy theorems have exactly the scopes stated
+above. A populated family with distinct temperatures is constructed separately
+in [LogarithmicThermalModel.lean](../ProjectAInos/Thermodynamics/LogarithmicThermalModel.lean);
+the [models guide](thermodynamics-models.md#a-populated-family-with-distinct-temperatures)
+describes it.

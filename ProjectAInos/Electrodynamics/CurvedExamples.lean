@@ -11,7 +11,7 @@ public import ProjectAInos.SmoothGeometry.Minkowski.HodgeFour
 
 On Minkowski spacetime, `F = t dt ∧ dx` has `H = t dy ∧ dz` and
 `dH = dt ∧ dy ∧ dz`. These are direct component computations, including
-the physical constitutive sign, rather than an assumed source equation.
+the public constitutive sign `H = -⋆F`, rather than an assumed source equation.
 -/
 
 @[expose] public section

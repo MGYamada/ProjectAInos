@@ -35,7 +35,9 @@ theorem negativeSpatial_currentForm : currentForm g o negativeSpatial = spatialC
   ext i j
   fin_cases j <;> rfl
 
-/-- The field `F=t dt∧dx` has the vector source `j=-∂x`, fixing the physical sign. -/
+/-- The field `F=t dt∧dx` has the vector source `j=-∂x`, fixing the sign of the public
+source convention `∇_μ F^{μν} = j^ν`. The matter current compatible with the flat
+conventions is `-j = ∂x`; see the module docstring of `Electrodynamics/Curved.lean`. -/
 theorem electric_source : source g o electric = negativeSpatial := by
   apply (currentEquiv g o).injective
   change currentForm g o (source g o electric) = currentForm g o negativeSpatial

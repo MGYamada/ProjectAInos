@@ -12,9 +12,13 @@ public import ProjectAInos.SmoothGeometry.Lorentzian.HodgeSquare
 /-! # Maxwell forms on a fixed Lorentz spacetime
 
 Time comes first, signature is `(-+++)`, and the constitutive normalization
-is one. The physical convention is `H = -⋆F`, `J = ⋆(j♭)`. All objects are
-smooth sections on the actual tangent bundle. Maxwell equations are explicit
-physical premises; no field action or gravitational dynamics is assumed.
+is one. The public convention is `H = -⋆F`, `J = ⋆(j♭)`, so the source vector
+satisfies `∇_μ F^{μν} = j^ν`. Under the flat conventions `F_{0i} = -E_i` and
+particle coupling `+e∫A`, the compatible matter current is `-j`. That bridge is
+a recorded proof obligation: see the source sign contract in
+`docs/cinfty-electrodynamics.md`. All objects are smooth sections on the actual
+tangent bundle. Maxwell equations are explicit physical premises; no field
+action or gravitational dynamics is assumed.
 -/
 
 @[expose] public section

@@ -12,7 +12,8 @@ public import ProjectAInos.Electrodynamics.Homogeneous
 
 The actual excitation derivative is the volume dual of the intrinsic
 two-form divergence. Thus the sourced equation and its coordinate form
-are equivalent, with the prescribed physical sign and no flatness premise.
+are equivalent, with the sign of the public source convention
+`∇_μ F^{μν} = j^ν` and no flatness premise.
 -/
 
 @[expose] public section

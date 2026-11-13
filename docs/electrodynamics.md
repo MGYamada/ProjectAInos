@@ -67,7 +67,11 @@ exact agreement with minus the existing flat physical star.
 `J=dt∧dy∧dz` directly, proves `dF=0` and proves the resulting source is nonzero.
 `CurrentExamples.lean` now proves the actual vector sign `j=-∂x`, using the
 injective current identification and volume contraction, and its divergence
-vanishes. The corresponding SymPy calculation agrees.
+vanishes. The corresponding SymPy calculation agrees. This fixes the sign of
+the public source convention `∇_μF^{μν}=j^ν`. The matter current compatible
+with the flat conventions `F_{0i}=-E_i` and particle coupling `+e∫A` is `-j`;
+the [source sign contract](cinfty-electrodynamics.md#sourced-variation-and-the-matter-current)
+records that bridge as a proof obligation.
 Typed API examples fix the current roundtrips, the sole source-equation premise
 for conservation, orientation independence and exact flat normalization.
 
@@ -150,7 +154,7 @@ Our Hodge operator is fixed by `α ∧ ⋆β = ⟨α,β⟩ vol`. Compared with t
 output-index-first epsilon ordering written in his (3.97), moving the input
 indices first introduces `(-1)^(p*(n-p))`: the two-form signs agree in four
 dimensions, while odd-degree conversion needs care. His `J` in (3.114) denotes
-a one-form; our `J` is a three-form. The physical equations here use
+a one-form; our `J` is a three-form. The public equations here use
 `H = -⋆F`, `J = ⋆(j♭)` and are calibrated by the proved example
 `F = t dt∧dx`, `j = -∂x`; current notation and epsilon ordering must therefore
 be converted before identifying textbook formulas.

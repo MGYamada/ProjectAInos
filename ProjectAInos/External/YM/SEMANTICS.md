@@ -90,11 +90,14 @@ These steps also leave the continuum existence and mass-gap problems open.
 - The finite Wilson-law theorem is an **actual equality of measures**, not
   merely a structural similarity. Haar uniqueness establishes that its
   canonical normalization agrees with each `WilsonFamily.haar`.
-- Future import candidates (`Maxwell/Exterior`, `Maxwell/Shell`,
-  `Maxwell/Wick`, `Labels/Grading`, `Mink/Poincare`, `OS/Core`, and
-  `PublicView`) are **not** part of this 18-module import. Their interfaces
-  should be evaluated independently with their full dependency and license
-  provenance before additional PRs.
+- The statements above describe the original 18-module import. The Maxwell
+  homogeneous-jet closure (`Maxwell/Exterior` with `Gauge/{Lie,Colors}`,
+  `Space/{Configurations,Orthogonal}` and `Labels/Jet`) was imported afterwards
+  as phase 4; [PROVENANCE.md](PROVENANCE.md) lists all 24 files.
+- The remaining import candidates (`Maxwell/Shell`, `Maxwell/Wick`,
+  `Labels/Grading`, `Mink/Poincare`, `OS/Core`, and `PublicView`) are **not**
+  imported. Their interfaces should be evaluated independently with their full
+  dependency and license provenance before additional PRs.
 
 Original source: [`yang-mills-group/OpenAI-YM-20261028`](https://github.com/yang-mills-group/OpenAI-YM-20261028),
 commit `3456e5e75cf8d4cd558955a5c7638fba2d68f464` (Apache-2.0).
