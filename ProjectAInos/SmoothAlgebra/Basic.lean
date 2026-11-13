@@ -83,6 +83,14 @@ attribute [simp] op_proj op_nullary op_addition op_multiplication
     rfl
   rw [h, op_mul, op_const, Algebra.smul_def]
 
+/-- Interpreting smooth operations commutes with finite sums of operations. -/
+@[simp] theorem op_sum {ι : Type*} (s : Finset ι) (f : ι → SmoothOperation n)
+    (a : Fin n → A) : op (∑ i ∈ s, f i) a = ∑ i ∈ s, op (f i) a := by
+  classical
+  induction s using Finset.induction_on with
+  | empty => simp
+  | insert i s hi ih => rw [Finset.sum_insert hi, Finset.sum_insert hi, op_add, ih]
+
 @[simp] theorem op_negation (a : Fin 1 → A) : op SmoothOperation.negation a = -a 0 := by
   simp [SmoothOperation.negation]
 

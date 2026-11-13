@@ -93,7 +93,9 @@ public import ProjectAInos.QuantumMechanics.Qubit
 public import ProjectAInos.SmoothAlgebra.Basic
 public import ProjectAInos.SmoothAlgebra.Category
 public import ProjectAInos.SmoothAlgebra.Congruence
+public import ProjectAInos.SmoothAlgebra.Derivation
 public import ProjectAInos.SmoothAlgebra.Differential
+public import ProjectAInos.SmoothAlgebra.DualNumber
 public import ProjectAInos.SmoothAlgebra.Free
 public import ProjectAInos.SmoothAlgebra.GeneralLocalization
 public import ProjectAInos.SmoothAlgebra.Hom
@@ -103,6 +105,7 @@ public import ProjectAInos.SmoothAlgebra.Localization
 public import ProjectAInos.SmoothAlgebra.LocalizationComparison
 public import ProjectAInos.SmoothAlgebra.Models
 public import ProjectAInos.SmoothAlgebra.Operations
+public import ProjectAInos.SmoothAlgebra.PartialDerivative
 public import ProjectAInos.SmoothAlgebra.SmoothFunctions
 public import ProjectAInos.SmoothGeometry.AffineScheme
 public import ProjectAInos.SmoothGeometry.DifferentialForm.BivectorVolume
