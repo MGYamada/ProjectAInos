@@ -285,3 +285,66 @@ example (g : HeavyTop.PhaseSpace) : HeavyTop.poisson.bracket (HeavyTop.L ⬝ᵥ 
   poisson_L_dot_Γ_left g
 
 end HeavyTop
+
+section Galilei
+
+open AngularMomentum Galilei
+
+example (m t : ℝ) (a : Fin 3) :
+    K m t a = algebraMap ℝ Space m * q a - algebraMap ℝ Space t * p a := rfl
+
+/-- The mass is the central term of the Galilei algebra. -/
+example (m t : ℝ) (a b : Fin 3) :
+    canonical.bracket (K m t a) (p b) = if a = b then algebraMap ℝ Space m else 0 :=
+  canonical_K_p m t a b
+
+example (m t : ℝ) (a b : Fin 3) : canonical.bracket (K m t a) (K m t b) = 0 :=
+  canonical_K_K m t a b
+
+example (m t : ℝ) : canonical.bracket (M 0) (K m t 1) = K m t 2 := canonical_M_K m t 0 1
+
+example (m : ℝ) (a : Fin 3) : canonical.bracket (M a) (freeHamiltonian m) = 0 :=
+  canonical_M_freeHamiltonian m a
+
+example (m : ℝ) (a : Fin 3) : canonical.bracket (p a) (freeHamiltonian m) = 0 :=
+  canonical_p_freeHamiltonian m a
+
+/-- `{K, H₀} = p` cancels the explicit time dependence `K_t − K_s = −(t − s) p`. -/
+example {m : ℝ} (hm : m ≠ 0) (t : ℝ) (a : Fin 3) :
+    canonical.bracket (K m t a) (freeHamiltonian m) = p a :=
+  canonical_K_freeHamiltonian hm t a
+
+example (m t s : ℝ) (a : Fin 3) :
+    K m t a - K m s a = -(algebraMap ℝ Space (t - s) * p a) :=
+  K_sub_K m t s a
+
+end Galilei
+
+section Virial
+
+variable {ι : Type*} [DecidableEq ι] [Fintype ι]
+
+example (H : PhaseSpace ι) :
+    (PhaseSpace.canonical ι).bracket (∑ i, PhaseSpace.q i * PhaseSpace.p i) H =
+      ∑ i, PhaseSpace.p i * FreeSmoothRing.partialDerivation (Sum.inr i) H -
+        ∑ i, PhaseSpace.q i * FreeSmoothRing.partialDerivation (Sum.inl i) H :=
+  PhaseSpace.canonical_dilation_bracket H
+
+/-- The virial identity `{Σ qᵢ pᵢ, T + U} = 2T − kU`. -/
+example (m : ι → ℝ) {U : PhaseSpace ι} {k : ℝ}
+    (hU : ∑ i, PhaseSpace.q i * FreeSmoothRing.partialDerivation (Sum.inl i) U =
+      algebraMap ℝ (PhaseSpace ι) k * U)
+    (hUp : ∀ i, FreeSmoothRing.partialDerivation (Sum.inr i) U = 0) :
+    (PhaseSpace.canonical ι).bracket PhaseSpace.dilation (PhaseSpace.kineticEnergy m + U) =
+      2 * PhaseSpace.kineticEnergy m - algebraMap ℝ (PhaseSpace ι) k * U :=
+  PhaseSpace.virial m hU hUp
+
+/-- The hypotheses are satisfiable: the isotropic oscillator has degree two. -/
+example (m : ι → ℝ) (k : ℝ) :
+    (PhaseSpace.canonical ι).bracket PhaseSpace.dilation
+        (PhaseSpace.kineticEnergy m + PhaseSpace.oscillatorPotential k) =
+      2 * PhaseSpace.kineticEnergy m -
+        algebraMap ℝ (PhaseSpace ι) 2 * PhaseSpace.oscillatorPotential k :=
+  PhaseSpace.virial_oscillator m k
+
+end Virial
