@@ -142,9 +142,6 @@ the component equivalence. Exact SymPy independently compares `d(-⋆F)` with
 `⋆((∇ᵢFⁱʲ)♭)` for six varying components in a curved metric with a nonlinear
 shear, checking both orientations and vector-current conservation.
 
-The stage F principal endpoints are implemented and await review. The Maxwell
-action and its variational derivation belong to §4.2 / #44.
-
 The reference for local forms is [Tong, §3.2](https://davidtong.org/teaching/general-relativity/grhtml/S3).
 Our Hodge operator is fixed by `α ∧ ⋆β = ⟨α,β⟩ vol`. Compared with the
 output-index-first epsilon ordering written in his (3.97), moving the input
@@ -154,6 +151,21 @@ a one-form; our `J` is a three-form. The physical equations here use
 `H = -⋆F`, `J = ⋆(j♭)` and are calibrated by the proved example
 `F = t dt∧dx`, `j = -∂x`; current notation and epsilon ordering must therefore
 be converted before identifying textbook formulas.
+
+## Vacuum field action (§4.2)
+
+[`VacuumAction`](../ProjectAInos/Electrodynamics/VacuumAction.lean) uses the
+time-first orientation to integrate the coefficient of `−½ F ∧ ⋆F` against
+Lebesgue measure. The Lagrangian is defined on first jets. For a globally
+C² potential with integrable action density on an open region, stationarity
+under all smooth one-form variations compactly supported in that region is
+equivalent to `d⋆F = 0` there. The proof computes the derivative of the
+action, integrates the exterior derivative of a compactly supported
+three-form, and uses the nondegenerate wedge pairing and the fundamental
+lemma. The homogeneous equation `dF = 0` follows independently from
+`F = dA`. An exact gauge shift preserves the action under the stated local
+regularity hypotheses. The uniform electric example on an open unit ball
+checks positive density `1/2`, a nonzero field, and stationarity.
 
 ## Actual action and admissible variations
 
