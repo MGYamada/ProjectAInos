@@ -172,6 +172,124 @@ metric-independent flat calculus and the exterior-power comparison. The
 [Minkowski guide](special-relativity.md) describes the oriented Hodge operator
 and its use by `SpecialRelativity`; shared geometry does not import physics.
 
+## GR 5.1: metric duality and the first chart regression
+
+`Lorentzian/Dual.lean` constructs `LorentzMetric.flat` and `sharp` as
+continuous linear equivalences on each actual tangent fibre and its
+continuous dual. `flat_apply` identifies the forward map with the metric;
+`sharp_flat` and `flat_sharp` prove the inverse laws. `flat_smooth` and
+`sharp_smooth` assert smoothness as sections of the corresponding hom
+bundles. The inverse proof uses smooth inversion in bundle charts and
+pointwise nondegeneracy, without selecting a smooth orthonormal frame.
+
+`lower` and `raise` act on smooth sections, with inverse laws
+`raise_lower` and `lower_raise`. `inversePairing` produces a smooth scalar
+from two smooth covectors. `flat_naturality` and `sharp_naturality` state
+the transformation rules under a metric-preserving tangent equivalence:
+covectors pull back, while raised vectors transform by its inverse.
+Negating the metric negates both dual maps. On Minkowski space they agree
+with the existing `Minkowski.flat` and `Minkowski.sharp`.
+
+`Tensor/Bilinear.lean` provides fibrewise pullback of covariant bilinear
+tensors, its identity/composition laws and symmetry preservation, and
+smoothness of pullback and contraction against vectors.
+
+`Tensor/Bundle.lean` builds arbitrary finite tangent/cotangent tensor types
+by iterated native hom bundles. `Shape.mixed r s` has `r` contravariant
+and `s` covariant slots, represented as multilinear maps on covectors and
+vectors, respectively. `SmoothBundle` retains the model, actual fibres,
+topology, and proved smooth-bundle instances needed by this recursion.
+Only the local model is normed; no preferred norm on tangent fibres or
+global trivialization is introduced. `LorentzMetric.toTensor` uses the
+same smooth-section type as the constructed covariant two-tensor bundle.
+
+`Shape.map` transports all slots through an invertible tangent map;
+`pullback` uses its inverse. Identity, composition and inverse laws are
+proved. These are fibrewise maps, including between different manifolds
+with the same model. `coefficients` extracts local representations from
+geometric smooth sections; their smoothness and transition rule hold in
+every atlas trivialization on its domain.
+
+`Tensor/HomMap.lean` proves smoothness of inversion and induced hom maps
+in local bundle coordinates. `Tensor/Pullback.lean` uses these results
+recursively to construct `Shape.pullbackField` for every tensor shape
+along a smooth diffeomorphism between manifolds with the same model.
+The tangent map is the actual manifold derivative; its inverse is proved
+smooth rather than assumed. Pullback preserves smooth sections, reverses
+composition, respects identity and inverse diffeomorphisms, and commutes
+with full and partial contraction. Covector and covariant two-tensor
+evaluation formulas explicitly use `mfderiv`. No isometry or global
+frame is required. Pullback of covariant tensors along noninvertible
+smooth maps, and a full slot-permutation and tensor-product API, remain
+subsequent work in [#52](https://github.com/MGYamada/ProjectAInos/issues/52).
+
+`Tensor/BundleOperations.lean` proves that fibrewise composition of smooth
+bundle homomorphisms is smooth: the intermediate coordinate maps cancel.
+`Tensor/Contraction.lean` constructs intrinsic trace contraction and proves
+coordinate invariance. The fibre trace functional is itself a smooth
+section, permitting `SmoothBundle.partialContract` to retain other tensor
+arguments. For example, it contracts a `(1,2)` tensor to a covector, and
+`Shape.partialTrace_map` proves that the remaining slot transforms correctly.
+
+`Lorentzian/Tensor.lean` raises and lowers an index of smooth covariant
+two-tensors/tangent endomorphisms, with inverse laws. `contractField` is
+the smooth scalar obtained by raising an index and taking the trace.
+`contract_eq_sum_components` proves its coordinate expression
+`∑ i, ∑ j, Bᵢⱼ gⁱʲ`, with inverse coefficients derived from `sharp`, not
+supplied as separate arrays. Contraction commutes with metric-preserving
+tangent coordinate maps. Contracting the metric gives `d+1`; contracting
+an elementary covector tensor gives the inverse-metric pairing. Negating
+the metric negates contraction of a fixed covariant tensor.
+
+`Lorentzian/ChartExamples.lean` addresses [#43](https://github.com/MGYamada/ProjectAInos/issues/43)
+on the plane. The standard chart has coordinates `(t,x)`; `inertialChart`
+uses `(T,X) = (t,x+t²)`. They are actual open partial homeomorphisms in the
+smooth maximal atlas, their overlap is the whole plane, and their
+transition Jacobian is nonconstant. Pulling back `-dT²+dX²` gives
+
+\[
+g=(-1+4t^2)\,dt^2+4t\,dt\,dx+dx^2.
+\]
+
+The off-diagonal matrix entry is `2t`; the line element contains two
+equal mixed terms. `metric_covariance` uses `mfderiv` of the actual
+transition, and the component theorems evaluate the constructed metric.
+`metric_nonconstant` and `jacobian_nonconstant` compare `(0,0)` and `(1,0)`.
+The example also checks lowering, raising, and `opposite` across charts.
+`metric_tensor_pullback` identifies the nonlinear metric with the
+pullback of the Minkowski metric as an equality of smooth tensor fields.
+Its `spacetime` instance uses `LorentzManifold.toScheme`, with the same
+underlying smooth scheme as the standard Minkowski plane.
+The smooth tensor `spatialTensor`, the pullback of `dX ⊗ dX`, has the
+nonconstant coefficient matrix `[[4t²,2t],[2t,1]]`; its contraction with
+the inverse metric is proved to be 1 in both charts. The arbitrary-tensor
+contraction covariance theorem does not require symmetry of the tensor.
+This is a coordinate presentation of flat spacetime, not a curvature
+calculation or an assumption that an arbitrary Lorentz metric is flat.
+
+The conventions agree with [Tong, §§3.1.2–3.1.3](https://davidtong.org/teaching/general-relativity/grhtml/S3):
+time is index zero, `timeNegative` has signature `(-,+,…)`, and lowering
+means `v ↦ g(v,·)`. The shared API also supports `timePositive` by metric
+negation. The positive-definite inner-product identification of a space
+with its dual is not used to define the Lorentz musical maps.
+
+`checks/LorentzGeometryAPI.lean` fixes the hypotheses and conclusions of
+these interfaces in typed examples with default elaborator options. It
+runs in required CI alongside the root-import and transitive axiom checks.
+The separate Experiments workflow runs exact SymPy checks of the inverse
+chart, Jacobian, metric, inverse metric, duality, full/partial tensor
+contraction and sign reversal:
+
+```sh
+experiments/.venv/bin/python -m pip install ./experiments
+experiments/.venv/bin/python -m ainos_experiments.verify_lorentz_geometry
+```
+
+These computations use exact real symbolic expressions, with no random
+parameters or numerical tolerances. The formal acceptance evidence is
+the Lean proofs. Connections, curvature, parallel transport, geodesics,
+curved differential forms and the Newtonian motion limit remain open.
+
 ## Scope and next stages
 
 These definitions impose neither finite generation nor global Hausdorffness

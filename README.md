@@ -176,6 +176,21 @@ See the [electrodynamics API and proof map](docs/electrodynamics.md).
 The sourced Maxwell equations and field action in 4.2, collision theory,
 and QFT remain outside this implementation.
 
+Section 5.1 has begun with smooth metric duality on the actual tangent and
+cotangent bundles: `flat`, `sharp`, smooth lowering/raising of sections, and
+their coordinate compatibility. Iterated hom bundles construct finite mixed
+tensor types; full/partial trace contraction and inverse-metric contraction
+are smooth and coordinate compatible. Tensor-field pullback along
+diffeomorphisms preserves smoothness and commutes with contraction.
+A two-chart regression uses
+`(T,X) = (t,x+t²)` to obtain nonconstant coefficients for the Minkowski
+metric and proves covariance using the manifold derivative. Both charts
+belong to the smooth maximal atlas. The [shared geometry guide](docs/smooth-geometry.md)
+records the public API and exact checks. [Issue #52](https://github.com/MGYamada/ProjectAInos/issues/52)
+tracks the remaining tensor, connection, curvature, motion, curved-form,
+and time-dependent Newton-limit stages; [#43](https://github.com/MGYamada/ProjectAInos/issues/43)
+is the first chart-regression gate. Einstein dynamics belongs to 5.2.
+
 See the [proof development record](docs/proof-development.md) for the history of the Lean formalization.
 
 The documentation index links to the guides and the build instructions for the HTML handbook and Lean API reference. [Documentation index](docs/README.md)

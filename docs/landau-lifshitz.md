@@ -104,6 +104,16 @@ radiation, and cosmology.
 | Vol. 2, Ch. XIII | 5.3: Gravitational radiation |
 | Vol. 2, Ch. XIV | 5.4: Relativistic cosmology |
 
+The first 5.1 implementation provides smooth metric duality on the actual
+tangent bundle, finite mixed tensor bundles with smooth contraction and
+field pullback along diffeomorphisms, and
+a nonlinear two-chart Minkowski regression. Its
+[API and proof map](smooth-geometry.md#gr-51-metric-duality-and-the-first-chart-regression)
+distinguishes the proved foundation from the remaining tensor, connection,
+curvature and motion work tracked by [#52](https://github.com/MGYamada/ProjectAInos/issues/52).
+Einstein equations and their Newtonian field-equation limit remain in 5.2;
+the Maxwell field action remains in 4.2.
+
 ## Thermodynamics, Statistical Mechanics, and Later Topics
 
 Thermodynamics and Classical Statistical Mechanics are items 1 and 6 in the research plan. The other subjects in this table have an open implementation order after topic 6. [Elsevier series catalogue](https://legacyfileshare.elsevier.com/assets/pdf_file/0006/796479/Landau_CTP_180529.pdf) · [Volume 5 contents](https://www.sciencedirect.com/book/monograph/9780080570464/statistical-physics) · [Volume 9 contents](https://www.sciencedirect.com/book/9780080503509/statistical-physics)
