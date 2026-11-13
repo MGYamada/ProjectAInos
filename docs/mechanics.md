@@ -130,6 +130,23 @@ identities use the real inverse `(I i)⁻¹` and hold for every `I`; a physical
 body has `I i > 0`. The quotient by `|L|² − r²`, the ring of functions on the
 sphere, is not constructed.
 
+`AngularMomentum` works on the canonical phase space of one particle in space.
+With `M = q × p` it proves `{Mₐ, q_b} = εₐ_bc q_c`, `{Mₐ, p_b} = εₐ_bc p_c` and
+`{Mₐ, M_b} = εₐ_bc M_c`. The scalars `|q|²`, `|p|²` and `q · p` Poisson-commute
+with `M`, so `isIntegral_M` gives conservation of angular momentum for every
+Hamiltonian `Φ_f(|q|², |p|², q · p)` with `f` a smooth function of three
+variables. `momentumMap` is the morphism from the rigid-body ring with
+`L ↦ −M`, and `isPoissonHom_momentumMap` proves that it is a Poisson morphism.
+The sign relates the body-frame convention `{Lᵢ, Lⱼ} = −εᵢⱼₖ Lₖ` to the
+space-frame relations of `q × p`.
+
+`HeavyTop.PhaseSpace` is the free C∞-ring on the angular momentum `L` and the
+vertical unit vector `Γ` in the body frame, with `{Lᵢ, Lⱼ} = −εᵢⱼₖ Lₖ`,
+`{Lᵢ, Γⱼ} = −εᵢⱼₖ Γₖ` and `{Γᵢ, Γⱼ} = 0`. For every Hamiltonian
+`{L, H} = L × ∇_L H + Γ × ∇_Γ H` and `{Γ, H} = Γ × ∇_L H`. For
+`H = Σᵢ Lᵢ² / 2Iᵢ + k Γ · χ` these are `L × Ω + k Γ × χ` and `Γ × Ω`. `|Γ|²` and
+`L · Γ` are Casimirs.
+
 ## Proof map
 
 | Module | Main declarations |
@@ -145,6 +162,9 @@ sphere, is not constructed.
 | [Jet/Conservation](../ProjectAInos/Mechanics/Jet/Conservation.lean) | `naturalLagrangian`, `euler_naturalLagrangian`, `conserved_momentum`, `conserved_boost`, `conserved_linear`, `conserved_angularMomentum` |
 | [Jet/Standard](../ProjectAInos/Mechanics/Jet/Standard.lean) | `StandardJet`, `jetRing`, `totalDeriv_eq_derivation`, `euler_q_mul_acceleration`, `euler_oscillator`, `conserved_energy_oscillator`, `conserved_boost_free` |
 | [Poisson/RigidBody](../ProjectAInos/Mechanics/Poisson/RigidBody.lean) | `PhaseSpace`, `L`, `poisson`, `poisson_L_L`, `L_ne_zero`, `poisson_bracket`, `poisson_L_bracket`, `kineticEnergy`, `gradient_kineticEnergy`, `euler_equations`, `euler_equation_zero`, `casimir`, `poisson_casimir_left`, `isIntegral_casimir` |
+| [Poisson/Epsilon](../ProjectAInos/Mechanics/Poisson/Epsilon.lean) | `epsilon`, `epsilon_skew`, `sum_epsilon_mul` |
+| [Poisson/AngularMomentum](../ProjectAInos/Mechanics/Poisson/AngularMomentum.lean) | `M`, `canonical_M_q`, `canonical_M_p`, `canonical_M_M`, `canonical_M_dotProduct`, `isIntegral_M`, `isIntegral_M_sq`, `momentumMap`, `isPoissonHom_momentumMap` |
+| [Poisson/HeavyTop](../ProjectAInos/Mechanics/Poisson/HeavyTop.lean) | `PhaseSpace`, `L`, `Γ`, `poisson`, `poisson_bracket`, `poisson_L_bracket`, `poisson_Γ_bracket`, `hamiltonian`, `poisson_L_hamiltonian`, `poisson_Γ_hamiltonian`, `poisson_Γ_sq_left`, `poisson_L_dot_Γ_left` |
 | [Examples](../ProjectAInos/Mechanics/Examples.lean) | Newton equation, stationary uniform free motion, rejection of accelerated free motion, endpoint-vanishing polynomial variation and its endpoint derivative, zero-length interval and zero-coordinate system |
 
 For `L = m v²/2 − V(q)`, `stationary_natural_iff` proves `m q'' = −V'(q)` on `(a,b)`. This algebraic equation remains valid at `m = 0`; dividing by the mass would require a separate nonzero premise.

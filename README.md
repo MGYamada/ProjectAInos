@@ -193,7 +193,8 @@ the nondegenerate model. These identities are not yet connected to actual
 trajectories. For 2.3, Poisson structures on C∞-rings are implemented with
 Poisson's theorem, the normalizer of a coisotropic ideal, the Hamilton–Jacobi
 and Maupertuis–Jacobi statements, the canonical bracket with Hamilton's
-equations, and the rigid body with Euler's equations. Symplectic structures,
+equations, the rigid body with Euler's equations, the angular momentum of a
+particle with its momentum map, and the heavy top. Symplectic structures,
 the Legendre transformation, Dirac brackets and canonical transformations are
 not implemented. Galilean symmetry as a group action and the topics of 2.1 and
 2.4 have no Lean counterpart yet. The

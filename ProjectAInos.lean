@@ -90,6 +90,9 @@ public import ProjectAInos.Mechanics.Jet.Euler
 public import ProjectAInos.Mechanics.Jet.Noether
 public import ProjectAInos.Mechanics.Jet.Standard
 public import ProjectAInos.Mechanics.OpenDomain
+public import ProjectAInos.Mechanics.Poisson.AngularMomentum
+public import ProjectAInos.Mechanics.Poisson.Epsilon
+public import ProjectAInos.Mechanics.Poisson.HeavyTop
 public import ProjectAInos.Mechanics.Poisson.RigidBody
 public import ProjectAInos.Mechanics.SmoothLagrangian
 public import ProjectAInos.Mechanics.TotalTimeDerivative
@@ -116,6 +119,7 @@ public import ProjectAInos.SmoothAlgebra.PartialDerivative
 public import ProjectAInos.SmoothAlgebra.Poisson.Basic
 public import ProjectAInos.SmoothAlgebra.Poisson.Canonical
 public import ProjectAInos.SmoothAlgebra.Poisson.Free
+public import ProjectAInos.SmoothAlgebra.Poisson.Hom
 public import ProjectAInos.SmoothAlgebra.Poisson.Ideal
 public import ProjectAInos.SmoothAlgebra.SmoothFunctions
 public import ProjectAInos.SmoothGeometry.AffineScheme

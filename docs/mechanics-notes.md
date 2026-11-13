@@ -192,7 +192,7 @@ The velocity derivative of the added density is $\partial_q F$, so the momentum 
 
 **Interface decision.** `RigidBody.structureMatrix` is the explicit skew matrix, so that the generator brackets reduce by `rfl` and case analysis. The general statements `poisson_bracket` and `poisson_L_bracket` are in vector form with `⨯₃`, and Euler's equations are stated both in vector form and by components. No positivity or nonvanishing of `I` is assumed, since no proof uses it. `L_ne_zero` evaluates at the point `(1, 1, 1)` through `FreeSmoothRing.lift` to show that the bracket is not the zero bracket.
 
-**Proof status.** Proved: the row for §36 is *proved*. The quotient by `|L|² − r²`, stability of the principal rotations (§37), the heavy top and the link to the Lagrangian on `T(SO(3))` are not formalized. [Rigid body](../ProjectAInos/Mechanics/Poisson/RigidBody.lean)
+**Proof status.** Proved: the row for §36 is *proved*. The heavy top is M27. The quotient by `|L|² − r²`, stability of the principal rotations (§37) and the link to the Lagrangian on `T(SO(3))` are not formalized. [Rigid body](../ProjectAInos/Mechanics/Poisson/RigidBody.lean)
 
 ## M25. The canonical phase space is all of ℝ²ⁿ
 
@@ -201,3 +201,27 @@ The velocity derivative of the added density is $\partial_q F$, so the momentum 
 **Interface decision.** None yet. The models of this stage are polynomial or globally smooth, so they need no localization. The Kepler stage has two options: extend a Poisson structure along `GeneralLocalization`, or state the Runge–Lenz identities with an element `ρ` and the hypothesis `ρ * r = 1` in an arbitrary Poisson C∞-ring.
 
 **Proof status.** Not implemented. This records a constraint for the model stage of issue #78. [Canonical bracket](../ProjectAInos/SmoothAlgebra/Poisson/Canonical.lean)
+
+## M26. A momentum map is a Poisson morphism out of a free ring, checked on generators
+
+**Observation.** Definition 57 asks for a linear map `ξ ↦ μ_ξ` with `X_{μ_ξ} = ξ_M` and `{μ_ξ, μ_η} = μ_[ξ, η]`, and remarks that the second condition says that the induced morphism `C∞(𝔤*) → P` is a Poisson morphism. In Lean the remark is the usable statement. `C∞(𝔤*)` is a free C∞-ring, a morphism out of it is a choice of images of the generators, and both `φ {f, g}` and `{φ f, φ g}` satisfy the chain rule in each argument, so the morphism is Poisson as soon as it preserves the brackets of generators. For rotations of one particle the generator condition is `{Mₐ, M_b} = εₐ_bc M_c`. The rigid-body ring uses the body-frame sign `{Lₐ, L_b} = −εₐ_bc L_c`, so the Poisson morphism is `L ↦ −M`.
+
+**Interface decision.** `IsPoissonHom π ρ φ` is a predicate on morphisms of C∞-rings between almost-Poisson structures, with `FreeSmoothRing.isPoissonHom_of_generators` as the criterion. `AngularMomentum.momentumMap` is `FreeSmoothRing.lift fun a => -M a`. No Lie algebra, group action or infinitesimal action is defined; the first condition of Definition 57 is not stated.
+
+**Proof status.** `isPoissonHom_momentumMap` is proved. Momentum maps of a general Lie algebra, and the identification of `X_{Mₐ}` with the infinitesimal rotation, are not formalized. `SmoothRingHom` gained `map_sum`, `map_neg` and `map_sub`; they are stated next to their first use and belong in the morphism file. [Poisson morphisms](../ProjectAInos/SmoothAlgebra/Poisson/Hom.lean) · [Angular momentum](../ProjectAInos/Mechanics/Poisson/AngularMomentum.lean)
+
+## M27. The heavy top: one matrix for the structure constants, vector form for the statements
+
+**Observation.** The brackets of the heavy top, of the rigid body and of `q × p` all have the form `± Σ_c εₐ_bc x_c`. Writing the matrix once, as `epsilon x`, lets the generator brackets reduce by evaluation of a matrix literal, and the Jacobi identity on the six generators is 216 cases closed by one `simp` call in a few seconds. The matrix form is wrong for stating results: `Σ_b ∂_b H · (−εₐ_bc L_c)` and `(L × ∇H)ₐ` agree only after renaming the summation index, so a termwise comparison fails and the equations of motion are proved by expanding the three components.
+
+**Interface decision.** `Mechanics.epsilon` with `epsilon_skew` and `sum_epsilon_mul` is a small shared module. The statements are in vector form with `⨯₃` and `⬝ᵥ`: `poisson_L_bracket`, `poisson_Γ_bracket` and `poisson_bracket` for any Hamiltonian, then the specialization to `Σ Lᵢ² / 2Iᵢ + k Γ · χ`. The Casimirs `|Γ|²` and `L · Γ` are proved for every second argument, from the general equations of motion and the triple-product identities.
+
+**Proof status.** Proved, including the Jacobi identity for all elements; experiment E6f tested it on polynomials. The row for §34 stays *informal* because the equation for the momentum, general torques and the link to the Lagrangian on `T(SO(3))` are missing. [Heavy top](../ProjectAInos/Mechanics/Poisson/HeavyTop.lean)
+
+## M28. In a free ring `simp` does not normalize signs, and `ring` does
+
+**Observation.** In goals over `FreeSmoothRing κ`, `simp` leaves terms such as `x * -1` and `-(x * -1)` unsimplified, and reports `mul_neg` and `mul_one` as unused. `ring` closes the same goals. The same proofs over a variable commutative ring need no `ring` step. The cause was not isolated; the ring structure of the free ring comes from a subalgebra of a function algebra, and `simp` lemmas about negation may fail to unify their instance arguments with it.
+
+**Interface decision.** Case-analysis proofs in the model files end with `simp [...] <;> ring`. General statements are proved over a variable ring where possible (M22).
+
+**Proof status.** A proof-engineering observation, with no mathematical content. It is recorded because it recurred in the canonical bracket, the angular momentum and the heavy top.
