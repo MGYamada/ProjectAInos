@@ -35,7 +35,31 @@ jobs:
       - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
         with:
           persist-credentials: false
+          # A pull request is checked out as its merge commit. Keep the first
+          # parent as well, so the files the pull request changes can be listed.
+          fetch-depth: 2
+      - name: Detect whether the change can affect Lean
+        id: scope
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+        # Pushes to main always run the Lean steps: they verify main and warm
+        # the build cache that pull requests restore. A pull request skips them
+        # only when it changes no Lean source, check, toolchain, manifest or
+        # this workflow. If the changed files cannot be listed, the steps run.
+        run: |
+          lean=true
+          if [ "$EVENT_NAME" = pull_request ]; then
+            if changed=$(git diff --name-only HEAD^1 HEAD); then
+              pattern='\.lean$|^lakefile\.toml$|^lake-manifest\.json$|^lean-toolchain$|^checks/|^\.github/workflows/ci\.yml$'
+              if ! printf '%s\n' "$changed" | grep -qE "$pattern"; then
+                lean=false
+              fi
+            fi
+          fi
+          echo "lean=$lean" >> "$GITHUB_OUTPUT"
+          echo "Lean steps required: $lean"
       - name: Build and audit Lean
+        if: steps.scope.outputs.lean == 'true'
         uses: leanprover/lean-action@ba3fdfe5c4476c925da13bf11a005ddb47e47aee # v1
         env:
           # This lean-action revision otherwise exports a fixed flat cache URL.
@@ -46,32 +70,14 @@ jobs:
           build: "true"
           build-args: --wfail ProjectAInos
           use-mathlib-cache: "true"
+          # Run inside the action, before it saves the build cache, so the
+          # linked mk_all executable is cached and not rebuilt on every run.
+          mk_all-check: "true"
+          mk_all-args: --lib ProjectAInos
           axiom-audit: "true"
           axiom-audit-root: ProjectAInos
           axiom-audit-allow: propext,Classical.choice,Quot.sound
-      - name: Check shared-core import boundaries
-        run: lake env lean -DwarningAsError=true --run checks/CoreImports.lean
-      - name: Check the root module imports
-        run: lake exe mk_all --check --lib ProjectAInos
-      - name: Check the smooth algebra API
-        run: lake env lean -DwarningAsError=true checks/SmoothAlgebraAPI.lean
-      - name: Check the smooth geometry API
-        run: lake env lean -DwarningAsError=true checks/SmoothGeometryAPI.lean
-      - name: Check the Lorentz geometry API
-        run: lake env lean -DwarningAsError=true checks/LorentzGeometryAPI.lean
-      - name: Check the imported Yang--Mills API
-        run: lake env lean -DwarningAsError=true checks/YangMillsImportAPI.lean
-      - name: Check the special relativity API
-        run: lake env lean -DwarningAsError=true checks/SpecialRelativityAPI.lean
-      - name: Check the general relativity API
-        run: lake env lean -DwarningAsError=true checks/GeneralRelativityAPI.lean
-      - name: Check the canonical atomic process API
-        run: lake env lean -DwarningAsError=true checks/AtomicNonreactiveAPI.lean
-      - name: Check the electrodynamics API
-        run: lake env lean -DwarningAsError=true checks/ElectrodynamicsAPI.lean
-      - name: Check the quantum mechanics API and axiom dependencies
-        run: lake env lean -DwarningAsError=true checks/QuantumMechanicsAPI.lean
-      - name: Check the quantum field theory API
-        run: lake env lean -DwarningAsError=true checks/QuantumFieldTheoryAPI.lean
-      - name: Audit project and imported YM declarations transitively
-        run: lake env lean -DwarningAsError=true checks/AxiomAudit.lean
+      - name: Run the import-boundary, API and axiom checks
+        if: steps.scope.outputs.lean == 'true'
+        # Every file in checks/ runs in parallel; a new check needs no step here.
+        run: checks/run.sh
