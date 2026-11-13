@@ -177,18 +177,24 @@ Each stage is checked by `lake build --wfail ProjectAInos`, the root-import
 check, and the transitive axiom audit. Only `propext`, `Classical.choice`, and
 `Quot.sound` are allowed.
 
-In `Mechanics/`, Section 2 currently has its first stage only. On a finite real time interval,
-fixed-endpoint stationarity of the actual action is equivalent to the
+Section 2 has two parts so far. In the real analytic model, on a finite time
+interval, fixed-endpoint stationarity of the actual action is equivalent to the
 Euler–Lagrange equation, including Lagrangians defined on an open jet domain.
 Adding the total time derivative of a boundary function `F(t, q)` changes the
 action by an endpoint difference and leaves the Euler–Lagrange residual
 unchanged. The natural scalar Lagrangian yields Newton's equation, and
-Lagrangians can be taken from the shared C∞-ring of smooth operations. The
-algebraic core of the plan (partial derivatives of smooth operations, dual
-numbers and C∞-derivations) is in the shared algebra layer. Jet rings,
-Galilean symmetry and Noether's theorem, and the topics of 2.1, 2.3 and 2.4
-are research targets with no Lean counterpart yet. See the
-[fixed-endpoint mechanics guide](docs/mechanics.md) and the
+Lagrangians can be taken from the shared C∞-ring of smooth operations.
+In the algebraic model, jet C∞-rings carry a total derivative and Euler
+operators. Total derivatives are null Lagrangians, the energy and Noether
+identities hold in every jet ring, and the conservation laws of energy,
+momentum, the centre of mass and angular momentum follow for natural
+Lagrangians as membership in the Euler–Lagrange ideal. The standard jet ring is
+the nondegenerate model. These identities are not yet connected to actual
+trajectories. Galilean symmetry as a group action and the topics of 2.1, 2.3
+and 2.4 have no Lean counterpart yet. The
+[ledger](docs/cinfty-mechanics.md#ledger) gives the status of each section of
+Landau–Lifshitz, and [#78](https://github.com/MGYamada/ProjectAInos/issues/78) tracks completion. See the
+[mechanics guide](docs/mechanics.md) and the
 [C∞ mechanics research plan](docs/cinfty-mechanics.md).
 
 Section 3.1 uses natural units `c = 1` and signature `(-+++)` in the physics

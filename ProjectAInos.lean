@@ -84,6 +84,11 @@ public import ProjectAInos.Mechanics.Basic
 public import ProjectAInos.Mechanics.EulerLagrange
 public import ProjectAInos.Mechanics.Examples
 public import ProjectAInos.Mechanics.FirstVariation
+public import ProjectAInos.Mechanics.Jet.Basic
+public import ProjectAInos.Mechanics.Jet.Conservation
+public import ProjectAInos.Mechanics.Jet.Euler
+public import ProjectAInos.Mechanics.Jet.Noether
+public import ProjectAInos.Mechanics.Jet.Standard
 public import ProjectAInos.Mechanics.OpenDomain
 public import ProjectAInos.Mechanics.SmoothLagrangian
 public import ProjectAInos.Mechanics.TotalTimeDerivative
@@ -97,6 +102,7 @@ public import ProjectAInos.SmoothAlgebra.Derivation
 public import ProjectAInos.SmoothAlgebra.Differential
 public import ProjectAInos.SmoothAlgebra.DualNumber
 public import ProjectAInos.SmoothAlgebra.Free
+public import ProjectAInos.SmoothAlgebra.FreeDerivation
 public import ProjectAInos.SmoothAlgebra.GeneralLocalization
 public import ProjectAInos.SmoothAlgebra.Hom
 public import ProjectAInos.SmoothAlgebra.Limits

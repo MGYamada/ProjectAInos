@@ -106,10 +106,50 @@ The velocity derivative of the added density is $\partial_q F$, so the momentum 
 
 **Proof status.** Not implemented. This records a constraint for the second half of milestone M2.
 
-## M14. The standard jet ring can probably reuse the free ring on generators
+## M14. The standard jet ring is the free ring on time and the jet coordinates
 
 **Observation.** The standard jet model `Jₙ` is the ring of smooth functions of `t` and finitely many of the variables `qᵢ⁽ᵏ⁾`. `FreeSmoothRing ι` is already the ring of smooth functions on real assignments to `ι` with finite coordinate dependence, so `ι = Unit ⊕ (Fin n × ℕ)` gives the same carrier together with its universal property.
 
-**Interface decision.** None yet. Using it for jets needs partial derivatives on `FreeSmoothRing`, which exist so far only on `SmoothOperation n`, and a proof that they commute.
+**Interface decision.** `StandardJet ι` is `FreeSmoothRing (Option (ι × ℕ))`, with `none` for time and `some (i, k)` for `qᵢ⁽ᵏ⁾`. The partial derivatives it needs were first expected to require calculus on the free ring; M15 records why they do not.
 
-**Proof status.** Not implemented, and the identification is a design observation, not a theorem. Abstract jet rings need this model as their nondegenerate instance, so the two should land together. [Free rings](../ProjectAInos/SmoothAlgebra/Free.lean)
+**Proof status.** Implemented: `StandardJet.jetRing` is a `JetRing`, and it landed together with the abstract structure so that the structure has a nondegenerate instance. The universal property of the standard jet ring among jet rings is not stated. [Free rings](../ProjectAInos/SmoothAlgebra/Free.lean) · [Standard jet ring](../ProjectAInos/Mechanics/Jet/Standard.lean)
+
+## M15. Vector fields on a free ring come from the dual numbers, without analysis
+
+**Observation.** A vector field on the free C∞-ring should exist for every choice of values on the generators. Proving this by differentiating cylinder functions would need calculus on an infinite product and a proof that the result is again a cylinder function. Neither is necessary. The universal property of the free ring gives a morphism into its dual numbers that sends each generator `x` to `x + ε w(x)`; this morphism reduces to the identity at `ε = 0`, and by Proposition 18 its infinitesimal part is a derivation. Uniqueness is the chain rule applied to a presentation. Two coordinate vector fields commute because their commutator is a derivation that vanishes on every generator.
+
+**Interface decision.** `FreeSmoothRing.derivation`, `derivation_ext` and `partialDerivation_comm` are stated for the free ring on any set of generators. The standard jet ring takes its `∂ₜ` and `∂ᵢ⁽ᵏ⁾` from them. The manuscript lists symmetry of second derivatives as the analytic input of the standard model; in Lean that input is used once, in the Lie-ring structure of derivations (M10), and the model itself is algebra.
+
+**Proof status.** Proved. This construction gives vector fields with values in the ring itself. Derivations of a free ring into an arbitrary module would need the square-zero extension deferred in M09. [Derivations of free rings](../ProjectAInos/SmoothAlgebra/FreeDerivation.lean)
+
+## M16. A jet ring has no time coordinate, and boosts need one
+
+**Observation.** Definition 32 gives a jet ring the vector field `∂ₜ` but no element `t`. The energy, momentum and angular-momentum laws never mention time. The boost of Corollary 38 has `ξ = t u`, so the centre-of-mass integral `u · (t P − Σ m q)` cannot even be written without a time coordinate.
+
+**Interface decision.** `JetRing` follows Definition 32 and has no time field. `conserved_boost` takes an element `τ` with `∂ₜτ = 1` and `∂ᵢ⁽ᵏ⁾τ = 0` as explicit hypotheses and proves `Dτ = 1` from them. In the standard jet ring these hold for `StandardJet.time`.
+
+**Proof status.** Proved, with the hypotheses instantiated in the standard model (`conserved_boost_free`). [Conservation laws](../ProjectAInos/Mechanics/Jet/Conservation.lean)
+
+## M17. The Noether identity holds for every variation
+
+**Observation.** Proposition 37 assumes that the components `ξᵢ` have order at most zero. The identity `pr ξ(L) = Σᵢ ξᵢ Eᵢ(L) + D(Σᵢ ξᵢ pᵢ)` for a first-order Lagrangian is only the Leibniz rule and holds for every `ξ`. The order restriction matters when `pr ξ` is read as the prolongation of a point transformation; the algebra does not use it.
+
+**Interface decision.** `prolong` is defined for arbitrary `ξ` as `Σₖ Σᵢ (Dᵏ ξᵢ) ∂ᵢ⁽ᵏ⁾`, and `prolong_eq_euler_add_totalDeriv` has no hypothesis on `ξ`. The Euler operator and `euler_totalDeriv` are likewise stated for elements of every order, which covers the second-order Euler operator of experiment E9b.
+
+**Proof status.** Proved. That `pr ξ` commutes with `D` for evolutionary `ξ` is not stated. [Noether identity](../ProjectAInos/Mechanics/Jet/Noether.lean)
+
+## M18. Coordinates are indexed by a finite type, and the cross product comes from Mathlib
+
+**Observation.** The manuscript indexes coordinates by `1, …, n`. Particles in space are naturally indexed by pairs (particle, component), and re-indexing them as `Fin (3 N)` would hide the structure that angular momentum uses. Mathlib's cross product `⨯₃` is defined on `Fin 3 → R` for every commutative ring `R`, so it applies to vectors whose entries are elements of a jet ring.
+
+**Interface decision.** `JetRing ι J` takes any index type, with `[Fintype ι]` where sums occur. Angular momentum uses `ι = κ × Fin 3`: the variation is `n ⨯₃ qₐ`, the kinetic term vanishes by `(n × v) · v = 0`, and `axis_cross_dotProduct` rewrites the charge as `n · (q × p)`. Mathlib provides the Lie ring of the cross product only as a definition, `Cross.lieRing`, because `Fin 3 → R` is already a ring under componentwise multiplication and carries the commutator bracket. This is the same clash as in M13, so the rigid-body stage should use `⨯₃` directly and not bracket notation.
+
+**Proof status.** `conserved_angularMomentum` and `conserved_linear` are proved. The `so(3)` momentum map of the row for §9 belongs to the Poisson stage.
+
+## M19. Conservation in a jet ring is ideal membership, not constancy along a path
+
+**Observation.** In a jet ring, "conserved" means that the total derivative lies in the Euler–Lagrange ideal. This is a statement about elements of a ring. It becomes "constant along every solution" only after a path is prolonged to a morphism out of the jet ring that kills the Euler–Lagrange ideal and turns `D` into `d/dt`. For a first-order Lagrangian the energy identity involves the second derivative of the path, so that bridge needs at least `C²` paths, and the full ideal needs all derivatives.
+
+**Interface decision.** `Conserved L F` is defined as `D F ∈ eulerLagrangeIdeal L`, and the ideal is proved stable under `D`. Nothing in `Mechanics/Jet` mentions a path. The real analytic statements (`Mechanics.stationary_iff_eulerLagrange` and its relatives) remain separate.
+
+**Proof status.** The algebraic laws are proved. No theorem yet says that energy or momentum is constant along a solution of the Euler–Lagrange equations; the ledger rows for §§6–9 are *proved* for their stated main target, the jet-ring identity. The bridge is a stage of issue #78. [Euler operators](../ProjectAInos/Mechanics/Jet/Euler.lean)

@@ -136,6 +136,8 @@ The jet has two degrees of freedom, with coordinates `(t,q_i,v_i,a_i,j_i,k_i)`. 
 
 The regression suite deliberately corrupts either index and requires E9e to fail in each case.
 
+These identities are now Lean theorems in every jet C∞-ring, for any finite number of coordinates and any order: E9a and E9b are `JetRing.euler_totalDeriv`, E9c is `JetRing.totalDeriv_energy`, E9d is `JetRing.prolong_eq_euler_add_totalDeriv`, and E9e is `JetRing.d_succ_totalDeriv` with `JetRing.d_zero_totalDeriv`. The experiment remains as independent evidence for the conventions.
+
 ## E10: Canonical coordinates and rotating frames
 
 These identities support §§13–14, 39, 44, and 45. Polar-coordinate expressions are local formulas away from their singularities.

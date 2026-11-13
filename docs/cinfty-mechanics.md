@@ -8,6 +8,7 @@ The original manuscript, *Classical Mechanics over C∞-Rings*, was dated 10 Nov
 
 - The common mathematical foundation lives in `ProjectAInos/SmoothAlgebra/` and `ProjectAInos/SmoothGeometry/`; `ProjectAInos/Variational/` contains variational calculus. The `SmoothAlgebra` work for issue #7 implemented finite-arity smooth operations, C∞-rings and their morphisms, free generation, and the chain rule for concrete directional derivatives. `SmoothRing` adds structure to an existing commutative real algebra. The [shared geometry guide](smooth-geometry.md) records the subsequent spectrum and scheme construction.
 - **Algebraic core ([issue #74](https://github.com/MGYamada/ProjectAInos/issues/74)).** `SmoothAlgebra` has partial derivatives of smooth operations, with the chain rule as an identity between operations and commuting second partial derivatives (milestone M1). It has the C∞-ring structure on the dual numbers `A[ε]` and C∞-derivations whose only law is the chain rule. The Leibniz rule and real linearity are theorems, vector fields form a Lie ring under the commutator, derivations of `C∞(ℝⁿ)` correspond to tuples of values on the coordinates, and vector fields correspond to morphisms `A → A[ε]` lifting the identity. This covers Example 2(c), Definitions 15 and 17 and Propositions 16(a) and 18, the first half of milestone M2.
+- **Jet algebra ([issue #78](https://github.com/MGYamada/ProjectAInos/issues/78)).** `Mechanics/Jet` has jet C∞-rings over a finite index type, the total derivative as a vector field with the commutators of Lemma 33, Euler operators of every order, and the Euler–Lagrange ideal. It proves that total derivatives are null Lagrangians (Proposition 35), the energy identity (Proposition 36), the Noether identity and its conserved charge (Proposition 37), Newton's equations for natural Lagrangians, and the conservation laws of Corollary 38, including angular momentum of particles in space. The standard jet ring is a jet ring, built from the free C∞-ring without analysis. Conservation here means membership in the Euler–Lagrange ideal; the link to actual trajectories is a later stage.
 - The common analytic layer implements local first jets, directional derivatives of the action, integration by parts, and the Euler–Lagrange equivalence for compactly supported interior variations.
 - **Fixed-endpoint mechanics.** `ProjectAInos/Mechanics/` treats paths `q : ℝ → Q` on a real time interval `[a,b]`. It proves the derivative of the action, the first variation with the boundary term, and the equivalence between fixed-endpoint stationarity and the Euler–Lagrange equations for C² Lagrangians and paths with `a < b`. This includes the generalized coordinates `Q = Fin n → ℝ`. The scalar natural Lagrangian yields Newton’s equation `m q'' = −V'(q)`.
 - **Total time derivatives.** In the real first-order model, adding the total time derivative of `F(t,q)` changes the action by `F(b,q(b)) − F(a,q(a))` and preserves fixed-endpoint stationarity and the pointwise Euler–Lagrange residual. Energy and Noether identities and further natural Lagrangian models are next. Quotients of abstract C∞-rings by ordinary ideals, universal cotangent modules, abstract jet rings, and the comparison between abstract jet rings and the analytic model are separate stages.
@@ -19,12 +20,76 @@ Paths such as `Cinfty/...` and Lean listings in the manuscript are design sketch
 | --- | --- | --- |
 | C∞-rings, morphisms, and free generation | Implemented | `SmoothAlgebra` adds structure to an existing real algebra |
 | First variation and fixed-endpoint Euler–Lagrange equations | Proved in the real analytic model | `Mechanics.FirstVariation` and `Mechanics.EulerLagrange` |
-| Addition of a total time derivative and the boundary term | Proved for `F(t,q)` in the real first-order model | `Mechanics.TotalTimeDerivative`. The abstract jet-ring statement remains a research target |
+| Addition of a total time derivative and the boundary term | Proved for `F(t,q)` in the real first-order model | `Mechanics.TotalTimeDerivative`. In every jet ring: `JetRing.euler_totalDeriv` and `JetRing.euler_add_totalDeriv` |
 | Connection between smooth observables and the analytic model | Implemented | `Mechanics.ofSmoothOperation` and `stationary_ofSmoothOperation_iff` |
 | Partial derivatives of smooth operations, dual numbers `A[ε]`, C∞-derivations and vector fields | Implemented | `SmoothOperation.partialDeriv`, `SmoothRing (DualNumber A)`, `SmoothDerivation`, `SmoothDerivation.equivInfinitesimalAut`. The design sketch calls these `Smooth.partial`, `CinftyDerivation` and `CinftyRing.Derivation.equivInfinitesimalAut` |
-| Quotients by ordinary ideals, universal cotangent modules, and abstract jet rings | Planned | Foundation and jet-ring sections below |
+| Jet C∞-rings, total derivative, Euler operators, energy and Noether identities, classical conservation laws | Implemented | `JetRing`, `JetRing.totalDeriv`, `JetRing.euler`, `JetRing.totalDeriv_energy`, `JetRing.conserved_noetherCharge`, `JetRing.conserved_angularMomentum`, `StandardJet.jetRing`. The design sketch uses the same name `JetRing` |
+| Quotients by ordinary ideals, universal cotangent modules, the on-shell ring and regular Lagrangians (Proposition 39) | Planned | Foundation and jet-ring sections below |
 | Action, critical subfunctors, and representability of solutions over general coefficient rings | Open research targets | The available variational proofs apply to real coefficients |
-| Noether theory, Poisson structures, Hamiltonian mechanics, reduction, and remaining models | Later stages | Section-by-section map below |
+| Poisson structures, momentum maps, Hamiltonian mechanics, reduction, and remaining models | Later stages | Section-by-section map and ledger below |
+
+<a id="ledger"></a>
+
+### Ledger
+
+The ledger gives one status to each section of Landau–Lifshitz, following the policy in [The ledger](#the-ledger): *proved* (Lean, no `sorry`, axioms audited), *proved modulo interface*, *hypothesis*, *evidence* (computer algebra only), or *informal*. The status refers to the main target of the row in [the dictionary](#the-dictionary). A status is only promoted, and a row whose main target is proved only in part stays at the lower status, with the proved part named. [Issue #78](https://github.com/MGYamada/ProjectAInos/issues/78) tracks completion.
+
+| § | Topic | Status | Lean declarations, evidence, or what is missing |
+|---:|:---|:---|:---|
+| 1 | Generalised co-ordinates | informal | `SmoothRing`, `SmoothRingHom`, `FreeSmoothRing`, `DualNumber` and `SmoothDerivation` exist. The tangent functor and its points are not formalized |
+| 2 | The principle of least action | proved | `JetRing.euler_totalDeriv`, `JetRing.euler_add_totalDeriv`, `JetRing.eulerLagrangeIdeal`. First variation in the real analytic model: `Mechanics.stationary_iff_eulerLagrange`. The path-functor form over coefficient rings is open |
+| 3 | Galileo's relativity principle | informal | Boost quasi-invariance of natural Lagrangians is proved inside `JetRing.conserved_boost`. The Galilei algebra and invariance of the Euler–Lagrange ideal are not stated |
+| 4 | The Lagrangian for a free particle | evidence | E4f. Theorem 66 is not formalized |
+| 5 | The Lagrangian for a system of particles | informal | Constant masses: `JetRing.naturalLagrangian`, `JetRing.euler_naturalLagrangian`, `Mechanics.stationary_natural_iff`. Position-dependent `a_ik(q)` is missing |
+| 6 | Energy | proved | `JetRing.totalDeriv_energy`, `JetRing.conserved_energy`, `JetRing.conserved_energy_naturalLagrangian` |
+| 7 | Momentum | proved | `JetRing.prolong_eq_euler_add_totalDeriv`, `JetRing.conserved_noetherCharge`, `JetRing.conserved_momentum` |
+| 8 | Centre of mass | proved | `JetRing.conserved_boost`, `StandardJet.conserved_boost_free` |
+| 9 | Angular momentum | proved | `JetRing.conserved_angularMomentum`, `JetRing.conserved_linear`, `JetRing.axis_cross_dotProduct`. The momentum-map form belongs to the Poisson stage |
+| 10 | Mechanical similarity | evidence | E4e |
+| 11 | Motion in one dimension | informal | |
+| 12 | Determination of the potential energy from the period | informal | |
+| 13 | The reduced mass | evidence | E10c |
+| 14 | Motion in a central field | evidence | E10a, E10b |
+| 15 | Kepler's problem | evidence | E5a–f |
+| 16 | Disintegration of particles | informal | |
+| 17 | Elastic collisions | informal | |
+| 18 | Scattering | informal | |
+| 19 | Rutherford's formula | evidence | E5g |
+| 20 | Small-angle scattering | informal | Tier P: the precise theorem is not chosen |
+| 21 | Free oscillations in one dimension | informal | |
+| 22 | Forced oscillations | informal | |
+| 23 | Oscillations of systems with more than one degree of freedom | informal | |
+| 24 | Vibrations of molecules | informal | |
+| 25 | Damped oscillations | informal | |
+| 26 | Forced oscillations under friction | informal | |
+| 27 | Parametric resonance | informal | |
+| 28 | Anharmonic oscillations | evidence | E11 (numerical) |
+| 29 | Resonance in non-linear oscillations | informal | Tier P |
+| 30 | Motion in a rapidly oscillating field | informal | Tier P and D |
+| 31 | Angular velocity | informal | |
+| 32 | The inertia tensor | informal | |
+| 33 | Angular momentum of a rigid body | informal | |
+| 34 | The equations of motion of a rigid body | informal | |
+| 35 | Eulerian angles | informal | |
+| 36 | Euler's equations | evidence | E6a–d |
+| 37 | The asymmetrical top | evidence | E6e |
+| 38 | Rigid bodies in contact | informal | |
+| 39 | Motion in a non-inertial frame of reference | evidence | E10d, E10e |
+| 40 | Hamilton's equations | informal | |
+| 41 | The Routhian | informal | |
+| 42 | Poisson brackets | evidence | E1. See [mechanics notes](mechanics-notes.md) M13 for the bracket-notation constraint |
+| 43 | The action as a function of the co-ordinates | informal | |
+| 44 | Maupertuis' principle | evidence | E10f |
+| 45 | Canonical transformations | informal | |
+| 46 | Liouville's theorem | informal | |
+| 47 | The Hamilton–Jacobi equation | informal | |
+| 48 | Separation of the variables | informal | |
+| 49 | Adiabatic invariants | informal | Tier D and P |
+| 50 | Canonical variables | informal | |
+| 51 | Accuracy of conservation of the adiabatic invariant | informal | Tier P and D |
+| 52 | Conditionally periodic motion | informal | Tier D |
+
+Count: 5 proved, 12 evidence, 35 informal.
 
 <a id="abstract"></a>
 
