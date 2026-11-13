@@ -87,6 +87,7 @@ public import ProjectAInos.Mechanics.FirstVariation
 public import ProjectAInos.Mechanics.OpenDomain
 public import ProjectAInos.Mechanics.SmoothLagrangian
 public import ProjectAInos.Mechanics.TotalTimeDerivative
+public import ProjectAInos.QuantumFieldTheory.SmearedField
 public import ProjectAInos.QuantumMechanics.Pauli
 public import ProjectAInos.QuantumMechanics.Qubit
 public import ProjectAInos.SmoothAlgebra.Basic
