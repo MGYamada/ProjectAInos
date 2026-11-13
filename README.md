@@ -200,11 +200,23 @@ invertibility follows from equal dimension and nondegeneracy. Pullback
 metrics and restriction to open submanifolds preserve the Lorentz signature,
 and the restricted connection agrees with the ambient connection on
 restricted differentiable fields.
+The curvature commutator is now a smooth trilinear tensor on the actual
+tangent bundle, with extension independence for locally `C²` fields,
+both pair antisymmetries, pair interchange, and the algebraic first Bianchi
+identity. Its Christoffel formula and tensor transformation law hold on
+arbitrary smooth chart overlaps. Smooth metric-preserving maps intertwine
+curvature. Ricci and
+scalar curvature are smooth intrinsic contractions, with coordinate-trace
+and metric-sign laws. Standard Minkowski and the nonlinear shear example
+have proved zero Riemann, Ricci and scalar curvature. Ricci is symmetric.
+The curved metric `exp(2x²)(-dt²+dx²)` has proved scalar curvature
+`-4 exp(-2x²)`: all connection coefficients vanish at the origin, while
+the native curvature tensor is nonzero there.
 The [shared geometry guide](docs/smooth-geometry.md)
 records the public API and exact checks. [Issue #52](https://github.com/MGYamada/ProjectAInos/issues/52)
-tracks review of the connection stage and the remaining tensor operations,
-curvature, motion, curved-form,
-and time-dependent Newton-limit stages; [#43](https://github.com/MGYamada/ProjectAInos/issues/43)
+tracks review of the connection and curvature stages, further tensor operations,
+motion, curved forms, and time-dependent Newton-limit stages;
+[#43](https://github.com/MGYamada/ProjectAInos/issues/43)
 is the first chart-regression gate. Einstein dynamics belongs to 5.2.
 
 See the [proof development record](docs/proof-development.md) for the history of the Lean formalization.

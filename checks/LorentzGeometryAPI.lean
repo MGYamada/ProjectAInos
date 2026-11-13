@@ -8,11 +8,14 @@ import ProjectAInos.SmoothGeometry.Lorentzian.Dual
 import ProjectAInos.SmoothGeometry.Lorentzian.ChartExamples
 import ProjectAInos.SmoothGeometry.Lorentzian.ChartConnection
 import ProjectAInos.SmoothGeometry.Lorentzian.ConnectionExamples
+import ProjectAInos.SmoothGeometry.Lorentzian.CurvatureExamples
+import ProjectAInos.SmoothGeometry.Lorentzian.CurvatureNaturality
+import ProjectAInos.SmoothGeometry.Lorentzian.ConformalExample
 import ProjectAInos.SmoothGeometry.Lorentzian.Regularity
 import ProjectAInos.SmoothGeometry.Lorentzian.Restriction
 import ProjectAInos.SmoothGeometry.Tensor.Bundle
 
-/-! Typed contracts for GR 5.1's shared metric and connection foundation. These examples use
+/-! Typed contracts for GR 5.1's shared metric, connection and curvature foundation. These examples use
 default elaborator options and do not assume a global frame or flatness. -/
 
 open ProjectAInos.SmoothGeometry
@@ -99,6 +102,153 @@ example (hY : ContMDiffAt 𝓘(ℝ, MinkowskiModel d)
 
 end Connection
 
+section Curvature
+
+variable {σ : LorentzConvention} {d : ℕ} {M : Type} [TopologicalSpace M]
+  [ChartedSpace (MinkowskiModel d) M] [IsManifold 𝓘(ℝ, MinkowskiModel d) ∞ M]
+  (g : LorentzMetric σ d M)
+
+local notation "I" => 𝓘(ℝ, MinkowskiModel d)
+local notation "TM" => TangentSpace 𝓘(ℝ, MinkowskiModel d) (M := M)
+
+example (x : M) : TM x →L[ℝ] TM x →L[ℝ] TM x →L[ℝ] TM x := g.curvature x
+
+example : (LorentzMetric.curvatureBundle (d := d) (M := M)).Section I := g.curvatureTensor
+
+example {X Y Z : ∀ x, TM x} {x : M}
+    (hX : ContMDiffAt I ((I).prod I) 2 (T% X) x)
+    (hY : ContMDiffAt I ((I).prod I) 2 (T% Y) x)
+    (hZ : ContMDiffAt I ((I).prod I) 2 (T% Z) x) :
+    g.curvature x (X x) (Y x) (Z x) =
+      g.leviCivita (fun y => g.leviCivita Z y (Y y)) x (X x) -
+      g.leviCivita (fun y => g.leviCivita Z y (X y)) x (Y x) -
+      g.leviCivita Z x (VectorField.mlieBracket I X Y x) := g.curvature_apply hX hY hZ
+
+example {X Y Z : ∀ x, TM x} {x : M}
+    (hX : ContMDiffAt I ((I).prod I) ∞ (T% X) x)
+    (hY : ContMDiffAt I ((I).prod I) ∞ (T% Y) x)
+    (hZ : ContMDiffAt I ((I).prod I) ∞ (T% Z) x) :
+    ContMDiffAt I ((I).prod I) ∞ (T% (g.curvatureField X Y Z)) x :=
+  g.contMDiffAt_curvatureField hX hY hZ
+
+example (x : M) (u v w : TM x) : g.curvature x u v w = -g.curvature x v u w :=
+  g.curvature_swap x u v w
+
+example (x : M) (u v w : TM x) :
+    g.curvature x u v w + g.curvature x v w u + g.curvature x w u v = 0 :=
+  g.curvature_first_bianchi x u v w
+
+example (x : M) : g.opposite.curvature x = g.curvature x := g.curvature_opposite x
+
+example (x : M) (u v w z : TM x) :
+    g.form x (g.curvature x u v w) z + g.form x w (g.curvature x u v z) = 0 :=
+  g.curvature_skewAdjoint x u v w z
+
+example (x : M) (u v w z : TM x) :
+    g.form x (g.curvature x u v w) z = -g.form x (g.curvature x u v z) w :=
+  g.curvature_pair_swap x u v w z
+
+example (x : M) (u v w z : TM x) :
+    g.form x (g.curvature x u v w) z = g.form x (g.curvature x w z u) v :=
+  g.curvature_pair_interchange x u v w z
+
+example (x : M) (u v : TM x) : g.ricci x u v = g.ricci x v u := g.ricci_symmetric x u v
+
+example (φ : C^∞⟮I, M; ℝ⟯) : LorentzMetric σ d M := g.conformal φ
+
+example (φ : C^∞⟮I, M; ℝ⟯) (x : M) :
+    (g.conformal φ).form x = Real.exp (2 * φ x) • g.form x := g.conformal_form φ x
+
+example (x : M) (u v w : TM x) :
+    g.curvatureEndomorphism x u v w = g.curvature x w u v :=
+  g.curvatureEndomorphism_apply x u v w
+
+example (x : M) (u v : TM x) :
+    g.ricci x u v = LinearMap.trace ℝ (TM x) (g.curvatureEndomorphism x u v).toLinearMap :=
+  g.ricci_apply x u v
+
+example : CovariantTwoTensor d M := g.ricciTensor
+
+example (x : M) (e : TM x ≃L[ℝ] MinkowskiModel d) (u v : TM x) :
+    g.ricci x u v = ∑ i, e (g.curvature x (e.symm (Pi.single i 1)) u v) i :=
+  g.ricci_eq_sum x e u v
+
+example : C^∞⟮I, M; ℝ⟯ := g.scalarCurvature
+
+example (x : M) (e : TM x ≃L[ℝ] MinkowskiModel d) :
+    g.scalarCurvature x = ∑ i, ∑ j,
+      g.ricci x (e.symm (Pi.single i 1)) (e.symm (Pi.single j 1)) *
+        g.inverseComponent x e i j := g.scalarCurvature_eq_sum x e
+
+example (x : M) : g.opposite.ricci x = g.ricci x := g.ricci_opposite x
+
+example (x : M) : g.opposite.scalarCurvature x = -g.scalarCurvature x :=
+  g.scalarCurvature_opposite x
+
+example (σ : LorentzConvention) (d : ℕ) (x : MinkowskiModel d) :
+    (minkowskiMetric σ d).curvature x = 0 := LorentzMetric.minkowski_curvature σ d x
+
+example (σ : LorentzConvention) (d : ℕ) (x : MinkowskiModel d) :
+    (minkowskiMetric σ d).scalarCurvature x = 0 :=
+  LorentzMetric.minkowski_scalarCurvature σ d x
+
+example (p : LorentzianCharts.Plane) : LorentzianCharts.metric.curvature p = 0 :=
+  LorentzianCharts.curvature_shear p
+
+example (p : LorentzianCharts.Plane) : LorentzianCharts.metric.scalarCurvature p = 0 :=
+  LorentzianCharts.scalarCurvature_shear p
+
+end Curvature
+
+section ChartCurvature
+
+open LorentzMetric
+
+variable {σ : LorentzConvention} {d : ℕ} {M : Type} [TopologicalSpace M]
+  [ChartedSpace (MinkowskiModel d) M] [IsManifold 𝓘(ℝ, MinkowskiModel d) ∞ M]
+  (g : LorentzMetric σ d M)
+
+local notation "E" => MinkowskiModel d
+local notation "I" => 𝓘(ℝ, MinkowskiModel d)
+
+example {e : OpenPartialHomeomorph M E} (he : e ∈ IsManifold.maximalAtlas I ∞ M)
+    {x : M} (hx : x ∈ e.source) (l i j k : Fin (d + 1)) :
+    g.chartCurvature e x l i j k =
+      fderiv ℝ (fun z => g.chartChristoffel e (e.symm z) l j k) (e x) (Pi.single i 1) -
+      fderiv ℝ (fun z => g.chartChristoffel e (e.symm z) l i k) (e x) (Pi.single j 1) +
+      ∑ a, (g.chartChristoffel e x l i a * g.chartChristoffel e x a j k -
+        g.chartChristoffel e x l j a * g.chartChristoffel e x a i k) :=
+  g.chartCurvature_eq_fderiv he hx l i j k
+
+example {e : OpenPartialHomeomorph M E} (he : e ∈ IsManifold.maximalAtlas I ∞ M)
+    {x : M} (hx : x ∈ e.source) (l i j k : Fin (d + 1)) :
+    ContMDiffAt I 𝓘(ℝ) ∞ (fun y => g.chartCurvature e y l i j k) x :=
+  g.chartCurvature_contMDiffAt he hx l i j k
+
+example {e e' : OpenPartialHomeomorph M E}
+    (he : e ∈ IsManifold.maximalAtlas I ∞ M) (he' : e' ∈ IsManifold.maximalAtlas I ∞ M)
+    {x : M} (hx : x ∈ e.source) (hx' : x ∈ e'.source) (l i j k : Fin (d + 1)) :
+    (∑ a, fderiv ℝ (e' ∘ e.symm) (e x) (Pi.single a 1) l *
+      g.chartCurvature e x a i j k) =
+      ∑ a, ∑ b, ∑ c, g.chartCurvature e' x l a b c *
+        fderiv ℝ (e' ∘ e.symm) (e x) (Pi.single i 1) a *
+        fderiv ℝ (e' ∘ e.symm) (e x) (Pi.single j 1) b *
+        fderiv ℝ (e' ∘ e.symm) (e x) (Pi.single k 1) c :=
+  g.chartCurvature_transformation he he' hx hx' l i j k
+
+example (p : LorentzianConformalExample.Plane) :
+    LorentzianConformalExample.metric.scalarCurvature p = -4 * Real.exp (-(2 * (p 1)^2)) :=
+  LorentzianConformalExample.scalarCurvature_eq p
+
+example : (∀ k i j, LorentzianConformalExample.metric.christoffel 0 k i j = 0) ∧
+    LorentzianConformalExample.metric.curvature 0 ≠ 0 ∧
+    LorentzianConformalExample.metric.scalarCurvature 0 = -4 :=
+  ⟨LorentzianConformalExample.christoffel_origin,
+    LorentzianConformalExample.curvature_origin_ne_zero,
+    LorentzianConformalExample.scalarCurvature_origin⟩
+
+end ChartCurvature
+
 section ConnectionNaturality
 
 variable {σ : LorentzConvention} {d : ℕ} {M N : Type}
@@ -128,6 +278,31 @@ example {f : M → N}
       h.leviCivita Y (f x)
         (mfderiv 𝓘(ℝ, MinkowskiModel d) 𝓘(ℝ, MinkowskiModel d) f x v) :=
   g.leviCivita_naturality_of_metric h hf hmetric hY v
+
+example {f : M → N}
+    (hf : ContMDiff 𝓘(ℝ, MinkowskiModel d) 𝓘(ℝ, MinkowskiModel d) ∞ f)
+    (hmetric : ∀ y v w, g.form y v w = h.form (f y)
+      (mfderiv 𝓘(ℝ, MinkowskiModel d) 𝓘(ℝ, MinkowskiModel d) f y v)
+      (mfderiv 𝓘(ℝ, MinkowskiModel d) 𝓘(ℝ, MinkowskiModel d) f y w))
+    (x : M) (u v w : TangentSpace 𝓘(ℝ, MinkowskiModel d) x) :
+    mfderiv 𝓘(ℝ, MinkowskiModel d) 𝓘(ℝ, MinkowskiModel d) f x (g.curvature x u v w) =
+      h.curvature (f x)
+        (mfderiv 𝓘(ℝ, MinkowskiModel d) 𝓘(ℝ, MinkowskiModel d) f x u)
+        (mfderiv 𝓘(ℝ, MinkowskiModel d) 𝓘(ℝ, MinkowskiModel d) f x v)
+        (mfderiv 𝓘(ℝ, MinkowskiModel d) 𝓘(ℝ, MinkowskiModel d) f x w) :=
+  g.curvature_naturality_of_metric h hf hmetric x u v w
+
+example (f : M → N)
+    (hf : ContMDiff 𝓘(ℝ, MinkowskiModel d) 𝓘(ℝ, MinkowskiModel d) ∞ f)
+    (hinv : ∀ x, (mfderiv 𝓘(ℝ, MinkowskiModel d) 𝓘(ℝ, MinkowskiModel d) f x).IsInvertible)
+    (x : M) (u v w : TangentSpace 𝓘(ℝ, MinkowskiModel d) x) :
+    mfderiv 𝓘(ℝ, MinkowskiModel d) 𝓘(ℝ, MinkowskiModel d) f x
+      ((h.pullback f hf hinv).curvature x u v w) =
+      h.curvature (f x)
+        (mfderiv 𝓘(ℝ, MinkowskiModel d) 𝓘(ℝ, MinkowskiModel d) f x u)
+        (mfderiv 𝓘(ℝ, MinkowskiModel d) 𝓘(ℝ, MinkowskiModel d) f x v)
+        (mfderiv 𝓘(ℝ, MinkowskiModel d) 𝓘(ℝ, MinkowskiModel d) f x w) :=
+  h.curvature_pullback hf hinv x u v w
 
 example (f : M → N)
     (hf : ContMDiff 𝓘(ℝ, MinkowskiModel d) 𝓘(ℝ, MinkowskiModel d) ∞ f)
