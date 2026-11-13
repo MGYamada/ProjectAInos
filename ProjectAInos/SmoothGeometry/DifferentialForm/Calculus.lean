@@ -26,6 +26,15 @@ def wedgeCLM : ((Fin n → ℝ) [⋀^Fin k]→L[ℝ] ℝ) →L[ℝ]
 @[simp] theorem wedgeCLM_apply (a : (Fin n → ℝ) [⋀^Fin k]→L[ℝ] ℝ)
     (b : (Fin n → ℝ) [⋀^Fin l]→L[ℝ] ℝ) : wedgeCLM a b = wedgeFiber a b := rfl
 
+/-- Exterior product preserves regularity locally, without global extensions. -/
+theorem wedge_contDiffAt {α : Form (Fin n → ℝ) k} {β : Form (Fin n → ℝ) l}
+    {r : WithTop ℕ∞} {x : Fin n → ℝ}
+    (hα : ContDiffAt ℝ r α x) (hβ : ContDiffAt ℝ r β x) :
+    ContDiffAt ℝ r (wedge α β) x := by
+  change ContDiffAt ℝ r (fun y => wedgeFiber (α y) (β y)) x
+  simpa only [Function.comp_def, wedgeCLM_apply] using
+    wedgeCLM.isBoundedBilinearMap.contDiff.contDiffAt.comp x (hα.prodMk hβ)
+
 theorem wedge_contDiff (α : Form (Fin n → ℝ) k) (β : Form (Fin n → ℝ) l)
     {r : WithTop ℕ∞} (hα : ContDiff ℝ r α) (hβ : ContDiff ℝ r β) :
     ContDiff ℝ r (wedge α β) := by

@@ -173,8 +173,9 @@ are connected to the pinned upstream radial-gauge reconstruction through an
 explicit time-first/time-last coordinate equivalence. Nonzero fields, degrees
 0 and 1, and a uniformly accelerated worldline are checked in Lean and SymPy.
 See the [electrodynamics API and proof map](docs/electrodynamics.md).
-The sourced Maxwell equations and field action in 4.2, collision theory,
-and QFT remain outside this implementation.
+The Maxwell field-action derivation in 4.2, collision theory, and QFT remain
+outside this implementation. Fixed-background Maxwell forms are part of the
+5.1 progress recorded below.
 
 Section 5.1 has begun with smooth metric duality on the actual tangent and
 cotangent bundles: `flat`, `sharp`, smooth lowering/raising of sections, and
@@ -281,12 +282,54 @@ Nonzero null initial velocity is preserved on the entire closed quadratic-
 stationary segment, with no causal restriction on variations. A smooth compact
 test in the nonlinear chart realizes arbitrary midpoint tangent data.
 The stage E principal endpoints are implemented and awaiting review.
+Stage F now has smooth alternating bundles on actual tangent fibres, local
+coefficient transition laws, open-cover gluing and arbitrary-smooth-map
+pullback, including different dimensions and singular derivatives. Flat API
+agreement and nonlinear one-/two-form examples are proved. Native exterior
+differentiation is now chart-independent, linear and local, squares to zero,
+and commutes with arbitrary smooth pullback. Its flat specialization and
+nonzero nonlinear-chart examples are proved. On finite coordinate models,
+native wedge is chart-independent and smooth, preserves arbitrary smooth
+pullback, and satisfies bilinearity, associativity, graded commutativity,
+unit laws and graded Leibniz. Exact flat normalization, nonlinear/singular
+and dimension-changing examples, and a nonzero three-form sign check are
+proved. Intrinsic Gram-determinant volume density is positive on tangent
+bases, smooth in charts and transforms by the absolute Jacobian. Compatible
+signed local charts now construct a smooth, nowhere-zero oriented volume
+form, independent of the chosen cover. Its absolute value is the density;
+orientation reversal negates the form, while whole-metric sign reversal
+preserves both. Minkowski, nonlinear-chart and curved conformal examples
+fix its normalization. The inverse metric and this volume now construct
+Lorentz Hodge on native fibres, with its wedge identity, uniqueness,
+orientation and metric-sign laws, and naturality under metric/volume-preserving
+tangent equivalences proved. Exact Minkowski API agreement, the six
+four-dimensional two-form signs and nonlinear shear transport are proved.
+The local inverse-metric formula proves smoothness, yielding a linear map
+on smooth native forms. The general Lorentz square identity is proved using
+only pointwise signature witnesses; a curved conformal example verifies it.
+The actual connection trace now defines smooth divergence and yields
+`div V = ρ⁻¹ ∂ᵢ(ρ Vⁱ)` in every smooth chart, with `ρ = sqrt(abs(det g))`.
+On a fixed four-dimensional `(-+++)` background, Maxwell forms use
+`H = -⋆F` and `J = ⋆(j♭)`. The current identification is invertible;
+the sourced equation implies `dJ = 0`, and orientation reversal preserves
+the equations. Pointwise Lorentz frames prove `⋆(j♭) = ιⱼ vol` with no flatness
+or global-frame assumption. Chart differentiation proves `dJ = (div j) vol`,
+so current closedness is equivalent to vanishing covariant vector divergence.
+A time-dependent field has the proved nonzero vector source `j = -∂x`, fixing
+the physical sign. Native two-form covariant differentiation is now constructed,
+smooth and independent of local extensions. Its chart formula has both
+Christoffel corrections; `dF = 0` is equivalent to the cyclic covariant component
+equation in every smooth chart. The native two-form divergence is a smooth vector,
+with both raised indices and the density formula `∇ᵢFⁱʲ = ρ⁻¹ ∂ᵢ(ρ Fⁱʲ)` proved.
+The source defined by `dH` is now proved equal to this native divergence.
+Both Maxwell equations are equivalent to their covariant component equations
+in every smooth chart. Stage F’s principal endpoints are implemented and await review.
 The [GR guide](docs/general-relativity.md)
 records the exact scope and typed contracts.
 The [shared geometry guide](docs/smooth-geometry.md)
 records the public API and exact checks. [Issue #52](https://github.com/MGYamada/ProjectAInos/issues/52)
-tracks review of the geometry and particle-variation stages, and completion of
-curved forms and the time-dependent Newton-limit stages;
+tracks review of the geometry, particle-variation and curved-form stages, and
+completion of the time-dependent Newton-limit stage.
 [#43](https://github.com/MGYamada/ProjectAInos/issues/43)
 is the first chart-regression gate. Einstein dynamics belongs to 5.2.
 

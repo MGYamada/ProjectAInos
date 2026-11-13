@@ -7,6 +7,10 @@ module
 import ProjectAInos.SmoothGeometry.Lorentzian.AccelerationRegularity
 import ProjectAInos.SmoothGeometry.Lorentzian.LocalizedVariation
 import ProjectAInos.SmoothGeometry.Lorentzian.Dual
+import ProjectAInos.SmoothGeometry.Lorentzian.DivergenceExamples
+import ProjectAInos.SmoothGeometry.Lorentzian.HodgeCurrent
+import ProjectAInos.SmoothGeometry.Lorentzian.TwoFormExamples
+import ProjectAInos.SmoothGeometry.Lorentzian.TwoFormDivergenceExamples
 import ProjectAInos.SmoothGeometry.Lorentzian.PullbackExamples
 import ProjectAInos.SmoothGeometry.Lorentzian.ChartExamples
 import ProjectAInos.SmoothGeometry.Lorentzian.ChartConnection
@@ -24,6 +28,9 @@ import ProjectAInos.SmoothGeometry.Lorentzian.MotionODE
 import ProjectAInos.SmoothGeometry.Lorentzian.PathExamples
 import ProjectAInos.SmoothGeometry.Lorentzian.Regularity
 import ProjectAInos.SmoothGeometry.Lorentzian.Restriction
+import ProjectAInos.SmoothGeometry.Lorentzian.VolumeExamples
+import ProjectAInos.SmoothGeometry.Lorentzian.HodgeExamples
+import ProjectAInos.SmoothGeometry.Lorentzian.HodgeCurvedExamples
 import ProjectAInos.SmoothGeometry.Tensor.Bundle
 import ProjectAInos.SmoothGeometry.ODE.VolterraExamples
 import ProjectAInos.SmoothGeometry.ODE.RadialExamples
@@ -1465,3 +1472,342 @@ example {e : OpenPartialHomeomorph M E} {U : Set ℝ}
   variationField_chart he hU hUI hstay hsupport hγ hη ht
 
 end LocalizedManifoldVariation
+
+section DensityAndVolume
+
+open LorentzMetric DifferentialForm
+open scoped BigOperators
+
+variable {σ : LorentzConvention} {d : ℕ} {M : Type} [TopologicalSpace M]
+  [ChartedSpace (MinkowskiModel d) M] [IsManifold 𝓘(ℝ, MinkowskiModel d) ∞ M]
+  (g : LorentzMetric σ d M) (o : OrientedAtlas (d + 1) M)
+
+example (x : M) (v : Fin (d + 1) → TangentSpace 𝓘(ℝ, MinkowskiModel d) x)
+    (A : Matrix (Fin (d + 1)) (Fin (d + 1)) ℝ) :
+    g.volumeDensity x (fun i => ∑ j, A j i • v j) = |A.det| * g.volumeDensity x v :=
+  g.volumeDensity_change x v A
+
+example (x : M) (b : Module.Basis (Fin (d + 1)) ℝ (TangentSpace 𝓘(ℝ, MinkowskiModel d) x)) :
+    0 < g.volumeDensity x b := g.volumeDensity_basis_pos x b
+
+example {N : Type} [TopologicalSpace N] [ChartedSpace (MinkowskiModel d) N]
+    [IsManifold 𝓘(ℝ, MinkowskiModel d) ∞ N] (h : LorentzMetric σ d N) (x : M) (y : N)
+    (L : TangentSpace 𝓘(ℝ, MinkowskiModel d) x →ₗ[ℝ] TangentSpace 𝓘(ℝ, MinkowskiModel d) y)
+    (hL : ∀ u w, h.form y (L u) (L w) = g.form x u w)
+    (v : Fin (d + 1) → TangentSpace 𝓘(ℝ, MinkowskiModel d) x) :
+    h.volumeDensity y (L ∘ v) = g.volumeDensity x v := g.volumeDensity_naturality h x y L hL v
+
+example {e e' : OpenPartialHomeomorph M (MinkowskiModel d)}
+    (he : e ∈ IsManifold.maximalAtlas 𝓘(ℝ, MinkowskiModel d) ∞ M)
+    (he' : e' ∈ IsManifold.maximalAtlas 𝓘(ℝ, MinkowskiModel d) ∞ M)
+    {x : M} (hx : x ∈ e.source) (hx' : x ∈ e'.source) :
+    g.chartDensity e x =
+      |Matrix.det (fun i j => fderiv ℝ (e' ∘ e.symm) (e x) (Pi.single j 1) i)| *
+        g.chartDensity e' x := g.chartDensity_transition he he' hx hx'
+
+example {e : OpenPartialHomeomorph M (MinkowskiModel d)}
+    (he : e ∈ IsManifold.maximalAtlas 𝓘(ℝ, MinkowskiModel d) ∞ M)
+    {x : M} (hx : x ∈ e.source) :
+    ContMDiffAt 𝓘(ℝ, MinkowskiModel d) 𝓘(ℝ) ∞ (g.chartDensity e) x :=
+  g.chartDensity_contMDiffAt he hx
+
+example : SmoothForm 𝓘(ℝ, MinkowskiModel d) M (d + 1) := g.volumeForm o
+
+example (x : M) (v : Fin (d + 1) → TangentSpace 𝓘(ℝ, MinkowskiModel d) x) :
+    |g.volumeForm o x v| = g.volumeDensity x v := g.abs_volumeForm o x v
+
+example (x : M) : g.volumeForm o x ≠ 0 := g.volumeForm_ne_zero o x
+
+example : g.volumeForm o.reverse = -g.volumeForm o := g.volumeForm_reverse o
+
+example : g.opposite.volumeForm o = g.volumeForm o := g.opposite_volumeForm o
+
+example (x : M) (v : Fin (d + 1) → TangentSpace 𝓘(ℝ, MinkowskiModel d) x) :
+    g.opposite.volumeDensity x v = g.volumeDensity x v := g.opposite_volumeDensity x v
+
+example (o' : OrientedAtlas (d + 1) M) (h : o.Compatible o') :
+    g.volumeForm o = g.volumeForm o' := g.volumeForm_eq_of_compatible o o' h
+
+example (p : M) {y : MinkowskiModel d} (hy : y ∈ (o.chart p).target) :
+    chartCoefficients (o.chart p) (fun x => g.volumeForm o x) y =
+      (o.sign p * g.chartDensity (o.chart p) ((o.chart p).symm y)) • coordinateForm id :=
+  g.chartCoefficients_volumeForm o p hy
+
+example (σ : LorentzConvention) (d : ℕ) (x : MinkowskiModel d) :
+    (minkowskiMetric σ d).volumeForm (OrientedAtlas.standard (d + 1)) x = coordinateForm id :=
+  LorentzianVolumeExamples.minkowski_volume σ d x
+
+example (x : LorentzianCharts.Plane) :
+    LorentzianCharts.metric.chartDensity LorentzianCharts.inertialChart x = 1 :=
+  LorentzianVolumeExamples.shear_inertial_density x
+
+example : LorentzianCharts.metric.volumeForm LorentzianVolumeExamples.shearOrientation =
+    LorentzianCharts.metric.volumeForm (OrientedAtlas.standard 2) :=
+  LorentzianVolumeExamples.shear_volume_atlas
+
+example (x : LorentzianCharts.Plane) :
+    LorentzianConformalExample.metric.volumeForm (OrientedAtlas.standard 2) x =
+      Real.exp (2 * (x 1) ^ 2) • NativeExamples.area x :=
+  LorentzianVolumeExamples.conformal_volume x
+
+example (x : LorentzianCharts.Plane) :
+    (minkowskiMetric .timeNegative 1).volumeDensity x ![![2, 0], ![0, -3]] = 6 :=
+  LorentzianVolumeExamples.scaled_reversed_density x
+
+end DensityAndVolume
+
+section NativeHodge
+
+open LorentzMetric DifferentialForm
+
+variable {σ : LorentzConvention} {d : ℕ} {M : Type} [TopologicalSpace M]
+  [ChartedSpace (MinkowskiModel d) M] [IsManifold 𝓘(ℝ, MinkowskiModel d) ∞ M]
+  (g : LorentzMetric σ d M) (o : OrientedAtlas (d + 1) M) (x : M)
+  {k l : ℕ} (hkl : k + l = d + 1)
+
+example : Function.Bijective (g.coMetric x) := g.coMetric_bijective x
+
+example : LinearMap.IsSymm (g.coMetric x) := g.coMetric_symmetric x
+
+example : (TangentSpace 𝓘(ℝ, MinkowskiModel d) x [⋀^Fin k]→L[ℝ] ℝ) ≃ₗ[ℝ]
+    (TangentSpace 𝓘(ℝ, MinkowskiModel d) x [⋀^Fin l]→L[ℝ] ℝ) := g.hodgeFiber o x hkl
+
+example (α β : TangentSpace 𝓘(ℝ, MinkowskiModel d) x [⋀^Fin k]→L[ℝ] ℝ) :
+    finiteDegreeCast hkl (finiteWedge α (g.hodgeFiber o x hkl β)) =
+      g.formPairing x α β • g.volumeForm o x := g.hodgeFiber_wedge o x hkl α β
+
+example (β : TangentSpace 𝓘(ℝ, MinkowskiModel d) x [⋀^Fin k]→L[ℝ] ℝ)
+    (γ : TangentSpace 𝓘(ℝ, MinkowskiModel d) x [⋀^Fin l]→L[ℝ] ℝ)
+    (h : ∀ α : TangentSpace 𝓘(ℝ, MinkowskiModel d) x [⋀^Fin k]→L[ℝ] ℝ,
+      finiteDegreeCast hkl (finiteWedge α γ) = g.formPairing x α β • g.volumeForm o x) :
+    γ = g.hodgeFiber o x hkl β := g.hodgeFiber_unique o x hkl β γ h
+
+example (α β : NativeForm 𝓘(ℝ, MinkowskiModel d) M k) :
+    finiteDegreeCast hkl (nativeWedge α (g.nativeHodge o hkl β) x) =
+      g.formPairing x (α x) (β x) • g.volumeForm o x := g.nativeHodge_wedge o hkl α β x
+
+example (α : TangentSpace 𝓘(ℝ, MinkowskiModel d) x [⋀^Fin k]→L[ℝ] ℝ) :
+    g.hodgeFiber o.reverse x hkl α = -g.hodgeFiber o x hkl α := g.hodgeFiber_reverse o x hkl α
+
+example (α : TangentSpace 𝓘(ℝ, MinkowskiModel d) x [⋀^Fin k]→L[ℝ] ℝ) :
+    g.opposite.hodgeFiber o x hkl α = (-1 : ℝ) ^ k • g.hodgeFiber o x hkl α :=
+  g.hodgeFiber_opposite o x hkl α
+
+example {N : Type} [TopologicalSpace N] [ChartedSpace (MinkowskiModel d) N]
+    [IsManifold 𝓘(ℝ, MinkowskiModel d) ∞ N] (h : LorentzMetric σ d N)
+    (o' : OrientedAtlas (d + 1) N) (y : N)
+    (L : TangentSpace 𝓘(ℝ, MinkowskiModel d) x ≃L[ℝ] TangentSpace 𝓘(ℝ, MinkowskiModel d) y)
+    (hmetric : ∀ v w, g.form x v w = h.form y (L v) (L w))
+    (hvolume : (h.volumeForm o' y).compContinuousLinearMap L.toContinuousLinearMap = g.volumeForm o x)
+    (β : TangentSpace 𝓘(ℝ, MinkowskiModel d) y [⋀^Fin k]→L[ℝ] ℝ) :
+    (h.hodgeFiber o' y hkl β).compContinuousLinearMap L.toContinuousLinearMap =
+      g.hodgeFiber o x hkl (β.compContinuousLinearMap L.toContinuousLinearMap) :=
+  g.hodgeFiber_naturality h o o' x y L hmetric hvolume hkl β
+
+example (σ : LorentzConvention) (d : ℕ) (x : MinkowskiModel d)
+    {k l : ℕ} (hkl : k + l = d + 1) (α : MinkowskiModel d [⋀^Fin k]→L[ℝ] ℝ) :
+    (minkowskiMetric σ d).hodgeFiber (OrientedAtlas.standard (d + 1)) x hkl α =
+      Minkowski.hodgeFiber σ .standard hkl α := minkowskiMetric_hodgeFiber σ d x hkl α
+
+example (σ : LorentzConvention) (x : MinkowskiModel 3) :
+    (minkowskiMetric σ 3).hodgeFiber (OrientedAtlas.standard 4) x (by decide : 2 + 2 = 3 + 1)
+      (coordinateForm ![0, 1]) = -coordinateForm ![2, 3] := LorentzianHodgeExamples.flat_dt_dx σ x
+
+example (x : LorentzianCharts.Plane) {k l : ℕ} (hkl : k + l = 2)
+    (β : LorentzianCharts.Plane [⋀^Fin k]→L[ℝ] ℝ) :
+    LorentzianCharts.metric.hodgeFiber (OrientedAtlas.standard 2) x hkl
+      (β.compContinuousLinearMap (LorentzianCharts.shearLinear (2 * x 0)).toContinuousLinearMap) =
+    (Minkowski.hodgeFiber .timeNegative .standard hkl β).compContinuousLinearMap
+      (LorentzianCharts.shearLinear (2 * x 0)).toContinuousLinearMap :=
+  LorentzianHodgeExamples.shear_hodge x hkl β
+
+end NativeHodge
+
+section SmoothHodge
+
+open LorentzMetric DifferentialForm
+
+variable {σ : LorentzConvention} {d : ℕ} {M : Type} [TopologicalSpace M]
+  [ChartedSpace (MinkowskiModel d) M] [IsManifold 𝓘(ℝ, MinkowskiModel d) ∞ M]
+  (g : LorentzMetric σ d M) (o : OrientedAtlas (d + 1) M)
+  {k l : ℕ} (hkl : k + l = d + 1)
+
+example {e : OpenPartialHomeomorph M (MinkowskiModel d)}
+    (he : e ∈ IsManifold.maximalAtlas 𝓘(ℝ, MinkowskiModel d) ∞ M) {x : M} (hx : x ∈ e.source) :
+    ContMDiffAt 𝓘(ℝ, MinkowskiModel d) 𝓘(ℝ, (MinkowskiModel d →L[ℝ] ℝ) →L[ℝ] MinkowskiModel d)
+      ∞ (g.chartSharp e) x := g.chartSharp_contMDiffAt he hx
+
+example (p : M) (α : NativeForm 𝓘(ℝ, MinkowskiModel d) M k) {y : MinkowskiModel d}
+    (hy : y ∈ (o.chart p).target) :
+    chartCoefficients (o.chart p) (g.nativeHodge o hkl α) y =
+      (o.sign p * g.chartDensity (o.chart p) ((o.chart p).symm y)) •
+        Minkowski.hodgeFiber .timeNegative .standard hkl
+          ((chartCoefficients (o.chart p) α y).compContinuousLinearMap
+            ((g.chartSharp (o.chart p) ((o.chart p).symm y)).comp
+              (Minkowski.flat .timeNegative).toContinuousLinearMap)) :=
+  g.chartCoefficients_nativeHodge o p hkl α hy
+
+example {α : NativeForm 𝓘(ℝ, MinkowskiModel d) M k} {x : M}
+    (hα : ContMDiffAt 𝓘(ℝ, MinkowskiModel d)
+      (𝓘(ℝ, MinkowskiModel d).prod 𝓘(ℝ, MinkowskiModel d [⋀^Fin k]→L[ℝ] ℝ)) ∞
+      (fun y => Bundle.TotalSpace.mk' (MinkowskiModel d [⋀^Fin k]→L[ℝ] ℝ) y (α y)) x) :
+    ContMDiffAt 𝓘(ℝ, MinkowskiModel d)
+      (𝓘(ℝ, MinkowskiModel d).prod 𝓘(ℝ, MinkowskiModel d [⋀^Fin l]→L[ℝ] ℝ)) ∞
+      (fun y => Bundle.TotalSpace.mk' (MinkowskiModel d [⋀^Fin l]→L[ℝ] ℝ) y (g.nativeHodge o hkl α y)) x :=
+  g.contMDiffAt_nativeHodge o hkl hα
+
+example : SmoothForm 𝓘(ℝ, MinkowskiModel d) M k →ₗ[ℝ] SmoothForm 𝓘(ℝ, MinkowskiModel d) M l :=
+  g.smoothHodge o hkl
+
+example (x : M) (hlk : l + k = d + 1)
+    (α : TangentSpace 𝓘(ℝ, MinkowskiModel d) x [⋀^Fin k]→L[ℝ] ℝ) :
+    g.hodgeFiber o x hlk (g.hodgeFiber o x hkl α) =
+      (-1 : ℝ) ^ (k * l + σ.negativeIndex d) • α := g.hodgeFiber_square o x hkl hlk α
+
+example (hlk : l + k = d + 1) (α : SmoothForm 𝓘(ℝ, MinkowskiModel d) M k) :
+    g.smoothHodge o hlk (g.smoothHodge o hkl α) =
+      (-1 : ℝ) ^ (k * l + σ.negativeIndex d) • α := g.smoothHodge_square o hkl hlk α
+
+example (p : LorentzianConformalExample.Plane)
+    (α : LorentzianConformalExample.Plane [⋀^Fin 1]→L[ℝ] ℝ) :
+    LorentzianConformalExample.metric.hodgeFiber (OrientedAtlas.standard 2) p
+      (by decide : 1 + 1 = 1 + 1) α =
+      Minkowski.hodgeFiber .timeNegative .standard (by decide : 1 + 1 = 1 + 1) α :=
+  LorentzianHodgeCurvedExamples.conformal_one p α
+
+end SmoothHodge
+
+section NativeDivergence
+
+open LorentzMetric
+variable {σ : LorentzConvention} {d : ℕ} {M : Type} [TopologicalSpace M]
+  [ChartedSpace (MinkowskiModel d) M] [IsManifold 𝓘(ℝ, MinkowskiModel d) ∞ M]
+  (g : LorentzMetric σ d M)
+
+example (V : ∀ x : M, TangentSpace 𝓘(ℝ, MinkowskiModel d) x) (x : M) :
+    g.divergence V x = LinearMap.trace ℝ (TangentSpace 𝓘(ℝ, MinkowskiModel d) x)
+      (g.leviCivita V x).toLinearMap := rfl
+
+example (V : Cₛ^∞⟮𝓘(ℝ, MinkowskiModel d); MinkowskiModel d,
+    (fun x : M => TangentSpace 𝓘(ℝ, MinkowskiModel d) x)⟯) :
+    C^∞⟮𝓘(ℝ, MinkowskiModel d), M; ℝ⟯ := g.smoothDivergence V
+
+example {e : OpenPartialHomeomorph M (MinkowskiModel d)}
+    (he : e ∈ IsManifold.maximalAtlas 𝓘(ℝ, MinkowskiModel d) ∞ M)
+    {x : M} (hx : x ∈ e.source) (k : Fin (d + 1)) :
+    mvfderiv 𝓘(ℝ, MinkowskiModel d) (g.chartDensity e) x (chartField e (Pi.single k 1) x) =
+      (∑ i, g.chartChristoffel e x i i k) * g.chartDensity e x := g.chartDensity_derivative he hx k
+
+example {V : ∀ x : M, TangentSpace 𝓘(ℝ, MinkowskiModel d) x}
+    {e : OpenPartialHomeomorph M (MinkowskiModel d)}
+    (he : e ∈ IsManifold.maximalAtlas 𝓘(ℝ, MinkowskiModel d) ∞ M)
+    {x : M} (hx : x ∈ e.source)
+    (hV : MDifferentiableAt 𝓘(ℝ, MinkowskiModel d)
+      (𝓘(ℝ, MinkowskiModel d).prod 𝓘(ℝ, MinkowskiModel d)) (T% V) x) :
+    g.divergence V x = (g.chartDensity e x)⁻¹ *
+      ∑ i, mvfderiv 𝓘(ℝ, MinkowskiModel d)
+        (fun y => g.chartDensity e y • chartTangentMap e y (V y)) x
+        (chartField e (Pi.single i 1) x) i := g.divergence_density he hx hV
+
+example (p : LorentzianConformalExample.Plane) :
+    LorentzianConformalExample.metric.divergence (modelField (Pi.single 1 1)) p = 4 * p 1 :=
+  LorentzianDivergenceExamples.conformal_spatial_divergence p
+
+end NativeDivergence
+
+open DifferentialForm in
+example {σ : LorentzConvention} {M : Type} [TopologicalSpace M]
+    [ChartedSpace (MinkowskiModel 3) M] [IsManifold 𝓘(ℝ, MinkowskiModel 3) ∞ M]
+    (g : LorentzMetric σ 3 M) (o : OrientedAtlas 4 M) (x : M)
+    (v : TangentSpace 𝓘(ℝ, MinkowskiModel 3) x) :
+    g.hodgeFiber o x (by decide : 1 + 3 = 3 + 1) (oneFormEquiv (g.flat x v)) =
+      DifferentialForm.interior v (g.volumeForm o x) := g.hodge_flat_one o x v
+
+section CovariantTwoForms
+
+open DifferentialForm LorentzMetric
+variable {σ : LorentzConvention} {d : ℕ} {M : Type} [TopologicalSpace M]
+  [ChartedSpace (MinkowskiModel d) M] [IsManifold 𝓘(ℝ, MinkowskiModel d) ∞ M]
+  (g : LorentzMetric σ d M) (F : SmoothForm 𝓘(ℝ, MinkowskiModel d) M 2)
+
+example : (twoFormDerivativeBundle (d := d) (M := M)).Section 𝓘(ℝ, MinkowskiModel d) :=
+  g.smoothTwoFormDerivative F
+
+example (x : M) (u v w : TangentSpace 𝓘(ℝ, MinkowskiModel d) x) :
+    smoothExteriorDerivative F x ![u, v, w] =
+      g.twoFormDerivative F x v w u - g.twoFormDerivative F x u w v +
+        g.twoFormDerivative F x u v w := g.exteriorDerivative_eq_covariant F x u v w
+
+example : smoothExteriorDerivative F = 0 ↔
+    ∀ x (u v w : TangentSpace 𝓘(ℝ, MinkowskiModel d) x),
+      g.twoFormDerivative F x v w u + g.twoFormDerivative F x w u v +
+        g.twoFormDerivative F x u v w = 0 := g.exteriorDerivative_zero_iff_covariant F
+
+example {e : OpenPartialHomeomorph M (MinkowskiModel d)}
+    (he : e ∈ IsManifold.maximalAtlas 𝓘(ℝ, MinkowskiModel d) ∞ M)
+    {x : M} (hx : x ∈ e.source) (i j k : Fin (d + 1)) :
+    g.twoFormCovariantComponent F e x i j k =
+      mvfderiv 𝓘(ℝ, MinkowskiModel d) (fun y => twoFormComponent (fun z => F z) e y j k) x
+        (chartField e (Pi.single i 1) x) -
+      ∑ l, g.chartChristoffel e x l i j * twoFormComponent (fun z => F z) e x l k -
+      ∑ l, g.chartChristoffel e x l i k * twoFormComponent (fun z => F z) e x j l :=
+  g.twoFormCovariantComponent_eq F he hx i j k
+
+example : smoothExteriorDerivative F = 0 ↔
+    ∀ (e : OpenPartialHomeomorph M (MinkowskiModel d)),
+      e ∈ IsManifold.maximalAtlas 𝓘(ℝ, MinkowskiModel d) ∞ M →
+      ∀ x ∈ e.source, ∀ i j k : Fin (d + 1),
+        g.twoFormCovariantComponent F e x i j k + g.twoFormCovariantComponent F e x j k i +
+          g.twoFormCovariantComponent F e x k i j = 0 := g.exteriorDerivative_zero_iff_components F
+
+example (p : LorentzianConformalExample.Plane) :
+    LorentzianConformalExample.metric.twoFormDerivative LorentzianTwoFormExamples.coordinateArea p
+      (modelField (Pi.single 0 1) p) (modelField (Pi.single 1 1) p) (modelField (Pi.single 1 1) p) =
+        -4 * p 1 := LorentzianTwoFormExamples.conformal_area_derivative p
+
+end CovariantTwoForms
+
+section TwoFormDivergence
+
+open DifferentialForm LorentzMetric
+variable {σ : LorentzConvention} {d : ℕ} {M : Type} [TopologicalSpace M]
+  [ChartedSpace (MinkowskiModel d) M] [IsManifold 𝓘(ℝ, MinkowskiModel d) ∞ M]
+  (g : LorentzMetric σ d M) (F : SmoothForm 𝓘(ℝ, MinkowskiModel d) M 2)
+
+example : Cₛ^∞⟮𝓘(ℝ, MinkowskiModel d); MinkowskiModel d,
+    (fun x : M => TangentSpace 𝓘(ℝ, MinkowskiModel d) x)⟯ := g.twoFormDivergence F
+
+example {α : ∀ x : M, TangentSpace 𝓘(ℝ, MinkowskiModel d) x →L[ℝ] ℝ}
+    {V : ∀ x : M, TangentSpace 𝓘(ℝ, MinkowskiModel d) x} {x : M}
+    (hα : MDifferentiableAt 𝓘(ℝ, MinkowskiModel d)
+      (𝓘(ℝ, MinkowskiModel d).prod 𝓘(ℝ, MinkowskiModel d →L[ℝ] ℝ))
+      (fun y => Bundle.TotalSpace.mk' (MinkowskiModel d →L[ℝ] ℝ) y (α y)) x)
+    (hV : MDifferentiableAt 𝓘(ℝ, MinkowskiModel d)
+      (𝓘(ℝ, MinkowskiModel d).prod 𝓘(ℝ, MinkowskiModel d)) (T% V) x)
+    (u : TangentSpace 𝓘(ℝ, MinkowskiModel d) x) :
+    g.form x (g.leviCivita (fun y => g.sharp y (α y)) x u) (V x) =
+      mvfderiv 𝓘(ℝ, MinkowskiModel d) (fun y => α y (V y)) x u - α x (g.leviCivita V x u) :=
+  g.leviCivita_sharp_pairing hα hV u
+
+example {e : OpenPartialHomeomorph M (MinkowskiModel d)}
+    (he : e ∈ IsManifold.maximalAtlas 𝓘(ℝ, MinkowskiModel d) ∞ M)
+    {x : M} (hx : x ∈ e.source) (j : Fin (d + 1)) :
+    chartTangentMap e x (g.twoFormDivergence F x) j = ∑ b, ∑ a, ∑ i,
+      g.twoFormCovariantComponent F e x i a b *
+        g.inverseComponent x (chartTangentEquiv he hx) a i *
+        g.inverseComponent x (chartTangentEquiv he hx) j b := g.twoFormDivergence_chart F he hx j
+
+example {e : OpenPartialHomeomorph M (MinkowskiModel d)}
+    (he : e ∈ IsManifold.maximalAtlas 𝓘(ℝ, MinkowskiModel d) ∞ M)
+    {x : M} (hx : x ∈ e.source) (j : Fin (d + 1)) :
+    chartTangentMap e x (g.twoFormDivergence F x) j = (g.chartDensity e x)⁻¹ *
+      ∑ i, mvfderiv 𝓘(ℝ, MinkowskiModel d)
+        (fun y => g.chartDensity e y * g.raisedTwoFormComponent F e y i j) x
+        (chartField e (Pi.single i 1) x) := g.twoFormDivergence_density F he hx j
+
+example (p : LorentzianConformalExample.Plane) :
+    LorentzianConformalExample.metric.twoFormDivergence LorentzianTwoFormExamples.coordinateArea p =
+      modelField ![-4 * p 1 * Real.exp (-(4 * (p 1)^2)), 0] p :=
+  LorentzianTwoFormExamples.conformal_area_divergence p
+
+end TwoFormDivergence

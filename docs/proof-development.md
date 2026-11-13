@@ -472,3 +472,153 @@ through the explicit coordinate swap. Nonzero degrees 0 and 1 and the
 hyperbolic charged worldline are regression proofs. The
 [electrodynamics guide](electrodynamics.md) records the full theorem map,
 regularity conditions, experiment runner, and boundaries of §4.1.
+
+
+## GR 5.1 native differential-form foundation
+
+The first stage F increment constructs the smooth structure on mathlib's
+native continuous-alternating-map bundle, then proves arbitrary smooth
+pullback, coefficient overlap/recovery and open-cover gluing. No native
+fibre receives an artificial norm, and local gluing representatives only
+need regularity on their own domains. Flat smooth forms and pullback agree
+exactly with the existing API. Nonlinear shear, time-axis and singular
+projection examples are formal proofs, with independent exact SymPy checks.
+Typed contracts cover the general interfaces at default elaborator settings.
+Native exterior differentiation is now constructed by differentiating
+actual chart coefficients and proving the overlap law before assembling the
+global section. Local chart maps need no global smooth extension. Smoothness,
+chart independence, linearity, locality, `d² = 0`, arbitrary smooth pullback
+naturality across different model spaces and exact flat specialization are
+proved. The nonzero exact plane area form, nonlinear shear and time-axis
+inclusion are Lean examples; exact SymPy also checks mixed-partial cancellation
+and a nonlinear two-to-three-dimensional pullback.
+
+`NativeWedge` lifts the established normalized coordinate product through
+actual charts on manifolds modeled on `Fin n → ℝ`. Its overlap theorem is
+proved for arbitrary native forms, before the smooth product is bundled.
+The flat pullback law now allows different source and target dimensions;
+the native law inherits this generality. Bilinearity, associativity, graded
+commutativity, a degree-zero unit and graded Leibniz are section equalities.
+`smoothDegreeCast` makes degree arithmetic explicit in these identities.
+No norm is introduced on native fibres. Lean examples cover nonlinear
+charts, singular and dimension-changing maps, and the nonzero signed identity
+`d(dx⁰ ∧ x¹ dx²) = -dx⁰ ∧ dx¹ ∧ dx²`. Independent exact SymPy checks use
+variable forms and a nonlinear immersion.
+
+`MetricDensity` proves the Gram-determinant density law even for singular
+changes of vector family. `Lorentzian/VolumeDensity` specializes it to actual
+tangent fibres and proves positive basis volumes, the chart formula,
+absolute-Jacobian covariance and local smoothness. The determinant is a
+finite polynomial on the coordinate model; no native fibre norm is added.
+`OrientedAtlas` supplies only signed local chart data. `VolumeForm` proves
+overlap compatibility before gluing, then proves nonvanishing, equality of
+the absolute volume with density, reversal of orientation, invariance under
+whole-metric sign reversal, and independence of compatible chart covers.
+Exact Lean examples cover either Minkowski convention in every dimension,
+both actual shear charts, a different compatible oriented cover, the curved
+conformal plane, and a basis change with volume `-6` but density `6`.
+Default-option typed contracts and independent exact SymPy checks accompany
+the construction.
+
+`FiniteDual` identifies continuous alternating forms on finite topological
+fibres with exterior powers of their algebraic duals, without introducing a
+norm. `FiniteWedge` proves exact agreement with the native chart-based wedge.
+`VolumeNormalization` constructs the top-covector functional as division by
+a nonzero volume vector: scaling the volume by `r` scales the functional by
+`1/r`. `FiniteHodge` and `HodgeTransport` then prove the actual wedge equation,
+uniqueness, volume and metric scaling, and transport between independent
+finite topological fibres. `HodgeFiber` applies these results to the native
+Lorentz inverse metric and constructed volume form. The operator is an actual
+linear equivalence on each fibre, with the expected orientation and metric-sign
+laws. `HodgeFlat` proves exact agreement with the existing Minkowski API;
+`HodgeExamples` transfers all six two-form signs and square `-1`, and proves
+nonlinear shear transport using the actual metric and volume identities.
+Typed contracts use default elaborator settings. Independent exact SymPy
+checks all degrees under nonlinear positive/negative-Jacobian chart changes,
+metric sign reversal, and the conformal plane.
+
+`HodgeFormula` proves the native/reference comparison with inverse-metric
+precomposition and a volume coefficient. `ChartDuality` identifies the actual
+coordinate metric with a continuous linear equivalence and proves smooth
+inversion locally. `HodgeCoordinates` derives `⋆g α = sρ ⋆η (α ∘ (G⁻¹η))`,
+where precomposition acts in every slot and `ρ = sqrt(abs(det G))`.
+`HodgeSmooth` uses this formula and smooth chart coefficients to construct
+`smoothHodge` on the actual alternating tangent bundle. No norm is added to
+native fibres. `HodgeSquare` uses a pointwise signature witness and proves
+its volume has square one, transferring the flat square law without a global
+frame or a flatness premise. `HodgeCurvedExamples` proves that the curved
+conformal plane's one-form Hodge equals flat Hodge, including smooth sections,
+and checks its square alongside the known nonzero scalar curvature.
+The exact runner independently checks the inverse-metric formula for all
+degrees in nonconstant coordinates and both metric signs.
+
+`OneForm` proves regularity equivalence for native covectors and alternating
+one-forms, giving a smooth linear equivalence. `Electrodynamics.Curved` uses
+it with metric lowering and Hodge to construct `J = ⋆(j♭)` and its inverse,
+sets `H = -⋆F`, and proves current closedness from the sourced equation alone.
+The actual derivative `dH` determines a unique vector source. Orientation
+reversal preserves the equations, and a directly differentiated field
+`F=t dt∧dx` verifies `H=t dy∧dz` and the nonzero source three-form.
+
+`Divergence` defines the intrinsic trace of Levi-Civita and proves smoothness
+and its derivative-plus-Christoffel expression. `MetricDensityDerivative`
+derives determinant/density directional derivatives by row multilinearity,
+transposition and nonzero-determinant calculus. `DensityDerivative` applies
+metric compatibility and the product rule to obtain the chart-density
+derivative and `div V = ρ⁻¹ ∂ᵢ(ρVⁱ)`. A curved conformal constant field has
+proved nonzero divergence `4x`; exact calculations also check nonconstant
+fields in curved, time-dependent, non-diagonal metrics of either signature.
+
+`Interior` constructs first-slot contraction on native topological fibres and
+proves linear-map naturality without native norms. `Minkowski/HodgeCurrent`
+derives all one-form signs and the coordinate volume contraction identity;
+`Lorentzian/HodgeCurrent` transfers it through pointwise signature witnesses.
+`Current` obtains the signed chart-density expression and proves the actual
+native equality `dJ=(div j) vol`. Nonvanishing volume makes current closedness
+equivalent to vanishing vector divergence. The sourced Maxwell equation alone
+therefore gives covariant current conservation. `CurrentExamples` proves the
+nonzero source vector `-∂x` and its divergence. Exact checks include curved
+mixed-coordinate metrics and nonzero current divergence in both signatures
+and orientations.
+
+`Tensor/CovariantDerivative` now applies the local tensoriality criterion to
+the Leibniz-corrected derivative of native bilinear tensors. `TwoForm` proves
+smooth currying from the alternating bundle without installing fibre norms.
+`TwoFormDerivative` derives both Christoffel corrections from the actual
+Levi-Civita connection and proves smoothness by testing on local smooth fields.
+Its packaged iterated-hom model retains the recursively constructed coordinate
+norms/topologies. `TwoFormExterior` uses actual chart coefficients and
+torsion-freeness to identify the exterior derivative with the alternating
+covariant sum. Basis extensionality proves the reverse implication from
+component equations; no coordinate transformation law is assumed.
+
+Lean examples include closed coordinate area with nonzero covariant derivative
+on the curved conformal plane and a nonclosed four-dimensional form with
+nonzero cyclic sum. Exact calculations test all three covariant slots under
+a nonlinear chart change in a curved metric.
+
+`TwoFormDivergence` constructs a smooth vector by contracting and raising the
+native derivative. `DualDerivative` proves the raising product rule from metric
+compatibility. `TwoFormRaised` derives the local dual-frame connection rule,
+the two positive Christoffel corrections, and the vanishing symmetric/skew
+contraction. The resulting density formula is proved for every smooth chart.
+The conformal area example has nonzero divergence, and the physical electric
+example agrees exactly with its source from `dH`. Exact checks also verify
+the vector transformation law under the nonlinear change of chart.
+
+`BivectorVolume` proves the local coordinate identity for differentiating the
+volume dual of an antisymmetric coefficient matrix. `ExcitationChart` derives
+that matrix from the actual Hodge operator as `ρ Fⁱʲ`, with the oriented chart
+sign. `CurvedComponents` then uses local chart recovery, the density divergence
+formula and current-volume identification to prove `dH = currentForm (div F)`.
+No chart is assumed globally smooth. Both directions of the sourced equation
+and of the complete Maxwell component equations follow. The source is
+orientation independent; every native two-form divergence is conserved.
+Typed API contracts include the full component iff, and exact SymPy compares
+the independently computed Hodge/exterior and covariant-derivative sides in
+a curved nonlinear chart with all six field components varying.
+
+Stage F’s principal endpoints are implemented and await review. The controlled
+time-dependent Newtonian motion/trajectory limit remains in stage G. The
+[geometry guide](smooth-geometry.md) and [electrodynamics guide](electrodynamics.md)
+record the APIs and convention comparison.

@@ -179,9 +179,40 @@ geodesics for the quadratic action. Actual localized manifold test families
 now prove the converse directions and both complete native equivalences.
 Local affine reparametrization, unit proper speed, one finite proper-time
 inverse and closed-segment preservation of nonzero null initial velocity are
-proved. Stage E's principal endpoints await review. Curved forms and the
-Newtonian motion limit remain in the work
-tracked by [#52](https://github.com/MGYamada/ProjectAInos/issues/52).
+proved. Stage E's principal endpoints await review. Stage F has a smooth
+native alternating bundle, coefficient overlap laws, open-cover gluing,
+arbitrary smooth pullback and exact flat specialization, with nonlinear and
+singular-map examples. The native exterior derivative is constructed and
+proved chart-independent, smooth, linear, local, square-zero and natural
+under every smooth pullback. A nonzero exact two-form, nonlinear charts and
+a dimension-changing map test its normalization. The native wedge on finite
+coordinate models now has chart independence, smoothness, general pullback
+naturality, bilinearity, associativity, graded commutativity, units and the
+graded Leibniz rule. Actual nonlinear charts and a nonzero three-form check
+fix normalization and signs. Intrinsic volume density now has positive,
+smooth chart coefficients with absolute-Jacobian covariance. Signed local
+orientations glue a smooth nonzero volume form, with proved cover independence,
+orientation reversal and exact flat/nonlinear/conformal normalizations.
+Native Hodge now has a proved wedge identity, uniqueness, sign laws,
+metric/volume-preserving naturality and exact flat API agreement. Native
+four-dimensional signs and nonlinear shear transport test its normalization.
+The local inverse-metric formula proves smooth-section regularity, and the
+general Lorentz square identity holds without flatness or a global frame.
+The curved conformal plane verifies the one-form operator and its square.
+Intrinsic divergence and its positive-density formula are now proved in all
+smooth charts, including a nonzero curved example. Fixed-background Maxwell
+forms, invertible vector/three-form current identification, sourced current
+closedness and orientation invariance are implemented. A time-dependent
+nonzero-current example fixes the physical vector sign. Pointwise volume
+contraction and `dJ = (div j) vol` now prove vector-divergence conservation.
+Native two-form covariant differentiation and the homogeneous Maxwell
+component equivalence are now proved, with curved and nonclosed examples.
+The smooth native two-form divergence and its density expression are also
+proved, including the nonzero electric-source sign and a curved example.
+The general source from `dH` is now proved to equal the native two-form
+divergence, completing both Maxwell component equivalences in every chart.
+Stage F’s principal endpoints await review; the Newtonian motion limit remains
+in the work tracked by [#52](https://github.com/MGYamada/ProjectAInos/issues/52).
 Einstein equations and their Newtonian field-equation limit remain in 5.2;
 the Maxwell field action remains in 4.2.
 

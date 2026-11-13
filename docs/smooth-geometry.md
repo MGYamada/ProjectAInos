@@ -432,8 +432,10 @@ law, metric pullback, naturality, open restriction and the nonlinear
 connection examples at default elaborator settings. The stage B connection
 proof endpoints are implemented; its PR still requires review and merge.
 The curvature endpoints below are implemented. Finite-segment parallel
-transport is described in the motion section. Local inertial coordinates,
-curved forms and the Newtonian motion limit remain later work.
+transport and local inertial coordinates are described in the motion section.
+Native form bundles, pullback, exterior differentiation, wedge, density and
+oriented volume and smooth Hodge are described below; Maxwell and the Newtonian motion limit
+remain incomplete.
 
 ## GR 5.1: curvature and intrinsic contractions
 
@@ -918,10 +920,12 @@ shear example proves this equality for arbitrary piecewise paths.
 
 Stage D's principal proof endpoints are implemented, pending review and
 merge. No global frame, global chart, analytic metric, Hausdorff premise or
-geodesic completeness is assumed or concluded. Particle variation, curved
-forms and the Newtonian trajectory limit are the subsequent E–G stages.
+geodesic completeness is assumed or concluded. Stage E's principal particle-
+variation endpoints are now implemented; see the [GR guide](general-relativity.md).
+Curved exterior calculus/Maxwell and the Newtonian trajectory limit remain
+in stages F–G.
 
-This increment passes the warning-free full build (9,302 jobs), root-import
+The stage D checkpoint passed the warning-free full build (9,302 jobs), root-import
 check, all six API checks and the transitive audit of 7,309 declarations
 (3,144 in smooth geometry). Only `propext`, `Classical.choice` and `Quot.sound`
 are permitted. Typed contracts fix the native along-field carrier, overlap
@@ -937,8 +941,372 @@ flatness equation, constructed parallel-coframe existence, native coordinate
 curvature, the near-point Minkowski chart, the full local-flatness equivalence,
 local path independence for actual piecewise paths,
 and flat/curved concrete examples at default elaborator settings. The installed-package
-exact Lorentz experiment also passes. These checks validate this increment, not the remaining E–G
-proof obligations.
+exact Lorentz experiment also passed at that checkpoint. These historical checks
+validate stage D; later stage checks are recorded separately.
+
+## GR 5.1: native differential-form foundation
+
+`DifferentialForm/Bundle.lean` equips mathlib's existing continuous-alternating-
+map bundle topology with a proved smooth vector-bundle structure. Its
+transition maps are polynomial compositions of the original smooth bundle
+transitions. `NativeForm I M k` assigns an alternating covector to each actual
+tangent fibre; `SmoothForm I M k` is a smooth section of that bundle. No norm
+or global frame is installed on native tangent fibres. These constructions
+need neither a metric nor finite-dimensional models.
+
+`NativeCoordinates` extracts `coefficients` in any atlas tangent
+trivialization. `coefficients_change` proves the overlap law,
+`SmoothForm.contMDiffAt_coefficients` proves local smoothness, and
+`coefficients_recover` reconstructs the native value from the coefficients.
+`smoothGlue` in `NativeGluing.lean` glues
+compatible local native forms over any open cover. Each representative only
+needs to be smooth on its own open set; there is no global extension
+hypothesis. `smoothGlue_apply` and `smoothForm_ext_of_cover` prove restriction
+and uniqueness.
+
+`smoothPullback` in `NativePullback.lean` precomposes every slot with `mfderiv I J f x`.
+It is a smooth section for every smooth map, including different source and
+target dimensions and singular derivatives. `smoothPullback_id`,
+`smoothPullback_comp`, `smoothPullbackLinear` and `smoothPullback_const` give
+identity, contravariant composition, linearity and annihilation of positive
+degrees by constant maps. In degree zero `nativePullback_degreeZero` is
+ordinary scalar composition. The names are in `DifferentialForm`, not nested
+module namespaces.
+
+`ofFlat` in `NativeFlat.lean` identifies flat smooth forms with native sections on the
+model manifold. `nativePullback_flat` and `smoothPullback_flat` prove exact
+agreement with the existing flat pullback. `NativeExamples` computes
+`dX = dx + 2t dt` under the nonlinear shear, the preserved area form,
+`2t dt` on the time axis, and the vanishing area pullback under a nonconstant
+singular projection. These are identities of actual smooth native sections.
+Typed contracts in `checks/SmoothGeometryAPI.lean` fix the bundle, pullback,
+coefficient, gluing and flat-comparison interfaces. Exact SymPy checks cover
+the same nonlinear and dimension-changing examples and a variable two-form
+under nonlinear composition.
+
+Native exterior differentiation, wedge, volume density and oriented volume
+and smooth Hodge are described below. The curved Maxwell component bridge remains
+in #52. Maxwell action variation remains in §4.2/#44, and Einstein dynamics
+remains in §5.2.
+
+### Exterior differentiation and chart independence
+
+`NativeChart.lean` works on boundaryless smooth real manifolds with arbitrary
+normed model spaces. `chartCoefficients` pulls a native form through the actual
+inverse chart derivative, and `chartLift` uses the forward derivative.
+Their source/target inverse laws and transition laws are proved only where
+the charts are defined. The supporting `contMDiffAt_nativePullback` theorem
+requires smoothness of the map at the source point and of the native section
+at its image. No global smooth extension of a chart is assumed.
+
+`NativeExteriorDerivative.lean` differentiates those model coefficients using
+mathlib's normalized `extDeriv`. `chartExtDeriv_transition` proves the overlap
+law using the derivative pullback theorem and locality. Then
+`chartLift_extDeriv_independent` identifies the native results on overlaps.
+`nativeExteriorDerivative` chooses a chart at each point, while
+`nativeExteriorDerivative_eq_chart` proves equality with every smooth chart
+containing it. This supplies the regularity proof for the bundled
+`smoothExteriorDerivative`, rather than storing regularity or chart
+independence as assumptions.
+
+`chartCoefficients_smoothExteriorDerivative` is the standard coordinate
+formula in every chart. `smoothExteriorDerivative_squared` proves `d² = 0`;
+`smoothExteriorDerivativeLinear` and `smoothExteriorDerivative_local` give
+linearity and dependence only on the local native section. The construction
+requires no metric, orientation, global frame, finite-dimensional model or
+Hausdorff assumption. The operator API currently acts on smooth sections.
+
+`NativeNaturality.lean` proves `smoothExteriorDerivative_pullback` for every
+smooth map between these manifolds, with independent source and target model
+spaces. In coordinates the proof includes the map derivative and all of its
+second derivatives; the alternating cancellation comes from mathlib's model
+pullback theorem. No inverse derivative is required.
+`smoothExteriorDerivative_flat` is exact agreement with the existing flat
+operator.
+
+`NativeExteriorExamples.lean` proves `d(T dX) = dT ∧ dX` in the plane, with a
+nonzero exact area form and `d(area) = 0`. The nonlinear shear, its actual
+maximal-atlas chart, and the time-axis inclusion test naturality. The SymPy
+runner independently checks forward/inverse shear coefficients and exterior
+derivatives, a three-variable mixed-partial cancellation for `d²`, and a
+nonlinear two-to-three-dimensional pullback of a nonconstant potential.
+Typed contracts in `checks/SmoothGeometryAPI.lean` fix local regularity,
+chart independence, the coordinate formula, linearity/locality, `d²`, general
+pullback naturality and flat specialization.
+
+### Native exterior product and graded calculus
+
+`NativeWedge.lean` works on boundaryless smooth manifolds modeled on
+`Fin n → ℝ`, including the Lorentz manifolds used by GR. This is a local
+coordinate-model requirement, not a global chart or frame. The preceding
+native derivative and pullback API still supports arbitrary normed models.
+
+`nativeWedge` lifts the existing normalized coordinate product through an
+actual chart. `chartWedge_transition`, `chartLift_wedge_independent` and
+`nativeWedge_eq_chart` prove chart independence even for nonsmooth native
+forms. Local coefficient regularity and `wedge_contDiffAt` prove smoothness
+before bundling `smoothWedge`. `chartCoefficients_smoothWedge` gives the
+coordinate formula in every smooth chart. No native tangent norm, metric,
+orientation, global frame or Hausdorff hypothesis is introduced.
+
+`smoothWedgeLinear` supplies bilinearity. `smoothPullback_wedge` holds for
+every smooth map, including noninvertible maps and different source/target
+dimensions. The flat `pullback_wedge` was generalized to these dimensions
+without changing its name or existing specializations. `smoothWedge_flat`
+proves exact agreement with the established determinant normalization.
+
+`NativeWedgeCalculus.lean` proves `smoothWedge_assoc`, `smoothWedge_comm`,
+`smoothWedge_one_left`, `smoothWedge_one_right` and
+`smoothExteriorDerivative_wedge`. These are equalities of smooth native
+sections. `smoothDegreeCast` explicitly transports degrees such as
+`(k+1)+l = (k+l)+1`; it does not introduce a premise about the forms.
+The commutation sign is `(-1)^(k*l)` and the Leibniz sign is `(-1)^k`.
+`smoothOne` is the constant degree-zero scalar one, whose derivative is zero.
+
+`NativeWedgeExamples.lean` identifies the wedge of the temporal/spatial
+covectors with the previously constructed nonzero area form. It checks the
+actual nonlinear maximal-atlas chart, the shear, a nonconstant singular
+projection and the one-dimensional time-axis inclusion. A direct
+three-dimensional derivative proves
+`d(dx⁰ ∧ x¹ dx²) = -dx⁰ ∧ dx¹ ∧ dx²`, detecting the minus sign with a
+nonzero result. Default-option typed API examples cover the full product
+interfaces. Exact SymPy additionally tests variable one-forms, graded
+Leibniz and wedge naturality under a nonlinear two-to-three-dimensional map.
+
+### Lorentz density and oriented volume
+
+`MetricDensity.value B v` is `sqrt(abs(det(gram B v)))` for a bilinear form
+and an ordered vector family. `value_change` proves multiplication by
+`abs(det A)` under every change matrix, including singular ones. No
+orientation or norm is involved. `LorentzMetric.volumeDensity` applies this
+construction directly to the metric on each actual tangent fibre.
+`volumeDensity_basis_pos` proves positivity on bases from nondegeneracy;
+`volumeDensity_naturality` proves invariance under metric-preserving tangent
+maps, and `opposite_volumeDensity` handles whole-metric sign reversal.
+
+`chartDensity` is the familiar `sqrt(abs(det(g_ij)))`.
+`volumeDensity_eq_chart` expresses intrinsic density using the determinant
+of the input vectors' chart components. `chartDensity_transition` proves
+the absolute-Jacobian change rule between any two actual smooth charts,
+with explicit source membership. `chartDensity_contMDiffAt` proves local
+smoothness using the nonzero determinant and its finite polynomial
+expansion. Only the finite coordinate model carries a norm.
+
+`OrientedAtlas` records a covering chart around each point and a constant
+sign of square one in each chart. Its overlap condition compares those signs
+using the transition Jacobian. This is explicit local orientation data;
+it requires no global frame or chart, metric, or Hausdorff premise.
+`localVolume` multiplies the pulled-back normalized coordinate top form by
+the signed density. `localVolume_compatible` proves equality on overlaps,
+so `volumeForm` uses the existing native gluing theorem to construct a
+`SmoothForm` of degree `d+1`. Neither smoothness nor existence of the global
+volume is an input premise.
+
+`chartCoefficients_volumeForm` gives the signed-density coefficient in every
+selected chart. `volumeForm_ne_zero` and `abs_volumeForm` identify a nonzero
+oriented top form whose absolute value is precisely the intrinsic density.
+`volumeForm_reverse` negates it when the orientation is reversed;
+`opposite_volumeForm` leaves it unchanged when the whole metric is negated.
+`volumeForm_eq_of_compatible` proves that a different signed chart cover
+describing the same orientation gives the same native section.
+
+`VolumeExamples.lean` proves density one and the standard coordinate volume
+for Minkowski metrics in either sign convention and every dimension. The
+nonlinear shear metric has unit density in both actual atlas charts, and a
+cover made from the inertial charts gives the same volume. The conformal
+plane `exp(2x²)(-dt²+dx²)` has density `exp(2x²)` and that coefficient times
+the existing native area form. An orientation-reversing rescaling has
+volume `-6` and density `6`. These interfaces have default-option typed
+examples in `checks/LorentzGeometryAPI.lean`. The exact SymPy runner also
+checks a nonlinear chart with nonconstant, negative Jacobian determinant.
+The density divergence formula remains to be implemented with the curved
+Maxwell bridge.
+
+### Native Lorentz Hodge
+
+`FiniteDual.lean` works on finite-dimensional Hausdorff topological real
+vector spaces. These hypotheses hold for each tangent fibre; they impose
+no global Hausdorff hypothesis on the manifold. Algebraic alternating forms
+are continuous by a finite coordinate expansion, giving `finiteToExterior`.
+Its pullback theorem holds between independent vector spaces, even for
+singular linear maps. No norm is placed on a native fibre. `FiniteWedge`
+constructs the intrinsic exterior product and proves it equals the existing
+chart-defined `nativeWedge` at every point.
+
+The volume in `DifferentialForm.hodge` is a functional on top exterior
+covectors. `VolumeNormalization` builds that functional from a nonzero volume
+vector: `volumeNormalizer` sends `r • vol` to `r`. In particular, multiplying
+the volume form by `r` multiplies this functional by `r⁻¹` and Hodge by `r`.
+This reciprocal normalization is proved explicitly. `FiniteHodge` transports
+the established wedge-normalized algebraic Hodge to continuous forms and
+proves the wedge equation and uniqueness. `finiteDegreeCast` records the
+degree arithmetic. `HodgeTransport` proves naturality between separate
+finite topological fibres and the inverse-metric precomposition identity
+used in the local regularity proof below.
+
+`LorentzMetric.coMetric` is the inverse metric on the algebraic cotangent
+space, derived from the existing `sharp`; its bijectivity and symmetry are
+proved. `hodgeFiber g o x hkl` is a linear equivalence of the actual
+alternating tangent fibres. `formPairing` is the exterior-power pairing of
+the inverse metric. `hodgeFiber_wedge` and `hodgeFiber_unique` prove
+`α ∧ ⋆β = ⟨α,β⟩ vol`, after the explicit degree transport. The unbundled
+`nativeHodge` satisfies the same equality with the existing native wedge.
+
+`hodgeFiber_reverse` negates the operator when only orientation is reversed.
+`hodgeFiber_opposite` multiplies it by `(-1)^k` under whole-metric reversal.
+`hodgeFiber_naturality` applies to tangent equivalences that preserve both
+the metric and the oriented volume; it does not claim that Hodge commutes
+with arbitrary pullback.
+
+`HodgeFlat.lean` proves exact agreement with `Minkowski.hodgeFiber` in every
+dimension and either metric convention, including the top-degree casts and
+volume normalization. `HodgeExamples.lean` transfers all six four-dimensional
+coordinate two-form signs and the two-form square `-1`. The nonconstant
+shear metric has proved Hodge transport under its actual tangent shear map,
+using separately proved metric and oriented-volume preservation.
+Default-option typed contracts are in `checks/LorentzGeometryAPI.lean`.
+Exact SymPy independently checks all degrees under a nonlinear chart with
+nonconstant Jacobian magnitude, both Jacobian orientations, whole-metric
+reversal, and the conformal plane.
+
+`HodgeFormula` proves a reference-metric formula on independent finite
+topological fibres. `ChartDuality` identifies the chart metric `G` with native
+metric duality conjugated by the actual chart tangent equivalence.
+`chartSharp` is its inverse, smooth on the chart source by smooth inversion.
+For a selected signed chart, `HodgeCoordinates` proves
+
+```
+⋆g α = sρ ⋆η (α.compContinuousLinearMap (G⁻¹η))
+```
+
+Here `s` is the chart's orientation sign, `ρ = sqrt(abs(det G))`, and `η`
+is the time-negative reference metric even when `g` uses the opposite
+signature. Precomposition acts in every covariant slot. The formula is
+proved both for a lifted form and for the actual inverse-chart coefficients
+of `nativeHodge`. It is valid locally and needs no globally extended chart.
+
+`HodgeSmooth` proves preservation of local smoothness, then bundles
+`smoothHodge` as a linear map between smooth native sections. Its orientation
+and metric-sign laws and flat specialization follow from the pointwise API.
+`HodgeSquare` proves `⋆⋆α = (-1)^(k*l + σ.negativeIndex d) • α` on native
+fibres and as an equality of smooth sections. A pointwise signature witness
+gives a frame whose oriented volume has square one; that sign cancels in
+the square. No global frame, flatness or additional Hausdorff assumption is
+used.
+
+For `g = exp(2x²)(-dt² + dx²)`, `HodgeCurvedExamples` proves the inverse-metric
+chart map is `exp(-2x²)` times the identity and all one-form Hodge values
+agree with flat Hodge. It also proves the smooth-section version and checks
+the square together with scalar curvature `-4 exp(-2x²)`. Typed API examples
+fix the explicit local formula, regularity hypotheses, smooth linear map and
+general square. Exact SymPy additionally checks that local formula in all
+degrees with variable, non-diagonal metrics and either signature.
+
+### Intrinsic divergence and the positive density
+
+`Lorentzian/Divergence.lean` defines `divergence V x` as the intrinsic trace
+of `g.leviCivita V x` on the actual tangent fibre. `smoothDivergence` bundles
+the result for smooth vector fields. `divergence_eq_sum` proves invariance
+under arbitrary pointwise tangent-coordinate equivalences, and
+`divergence_chart` derives `∂ᵢVⁱ + ΓⁱᵢⱼVʲ` for a field differentiable at the
+point in any smooth maximal-atlas chart containing that point. Both metric
+sign conventions are supported; whole-metric sign reversal preserves divergence.
+
+`MetricDensityDerivative.lean` differentiates the row-multilinear determinant
+and proves the trace formula in directions `A G + G Aᵀ`. Differentiating
+`sqrt(abs(det G))` requires only nonzero determinant. This algebraic step
+does not assume positive definiteness. `Lorentzian/DensityDerivative.lean`
+then derives the actual chart-metric derivative from Levi-Civita compatibility,
+and proves
+
+\[
+\partial_k\rho=\rho\sum_i\Gamma^i{}_{ik},\qquad
+\operatorname{div}V=\rho^{-1}\sum_i\partial_i(\rho V^i),
+\quad\rho=\sqrt{|\det g|}.
+\]
+
+`chartDensity_derivative`, `chartDensity_mul_divergence` and
+`divergence_density` express coordinate directions through the native
+`chartField` and `mvfderiv`. They need no orientation or global frame.
+`DivergenceExamples` checks `div(∂x)=4x` for the curved conformal plane,
+and independently differentiates its density to recover the same value.
+Typed contracts fix the actual connection trace, regularity and local
+chart hypotheses. SymPy checks a nonconstant vector field with a curved,
+non-diagonal, time-dependent metric in both overall signatures.
+
+`DifferentialForm/OneForm.lean` identifies continuous covectors with
+alternating one-forms on native fibres. Its coordinate regularity theorem
+constructs `smoothOneFormEquiv` between the existing smooth cotangent and
+alternating-section bundles, without adding fibre norms. This supports the
+[fixed-background Maxwell form API](electrodynamics.md#fixed-background-maxwell-forms).
+`Interior.lean` inserts a vector in the first slot of a continuous form on
+any topological real module. Its continuity proof uses no norm or finite-basis
+choice; naturality holds even for singular continuous linear maps.
+`InteriorDerivative.lean` proves the four-coordinate trace formula for the
+exterior derivative of contraction with coordinate volume. The chart-direction
+chain-rule API now also accepts vector-space-valued functions.
+
+`Minkowski/HodgeCurrent.lean` proves all four one-form Hodge signs, a general
+coordinate-volume cofactor expansion and `⋆(v♭)=ιᵥ vol` in four dimensions.
+`Lorentzian/HodgeCurrent.lean` transports this identity to every actual tangent
+fibre, in either signature, using only a pointwise Lorentz frame. The physical
+current API then proves `dJ=(div j) vol`, so closedness is equivalent to zero
+vector divergence. A directly computed Maxwell field has native vector source
+`-∂x`. SymPy also tests current contraction and nonzero divergence in curved
+mixed-coordinate metrics with either signature/orientation. The covariant
+Maxwell sourced component bridge is now proved in `Electrodynamics/CurvedComponents`.
+
+`Tensor/CovariantDerivative.lean` constructs the derivative of a smooth native
+covariant bilinear tensor using any tangent connection. The scalar Leibniz
+correction is tensorial in both input fields, so mathlib's `TensorialAt.mkHom₂`
+descends it to the actual fibres independently of local extensions. It is
+linear in all three slots and preserves antisymmetry. No native norm is added.
+`DifferentialForm/TwoForm.lean` curries native alternating two-forms into the
+existing hom bundle and proves smoothness through actual trivializations.
+
+`Lorentzian/TwoFormDerivative.lean` applies this construction to Levi-Civita,
+proves smoothness of the resulting three-covariant tensor and bundles it in
+`smoothTwoFormDerivative`. The last argument is the derivative direction.
+The public `twoFormCovariantComponent` puts that direction first, as in
+`∇ᵢFⱼₖ`, and its formula derives both negative Christoffel terms.
+`TwoFormExterior.lean` proves `dF(u,v,w) = ∇ᵤF(v,w) - ∇ᵥF(u,w) + ∇wF(u,v)`.
+Torsion-freeness cancels the connection corrections; actual chart recovery
+then proves equivalence with the cyclic component equation in every chart.
+
+`TwoFormExamples.lean` proves that `dt∧dx` on the curved conformal plane has
+`∇xFₜₓ = -4x` even though its coordinate coefficients are constant and `dF=0`.
+The physical examples also include a nonclosed two-form with cyclic sum `1`.
+Exact SymPy checks the nonlinear three-slot transition law and the cyclic
+identity in a curved four-dimensional metric. The sourced Maxwell component
+bridge is proved below; the controlled Newtonian limit remains outstanding.
+
+`TwoFormDivergence.lean` contracts the actual three-covariant derivative by
+`sharp` and trace, then raises the resulting covector to a smooth tangent
+section. Local smoothness is proved by evaluating on local smooth fields;
+native fibres retain their existing topologies. Its component formula has the
+two inverse-metric factors derived from the trace construction.
+
+`DualDerivative.lean` derives the covariant product rule for raised covectors
+directly from metric compatibility. `TwoFormRaised.lean` constructs the actual
+coordinate covectors and raises them, proves their local smoothness and dual
+Christoffel rule, then derives the two positive corrections for raised two-form
+components. The symmetric-connection/antisymmetric-form contraction is zero.
+Together with the proved density derivative this gives
+`∇ᵢFⁱʲ = ρ⁻¹ ∂ᵢ(ρ Fⁱʲ)` in every smooth chart, in all Lorentz dimensions and
+both signatures. No global frame, orientation or flatness is assumed.
+
+The curved conformal area example has divergence `(-4x exp(-4x²), 0)`. The
+physical electric example has divergence `-∂x`, equal to its `dH` source.
+`DifferentialForm/BivectorVolume.lean` proves a metric-free four-dimensional
+coordinate-volume dual derivative formula under local differentiability and
+local antisymmetry. The physical layer applies this to the actual signed
+chart coefficients of the excitation. `Electrodynamics/CurvedComponents.lean`
+proves that its native derivative is the current form of `twoFormDivergence`.
+Consequently the source equals that divergence, both Maxwell equations are
+equivalent to their covariant component equations in every smooth chart, and
+the source vector is orientation independent and conserved. The shared
+geometry modules import no physics. See the [electrodynamics guide](electrodynamics.md#fixed-background-maxwell-forms)
+for exact assumptions and the textbook convention comparison.
 
 ## Scope and next stages
 

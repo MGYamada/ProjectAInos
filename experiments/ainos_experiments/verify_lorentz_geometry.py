@@ -5,6 +5,8 @@ All computations are symbolic over the reals; no tolerances or random seeds
 are needed. Formal claims are established separately in Lean.
 """
 
+from itertools import combinations
+
 import sympy as sp
 
 
@@ -130,6 +132,382 @@ def verify_covariant_pullback(metric, coordinates):
         dict(zip(coordinates, composite)), simultaneous=True) * composite.diff(s)
     check_zero("nonlinear noninvertible pullback composition", direct - iterated)
     check_zero("vanishing derivative at origin", direct.subs(s, 0))
+
+
+def verify_native_forms():
+    """Alternating pullback: nonlinear charts, changed dimension and singular maps."""
+    t, x, s, r = sp.symbols("t x s r", real=True)
+    coordinates = sp.Matrix([t, x])
+    shear = sp.Matrix([t, x + t**2])
+    jacobian = shear.jacobian(coordinates)
+    spatial = sp.Matrix([[0, 1]])
+    area = sp.Matrix([[0, 1], [-1, 0]])
+    pulled_spatial = spatial * jacobian
+    check_zero("native spatial shear form", pulled_spatial - sp.Matrix([[2*t, 1]]))
+    check_zero("native normalized shear area", jacobian.T * area * jacobian - area)
+    axis = sp.Matrix([s, 0])
+    check_zero("native dimension-changing one-form", pulled_spatial.subs(
+        {t: s, x: 0}, simultaneous=True) * axis.diff(s) - sp.Matrix([[2*s]]))
+    check_zero("native dimension-changing two-form", axis.diff(s).T * area * axis.diff(s))
+    projection = sp.Matrix([t, 0]).jacobian(coordinates)
+    check_zero("native singular projection area", projection.T * area * projection)
+
+    def pull_two(mapping, source, target, field):
+        derivative = mapping.jacobian(source)
+        return derivative.T * field.subs(
+            dict(zip(target, mapping)), simultaneous=True) * derivative
+
+    def d_one(form, coords):
+        return sp.Matrix(len(coords), len(coords), lambda i, j:
+                         sp.diff(form[j], coords[i]) - sp.diff(form[i], coords[j]))
+
+    potential = sp.Matrix([[0, t]])
+    check_zero("native nonzero exterior derivative normalization", d_one(potential, coordinates) - area)
+    shear_potential = potential.subs(dict(zip(coordinates, shear)), simultaneous=True) * jacobian
+    check_zero("native nonlinear potential coefficients", shear_potential - sp.Matrix([[2*t**2, t]]))
+    check_zero("native nonlinear exterior derivative", d_one(shear_potential, coordinates) - area)
+    inverse = sp.Matrix([t, x - t**2])
+    inverse_potential = potential.subs(dict(zip(coordinates, inverse)), simultaneous=True) * inverse.jacobian(coordinates)
+    check_zero("native inverse-chart exterior derivative", d_one(inverse_potential, coordinates) - area)
+
+    # A nonlinear map from a plane into three dimensions tests naturality without invertibility.
+    u, v, w = sp.symbols("u v w", real=True)
+    target = sp.Matrix([u, v, w])
+    target_potential = sp.Matrix([[u*v, w*u**2, sp.exp(v)*w]])
+    target_field = d_one(target_potential, target)
+    check_zero("native d-squared mixed-derivative cancellation",
+               sp.diff(target_field[1, 2], u) + sp.diff(target_field[2, 0], v)
+               + sp.diff(target_field[0, 1], w))
+    immersion = sp.Matrix([t, x, t*x])
+    immersion_jacobian = immersion.jacobian(coordinates)
+    substitution = dict(zip(target, immersion))
+    source_potential = target_potential.subs(substitution, simultaneous=True) * immersion_jacobian
+    check_zero("native dimension-changing d-pullback naturality",
+               d_one(source_potential, coordinates) - immersion_jacobian.T
+               * target_field.subs(substitution, simultaneous=True) * immersion_jacobian)
+
+    def wedge_one(a, b):
+        return a.T * b - b.T * a
+
+    def d_two_three(form):
+        return sp.diff(form[1, 2], u) + sp.diff(form[2, 0], v) + sp.diff(form[0, 1], w)
+
+    def wedge_two_one(two, one):
+        return two[0, 1]*one[2] - two[0, 2]*one[1] + two[1, 2]*one[0]
+
+    alpha = sp.Matrix([[u*v, w, u]])
+    beta = sp.Matrix([[v, w*u, v**2]])
+    product = wedge_one(alpha, beta)
+    check_zero("native wedge graded commutation", product + wedge_one(beta, alpha))
+    check_zero("native wedge graded Leibniz",
+               d_two_three(product) - wedge_two_one(d_one(alpha, target), beta)
+               + wedge_two_one(d_one(beta, target), alpha))
+    check_zero("native wedge negative Leibniz example",
+               d_two_three(wedge_one(sp.Matrix([[1, 0, 0]]), sp.Matrix([[0, 0, v]]))) + 1)
+    pulled_alpha = alpha.subs(substitution, simultaneous=True) * immersion_jacobian
+    pulled_beta = beta.subs(substitution, simultaneous=True) * immersion_jacobian
+    check_zero("native wedge dimension-changing naturality",
+               wedge_one(pulled_alpha, pulled_beta) - immersion_jacobian.T
+               * product.subs(substitution, simultaneous=True) * immersion_jacobian)
+    check_zero("native wedge nonlinear-chart normalization",
+               wedge_one(sp.Matrix([[1, 0]]) * jacobian, spatial * jacobian) - area)
+
+    # Variable form and nonlinear maps test both evaluation and all covariant slots.
+    f = sp.Matrix([s, r + s**2])
+    g = sp.Matrix([t**2, t*x])
+    variable_area = (1 + t + x**2) * area
+    composite = g.subs({t: f[0], x: f[1]}, simultaneous=True)
+    direct = pull_two(composite, sp.Matrix([s, r]), coordinates, variable_area)
+    iterated = pull_two(f, sp.Matrix([s, r]), coordinates,
+                       pull_two(g, coordinates, coordinates, variable_area))
+    check_zero("native variable two-form composition", direct - iterated)
+    check_zero("native composition at singular point", direct.subs(s, 0))
+
+
+def verify_volume_density():
+    """Absolute density versus signed volume, including a nonconstant negative Jacobian."""
+    t, x = sp.symbols("t x", real=True)
+    coordinates = sp.Matrix([t, x])
+
+    def density(metric):
+        return sp.sqrt(sp.Abs(sp.simplify(metric.det())))
+
+    eta = sp.diag(-1, 1)
+    for minkowski in (eta, -eta, sp.diag(-1, 1, 1, 1), sp.diag(1, -1, -1, -1)):
+        check_zero("Minkowski density in either convention", density(minkowski) - 1)
+    shear = sp.Matrix([t, x + t**2]).jacobian(coordinates)
+    check_zero("nonlinear shear density", density(shear.T * eta * shear) - 1)
+    curved = sp.exp(2*x**2) * eta
+    check_zero("curved conformal density", density(curved) - sp.exp(2*x**2))
+    check_zero("whole-metric sign reversal density", density(-curved) - density(curved))
+
+    # This chart is a diffeomorphism onto T>0. Its Jacobian reverses
+    # orientation and has nonconstant magnitude, unlike the shear.
+    chart = sp.Matrix([sp.exp(t), -3*x])
+    jacobian = chart.jacobian(coordinates)
+    target_density = density(curved).subs(dict(zip(coordinates, chart)), simultaneous=True)
+    pulled_metric = jacobian.T * curved.subs(
+        dict(zip(coordinates, chart)), simultaneous=True) * jacobian
+    source_density = density(pulled_metric)
+    check_zero("nonconstant absolute-Jacobian density covariance",
+               source_density - 3*sp.exp(t + 18*x**2))
+    signed_volume = jacobian.det() * target_density
+    check_zero("orientation-reversing chart signed volume", signed_volume + source_density)
+    check_zero("absolute volume equals density", sp.Abs(signed_volume) - source_density)
+
+    changed_basis = sp.diag(2, -3)
+    check_zero("rescaled reversed basis signed volume", changed_basis.det() + 6)
+    check_zero("rescaled reversed basis density", density(changed_basis.T * eta * changed_basis) - 6)
+    singular_basis = sp.Matrix([[1, t], [0, 0]])
+    check_zero("singular vector-family density", density(singular_basis.T * curved * singular_basis))
+    a, b, c, d = sp.symbols("a b c d", real=True)
+    arbitrary_basis = sp.Matrix([[a, b], [c, d]])
+    check_zero("general Gram determinant covariance",
+               (arbitrary_basis.T * curved * arbitrary_basis).det()
+               - arbitrary_basis.det()**2 * curved.det())
+
+
+def verify_native_hodge():
+    """Wedge-normalized Hodge signs and transport, with exact variable metrics."""
+    def indices(n, degree):
+        return list(combinations(range(n), degree))
+
+    def sign(order):
+        return (-1)**sum(a > b for i, a in enumerate(order) for b in order[i+1:])
+
+    def hodge_matrix(metric, degree):
+        n = metric.rows
+        inverse = metric.inv()
+        rho = sp.sqrt(sp.Abs(sp.simplify(metric.det())))
+        source, target = indices(n, degree), indices(n, n-degree)
+        result = sp.zeros(len(target), len(source))
+        for j in source:
+            complement = tuple(i for i in range(n) if i not in j)
+            for column, i in enumerate(source):
+                result[target.index(complement), column] = sp.simplify(
+                    rho * sign(j + complement) * inverse.extract(j, i).det())
+        return result
+
+    def exterior_pullback(jacobian, degree):
+        basis = indices(jacobian.rows, degree)
+        return sp.Matrix(len(basis), len(basis), lambda i, j:
+                         jacobian.extract(basis[j], basis[i]).det())
+
+    eta = sp.diag(-1, 1, 1, 1)
+    two_basis = indices(4, 2)
+    expected = sp.zeros(6)
+    for source, target, coefficient in (
+            ((0, 1), (2, 3), -1), ((0, 2), (1, 3), 1), ((0, 3), (1, 2), -1),
+            ((2, 3), (0, 1), 1), ((1, 3), (0, 2), -1), ((1, 2), (0, 3), 1)):
+        expected[two_basis.index(target), two_basis.index(source)] = coefficient
+    check_zero("native Hodge six flat signs", hodge_matrix(eta, 2) - expected)
+    check_zero("native Hodge opposite flat signature", hodge_matrix(-eta, 2) - expected)
+
+    # Match the native Maxwell example: F=t dt∧dx, H=t dy∧dz, j=-∂x.
+    coords = sp.symbols("t x y z", real=True)
+
+    def exterior_derivative(coefficients, degree):
+        source_basis = indices(4, degree)
+        return sp.Matrix([sum((-1)**slot * sp.diff(
+            coefficients[source_basis.index(target[:slot] + target[slot+1:])], coords[index])
+            for slot, index in enumerate(target)) for target in indices(4, degree+1)])
+
+    field = sp.zeros(6, 1)
+    field[two_basis.index((0, 1))] = coords[0]
+    excitation = -hodge_matrix(eta, 2) * field
+    expected_excitation = sp.zeros(6, 1)
+    expected_excitation[two_basis.index((2, 3))] = coords[0]
+    check_zero("physical Maxwell excitation sign", excitation - expected_excitation)
+    check_zero("time-dependent homogeneous Maxwell equation", exterior_derivative(field, 2))
+    current_form = exterior_derivative(excitation, 2)
+    expected_current = sp.zeros(4, 1)
+    expected_current[indices(4, 3).index((0, 2, 3))] = 1
+    check_zero("nonzero Maxwell current three-form", current_form - expected_current)
+    current_vector = eta.inv() * hodge_matrix(eta, 3) * current_form
+    check_zero("Maxwell vector current sign", current_vector - sp.Matrix([0, -1, 0, 0]))
+    check_zero("current representation roundtrip", hodge_matrix(eta, 1) * eta * current_vector
+               - current_form)
+    check_zero("Maxwell current closedness", exterior_derivative(current_form, 3))
+
+    t, y = sp.symbols("t y", real=True)
+    # Derivative of (t,x,y,z) -> (t,x+t^2,exp(y),z), a genuine local chart.
+    jacobian = sp.Matrix([[1, 0, 0, 0], [2*t, 1, 0, 0],
+                          [0, 0, sp.exp(y), 0], [0, 0, 0, 1]])
+    for orientation in (1, -1):
+        change = jacobian * sp.diag(1, 1, 1, orientation)
+        metric = change.T * eta * change
+        for degree in range(5):
+            star = hodge_matrix(metric, degree)
+            for local_metric in (metric, -metric):
+                local_density = sp.sqrt(sp.Abs(sp.simplify(local_metric.det())))
+                check_zero("Hodge local inverse-metric formula",
+                           hodge_matrix(local_metric, degree)
+                           - local_density * hodge_matrix(eta, degree)
+                           * exterior_pullback(local_metric.inv() * eta, degree))
+            check_zero("native Hodge chart transport and orientation",
+                       star * exterior_pullback(change, degree)
+                       - orientation * exterior_pullback(change, 4-degree) * hodge_matrix(eta, degree))
+            check_zero("native Hodge metric sign reversal",
+                       hodge_matrix(-metric, degree) - (-1)**degree * star)
+            check_zero("native Hodge square in variable coordinates",
+                       hodge_matrix(metric, 4-degree) * star
+                       - (-1)**(degree*(4-degree)+1) * sp.eye(len(indices(4, degree))))
+    curved = sp.exp(2*y**2) * sp.diag(-1, 1)
+    check_zero("conformal plane Hodge on one-forms",
+               hodge_matrix(curved, 1) - sp.Matrix([[0, -1], [-1, 0]]))
+
+    # A curved four-dimensional metric with mixed coefficients tests the native current identity.
+    curved_four = sp.exp(2*y**2) * jacobian.T * eta * jacobian
+    rho = sp.sqrt(sp.Abs(sp.simplify(curved_four.det())))
+    t, x, y, z = coords
+    vector = sp.Matrix([t*x, z*y, t**2+x, 1+y**2])
+    gamma = christoffel(curved_four, coords)
+    divergence = sum(sp.diff(vector[i], coords[i]) for i in range(4)) + sum(
+        gamma[i][i, j] * vector[j] for i in range(4) for j in range(4))
+    check_zero("nonzero curved current divergence example",
+               divergence.subs({t: 0, x: 1, y: 0, z: 0}) - 2)
+    for metric_sign in (1, -1):
+        current = hodge_matrix(metric_sign * curved_four, 1) * (metric_sign * curved_four) * vector
+        for orientation in (1, -1):
+            expected_volume_contraction = sp.zeros(4, 1)
+            for i in range(4):
+                complement = tuple(j for j in range(4) if j != i)
+                expected_volume_contraction[indices(4, 3).index(complement)] = (
+                    orientation * (-1)**i * rho * vector[i])
+            check_zero("curved current is volume contraction",
+                       orientation * current - expected_volume_contraction)
+            check_zero("current derivative is divergence times volume",
+                       exterior_derivative(orientation * current, 3)
+                       - sp.Matrix([orientation * rho * divergence]))
+
+    # Independently compare d(-star F) with star((div F).flat). All six
+    # components vary; the metric is curved and the chart has a nonlinear shear.
+    field_matrix = sp.Matrix([
+        [0, t*y, x*z, t**2],
+        [-t*y, 0, y**2+z, t*x],
+        [-x*z, -y**2-z, 0, t*z],
+        [-t**2, -t*x, -t*z, 0]])
+    field_coefficients = sp.Matrix([field_matrix[i, j] for i, j in two_basis])
+    covariant = [sp.Matrix(4, 4, lambda a, b: sp.simplify(
+        sp.diff(field_matrix[a, b], coords[i])
+        - sum(gamma[k][i, a]*field_matrix[k, b] + gamma[k][i, b]*field_matrix[a, k]
+              for k in range(4)))) for i in range(4)]
+    inverse = curved_four.inv()
+    source = sp.Matrix([sp.simplify(sum(
+        inverse[i, a]*inverse[j, b]*covariant[i][a, b]
+        for i in range(4) for a in range(4) for b in range(4))) for j in range(4)])
+    assert source.subs({t: 1, x: 1, y: 0, z: 1}) != sp.zeros(4, 1)
+    for orientation in (1, -1):
+        excitation = -orientation * hodge_matrix(curved_four, 2) * field_coefficients
+        actual_current = exterior_derivative(excitation, 2)
+        expected_current = orientation * hodge_matrix(curved_four, 1) * curved_four * source
+        check_zero("curved sourced Maxwell form/component bridge", actual_current-expected_current)
+        check_zero("curved sourced Maxwell current conservation", exterior_derivative(actual_current, 3))
+        recovered_source = (curved_four.inv() * orientation
+                            * hodge_matrix(curved_four, 3) * actual_current)
+        check_zero("source vector is independent of orientation", recovered_source-source)
+    source_divergence = sum(sp.diff(source[i], coords[i]) for i in range(4)) + sum(
+        gamma[i][i, j]*source[j] for i in range(4) for j in range(4))
+    check_zero("covariant two-form divergence is a conserved vector", source_divergence)
+
+
+def verify_two_form_covariant():
+    """Check actual two-form derivatives and their nonlinear three-slot chart law."""
+    t, x, y, z = sp.symbols("t x y z", real=True)
+    big_t, big_x, big_y, big_z = sp.symbols("T X Y Z", real=True)
+    coordinates = (t, x, y, z)
+    original_coordinates = (big_t, big_x, big_y, big_z)
+    transform = sp.Matrix([t, x + t**2, y, z])
+    jacobian = transform.jacobian(coordinates)
+    substitution = dict(zip(original_coordinates, transform))
+    metric = sp.exp(2*big_y**2) * sp.diag(-1, 1, 1, 1)
+    form = sp.Matrix([
+        [0, big_t*big_y, big_x*big_z, big_t**2],
+        [-big_t*big_y, 0, big_y**2+big_z, big_t*big_x],
+        [-big_x*big_z, -big_y**2-big_z, 0, big_t*big_z],
+        [-big_t**2, -big_t*big_x, -big_t*big_z, 0]])
+
+    def derivative(field, gamma, coords):
+        n = len(coords)
+        return [sp.Matrix(n, n, lambda j, k: sp.simplify(
+            sp.diff(field[j, k], coords[i])
+            - sum(gamma[ell][i, j]*field[ell, k]
+                  + gamma[ell][i, k]*field[j, ell] for ell in range(n))))
+                for i in range(n)]
+
+    original = derivative(form, christoffel(metric, original_coordinates), original_coordinates)
+    pulled_metric = jacobian.T * metric.subs(substitution) * jacobian
+    pulled_form = jacobian.T * form.subs(substitution) * jacobian
+    actual = derivative(pulled_form, christoffel(pulled_metric, coordinates), coordinates)
+
+    def divergence(field, geometry, covariant, coords):
+        inverse = geometry.inv()
+        raised = inverse * field * inverse
+        rho = sp.sqrt(sp.Abs(geometry.det()))
+        current = sp.Matrix([sp.simplify(sum(
+            inverse[i, a]*inverse[j, b]*covariant[i][a, b]
+            for i in range(len(coords)) for a in range(len(coords))
+            for b in range(len(coords)))) for j in range(len(coords))])
+        density_current = sp.Matrix([sp.simplify(sum(
+            sp.diff(rho*raised[i, j], coords[i]) for i in range(len(coords))) / rho)
+            for j in range(len(coords))])
+        check_zero("native two-form divergence equals density derivative", current-density_current)
+        return current
+
+    original_current = divergence(form, metric, original, original_coordinates)
+    actual_current = divergence(pulled_form, pulled_metric, actual, coordinates)
+    check_zero("two-form divergence transforms as a vector",
+               actual_current - jacobian.inv()*original_current.subs(substitution))
+    opposite_current = divergence(pulled_form, -pulled_metric,
+                                 derivative(pulled_form, christoffel(-pulled_metric, coordinates),
+                                            coordinates), coordinates)
+    check_zero("raising both indices preserves metric-sign reversal",
+               actual_current-opposite_current)
+    for i in range(4):
+        check_zero("two-form derivative preserves antisymmetry", actual[i] + actual[i].T)
+        for j in range(4):
+            for k in range(4):
+                transformed = sum(jacobian[a, i]*jacobian[b, j]*jacobian[c, k]
+                                  * original[a][b, c].subs(substitution)
+                                  for a in range(4) for b in range(4) for c in range(4))
+                check_zero("native two-form derivative three-slot covariance",
+                           actual[i][j, k] - transformed)
+                exterior = (sp.diff(pulled_form[j, k], coordinates[i])
+                            + sp.diff(pulled_form[k, i], coordinates[j])
+                            + sp.diff(pulled_form[i, j], coordinates[k]))
+                check_zero("exterior derivative is cyclic covariant sum",
+                           actual[i][j, k] + actual[j][k, i] + actual[k][i, j] - exterior)
+    check_zero("nonclosed two-form has nonzero covariant cyclic sum",
+               (actual[0][2, 3] + actual[2][3, 0] + actual[3][0, 2]).subs(
+                   {t: 0, x: 1, y: 0, z: 1}) - 2)
+    plane_metric = sp.exp(2*x**2) * sp.diag(-1, 1)
+    area = sp.Matrix([[0, 1], [-1, 0]])
+    plane_derivative = derivative(area, christoffel(plane_metric, (t, x)), (t, x))
+    check_zero("closed coordinate area is not parallel", plane_derivative[1][0, 1] + 4*x)
+    plane_current = divergence(area, plane_metric, plane_derivative, (t, x))
+    check_zero("closed coordinate area has nonzero curved divergence",
+               plane_current-sp.Matrix([-4*x*sp.exp(-4*x**2), 0]))
+
+
+def verify_density_divergence():
+    """Compare actual connection trace and density differentiation in curved charts."""
+    t, x = sp.symbols("t x", real=True)
+    coords = (t, x)
+    jacobian = sp.Matrix([[1, 0], [2*t, 1]])
+    curved = sp.exp(2*x**2) * jacobian.T * sp.diag(-1, 1) * jacobian
+    vector = sp.Matrix([t*x, t**2 + x**2])
+    for metric in (curved, -curved):
+        gamma = christoffel(metric, coords)
+        rho = sp.sqrt(sp.Abs(sp.simplify(metric.det())))
+        for k in range(2):
+            check_zero("Lorentz density derivative", sp.diff(rho, coords[k])
+                       - rho * sum(gamma[i][i, k] for i in range(2)))
+        trace = sum(sp.diff(vector[i], coords[i]) for i in range(2)) + sum(
+            gamma[i][i, j] * vector[j] for i in range(2) for j in range(2))
+        density_divergence = sum(sp.diff(rho * vector[i], coords[i]) for i in range(2)) / rho
+        check_zero("intrinsic trace versus density divergence", trace - density_divergence)
+        check_zero("curved nonconstant divergence", trace
+                   - (x + 2*x + 4*x*(t**2 + x**2)))
 
 
 def verify_quadratic_variation(metric, coordinates, gamma):
@@ -561,6 +939,7 @@ def verify_flat_frame_defect():
 
 
 def verify():
+    verify_density_divergence()
     verify_volterra_solution()
     verify_radial_family()
     verify_flat_frame_defect()
@@ -640,6 +1019,10 @@ def verify():
         check_zero("connection Hessian transformation", gamma[k] - transformed_gamma)
 
     verify_covariant_pullback(metric, coordinates)
+    verify_native_forms()
+    verify_volume_density()
+    verify_native_hodge()
+    verify_two_form_covariant()
     verify_motion(metric, coordinates, gamma, jacobian)
     verify_parallel_coframe(coordinates, gamma, jacobian, shear)
 
@@ -737,7 +1120,12 @@ def verify():
           "curved proper-time clocks, quadratic Euler–Lagrange/native acceleration, "
           "endpoint variations, unconstrained null-velocity variations, "
           "massive non-affine Euler–Lagrange equations, the finite proper-time inverse, "
-          "and mixed covariant derivatives and densities of curve families.")
+          "mixed covariant derivatives and densities of curve families, "
+          "native alternating-form pullback, graded exterior calculus, "
+          "volume density/orientation and divergence, Hodge local formulas, signs and squares, "
+          "the time-dependent Maxwell current and constitutive sign, "
+          "curved current/volume/divergence identities in both signatures and orientations, "
+          "and native two-form covariant differentiation, nonlinear chart covariance and cyclic exterior identities.")
 
 
 def main():

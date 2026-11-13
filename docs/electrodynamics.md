@@ -1,9 +1,9 @@
 # Charged Particles and Electromagnetic Fields
 
 This implements research-plan §4.1 of [issue #8](https://github.com/MGYamada/ProjectAInos/issues/8),
-with the free-particle action needed from §3.2. The scope is prescribed local
-electromagnetic fields and classical massive-particle motion. The sourced
-Maxwell equations, field action, collision theory, and quantum field theory
+with the free-particle action needed from §3.2, and the fixed-background
+Maxwell form API from §5.1 / [#52](https://github.com/MGYamada/ProjectAInos/issues/52).
+The field-action derivation in §4.2, collision theory and quantum field theory
 remain later stages. Issue #8 is a broader research plan and remains open.
 
 ## Conventions and local fields
@@ -33,6 +33,127 @@ it is the nonnegative Euclidean rest-space norm. Thus the proved formulas are
 The first is invariant under every Lorentz map. The second transforms by
 `det L`, so a transformation reversing spacetime orientation changes its sign.
 Changing only the chosen orientation also changes the Hodge operator's sign.
+
+## Fixed-background Maxwell forms
+
+`Electrodynamics/Curved.lean` works on an arbitrary smooth four-dimensional
+Lorentz manifold with time-first signature `(-+++)`, an explicitly supplied
+orientation, and constitutive normalization one. `CurrentVector` is a smooth
+section of the actual tangent bundle; `Field`, `CurrentForm` and `Potential`
+are native smooth two-, three- and one-forms. The definitions are
+
+\[
+H=-\star F,\qquad J=\star(j^\flat),\qquad dF=0,\quad dH=J.
+\]
+
+`currentOneForm` uses the existing metric `lower` and the proved smooth
+covector/one-form equivalence. `currentVector` constructs the inverse current
+identification using `⋆²=+1` in degrees one and three, then raises the covector.
+Both roundtrip theorems are proved. `Maxwell` states the two physical equations
+as explicit premises. The sourced equation alone implies `dJ=0` by `d²=0`;
+no field-action derivation is assumed.
+
+`source` constructs the unique smooth vector current from the actual `dH`.
+`maxwell_iff` is equivalent to closedness of `F` and equality with this source.
+`potential_maxwell` supplies a field and source from any global potential;
+it does not assert global exactness for all closed fields. Reversing orientation
+negates both `H` and `J`, preserving the equations. `excitation_flat` gives
+exact agreement with minus the existing flat physical star.
+
+`CurvedExamples.lean` computes `F=t dt∧dx`, `H=t dy∧dz`, and
+`J=dt∧dy∧dz` directly, proves `dF=0` and proves the resulting source is nonzero.
+`CurrentExamples.lean` now proves the actual vector sign `j=-∂x`, using the
+injective current identification and volume contraction, and its divergence
+vanishes. The corresponding SymPy calculation agrees.
+Typed API examples fix the current roundtrips, the sole source-equation premise
+for conservation, orientation independence and exact flat normalization.
+
+`Electrodynamics/Current.lean` proves `currentForm_volume`: the physical
+three-form is `ιⱼ vol` on the actual tangent fibre. The shared geometric
+identity holds for either Lorentz sign, using only a pointwise signature
+witness and its orientation sign. `currentForm_chart` derives the signed,
+positive-density coordinate expression. The actual native exterior derivative
+and the proved density formula then give `exteriorDerivative_currentForm`:
+
+\[
+dJ=(\operatorname{div}j)\,\mathrm{vol}_g.
+\]
+
+Since the volume form is nowhere zero, `current_closed_iff_divergence` is an
+equivalence, and `divergence_zero_of_source` needs only the sourced Maxwell
+equation. No flatness or globally extended chart is assumed. Typed contracts
+fix these premises and conclusions. Exact SymPy checks a curved four-dimensional
+metric with mixed coefficients, a vector field with nonzero divergence, both
+metric signatures and both orientations.
+
+The shared `TwoFormDerivative` constructs the actual smooth covariant tensor,
+with `twoFormDerivative F x v w u = ∇ᵤF(v,w)`. Its two Christoffel corrections
+are derived from the Levi-Civita connection. `TwoFormExterior` proves that
+exterior differentiation is its alternating sum, using torsion-freeness, and
+proves both directions of the equivalence with the cyclic covariant component
+equation in every smooth chart. This holds in every dimension and either
+Lorentz signature, without an orientation or a global frame.
+
+`Homogeneous.lean` exposes `Maxwell.homogeneous_covariant` and
+`Maxwell.homogeneous_components` for the physical four-dimensional background.
+`HomogeneousExamples.lean` verifies the closed electric field and a nonclosed
+two-form whose cyclic sum is exactly `1`. A shared curved example has constant
+coordinate area but nonzero covariant derivative `-4x`, while remaining closed.
+Typed examples fix the connection formula, equivalences and physical premise.
+Exact SymPy checks all three tensor slots under a nonlinear chart change on a
+curved mixed-coordinate metric, as well as the nonzero cyclic sum.
+
+`TwoFormDivergence` now constructs the actual smooth vector `∇ᵢFⁱʲ`: metric
+contraction of the first form slot with the derivative direction gives a
+covector, and `sharp` raises the remaining index. The two inverse-metric factors
+in every chart are proved consequences of this construction. `DualDerivative`
+proves that covariant differentiation commutes with raising. `TwoFormRaised`
+uses actual raised coordinate covectors to derive the two positive Christoffel
+corrections; torsion-freeness cancels the antisymmetric contraction and yields
+`∇ᵢFⁱʲ = ρ⁻¹ ∂ᵢ(ρ Fⁱʲ)`. No orientation is needed for these results.
+
+Lean computes the divergence of `dt∧dx` on the curved conformal plane as
+`(-4x exp(-4x²), 0)`. `DivergenceExamples.lean` proves that the existing electric
+field has two-form divergence `-∂x`, exactly its source constructed from `dH`.
+Typed API checks fix the native smoothness, contraction, raising and density
+formulas. Exact SymPy checks the density identity and vector transformation in
+a curved mixed-coordinate metric, including overall metric-sign reversal.
+
+`ExcitationChart.lean` identifies the actual excitation with the signed
+volume dual of `ρ Fⁱʲ`. The metric-free `BivectorVolume` derivative lemma
+requires only local differentiability and local antisymmetry. Applying it in
+an actual oriented chart proves, in `CurvedComponents.lean`,
+
+```text
+exteriorDerivative_excitation : dH = currentForm (twoFormDivergence F)
+source_eq_twoFormDivergence    : source F = twoFormDivergence F
+sourced_iff_divergence         : dH = currentForm j ↔ twoFormDivergence F = j
+maxwell_iff_components        : Maxwell F j ↔ both covariant chart equations
+```
+
+These are native smooth-section equalities, on any smooth four-dimensional
+`(-+++)` Lorentz manifold with an explicit oriented atlas. No global frame,
+flatness, global chart extension or homogeneous-field hypothesis is required
+for the sourced identity. `source_density` exposes the density formula in every
+smooth chart. `source_reverse` proves orientation independence of the source
+vector, and `divergence_twoFormDivergence` proves conservation for every field.
+Default-option typed contracts fix these hypotheses and both directions of
+the component equivalence. Exact SymPy independently compares `d(-⋆F)` with
+`⋆((∇ᵢFⁱʲ)♭)` for six varying components in a curved metric with a nonlinear
+shear, checking both orientations and vector-current conservation.
+
+The stage F principal endpoints are implemented and await review. The Maxwell
+action and its variational derivation belong to §4.2 / #44.
+
+The reference for local forms is [Tong, §3.2](https://davidtong.org/teaching/general-relativity/grhtml/S3).
+Our Hodge operator is fixed by `α ∧ ⋆β = ⟨α,β⟩ vol`. Compared with the
+output-index-first epsilon ordering written in his (3.97), moving the input
+indices first introduces `(-1)^(p*(n-p))`: the two-form signs agree in four
+dimensions, while odd-degree conversion needs care. His `J` in (3.114) denotes
+a one-form; our `J` is a three-form. The physical equations here use
+`H = -⋆F`, `J = ⋆(j♭)` and are calibrated by the proved example
+`F = t dt∧dx`, `j = -∂x`; current notation and epsilon ordering must therefore
+be converted before identifying textbook formulas.
 
 ## Actual action and admissible variations
 

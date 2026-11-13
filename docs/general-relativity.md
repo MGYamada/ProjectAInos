@@ -295,7 +295,26 @@ calculations test conventions; Lean establishes the formal claims.
 ## Scope after stage E
 
 The stage E principal proof endpoints are implemented and awaiting review.
-Curved exterior
-calculus/Hodge/Maxwell (F) and the controlled time-dependent Newtonian
-motion/trajectory limit (G) remain. Einstein dynamics belongs to §5.2 and
-the Maxwell field action to §4.2 / #44.
+Stage F now has native form bundles, pullback, exterior differentiation,
+wedge calculus, positive chart-covariant density and a glued oriented volume
+form. Native Hodge now has its wedge identity, uniqueness, sign laws,
+metric/volume-preserving naturality, exact flat comparison and nonlinear shear
+transport. Its local formula proves smooth-section regularity, and the
+general square identity requires no flatness or global frame. The curved
+conformal plane verifies the native and smooth operators. Intrinsic divergence
+and its density formula are also proved in every smooth chart. Fixed-background
+Maxwell forms now have invertible current identification, sourced current
+closedness, orientation invariance and a nonzero-current example. Volume
+contraction and `dJ = (div j) vol` identify that closedness with vanishing
+covariant vector divergence. The
+[geometry guide](smooth-geometry.md) and [electrodynamics guide](electrodynamics.md)
+record these proofs. Two-form covariant differentiation now has proved
+tensoriality, smoothness and its two Christoffel corrections. The homogeneous
+Maxwell equation is equivalent to the cyclic covariant component equation in
+every smooth chart. Intrinsic two-form divergence, its smoothness, both raised
+indices and the density formula are proved. The source defined by `dH` is now
+proved equal to this divergence on every oriented physical background. Both
+Maxwell equations are equivalent to the covariant component equations in every
+smooth chart. Stage F’s principal endpoints are implemented and await review;
+the controlled time-dependent Newtonian motion/trajectory limit (G) remains. Einstein dynamics
+belongs to §5.2 and the Maxwell field action to §4.2 / #44.
