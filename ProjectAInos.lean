@@ -326,6 +326,7 @@ public import ProjectAInos.Thermodynamics.Physical
 public import ProjectAInos.Thermodynamics.PhysicalComparison
 public import ProjectAInos.Thermodynamics.PhysicalEntropyPrinciple
 public import ProjectAInos.Thermodynamics.PhysicalReactions
+public import ProjectAInos.Thermodynamics.ReactingReservoir
 public import ProjectAInos.Thermodynamics.ReactionCalibration
 public import ProjectAInos.Thermodynamics.ReactionCycles
 public import ProjectAInos.Thermodynamics.ReactionModels
