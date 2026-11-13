@@ -7,6 +7,7 @@ module
 public import ProjectAInos.SmoothAlgebra.Derivation
 public import Mathlib.Analysis.Calculus.Deriv.Prod
 public import Mathlib.Analysis.Calculus.MeanValue
+public import Mathlib.Analysis.SpecialFunctions.Trigonometric.Deriv
 
 /-!
 # Smooth functions of time
@@ -69,5 +70,37 @@ theorem TimeFunction.eq_of_timeDerivative_eq_zero {f : TimeFunction}
   have h0 : SmoothOperation.partialDeriv 0 f x = 0 := congrArg (fun g : TimeFunction => g x) h
   rw [h0, mul_zero]
   rfl
+
+/-- The function `cos t` of time. -/
+def TimeFunction.cos : TimeFunction :=
+  SmoothOperation.ofContDiff (fun x => Real.cos (x 0))
+    (Real.contDiff_cos.comp (contDiff_apply ℝ (fun _ => ℝ) 0))
+
+/-- The function `sin t` of time. -/
+def TimeFunction.sin : TimeFunction :=
+  SmoothOperation.ofContDiff (fun x => Real.sin (x 0))
+    (Real.contDiff_sin.comp (contDiff_apply ℝ (fun _ => ℝ) 0))
+
+theorem TimeFunction.timeDerivative_cos : timeDerivative TimeFunction.cos = -TimeFunction.sin := by
+  refine TimeFunction.ext_apply_const fun t => ?_
+  rw [TimeFunction.timeDerivative_apply]
+  have h : (fun s : ℝ => TimeFunction.cos (fun _ => s)) = Real.cos := rfl
+  rw [h, Real.deriv_cos]
+  rfl
+
+theorem TimeFunction.timeDerivative_sin : timeDerivative TimeFunction.sin = TimeFunction.cos := by
+  refine TimeFunction.ext_apply_const fun t => ?_
+  rw [TimeFunction.timeDerivative_apply]
+  have h : (fun s : ℝ => TimeFunction.sin (fun _ => s)) = Real.sin := rfl
+  rw [h, Real.deriv_sin]
+  rfl
+
+theorem TimeFunction.cos_mul_cos_add_sin_mul_sin :
+    TimeFunction.cos * TimeFunction.cos + TimeFunction.sin * TimeFunction.sin = 1 := by
+  refine TimeFunction.ext_apply_const fun t => ?_
+  have h := Real.cos_sq_add_sin_sq t
+  change Real.cos t * Real.cos t + Real.sin t * Real.sin t = 1
+  rw [← sq, ← sq]
+  exact h
 
 end ProjectAInos.Mechanics

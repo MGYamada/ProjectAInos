@@ -96,6 +96,9 @@ public import ProjectAInos.Mechanics.Poisson.AngularMomentum
 public import ProjectAInos.Mechanics.Poisson.Epsilon
 public import ProjectAInos.Mechanics.Poisson.Galilei
 public import ProjectAInos.Mechanics.Poisson.HeavyTop
+public import ProjectAInos.Mechanics.Poisson.Kepler
+public import ProjectAInos.Mechanics.Poisson.KeplerModel
+public import ProjectAInos.Mechanics.Poisson.KeplerMotion
 public import ProjectAInos.Mechanics.Poisson.RigidBody
 public import ProjectAInos.Mechanics.Poisson.RotatingFrame
 public import ProjectAInos.Mechanics.Poisson.Trajectory

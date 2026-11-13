@@ -455,3 +455,111 @@ example {m : ℝ} (hm : m ≠ 0) (U : Space) (Ω : Fin 3 → ℝ) :
   hamiltonian_eq_velocity hm U Ω
 
 end RotatingFrame
+
+section Kepler
+
+variable {P : Type*} [CommRing P] [Algebra ℝ P] [SmoothRing P]
+  {π : PoissonStructure P} {q p : Fin 3 → P} {ρ : P}
+
+/-- A Kepler frame assumes only brackets; the relation `ρ² |q|² = 1` is not a
+hypothesis. -/
+example : Kepler.IsFrame π q p ρ ↔
+    (∀ i j, π.bracket (q i) (q j) = 0) ∧ (∀ i j, π.bracket (p i) (p j) = 0) ∧
+      (∀ i j, π.bracket (q i) (p j) = if i = j then 1 else 0) ∧
+      (∀ j, π.bracket ρ (q j) = 0) ∧ ∀ j, π.bracket ρ (p j) = -(ρ * ρ * ρ * q j) :=
+  ⟨fun h => ⟨h.q_q, h.p_p, h.q_p, h.ρ_q, h.ρ_p⟩,
+    fun h => ⟨h.1, h.2.1, h.2.2.1, h.2.2.2.1, h.2.2.2.2⟩⟩
+
+example (m α : ℝ) (a : Fin 3) :
+    Kepler.rungeLenz m α q p ρ a =
+      (p ⨯₃ (q ⨯₃ p)) a - algebraMap ℝ P m * algebraMap ℝ P α * (ρ * q a) := rfl
+
+example (m α : ℝ) :
+    Kepler.hamiltonian m α p ρ = algebraMap ℝ P (m⁻¹ / 2) * (p ⬝ᵥ p) - algebraMap ℝ P α * ρ :=
+  rfl
+
+example : Kepler.constraint q ρ = ρ * ρ * (q ⬝ᵥ q) - 1 := rfl
+
+/-- E5a: the Runge–Lenz vector is conserved up to the constraint. -/
+example (h : Kepler.IsFrame π q p ρ) {m : ℝ} (hm : m ≠ 0) (α : ℝ) (a : Fin 3) :
+    π.bracket (Kepler.rungeLenz m α q p ρ a) (Kepler.hamiltonian m α p ρ) =
+      algebraMap ℝ P α * ρ * p a * Kepler.constraint q ρ :=
+  h.rungeLenz_hamiltonian hm α a
+
+/-- E5b. -/
+example (h : Kepler.IsFrame π q p ρ) (m α : ℝ) (a b : Fin 3) :
+    π.bracket (Kepler.angularMomentum q p a) (Kepler.rungeLenz m α q p ρ b) =
+      epsilon (Kepler.rungeLenz m α q p ρ) a b :=
+  h.angularMomentum_rungeLenz m α a b
+
+/-- E5c. -/
+example (h : Kepler.IsFrame π q p ρ) {m : ℝ} (hm : m ≠ 0) (α : ℝ) (a b : Fin 3) :
+    π.bracket (Kepler.rungeLenz m α q p ρ a) (Kepler.rungeLenz m α q p ρ b) =
+      -(2 * algebraMap ℝ P m * Kepler.hamiltonian m α p ρ +
+          algebraMap ℝ P m * algebraMap ℝ P α * ρ * Kepler.constraint q ρ) *
+        epsilon (Kepler.angularMomentum q p) a b :=
+  h.rungeLenz_rungeLenz hm α a b
+
+/-- E5d. -/
+example (m α : ℝ) : Kepler.rungeLenz m α q p ρ ⬝ᵥ Kepler.angularMomentum q p = 0 :=
+  Kepler.rungeLenz_dotProduct_angularMomentum m α q p ρ
+
+/-- E5e. -/
+example {m : ℝ} (hm : m ≠ 0) (α : ℝ) :
+    Kepler.rungeLenz m α q p ρ ⬝ᵥ Kepler.rungeLenz m α q p ρ =
+      algebraMap ℝ P m * algebraMap ℝ P m * (algebraMap ℝ P α * algebraMap ℝ P α) +
+        2 * algebraMap ℝ P m * Kepler.hamiltonian m α p ρ *
+          (Kepler.angularMomentum q p ⬝ᵥ Kepler.angularMomentum q p) +
+        algebraMap ℝ P m * algebraMap ℝ P m * (algebraMap ℝ P α * algebraMap ℝ P α) *
+          Kepler.constraint q ρ :=
+  Kepler.rungeLenz_dotProduct_self hm α q p ρ
+
+/-- E5f: the orbit identity. -/
+example (m α : ℝ) :
+    Kepler.rungeLenz m α q p ρ ⬝ᵥ q =
+      Kepler.angularMomentum q p ⬝ᵥ Kepler.angularMomentum q p -
+        algebraMap ℝ P m * algebraMap ℝ P α * Kepler.distance q ρ :=
+  Kepler.rungeLenz_dotProduct_q m α q p ρ
+
+example (h : Kepler.IsFrame π q p ρ) (m α : ℝ) (a : Fin 3) :
+    π.bracket (Kepler.angularMomentum q p a) (Kepler.hamiltonian m α p ρ) = 0 :=
+  h.angularMomentum_hamiltonian m α a
+
+/-- Kepler frames exist: the free ring on `q`, `p` and `ρ`. -/
+example : Kepler.IsFrame KeplerModel.poisson KeplerModel.q KeplerModel.p KeplerModel.ρ :=
+  KeplerModel.isFrame
+
+example : KeplerModel.poisson.IsPoissonIdeal KeplerModel.constraintIdeal :=
+  KeplerModel.isPoissonIdeal_constraintIdeal
+
+/-- A Kepler motion is Newton's equations for the inverse-square force. -/
+example (m α : ℝ) (Q Pm : Fin 3 → TimeFunction) (R : TimeFunction) :
+    KeplerModel.IsKeplerMotion m α Q Pm R ↔
+      R * R * (Q ⬝ᵥ Q) = 1 ∧
+        (∀ i, timeDerivative (Q i) = algebraMap ℝ TimeFunction m⁻¹ * Pm i) ∧
+        ∀ i, timeDerivative (Pm i) = -(algebraMap ℝ TimeFunction α * (R * R * R * Q i)) :=
+  ⟨fun h => ⟨h.constraint, h.velocity, h.force⟩, fun h => ⟨h.1, h.2.1, h.2.2⟩⟩
+
+/-- The Runge–Lenz vector is constant along Kepler motions. -/
+example {m α : ℝ} {Q Pm : Fin 3 → TimeFunction} {R : TimeFunction}
+    (h : KeplerModel.IsKeplerMotion m α Q Pm R) (hm : m ≠ 0) (a : Fin 3) (s t : Fin 1 → ℝ) :
+    Kepler.rungeLenz m α Q Pm R a s = Kepler.rungeLenz m α Q Pm R a t :=
+  h.rungeLenz_eq hm a s t
+
+example {m α : ℝ} {Q Pm : Fin 3 → TimeFunction} {R : TimeFunction}
+    (h : KeplerModel.IsKeplerMotion m α Q Pm R) (a : Fin 3) (s t : Fin 1 → ℝ) :
+    Kepler.angularMomentum Q Pm a s = Kepler.angularMomentum Q Pm a t :=
+  h.angularMomentum_eq a s t
+
+example {m α : ℝ} {Q Pm : Fin 3 → TimeFunction} {R : TimeFunction}
+    (h : KeplerModel.IsKeplerMotion m α Q Pm R) :
+    R * Kepler.distance Q R = 1 ∧ Kepler.distance Q R * Kepler.distance Q R = Q ⬝ᵥ Q :=
+  ⟨h.R_mul_distance, h.distance_mul_distance⟩
+
+/-- Kepler motions exist: the uniform circular motion. -/
+example :
+    KeplerModel.IsKeplerMotion 1 1 ![TimeFunction.cos, TimeFunction.sin, 0]
+      ![-TimeFunction.sin, TimeFunction.cos, 0] 1 :=
+  KeplerModel.isKeplerMotion_circular
+
+end Kepler
