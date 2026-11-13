@@ -100,6 +100,14 @@ Its planned proof library will make each theory's assumptions explicit, derive i
 Topics 3, 4, and 5 follow Chapters I–II, III–IX, and X–XIV, respectively, of
 Landau–Lifshitz Volume 2, *The Classical Theory of Fields*. See the
 [chapter correspondence](docs/landau-lifshitz.md#special-relativity).
+The C∞ research trilogy gives section-level targets, mathematical assumptions,
+Lean architecture, and the distinction between proved results and future work:
+[Special Relativity, §§1–14](docs/cinfty-special-relativity.md),
+[Electrodynamics, §§15–80](docs/cinfty-electrodynamics.md), and
+[General Relativity, §§81–119](docs/cinfty-general-relativity.md).
+These documents carry forward the design from
+[issue #8](https://github.com/MGYamada/ProjectAInos/issues/8); completing that
+documentation does not complete the remaining physics proofs.
 The order of topics after 6 is yet to be determined.
 
 ## Shared smooth algebra and geometry
@@ -168,7 +176,7 @@ Section 3.1 uses natural units `c = 1` and signature `(-+++)` in the physics
 layer. Shared geometry accepts both Lorentz conventions explicitly; causal
 classification, boosts, and proper time use the convention-independent quadratic
 form. [Issue #40](https://github.com/MGYamada/ProjectAInos/issues/40) tracks this
-foundation for [electrodynamics #8](https://github.com/MGYamada/ProjectAInos/issues/8).
+foundation for the [classical-field research trilogy](docs/cinfty-special-relativity.md).
 The [Minkowski geometry and kinematics guide](docs/special-relativity.md) maps the
 formal APIs and exact examples.
 
@@ -264,7 +272,8 @@ proved inverse-Jacobian endpoint formula. Native curvature is now identified
 with the coordinate condition, and the constructed coframe integrates to a
 Minkowski chart wherever curvature vanishes on a neighborhood. This proves
 `IsLocallyMinkowski ↔ ∀ p, curvature p = 0` and completes stage D's principal
-proof endpoints, pending review and merge. Transport is proved independent
+proof endpoints, merged through [#52](https://github.com/MGYamada/ProjectAInos/issues/52).
+Transport is proved independent
 of the piecewise path inside a flat neighborhood. The conclusion is local; it
 does not assert a global inertial chart or geodesic completeness.
 The first stage E increment defines proper time and particle actions on the
@@ -294,7 +303,7 @@ local reparametrization, unit proper speed, and one finite proper-time inverse.
 Nonzero null initial velocity is preserved on the entire closed quadratic-
 stationary segment, with no causal restriction on variations. A smooth compact
 test in the nonlinear chart realizes arbitrary midpoint tangent data.
-The stage E principal endpoints are implemented and awaiting review.
+The stage E principal endpoints are implemented and merged into `main`.
 Stage F now has smooth alternating bundles on actual tangent fibres, local
 coefficient transition laws, open-cover gluing and arbitrary-smooth-map
 pullback, including different dimensions and singular derivatives. Flat API
@@ -336,7 +345,7 @@ equation in every smooth chart. The native two-form divergence is a smooth vecto
 with both raised indices and the density formula `∇ᵢFⁱʲ = ρ⁻¹ ∂ᵢ(ρ Fⁱʲ)` proved.
 The source defined by `dH` is now proved equal to this native divergence.
 Both Maxwell equations are equivalent to their covariant component equations
-in every smooth chart. Stage F’s principal endpoints are implemented and await review.
+in every smooth chart. Stage F’s principal endpoints are implemented and merged into `main`.
 Stage G now has the full time-dependent coefficient-family contract, proved
 bounded-velocity negativity and spatial positivity, and the native
 coordinate-time equation including its non-affine correction. A polynomial
@@ -354,7 +363,7 @@ The [GR guide](docs/general-relativity.md)
 records the exact scope and typed contracts.
 The [shared geometry guide](docs/smooth-geometry.md)
 records the public API and exact checks. [Issue #52](https://github.com/MGYamada/ProjectAInos/issues/52)
-tracks review and merge of the geometry, particle variation, curved forms
+records the completed delivery of the geometry, particle variation, curved forms
 and time-dependent Newtonian limit.
 [#43](https://github.com/MGYamada/ProjectAInos/issues/43)
 is the first chart-regression gate. Einstein dynamics belongs to 5.2.

@@ -3,7 +3,9 @@
 `ProjectAInos/SmoothAlgebra/` and `ProjectAInos/SmoothGeometry/` are the
 mathematical foundation shared by Mechanics, Special Relativity,
 Electrodynamics, and General Relativity (research-plan topics 2–5).
-Neither imports the physics or variational modules.
+The shared smooth-algebra, geometry and variational layers may use one another
+through an acyclic module graph. They import neither project physics nor the
+vendored Yang–Mills theory; `checks/CoreImports.lean` enforces this boundary.
 The implementation sequence and subsequent research stages are in the
 [research plan](../README.md#shared-smooth-algebra-and-geometry).
 
@@ -467,12 +469,14 @@ reversal, local/native finite and smooth regularity, the full coordinate
 formula on models and manifold charts, the complete overlap transformation
 law, metric pullback, naturality, open restriction and the nonlinear
 connection examples at default elaborator settings. The stage B connection
-proof endpoints are implemented; its PR still requires review and merge.
+proof endpoints are implemented and merged into `main`.
 The curvature endpoints below are implemented. Finite-segment parallel
 transport and local inertial coordinates are described in the motion section.
 Native form bundles, pullback, exterior differentiation, wedge, density and
-oriented volume and smooth Hodge are described below; Maxwell and the Newtonian motion limit
-remain incomplete.
+oriented volume and smooth Hodge are described below. Fixed-background Maxwell
+and the Newtonian motion limit are implemented in stages F and G; sourced
+field-action dynamics and the Newtonian gravitational field-equation limit
+remain separate targets in the [research trilogy](cinfty-general-relativity.md).
 
 ## GR 5.1: curvature and intrinsic contractions
 
@@ -559,7 +563,7 @@ prove zero connection coefficients but nonzero curvature and scalar `-4`
 at the origin. This is pointwise vanishing of the connection coefficients,
 not vanishing on a neighborhood.
 
-Stage C's proof endpoints are implemented and awaiting review/merge.
+Stage C's proof endpoints are implemented and merged into `main`.
 Typed API examples fix the chart formula/overlap hypotheses, all metric
 symmetries, Ricci symmetry, conformal signature construction and curved
 example conclusions. Exact experiments independently check these examples
@@ -955,8 +959,8 @@ transport, regardless of their decompositions.
 neighborhood from native curvature zero near the point. The nonlinear
 shear example proves this equality for arbitrary piecewise paths.
 
-Stage D's principal proof endpoints are implemented, pending review and
-merge. No global frame, global chart, analytic metric, Hausdorff premise or
+Stage D's principal proof endpoints are implemented and merged into `main`.
+No global frame, global chart, analytic metric, Hausdorff premise or
 geodesic completeness is assumed or concluded. Stage E's principal particle-
 variation endpoints are now implemented; see the [GR guide](general-relativity.md).
 The curved Maxwell and Newtonian trajectory theorems are implemented in
@@ -1358,7 +1362,7 @@ construction are implemented. Subsequent stages include quotients by
 arbitrary ordinary ideals, the Γ–Spec adjunction, complete/fair rings,
 full faithfulness of the manifold construction, and universal cotangent
 modules. The Lorentz connection and curvature endpoints above are
-implemented and awaiting review/merge.
+implemented and merged into `main` through [#52](https://github.com/MGYamada/ProjectAInos/issues/52).
 In particular,
 `A ≅ Γ(Spec A)` and full faithfulness of Spec on all C∞-rings are not asserted.
 The essential-image definition of affine schemes does not require either

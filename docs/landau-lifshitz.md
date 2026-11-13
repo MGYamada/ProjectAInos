@@ -1,6 +1,6 @@
 # Landau–Lifshitz Correspondence
 
-This cross-reference connects the Project AInos research plan to the English editions of the *Course of Theoretical Physics*. Mechanics has section-level proof targets, and the other subjects are mapped by chapter or volume. The implementation order follows the [research plan](../README.md).
+This cross-reference connects the Project AInos research plan to the English editions of the *Course of Theoretical Physics*. Mechanics and the classical-field trilogy have section-level proof targets; the other subjects are mapped by chapter or volume. The implementation order follows the [research plan](../README.md).
 
 ## Mechanics
 
@@ -71,24 +71,38 @@ Topic 3 follows Volume 2, *The Classical Theory of Fields*, fourth edition,
 Chapters I–II. Topics 4 and 5 continue with Chapters III–IX and X–XIV,
 respectively. [Volume 2 contents](https://shop.elsevier.com/books/the-classical-theory-of-fields/landau/978-0-08-025072-4)
 
+The [C∞ special relativity dictionary](cinfty-special-relativity.md#landau-lifshitz-correspondence)
+assigns a target, hypotheses, proof tier and status to every section in §§1–14.
+The trilogy preserves the chapter/section allocation adopted in
+[issue #8](https://github.com/MGYamada/ProjectAInos/issues/8), with the fourth
+revised English edition as the cross-reference. Page numbers vary by reprint;
+the section labels in the dictionaries describe our formalization targets.
+
 | Landau–Lifshitz reference | Research-plan topic |
 | --- | --- |
-| Vol. 2, Ch. I | 3.1: Minkowski geometry, Lorentz transformations, and relativistic kinematics |
-| Vol. 2, Ch. II | 3.2: Relativistic particle dynamics, energy, momentum, and conservation laws |
+| Vol. 2, Ch. I, §§1–7 | 3.1: Minkowski geometry, Lorentz transformations, and relativistic kinematics |
+| Vol. 2, Ch. II, §§8–14 | 3.2: Relativistic particle dynamics, energy, momentum, and conservation laws |
 
 ## Electrodynamics
 
 Topic 4 follows Volume 2, Chapters III–IX, using Special Relativity from topic 3.
 Volume 8, *Electrodynamics of Continuous Media*, second edition, supplies the
-additional macroscopic-matter extension proposed in [issue #8](https://github.com/MGYamada/ProjectAInos/issues/8).
+additional macroscopic-matter extension described in the
+[C∞ electrodynamics research plan](cinfty-electrodynamics.md).
 [Volume 8 contents](https://www.sciencedirect.com/book/monograph/9780080302751/electrodynamics-of-continuous-media)
+
+The [electrodynamics dictionary](cinfty-electrodynamics.md#landau-lifshitz-correspondence)
+gives all 66 targets in §§15–80, including their analytic and source assumptions.
 
 | Landau–Lifshitz reference | Candidate formalization topics |
 | --- | --- |
-| Vol. 2, Ch. III | 4.1: Charged-particle action, electromagnetic potentials, field tensor, and Lorentz force |
-| Vol. 2, Ch. IV | 4.2: Maxwell equations and conservation laws |
-| Vol. 2, Ch. V–VII | 4.3: Static fields, vacuum waves, and optics |
-| Vol. 2, Ch. VIII–IX | 4.4: Fields of moving charges and radiation |
+| Vol. 2, Ch. III, §§15–25 | 4.1: Charged-particle action, electromagnetic potentials, field tensor, and Lorentz force |
+| Vol. 2, Ch. IV, §§26–35 | 4.2: Maxwell equations and conservation laws |
+| Vol. 2, Ch. V, §§36–45 | 4.3: Static fields |
+| Vol. 2, Ch. VI, §§46–52 | 4.3: Vacuum waves and polarization |
+| Vol. 2, Ch. VII, §§53–61 | 4.3: Geometric optics and diffraction |
+| Vol. 2, Ch. VIII, §§62–65 | 4.4: Fields of moving charges |
+| Vol. 2, Ch. IX, §§66–80 | 4.4: Radiation and scattering |
 | Vol. 8 | Macroscopic Maxwell equations, constitutive relations, and propagation in matter |
 
 ## General Relativity
@@ -97,12 +111,19 @@ Topic 5 follows Volume 2, Chapters X–XIV. It treats the metric as a dynamical
 field and develops gravitational motion, Einstein's equations, gravitational
 radiation, and cosmology.
 
+The [general relativity dictionary](cinfty-general-relativity.md#landau-lifshitz-correspondence)
+gives all 39 targets in §§81–119. Existing §5.1 proofs are distinguished from
+the Einstein, gravitational-radiation and cosmology program. Together, the
+three dictionaries cover §§1–119 exactly once; cross-links identify reused
+geometry without assigning it a second textbook section.
+
 | Landau–Lifshitz reference | Research-plan topic |
 | --- | --- |
-| Vol. 2, Ch. X | 5.1: Geometry and particle motion in gravitational fields |
-| Vol. 2, Ch. XI–XII | 5.2: Einstein dynamics and fields of gravitating systems |
-| Vol. 2, Ch. XIII | 5.3: Gravitational radiation |
-| Vol. 2, Ch. XIV | 5.4: Relativistic cosmology |
+| Vol. 2, Ch. X, §§81–90 | 5.1: Geometry and particle motion in gravitational fields |
+| Vol. 2, Ch. XI, §§91–98 | 5.2: Curvature and Einstein dynamics |
+| Vol. 2, Ch. XII, §§99–106 | 5.2: Fields of gravitating systems |
+| Vol. 2, Ch. XIII, §§107–110 | 5.3: Gravitational radiation |
+| Vol. 2, Ch. XIV, §§111–119 | 5.4: Relativistic cosmology |
 
 The first 5.1 implementation provides smooth metric duality on the actual
 tangent bundle, finite mixed tensor bundles with smooth contraction and
@@ -129,7 +150,7 @@ The Christoffel curvature formula and tensor transformation law hold in
 arbitrary smooth charts. Both Minkowski presentations have proved zero
 curvature. The curved metric `exp(2x²)(-dt²+dx²)` has proved scalar curvature
 `-4 exp(-2x²)`, including zero connection but nonzero curvature at the origin.
-Stage C's proof endpoints are implemented and awaiting review/merge.
+Stage C's proof endpoints are implemented and merged into `main`.
 Stage D constructs chart-independent covariant differentiation along
 curves, proves metric preservation for parallel fields and geodesic
 velocity, and derives the coordinate geodesic ODE. The local geodesic
@@ -159,7 +180,7 @@ and integrating the constructed normalized coframe gives a Minkowski chart
 wherever curvature vanishes near a point. The equivalence
 `IsLocallyMinkowski ↔ ∀ p, curvature p = 0` is proved. Stage D's principal
 proof endpoints, including path independence for finite piecewise paths
-inside a flat neighborhood, are implemented, pending review and merge; global inertial
+inside a flat neighborhood, are implemented and merged; global inertial
 coordinates and geodesic completeness are not conclusions.
 Stage E now supplies intrinsic proper time and particle actions, subdivision
 and chart formulas, reparametrization invariance and exact SR specialization.
@@ -182,7 +203,7 @@ geodesics for the quadratic action. Actual localized manifold test families
 now prove the converse directions and both complete native equivalences.
 Local affine reparametrization, unit proper speed, one finite proper-time
 inverse and closed-segment preservation of nonzero null initial velocity are
-proved. Stage E's principal endpoints await review. Stage F has a smooth
+proved. Stage E's principal endpoints are merged. Stage F has a smooth
 native alternating bundle, coefficient overlap laws, open-cover gluing,
 arbitrary smooth pullback and exact flat specialization, with nonlinear and
 singular-map examples. The native exterior derivative is constructed and
@@ -214,7 +235,7 @@ The smooth native two-form divergence and its density expression are also
 proved, including the nonzero electric-source sign and a curved example.
 The general source from `dH` is now proved to equal the native two-form
 divergence, completing both Maxwell component equivalences in every chart.
-Stage F’s principal endpoints await review. Stage G has the general
+Stage F’s principal endpoints are merged. Stage G has the general
 coefficient-family contract, derived bounded-velocity negativity and spatial
 positivity, and the native coordinate-time identity with its non-affine term.
 A nonstatic polynomial example has proved C² bounds. The native Lorentz metric
@@ -222,7 +243,7 @@ and its physical-coordinate connection are constructed, with uniform inverse
 coefficient estimates and a uniform acceleration error of order `c⁻²`.
 The uniform relativistic Lipschitz bound, compact trajectory tube and
 Gronwall estimate give a common interval, uniform convergence and order
-`c⁻²` for suitably close initial data. Stage G awaits review and merge.
+`c⁻²` for suitably close initial data. Stage G is merged into `main`.
 [#52](https://github.com/MGYamada/ProjectAInos/issues/52)
 Einstein equations and their Newtonian field-equation limit remain in 5.2;
 the Maxwell field action remains in 4.2.

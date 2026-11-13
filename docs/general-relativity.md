@@ -1,12 +1,17 @@
 # General relativity: intrinsic clocks and particle variation
 
-This is the implemented physics layer for stage E in
+This is the implemented physics layer for particle variation and the
+time-dependent Newtonian motion limit in
 [§5.1 / issue #52](https://github.com/MGYamada/ProjectAInos/issues/52).
 The shared connection, curvature and motion APIs are described in the
 [smooth-geometry guide](smooth-geometry.md). Definitions here use the actual
 tangent bundle, time first, signature `(-+++)`, and `c = 1`. The dimension
 parameter is the number of spatial coordinates. No global frame or norm on
 native tangent fibres is added.
+The [C∞ general relativity research plan](cinfty-general-relativity.md)
+extends this proof map to the Einstein, gravitational-radiation and cosmology
+targets of §§81–119. The §5.1 delivery is merged; Einstein dynamics remains
+a separate research stage.
 
 ## Intrinsic proper time and actions
 
@@ -294,7 +299,7 @@ calculations test conventions; Lean establishes the formal claims.
 
 ## Scope after stage E
 
-The stage E principal proof endpoints are implemented and awaiting review.
+The stage E principal proof endpoints are implemented and merged into `main`.
 Stage F now has native form bundles, pullback, exterior differentiation,
 wedge calculus, positive chart-covariant density and a glued oriented volume
 form. Native Hodge now has its wedge identity, uniqueness, sign laws,
@@ -315,7 +320,7 @@ every smooth chart. Intrinsic two-form divergence, its smoothness, both raised
 indices and the density formula are proved. The source defined by `dH` is now
 proved equal to this divergence on every oriented physical background. Both
 Maxwell equations are equivalent to the covariant component equations in every
-smooth chart. Stage F’s principal endpoints are implemented and await review;
+smooth chart. Stage F’s principal endpoints are implemented and merged into `main`;
 stage G proves the controlled time-dependent Newtonian motion and trajectory limit. Einstein dynamics
 belongs to §5.2 and the Maxwell field action to §4.2 / #44.
 
@@ -424,4 +429,4 @@ reference trajectory `x¹=-t³/6`, `v¹=-t²/2` on `[0,1]` with the
 other spatial coordinates zero. Lean verifies the reference equation and
 domain membership and proves convergence at order `c⁻²` for equal zero
 initial data. Exact SymPy checks the trajectory and both nonzero corrections
-along it. The stage G implementation awaits review and merge.
+along it. The stage G implementation is merged into `main`.

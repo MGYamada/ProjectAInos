@@ -2,6 +2,15 @@
 
 This record traces the development of the Lean proofs. The research plan and subject outline are in the [project README](../README.md).
 
+The classical-field design from [issue #8](https://github.com/MGYamada/ProjectAInos/issues/8)
+is now maintained in three research manuscripts:
+[C∞ special relativity](cinfty-special-relativity.md),
+[C∞ electrodynamics](cinfty-electrodynamics.md), and
+[C∞ general relativity](cinfty-general-relativity.md).
+Their dictionaries cover all 119 sections of L&L Volume 2 and separate existing
+proofs from future targets. This documentation migration adds no Lean proofs;
+the completion of the design issue refers to that migration.
+
 ## Thermodynamics Proof Development
 
 Issue #27 replaces the physical atomic-only ECH specialization with composite
@@ -38,7 +47,7 @@ See the [Landau–Lifshitz correspondence](landau-lifshitz.md) for the Mechanics
 
 ## Shared Smooth Algebra and Geometry
 
-The shared mathematical layers for Mechanics, Special Relativity, Electrodynamics, and General Relativity (research-plan topics 2–5) live in `ProjectAInos/SmoothAlgebra` and `ProjectAInos/SmoothGeometry`, independently of the physics and variational calculus. C∞-rings have finite smooth operations, substitution laws, and compatibility with a commutative real algebra. Morphisms preserve every smooth operation; their real-algebra homomorphisms are derived. The concrete models are ℝ, products, and C∞(ℝⁿ), including dimension zero. The smooth-function ring is proved free on its coordinate functions, with evaluation and pullback as morphisms. A nonpolynomial check proves `exp(a + b) = exp(a) * exp(b)` in every C∞-ring.
+The shared mathematical layers for Mechanics, Special Relativity, Electrodynamics, and General Relativity (research-plan topics 2–5) live in `ProjectAInos/SmoothAlgebra` and `ProjectAInos/SmoothGeometry`, independently of the physics. Together with the shared `Variational` layer, they have an acyclic import graph excluding project physics and vendored Yang–Mills. C∞-rings have finite smooth operations, substitution laws, and compatibility with a commutative real algebra. Morphisms preserve every smooth operation; their real-algebra homomorphisms are derived. The concrete models are ℝ, products, and C∞(ℝⁿ), including dimension zero. The smooth-function ring is proved free on its coordinate functions, with evaluation and pullback as morphisms. A nonpolynomial check proves `exp(a + b) = exp(a) * exp(b)` in every C∞-ring.
 
 The geometry follows mathlib's progression from ringed spaces through `Spec` to `Scheme`, with Joyce's real points and C∞ operations. Smooth congruence quotients and cutoff functions construct point localizations with their universal property. Locally represented sections form the structure sheaf, and its stalks are identified with the localizations. The resulting spectrum functor supplies the actual affine models in the local-affine definition of a C∞ scheme. Affine schemes are the essential image of this functor. Examples include affine spaces and the empty scheme.
 
@@ -132,7 +141,7 @@ actual transition Hessian. The nonlinear two-chart regression specializes
 this general theorem: the standard chart has `Γˣ_tt = 2`, while the same
 metric has zero coefficients in the inertial chart. Typed API examples fix
 the full law with only atlas and overlap hypotheses. Stage B's proof endpoints
-are implemented and awaiting PR review/merge.
+are implemented and merged through [#52](https://github.com/MGYamada/ProjectAInos/issues/52).
 
 The stage C increment constructs `LorentzMetric.curvature` as a continuous
 trilinear map on the actual tangent fibre. The generic
@@ -161,7 +170,7 @@ origin its connection coefficients vanish but its curvature does not.
 Exact SymPy checks independently cover the same examples and covariance
 of nonzero conformal curvature under the shear.
 
-Stage C is awaiting review/merge. The stage D increment constructs
+Stage C is merged into `main`. The stage D increment constructs
 `covariantAlong` on the actual tangent fibres using chart components and
 the native Levi-Civita connection. A transition-Jacobian product rule and
 the connection's chart decomposition prove chart independence without
@@ -301,8 +310,8 @@ integration theorem yields a Minkowski chart on its whole source.
 The local theorem assumes only curvature zero near the selected point;
 the global predicate equivalence is `IsLocallyMinkowski ↔ ∀ p, curvature p = 0`.
 The shear example now invokes this construction directly from its native
-curvature theorem. Stage D's principal proof endpoints are implemented,
-pending review and merge. `FlatTransport` identifies transport in a flat
+curvature theorem. Stage D's principal proof endpoints are implemented
+and merged. `FlatTransport` identifies transport in a flat
 chart with its endpoint tangent equivalences, first for regular segments,
 then for finite piecewise paths using their actual path ranges. Native zero
 curvature near a point consequently yields an open neighborhood with
@@ -624,7 +633,7 @@ Typed API contracts include the full component iff, and exact SymPy compares
 the independently computed Hodge/exterior and covariant-derivative sides in
 a curved nonlinear chart with all six field components varying.
 
-Stage F’s principal endpoints are implemented and await review. The controlled
+Stage F’s principal endpoints are implemented and merged. The controlled
 time-dependent Newtonian motion and trajectory limit is proved in stage G. The
 [geometry guide](smooth-geometry.md) and [electrodynamics guide](electrodynamics.md)
 record the APIs and convention comparison.
