@@ -97,10 +97,11 @@ adds the endpoint term `e (χ(γ(b)) − χ(γ(a)))` for a C¹ gauge function on
 domain. Fixed-endpoint stationarity is gauge invariant under the theorem's C³
 gauge-function hypothesis.
 
-General coordinate changes for field jets and global jet bundles remain
-subsequent stages. The vacuum Maxwell action derivation is tracked in
-[#44](https://github.com/MGYamada/ProjectAInos/issues/44), separately from the
-[curved fixed-background Maxwell equations](electrodynamics.md).
+The [flat vacuum Maxwell action](electrodynamics.md#vacuum-field-action-42)
+uses compactly supported first-jet variations in four dimensions. Its
+stationarity theorem combines the shared action derivative with exterior
+integration by parts. General coordinate changes for field jets and global
+jet bundles remain subsequent stages.
 [Smooth algebra](smooth-algebra.md) supplies the smooth observables used by
 `Mechanics.ofSmoothOperation` and their concrete directional chain rule.
 

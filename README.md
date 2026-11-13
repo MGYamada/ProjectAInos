@@ -182,9 +182,11 @@ are connected to the pinned upstream radial-gauge reconstruction through an
 explicit time-first/time-last coordinate equivalence. Nonzero fields, degrees
 0 and 1, and a uniformly accelerated worldline are checked in Lean and SymPy.
 See the [electrodynamics API and proof map](docs/electrodynamics.md).
-The Maxwell field-action derivation in 4.2, collision theory, and QFT remain
-outside this implementation. Fixed-background Maxwell forms are part of the
-5.1 progress recorded below.
+Section 4.2 includes the flat vacuum Maxwell action and the equivalence of
+compactly supported stationarity with the vacuum field equation. The proof
+uses the signed four-form density, and a uniform nonzero electric field
+checks its sign and stationarity on a finite-volume domain. Fixed-background
+Maxwell forms are part of the 5.1 progress recorded below.
 
 Section 5.1 has begun with smooth metric duality on the actual tangent and
 cotangent bundles: `flat`, `sharp`, smooth lowering/raising of sections, and
