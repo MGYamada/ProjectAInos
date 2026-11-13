@@ -246,4 +246,9 @@ example (m a b : ι → ℝ) :
 example (a b : ι → ℝ) (i : ι) (t : Fin 1 → ℝ) :
     StandardJet.uniformMotion a b i t = a i + b i * t 0 := rfl
 
+/-- `timeDerivative` is the ordinary derivative of a function of a real variable. -/
+example (f : TimeFunction) (t : ℝ) :
+    timeDerivative f (fun _ => t) = deriv (fun s : ℝ => f (fun _ => s)) t :=
+  TimeFunction.timeDerivative_apply f t
+
 end Prolongation

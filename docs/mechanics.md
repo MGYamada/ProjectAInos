@@ -100,7 +100,7 @@ For the natural Lagrangian `Σᵢ ½ mᵢ vᵢ² − U` with a potential of orde
 
 `StandardJet ι` is the free C∞-ring on the time coordinate and the jet coordinates. `StandardJet.jetRing` makes it a jet ring, so the structure is not vacuous. Its vector fields come from the universal property of the free ring and the dual numbers, without analysis. The examples have nonzero values: `Eᵢ(q q̈) = 2 q̈`, `Eᵢ(q̇²) = −2 q̈`, Newton's equation of the isotropic oscillator, and the centre-of-mass integral of free particles.
 
-These statements are identities in a ring. The prolongation of a path turns them into statements about trajectories. `TimeFunction` is the C∞-ring of smooth functions of time and `timeDerivative` is `d/dt`. For a smooth path `γ : ι → TimeFunction`, `StandardJet.prolongation γ` is the morphism from the standard jet ring that sends the time coordinate to `t` and `qᵢ⁽ᵏ⁾` to the `k`-th derivative of `γᵢ`. `prolongation_totalDeriv` proves that it turns the total derivative into `d/dt`. `IsSolution L γ` means that the prolongation annihilates every `Eᵢ(L)`; it then annihilates the Euler–Lagrange ideal, and `prolongation_eq_of_conserved` proves that a conserved element takes the same value at all times along a solution.
+These statements are identities in a ring. The prolongation of a path turns them into statements about trajectories. `TimeFunction` is the C∞-ring of smooth functions of time and `timeDerivative` is `d/dt`; `TimeFunction.timeDerivative_apply` proves that it is Mathlib's `deriv` of the function of a real variable. Both live in their own module and are shared with the Hamiltonian trajectories below. For a smooth path `γ : ι → TimeFunction`, `StandardJet.prolongation γ` is the morphism from the standard jet ring that sends the time coordinate to `t` and `qᵢ⁽ᵏ⁾` to the `k`-th derivative of `γᵢ`. `prolongation_totalDeriv` proves that it turns the total derivative into `d/dt`. `IsSolution L γ` means that the prolongation annihilates every `Eᵢ(L)`; it then annihilates the Euler–Lagrange ideal, and `prolongation_eq_of_conserved` proves that a conserved element takes the same value at all times along a solution.
 
 For a natural Lagrangian, `isSolution_naturalLagrangian_iff` identifies the solutions with the smooth solutions of Newton's equations `mᵢ γ̈ᵢ = −∂ᵢU` along the path, and `energy_eq_of_isSolution` proves that `Σᵢ ½ mᵢ γ̇ᵢ² + U(γ)` is constant in time when `∂ₜU = 0`. The isotropic oscillator has `mᵢ γ̈ᵢ = −k γᵢ`, and uniform motion is a solution of the free equations, so solutions exist. Paths are smooth and defined for all times. The equivalence between `IsSolution` and fixed-endpoint stationarity of the action in the real analytic model above is not proved.
 
@@ -164,6 +164,20 @@ formalized.
 `T = Σᵢ pᵢ² / 2mᵢ` and a potential `U` of the positions with
 `Σᵢ qᵢ ∂U/∂qᵢ = k U`. `virial_oscillator` is the case `k = 2`.
 
+`Poisson/Trajectory` connects these models to curves. For a Poisson structure
+on a free C∞-ring and a family `c` of smooth functions of time indexed by the
+generators, `FreeSmoothRing.lift c` evaluates an observable along the curve.
+`IsTrajectory π H c` says that each generator satisfies
+`d/dt x(c) = {x, H}(c)`. `IsTrajectory.timeDerivative_lift` extends this to
+every observable, `d/dt f(c) = {f, H}(c)`, and
+`IsTrajectory.lift_eq_of_isIntegral` proves that an integral of the motion
+takes the same value at all times. `isTrajectory_canonical_iff` identifies the
+trajectories of the canonical bracket with the solutions of Hamilton's
+equations along the curve. The corollaries are constancy of the Hamiltonian,
+of `|L|²` for the rigid body, of the angular momentum in a central field, and
+of `|Γ|²` and `L · Γ` for the heavy top. Existence of trajectories is not
+proved.
+
 ## Proof map
 
 | Module | Main declarations |
@@ -177,7 +191,8 @@ formalized.
 | [Jet/Euler](../ProjectAInos/Mechanics/Jet/Euler.lean) | `euler`, `euler_totalDeriv`, `euler_add_totalDeriv`, `eulerLagrangeIdeal`, `Conserved`, `totalDeriv_mem_eulerLagrangeIdeal` |
 | [Jet/Noether](../ProjectAInos/Mechanics/Jet/Noether.lean) | `momentum`, `energy`, `prolong`, `totalDeriv_energy`, `prolong_eq_euler_add_totalDeriv`, `conserved_noetherCharge`, `conserved_energy` |
 | [Jet/Conservation](../ProjectAInos/Mechanics/Jet/Conservation.lean) | `naturalLagrangian`, `euler_naturalLagrangian`, `conserved_momentum`, `conserved_boost`, `conserved_linear`, `conserved_angularMomentum` |
-| [Jet/Prolongation](../ProjectAInos/Mechanics/Jet/Prolongation.lean) | `TimeFunction`, `timeDerivative`, `prolongation`, `prolongation_totalDeriv`, `IsSolution`, `prolongation_eq_zero_of_mem`, `prolongation_eq_of_conserved`, `isSolution_naturalLagrangian_iff`, `energy_eq_of_isSolution`, `isSolution_oscillator_iff`, `isSolution_uniformMotion` |
+| [TimeFunction](../ProjectAInos/Mechanics/TimeFunction.lean) | `TimeFunction`, `timeDerivative`, `TimeFunction.timeDerivative_apply`, `TimeFunction.eq_of_timeDerivative_eq_zero` |
+| [Jet/Prolongation](../ProjectAInos/Mechanics/Jet/Prolongation.lean) | `prolongation`, `prolongation_totalDeriv`, `IsSolution`, `prolongation_eq_zero_of_mem`, `prolongation_eq_of_conserved`, `isSolution_naturalLagrangian_iff`, `energy_eq_of_isSolution`, `isSolution_oscillator_iff`, `isSolution_uniformMotion` |
 | [Jet/Standard](../ProjectAInos/Mechanics/Jet/Standard.lean) | `StandardJet`, `jetRing`, `totalDeriv_eq_derivation`, `euler_q_mul_acceleration`, `euler_oscillator`, `conserved_energy_oscillator`, `conserved_boost_free` |
 | [Poisson/RigidBody](../ProjectAInos/Mechanics/Poisson/RigidBody.lean) | `PhaseSpace`, `L`, `poisson`, `poisson_L_L`, `L_ne_zero`, `poisson_bracket`, `poisson_L_bracket`, `kineticEnergy`, `gradient_kineticEnergy`, `euler_equations`, `euler_equation_zero`, `casimir`, `poisson_casimir_left`, `isIntegral_casimir` |
 | [Poisson/Epsilon](../ProjectAInos/Mechanics/Poisson/Epsilon.lean) | `epsilon`, `epsilon_skew`, `sum_epsilon_mul` |
@@ -185,6 +200,7 @@ formalized.
 | [Poisson/HeavyTop](../ProjectAInos/Mechanics/Poisson/HeavyTop.lean) | `PhaseSpace`, `L`, `Γ`, `poisson`, `poisson_bracket`, `poisson_L_bracket`, `poisson_Γ_bracket`, `hamiltonian`, `poisson_L_hamiltonian`, `poisson_Γ_hamiltonian`, `poisson_Γ_sq_left`, `poisson_L_dot_Γ_left` |
 | [Poisson/Galilei](../ProjectAInos/Mechanics/Poisson/Galilei.lean) | `K`, `freeHamiltonian`, `canonical_K_p`, `canonical_K_q`, `canonical_K_K`, `canonical_M_K`, `canonical_M_freeHamiltonian`, `canonical_p_freeHamiltonian`, `canonical_K_freeHamiltonian`, `K_sub_K` |
 | [Poisson/Virial](../ProjectAInos/Mechanics/Poisson/Virial.lean) | `dilation`, `canonical_dilation_bracket`, `canonical_dilation_bracket_add`, `kineticEnergy`, `virial`, `oscillatorPotential`, `virial_oscillator` |
+| [Poisson/Trajectory](../ProjectAInos/Mechanics/Poisson/Trajectory.lean) | `IsTrajectory`, `IsTrajectory.timeDerivative_lift`, `IsTrajectory.lift_eq_of_isIntegral`, `IsTrajectory.lift_hamiltonian_eq`, `isTrajectory_canonical_iff`, `RigidBody.lift_casimir_eq`, `AngularMomentum.lift_M_eq`, `HeavyTop.lift_Γ_sq_eq`, `HeavyTop.lift_L_dot_Γ_eq` |
 | [Examples](../ProjectAInos/Mechanics/Examples.lean) | Newton equation, stationary uniform free motion, rejection of accelerated free motion, endpoint-vanishing polynomial variation and its endpoint derivative, zero-length interval and zero-coordinate system |
 
 For `L = m v²/2 − V(q)`, `stationary_natural_iff` proves `m q'' = −V'(q)` on `(a,b)`. This algebraic equation remains valid at `m = 0`; dividing by the mass would require a separate nonzero premise.

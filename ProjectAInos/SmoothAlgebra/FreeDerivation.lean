@@ -69,6 +69,17 @@ theorem derivation_ext {M : Type*} [AddCommGroup M] [Module (FreeSmoothRing ι) 
   rw [presentation_eq s, d.chain, e.chain]
   simp only [h]
 
+/-- A morphism out of a free C-infinity ring intertwines two vector fields if it
+does so on the generators. -/
+theorem map_derivation_eq {B : Type*} [CommRing B] [Algebra ℝ B] [SmoothRing B]
+    (φ : SmoothRingHom (FreeSmoothRing ι) B)
+    (D : SmoothDerivation (FreeSmoothRing ι) (FreeSmoothRing ι)) (E : SmoothDerivation B B)
+    (h : ∀ i, φ (D (generator i)) = E (φ (generator i))) (s : FreeSmoothRing ι) :
+    φ (D s) = E (φ s) := by
+  rw [presentation_eq s, D.chain, φ.map_sum, φ.map_op, E.chain]
+  refine Finset.sum_congr rfl fun i _ => ?_
+  rw [smul_eq_mul, smul_eq_mul, φ.map_mul, φ.map_op, h]
+
 /-- Vector fields on the free ring correspond to families of values on the generators. -/
 def derivationEquiv :
     SmoothDerivation (FreeSmoothRing ι) (FreeSmoothRing ι) ≃ (ι → FreeSmoothRing ι) where
