@@ -201,6 +201,41 @@ of `|L|²` for the rigid body, of the angular momentum in a central field, and
 of `|Γ|²` and `L · Γ` for the heavy top. Existence of trajectories is not
 proved.
 
+## Rigid-body kinematics
+
+`Mechanics/Rigid` covers Landau–Lifshitz §§31–32 and the first formula of §33.
+It is linear algebra over the reals with Mathlib's cross product `⨯₃` and
+matrices; no C∞-ring is involved.
+
+`hat Ω` is the skew-symmetric matrix with `hat Ω *ᵥ r = Ω × r`, and `vee` is
+its inverse on skew-symmetric matrices. `hatEquiv` is the linear equivalence
+between `ℝ³` and Mathlib's `so (Fin 3) ℝ`, and `hatEquiv_cross` proves that it
+sends the cross product to the commutator: `so(3) ≅ ℝ³` as Lie algebras.
+
+The velocity field of a rigid motion is `velocityField V Ω r = V + Ω × r`.
+`velocityField_change_of_origin` proves that describing the same field from an
+origin displaced by `a` changes `V` to `V + Ω × a` and leaves `Ω` unchanged,
+and `velocityField_injective` proves that the field determines `V` and `Ω`. The
+form of the field is a theorem about motions: for `x(s) = c(s) + R(s) r₀` with
+`R(s)` orthogonal and entrywise differentiable, `transpose_deriv_mul_transpose`
+proves that `Ṙ Rᵀ` is skew-symmetric, and `hasDerivAt_rigidMotion` proves that
+the velocity of the body point is `ċ + Ω × (x − c)` with `Ω = vee (Ṙ Rᵀ)`.
+
+`inertia m r` is the inertia tensor `Σₐ mₐ (|rₐ|² δᵢₖ − rₐᵢ rₐₖ)` of finitely
+many point masses. It is symmetric (`transpose_inertia`).
+`inertia_mulVec` is `M = I Ω` with `M = Σₐ mₐ rₐ × (Ω × rₐ)`, and
+`dotProduct_inertia_mulVec` is `Ω · I Ω = Σₐ mₐ |Ω × rₐ|²`, twice the kinetic
+energy, which is non-negative for non-negative masses. `inertia_add_apply` is
+the parallel-axis theorem for a system with centre of mass at the origin.
+
+`principalMoments` and `principalAxes` are the eigenvalues and an orthonormal
+basis of eigenvectors of the inertia tensor, from Mathlib's spectral theorem
+for Hermitian matrices. For non-negative masses the principal moments are
+non-negative, and `principalMoments_two_le` and its two companions prove the
+triangle inequality `I₂ ≤ I₀ + I₁`. The basis-free statement behind it is
+`two_mul_dotProduct_inertia_mulVec_le_trace`: for a unit vector `n`,
+`2 n · I n ≤ tr I`.
+
 ## Proof map
 
 | Module | Main declarations |
@@ -226,6 +261,8 @@ proved.
 | [Poisson/RotatingFrame](../ProjectAInos/Mechanics/Poisson/RotatingFrame.lean) | `angularVelocity`, `canonical_bracket_dot_M`, `hamiltonian`, `velocity`, `canonical_q_hamiltonian`, `canonical_p_hamiltonian`, `canonical_velocity_hamiltonian`, `hamiltonian_eq_velocity` |
 | [Poisson/Virial](../ProjectAInos/Mechanics/Poisson/Virial.lean) | `dilation`, `canonical_dilation_bracket`, `canonical_dilation_bracket_add`, `kineticEnergy`, `virial`, `oscillatorPotential`, `virial_oscillator` |
 | [Poisson/Trajectory](../ProjectAInos/Mechanics/Poisson/Trajectory.lean) | `IsTrajectory`, `IsTrajectory.timeDerivative_lift`, `IsTrajectory.lift_eq_of_isIntegral`, `IsTrajectory.lift_hamiltonian_eq`, `isTrajectory_canonical_iff`, `RigidBody.lift_casimir_eq`, `AngularMomentum.lift_M_eq`, `HeavyTop.lift_Γ_sq_eq`, `HeavyTop.lift_L_dot_Γ_eq` |
+| [Rigid/AngularVelocity](../ProjectAInos/Mechanics/Rigid/AngularVelocity.lean) | `hat`, `vee`, `hat_mulVec`, `hat_cross`, `hat_vee`, `hatEquiv`, `hatEquiv_cross`, `velocityField`, `velocityField_add`, `velocityField_injective`, `velocityField_change_of_origin`, `transpose_deriv_mul_transpose`, `angularVelocity`, `hasDerivAt_rigidMotion` |
+| [Rigid/InertiaTensor](../ProjectAInos/Mechanics/Rigid/InertiaTensor.lean) | `inertia`, `transpose_inertia`, `inertia_mulVec`, `dotProduct_inertia_mulVec`, `dotProduct_inertia_mulVec_nonneg`, `trace_inertia`, `two_mul_dotProduct_inertia_mulVec_le_trace`, `inertia_add_apply`, `principalMoments`, `principalAxes`, `inertia_mulVec_principalAxes`, `principalMoments_nonneg`, `principalMoments_two_le` |
 | [Examples](../ProjectAInos/Mechanics/Examples.lean) | Newton equation, stationary uniform free motion, rejection of accelerated free motion, endpoint-vanishing polynomial variation and its endpoint derivative, zero-length interval and zero-coordinate system |
 
 For `L = m v²/2 − V(q)`, `stationary_natural_iff` proves `m q'' = −V'(q)` on `(a,b)`. This algebraic equation remains valid at `m = 0`; dividing by the mass would require a separate nonzero premise.

@@ -199,7 +199,9 @@ and Maupertuis–Jacobi statements, the canonical bracket with Hamilton's
 equations, the rigid body with Euler's equations, the angular momentum of a
 particle with its momentum map, the heavy top, the Galilei algebra of a free
 particle, the virial identity, and the equations of motion in a uniformly
-rotating frame. Integrals of the motion are constant along
+rotating frame. The kinematics of a rigid body is proved by linear algebra:
+`so(3) ≅ ℝ³`, the angular velocity, and the inertia tensor of point masses with
+its principal moments. Integrals of the motion are constant along
 trajectories of a Hamiltonian on a free C∞-ring. Symplectic structures,
 the Legendre transformation, Dirac brackets and canonical transformations are
 not implemented. Galilean symmetry as a group action and the topics of 2.1 and
