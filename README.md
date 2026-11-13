@@ -253,10 +253,40 @@ Minkowski chart wherever curvature vanishes on a neighborhood. This proves
 proof endpoints, pending review and merge. Transport is proved independent
 of the piecewise path inside a flat neighborhood. The conclusion is local; it
 does not assert a global inertial chart or geodesic completeness.
+The first stage E increment defines proper time and particle actions on the
+actual tangent bundle of a curved spacetime. Integrability, interval
+subdivision, chart formulas, parameter invariance and exact SR specialization
+are proved. Fixed-position clocks in the curved conformal example have proper
+time `(b-a) exp(x²)`. On the model manifold with an arbitrary smooth Lorentz
+metric, the actual quadratic action has the first-variation formula including
+endpoint terms; fixed-endpoint stationarity is equivalent to the native affine
+geodesic equation. This theorem allows null reference velocities and imposes
+no causal constraint on variations. Positive-mass timelike stationarity is now
+equivalent to local affine-geodesic reparametrization in model coordinates.
+The actual proper-time integral has one constructed C² inverse covering a full
+finite timelike segment on arbitrary Lorentz manifolds. Both endpoints, unit
+rate and the removal of tangential acceleration are proved. An exponentially
+parametrized shear worldline is stationary for the massive action but not for
+the quadratic action; its finite inverse is logarithmic. For genuine C²
+manifold-valued curve families, mixed covariant derivatives commute. The actual
+actions now have intrinsic first-variation formulas with endpoint terms,
+derived from local C² regularity on the finite reference segment. Their
+derivatives glue over subdivisions, and fixed-endpoint families make affine
+geodesics stationary for the quadratic action and timelike tangential motion
+stationary for the massive action. Localized chart families now realize the
+compact test fields used in the fundamental lemma. Both variational
+equivalences are proved on arbitrary Lorentz manifolds, including regular
+local reparametrization, unit proper speed, and one finite proper-time inverse.
+Nonzero null initial velocity is preserved on the entire closed quadratic-
+stationary segment, with no causal restriction on variations. A smooth compact
+test in the nonlinear chart realizes arbitrary midpoint tangent data.
+The stage E principal endpoints are implemented and awaiting review.
+The [GR guide](docs/general-relativity.md)
+records the exact scope and typed contracts.
 The [shared geometry guide](docs/smooth-geometry.md)
 records the public API and exact checks. [Issue #52](https://github.com/MGYamada/ProjectAInos/issues/52)
-tracks review of the connection and curvature stages, further tensor operations,
-motion, curved forms, and time-dependent Newton-limit stages;
+tracks review of the geometry and particle-variation stages, and completion of
+curved forms and the time-dependent Newton-limit stages;
 [#43](https://github.com/MGYamada/ProjectAInos/issues/43)
 is the first chart-regression gate. Einstein dynamics belongs to 5.2.
 

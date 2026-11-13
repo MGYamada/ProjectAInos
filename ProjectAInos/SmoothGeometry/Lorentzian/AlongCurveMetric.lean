@@ -55,6 +55,22 @@ theorem chartMetric_contMDiffAt (g : LorentzMetric σ d M)
   intro w
   exact g.contMDiffAt_pairing (chartField_contMDiffAt he hx v) (chartField_contMDiffAt he hx w)
 
+/-- Metric pairing preserves local regularity of native fields along a curve. -/
+theorem contDiffAt_pairing_along (g : LorentzMetric σ d M) {n : ℕ∞}
+    {γ : ℝ → M} {V W : AlongField (d := d) γ} {t : ℝ}
+    (hγ : ContMDiffAt 𝓘(ℝ) I n γ t)
+    (hV : ContMDiffAt 𝓘(ℝ) ((I).prod I) n
+      (fun s => TotalSpace.mk' E (γ s) (V s)) t)
+    (hW : ContMDiffAt 𝓘(ℝ) ((I).prod I) n
+      (fun s => TotalSpace.mk' E (γ s) (W s)) t) :
+    ContDiffAt ℝ n (fun s => g.form (γ s) (V s) (W s)) t := by
+  have hp : ContMDiffAt 𝓘(ℝ) ((I).prod 𝓘(ℝ)) n
+      (fun s => (⟨γ s, g.form (γ s) (V s) (W s)⟩ :
+        TotalSpace ℝ (Bundle.Trivial M ℝ))) t :=
+    (((g.smooth (γ t)).of_le (by simp)).comp t hγ).clm_bundle_apply₂ hV hW
+  rw [contMDiffAt_totalSpace] at hp
+  exact hp.2.contDiffAt
+
 /-- Metric compatibility holds for arbitrary differentiable tangent fields
 along a differentiable curve, without ambient extensions. -/
 theorem hasDerivAt_pairing_along (g : LorentzMetric σ d M)

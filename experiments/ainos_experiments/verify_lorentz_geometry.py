@@ -132,6 +132,222 @@ def verify_covariant_pullback(metric, coordinates):
     check_zero("vanishing derivative at origin", direct.subs(s, 0))
 
 
+def verify_quadratic_variation(metric, coordinates, gamma):
+    """Differentiate the density independently, using force minus d(momentum)/ds."""
+    size = len(coordinates)
+    velocity = sp.Matrix(sp.symbols(f"v0:{size}", real=True))
+    acceleration = sp.Matrix(sp.symbols(f"a0:{size}", real=True))
+    density = (velocity.T * metric * velocity)[0] / 2
+    force = sp.Matrix([sp.diff(density, q) for q in coordinates])
+    momentum = sp.Matrix([sp.diff(density, v) for v in velocity])
+    residual = (force - momentum.jacobian(coordinates) * velocity
+                - momentum.jacobian(velocity) * acceleration)
+    covariant_acceleration = acceleration + sp.Matrix([
+        (velocity.T * component * velocity)[0] for component in gamma])
+    check_zero("quadratic EL equals minus lowered acceleration",
+               residual + metric * covariant_acceleration)
+
+    # On the open timelike cone the speed is positive. Differentiate the
+    # square-root density itself, retaining the full speed derivative.
+    mass = sp.symbols("m", positive=True)
+    speed = sp.sqrt(-(velocity.T * metric * velocity)[0])
+    free_density = -mass * speed
+    free_force = sp.Matrix([sp.diff(free_density, q) for q in coordinates])
+    free_momentum = sp.Matrix([sp.diff(free_density, v) for v in velocity])
+    free_residual = (free_force - free_momentum.jacobian(coordinates) * velocity
+                     - free_momentum.jacobian(velocity) * acceleration)
+    speed_derivative = (sp.Matrix([speed]).jacobian(coordinates) * velocity
+                        + sp.Matrix([speed]).jacobian(velocity) * acceleration)[0]
+    check_zero("massive EL includes the non-affine speed term",
+               free_residual + mass/speed * metric *
+               (covariant_acceleration - speed_derivative/speed * velocity))
+
+    # Nonzero endpoint variations exercise the boundary term. A stationary
+    # coordinate clock in the conformal metric need not be a geodesic.
+    s, x0, epsilon = sp.symbols("s x0 epsilon", real=True)
+    curve = sp.Matrix([s, x0])
+    variation = sp.Matrix([s**2, 1+s])
+    perturbed = curve + epsilon * variation
+    perturbed_metric = metric.subs(dict(zip(coordinates, perturbed)), simultaneous=True)
+    perturbed_velocity = sp.diff(perturbed, s)
+    action_density = (perturbed_velocity.T * perturbed_metric * perturbed_velocity)[0] / 2
+    variation_density = sp.diff(action_density, epsilon).subs(epsilon, 0)
+    along_metric = metric.subs(dict(zip(coordinates, curve)), simultaneous=True)
+    boundary = (sp.diff(curve, s).T * along_metric * variation)[0]
+    along_acceleration = covariant_along(gamma, coordinates, curve, sp.diff(curve, s), s)
+    interior = -(along_acceleration.T * along_metric * variation)[0]
+    check_zero("first variation with endpoint term",
+               sp.integrate(variation_density, (s, 0, 1))
+               - (boundary.subs(s, 1) - boundary.subs(s, 0))
+               - sp.integrate(interior, (s, 0, 1)))
+
+
+def verify_clocks(metric, curved_metric, coordinates):
+    """Exact native-clock examples and a causal-type check of the quadratic density."""
+    s, x0, a, b = sp.symbols("s x0 a b", real=True)
+    curve = sp.Matrix([s, -s**2])
+    velocity = sp.diff(curve, s)
+    along_metric = metric.subs(dict(zip(coordinates, curve)), simultaneous=True)
+    check_zero("shear proper-speed square", (velocity.T * along_metric * velocity)[0] + 1)
+    check_zero("shear proper time", sp.integrate(sp.Integer(1), (s, a, b)) - (b-a))
+    clock_metric = curved_metric.subs(coordinates[1], x0)
+    speed = sp.sqrt(-clock_metric[0, 0])
+    check_zero("curved stationary-clock rate", speed - sp.exp(x0**2))
+    check_zero("curved stationary-clock proper time",
+               sp.integrate(speed, (s, a, b)) - (b-a) * sp.exp(x0**2))
+    check_zero("curved stationary-clock quadratic action",
+               sp.integrate(clock_metric[0, 0]/2, (s, a, b)) + (b-a)*sp.exp(2*x0**2)/2)
+    null = sp.Matrix([1, 1])
+    check_zero("null quadratic density", (null.T * curved_metric * null)[0])
+    # A null reference velocity still admits arbitrary variation directions.
+    epsilon = sp.symbols("epsilon", real=True)
+    varied = null + epsilon * sp.Matrix([0, 1])
+    check_zero("unconstrained variation at a null velocity",
+               sp.diff((varied.T * curved_metric * varied)[0]/2, epsilon).subs(epsilon, 0)
+               - sp.exp(2*coordinates[1]**2))
+
+    # The exponential clock is a stationary massive worldline with nonzero
+    # native acceleration. The proper-time inverse is log(tau + exp(s0)).
+    exponential_curve = sp.Matrix([sp.exp(s), -sp.exp(2*s)])
+    exponential_velocity = sp.diff(exponential_curve, s)
+    gamma = christoffel(metric, coordinates)
+    native_acceleration = covariant_along(gamma, coordinates, exponential_curve,
+                                        exponential_velocity, s)
+    check_zero("exponential-clock tangential acceleration",
+               native_acceleration - exponential_velocity)
+    along_exponential = metric.subs(dict(zip(coordinates, exponential_curve)), simultaneous=True)
+    exponential_speed = sp.sqrt(-(exponential_velocity.T * along_exponential * exponential_velocity)[0])
+    check_zero("exponential-clock proper speed", exponential_speed - sp.exp(s))
+    check_zero("exponential-clock massive residual",
+               native_acceleration - sp.diff(exponential_speed, s)/exponential_speed
+               * exponential_velocity)
+    if sp.simplify((along_exponential * native_acceleration)[0]) == 0:
+        raise AssertionError("non-affine clock must have a nonzero quadratic residual")
+    check_zero("exponential-clock proper time",
+               sp.integrate(exponential_speed, (s, a, b)) - sp.exp(b) + sp.exp(a))
+    p = sp.symbols("p", positive=True)  # p = tau + exp(s0)
+    inverse = sp.log(p)
+    inverse_curve = exponential_curve.subs(s, inverse)
+    check_zero("proper-time inverse derivative", sp.diff(inverse, p) - 1/sp.exp(inverse))
+    check_zero("proper-time inverse yields affine motion",
+               covariant_along(gamma, coordinates, inverse_curve, sp.diff(inverse_curve, p), p))
+    inverse_metric = metric.subs(dict(zip(coordinates, inverse_curve)), simultaneous=True)
+    check_zero("proper-time inverse gives unit speed",
+               (sp.diff(inverse_curve, p).T * inverse_metric * sp.diff(inverse_curve, p))[0] + 1)
+    tau = sp.symbols("tau", nonnegative=True)
+    finite_inverse = sp.log(tau + sp.exp(a))
+    check_zero("finite clock inverse composition", sp.exp(finite_inverse) - sp.exp(a) - tau)
+    check_zero("finite clock left endpoint", finite_inverse.subs(tau, 0) - a)
+    check_zero("finite clock right endpoint",
+               finite_inverse.subs(tau, sp.exp(b) - sp.exp(a)) - b)
+
+
+def verify_family_variations(metric, coordinates, gamma, *, shear=False):
+    """Differentiate genuine two-parameter families and their scalar densities."""
+    epsilon, s, x0, mass = sp.symbols("epsilon s x0 mass", real=True)
+    family = sp.Matrix([s + epsilon*s**2, epsilon + s**2])
+    variation = sp.diff(family, epsilon)
+    velocity = sp.diff(family, s)
+    mixed_et = covariant_along(gamma, coordinates, family, velocity, epsilon)
+    mixed_te = covariant_along(gamma, coordinates, family, variation, s)
+    check_zero("native family mixed covariant derivatives", mixed_et - mixed_te)
+    along_metric = metric.subs(dict(zip(coordinates, family)), simultaneous=True)
+    density = (velocity.T * along_metric * velocity)[0]/2
+    check_zero("native quadratic family density derivative",
+               sp.diff(density, epsilon) - (mixed_te.T * along_metric * velocity)[0])
+
+    # At epsilon=0 this is a timelike clock for every s and x0. The shear
+    # case uses the actual inverse coordinate map, including its second derivative.
+    timelike_family = sp.Matrix([s + epsilon*s**2, x0 + epsilon*(1+s)])
+    if shear:
+        timelike_family[1] -= timelike_family[0]**2
+    field = sp.diff(timelike_family, epsilon)
+    velocity = sp.diff(timelike_family, s)
+    along_metric = metric.subs(dict(zip(coordinates, timelike_family)), simultaneous=True)
+    q = sp.simplify((velocity.T * along_metric * velocity)[0])
+    speed = sp.sqrt(-q)
+    mixed = covariant_along(gamma, coordinates, timelike_family, field, s)
+    actual = sp.diff(-mass*speed, epsilon).subs(epsilon, 0)
+    expected = (mass/speed * (mixed.T * along_metric * velocity)[0]).subs(epsilon, 0)
+    check_zero("native massive family density derivative", actual - expected)
+    base_curve = timelike_family.subs(epsilon, 0)
+    base_velocity = velocity.subs(epsilon, 0)
+    base_field = field.subs(epsilon, 0)
+    base_metric = along_metric.subs(epsilon, 0)
+    base_speed = sp.simplify(speed.subs(epsilon, 0))
+    acceleration = covariant_along(gamma, coordinates, base_curve, base_velocity, s)
+    pairing = (base_field.T * base_metric * base_velocity)[0]
+    quadratic_actual = sp.diff(q/2, epsilon).subs(epsilon, 0)
+    quadratic_residual = -(base_field.T * base_metric * acceleration)[0]
+    massive_boundary = mass/base_speed * pairing
+    massive_residual = -mass/base_speed * (base_field.T * base_metric * (
+        acceleration - sp.diff(base_speed, s)/base_speed * base_velocity))[0]
+    for label, derivative, boundary, residual in [
+        ("quadratic", quadratic_actual, pairing, quadratic_residual),
+        ("massive", actual, massive_boundary, massive_residual),
+    ]:
+        derivative, boundary, residual = map(sp.simplify, (derivative, boundary, residual))
+        check_zero(f"native {label} endpoint formula", derivative - sp.diff(boundary, s) - residual)
+        integral = sp.integrate(derivative, (s, 0, 1))
+        middle = sp.Rational(1, 2)
+        left = boundary.subs(s, middle) - boundary.subs(s, 0) + sp.integrate(residual, (s, 0, middle))
+        right = boundary.subs(s, 1) - boundary.subs(s, middle) + sp.integrate(residual, (s, middle, 1))
+        check_zero(f"native {label} first-variation subdivision", integral - left - right)
+
+    if shear:
+        # Same genuinely nonlinear fixed-endpoint family proved in Lean.
+        bump = s*(1-s)
+        time = s + epsilon*bump
+        nonlinear = sp.Matrix([time, epsilon**2*bump - time**2])
+        nonlinear_metric = metric.subs(dict(zip(coordinates, nonlinear)), simultaneous=True)
+        nonlinear_v = sp.diff(nonlinear, s)
+        nonlinear_q = sp.simplify((nonlinear_v.T * nonlinear_metric * nonlinear_v)[0])
+        check_zero("nonlinear family endpoint fixing",
+                   [entry for endpoint in (0, 1)
+                    for entry in nonlinear.subs(s, endpoint) - nonlinear.subs({s: endpoint, epsilon: 0})])
+        check_zero("nonlinear family quadratic stationarity",
+                   sp.integrate(sp.diff(nonlinear_q/2, epsilon).subs(epsilon, 0), (s, 0, 1)))
+        check_zero("nonlinear family massive stationarity",
+                   sp.integrate(sp.diff(-mass*sp.sqrt(-nonlinear_q), epsilon).subs(epsilon, 0), (s, 0, 1)))
+
+
+def verify_localized_variations(metric, coordinates):
+    """C² compact chart tests and a nonstationary curved clock, all exact."""
+    s, epsilon, u, v = sp.symbols("s epsilon u v", real=True)
+    left, right = sp.Rational(1, 4), sp.Rational(3, 4)
+    cutoff = 4096*(s-left)**3*(right-s)**3
+    # Extending by zero has matching derivatives through order two.
+    check_zero("localized cutoff C2 gluing",
+               [sp.diff(cutoff, s, k).subs(s, end)
+                for k in range(3) for end in (left, right)])
+    check_zero("localized cutoff midpoint", cutoff.subs(s, sp.Rational(1, 2))-1)
+    time, space = s + epsilon*cutoff*u, epsilon*cutoff*v
+    family = sp.Matrix([time, space-time**2])
+    reference = sp.Matrix([s, -s**2])
+    check_zero("localized chart reference", family.subs(epsilon, 0)-reference)
+    check_zero("localized chart native test velocity",
+               sp.diff(family, epsilon).subs(epsilon, 0)
+               - cutoff*sp.Matrix([u, v-2*s*u]))
+    along_metric = metric.subs(dict(zip(coordinates, family)), simultaneous=True)
+    velocity = sp.diff(family, s)
+    density = sp.simplify((velocity.T*along_metric*velocity)[0]/2)
+    check_zero("localized chart quadratic stationarity",
+               sp.integrate(sp.diff(density, epsilon).subs(epsilon, 0), (s, left, right)))
+
+    # At x=1, a supported spatial test detects the conformal clock's acceleration.
+    curved_family = sp.Matrix([s, 1+epsilon*cutoff])
+    curved_metric = sp.exp(2*curved_family[1]**2)*sp.diag(-1, 1)
+    curved_velocity = sp.diff(curved_family, s)
+    norm = (curved_velocity.T*curved_metric*curved_velocity)[0]
+    total = sp.integrate(cutoff, (s, left, right))
+    assert total > 0
+    quadratic = sp.integrate(sp.diff(norm/2, epsilon).subs(epsilon, 0), (s, left, right))
+    massive = sp.integrate(sp.diff(-sp.sqrt(-norm), epsilon).subs(epsilon, 0), (s, left, right))
+    check_zero("curved clock localized quadratic variation", quadratic+2*sp.exp(2)*total)
+    check_zero("curved clock localized massive variation", massive+2*sp.E*total)
+    assert quadratic < 0 and massive < 0
+
+
 def verify_motion(metric, coordinates, gamma, jacobian):
     s, a, b, c, d = sp.symbols("s a b c d", real=True)
     curve = sp.Matrix([s, -s**2])
@@ -430,6 +646,14 @@ def verify():
     curved_metric = sp.exp(2*x**2) * eta
     curved_gamma = verify_connection(curved_metric, coordinates)
     verify_piecewise_transport(curved_metric, coordinates, curved_gamma)
+    verify_quadratic_variation(eta, inertial, flat_gamma)
+    verify_quadratic_variation(metric, coordinates, gamma)
+    verify_quadratic_variation(curved_metric, coordinates, curved_gamma)
+    verify_clocks(metric, curved_metric, coordinates)
+    verify_family_variations(eta, inertial, flat_gamma)
+    verify_family_variations(metric, coordinates, gamma, shear=True)
+    verify_localized_variations(metric, coordinates)
+    verify_family_variations(curved_metric, coordinates, curved_gamma)
     check_zero("conformal time connection", curved_gamma[0] - sp.Matrix([[0, 2*x], [2*x, 0]]))
     check_zero("conformal spatial connection", curved_gamma[1] - sp.diag(2*x, 2*x))
 
@@ -509,7 +733,11 @@ def verify():
           "parallel coframe integration, the curved integrability obstruction, "
           "a nonconstant Volterra solution/parameter variation, "
           "a smooth radial family with rescaling and endpoint derivative, "
-          "and full flat-frame/coframe equations with the curved defect sign.")
+          "full flat-frame/coframe equations with the curved defect sign, "
+          "curved proper-time clocks, quadratic Euler–Lagrange/native acceleration, "
+          "endpoint variations, unconstrained null-velocity variations, "
+          "massive non-affine Euler–Lagrange equations, the finite proper-time inverse, "
+          "and mixed covariant derivatives and densities of curve families.")
 
 
 def main():

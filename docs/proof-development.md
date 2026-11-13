@@ -302,8 +302,110 @@ then for finite piecewise paths using their actual path ranges. Native zero
 curvature near a point consequently yields an open neighborhood with
 path-independent transport; arbitrary nonlinear-shear piecewise paths
 instantiate the theorem. No global inertial chart or completeness follows.
-Stages E–G remain subsequent work; differential/contracted
-Bianchi and Einstein dynamics belong to 5.2.
+Differential/contracted Bianchi and Einstein dynamics belong to 5.2.
+
+### Intrinsic clocks and the first quadratic-action variation
+
+The first stage E increment uses the physical negative-time signature.
+`GeneralRelativity.ProperTime` constructs the intrinsic proper-speed rate,
+proper-time integral and normalized timelike velocity. Local C¹ regularity
+gives integrability, including at null velocities. Subdivision and smooth-chart
+formulas are proved without a global chart. Parameter substitution allows zero
+parameter speed. Metric preservation along a curve gives invariance even for
+maps between different dimensions. Metric compatibility supplies the derivative
+of the proper-speed rate for locally C² timelike curves.
+
+`ParticleAction` defines quadratic and square-root actions and proves their
+subdivision, geodesic evaluations and appropriate parameter-change laws.
+`SpecialRelativity` identifies the Minkowski specializations with the existing
+SR functionals. The shear parabola has unit rate; clocks at fixed `x` in the
+curved conformal metric have rate `exp(x²)` and the corresponding exact
+proper-time and quadratic-action integrals.
+
+`QuadraticLagrangian` differentiates the position-dependent metric and velocity
+slots on an open coordinate domain, reusing `Mechanics.OpenDomain` for the
+derivative of the actual action and the stationarity equivalence.
+`QuadraticGeodesic` uses the native metric and Koszul formula on the model
+manifold to identify the Euler–Lagrange covector with minus lowered covariant
+acceleration. The first variation includes its endpoint pairing. Nondegeneracy
+then proves quadratic stationarity iff the native affine geodesic equation,
+without restricting variations to any causal class.
+
+This is a model-manifold variational endpoint, with an arbitrary curved metric;
+the native manifold equivalences proved below now remove that restriction.
+Those variation gluing arguments remain in E. F–G are subsequent work.
+The [GR guide](general-relativity.md) records the hypotheses. New typed GR
+contracts run under default elaborator settings in the required Lean job;
+the audit includes the namespace. Exact SymPy checks independently test the
+clock rates, Euler–Lagrange signs and nonzero endpoint variations in flat,
+nonlinear flat and curved examples.
+
+The massive-action increment now differentiates the square-root density on
+its open timelike jet domain. `FreeLagrangian` proves the momentum's speed-factor
+derivative and actual-action stationarity equivalence using the existing
+open-domain calculus. `FreeGeodesic` identifies the Euler–Lagrange covector
+with `-(m/s)` times the metric dual of acceleration minus `(s'/s)` velocity.
+For positive mass and timelike reference curves, stationarity is equivalent
+to tangential native acceleration and to regular local affine-geodesic
+reparametrization. The unit-speed specialization is affine in the given
+parameter. These coordinate results remain available alongside the native results below.
+
+`ProperTimeParameter` works on arbitrary Lorentz manifolds. C² timelike curves
+have C¹ clock rates; the actual clock integral is C² with positive derivative.
+The inverse function theorem constructs a local C² parameter inverse with
+derivative `1/s` and unit proper-speed rate. Metric compatibility determines
+the tangential acceleration factor, and the full second-derivative parameter
+law proves that this inverse yields an affine geodesic. The converse law also
+proves that regular reparametrization of affine motion forces tangential
+acceleration. `FiniteProperTime` now extends this to one inverse over a full
+finite timelike segment. C² regularity and timelikeness at all points of the
+closed segment supply a larger open interval, and positive derivative gives
+global injectivity there. The scalar construction belongs to `Variational.Parameter`.
+Both closed-interval images, endpoint correspondence, inverse regularity and
+unit rate are proved; tangential acceleration on the original interior gives
+affine motion on the whole proper-time interior.
+
+`ParticleExamples` proves that the exponential shear worldline has nonzero
+covariant acceleration equal to velocity. Its massive action is stationary
+on every nontrivial finite interval; its quadratic action is not. Proper time
+is `exp(b)-exp(a)`. Typed contracts fix both the native construction and the
+model variational scope. Exact SymPy checks differentiate the massive density
+independently and verify the explicit inverse parameter and cancellation.
+The finite-segment example now proves the logarithmic inverse and both
+endpoints in Lean.
+
+`CurveFamily` supplies native parameter velocities, their C¹ bundle regularity,
+and the mixed covariant derivative interchange law for jointly C² families.
+The proof uses local second-derivative symmetry and zero torsion, with no
+immersion or global chart assumption. `VariationDensity` differentiates both
+actual particle densities on arbitrary manifolds. Timelikeness is local at the
+point of the square-root density derivative. Typed contracts and exact flat,
+shear and conformal family calculations cover these new laws.
+
+`VariationAction` now differentiates the actual actions on arbitrary Lorentz
+manifolds from joint C² regularity only along the finite reference segment.
+`Variational.IntervalParameter` localizes the scalar parameter-plane density
+and obtains domination from compactness. No single chart for the full curve,
+global family regularity or caller-supplied integral bound is required.
+`VariationBoundary` uses metric compatibility to retain the intrinsic endpoint
+pairings and the massive residual's full proper-speed derivative. Actual
+derivatives add over subdivisions, including across chart changes.
+
+`VariationStationary` derives vanishing endpoint variation fields from actual
+locally fixed endpoints. Affine geodesics are stationary for all such quadratic
+families without causal restrictions, and timelike tangential acceleration
+implies massive stationarity. `ManifoldCurve` now constructs actual localized
+chart families; `LocalizedVariation` identifies their native test vectors.
+`VariationTesting` applies the fundamental lemma on small interior time
+patches and metric nondegeneracy. `ManifoldStationary` consequently proves both
+full native equivalences, with positive mass and timelikeness only for the
+massive action. `ManifoldMotion` supplies local reparametrization, unit-rate,
+finite proper-time and closed-segment nonzero null preservation corollaries.
+`AccelerationRegularity` proves C² curves have continuous native acceleration
+and extends the affine equation to interval endpoints. `VariationExamples` verifies a
+genuine nonlinear fixed-endpoint family in the shear chart using the native
+theorems. Exact checks additionally test curved endpoint/residual terms and
+subdivision with a nonzero junction pairing.
 
 ## Minkowski Geometry and Relativistic Kinematics
 

@@ -570,6 +570,26 @@ metric compatibility. Normed structures are confined to the coordinate
 models, with no norm or positive-definite inner product imposed on tangent
 fibres. No orientation, time orientation or global frame is needed.
 
+`CurveFamily.lean` defines directional velocities of a two-parameter manifold
+family by `mfderiv`. A jointly C² family has C¹ velocity fields into the actual
+tangent bundle. `curveVelocity_family` identifies them with differentiation
+along parameter paths, and `covariantAlong_family_interchange` proves
+`D_ε ∂t Γ = D_t ∂ε Γ` using symmetry of second derivatives and zero torsion.
+Parameter velocities may vanish and the family need not be an immersion.
+Slice regularity and C¹ variation-field regularity are proved. An actual
+endpoint fixed for nearby variation parameters has zero native variation
+field there, by locality of `mfderiv`. `contDiffAt_pairing_along` preserves
+the finite regularity of arbitrary native fields along a curve.
+The theorem supports both Lorentz conventions and introduces no physical
+imports. Its typed contracts are in `LorentzGeometryAPI`; the
+[GR guide](general-relativity.md) describes the resulting actual action
+derivatives, intrinsic boundary terms, subdivision and both stationarity
+equivalences. `AccelerationRegularity` derives continuous native acceleration
+and extension of the geodesic equation to closures. `LocalizedVariation`
+identifies actual chart-family velocities with the specified test fields;
+`VariationTesting` proves the nondegenerate fundamental lemma by local scalar
+tests realized by those families. These shared modules import no physics.
+
 `AlongCurveReparam.lean` proves `C^(n+1)` velocity regularity, the chain rule
 for `curveVelocity`, and both reparametrization identities:
 

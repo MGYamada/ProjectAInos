@@ -4,6 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 module
 
+import ProjectAInos.SmoothGeometry.Lorentzian.AccelerationRegularity
+import ProjectAInos.SmoothGeometry.Lorentzian.LocalizedVariation
 import ProjectAInos.SmoothGeometry.Lorentzian.Dual
 import ProjectAInos.SmoothGeometry.Lorentzian.PullbackExamples
 import ProjectAInos.SmoothGeometry.Lorentzian.ChartExamples
@@ -11,6 +13,7 @@ import ProjectAInos.SmoothGeometry.Lorentzian.ChartConnection
 import ProjectAInos.SmoothGeometry.Lorentzian.ConnectionExamples
 import ProjectAInos.SmoothGeometry.Lorentzian.CurvatureExamples
 import ProjectAInos.SmoothGeometry.Lorentzian.CurvatureNaturality
+import ProjectAInos.SmoothGeometry.Lorentzian.CurveFamily
 import ProjectAInos.SmoothGeometry.Lorentzian.ConformalExample
 import ProjectAInos.SmoothGeometry.Lorentzian.LocalInertialExamples
 import ProjectAInos.SmoothGeometry.Lorentzian.LocalFlatnessExamples
@@ -288,6 +291,35 @@ example {x y : LorentzianCharts.Plane} (p q : PiecewisePath 1 LorentzianCharts.P
   LorentzianCharts.piecewise_transport_path_independent p q
 
 end LocalFlatness
+
+section CurveFamilies
+
+open LorentzMetric
+
+variable {σ : LorentzConvention} {d : ℕ} {M : Type} [TopologicalSpace M]
+  [ChartedSpace (MinkowskiModel d) M] [IsManifold 𝓘(ℝ, MinkowskiModel d) ∞ M]
+
+example {Γ : ℝ × ℝ → M} {z : ℝ × ℝ} (v : ℝ × ℝ)
+    (hΓ : ContMDiffAt 𝓘(ℝ, ℝ × ℝ) 𝓘(ℝ, MinkowskiModel d) 2 Γ z) :
+    ContMDiffAt 𝓘(ℝ, ℝ × ℝ) (𝓘(ℝ, MinkowskiModel d).prod 𝓘(ℝ, MinkowskiModel d)) 1
+      (fun q => Bundle.TotalSpace.mk' (MinkowskiModel d) (Γ q)
+        (familyVelocity (d := d) Γ v q)) z := familyVelocity_contMDiffAt v hΓ
+
+example (g : LorentzMetric σ d M) {Γ : ℝ × ℝ → M} {a b : ℝ}
+    (hΓ : ContMDiffAt 𝓘(ℝ, ℝ × ℝ) 𝓘(ℝ, MinkowskiModel d) 2 Γ (a, b)) :
+    g.covariantAlong (γ := fun s => Γ (s, b))
+      (fun s => familyVelocity Γ (0, 1) (s, b)) a =
+    g.covariantAlong (γ := fun t => Γ (a, t))
+      (fun t => familyVelocity Γ (1, 0) (a, t)) b :=
+  g.covariantAlong_family_interchange hΓ
+
+example {Γ : ℝ × ℝ → M} {ε₀ t : ℝ}
+    (hΓ : MDifferentiableAt 𝓘(ℝ, ℝ × ℝ) 𝓘(ℝ, MinkowskiModel d) Γ (ε₀, t))
+    (hfixed : ∀ᶠ ε in 𝓝 ε₀, Γ (ε, t) = Γ (ε₀, t)) :
+    familyVelocity (d := d) Γ (1, 0) (ε₀, t) = 0 :=
+  familyVelocity_fst_eq_zero_of_eventually_const hΓ hfixed
+
+end CurveFamilies
 
 section AlongCurve
 
@@ -1408,3 +1440,28 @@ example {Y : ∀ y : Plane, TangentSpace 𝓘(ℝ, Plane) y} {p : Plane}
         (mfderiv 𝓘(ℝ, Plane) 𝓘(ℝ, Plane) shear p v) := leviCivita_shear_naturality hY v
 
 end Charts
+
+section LocalizedManifoldVariation
+open Set Bundle ProjectAInos.Variational LorentzMetric
+variable {σ : LorentzConvention} {d : ℕ} {M : Type} [TopologicalSpace M]
+  [ChartedSpace (MinkowskiModel d) M] [IsManifold 𝓘(ℝ, MinkowskiModel d) ∞ M]
+local notation "E" => MinkowskiModel d
+local notation "I" => 𝓘(ℝ, MinkowskiModel d)
+
+example (g : LorentzMetric σ d M)
+    {γ : ℝ → M} {t : ℝ} (hγ : ContMDiffAt 𝓘(ℝ) I 2 γ t) :
+    ContMDiffAt 𝓘(ℝ) ((I).prod I) 0
+      (fun s => TotalSpace.mk' E (γ s) (g.covariantAlong (curveVelocity γ) s)) t :=
+  g.covariantAcceleration_contMDiffAt hγ
+
+example {e : OpenPartialHomeomorph M E} {U : Set ℝ}
+    {γ : ℝ → M} {η : ℝ → E} {a b : ℝ}
+    (he : e ∈ IsManifold.maximalAtlas I ∞ M) (hU : IsOpen U)
+    (hUI : U ⊆ Ioo a b) (hstay : MapsTo γ U e.source) (hsupport : tsupport η ⊆ U)
+    (hγ : ∀ t ∈ uIcc a b, ContMDiffAt 𝓘(ℝ) I 2 γ t) (hη : ContDiff ℝ 2 η)
+    {t : ℝ} (ht : t ∈ uIcc a b) :
+    variationField (chartCurveVariation he hU hUI hstay hsupport hγ hη) t =
+      chartField e (η t) (γ t) :=
+  variationField_chart he hU hUI hstay hsupport hγ hη ht
+
+end LocalizedManifoldVariation
