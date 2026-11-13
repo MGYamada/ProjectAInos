@@ -46,10 +46,12 @@ jobs:
         # the build cache that pull requests restore. A pull request skips them
         # only when it changes no Lean source, check, toolchain, manifest or
         # this workflow. If the changed files cannot be listed, the steps run.
+        # Rename detection is off, so a renamed file is listed under both its
+        # old and its new path and moving a Lean file away still counts.
         run: |
           lean=true
           if [ "$EVENT_NAME" = pull_request ]; then
-            if changed=$(git diff --name-only HEAD^1 HEAD); then
+            if changed=$(git diff --name-only --no-renames HEAD^1 HEAD); then
               pattern='\.lean$|^lakefile\.toml$|^lake-manifest\.json$|^lean-toolchain$|^checks/|^\.github/workflows/ci\.yml$'
               if ! printf '%s\n' "$changed" | grep -qE "$pattern"; then
                 lean=false
