@@ -348,3 +348,64 @@ example (m : ι → ℝ) (k : ℝ) :
   PhaseSpace.virial_oscillator m k
 
 end Virial
+
+section Trajectories
+
+variable {κ : Type*}
+
+/-- A morphism out of a free ring intertwines two vector fields if it does so
+on generators. -/
+example {B : Type*} [CommRing B] [Algebra ℝ B] [SmoothRing B]
+    (φ : SmoothRingHom (FreeSmoothRing κ) B)
+    (D : SmoothDerivation (FreeSmoothRing κ) (FreeSmoothRing κ)) (E : SmoothDerivation B B)
+    (h : ∀ i, φ (D (FreeSmoothRing.generator i)) = E (φ (FreeSmoothRing.generator i)))
+    (s : FreeSmoothRing κ) : φ (D s) = E (φ s) :=
+  FreeSmoothRing.map_derivation_eq φ D E h s
+
+example (π : PoissonStructure (FreeSmoothRing κ)) (H : FreeSmoothRing κ)
+    (c : κ → TimeFunction) :
+    IsTrajectory π H c ↔ ∀ a, timeDerivative (c a) =
+      FreeSmoothRing.lift c (π.bracket (FreeSmoothRing.generator a) H) :=
+  Iff.rfl
+
+/-- Along a trajectory, `d/dt f(c) = {f, H}(c)` for every observable. -/
+example {π : PoissonStructure (FreeSmoothRing κ)} {H : FreeSmoothRing κ}
+    {c : κ → TimeFunction} (h : IsTrajectory π H c) (f : FreeSmoothRing κ) :
+    timeDerivative (FreeSmoothRing.lift c f) = FreeSmoothRing.lift c (π.bracket f H) :=
+  h.timeDerivative_lift f
+
+/-- Integrals of the motion are constant along trajectories. -/
+example {π : PoissonStructure (FreeSmoothRing κ)} {H f : FreeSmoothRing κ}
+    {c : κ → TimeFunction} (h : IsTrajectory π H c) (hf : π.bracket f H = 0)
+    (s t : Fin 1 → ℝ) : FreeSmoothRing.lift c f s = FreeSmoothRing.lift c f t :=
+  h.lift_eq_of_isIntegral hf s t
+
+example {π : PoissonStructure (FreeSmoothRing κ)} {H : FreeSmoothRing κ}
+    {c : κ → TimeFunction} (h : IsTrajectory π H c) (s t : Fin 1 → ℝ) :
+    FreeSmoothRing.lift c H s = FreeSmoothRing.lift c H t :=
+  h.lift_hamiltonian_eq s t
+
+/-- Trajectories of the canonical bracket are solutions of Hamilton's equations. -/
+example {ι : Type*} [DecidableEq ι] [Fintype ι] (H : PhaseSpace ι)
+    (c : ι ⊕ ι → TimeFunction) :
+    IsTrajectory (PhaseSpace.canonical ι) H c ↔
+      (∀ i, timeDerivative (c (Sum.inl i)) =
+        FreeSmoothRing.lift c (FreeSmoothRing.partialDerivation (Sum.inr i) H)) ∧
+      ∀ i, timeDerivative (c (Sum.inr i)) =
+        -FreeSmoothRing.lift c (FreeSmoothRing.partialDerivation (Sum.inl i) H) :=
+  isTrajectory_canonical_iff H c
+
+/-- Angular momentum is constant along trajectories in a central field. -/
+example (f : SmoothOperation 3) {c : Fin 3 ⊕ Fin 3 → TimeFunction}
+    (h : IsTrajectory AngularMomentum.canonical (op f AngularMomentum.scalars) c) (a : Fin 3)
+    (s t : Fin 1 → ℝ) :
+    FreeSmoothRing.lift c (AngularMomentum.M a) s =
+      FreeSmoothRing.lift c (AngularMomentum.M a) t :=
+  AngularMomentum.lift_M_eq f h a s t
+
+example {H : RigidBody.PhaseSpace} {c : Fin 3 → TimeFunction}
+    (h : IsTrajectory RigidBody.poisson H c) (s t : Fin 1 → ℝ) :
+    FreeSmoothRing.lift c RigidBody.casimir s = FreeSmoothRing.lift c RigidBody.casimir t :=
+  RigidBody.lift_casimir_eq h s t
+
+end Trajectories

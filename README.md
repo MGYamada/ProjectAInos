@@ -197,7 +197,8 @@ Poisson's theorem, the normalizer of a coisotropic ideal, the Hamilton–Jacobi
 and Maupertuis–Jacobi statements, the canonical bracket with Hamilton's
 equations, the rigid body with Euler's equations, the angular momentum of a
 particle with its momentum map, the heavy top, the Galilei algebra of a free
-particle, and the virial identity. Symplectic structures,
+particle, and the virial identity. Integrals of the motion are constant along
+trajectories of a Hamiltonian on a free C∞-ring. Symplectic structures,
 the Legendre transformation, Dirac brackets and canonical transformations are
 not implemented. Galilean symmetry as a group action and the topics of 2.1 and
 2.4 have no Lean counterpart yet. The

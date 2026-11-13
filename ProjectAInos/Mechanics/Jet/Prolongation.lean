@@ -5,7 +5,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 module
 
 public import ProjectAInos.Mechanics.Jet.Standard
-public import Mathlib.Analysis.Calculus.MeanValue
+public import ProjectAInos.Mechanics.TimeFunction
 import Mathlib.Tactic.Ring
 
 /-!
@@ -30,24 +30,6 @@ noncomputable section
 namespace ProjectAInos.Mechanics
 
 open SmoothAlgebra SmoothRing
-
-/-- Smooth functions of time. -/
-abbrev TimeFunction := SmoothOperation 1
-
-/-- The derivative `d/dt` of a smooth function of time. -/
-def timeDerivative : SmoothDerivation TimeFunction TimeFunction :=
-  SmoothDerivation.partialDerivation 0
-
-/-- A smooth function of time with zero derivative is constant. -/
-theorem TimeFunction.eq_of_timeDerivative_eq_zero {f : TimeFunction}
-    (h : timeDerivative f = 0) (s t : Fin 1 → ℝ) : f s = f t := by
-  refine is_const_of_fderiv_eq_zero (𝕜 := ℝ) (f.contMDiff.contDiff.differentiable (by simp))
-    (fun x => ?_) s t
-  ext v
-  rw [SmoothOperation.fderiv_apply_eq_sum_partialDeriv, Fin.sum_univ_one]
-  have h0 : SmoothOperation.partialDeriv 0 f x = 0 := congrArg (fun g : TimeFunction => g x) h
-  rw [h0, mul_zero]
-  rfl
 
 namespace StandardJet
 
@@ -95,10 +77,7 @@ theorem prolongation_totalDeriv (γ : ι → TimeFunction) (F : StandardJet ι) 
           (timeDerivative^[p.2]) (γ p.1) := prolongation_q γ p.1 p.2
       rw [h1, h2, prolongation_q]
       exact Function.iterate_succ_apply' _ _ _
-  rw [FreeSmoothRing.presentation_eq F, SmoothDerivation.chain, SmoothRingHom.map_sum,
-    SmoothRingHom.map_op, SmoothDerivation.chain]
-  refine Finset.sum_congr rfl fun i _ => ?_
-  rw [smul_eq_mul, smul_eq_mul, SmoothRingHom.map_mul, SmoothRingHom.map_op, hgen]
+  exact FreeSmoothRing.map_derivation_eq _ _ _ hgen F
 
 theorem prolongation_iterate_totalDeriv (γ : ι → TimeFunction) (F : StandardJet ι) (k : ℕ) :
     prolongation γ (((jetRing ι).totalDeriv^[k]) F) =
