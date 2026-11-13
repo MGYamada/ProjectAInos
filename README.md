@@ -181,8 +181,10 @@ Section 5.1 has begun with smooth metric duality on the actual tangent and
 cotangent bundles: `flat`, `sharp`, smooth lowering/raising of sections, and
 their coordinate compatibility. Iterated hom bundles construct finite mixed
 tensor types; full/partial trace contraction and inverse-metric contraction
-are smooth and coordinate compatible. Tensor-field pullback along
-diffeomorphisms preserves smoothness and commutes with contraction.
+are smooth and coordinate compatible. Smooth tensor products, permutations of
+typed slots, and contraction of any selected tangent/cotangent pair use the
+same bundles. All three operations commute with diffeomorphism pullback, and
+the selected contraction has a basis–dual-basis component formula.
 Covariant tensors of every finite rank also pull back along arbitrary smooth
 maps, including dimension-changing maps and singular derivatives. Smoothness,
 identity/composition laws, constant-map vanishing in positive rank, and agreement

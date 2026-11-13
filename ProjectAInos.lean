@@ -267,6 +267,8 @@ public import ProjectAInos.SmoothGeometry.Tensor.CovariantDerivative
 public import ProjectAInos.SmoothGeometry.Tensor.CovariantPullback
 public import ProjectAInos.SmoothGeometry.Tensor.HomMap
 public import ProjectAInos.SmoothGeometry.Tensor.HomPullback
+public import ProjectAInos.SmoothGeometry.Tensor.Operations
+public import ProjectAInos.SmoothGeometry.Tensor.OperationsExamples
 public import ProjectAInos.SmoothGeometry.Tensor.Pullback
 public import ProjectAInos.SmoothGeometry.Tensor.Regularity
 public import ProjectAInos.SmoothGeometry.Tensor.Tensoriality

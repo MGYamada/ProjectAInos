@@ -31,7 +31,7 @@ import ProjectAInos.SmoothGeometry.Lorentzian.Restriction
 import ProjectAInos.SmoothGeometry.Lorentzian.VolumeExamples
 import ProjectAInos.SmoothGeometry.Lorentzian.HodgeExamples
 import ProjectAInos.SmoothGeometry.Lorentzian.HodgeCurvedExamples
-import ProjectAInos.SmoothGeometry.Tensor.Bundle
+import ProjectAInos.SmoothGeometry.Tensor.OperationsExamples
 import ProjectAInos.SmoothGeometry.ODE.VolterraExamples
 import ProjectAInos.SmoothGeometry.ODE.RadialExamples
 
@@ -1263,6 +1263,50 @@ example (n : ℕ) {a : P → M} {b : P → N} {p : P}
   contMDiffAt_covariantPullback I J K n ha hb L hL
 
 end CovariantPullback
+
+section TensorOperations
+
+open Tensor.Shape
+
+variable {E H M N : Type} [NormedAddCommGroup E] [NormedSpace ℝ E] [FiniteDimensional ℝ E]
+  [TopologicalSpace H] (I : ModelWithCorners ℝ E H)
+  [TopologicalSpace M] [ChartedSpace H M] [IsManifold I ∞ M]
+  [TopologicalSpace N] [ChartedSpace H N] [IsManifold I ∞ N]
+
+example (r s : ℕ) : slots (List.replicate r cotangent ++ List.replicate s .tangent) =
+    mixed r s := slots_mixed r s
+
+example (as bs : List Tensor.Shape) (T : ((slots as).bundle I (M := M)).Section I)
+    (U : ((slots bs).bundle I (M := M)).Section I) (x : M)
+    (v : Arguments I x as) (w : Arguments I x bs) :
+    evaluate I (as ++ bs) (tensorProductField I as bs T U x) (appendArguments I bs as v w) =
+      evaluate I as (T x) v * evaluate I bs (U x) w :=
+  evaluate_tensorProduct I as bs (T x) (U x) v w
+
+example (as : List Tensor.Shape) (T : ((slots (cotangent :: .tangent :: as)).bundle I
+    (M := M)).Section I) (x : M) (v : TangentSpace I x) (α : TangentSpace I x →L[ℝ] ℝ) :
+    SlotPermutation.tensorField I (.swap cotangent .tangent as) T x v α = T x α v :=
+  SlotPermutation.tensorMap_swap_apply I cotangent .tangent as (T x) α v
+
+example {as bs : List Tensor.Shape} (p : SlotPermutation as bs) (x : M)
+    (T : ((slots as).bundle I).Fiber x) :
+    p.symm.tensorMap I (p.tensorMap I T) = T := p.tensorMap_symm I T
+
+example {as bs : List Tensor.Shape} (p : SlotPermutation as (bs ++ [cotangent, .tangent]))
+    (f : M ≃ₘ⟮I, I⟯ N) (T : ((slots as).bundle I (M := N)).Section I) :
+    pullbackField I (slots bs) f (contractSlotsField I p T) =
+      contractSlotsField I p (pullbackField I (slots as) f T) :=
+  pullbackField_contractSlots I f p T
+
+example (f : C^∞⟮I, M; 𝓘(ℝ, ℝ), ℝ⟯)
+    (T U : (cotangent.bundle 𝓘(ℝ, ℝ) (M := ℝ)).Section 𝓘(ℝ, ℝ)) :
+    covariantPullbackField I 𝓘(ℝ, ℝ) 2 f
+        (tensorProductField 𝓘(ℝ, ℝ) [.tangent] [.tangent] T U) =
+      tensorProductField I [.tangent] [.tangent]
+        (covariantPullbackField I 𝓘(ℝ, ℝ) 1 f T) (covariantPullbackField I 𝓘(ℝ, ℝ) 1 f U) :=
+  covariantPullbackField_tensorProduct_one I 𝓘(ℝ, ℝ) f T U
+
+end TensorOperations
 
 section CovariantPullbackExamples
 

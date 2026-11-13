@@ -72,7 +72,13 @@ and agreement with the diffeomorphism API. Time-axis restriction, its degenerate
 points, a constant map, and a nonconstant singular projection are proved examples.
 Default-option typed examples fix the independent models and the main contracts.
 Exact SymPy checks additionally test nonlinear composition with a nonsymmetric
-tensor. General slot-permutation/tensor-product APIs remain subsequent work.
+tensor. Tensor products and typed slot permutations now use the same hom
+bundles. Testing on local smooth arguments proves regularity and gives
+pointwise evaluation formulas. Opposite-variance contraction moves the
+selected slots to the end and takes the trace of the cotangent endomorphism.
+A basis–dual-basis sum gives its components. Each operation commutes with
+diffeomorphism pullback, and the shear regression uses a nonsymmetric
+covector product to check the slot order.
 
 For the chart regression, the shear `(t,x) ↦ (t,x+t²)` and its inverse are
 proved smooth and turned into an actual chart in the maximal atlas.

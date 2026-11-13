@@ -109,7 +109,10 @@ tangent bundle, finite mixed tensor bundles with smooth contraction and
 field pullback along diffeomorphisms, covariant pullback along arbitrary smooth
 maps between possibly different dimensions, and a nonlinear two-chart Minkowski
 regression. Covariant pullback has proved smoothness, functoriality and singular-map
-examples; its induced tensor need not remain a Lorentz metric. Its
+examples; its induced tensor may be degenerate. Smooth products and slot
+permutations cover arbitrary mixed tensors. Contraction of a selected
+opposite-variance pair agrees with the coordinate index sum. All three
+operations commute with diffeomorphism pullback. The
 [API and proof map](smooth-geometry.md#gr-51-metric-duality-and-the-first-chart-regression)
 also records the Lorentz Levi-Civita construction: metric compatibility,
 vanishing torsion, uniqueness on differentiable sections, finite and smooth

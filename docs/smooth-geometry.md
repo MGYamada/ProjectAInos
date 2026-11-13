@@ -248,9 +248,30 @@ without asserting it is a Lorentz metric. The nonconstant singular projection
 `(t,x) ↦ (t,0)` retains the time coefficient and kills spatial slots. Constant-map
 pullback is also checked. Typed API examples use independent models and default
 elaborator options. Exact SymPy checks cover these examples and nonlinear,
-noninvertible composition with a nonsymmetric two-tensor. A full slot-permutation
-and tensor-product API remains subsequent work in
-[#52](https://github.com/MGYamada/ProjectAInos/issues/52).
+noninvertible composition with a nonsymmetric two-tensor.
+
+`Tensor/Operations.lean` uses `Shape.slots` to represent a tensor with a
+specified list of input types. The standard mixed shape lists cotangent slots
+first, then tangent slots. `tensorProductField` concatenates the slot lists and
+`evaluate_tensorProduct` identifies evaluation with the product of the two
+scalar evaluations. The fibre operation is bilinear. A `SlotPermutation` records
+adjacent exchanges and their compositions with typed input and output slots.
+`evaluate_tensorMap` gives the induced reordering of arguments, and
+`tensorMap_symm` proves the inverse law.
+
+`contractSlotsField` brings the selected cotangent and tangent slots to the end
+of the list and traces the induced cotangent endomorphism. The remaining
+arguments stay in the specified order. `evaluate_contractSlots_eq_sum` proves
+that the value is the sum over any tangent basis and its dual. Smoothness
+follows by testing on local smooth arguments. Tensor product, permutation and
+contraction commute with invertible tangent transport and diffeomorphism
+pullback, so their smooth local coefficients obey the same transition rule.
+
+`Tensor/OperationsExamples.lean` computes the nonsymmetric `dT ⊗ dX` product
+after the nonlinear shear and contracts the first and third slots of
+`∂ₓ ⊗ dt ⊗ dx` to obtain `dt`. The typed contracts include dimension-changing
+pullback of an elementary covariant product. Exact SymPy checks the nonlinear
+product and exchange laws and the mixed contraction in both charts.
 
 `Tensor/BundleOperations.lean` proves that fibrewise composition of smooth
 bundle homomorphisms is smooth: the intermediate coordinate maps cancel.
