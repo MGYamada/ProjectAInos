@@ -233,3 +233,19 @@ The velocity derivative of the added density is $\partial_q F$, so the momentum 
 **Interface decision.** `StandardJet.IsSolution L γ` is defined by the prolongation: it annihilates each `Eᵢ(L)`. With this definition the Euler–Lagrange ideal is annihilated by induction on the span, using `prolongation_totalDeriv` for the higher total derivatives, and `prolongation_eq_of_conserved` follows. For natural Lagrangians `isSolution_naturalLagrangian_iff` unfolds the definition to Newton's equations, so the hypothesis of `energy_eq_of_isSolution` is a differential equation and not a statement about ideals. Paths are smooth and defined on all of `ℝ`, which is what a morphism of C∞-rings out of the jet ring requires.
 
 **Proof status.** Proved, with uniform motion as a solution of the free equations. Two things are open. The real analytic model treats `C²` paths on a compact interval and defines solutions by stationarity of the action; no theorem relates `IsSolution` to `Mechanics.Stationary`. And a smooth path on an open interval, or one that leaves a region where the Lagrangian is defined, is not covered. [Prolongation](../ProjectAInos/Mechanics/Jet/Prolongation.lean)
+
+## M30. The mass is a central term, and the boost generator carries time as a parameter
+
+**Observation.** On the phase space of one particle, `{Kₐ, p_b} = m δₐ_b` for `K = m q − t p`: boosts and translations commute as vector fields, and their generators commute only up to the constant `m`. This is the central extension of the Galilei algebra, and it is visible only on the Hamiltonian side; the jet-ring statement `conserved_boost` shows the same constant as the total derivative that the boost adds to the Lagrangian. The phase space has no time coordinate (compare M16), so `t` is a real parameter of `K`. Conservation of the centre-of-mass integral is then two statements, `{K_t, H₀} = p` and `K_t − K_s = −(t − s) p`, which cancel. The bracket `{K, H₀} = p` needs `m ≠ 0`, the only place in the model files where a nonvanishing hypothesis is used, because it cancels `m · m⁻¹`.
+
+**Interface decision.** `Galilei.K m t` takes the time as an argument. The relations are stated for one particle in space, reusing `AngularMomentum.M` and `epsilon`. Definition 23's time-dependent systems, with `ḟ = ∂ₜf + {f, H}` on a phase space extended by time, are not introduced for this single use.
+
+**Proof status.** Proved for one particle. The Galilei algebra acting on the jet ring, several particles, and the invariance of the Euler–Lagrange ideal under finite boosts (the main target of the row for §3) are not formalized. [Galilei algebra](../ProjectAInos/Mechanics/Poisson/Galilei.lean)
+
+## M31. Homogeneity enters the virial identity as Euler's relation
+
+**Observation.** `{Σ qᵢ pᵢ, H} = Σᵢ pᵢ ∂H/∂pᵢ − Σᵢ qᵢ ∂H/∂qᵢ` holds for every Hamiltonian; it is the Leibniz rule and Hamilton's equations. Homogeneity of degree `k` is used only through Euler's relation `Σᵢ qᵢ ∂U/∂qᵢ = k U`, which is a statement about an element of the ring and needs no notion of a homogeneous function, no scaling action and no real powers. The potentials of interest in Landau–Lifshitz §10 include `r^k` with negative or fractional `k`, which are not elements of the free ring (M25).
+
+**Interface decision.** `PhaseSpace.virial` takes Euler's relation and independence of the momenta as hypotheses on `U`; the kinetic energy satisfies its own relation as a theorem. `virial_oscillator` shows that the hypotheses are satisfiable with `k = 2`.
+
+**Proof status.** Proved. The row for §10 stays *evidence*: scaling as a symmetry of the Euler–Lagrange ideal and the virial theorem for time averages are missing. [Virial identity](../ProjectAInos/Mechanics/Poisson/Virial.lean)

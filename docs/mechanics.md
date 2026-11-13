@@ -149,6 +149,21 @@ vertical unit vector `Γ` in the body frame, with `{Lᵢ, Lⱼ} = −εᵢⱼₖ
 `H = Σᵢ Lᵢ² / 2Iᵢ + k Γ · χ` these are `L × Ω + k Γ × χ` and `Γ × Ω`. `|Γ|²` and
 `L · Γ` are Casimirs.
 
+`Galilei` adds the boost generator `K = m q − t p` and the free Hamiltonian
+`H₀ = |p|² / 2m` of one particle. It proves `{Kₐ, p_b} = m δₐ_b`,
+`{Kₐ, K_b} = 0`, `{Mₐ, K_b} = εₐ_bc K_c`, `{Mₐ, H₀} = 0`, `{pₐ, H₀} = 0` and,
+for `m ≠ 0`, `{Kₐ, H₀} = pₐ`. The time `t` is a real parameter, and
+`K_sub_K` records `K_t − K_s = −(t − s) p`; together with `{K, H₀} = p` this
+is conservation of the centre-of-mass integral. A single statement
+`∂ₜK + {K, H₀} = 0` needs time-dependent Hamiltonian systems, which are not
+formalized.
+
+`PhaseSpace.dilation` is `Σᵢ qᵢ pᵢ`. For every Hamiltonian
+`{Σ qᵢ pᵢ, H} = Σᵢ pᵢ ∂H/∂pᵢ − Σᵢ qᵢ ∂H/∂qᵢ` (`canonical_dilation_bracket`).
+`virial` gives `{Σ qᵢ pᵢ, T + U} = 2T − kU` for the kinetic energy
+`T = Σᵢ pᵢ² / 2mᵢ` and a potential `U` of the positions with
+`Σᵢ qᵢ ∂U/∂qᵢ = k U`. `virial_oscillator` is the case `k = 2`.
+
 ## Proof map
 
 | Module | Main declarations |
@@ -168,6 +183,8 @@ vertical unit vector `Γ` in the body frame, with `{Lᵢ, Lⱼ} = −εᵢⱼₖ
 | [Poisson/Epsilon](../ProjectAInos/Mechanics/Poisson/Epsilon.lean) | `epsilon`, `epsilon_skew`, `sum_epsilon_mul` |
 | [Poisson/AngularMomentum](../ProjectAInos/Mechanics/Poisson/AngularMomentum.lean) | `M`, `canonical_M_q`, `canonical_M_p`, `canonical_M_M`, `canonical_M_dotProduct`, `isIntegral_M`, `isIntegral_M_sq`, `momentumMap`, `isPoissonHom_momentumMap` |
 | [Poisson/HeavyTop](../ProjectAInos/Mechanics/Poisson/HeavyTop.lean) | `PhaseSpace`, `L`, `Γ`, `poisson`, `poisson_bracket`, `poisson_L_bracket`, `poisson_Γ_bracket`, `hamiltonian`, `poisson_L_hamiltonian`, `poisson_Γ_hamiltonian`, `poisson_Γ_sq_left`, `poisson_L_dot_Γ_left` |
+| [Poisson/Galilei](../ProjectAInos/Mechanics/Poisson/Galilei.lean) | `K`, `freeHamiltonian`, `canonical_K_p`, `canonical_K_q`, `canonical_K_K`, `canonical_M_K`, `canonical_M_freeHamiltonian`, `canonical_p_freeHamiltonian`, `canonical_K_freeHamiltonian`, `K_sub_K` |
+| [Poisson/Virial](../ProjectAInos/Mechanics/Poisson/Virial.lean) | `dilation`, `canonical_dilation_bracket`, `canonical_dilation_bracket_add`, `kineticEnergy`, `virial`, `oscillatorPotential`, `virial_oscillator` |
 | [Examples](../ProjectAInos/Mechanics/Examples.lean) | Newton equation, stationary uniform free motion, rejection of accelerated free motion, endpoint-vanishing polynomial variation and its endpoint derivative, zero-length interval and zero-coordinate system |
 
 For `L = m v²/2 − V(q)`, `stationary_natural_iff` proves `m q'' = −V'(q)` on `(a,b)`. This algebraic equation remains valid at `m = 0`; dividing by the mass would require a separate nonzero premise.

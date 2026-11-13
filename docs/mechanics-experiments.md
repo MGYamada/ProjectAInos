@@ -74,7 +74,7 @@ The variables are three canonical coordinate pairs. Angular momentum supports §
 
 The homogeneous-power expressions are symbolic local identities on domains where the displayed potentials and derivatives are defined.
 
-E4a is now a Lean theorem, `AngularMomentum.canonical_M_M`, for all pairs of indices. `JetRing.conserved_boost` uses the infinitesimal form of E4f; the finite identity and E4b–e have no Lean counterpart.
+E4a is now a Lean theorem, `AngularMomentum.canonical_M_M`, for all pairs of indices. For one particle, E4b is `Galilei.canonical_K_p` and E4d is `Galilei.canonical_K_K`. E4c is proved as two statements, `Galilei.canonical_K_freeHamiltonian` and `Galilei.K_sub_K`, because time is a real parameter of the generator and not a coordinate of the phase space. The identity behind E4e is `PhaseSpace.virial`, with Euler's relation for the potential as a hypothesis; the potentials `r^k` and `x²y^(k−2)` of the experiment are not instantiated, and `r^k` is not an element of the free ring. `JetRing.conserved_boost` uses the infinitesimal form of E4f; the finite identity has no Lean counterpart.
 
 ## E5: Kepler and Rutherford identities
 
