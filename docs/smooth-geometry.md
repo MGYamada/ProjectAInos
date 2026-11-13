@@ -1254,7 +1254,31 @@ current API then proves `dJ=(div j) vol`, so closedness is equivalent to zero
 vector divergence. A directly computed Maxwell field has native vector source
 `-∂x`. SymPy also tests current contraction and nonzero divergence in curved
 mixed-coordinate metrics with either signature/orientation. The covariant
-Maxwell component bridge remains to be implemented.
+Maxwell sourced component bridge remains to be implemented.
+
+`Tensor/CovariantDerivative.lean` constructs the derivative of a smooth native
+covariant bilinear tensor using any tangent connection. The scalar Leibniz
+correction is tensorial in both input fields, so mathlib's `TensorialAt.mkHom₂`
+descends it to the actual fibres independently of local extensions. It is
+linear in all three slots and preserves antisymmetry. No native norm is added.
+`DifferentialForm/TwoForm.lean` curries native alternating two-forms into the
+existing hom bundle and proves smoothness through actual trivializations.
+
+`Lorentzian/TwoFormDerivative.lean` applies this construction to Levi-Civita,
+proves smoothness of the resulting three-covariant tensor and bundles it in
+`smoothTwoFormDerivative`. The last argument is the derivative direction.
+The public `twoFormCovariantComponent` puts that direction first, as in
+`∇ᵢFⱼₖ`, and its formula derives both negative Christoffel terms.
+`TwoFormExterior.lean` proves `dF(u,v,w) = ∇ᵤF(v,w) - ∇ᵥF(u,w) + ∇wF(u,v)`.
+Torsion-freeness cancels the connection corrections; actual chart recovery
+then proves equivalence with the cyclic component equation in every chart.
+
+`TwoFormExamples.lean` proves that `dt∧dx` on the curved conformal plane has
+`∇xFₜₓ = -4x` even though its coordinate coefficients are constant and `dF=0`.
+The physical examples also include a nonclosed two-form with cyclic sum `1`.
+Exact SymPy checks the nonlinear three-slot transition law and the cyclic
+identity in a curved four-dimensional metric. The sourced Maxwell component
+bridge and the controlled Newtonian limit remain outstanding.
 
 ## Scope and next stages
 

@@ -316,7 +316,10 @@ the equations. Pointwise Lorentz frames prove `⋆(j♭) = ιⱼ vol` with no fl
 or global-frame assumption. Chart differentiation proves `dJ = (div j) vol`,
 so current closedness is equivalent to vanishing covariant vector divergence.
 A time-dependent field has the proved nonzero vector source `j = -∂x`, fixing
-the physical sign. The covariant Maxwell component bridge remains to be implemented.
+the physical sign. Native two-form covariant differentiation is now constructed,
+smooth and independent of local extensions. Its chart formula has both
+Christoffel corrections; `dF = 0` is equivalent to the cyclic covariant component
+equation in every smooth chart. The sourced Maxwell component bridge remains.
 The [GR guide](docs/general-relativity.md)
 records the exact scope and typed contracts.
 The [shared geometry guide](docs/smooth-geometry.md)

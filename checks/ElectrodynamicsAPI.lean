@@ -120,3 +120,29 @@ example : Curved.source (minkowskiMetric .timeNegative 3) (OrientedAtlas.standar
     Curved.Examples.electric = Curved.Examples.negativeSpatial := Curved.Examples.electric_source
 
 end CurvedMaxwell
+
+section HomogeneousMaxwell
+
+open scoped Manifold ContDiff
+open DifferentialForm LorentzMetric
+variable {M : Type} [TopologicalSpace M] [ChartedSpace (MinkowskiModel 3) M]
+  [IsManifold 𝓘(ℝ, MinkowskiModel 3) ∞ M]
+  (g : LorentzMetric .timeNegative 3 M) (o : OrientedAtlas 4 M)
+
+example {F : Curved.Field (M := M)} {j : Curved.CurrentVector (M := M)}
+    (h : Curved.Maxwell g o F j) {e : OpenPartialHomeomorph M (MinkowskiModel 3)}
+    (he : e ∈ IsManifold.maximalAtlas 𝓘(ℝ, MinkowskiModel 3) ∞ M)
+    {x : M} (hx : x ∈ e.source) (i j k : Fin 4) :
+    g.twoFormCovariantComponent F e x i j k + g.twoFormCovariantComponent F e x j k i +
+      g.twoFormCovariantComponent F e x k i j = 0 := h.homogeneous_components g o he hx i j k
+
+example (x : Spacetime) :
+    (minkowskiMetric .timeNegative 3).twoFormDerivative Curved.Examples.magneticExcitation x
+        (Pi.single 2 1) (Pi.single 3 1) (Pi.single 0 1) +
+      (minkowskiMetric .timeNegative 3).twoFormDerivative Curved.Examples.magneticExcitation x
+        (Pi.single 3 1) (Pi.single 0 1) (Pi.single 2 1) +
+      (minkowskiMetric .timeNegative 3).twoFormDerivative Curved.Examples.magneticExcitation x
+        (Pi.single 0 1) (Pi.single 2 1) (Pi.single 3 1) = 1 :=
+  Curved.Examples.magneticExcitation_covariant_cyclic x
+
+end HomogeneousMaxwell

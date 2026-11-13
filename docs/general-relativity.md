@@ -308,6 +308,9 @@ closedness, orientation invariance and a nonzero-current example. Volume
 contraction and `dJ = (div j) vol` identify that closedness with vanishing
 covariant vector divergence. The
 [geometry guide](smooth-geometry.md) and [electrodynamics guide](electrodynamics.md)
-record these proofs. The covariant Maxwell component bridge (F), together with
+record these proofs. Two-form covariant differentiation now has proved
+tensoriality, smoothness and its two Christoffel corrections. The homogeneous
+Maxwell equation is equivalent to the cyclic covariant component equation in
+every smooth chart. The sourced Maxwell component bridge (F), together with
 the controlled time-dependent Newtonian motion/trajectory limit (G), remain. Einstein dynamics
 belongs to §5.2 and the Maxwell field action to §4.2 / #44.

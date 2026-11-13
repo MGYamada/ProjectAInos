@@ -10,6 +10,8 @@ import ProjectAInos.SmoothGeometry.DifferentialForm.NativeGluing
 import ProjectAInos.SmoothGeometry.DifferentialForm.NativeExteriorExamples
 import ProjectAInos.SmoothGeometry.DifferentialForm.NativeWedgeExamples
 import ProjectAInos.SmoothGeometry.DifferentialForm.InteriorDerivative
+import ProjectAInos.SmoothGeometry.DifferentialForm.TwoForm
+import ProjectAInos.SmoothGeometry.Tensor.CovariantDerivative
 
 /-! External API regressions: use the public definitions with default elaborator
 options, without unfolding morphism wrappers or adding local instances. -/
@@ -304,3 +306,26 @@ example {V : (Fin 4 → ℝ) → (Fin 4 → ℝ)} {x : Fin 4 → ℝ} (hV : Diff
   extDeriv_interior_volume_four hV
 
 end NativeInterior
+
+section NativeBilinearDerivative
+
+open scoped Manifold ContDiff
+variable {E H M : Type} [NormedAddCommGroup E] [NormedSpace ℝ E] [FiniteDimensional ℝ E]
+  [TopologicalSpace H] {I : ModelWithCorners ℝ E H}
+  [TopologicalSpace M] [ChartedSpace H M] [IsManifold I ∞ M]
+  (connection : CovariantDerivative I E (TangentSpace I (M := M)))
+  (B : Tensor.SmoothBilinear (I := I) (M := M))
+
+example {X Y : ∀ x : M, TangentSpace I x} {x : M}
+    (hX : MDifferentiableAt I (I.prod 𝓘(ℝ, E)) (T% X) x)
+    (hY : MDifferentiableAt I (I.prod 𝓘(ℝ, E)) (T% Y) x) (u : TangentSpace I x) :
+    Tensor.bilinearCovariantDerivative connection B x (X x) (Y x) u =
+      mvfderiv I (fun y => B y (X y) (Y y)) x u -
+        B x (connection X x u) (Y x) - B x (X x) (connection Y x u) :=
+  Tensor.bilinearCovariantDerivative_apply connection B hX hY u
+
+example (F : DifferentialForm.SmoothForm I M 2) (x : M) (v w : TangentSpace I x) :
+    DifferentialForm.smoothTwoFormBilinear F x v w = F x ![v, w] :=
+  DifferentialForm.smoothTwoFormBilinear_apply F x v w
+
+end NativeBilinearDerivative

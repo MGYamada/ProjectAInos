@@ -381,6 +381,57 @@ def verify_native_hodge():
                        - sp.Matrix([orientation * rho * divergence]))
 
 
+def verify_two_form_covariant():
+    """Check actual two-form derivatives and their nonlinear three-slot chart law."""
+    t, x, y, z = sp.symbols("t x y z", real=True)
+    big_t, big_x, big_y, big_z = sp.symbols("T X Y Z", real=True)
+    coordinates = (t, x, y, z)
+    original_coordinates = (big_t, big_x, big_y, big_z)
+    transform = sp.Matrix([t, x + t**2, y, z])
+    jacobian = transform.jacobian(coordinates)
+    substitution = dict(zip(original_coordinates, transform))
+    metric = sp.exp(2*big_y**2) * sp.diag(-1, 1, 1, 1)
+    form = sp.Matrix([
+        [0, big_t*big_y, big_x*big_z, big_t**2],
+        [-big_t*big_y, 0, big_y**2+big_z, big_t*big_x],
+        [-big_x*big_z, -big_y**2-big_z, 0, big_t*big_z],
+        [-big_t**2, -big_t*big_x, -big_t*big_z, 0]])
+
+    def derivative(field, gamma, coords):
+        n = len(coords)
+        return [sp.Matrix(n, n, lambda j, k: sp.simplify(
+            sp.diff(field[j, k], coords[i])
+            - sum(gamma[ell][i, j]*field[ell, k]
+                  + gamma[ell][i, k]*field[j, ell] for ell in range(n))))
+                for i in range(n)]
+
+    original = derivative(form, christoffel(metric, original_coordinates), original_coordinates)
+    pulled_metric = jacobian.T * metric.subs(substitution) * jacobian
+    pulled_form = jacobian.T * form.subs(substitution) * jacobian
+    actual = derivative(pulled_form, christoffel(pulled_metric, coordinates), coordinates)
+    for i in range(4):
+        check_zero("two-form derivative preserves antisymmetry", actual[i] + actual[i].T)
+        for j in range(4):
+            for k in range(4):
+                transformed = sum(jacobian[a, i]*jacobian[b, j]*jacobian[c, k]
+                                  * original[a][b, c].subs(substitution)
+                                  for a in range(4) for b in range(4) for c in range(4))
+                check_zero("native two-form derivative three-slot covariance",
+                           actual[i][j, k] - transformed)
+                exterior = (sp.diff(pulled_form[j, k], coordinates[i])
+                            + sp.diff(pulled_form[k, i], coordinates[j])
+                            + sp.diff(pulled_form[i, j], coordinates[k]))
+                check_zero("exterior derivative is cyclic covariant sum",
+                           actual[i][j, k] + actual[j][k, i] + actual[k][i, j] - exterior)
+    check_zero("nonclosed two-form has nonzero covariant cyclic sum",
+               (actual[0][2, 3] + actual[2][3, 0] + actual[3][0, 2]).subs(
+                   {t: 0, x: 1, y: 0, z: 1}) - 2)
+    plane_metric = sp.exp(2*x**2) * sp.diag(-1, 1)
+    area = sp.Matrix([[0, 1], [-1, 0]])
+    plane_derivative = derivative(area, christoffel(plane_metric, (t, x)), (t, x))
+    check_zero("closed coordinate area is not parallel", plane_derivative[1][0, 1] + 4*x)
+
+
 def verify_density_divergence():
     """Compare actual connection trace and density differentiation in curved charts."""
     t, x = sp.symbols("t x", real=True)
@@ -914,6 +965,7 @@ def verify():
     verify_native_forms()
     verify_volume_density()
     verify_native_hodge()
+    verify_two_form_covariant()
     verify_motion(metric, coordinates, gamma, jacobian)
     verify_parallel_coframe(coordinates, gamma, jacobian, shear)
 
@@ -1015,7 +1067,8 @@ def verify():
           "native alternating-form pullback, graded exterior calculus, "
           "volume density/orientation and divergence, Hodge local formulas, signs and squares, "
           "the time-dependent Maxwell current and constitutive sign, "
-          "and curved current/volume/divergence identities in both signatures and orientations.")
+          "curved current/volume/divergence identities in both signatures and orientations, "
+          "and native two-form covariant differentiation, nonlinear chart covariance and cyclic exterior identities.")
 
 
 def main():

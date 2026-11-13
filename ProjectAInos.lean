@@ -9,6 +9,8 @@ public import ProjectAInos.Electrodynamics.CurvedExamples
 public import ProjectAInos.Electrodynamics.Examples
 public import ProjectAInos.Electrodynamics.Field
 public import ProjectAInos.Electrodynamics.GaugeAction
+public import ProjectAInos.Electrodynamics.Homogeneous
+public import ProjectAInos.Electrodynamics.HomogeneousExamples
 public import ProjectAInos.Electrodynamics.Invariants
 public import ProjectAInos.Electrodynamics.LorentzForce
 public import ProjectAInos.Electrodynamics.ParticleAction
@@ -109,6 +111,7 @@ public import ProjectAInos.SmoothGeometry.DifferentialForm.NativeWedgeCalculus
 public import ProjectAInos.SmoothGeometry.DifferentialForm.NativeWedgeExamples
 public import ProjectAInos.SmoothGeometry.DifferentialForm.Naturality
 public import ProjectAInos.SmoothGeometry.DifferentialForm.OneForm
+public import ProjectAInos.SmoothGeometry.DifferentialForm.TwoForm
 public import ProjectAInos.SmoothGeometry.DifferentialForm.VolumeNormalization
 public import ProjectAInos.SmoothGeometry.DifferentialForm.WedgeAlgebra
 public import ProjectAInos.SmoothGeometry.Examples
@@ -179,6 +182,9 @@ public import ProjectAInos.SmoothGeometry.Lorentzian.Regularity
 public import ProjectAInos.SmoothGeometry.Lorentzian.Restriction
 public import ProjectAInos.SmoothGeometry.Lorentzian.Ricci
 public import ProjectAInos.SmoothGeometry.Lorentzian.Tensor
+public import ProjectAInos.SmoothGeometry.Lorentzian.TwoFormDerivative
+public import ProjectAInos.SmoothGeometry.Lorentzian.TwoFormExamples
+public import ProjectAInos.SmoothGeometry.Lorentzian.TwoFormExterior
 public import ProjectAInos.SmoothGeometry.Lorentzian.VariationTesting
 public import ProjectAInos.SmoothGeometry.Lorentzian.VolumeDensity
 public import ProjectAInos.SmoothGeometry.Lorentzian.VolumeExamples
@@ -235,6 +241,7 @@ public import ProjectAInos.SmoothGeometry.Tensor.Bilinear
 public import ProjectAInos.SmoothGeometry.Tensor.Bundle
 public import ProjectAInos.SmoothGeometry.Tensor.BundleOperations
 public import ProjectAInos.SmoothGeometry.Tensor.Contraction
+public import ProjectAInos.SmoothGeometry.Tensor.CovariantDerivative
 public import ProjectAInos.SmoothGeometry.Tensor.CovariantPullback
 public import ProjectAInos.SmoothGeometry.Tensor.HomMap
 public import ProjectAInos.SmoothGeometry.Tensor.HomPullback

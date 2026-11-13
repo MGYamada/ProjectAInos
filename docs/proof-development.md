@@ -579,6 +579,23 @@ equivalent to vanishing vector divergence. The sourced Maxwell equation alone
 therefore gives covariant current conservation. `CurrentExamples` proves the
 nonzero source vector `-∂x` and its divergence. Exact checks include curved
 mixed-coordinate metrics and nonzero current divergence in both signatures
-and orientations. The Maxwell covariant component bridge remains. The
+and orientations.
+
+`Tensor/CovariantDerivative` now applies the local tensoriality criterion to
+the Leibniz-corrected derivative of native bilinear tensors. `TwoForm` proves
+smooth currying from the alternating bundle without installing fibre norms.
+`TwoFormDerivative` derives both Christoffel corrections from the actual
+Levi-Civita connection and proves smoothness by testing on local smooth fields.
+Its packaged iterated-hom model retains the recursively constructed coordinate
+norms/topologies. `TwoFormExterior` uses actual chart coefficients and
+torsion-freeness to identify the exterior derivative with the alternating
+covariant sum. Basis extensionality proves the reverse implication from
+component equations; no coordinate transformation law is assumed.
+
+Lean examples include closed coordinate area with nonzero covariant derivative
+on the curved conformal plane and a nonclosed four-dimensional form with
+nonzero cyclic sum. Exact calculations test all three covariant slots under
+a nonlinear chart change in a curved metric. The sourced Maxwell component
+bridge remains. The
 [geometry guide](smooth-geometry.md) and
 [electrodynamics guide](electrodynamics.md) record this boundary.

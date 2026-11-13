@@ -9,6 +9,7 @@ import ProjectAInos.SmoothGeometry.Lorentzian.LocalizedVariation
 import ProjectAInos.SmoothGeometry.Lorentzian.Dual
 import ProjectAInos.SmoothGeometry.Lorentzian.DivergenceExamples
 import ProjectAInos.SmoothGeometry.Lorentzian.HodgeCurrent
+import ProjectAInos.SmoothGeometry.Lorentzian.TwoFormExamples
 import ProjectAInos.SmoothGeometry.Lorentzian.PullbackExamples
 import ProjectAInos.SmoothGeometry.Lorentzian.ChartExamples
 import ProjectAInos.SmoothGeometry.Lorentzian.ChartConnection
@@ -1720,3 +1721,47 @@ example {σ : LorentzConvention} {M : Type} [TopologicalSpace M]
     (v : TangentSpace 𝓘(ℝ, MinkowskiModel 3) x) :
     g.hodgeFiber o x (by decide : 1 + 3 = 3 + 1) (oneFormEquiv (g.flat x v)) =
       DifferentialForm.interior v (g.volumeForm o x) := g.hodge_flat_one o x v
+
+section CovariantTwoForms
+
+open DifferentialForm LorentzMetric
+variable {σ : LorentzConvention} {d : ℕ} {M : Type} [TopologicalSpace M]
+  [ChartedSpace (MinkowskiModel d) M] [IsManifold 𝓘(ℝ, MinkowskiModel d) ∞ M]
+  (g : LorentzMetric σ d M) (F : SmoothForm 𝓘(ℝ, MinkowskiModel d) M 2)
+
+example : (twoFormDerivativeBundle (d := d) (M := M)).Section 𝓘(ℝ, MinkowskiModel d) :=
+  g.smoothTwoFormDerivative F
+
+example (x : M) (u v w : TangentSpace 𝓘(ℝ, MinkowskiModel d) x) :
+    smoothExteriorDerivative F x ![u, v, w] =
+      g.twoFormDerivative F x v w u - g.twoFormDerivative F x u w v +
+        g.twoFormDerivative F x u v w := g.exteriorDerivative_eq_covariant F x u v w
+
+example : smoothExteriorDerivative F = 0 ↔
+    ∀ x (u v w : TangentSpace 𝓘(ℝ, MinkowskiModel d) x),
+      g.twoFormDerivative F x v w u + g.twoFormDerivative F x w u v +
+        g.twoFormDerivative F x u v w = 0 := g.exteriorDerivative_zero_iff_covariant F
+
+example {e : OpenPartialHomeomorph M (MinkowskiModel d)}
+    (he : e ∈ IsManifold.maximalAtlas 𝓘(ℝ, MinkowskiModel d) ∞ M)
+    {x : M} (hx : x ∈ e.source) (i j k : Fin (d + 1)) :
+    g.twoFormCovariantComponent F e x i j k =
+      mvfderiv 𝓘(ℝ, MinkowskiModel d) (fun y => twoFormComponent (fun z => F z) e y j k) x
+        (chartField e (Pi.single i 1) x) -
+      ∑ l, g.chartChristoffel e x l i j * twoFormComponent (fun z => F z) e x l k -
+      ∑ l, g.chartChristoffel e x l i k * twoFormComponent (fun z => F z) e x j l :=
+  g.twoFormCovariantComponent_eq F he hx i j k
+
+example : smoothExteriorDerivative F = 0 ↔
+    ∀ (e : OpenPartialHomeomorph M (MinkowskiModel d)),
+      e ∈ IsManifold.maximalAtlas 𝓘(ℝ, MinkowskiModel d) ∞ M →
+      ∀ x ∈ e.source, ∀ i j k : Fin (d + 1),
+        g.twoFormCovariantComponent F e x i j k + g.twoFormCovariantComponent F e x j k i +
+          g.twoFormCovariantComponent F e x k i j = 0 := g.exteriorDerivative_zero_iff_components F
+
+example (p : LorentzianConformalExample.Plane) :
+    LorentzianConformalExample.metric.twoFormDerivative LorentzianTwoFormExamples.coordinateArea p
+      (modelField (Pi.single 0 1) p) (modelField (Pi.single 1 1) p) (modelField (Pi.single 1 1) p) =
+        -4 * p 1 := LorentzianTwoFormExamples.conformal_area_derivative p
+
+end CovariantTwoForms

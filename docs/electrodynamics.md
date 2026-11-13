@@ -86,8 +86,26 @@ fix these premises and conclusions. Exact SymPy checks a curved four-dimensional
 metric with mixed coefficients, a vector field with nonzero divergence, both
 metric signatures and both orientations.
 
-The covariant Maxwell component equations remain pending in stage F. The
-Maxwell action and its variational derivation belong to §4.2 / #44.
+The shared `TwoFormDerivative` constructs the actual smooth covariant tensor,
+with `twoFormDerivative F x v w u = ∇ᵤF(v,w)`. Its two Christoffel corrections
+are derived from the Levi-Civita connection. `TwoFormExterior` proves that
+exterior differentiation is its alternating sum, using torsion-freeness, and
+proves both directions of the equivalence with the cyclic covariant component
+equation in every smooth chart. This holds in every dimension and either
+Lorentz signature, without an orientation or a global frame.
+
+`Homogeneous.lean` exposes `Maxwell.homogeneous_covariant` and
+`Maxwell.homogeneous_components` for the physical four-dimensional background.
+`HomogeneousExamples.lean` verifies the closed electric field and a nonclosed
+two-form whose cyclic sum is exactly `1`. A shared curved example has constant
+coordinate area but nonzero covariant derivative `-4x`, while remaining closed.
+Typed examples fix the connection formula, equivalences and physical premise.
+Exact SymPy checks all three tensor slots under a nonlinear chart change on a
+curved mixed-coordinate metric, as well as the nonzero cyclic sum.
+
+The sourced component equation `∇ᵢFⁱʲ = jʲ` and its equivalence with `dH = J`
+remain pending in stage F. The Maxwell action and its variational derivation
+belong to §4.2 / #44.
 
 ## Actual action and admissible variations
 
