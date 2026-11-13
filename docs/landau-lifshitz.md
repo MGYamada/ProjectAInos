@@ -217,8 +217,10 @@ positivity, and the native coordinate-time identity with its non-affine term.
 A nonstatic polynomial example has proved C² bounds. The native Lorentz metric
 and its physical-coordinate connection are constructed, with uniform inverse
 coefficient estimates and a uniform acceleration error of order `c⁻²`.
-Gronwall controls the phase error for solutions on a common interval. The
-common existence interval and trajectory limit remain in the work tracked by [#52](https://github.com/MGYamada/ProjectAInos/issues/52).
+The uniform relativistic Lipschitz bound, compact trajectory tube and
+Gronwall estimate give a common interval, uniform convergence and order
+`c⁻²` for suitably close initial data. Stage G awaits review and merge.
+[#52](https://github.com/MGYamada/ProjectAInos/issues/52)
 Einstein equations and their Newtonian field-equation limit remain in 5.2;
 the Maxwell field action remains in 4.2.
 

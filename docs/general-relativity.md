@@ -316,10 +316,10 @@ indices and the density formula are proved. The source defined by `dH` is now
 proved equal to this divergence on every oriented physical background. Both
 Maxwell equations are equivalent to the covariant component equations in every
 smooth chart. Stage F’s principal endpoints are implemented and await review;
-the controlled time-dependent Newtonian motion/trajectory limit (G) remains. Einstein dynamics
+stage G proves the controlled time-dependent Newtonian motion and trajectory limit. Einstein dynamics
 belongs to §5.2 and the Maxwell field action to §4.2 / #44.
 
-## Newtonian coordinate families — stage G in progress
+## Newtonian coordinate families and trajectory limits
 
 `NewtonianMetricFamily U` fixes a common open domain in physical coordinates
 `(t,x) : Fin 4 → ℝ`. Its potential and three correction families satisfy
@@ -397,7 +397,31 @@ bound at time `t` is `gronwallBound δ (max 1 K) (C/c²) (t-a)`. It uses
 the velocity bound and requires the segment between the two positions at
 each time to stay in `U`.
 
-**Remaining:** prove the uniform local Lipschitz bound for the relativistic
-field and establish a common finite existence interval using a compact
-tube away from the boundary. The final convergence and rate results will
-combine that existence theorem with the comparison estimate.
+The second derivative bound also controls differences of the relativistic
+field. `relativisticPhaseField_sub_le` uses the matrix inverse difference
+identity, the uniform inverse bounds and bounded velocities to give a
+Lipschitz constant independent of large `c`. It applies to pairs whose
+connecting coordinate segment stays in `U`.
+
+`exists_trajectory_tube` gives a common radius from compactness of the
+reference trajectory on the closed interval. `exists_relativistic_on_Icc`
+solves an auxiliary equation for the deviation, evaluating the field with
+each component of the deviation clipped to the tube radius. The auxiliary
+field is bounded and Lipschitz in the deviation on the whole interval.
+Picard–Lindelöf gives a solution, and the Gronwall bound keeps the deviation
+within the radius when the endpoint error budget fits. On this solution,
+clipping acts as the identity and the original relativistic equation holds.
+
+`exists_uniform_newtonian_limit` constructs trajectories on the reference
+interval for sufficiently large `c` and proves uniform position and
+velocity convergence as the initial phase points approach the Newtonian
+ones. `exists_newtonian_limit_with_rate` gives a uniform `C/c²` error
+from an initial bound `D/c²`. The Gronwall decomposition includes the
+zero-Lipschitz case, whose forcing factor is the elapsed time.
+
+For the polynomial family, `polynomial_trajectory_limit` uses the
+reference trajectory `x¹=-t³/6`, `v¹=-t²/2` on `[0,1]` with the
+other spatial coordinates zero. Lean verifies the reference equation and
+domain membership and proves convergence at order `c⁻²` for equal zero
+initial data. Exact SymPy checks the trajectory and both nonzero corrections
+along it. The stage G implementation awaits review and merge.

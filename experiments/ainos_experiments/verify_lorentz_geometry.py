@@ -958,6 +958,17 @@ def verify_newtonian_family():
         metric[0, i+1] = metric[i+1, 0] = eps*mixed[i]
         for j in range(3):
             metric[i+1, j+1] = int(i == j) + eps*spatial[i, j]
+    reference_position = sp.Matrix([-t**3/6, 0, 0])
+    reference_velocity = sp.Matrix([-t**2/2, 0, 0])
+    check_zero("polynomial Newtonian trajectory velocity",
+               reference_position.diff(t)-reference_velocity)
+    check_zero("polynomial Newtonian trajectory acceleration",
+               reference_velocity.diff(t)+sp.Matrix([sp.diff(phi, q) for q in coords[1:]]))
+    trajectory_metric = metric.subs(dict(zip(coords[1:], reference_position)))
+    check_zero("mixed correction along the nonstatic reference trajectory",
+               trajectory_metric[0, 1]+eps*t**4/6)
+    check_zero("spatial correction along the nonstatic reference trajectory",
+               trajectory_metric[1:, 1:]-(1+eps*t)*sp.eye(3))
     expected_norm = (-1/eps - 2*phi + eps*t**2 + 2*eps*(mixed.dot(v))
                      + v.dot(v) + eps*(v.dot(spatial*v)))
     check_zero("Newtonian family exact physical-time norm", (w.T*metric*w)[0]-expected_norm)

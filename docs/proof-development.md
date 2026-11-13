@@ -619,7 +619,7 @@ the independently computed Hodge/exterior and covariant-derivative sides in
 a curved nonlinear chart with all six field components varying.
 
 Stage F’s principal endpoints are implemented and await review. The controlled
-time-dependent Newtonian motion/trajectory limit remains in stage G. The
+time-dependent Newtonian motion and trajectory limit is proved in stage G. The
 [geometry guide](smooth-geometry.md) and [electrodynamics guide](electrodynamics.md)
 record the APIs and convention comparison.
 
@@ -653,5 +653,12 @@ Contracting with bounded physical-time velocities gives a uniform
 `O(c⁻²)` acceleration error. The potential Hessian bound gives the
 Newtonian phase-field Lipschitz estimate along contained segments. These
 results yield the Gronwall phase error on a common interval of existence.
-The uniform relativistic Lipschitz estimate and common existence interval
-for nearby initial data remain.
+The inverse difference identity and the coefficient Hessian bound give a
+uniform relativistic Lipschitz estimate on contained segments and bounded
+velocity ranges. A compact tube supplies a single radius for clipping the
+deviation in an auxiliary ODE. Boundedness and Lipschitz continuity give
+Picard–Lindelöf on the full interval. Gronwall keeps the solution inside the
+tube, where clipping is the identity. The resulting trajectories converge
+uniformly, with a rate from the two terms of the Gronwall bound including
+the zero-Lipschitz case. The polynomial example applies the result on
+`[0,1]` to a time-dependent potential with mixed and spatial corrections.

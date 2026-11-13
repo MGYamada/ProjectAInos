@@ -56,7 +56,11 @@ public import ProjectAInos.GeneralRelativity.ManifoldStationary
 public import ProjectAInos.GeneralRelativity.NewtonianAccelerationBounds
 public import ProjectAInos.GeneralRelativity.NewtonianBounds
 public import ProjectAInos.GeneralRelativity.NewtonianExamples
+public import ProjectAInos.GeneralRelativity.NewtonianExistence
 public import ProjectAInos.GeneralRelativity.NewtonianInverseBounds
+public import ProjectAInos.GeneralRelativity.NewtonianLimit
+public import ProjectAInos.GeneralRelativity.NewtonianLimitExamples
+public import ProjectAInos.GeneralRelativity.NewtonianLipschitz
 public import ProjectAInos.GeneralRelativity.NewtonianLorentz
 public import ProjectAInos.GeneralRelativity.NewtonianMetric
 public import ProjectAInos.GeneralRelativity.NewtonianTrajectoryComparison

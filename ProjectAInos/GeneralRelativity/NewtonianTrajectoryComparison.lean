@@ -48,7 +48,7 @@ theorem spatialGradient_sub_le {x y : E} (hseg : segment ℝ x y ⊆ U) :
   exact ((fderiv ℝ f.potential y - fderiv ℝ f.potential x).le_opNorm
     (Pi.single i.succ 1)).trans (by simpa [Pi.norm_single] using h)
 
-private theorem cons_sub_norm_le (t : ℝ) (x y : S) :
+theorem cons_sub_norm_le (t : ℝ) (x y : S) :
     ‖(Fin.cons t x : E) - Fin.cons t y‖ ≤ ‖x - y‖ := by
   apply (pi_norm_le_iff_of_nonneg (norm_nonneg _)).mpr
   intro i

@@ -732,3 +732,36 @@ example {c a b V δ : ℝ} (hc : 1 ≤ c) (hlarge : 24 * f.bound < c^2)
   f.phase_error_gronwall hc hlarge hV hz hw hz' hw' hseg hspeed hδ
 
 end NewtonianError
+
+section NewtonianTrajectoryLimit
+
+open NewtonianMetricFamily
+
+variable {U : TopologicalSpace.Opens NewtonianCoordinates} (f : NewtonianMetricFamily U)
+
+example {c t V : ℝ} (hc : 1 ≤ c) (hlarge : 24 * f.bound < c^2)
+    (z w : NewtonianSpace × NewtonianSpace) (hz : ‖z.2‖ ≤ V) (hw : ‖w.2‖ ≤ V)
+    (hseg : segment ℝ (Fin.cons t w.1 : NewtonianCoordinates) (Fin.cons t z.1) ⊆ U) :
+    ‖f.relativisticPhaseField c t z - f.relativisticPhaseField c t w‖ ≤
+      f.phaseLipschitzConstant V * ‖z - w‖ :=
+  f.relativisticPhaseField_sub_le hc hlarge t z w hz hw hseg
+
+example (δ η T : ℝ) : gronwallBound δ 0 η T = δ + η * T := by
+  rw [gronwallBound_split]
+  simp [gronwallForcingFactor]
+
+example {a b : ℝ} (hab : a ≤ b) (w : ℝ → NewtonianSpace × NewtonianSpace)
+    (hw : ∀ t ∈ Icc a b, HasDerivWithinAt w (f.newtonianPhaseField t (w t)) (Icc a b) t)
+    (hpos : ∀ t ∈ Icc a b, (Fin.cons t (w t).1 : NewtonianCoordinates) ∈ U)
+    (z₀ : ℝ → NewtonianSpace × NewtonianSpace) {D : ℝ} (hD : 0 ≤ D)
+    (hinit : ∀ᶠ c : ℝ in Filter.atTop, ‖z₀ c - w a‖ ≤ D/c^2) :
+    ∃ C ≥ (0 : ℝ), ∃ z : ℝ → ℝ → NewtonianSpace × NewtonianSpace,
+      TendstoUniformlyOn z w Filter.atTop (Icc a b) ∧
+      ∀ᶠ c : ℝ in Filter.atTop, z c a = z₀ c ∧
+        (∀ t ∈ Icc a b,
+          HasDerivWithinAt (z c) (f.relativisticPhaseField c t (z c t)) (Icc a b) t) ∧
+        (∀ t ∈ Icc a b, (Fin.cons t (z c t).1 : NewtonianCoordinates) ∈ U ∧
+          ‖z c t - w t‖ ≤ C/c^2) :=
+  f.exists_newtonian_limit_with_rate hab w hw hpos z₀ hD hinit
+
+end NewtonianTrajectoryLimit

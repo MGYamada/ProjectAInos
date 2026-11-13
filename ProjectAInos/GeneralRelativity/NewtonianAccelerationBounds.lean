@@ -22,7 +22,8 @@ local notation "E" => NewtonianCoordinates
 local notation "S" => NewtonianSpace
 variable {U : Opens E} (f : NewtonianMetricFamily U)
 
-private def coordinatePartial (g : E → ℝ) (q : E) (i : Fin 4) : ℝ :=
+/-- Derivative along a unit coordinate direction. -/
+def coordinatePartial (g : E → ℝ) (q : E) (i : Fin 4) : ℝ :=
   fderiv ℝ g q (Pi.single i 1)
 
 private def correction (c : ℝ) (q : E) : Fin 4 → Fin 4 → ℝ :=
@@ -105,7 +106,8 @@ private theorem coefficient_partial {c : ℝ} (hc : 1 ≤ c) (q : U) (i j k : Fi
       simp [coordinatePartial, timeIndicator, Fin.succ_ne_zero, correction,
         fderiv_const_mul (hh i j)]
 
-private def lowerChristoffel (c : ℝ) (q : E) (l i j : Fin 4) : ℝ :=
+/-- The Christoffel expression before raising the first index. -/
+def lowerChristoffel (c : ℝ) (q : E) (l i j : Fin 4) : ℝ :=
   (coordinatePartial (fun x => f.coefficient c x j l) q i +
    coordinatePartial (fun x => f.coefficient c x l i) q j -
    coordinatePartial (fun x => f.coefficient c x i j) q l) / 2
@@ -147,7 +149,7 @@ private theorem abs_leadingLower_le (q : U) (l i j : Fin 4) :
     linarith [(abs_le.mp (h 0)).1, (abs_le.mp (h 0)).2, (abs_le.mp (h i)).1, (abs_le.mp (h i)).2,
       (abs_le.mp (h j)).1, (abs_le.mp (h j)).2, (abs_le.mp (h l)).1, (abs_le.mp (h l)).2]
 
-private theorem abs_lowerChristoffel_le {c : ℝ} (hc : 1 ≤ c) (q : U) (l i j : Fin 4) :
+theorem abs_lowerChristoffel_le {c : ℝ} (hc : 1 ≤ c) (q : U) (l i j : Fin 4) :
     |f.lowerChristoffel c q l i j| ≤ 5 * f.bound := by
   have h := abs_sub_le (f.lowerChristoffel c q l i j) (f.leadingLower q l i j) 0
   simp only [sub_zero] at h

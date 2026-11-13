@@ -332,14 +332,17 @@ Lorentz metric and its coordinate connection are constructed.
 Uniform inverse bounds and coefficient derivatives give the uniform
 `O(c⁻²)` acceleration error. A Gronwall estimate controls position and velocity
 on a common interval where both solutions exist and their connecting segments
-stay in the domain. The relativistic Lipschitz estimate and the common
-existence interval for nearby initial data remain.
+stay in the domain. A uniform relativistic Lipschitz estimate and a compact tube about the
+Newtonian solution give a common finite interval for nearby initial data.
+Position and velocity converge uniformly, with order `c⁻²` for an initial
+error of that order. The time-dependent polynomial family exercises the
+trajectory theorem with mixed and spatial corrections.
 The [GR guide](docs/general-relativity.md)
 records the exact scope and typed contracts.
 The [shared geometry guide](docs/smooth-geometry.md)
 records the public API and exact checks. [Issue #52](https://github.com/MGYamada/ProjectAInos/issues/52)
-tracks review of the geometry, particle-variation and curved-form stages, and
-completion of the time-dependent Newton-limit stage.
+tracks review and merge of the geometry, particle variation, curved forms
+and time-dependent Newtonian limit.
 [#43](https://github.com/MGYamada/ProjectAInos/issues/43)
 is the first chart-regression gate. Einstein dynamics belongs to 5.2.
 

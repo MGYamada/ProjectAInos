@@ -922,8 +922,8 @@ Stage D's principal proof endpoints are implemented, pending review and
 merge. No global frame, global chart, analytic metric, Hausdorff premise or
 geodesic completeness is assumed or concluded. Stage E's principal particle-
 variation endpoints are now implemented; see the [GR guide](general-relativity.md).
-Curved exterior calculus/Maxwell and the Newtonian trajectory limit remain
-in stages F–G.
+The curved Maxwell and Newtonian trajectory theorems are implemented in
+stages F and G. See the [GR guide](general-relativity.md).
 
 The stage D checkpoint passed the warning-free full build (9,302 jobs), root-import
 check, all six API checks and the transitive audit of 7,309 declarations
@@ -1278,7 +1278,8 @@ then proves equivalence with the cyclic component equation in every chart.
 The physical examples also include a nonclosed two-form with cyclic sum `1`.
 Exact SymPy checks the nonlinear three-slot transition law and the cyclic
 identity in a curved four-dimensional metric. The sourced Maxwell component
-bridge is proved below; the controlled Newtonian limit remains outstanding.
+bridge is proved below. The controlled Newtonian limit is in the
+[GR guide](general-relativity.md#newtonian-coordinate-families-and-trajectory-limits).
 
 `TwoFormDivergence.lean` contracts the actual three-covariant derivative by
 `sharp` and trace, then raises the resulting covector to a smooth tangent
