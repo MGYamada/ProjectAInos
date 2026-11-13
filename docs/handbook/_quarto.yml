@@ -50,6 +50,10 @@ website:
           - electrodynamics.qmd
           - cinfty-general-relativity.qmd
           - general-relativity.qmd
+      - section: Quantum prototypes
+        contents:
+          - quantum-mechanics-prototype.qmd
+          - quantum-field-theory-prototype.qmd
       - build.qmd
 
 format:

@@ -1026,8 +1026,9 @@ the same nonlinear and dimension-changing examples and a variable two-form
 under nonlinear composition.
 
 Native exterior differentiation, wedge, volume density and oriented volume
-and smooth Hodge are described below. The curved Maxwell component bridge remains
-in #52. Maxwell action variation remains in §4.2/#44, and Einstein dynamics
+and smooth Hodge are described below. The curved Maxwell component bridge was
+delivered with #52 and is described in the [electrodynamics guide](electrodynamics.md).
+Maxwell action variation remains in §4.2/#44, and Einstein dynamics
 remains in §5.2.
 
 ### Exterior differentiation and chart independence
@@ -1160,8 +1161,8 @@ the existing native area form. An orientation-reversing rescaling has
 volume `-6` and density `6`. These interfaces have default-option typed
 examples in `checks/LorentzGeometryAPI.lean`. The exact SymPy runner also
 checks a nonlinear chart with nonconstant, negative Jacobian determinant.
-The density divergence formula remains to be implemented with the curved
-Maxwell bridge.
+The density divergence formula `divergence_density` is described under
+[Intrinsic divergence and the positive density](#intrinsic-divergence-and-the-positive-density).
 
 ### Native Lorentz Hodge
 

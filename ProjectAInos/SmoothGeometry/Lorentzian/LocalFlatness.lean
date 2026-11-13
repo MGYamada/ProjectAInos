@@ -12,7 +12,8 @@ public import ProjectAInos.SmoothGeometry.Manifold.OpenTangent
 /-! # Local Minkowski geometry and vanishing curvature
 
 The local coordinate definition of `IsLocallyMinkowski` implies zero native
-curvature. Its converse requires a flat parallel frame and local integration;
+curvature. Its converse uses a flat parallel frame and local integration and is
+proved as `isLocallyMinkowski_iff_curvature_eq_zero` in `LocalFlatnessConverse`;
 it is not inferred from pointwise inertial normalization.
 -/
 

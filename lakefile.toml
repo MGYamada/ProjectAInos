@@ -4,6 +4,11 @@ license = "Apache-2.0"
 licenseFiles = ["LICENSE", "NOTICE"]
 defaultTargets = ["ProjectAInos"]
 
+# An undeclared name in a statement must be an error, not a fresh implicit variable.
+[leanOptions]
+autoImplicit = false
+relaxedAutoImplicit = false
+
 [[require]]
 name = "mathlib"
 git = "https://github.com/leanprover-community/mathlib4.git"
