@@ -136,6 +136,7 @@ public import ProjectAInos.SmoothGeometry.DifferentialForm.VolumeNormalization
 public import ProjectAInos.SmoothGeometry.DifferentialForm.WedgeAlgebra
 public import ProjectAInos.SmoothGeometry.Examples
 public import ProjectAInos.SmoothGeometry.Gluing
+public import ProjectAInos.SmoothGeometry.GluingExample
 public import ProjectAInos.SmoothGeometry.Localization
 public import ProjectAInos.SmoothGeometry.LocallyRingedSpace
 public import ProjectAInos.SmoothGeometry.Lorentzian

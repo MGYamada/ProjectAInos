@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 module
 
-import ProjectAInos.SmoothGeometry.Gluing
+import ProjectAInos.SmoothGeometry.GluingExample
 import ProjectAInos.SmoothGeometry.DifferentialForm.NativeCoordinates
 import ProjectAInos.SmoothGeometry.DifferentialForm.NativeGluing
 import ProjectAInos.SmoothGeometry.DifferentialForm.NativeExteriorExamples
@@ -44,6 +44,27 @@ example (U : Opens X.carrier) (e : X ≅ Y) (f : Z ⟶ Y) :
     HasPullback (X.ofRestrict U.isOpenEmbedding ≫ e.hom) f := inferInstance
 
 end OpenImmersions
+
+section ConcreteGluing
+
+open GluingExample
+
+example : (overlapOpen : Set line).Nonempty := overlap_nonempty
+
+example (i : Bool) : overlapOpen < pieceOpen i := overlap_proper i
+
+example (i : datum.J) : Scheme.IsOpenImmersion (datum.ι i) := inferInstance
+
+example (i : datum.J) : datum.ι i ≫ toLine = pieceInclusion i := inclusion_toLine i
+
+example : Function.Surjective toLine.toSmoothLRSHom.base := toLine_surjective
+
+example : IsLimit
+    (PullbackCone.mk (overlapToPiece false) (overlapToPiece true)
+      ((overlapToPiece_comp false).trans (overlapToPiece_comp true).symm)) :=
+  overlapIsPullback
+
+end ConcreteGluing
 
 section LocallyRingedGluing
 

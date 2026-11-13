@@ -172,6 +172,22 @@ metric-independent flat calculus and the exterior-power comparison. The
 [Minkowski guide](special-relativity.md) describes the oriented Hodge operator
 and its use by `SpecialRelativity`; shared geometry does not import physics.
 
+## A two-piece gluing of the smooth affine line
+
+`SmoothGeometry/GluingExample.lean` constructs the open restrictions
+`x < 1` and `-1 < x` of the smooth affine line. Their intersection
+`-1 < x < 1` is nonempty and proper in both pieces. The overlap
+inclusions give a categorical pullback over the line. The off-diagonal
+transition is the identity on that overlap, and mathlib's two-piece
+gluing data construction supplies the diagonal maps and cocycle.
+
+The resulting `Scheme.GlueData` gives open-immersion inclusions into the
+glued scheme. Its compatible inclusions into the line descend to the
+surjective morphism `toLine`. Its restriction to each canonical inclusion
+recovers the original open inclusion, and its sheaf maps preserve every
+smooth operation. The public API check exercises these constructions on
+the populated datum.
+
 ## GR 5.1: metric duality and the first chart regression
 
 `Lorentzian/Dual.lean` constructs `LorentzMetric.flat` and `sharp` as
