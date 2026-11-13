@@ -4,6 +4,25 @@ open ProjectAInos.Thermodynamics
 open ProjectAInos.Thermodynamics.Physical
 open scoped NNReal
 
+section LogarithmicThermal
+
+open LogarithmicThermal
+
+example : family.Nontrivial := family_nontrivial
+
+example : family.admitted (join 1 1 1 1 one_pos one_pos).system ∧
+    ∃ x y : (join 1 1 1 1 one_pos one_pos).system.domain,
+      ¬ family.thermal ((join 1 1 1 1 one_pos one_pos).system.represent x)
+        ((join 1 1 1 1 one_pos one_pos).system.represent y) :=
+  joined_nonthermal
+
+example (n m : ℕ) (r s : ℝ) (hr : 0 < r) (hs : 0 < s)
+    (x : (system n r hr).domain) (y : (system m s hs).domain) :
+    (contact n m r s hr hs).Equilibrium x y ↔ x.val.1 / r = y.val.1 / s :=
+  equilibrium_iff n m r s hr hs x y
+
+end LogarithmicThermal
+
 #check Nonreactive.Generated.eval_le
 #check AtomicDomains.exchangeComparison_nonreactive
 #check AtomicDomains.exchangeComparison_atomicOnly

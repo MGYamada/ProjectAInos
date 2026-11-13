@@ -151,11 +151,25 @@ existence of a represented member state. Conditional comparison theorems
 retain their original hypotheses; they do not require nonvacuity when it is
 mathematically unnecessary.
 
-This model checks populated scaling, joining, support geometry and thermal
-equilibrium together. Its thermal relation is universal, so it exercises the
-universal-isotherm branch. A varying-temperature example remains separate. The
-[join assumption audit](thermodynamics-join-audit.md) records which geometric
-facts are explicit inputs in a general family and proved here for reservoirs.
+The [join assumption audit](thermodynamics-join-audit.md) records which
+geometric facts are inputs in a general family and proved here for reservoirs.
+
+## A populated family with distinct temperatures
+
+[LogarithmicThermalModel.lean](../ProjectAInos/Thermodynamics/LogarithmicThermalModel.lean)
+uses entropy $r\log(U/r)+\sum_i V_i$ on positive-energy domains with amount
+$r>0$ and at least one work coordinate. Accessibility orders entropy at fixed
+amount, with stability inherited from the sector model. The adiabats are
+exponential graphs over the work coordinates. Their supporting kernels are
+unique, their pressure is locally Lipschitz, and their graphs are path connected.
+
+Strict concavity of the logarithm gives a unique entropy-maximizing allocation
+at fixed total energy and work coordinates. The two components are in reversible
+thermal contact exactly when their energies per unit amount agree. This ratio
+is invariant under positive scaling. Changing one work coordinate at fixed
+energy supplies the strictly ordered states required by transversality. The
+joined system of two unit amounts has admitted states at temperatures one
+and two, and the populated family instantiates the physical calibrator theorem.
 
 ## Canonical atoms with genuine mixing
 
