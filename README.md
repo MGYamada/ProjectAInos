@@ -324,6 +324,12 @@ with both raised indices and the density formula `∇ᵢFⁱʲ = ρ⁻¹ ∂ᵢ(
 The source defined by `dH` is now proved equal to this native divergence.
 Both Maxwell equations are equivalent to their covariant component equations
 in every smooth chart. Stage F’s principal endpoints are implemented and await review.
+Stage G now has the full time-dependent coefficient-family contract, proved
+bounded-velocity negativity and spatial positivity, and the native
+coordinate-time equation including its non-affine correction. A polynomial
+family has proved C² bounds and nonzero time/mixed/spatial data. Construction
+of its native Lorentz metric and the uniform acceleration, common-interval
+and trajectory-convergence estimates remain.
 The [GR guide](docs/general-relativity.md)
 records the exact scope and typed contracts.
 The [shared geometry guide](docs/smooth-geometry.md)

@@ -211,8 +211,11 @@ The smooth native two-form divergence and its density expression are also
 proved, including the nonzero electric-source sign and a curved example.
 The general source from `dH` is now proved to equal the native two-form
 divergence, completing both Maxwell component equivalences in every chart.
-Stage F’s principal endpoints await review; the Newtonian motion limit remains
-in the work tracked by [#52](https://github.com/MGYamada/ProjectAInos/issues/52).
+Stage F’s principal endpoints await review. Stage G has the general
+coefficient-family contract, derived bounded-velocity negativity and spatial
+positivity, and the native coordinate-time identity with its non-affine term.
+A nonstatic polynomial example has proved C² bounds. The native Lorentz-metric
+construction, uniform estimates and trajectory limit remain in the work tracked by [#52](https://github.com/MGYamada/ProjectAInos/issues/52).
 Einstein equations and their Newtonian field-equation limit remain in 5.2;
 the Maxwell field action remains in 4.2.
 

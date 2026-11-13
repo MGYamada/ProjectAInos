@@ -318,3 +318,59 @@ Maxwell equations are equivalent to the covariant component equations in every
 smooth chart. Stage F’s principal endpoints are implemented and await review;
 the controlled time-dependent Newtonian motion/trajectory limit (G) remains. Einstein dynamics
 belongs to §5.2 and the Maxwell field action to §4.2 / #44.
+
+## Newtonian coordinate families — stage G in progress
+
+`NewtonianMetricFamily U` fixes a common open domain in physical coordinates
+`(t,x) : Fin 4 → ℝ`. Its potential and three correction families satisfy
+
+```text
+g_tt = -c² - 2 Φ + c⁻² A_c
+g_ti = c⁻² B_c,i
+g_ij = δ_ij + c⁻² H_c,ij
+```
+
+All coefficients may depend on time, `H_c` is symmetric, and each positive-`c`
+member is smooth on `U`. One constant bounds values and the first two ordinary
+spacetime derivatives for `c ≥ 1`. No differentiability in `c` is required.
+`CoordinateC2Bound` records the actual operator norms of those derivatives on
+the coordinate model; it does not assign norms to native tangent fibres.
+The domain can be an open buffer around the compact trajectory tube.
+
+`coefficient` and `form` construct the full symmetric coefficient matrix and
+smooth bilinear form. `form_timeVelocity` expands the exact norm of `(1,v)`.
+With coefficient bound `K` and `‖v‖ ≤ V`, the proved upper bound is
+
+```text
+g((1,v),(1,v)) ≤ -c² + 3 K + 6 K V + (3 + 9 K) V².
+```
+
+Consequently one sufficiently large-`c` tail makes this norm negative
+simultaneously at every point in `U` and every velocity in the prescribed
+range. `form_spatial_pos` proves positive definiteness on the spatial
+hyperplane when `c² > 9 K`. These are consequences of the coefficient data;
+Lorentz signature is not assumed in the family structure.
+
+For an existing native Lorentz metric in any smooth chart,
+`coordinateTimeAcceleration` is extracted from its actual connection as
+`-Γⁱ(w,w) + vⁱ Γᵗ(w,w)`, `w=(1,v)`. `tangential_iff_coordinateTime` proves
+that this ODE is equivalent to native acceleration being proportional to
+velocity when the chart's time coordinate equals the parameter locally.
+`coordinateTime_of_affine_reparam` derives it from a regular reparametrization
+of an affine geodesic. Smoothness is proved locally from the connection;
+no uniform Lipschitz bound is claimed by that local theorem.
+
+`NewtonianExamples.family` uses `Φ=t x¹`, `A=t²`, `B_i=t xⁱ` and
+`H_ij=t δ_ij` on the coordinate ball of radius two. Compactness of the closed
+ball supplies actual finite C² bounds. Lean checks the mixed/spatial sample
+coefficients and a nonzero time derivative of the potential. Exact SymPy
+checks the same norm and sample coefficients, the sample acceleration limit,
+and non-affine corrections in separate conformal and static calibrations.
+The rational sample limit is not a uniform bound or a trajectory theorem.
+
+**Remaining:** construct the actual Lorentz metric on the common open domain
+from the proved signature bounds; identify its connection with the coefficient
+formula; prove the uniform `O(c⁻²)` acceleration estimate and uniform local
+Lipschitz bound; establish a common finite existence interval using a compact
+tube away from the boundary; apply Gronwall and derive uniform convergence
+and the rate, including zero Lipschitz constant. This stage remains incomplete.

@@ -622,3 +622,24 @@ Stage F’s principal endpoints are implemented and await review. The controlled
 time-dependent Newtonian motion/trajectory limit remains in stage G. The
 [geometry guide](smooth-geometry.md) and [electrodynamics guide](electrodynamics.md)
 record the APIs and convention comparison.
+
+The first stage G increment defines `NewtonianMetricFamily` using smooth
+coefficient data on a common open physical-coordinate domain and uniform
+bounds through two spacetime derivatives. It preserves time dependence and
+all three correction types. Finite contractions give an explicit uniform
+upper bound for the norm of `(1,v)`, implying eventual negativity for bounded
+velocities. They also prove positivity on the spatial hyperplane. These
+properties are derived, not fields of the family structure.
+
+`CoordinateTime` works separately with the existing native Lorentz connection.
+The physical-clock germ fixes the first and second time derivatives. The time
+component then determines the tangential acceleration factor, proving both
+directions of the spatial ODE with its non-affine correction. A regular affine
+geodesic reparametrization implies that equation. Local smoothness follows
+from the actual connection. The polynomial family example has proved compact
+C² bounds and nonzero time/mixed/spatial data.
+
+The signature-to-native-metric construction and quantitative uniform
+acceleration, Lipschitz, existence and trajectory-convergence estimates remain.
+Typed contracts distinguish these outstanding claims from the proved local
+coordinate-time identity; exact symbolic examples do not discharge them.

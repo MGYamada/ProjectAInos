@@ -562,3 +562,85 @@ example {a b : ℝ} (hab : a < b) :
   VariationExamples.exponentialClock_not_native_quadratic_stationary hab
 
 end Examples
+
+section NewtonianFamily
+
+open NewtonianMetricFamily
+variable {U : TopologicalSpace.Opens NewtonianCoordinates} (f : NewtonianMetricFamily U)
+
+example {c : ℝ} (hc : 1 ≤ c) {q : NewtonianCoordinates} (hq : q ∈ U) :
+    ‖fderiv ℝ (fderiv ℝ (f.spatialCorrection c)) q‖ ≤ f.bound :=
+  (f.spatial_bound c hc).second q hq
+
+example (c : ℝ) (q : NewtonianCoordinates) (i j : Fin 3) :
+    f.coefficient c q i.succ j.succ =
+      (if i = j then 1 else 0) + (c ^ 2)⁻¹ * f.spatialCorrection c q i j :=
+  f.coefficient_spatial c q i j
+
+example {c : ℝ} (hc : 0 < c) {q : NewtonianCoordinates} (hq : q ∈ U) (i j : Fin 4) :
+    f.coefficient c q i j = f.coefficient c q j i := f.coefficient_symmetric hc hq i j
+
+example {c : ℝ} (hc : 0 < c) : ContDiffOn ℝ ∞ (f.form c) U := f.form_contDiffOn hc
+
+example {c : ℝ} (hc : 1 ≤ c) {q : NewtonianCoordinates} (hq : q ∈ U)
+    {v : NewtonianSpace} {V : ℝ} (hv : ‖v‖ ≤ V) (hV : 0 ≤ V) :
+    f.form c q (timeVelocity v) (timeVelocity v) ≤
+      -c ^ 2 + (3 * f.bound + 6 * f.bound * V + (3 + 9 * f.bound) * V ^ 2) :=
+  f.form_timeVelocity_le hc hq hv hV
+
+example {V : ℝ} (hV : 0 ≤ V) :
+    ∀ᶠ c in Filter.atTop, ∀ q ∈ U, ∀ v : NewtonianSpace, ‖v‖ ≤ V →
+      f.form c q (timeVelocity v) (timeVelocity v) < 0 :=
+  f.eventually_form_timeVelocity_neg hV
+
+example {c : ℝ} (hc : 1 ≤ c) {q : NewtonianCoordinates} (hq : q ∈ U)
+    (hlarge : 9 * f.bound < c ^ 2) {v : NewtonianSpace} (hv : v ≠ 0) :
+    0 < f.form c q (Fin.cons 0 v) (Fin.cons 0 v) := f.form_spatial_pos hc hq hlarge hv
+
+example : fderiv ℝ NewtonianExamples.family.potential NewtonianExamples.sample
+    (Pi.single 0 1) = 1 / 2 := NewtonianExamples.potential_time_derivative
+
+end NewtonianFamily
+
+section PhysicalTime
+
+variable {M : Type} [TopologicalSpace M] [ChartedSpace (MinkowskiModel 3) M]
+  [IsManifold 𝓘(ℝ, MinkowskiModel 3) ∞ M] (g : LorentzMetric .timeNegative 3 M)
+
+example (e : OpenPartialHomeomorph M NewtonianCoordinates) (q : NewtonianCoordinates)
+    (v : NewtonianSpace) (k : Fin 3) :
+    coordinateTimeAcceleration g e q v k =
+      -(∑ i : Fin 4, ∑ j : Fin 4, g.chartChristoffel e (e.symm q) k.succ i j *
+        NewtonianMetricFamily.timeVelocity v i * NewtonianMetricFamily.timeVelocity v j) +
+      v k * (∑ i : Fin 4, ∑ j : Fin 4, g.chartChristoffel e (e.symm q) 0 i j *
+        NewtonianMetricFamily.timeVelocity v i * NewtonianMetricFamily.timeVelocity v j) := rfl
+
+example {e : OpenPartialHomeomorph M NewtonianCoordinates}
+    (he : e ∈ IsManifold.maximalAtlas 𝓘(ℝ, MinkowskiModel 3) ∞ M)
+    {γ : ℝ → M} {t : ℝ} (hx : γ t ∈ e.source)
+    (hγ : ContMDiffAt 𝓘(ℝ) 𝓘(ℝ, MinkowskiModel 3) 2 γ t)
+    (hclock : (fun s => e (γ s) 0) =ᶠ[𝓝 t] id) :
+    (∃ a : ℝ, g.covariantAlong (curveVelocity γ) t = a • curveVelocity γ t) ↔
+      ∀ k : Fin 3, deriv (deriv (e ∘ γ)) t k.succ =
+        coordinateTimeAcceleration g e (e (γ t)) (fun j => deriv (e ∘ γ) t j.succ) k :=
+  tangential_iff_coordinateTime g he hx hγ hclock
+
+example {e : OpenPartialHomeomorph M NewtonianCoordinates}
+    (he : e ∈ IsManifold.maximalAtlas 𝓘(ℝ, MinkowskiModel 3) ∞ M)
+    {γ : ℝ → M} {r : ℝ → ℝ} {t : ℝ} (hx : γ (r t) ∈ e.source)
+    (hγ : ContMDiffAt 𝓘(ℝ) 𝓘(ℝ, MinkowskiModel 3) 2 γ (r t))
+    (hr : ContDiffAt ℝ 2 r t) (hn : deriv r t ≠ 0)
+    (hgeo : g.covariantAlong (curveVelocity γ) (r t) = 0)
+    (hclock : (fun s => e (γ (r s)) 0) =ᶠ[𝓝 t] id) :
+    ∀ k : Fin 3, deriv (deriv (e ∘ γ ∘ r)) t k.succ =
+      coordinateTimeAcceleration g e (e (γ (r t)))
+        (fun j => deriv (e ∘ γ ∘ r) t j.succ) k :=
+  coordinateTime_of_affine_reparam g he hx hγ hr hn hgeo hclock
+
+example {e : OpenPartialHomeomorph M NewtonianCoordinates}
+    (he : e ∈ IsManifold.maximalAtlas 𝓘(ℝ, MinkowskiModel 3) ∞ M)
+    {z : NewtonianCoordinates × NewtonianSpace} (hz : z.1 ∈ e.target) :
+    ContDiffAt ℝ ∞ (fun y : NewtonianCoordinates × NewtonianSpace =>
+      coordinateTimeAcceleration g e y.1 y.2) z := coordinateTimeAcceleration_contDiffAt g he hz
+
+end PhysicalTime
