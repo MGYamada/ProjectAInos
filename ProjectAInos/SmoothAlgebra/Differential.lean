@@ -5,6 +5,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 module
 
 public import ProjectAInos.SmoothAlgebra.Models
+public import ProjectAInos.SmoothAlgebra.PartialDerivative
 public import Mathlib.Analysis.Calculus.FDeriv.Prod
 import Mathlib.Tactic.NormNum
 
@@ -37,5 +38,10 @@ theorem directionalEvaluation_op (f : SmoothOperation m) (g : Fin m → SmoothOp
     (f.contMDiff.contDiff.differentiable (by norm_num)) _
   have h := hf.hasFDerivAt.comp x (hasFDerivAt_pi.mpr fun i => (hg i).hasFDerivAt)
   exact congrArg (fun D : (Fin n → ℝ) →L[ℝ] ℝ => D v) h.fderiv
+
+/-- Directional evaluation is the combination of the partial derivatives. -/
+theorem directionalEvaluation_eq_sum (x v : Fin n → ℝ) (g : SmoothOperation n) :
+    directionalEvaluation x v g = ∑ i, v i * partialDeriv i g x :=
+  fderiv_apply_eq_sum_partialDeriv g x v
 
 end ProjectAInos.SmoothAlgebra.SmoothOperation

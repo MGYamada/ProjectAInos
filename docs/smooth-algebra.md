@@ -11,8 +11,11 @@ quotients by smooth congruences; `LocalInverse` and `Localization` construct
 localization at real points and prove its C∞ universal property. The library
 also constructs free rings on arbitrary sets, general C∞ localizations,
 and limits. `SmoothFunctions` provides the smooth-function algebras on
-manifolds used by the geometric layer. The library root imports all these
-modules. This layer has no dependency on `Variational`,
+manifolds used by the geometric layer. `PartialDerivative`, `DualNumber` and
+`Derivation` add the differential algebra that starts the
+[mechanics plan](cinfty-mechanics.md): `Operations` → `PartialDerivative`, then
+`Models` and `PartialDerivative` → `DualNumber` → `Derivation`. The library root
+imports all these modules. This layer has no dependency on `Variational`,
 `Mechanics`, or a particular physical theory.
 
 ## Smooth operations and real-algebra compatibility
@@ -114,15 +117,62 @@ operations and proves their limiting property. The forgetful functor to
 commutative rings preserves these limits, so the geometric layer can pass
 between C∞-valued sheaves and their underlying ring-valued sheaves.
 
+## Partial derivatives, dual numbers, and derivations
+
+`SmoothOperation.partialDeriv i f` is the `i`-th partial derivative of a smooth
+operation, again a smooth operation of the same arity. The Fréchet derivative is
+recovered as `fderiv ℝ f x v = ∑ i, v i * partialDeriv i f x`. The chain rule
+`partialDeriv_comp` is an identity between operations, and `partialDeriv_comm`
+states that second partial derivatives commute. These are facts about the
+concrete operations and are proved from Mathlib's calculus.
+
+For every C∞-ring `A`, Mathlib's dual numbers `DualNumber A` (`A[ε]`) carry the
+smooth operations
+
+$$
+\Phi_f(c+\varepsilon b)=\Phi_f(c)+\varepsilon\sum_i\Phi_{\partial_i f}(c)\,b_i .
+$$
+
+The ring and real-algebra structures are Mathlib's. The substitution law of this
+`SmoothRing` instance is exactly `partialDeriv_comp`. The projection
+`DualNumber.fstHom` (setting `ε = 0`) and the zero section `DualNumber.inlHom`
+are morphisms of C∞-rings. `DualNumber.exp_inl_add_inr` checks a nonpolynomial
+operation: `exp (a + ε b) = exp a + ε (exp a · b)`.
+
+A `SmoothDerivation A M` is a map `d : A → M` into an `A`-module with the single
+law
+
+$$
+d\,\Phi_f(a_1,\dots,a_n)=\sum_i\Phi_{\partial_i f}(a_1,\dots,a_n)\cdot d a_i .
+$$
+
+Additivity, the Leibniz rule, vanishing on real constants and real linearity are
+theorems, so `toDerivation` gives Mathlib's `Derivation ℝ A M` whenever `M` has a
+compatible real action. `map_exp` is a consequence that an ordinary derivation of
+the underlying algebra need not satisfy. Derivations form a module over `A`.
+Vector fields `SmoothDerivation A A` are closed under the commutator and form a
+Lie ring; the proof uses `partialDeriv_comm`. `equivInfinitesimalAut` identifies
+them with the morphisms `A → A[ε]` that reduce to the identity at `ε = 0`.
+
+On the free ring `SmoothOperation n` the coordinate fields `partialDerivation i`
+are derivations, every derivation satisfies
+`d f = ∑ i, partialDeriv i f • d (proj i)`, and `equivCoordinates` identifies
+derivations into any module with `n`-tuples of values on the coordinates. The
+regression `lie_partialDerivation_proj_smul` proves `[∂ᵢ, xⱼ ∂ₖ] = δᵢⱼ ∂ₖ`, so
+the bracket is not trivial. This stage is tracked in [issue #74](https://github.com/MGYamada/ProjectAInos/issues/74).
+
 ## Proof map and verification
 
 | Module | Main checked results |
 | --- | --- |
 | [Operations](../ProjectAInos/SmoothAlgebra/Operations.lean) | `proj_comp`, `comp_proj`, `comp_assoc`, `exponential_addition` |
-| [Basic](../ProjectAInos/SmoothAlgebra/Basic.lean) | `op_const`, `op_add`, `op_mul`, `op_neg`, `op_sub`, `op_smul`, `exp_add` |
+| [Basic](../ProjectAInos/SmoothAlgebra/Basic.lean) | `op_const`, `op_add`, `op_mul`, `op_neg`, `op_sub`, `op_smul`, `op_sum`, `exp_add` |
 | [Hom](../ProjectAInos/SmoothAlgebra/Hom.lean) | `toAlgHom`, identity/composition laws, `map_exp` |
 | [Models](../ProjectAInos/SmoothAlgebra/Models.lean) | Real and function-ring instances; `hom_ext`, `lift_unique`, `existsUnique_lift`, `pullback_comp`, `eval_comp_pullback` |
-| [Differential](../ProjectAInos/SmoothAlgebra/Differential.lean) | `directionalEvaluation_op`, the chain rule for every finite smooth operation on the concrete model |
+| [Differential](../ProjectAInos/SmoothAlgebra/Differential.lean) | `directionalEvaluation_op`, the chain rule for every finite smooth operation on the concrete model; `directionalEvaluation_eq_sum` |
+| [PartialDerivative](../ProjectAInos/SmoothAlgebra/PartialDerivative.lean) | `partialDeriv`, `fderiv_apply_eq_sum_partialDeriv`, `partialDeriv_mul`, `partialDeriv_comp`, `partialDeriv_comm`, `partialDeriv_exponential` |
+| [DualNumber](../ProjectAInos/SmoothAlgebra/DualNumber.lean) | `SmoothRing (DualNumber A)`, `fst_op`, `snd_op`, `fstHom`, `inlHom`, `exp_inl_add_inr` |
+| [Derivation](../ProjectAInos/SmoothAlgebra/Derivation.lean) | `SmoothDerivation`, `map_mul`, `map_exp`, `toDerivation`, module and Lie-ring instances, `commutator_chain`, `equivInfinitesimalAut`, `equivCoordinates`, `lie_partialDerivation_proj_smul` |
 | [Category](../ProjectAInos/SmoothAlgebra/Category.lean) | `SmoothRingCat`, faithful forgetful functors, isomorphisms from bijective morphisms |
 | [Congruence](../ProjectAInos/SmoothAlgebra/Congruence.lean) | Smooth quotients, projection, factorization, generated smooth congruences |
 | [LocalInverse](../ProjectAInos/SmoothAlgebra/LocalInverse.lean) | `exists_localInverse`, a smooth inverse on the support of a cutoff |
@@ -145,6 +195,7 @@ lake exe cache get
 lake build --wfail ProjectAInos
 lake exe mk_all --check --lib ProjectAInos
 lake env lean -DwarningAsError=true checks/AxiomAudit.lean
+lake env lean -DwarningAsError=true checks/SmoothAlgebraAPI.lean
 lake env lean -DwarningAsError=true checks/SmoothGeometryAPI.lean
 git diff --check
 ```
@@ -153,8 +204,9 @@ The local audit inspects transitive axiom dependencies of every imported
 declaration in the `ProjectAInos` namespace. Its allowlist is `propext`,
 `Classical.choice`, and `Quot.sound`, matching the existing required Lean CI job.
 The required Lean CI job also checks the external smooth-geometry API,
-including open immersions and categorical gluing. No dependency change is
-needed.
+including open immersions and categorical gluing, and pins the differential
+part of this layer with typed examples in `checks/SmoothAlgebraAPI.lean`. No
+dependency change is needed.
 
 ## Ordinary differentials and further algebraic stages
 
@@ -165,8 +217,9 @@ functions. This connects smooth operations to the same ordinary calculus used
 for local jets and first variations in the [variational guide](variational.md).
 
 Smooth congruence quotients and general localizations now support the
-[C∞ scheme construction](smooth-geometry.md). Subsequent algebraic stages
-include quotients by arbitrary ordinary ideals and
-abstract smooth derivations satisfying the chain rule for every smooth
-operation. Cotangent and infinitesimal constructions require their own
-universal properties and comparison theorems with ordinary local jets.
+[C∞ scheme construction](smooth-geometry.md). Abstract smooth derivations
+satisfying the chain rule for every smooth operation, and the infinitesimal
+thickening `A[ε]`, are implemented as described above. Subsequent algebraic
+stages include quotients by arbitrary ordinary ideals, which need Hadamard's
+lemma, the universal cotangent module with its universal property, derivations
+along a morphism, and comparison theorems with ordinary local jets.

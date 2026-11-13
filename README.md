@@ -159,6 +159,11 @@ Stages 1–5 are implemented, including the spectrum functor, the category of
 C∞ schemes, affine schemes, global sections, affine spaces, and the empty
 scheme. The [smooth-geometry guide](docs/smooth-geometry.md) maps these
 constructions to mathlib and records the scope of stage 6.
+The algebra layer also has partial derivatives of smooth operations, the
+C∞-ring of dual numbers, and C∞-derivations with their commutator: the first
+algebraic stage of the [mechanics plan](docs/cinfty-mechanics.md), tracked in
+[#74](https://github.com/MGYamada/ProjectAInos/issues/74). The [smooth-algebra guide](docs/smooth-algebra.md) gives the
+statements.
 
 The parallel architecture does not identify the two theories: Joyce's points
 are real points, his local rings have residue field ℝ, and the canonical map
