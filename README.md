@@ -361,6 +361,11 @@ is the first chart-regression gate. Einstein dynamics belongs to 5.2.
 
 See the [proof development record](docs/proof-development.md) for the history of the Lean formalization.
 
+The [scalar smeared-field prototype](docs/quantum-field-theory-prototype.md)
+formalizes a common dense domain, operator closability, and positivity of
+finite vacuum words for the prospective QFT program in
+[#46](https://github.com/MGYamada/ProjectAInos/issues/46).
+
 The documentation index links to the guides and the build instructions for the HTML handbook and Lean API reference. [Documentation index](docs/README.md)
 
 ## License

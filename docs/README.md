@@ -18,6 +18,7 @@
 - [Shared algebra: C∞-rings and smooth operations](smooth-algebra.md)
 - [Shared variational foundation: first variation and Euler–Lagrange equations](variational.md)
 - [Shared variational formalization notes](variational-notes.md)
+- [Quantum field theory: scalar smeared-field prototype](quantum-field-theory-prototype.md)
 - [Building the HTML handbook and Lean API reference](build.md)
 
 The API reference is generated from the docstrings in the Lean library.
