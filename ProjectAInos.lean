@@ -5,9 +5,11 @@ public import ProjectAInos.Electrodynamics.Covariance
 public import ProjectAInos.Electrodynamics.Current
 public import ProjectAInos.Electrodynamics.CurrentExamples
 public import ProjectAInos.Electrodynamics.Curved
+public import ProjectAInos.Electrodynamics.CurvedComponents
 public import ProjectAInos.Electrodynamics.CurvedExamples
 public import ProjectAInos.Electrodynamics.DivergenceExamples
 public import ProjectAInos.Electrodynamics.Examples
+public import ProjectAInos.Electrodynamics.ExcitationChart
 public import ProjectAInos.Electrodynamics.Field
 public import ProjectAInos.Electrodynamics.GaugeAction
 public import ProjectAInos.Electrodynamics.Homogeneous
@@ -84,6 +86,7 @@ public import ProjectAInos.SmoothAlgebra.Models
 public import ProjectAInos.SmoothAlgebra.Operations
 public import ProjectAInos.SmoothAlgebra.SmoothFunctions
 public import ProjectAInos.SmoothGeometry.AffineScheme
+public import ProjectAInos.SmoothGeometry.DifferentialForm.BivectorVolume
 public import ProjectAInos.SmoothGeometry.DifferentialForm.Bundle
 public import ProjectAInos.SmoothGeometry.DifferentialForm.Calculus
 public import ProjectAInos.SmoothGeometry.DifferentialForm.Coordinates

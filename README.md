@@ -321,13 +321,15 @@ smooth and independent of local extensions. Its chart formula has both
 Christoffel corrections; `dF = 0` is equivalent to the cyclic covariant component
 equation in every smooth chart. The native two-form divergence is a smooth vector,
 with both raised indices and the density formula `∇ᵢFⁱʲ = ρ⁻¹ ∂ᵢ(ρ Fⁱʲ)` proved.
-The general identification of this vector with the source defined by `dH` remains.
+The source defined by `dH` is now proved equal to this native divergence.
+Both Maxwell equations are equivalent to their covariant component equations
+in every smooth chart. Stage F’s principal endpoints are implemented and await review.
 The [GR guide](docs/general-relativity.md)
 records the exact scope and typed contracts.
 The [shared geometry guide](docs/smooth-geometry.md)
 records the public API and exact checks. [Issue #52](https://github.com/MGYamada/ProjectAInos/issues/52)
-tracks review of the geometry and particle-variation stages, and completion of
-curved forms and the time-dependent Newton-limit stages;
+tracks review of the geometry, particle-variation and curved-form stages, and
+completion of the time-dependent Newton-limit stage.
 [#43](https://github.com/MGYamada/ProjectAInos/issues/43)
 is the first chart-regression gate. Einstein dynamics belongs to 5.2.
 

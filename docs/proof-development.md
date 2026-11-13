@@ -604,7 +604,21 @@ the two positive Christoffel corrections, and the vanishing symmetric/skew
 contraction. The resulting density formula is proved for every smooth chart.
 The conformal area example has nonzero divergence, and the physical electric
 example agrees exactly with its source from `dH`. Exact checks also verify
-the vector transformation law under the nonlinear change of chart. The
-general equivalence with the source defined by `dH` remains. The
-[geometry guide](smooth-geometry.md) and
-[electrodynamics guide](electrodynamics.md) record this boundary.
+the vector transformation law under the nonlinear change of chart.
+
+`BivectorVolume` proves the local coordinate identity for differentiating the
+volume dual of an antisymmetric coefficient matrix. `ExcitationChart` derives
+that matrix from the actual Hodge operator as `ρ Fⁱʲ`, with the oriented chart
+sign. `CurvedComponents` then uses local chart recovery, the density divergence
+formula and current-volume identification to prove `dH = currentForm (div F)`.
+No chart is assumed globally smooth. Both directions of the sourced equation
+and of the complete Maxwell component equations follow. The source is
+orientation independent; every native two-form divergence is conserved.
+Typed API contracts include the full component iff, and exact SymPy compares
+the independently computed Hodge/exterior and covariant-derivative sides in
+a curved nonlinear chart with all six field components varying.
+
+Stage F’s principal endpoints are implemented and await review. The controlled
+time-dependent Newtonian motion/trajectory limit remains in stage G. The
+[geometry guide](smooth-geometry.md) and [electrodynamics guide](electrodynamics.md)
+record the APIs and convention comparison.

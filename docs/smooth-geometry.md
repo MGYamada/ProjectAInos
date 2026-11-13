@@ -1254,7 +1254,7 @@ current API then proves `dJ=(div j) vol`, so closedness is equivalent to zero
 vector divergence. A directly computed Maxwell field has native vector source
 `-∂x`. SymPy also tests current contraction and nonzero divergence in curved
 mixed-coordinate metrics with either signature/orientation. The covariant
-Maxwell sourced component bridge remains to be implemented.
+Maxwell sourced component bridge is now proved in `Electrodynamics/CurvedComponents`.
 
 `Tensor/CovariantDerivative.lean` constructs the derivative of a smooth native
 covariant bilinear tensor using any tangent connection. The scalar Leibniz
@@ -1278,7 +1278,7 @@ then proves equivalence with the cyclic component equation in every chart.
 The physical examples also include a nonclosed two-form with cyclic sum `1`.
 Exact SymPy checks the nonlinear three-slot transition law and the cyclic
 identity in a curved four-dimensional metric. The sourced Maxwell component
-bridge and the controlled Newtonian limit remain outstanding.
+bridge is proved below; the controlled Newtonian limit remains outstanding.
 
 `TwoFormDivergence.lean` contracts the actual three-covariant derivative by
 `sharp` and trace, then raises the resulting covector to a smooth tangent
@@ -1297,7 +1297,16 @@ both signatures. No global frame, orientation or flatness is assumed.
 
 The curved conformal area example has divergence `(-4x exp(-4x²), 0)`. The
 physical electric example has divergence `-∂x`, equal to its `dH` source.
-The general equivalence between that source and two-form divergence remains.
+`DifferentialForm/BivectorVolume.lean` proves a metric-free four-dimensional
+coordinate-volume dual derivative formula under local differentiability and
+local antisymmetry. The physical layer applies this to the actual signed
+chart coefficients of the excitation. `Electrodynamics/CurvedComponents.lean`
+proves that its native derivative is the current form of `twoFormDivergence`.
+Consequently the source equals that divergence, both Maxwell equations are
+equivalent to their covariant component equations in every smooth chart, and
+the source vector is orientation independent and conserved. The shared
+geometry modules import no physics. See the [electrodynamics guide](electrodynamics.md#fixed-background-maxwell-forms)
+for exact assumptions and the textbook convention comparison.
 
 ## Scope and next stages
 

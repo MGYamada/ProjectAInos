@@ -380,6 +380,36 @@ def verify_native_hodge():
                        exterior_derivative(orientation * current, 3)
                        - sp.Matrix([orientation * rho * divergence]))
 
+    # Independently compare d(-star F) with star((div F).flat). All six
+    # components vary; the metric is curved and the chart has a nonlinear shear.
+    field_matrix = sp.Matrix([
+        [0, t*y, x*z, t**2],
+        [-t*y, 0, y**2+z, t*x],
+        [-x*z, -y**2-z, 0, t*z],
+        [-t**2, -t*x, -t*z, 0]])
+    field_coefficients = sp.Matrix([field_matrix[i, j] for i, j in two_basis])
+    covariant = [sp.Matrix(4, 4, lambda a, b: sp.simplify(
+        sp.diff(field_matrix[a, b], coords[i])
+        - sum(gamma[k][i, a]*field_matrix[k, b] + gamma[k][i, b]*field_matrix[a, k]
+              for k in range(4)))) for i in range(4)]
+    inverse = curved_four.inv()
+    source = sp.Matrix([sp.simplify(sum(
+        inverse[i, a]*inverse[j, b]*covariant[i][a, b]
+        for i in range(4) for a in range(4) for b in range(4))) for j in range(4)])
+    assert source.subs({t: 1, x: 1, y: 0, z: 1}) != sp.zeros(4, 1)
+    for orientation in (1, -1):
+        excitation = -orientation * hodge_matrix(curved_four, 2) * field_coefficients
+        actual_current = exterior_derivative(excitation, 2)
+        expected_current = orientation * hodge_matrix(curved_four, 1) * curved_four * source
+        check_zero("curved sourced Maxwell form/component bridge", actual_current-expected_current)
+        check_zero("curved sourced Maxwell current conservation", exterior_derivative(actual_current, 3))
+        recovered_source = (curved_four.inv() * orientation
+                            * hodge_matrix(curved_four, 3) * actual_current)
+        check_zero("source vector is independent of orientation", recovered_source-source)
+    source_divergence = sum(sp.diff(source[i], coords[i]) for i in range(4)) + sum(
+        gamma[i][i, j]*source[j] for i in range(4) for j in range(4))
+    check_zero("covariant two-form divergence is a conserved vector", source_divergence)
+
 
 def verify_two_form_covariant():
     """Check actual two-form derivatives and their nonlinear three-slot chart law."""

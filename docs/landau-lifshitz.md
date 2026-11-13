@@ -209,9 +209,10 @@ Native two-form covariant differentiation and the homogeneous Maxwell
 component equivalence are now proved, with curved and nonclosed examples.
 The smooth native two-form divergence and its density expression are also
 proved, including the nonzero electric-source sign and a curved example.
-The general identification with the source from `dH` and the
-Newtonian motion limit remain in the work
-tracked by [#52](https://github.com/MGYamada/ProjectAInos/issues/52).
+The general source from `dH` is now proved to equal the native two-form
+divergence, completing both Maxwell component equivalences in every chart.
+Stage F’s principal endpoints await review; the Newtonian motion limit remains
+in the work tracked by [#52](https://github.com/MGYamada/ProjectAInos/issues/52).
 Einstein equations and their Newtonian field-equation limit remain in 5.2;
 the Maxwell field action remains in 4.2.
 

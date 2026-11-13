@@ -150,3 +150,58 @@ end HomogeneousMaxwell
 example : (minkowskiMetric .timeNegative 3).twoFormDivergence Curved.Examples.electric =
     Curved.source (minkowskiMetric .timeNegative 3) (OrientedAtlas.standard 4)
       Curved.Examples.electric := Curved.Examples.electric_twoFormDivergence_eq_source
+
+section SourcedMaxwell
+
+open scoped Manifold ContDiff
+open DifferentialForm LorentzMetric
+variable {M : Type} [TopologicalSpace M] [ChartedSpace (MinkowskiModel 3) M]
+  [IsManifold 𝓘(ℝ, MinkowskiModel 3) ∞ M]
+  (g : LorentzMetric .timeNegative 3 M) (o : OrientedAtlas 4 M)
+
+example (F : Curved.Field (M := M)) :
+    smoothExteriorDerivative (Curved.excitation g o F) =
+      Curved.currentForm g o (g.twoFormDivergence F) := Curved.exteriorDerivative_excitation g o F
+
+example (F : Curved.Field (M := M)) (j : Curved.CurrentVector (M := M)) :
+    smoothExteriorDerivative (Curved.excitation g o F) = Curved.currentForm g o j ↔
+      g.twoFormDivergence F = j := Curved.sourced_iff_divergence g o F j
+
+example (F : Curved.Field (M := M)) (j : Curved.CurrentVector (M := M)) :
+    Curved.Maxwell g o F j ↔
+      (∀ x (u v w : TangentSpace 𝓘(ℝ, MinkowskiModel 3) x),
+        g.twoFormDerivative F x v w u + g.twoFormDerivative F x w u v +
+          g.twoFormDerivative F x u v w = 0) ∧ g.twoFormDivergence F = j :=
+  Curved.maxwell_iff_covariant g o F j
+
+example (F : Curved.Field (M := M)) (j : Curved.CurrentVector (M := M)) :
+    Curved.Maxwell g o F j ↔
+      (∀ (e : OpenPartialHomeomorph M (MinkowskiModel 3)),
+        e ∈ IsManifold.maximalAtlas 𝓘(ℝ, MinkowskiModel 3) ∞ M →
+        ∀ x ∈ e.source, ∀ i k l : Fin 4,
+          g.twoFormCovariantComponent F e x i k l +
+          g.twoFormCovariantComponent F e x k l i +
+          g.twoFormCovariantComponent F e x l i k = 0) ∧
+      (∀ (e : OpenPartialHomeomorph M (MinkowskiModel 3))
+          (he : e ∈ IsManifold.maximalAtlas 𝓘(ℝ, MinkowskiModel 3) ∞ M),
+        ∀ (x : M) (hx : x ∈ e.source), ∀ k : Fin 4,
+          (∑ b, ∑ a, ∑ i, g.twoFormCovariantComponent F e x i a b *
+            g.inverseComponent x (chartTangentEquiv he hx) a i *
+            g.inverseComponent x (chartTangentEquiv he hx) k b) =
+              chartTangentMap e x (j x) k) := Curved.maxwell_iff_components g o F j
+
+example (F : Curved.Field (M := M)) {e : OpenPartialHomeomorph M (MinkowskiModel 3)}
+    (he : e ∈ IsManifold.maximalAtlas 𝓘(ℝ, MinkowskiModel 3) ∞ M)
+    {x : M} (hx : x ∈ e.source) (j : Fin 4) :
+    chartTangentMap e x (Curved.source g o F x) j = (g.chartDensity e x)⁻¹ *
+      ∑ i, mvfderiv 𝓘(ℝ, MinkowskiModel 3)
+        (fun y => g.chartDensity e y * g.raisedTwoFormComponent F e y i j) x
+        (chartField e (Pi.single i 1) x) := Curved.source_density g o F he hx j
+
+example (F : Curved.Field (M := M)) :
+    Curved.source g o.reverse F = Curved.source g o F := Curved.source_reverse g o F
+
+example (F : Curved.Field (M := M)) (x : M) :
+    g.divergence (g.twoFormDivergence F) x = 0 := Curved.divergence_twoFormDivergence g o F x
+
+end SourcedMaxwell

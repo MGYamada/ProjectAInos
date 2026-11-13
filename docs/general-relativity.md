@@ -312,7 +312,9 @@ record these proofs. Two-form covariant differentiation now has proved
 tensoriality, smoothness and its two Christoffel corrections. The homogeneous
 Maxwell equation is equivalent to the cyclic covariant component equation in
 every smooth chart. Intrinsic two-form divergence, its smoothness, both raised
-indices and the density formula are proved. Identifying that vector with the
-source defined by `dH` for general backgrounds (F), together with
-the controlled time-dependent Newtonian motion/trajectory limit (G), remain. Einstein dynamics
+indices and the density formula are proved. The source defined by `dH` is now
+proved equal to this divergence on every oriented physical background. Both
+Maxwell equations are equivalent to the covariant component equations in every
+smooth chart. Stage F’s principal endpoints are implemented and await review;
+the controlled time-dependent Newtonian motion/trajectory limit (G) remains. Einstein dynamics
 belongs to §5.2 and the Maxwell field action to §4.2 / #44.

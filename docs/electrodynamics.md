@@ -119,9 +119,41 @@ Typed API checks fix the native smoothness, contraction, raising and density
 formulas. Exact SymPy checks the density identity and vector transformation in
 a curved mixed-coordinate metric, including overall metric-sign reversal.
 
-The general equivalence of `∇ᵢFⁱʲ = jʲ` with `dH = J` remains pending in
-stage F. The Maxwell action and its variational derivation
-belong to §4.2 / #44.
+`ExcitationChart.lean` identifies the actual excitation with the signed
+volume dual of `ρ Fⁱʲ`. The metric-free `BivectorVolume` derivative lemma
+requires only local differentiability and local antisymmetry. Applying it in
+an actual oriented chart proves, in `CurvedComponents.lean`,
+
+```text
+exteriorDerivative_excitation : dH = currentForm (twoFormDivergence F)
+source_eq_twoFormDivergence    : source F = twoFormDivergence F
+sourced_iff_divergence         : dH = currentForm j ↔ twoFormDivergence F = j
+maxwell_iff_components        : Maxwell F j ↔ both covariant chart equations
+```
+
+These are native smooth-section equalities, on any smooth four-dimensional
+`(-+++)` Lorentz manifold with an explicit oriented atlas. No global frame,
+flatness, global chart extension or homogeneous-field hypothesis is required
+for the sourced identity. `source_density` exposes the density formula in every
+smooth chart. `source_reverse` proves orientation independence of the source
+vector, and `divergence_twoFormDivergence` proves conservation for every field.
+Default-option typed contracts fix these hypotheses and both directions of
+the component equivalence. Exact SymPy independently compares `d(-⋆F)` with
+`⋆((∇ᵢFⁱʲ)♭)` for six varying components in a curved metric with a nonlinear
+shear, checking both orientations and vector-current conservation.
+
+The stage F principal endpoints are implemented and await review. The Maxwell
+action and its variational derivation belong to §4.2 / #44.
+
+The reference for local forms is [Tong, §3.2](https://davidtong.org/teaching/general-relativity/grhtml/S3).
+Our Hodge operator is fixed by `α ∧ ⋆β = ⟨α,β⟩ vol`. Compared with the
+output-index-first epsilon ordering written in his (3.97), moving the input
+indices first introduces `(-1)^(p*(n-p))`: the two-form signs agree in four
+dimensions, while odd-degree conversion needs care. His `J` in (3.114) denotes
+a one-form; our `J` is a three-form. The physical equations here use
+`H = -⋆F`, `J = ⋆(j♭)` and are calibrated by the proved example
+`F = t dt∧dx`, `j = -∂x`; current notation and epsilon ordering must therefore
+be converted before identifying textbook formulas.
 
 ## Actual action and admissible variations
 
