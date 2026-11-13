@@ -938,6 +938,88 @@ def verify_flat_frame_defect():
         raise AssertionError("curved defect regression requires nonzero curvature")
 
 
+
+def verify_newtonian_family():
+    """Physical-time correction and a nonstatic family, with exact rational checks.
+
+    These calibrate the scaling and signs. Uniform large-c estimates and
+    trajectory convergence remain Lean proof obligations.
+    """
+    t, x, y, z, eps = sp.symbols("t x y z eps", real=True)
+    coords = (t, x, y, z)
+    v = sp.Matrix(sp.symbols("v1 v2 v3", real=True))
+    w = sp.Matrix([1, *v])
+    phi = t*x
+    mixed = sp.Matrix([t*x, t*y, t*z])
+    spatial = t*sp.eye(3)
+    metric = sp.zeros(4)
+    metric[0, 0] = -1/eps - 2*phi + eps*t**2
+    for i in range(3):
+        metric[0, i+1] = metric[i+1, 0] = eps*mixed[i]
+        for j in range(3):
+            metric[i+1, j+1] = int(i == j) + eps*spatial[i, j]
+    reference_position = sp.Matrix([-t**3/6, 0, 0])
+    reference_velocity = sp.Matrix([-t**2/2, 0, 0])
+    check_zero("polynomial Newtonian trajectory velocity",
+               reference_position.diff(t)-reference_velocity)
+    check_zero("polynomial Newtonian trajectory acceleration",
+               reference_velocity.diff(t)+sp.Matrix([sp.diff(phi, q) for q in coords[1:]]))
+    trajectory_metric = metric.subs(dict(zip(coords[1:], reference_position)))
+    check_zero("mixed correction along the nonstatic reference trajectory",
+               trajectory_metric[0, 1]+eps*t**4/6)
+    check_zero("spatial correction along the nonstatic reference trajectory",
+               trajectory_metric[1:, 1:]-(1+eps*t)*sp.eye(3))
+    expected_norm = (-1/eps - 2*phi + eps*t**2 + 2*eps*(mixed.dot(v))
+                     + v.dot(v) + eps*(v.dot(spatial*v)))
+    check_zero("Newtonian family exact physical-time norm", (w.T*metric*w)[0]-expected_norm)
+    point = {t: sp.Rational(1, 2), x: sp.Rational(1, 2), y: 0, z: 0}
+    at_point = metric.subs(point)
+    check_zero("nonstatic sample coefficient contract", sp.Matrix([
+        at_point[0, 0] + 1/eps + sp.Rational(1, 2) - eps/4,
+        at_point[0, 1] - eps/4, at_point[1, 1] - 1 - eps/2]))
+    check_zero("nonstatic potential time derivative", sp.diff(phi, t).subs(point)-sp.Rational(1, 2))
+    inverse = at_point.inv()
+    row_scale = sp.diag(-eps, 1, 1, 1)
+    scaled_error = row_scale*at_point-sp.eye(4)
+    check_zero("inverse estimate column identity", inverse-row_scale+scaled_error*inverse)
+    check_zero("temporal inverse column leading coefficient",
+               (inverse[:, 0]/eps).applyfunc(sp.cancel).subs(eps, 0)
+               -sp.Matrix([-1, 0, 0, 0]))
+    check_zero("spatial inverse block leading correction",
+               ((inverse[1:, 1:]-sp.eye(3))/eps).applyfunc(sp.cancel).subs(eps, 0)
+               +sp.eye(3)/2)
+    derivatives = [metric.diff(q).subs(point) for q in coords]
+    gamma = [sp.Matrix(4, 4, lambda i, j: sp.factor(sum(
+        inverse[k, ell]*(derivatives[i][j, ell] + derivatives[j][ell, i]
+                         - derivatives[ell][i, j])/2 for ell in range(4)))) for k in range(4)]
+    acceleration = sp.Matrix([sp.factor(-(w.T*gamma[i+1]*w)[0]
+                                        + v[i]*(w.T*gamma[0]*w)[0]) for i in range(3)])
+    gradient = sp.Matrix([sp.diff(phi, q).subs(point) for q in coords[1:]])
+    for component in acceleration+gradient:
+        # Division by eps leaves a rational function regular at eps=0.
+        # This is only the specified-point example, not a uniform trajectory result.
+        quotient = sp.cancel(component/eps)
+        _, denominator = sp.fraction(quotient)
+        if sp.simplify(denominator.subs(eps, 0)) == 0:
+            raise AssertionError("Newtonian sample error is not O(c^-2)")
+        check_zero("sample Newtonian acceleration limit", sp.limit(component, eps, 0))
+    if sp.simplify((w.T*gamma[0]*w)[0].subs(dict(zip(v, [sp.Rational(1, 2), 0, 0])))) == 0:
+        raise AssertionError("non-affine correction regression must be nonzero")
+    # A separate curved calibration gives a simple, independently known answer.
+    conformal = sp.exp(2*t)*sp.diag(-1, 1, 1, 1)
+    conformal_gamma = christoffel(conformal, coords)
+    time_term = (w.T*conformal_gamma[0]*w)[0]
+    actual = sp.Matrix([-(w.T*conformal_gamma[i+1]*w)[0] + v[i]*time_term for i in range(3)])
+    check_zero("physical-time non-affine conformal acceleration", actual-v*(v.dot(v)-1))
+    check_zero("non-affine time-component term", time_term-1-v.dot(v))
+    static = sp.diag(-1/eps-2*x, 1, 1, 1)
+    static_gamma = christoffel(static, coords)
+    static_acceleration = sp.Matrix([-(w.T*static_gamma[i+1]*w)[0]
+        + v[i]*(w.T*static_gamma[0]*w)[0] for i in range(3)])
+    check_zero("static Newtonian calibration with coordinate-time correction",
+               static_acceleration-sp.Matrix([-1, 0, 0])-2*eps*v[0]/(1+2*eps*x)*v)
+
+
 def verify():
     verify_density_divergence()
     verify_volterra_solution()
@@ -1023,6 +1105,7 @@ def verify():
     verify_volume_density()
     verify_native_hodge()
     verify_two_form_covariant()
+    verify_newtonian_family()
     verify_motion(metric, coordinates, gamma, jacobian)
     verify_parallel_coframe(coordinates, gamma, jacobian, shear)
 
@@ -1125,7 +1208,8 @@ def verify():
           "volume density/orientation and divergence, Hodge local formulas, signs and squares, "
           "the time-dependent Maxwell current and constitutive sign, "
           "curved current/volume/divergence identities in both signatures and orientations, "
-          "and native two-form covariant differentiation, nonlinear chart covariance and cyclic exterior identities.")
+          "native two-form covariant differentiation, nonlinear chart covariance and cyclic exterior identities, "
+          "and nonstatic Newtonian coefficient/physical-time calibrations.")
 
 
 def main():

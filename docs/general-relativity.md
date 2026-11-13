@@ -316,5 +316,112 @@ indices and the density formula are proved. The source defined by `dH` is now
 proved equal to this divergence on every oriented physical background. Both
 Maxwell equations are equivalent to the covariant component equations in every
 smooth chart. Stage F’s principal endpoints are implemented and await review;
-the controlled time-dependent Newtonian motion/trajectory limit (G) remains. Einstein dynamics
+stage G proves the controlled time-dependent Newtonian motion and trajectory limit. Einstein dynamics
 belongs to §5.2 and the Maxwell field action to §4.2 / #44.
+
+## Newtonian coordinate families and trajectory limits
+
+`NewtonianMetricFamily U` fixes a common open domain in physical coordinates
+`(t,x) : Fin 4 → ℝ`. Its potential and three correction families satisfy
+
+```text
+g_tt = -c² - 2 Φ + c⁻² A_c
+g_ti = c⁻² B_c,i
+g_ij = δ_ij + c⁻² H_c,ij
+```
+
+All coefficients may depend on time, `H_c` is symmetric, and each positive-`c`
+member is smooth on `U`. One constant bounds values and the first two ordinary
+spacetime derivatives for `c ≥ 1`. No differentiability in `c` is required.
+`CoordinateC2Bound` records the actual operator norms of those derivatives on
+the coordinate model; it does not assign norms to native tangent fibres.
+The domain can be an open buffer around the compact trajectory tube.
+
+`coefficient` and `form` construct the full symmetric coefficient matrix and
+smooth bilinear form. `form_timeVelocity` expands the exact norm of `(1,v)`.
+With coefficient bound `K` and `‖v‖ ≤ V`, the proved upper bound is
+
+```text
+g((1,v),(1,v)) ≤ -c² + 3 K + 6 K V + (3 + 9 K) V².
+```
+
+Consequently one sufficiently large-`c` tail makes this norm negative
+simultaneously at every point in `U` and every velocity in the prescribed
+range. `form_spatial_pos` proves positive definiteness on the spatial
+hyperplane when `c² > 9 K`. Completing the square along the negative time line gives a positive form on
+its orthogonal complement. The resulting pointwise inertial frame proves
+Lorentz signature for `c ≥ 1` and `c² > 9 K`. The smooth coefficient form
+therefore defines `lorentzMetric` on the actual tangent bundle of `U`.
+`physicalChart` identifies the whole domain with its given open subset of
+physical coordinates. The native metric, its inverse and its Levi-Civita
+coefficients recover the ordinary matrix formulas in this chart.
+`timelike_timeVelocity` applies the velocity estimate to the native metric.
+
+For the stronger threshold `c² > 24 K`, multiplying the time row by
+`-c⁻²` gives a matrix within `12 K c⁻²` of the identity in the induced
+sup norm. The column equations give `|gⁱᵗ|, |gᵗʲ| ≤ 2 c⁻²` and
+`|gⁱʲ - δⁱʲ| ≤ 24 K c⁻²` for spatial `i,j` in the last bound.
+These estimates hold uniformly throughout the common open domain.
+
+For an existing native Lorentz metric in any smooth chart,
+`coordinateTimeAcceleration` is extracted from its actual connection as
+`-Γⁱ(w,w) + vⁱ Γᵗ(w,w)`, `w=(1,v)`. `tangential_iff_coordinateTime` proves
+that this ODE is equivalent to native acceleration being proportional to
+velocity when the chart's time coordinate equals the parameter locally.
+The family-level `acceleration` agrees with this native equation on `U`
+and is smooth in the position and velocity variables there.
+`coordinateTime_of_affine_reparam` derives it from a regular reparametrization
+of an affine geodesic. Smoothness is proved locally from the connection;
+no uniform Lipschitz bound is claimed by that local theorem.
+
+`NewtonianExamples.family` uses `Φ=t x¹`, `A=t²`, `B_i=t xⁱ` and
+`H_ij=t δ_ij` on the coordinate ball of radius two. Compactness of the closed
+ball supplies actual finite C² bounds. Lean checks the mixed/spatial sample
+coefficients and a nonzero time derivative of the potential. Exact SymPy
+checks the same norm and sample coefficients, the leading inverse blocks, the sample acceleration limit,
+and non-affine corrections in separate conformal and static calibrations.
+The rational sample limit is not a uniform bound or a trajectory theorem.
+
+The derivative of the time-time coefficient contributes the leading
+spatial gradient. `christoffel_spatial_error` and
+`christoffel_time_abs_le` bound the remaining terms, including time
+derivatives and the mixed and spatial corrections. For `c ≥ 1`, `c² > 24K`
+and `‖v‖ ≤ V`, `native_acceleration_error` bounds
+`‖a_c + ∇ₓΦ‖` by `accelerationErrorConstant V / c²` uniformly on `U`.
+
+On coordinate segments contained in `U`, the potential's second derivative
+gives a Lipschitz constant `max 1 K` for the Newtonian phase field at fixed
+time. `phase_error_gronwall` compares the position and velocity of two
+solutions already defined on `[a,b]`. For initial error at most `δ`, the
+bound at time `t` is `gronwallBound δ (max 1 K) (C/c²) (t-a)`. It uses
+the velocity bound and requires the segment between the two positions at
+each time to stay in `U`.
+
+The second derivative bound also controls differences of the relativistic
+field. `relativisticPhaseField_sub_le` uses the matrix inverse difference
+identity, the uniform inverse bounds and bounded velocities to give a
+Lipschitz constant independent of large `c`. It applies to pairs whose
+connecting coordinate segment stays in `U`.
+
+`exists_trajectory_tube` gives a common radius from compactness of the
+reference trajectory on the closed interval. `exists_relativistic_on_Icc`
+solves an auxiliary equation for the deviation, evaluating the field with
+each component of the deviation clipped to the tube radius. The auxiliary
+field is bounded and Lipschitz in the deviation on the whole interval.
+Picard–Lindelöf gives a solution, and the Gronwall bound keeps the deviation
+within the radius when the endpoint error budget fits. On this solution,
+clipping acts as the identity and the original relativistic equation holds.
+
+`exists_uniform_newtonian_limit` constructs trajectories on the reference
+interval for sufficiently large `c` and proves uniform position and
+velocity convergence as the initial phase points approach the Newtonian
+ones. `exists_newtonian_limit_with_rate` gives a uniform `C/c²` error
+from an initial bound `D/c²`. The Gronwall decomposition includes the
+zero-Lipschitz case, whose forcing factor is the elapsed time.
+
+For the polynomial family, `polynomial_trajectory_limit` uses the
+reference trajectory `x¹=-t³/6`, `v¹=-t²/2` on `[0,1]` with the
+other spatial coordinates zero. Lean verifies the reference equation and
+domain membership and proves convergence at order `c⁻²` for equal zero
+initial data. Exact SymPy checks the trajectory and both nonzero corrections
+along it. The stage G implementation awaits review and merge.

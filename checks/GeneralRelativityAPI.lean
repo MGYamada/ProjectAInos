@@ -562,3 +562,206 @@ example {a b : ℝ} (hab : a < b) :
   VariationExamples.exponentialClock_not_native_quadratic_stationary hab
 
 end Examples
+
+section NewtonianFamily
+
+open NewtonianMetricFamily
+variable {U : TopologicalSpace.Opens NewtonianCoordinates} (f : NewtonianMetricFamily U)
+
+example {c : ℝ} (hc : 1 ≤ c) {q : NewtonianCoordinates} (hq : q ∈ U) :
+    ‖fderiv ℝ (fderiv ℝ (f.spatialCorrection c)) q‖ ≤ f.bound :=
+  (f.spatial_bound c hc).second q hq
+
+example (c : ℝ) (q : NewtonianCoordinates) (i j : Fin 3) :
+    f.coefficient c q i.succ j.succ =
+      (if i = j then 1 else 0) + (c ^ 2)⁻¹ * f.spatialCorrection c q i j :=
+  f.coefficient_spatial c q i j
+
+example {c : ℝ} (hc : 0 < c) {q : NewtonianCoordinates} (hq : q ∈ U) (i j : Fin 4) :
+    f.coefficient c q i j = f.coefficient c q j i := f.coefficient_symmetric hc hq i j
+
+example {c : ℝ} (hc : 0 < c) : ContDiffOn ℝ ∞ (f.form c) U := f.form_contDiffOn hc
+
+example {c : ℝ} (hc : 1 ≤ c) {q : NewtonianCoordinates} (hq : q ∈ U)
+    {v : NewtonianSpace} {V : ℝ} (hv : ‖v‖ ≤ V) (hV : 0 ≤ V) :
+    f.form c q (timeVelocity v) (timeVelocity v) ≤
+      -c ^ 2 + (3 * f.bound + 6 * f.bound * V + (3 + 9 * f.bound) * V ^ 2) :=
+  f.form_timeVelocity_le hc hq hv hV
+
+example {V : ℝ} (hV : 0 ≤ V) :
+    ∀ᶠ c in Filter.atTop, ∀ q ∈ U, ∀ v : NewtonianSpace, ‖v‖ ≤ V →
+      f.form c q (timeVelocity v) (timeVelocity v) < 0 :=
+  f.eventually_form_timeVelocity_neg hV
+
+example {c : ℝ} (hc : 1 ≤ c) {q : NewtonianCoordinates} (hq : q ∈ U)
+    (hlarge : 9 * f.bound < c ^ 2) {v : NewtonianSpace} (hv : v ≠ 0) :
+    0 < f.form c q (Fin.cons 0 v) (Fin.cons 0 v) := f.form_spatial_pos hc hq hlarge hv
+
+example : fderiv ℝ NewtonianExamples.family.potential NewtonianExamples.sample
+    (Pi.single 0 1) = 1 / 2 := NewtonianExamples.potential_time_derivative
+
+end NewtonianFamily
+
+section PhysicalTime
+
+variable {M : Type} [TopologicalSpace M] [ChartedSpace (MinkowskiModel 3) M]
+  [IsManifold 𝓘(ℝ, MinkowskiModel 3) ∞ M] (g : LorentzMetric .timeNegative 3 M)
+
+example (e : OpenPartialHomeomorph M NewtonianCoordinates) (q : NewtonianCoordinates)
+    (v : NewtonianSpace) (k : Fin 3) :
+    coordinateTimeAcceleration g e q v k =
+      -(∑ i : Fin 4, ∑ j : Fin 4, g.chartChristoffel e (e.symm q) k.succ i j *
+        NewtonianMetricFamily.timeVelocity v i * NewtonianMetricFamily.timeVelocity v j) +
+      v k * (∑ i : Fin 4, ∑ j : Fin 4, g.chartChristoffel e (e.symm q) 0 i j *
+        NewtonianMetricFamily.timeVelocity v i * NewtonianMetricFamily.timeVelocity v j) := rfl
+
+example {e : OpenPartialHomeomorph M NewtonianCoordinates}
+    (he : e ∈ IsManifold.maximalAtlas 𝓘(ℝ, MinkowskiModel 3) ∞ M)
+    {γ : ℝ → M} {t : ℝ} (hx : γ t ∈ e.source)
+    (hγ : ContMDiffAt 𝓘(ℝ) 𝓘(ℝ, MinkowskiModel 3) 2 γ t)
+    (hclock : (fun s => e (γ s) 0) =ᶠ[𝓝 t] id) :
+    (∃ a : ℝ, g.covariantAlong (curveVelocity γ) t = a • curveVelocity γ t) ↔
+      ∀ k : Fin 3, deriv (deriv (e ∘ γ)) t k.succ =
+        coordinateTimeAcceleration g e (e (γ t)) (fun j => deriv (e ∘ γ) t j.succ) k :=
+  tangential_iff_coordinateTime g he hx hγ hclock
+
+example {e : OpenPartialHomeomorph M NewtonianCoordinates}
+    (he : e ∈ IsManifold.maximalAtlas 𝓘(ℝ, MinkowskiModel 3) ∞ M)
+    {γ : ℝ → M} {r : ℝ → ℝ} {t : ℝ} (hx : γ (r t) ∈ e.source)
+    (hγ : ContMDiffAt 𝓘(ℝ) 𝓘(ℝ, MinkowskiModel 3) 2 γ (r t))
+    (hr : ContDiffAt ℝ 2 r t) (hn : deriv r t ≠ 0)
+    (hgeo : g.covariantAlong (curveVelocity γ) (r t) = 0)
+    (hclock : (fun s => e (γ (r s)) 0) =ᶠ[𝓝 t] id) :
+    ∀ k : Fin 3, deriv (deriv (e ∘ γ ∘ r)) t k.succ =
+      coordinateTimeAcceleration g e (e (γ (r t)))
+        (fun j => deriv (e ∘ γ ∘ r) t j.succ) k :=
+  coordinateTime_of_affine_reparam g he hx hγ hr hn hgeo hclock
+
+example {e : OpenPartialHomeomorph M NewtonianCoordinates}
+    (he : e ∈ IsManifold.maximalAtlas 𝓘(ℝ, MinkowskiModel 3) ∞ M)
+    {z : NewtonianCoordinates × NewtonianSpace} (hz : z.1 ∈ e.target) :
+    ContDiffAt ℝ ∞ (fun y : NewtonianCoordinates × NewtonianSpace =>
+      coordinateTimeAcceleration g e y.1 y.2) z := coordinateTimeAcceleration_contDiffAt g he hz
+
+end PhysicalTime
+
+section NewtonianNativeMetric
+
+open NewtonianMetricFamily
+
+variable {U : TopologicalSpace.Opens NewtonianCoordinates} (f : NewtonianMetricFamily U)
+  {c : ℝ} (hc : 1 ≤ c) (hlarge : 9 * f.bound < c^2)
+
+example (q : U) :
+    ∃ e : NewtonianCoordinates ≃L[ℝ] NewtonianCoordinates,
+      ∀ v w, f.form c q v w = minkowskiForm .timeNegative 3 (e v) (e w) :=
+  f.form_signature hc hlarge q
+
+example (x q : U) (i j : Fin 4) :
+    (f.lorentzMetric c hc hlarge).chartComponent (physicalChart x) q i j =
+      f.coefficient c q i j :=
+  f.lorentzMetric_component hc hlarge x q i j
+
+example (x q : U) (k i j : Fin 4) :
+    (f.lorentzMetric c hc hlarge).chartChristoffel (physicalChart x) q k i j =
+      ∑ l, (f.coefficient c q)⁻¹ k l *
+        (fderiv ℝ (fun z => f.coefficient c z j l) q (Pi.single i 1) +
+         fderiv ℝ (fun z => f.coefficient c z l i) q (Pi.single j 1) -
+         fderiv ℝ (fun z => f.coefficient c z i j) q (Pi.single l 1)) / 2 :=
+  f.lorentzMetric_christoffel hc hlarge x q k i j
+
+example (x q : U) (v : NewtonianSpace) :
+    f.acceleration c q v =
+      coordinateTimeAcceleration (f.lorentzMetric c hc hlarge) (physicalChart x) q v :=
+  f.acceleration_eq_native hc hlarge x q v
+
+example (q : U) {V : ℝ} (hV : 0 ≤ V) (v : NewtonianSpace) (hv : ‖v‖ ≤ V)
+    (hspeed : f.timelikeThreshold V < c^2) :
+    Timelike (f.lorentzMetric c hc hlarge) (x := q) (timeVelocity v) :=
+  f.timelike_timeVelocity hc hlarge q hV hv hspeed
+
+example (hc : 1 ≤ c) (hlarge : 24 * f.bound < c^2) (q : U) :
+    (∀ i : Fin 4, |(f.coefficient c q)⁻¹ i 0| ≤ 2 * epsilon c) ∧
+    (∀ j : Fin 4, |(f.coefficient c q)⁻¹ 0 j| ≤ 2 * epsilon c) ∧
+    (∀ i j : Fin 3,
+      |(f.coefficient c q)⁻¹ i.succ j.succ - (if i = j then 1 else 0)| ≤
+        24 * f.bound * epsilon c) :=
+  f.inverseComponent_bounds hc hlarge q
+
+example {c : ℝ} (hc : NewtonianExamples.family.lorentzThreshold ≤ c) :
+    let q : NewtonianExamples.domain := ⟨NewtonianExamples.sample, NewtonianExamples.sample_mem⟩
+    let g := NewtonianExamples.family.lorentzMetric c
+      (NewtonianExamples.family.one_le_of_lorentzThreshold_le hc)
+      (NewtonianExamples.family.spatialBound_lt_sq_of_lorentzThreshold_le hc)
+    g.chartComponent (physicalChart q) q 0 1 = epsilon c / 4 := by
+  dsimp
+  rw [NewtonianExamples.family.lorentzMetric_component]
+  exact (NewtonianExamples.sample_coefficients c).2.1
+
+end NewtonianNativeMetric
+
+section NewtonianError
+
+open NewtonianMetricFamily
+
+variable {U : TopologicalSpace.Opens NewtonianCoordinates} (f : NewtonianMetricFamily U)
+
+example {V : ℝ} (hV : 0 ≤ V) :
+    ∀ᶠ c : ℝ in Filter.atTop, ∀ q : U, ∀ v : NewtonianSpace, ‖v‖ ≤ V →
+      ‖f.acceleration c q v + f.spatialGradient q‖ ≤ f.accelerationErrorConstant V / c^2 :=
+  f.eventually_acceleration_error hV
+
+example {c V : ℝ} (hc : 1 ≤ c) (hlarge : 24 * f.bound < c^2)
+    (x q : U) (hV : 0 ≤ V) {v : NewtonianSpace} (hv : ‖v‖ ≤ V) :
+    ‖coordinateTimeAcceleration (f.lorentzMetric c hc
+        (show 9 * f.bound < c^2 by linarith [f.bound_nonneg])) (physicalChart x) q v +
+      (fun k : Fin 3 => fderiv ℝ f.potential q (Pi.single k.succ 1))‖ ≤
+      f.accelerationErrorConstant V / c^2 :=
+  f.native_acceleration_error hc hlarge x q hV hv
+
+example {c a b V δ : ℝ} (hc : 1 ≤ c) (hlarge : 24 * f.bound < c^2)
+    (hV : 0 ≤ V) {z w : ℝ → NewtonianSpace × NewtonianSpace}
+    (hz : ContinuousOn z (Icc a b)) (hw : ContinuousOn w (Icc a b))
+    (hz' : ∀ t ∈ Ico a b, HasDerivWithinAt z (f.relativisticPhaseField c t (z t)) (Ici t) t)
+    (hw' : ∀ t ∈ Ico a b, HasDerivWithinAt w (f.newtonianPhaseField t (w t)) (Ici t) t)
+    (hseg : ∀ t ∈ Ico a b,
+      segment ℝ (Fin.cons t (w t).1 : NewtonianCoordinates) (Fin.cons t (z t).1) ⊆ U)
+    (hspeed : ∀ t ∈ Ico a b, ‖(z t).2‖ ≤ V) (hδ : ‖z a - w a‖ ≤ δ) :
+    ∀ t ∈ Icc a b,
+      ‖z t - w t‖ ≤ gronwallBound δ (max 1 f.bound) (f.accelerationErrorConstant V / c^2) (t - a) :=
+  f.phase_error_gronwall hc hlarge hV hz hw hz' hw' hseg hspeed hδ
+
+end NewtonianError
+
+section NewtonianTrajectoryLimit
+
+open NewtonianMetricFamily
+
+variable {U : TopologicalSpace.Opens NewtonianCoordinates} (f : NewtonianMetricFamily U)
+
+example {c t V : ℝ} (hc : 1 ≤ c) (hlarge : 24 * f.bound < c^2)
+    (z w : NewtonianSpace × NewtonianSpace) (hz : ‖z.2‖ ≤ V) (hw : ‖w.2‖ ≤ V)
+    (hseg : segment ℝ (Fin.cons t w.1 : NewtonianCoordinates) (Fin.cons t z.1) ⊆ U) :
+    ‖f.relativisticPhaseField c t z - f.relativisticPhaseField c t w‖ ≤
+      f.phaseLipschitzConstant V * ‖z - w‖ :=
+  f.relativisticPhaseField_sub_le hc hlarge t z w hz hw hseg
+
+example (δ η T : ℝ) : gronwallBound δ 0 η T = δ + η * T := by
+  rw [gronwallBound_split]
+  simp [gronwallForcingFactor]
+
+example {a b : ℝ} (hab : a ≤ b) (w : ℝ → NewtonianSpace × NewtonianSpace)
+    (hw : ∀ t ∈ Icc a b, HasDerivWithinAt w (f.newtonianPhaseField t (w t)) (Icc a b) t)
+    (hpos : ∀ t ∈ Icc a b, (Fin.cons t (w t).1 : NewtonianCoordinates) ∈ U)
+    (z₀ : ℝ → NewtonianSpace × NewtonianSpace) {D : ℝ} (hD : 0 ≤ D)
+    (hinit : ∀ᶠ c : ℝ in Filter.atTop, ‖z₀ c - w a‖ ≤ D/c^2) :
+    ∃ C ≥ (0 : ℝ), ∃ z : ℝ → ℝ → NewtonianSpace × NewtonianSpace,
+      TendstoUniformlyOn z w Filter.atTop (Icc a b) ∧
+      ∀ᶠ c : ℝ in Filter.atTop, z c a = z₀ c ∧
+        (∀ t ∈ Icc a b,
+          HasDerivWithinAt (z c) (f.relativisticPhaseField c t (z c t)) (Icc a b) t) ∧
+        (∀ t ∈ Icc a b, (Fin.cons t (z c t).1 : NewtonianCoordinates) ∈ U ∧
+          ‖z c t - w t‖ ≤ C/c^2) :=
+  f.exists_newtonian_limit_with_rate hab w hw hpos z₀ hD hinit
+
+end NewtonianTrajectoryLimit

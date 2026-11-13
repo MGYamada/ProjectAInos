@@ -619,6 +619,46 @@ the independently computed Hodge/exterior and covariant-derivative sides in
 a curved nonlinear chart with all six field components varying.
 
 Stage F’s principal endpoints are implemented and await review. The controlled
-time-dependent Newtonian motion/trajectory limit remains in stage G. The
+time-dependent Newtonian motion and trajectory limit is proved in stage G. The
 [geometry guide](smooth-geometry.md) and [electrodynamics guide](electrodynamics.md)
 record the APIs and convention comparison.
+
+The first stage G increment defines `NewtonianMetricFamily` using smooth
+coefficient data on a common open physical-coordinate domain and uniform
+bounds through two spacetime derivatives. It preserves time dependence and
+all three correction types. Finite contractions give an explicit uniform
+upper bound for the norm of `(1,v)`, implying eventual negativity for bounded
+velocities. They also prove positivity on the spatial hyperplane. These
+properties are derived, not fields of the family structure.
+
+`CoordinateTime` works separately with the existing native Lorentz connection.
+The physical-clock germ fixes the first and second time derivatives. The time
+component then determines the tangential acceleration factor, proving both
+directions of the spatial ODE with its non-affine correction. A regular affine
+geodesic reparametrization implies that equation. Local smoothness follows
+from the actual connection. The polynomial family example has proved compact
+C² bounds and nonzero time/mixed/spatial data.
+
+Completing the square along the negative time line yields a positive
+quadratic form on its orthogonal complement. Its Euclidean coordinates
+combine with the normalized time line to give the signature witness. The
+tangent-bundle trivializations of the common open domain identify the smooth
+coefficient form with a native Lorentz metric. The coordinate connection is
+derived from this metric. Rescaling the time row and estimating each inverse
+column gives the uniform temporal and spatial inverse bounds.
+The lower-index Christoffel formula isolates the potential derivative in
+the leading spatial time-time slot. The inverse bounds control the raised
+components and retain the time-component correction in coordinate time.
+Contracting with bounded physical-time velocities gives a uniform
+`O(c⁻²)` acceleration error. The potential Hessian bound gives the
+Newtonian phase-field Lipschitz estimate along contained segments. These
+results yield the Gronwall phase error on a common interval of existence.
+The inverse difference identity and the coefficient Hessian bound give a
+uniform relativistic Lipschitz estimate on contained segments and bounded
+velocity ranges. A compact tube supplies a single radius for clipping the
+deviation in an auxiliary ODE. Boundedness and Lipschitz continuity give
+Picard–Lindelöf on the full interval. Gronwall keeps the solution inside the
+tube, where clipping is the identity. The resulting trajectories converge
+uniformly, with a rate from the two terms of the Gronwall bound including
+the zero-Lipschitz case. The polynomial example applies the result on
+`[0,1]` to a time-dependent potential with mixed and spatial corrections.

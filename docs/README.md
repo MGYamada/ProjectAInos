@@ -13,7 +13,7 @@
 - [Mechanics formalization notes](mechanics-notes.md)
 - [Shared geometry: C∞ schemes, Lorentz geometry, tensors, and curved forms](smooth-geometry.md)
 - [Minkowski geometry, relativistic kinematics, and flat forms](special-relativity.md)
-- [General relativity: intrinsic clocks and quadratic variation](general-relativity.md)
+- [General relativity: clocks, variation, and Newtonian families](general-relativity.md)
 - [Charged particles, curved Maxwell equations, and polynomial Maxwell jets](electrodynamics.md)
 - [Shared algebra: C∞-rings and smooth operations](smooth-algebra.md)
 - [Shared variational foundation: first variation and Euler–Lagrange equations](variational.md)
