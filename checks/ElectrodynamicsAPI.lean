@@ -268,3 +268,26 @@ example (F : Curved.Field (M := M)) (x : M) :
     g.divergence (g.twoFormDivergence F) x = 0 := Curved.divergence_twoFormDivergence g o F x
 
 end SourcedMaxwell
+
+section VacuumFieldAction
+
+open Set MeasureTheory DifferentialForm
+open scoped ContDiff
+
+example {U : Set Spacetime} {A : Potential} (hU : IsOpen U) (hA : ContDiff ℝ 2 A)
+    (hfin : Integrable (Variational.density VacuumAction.lagrangian A) (volume.restrict U)) :
+    Variational.Stationary volume U VacuumAction.lagrangian A ↔
+      ∀ x ∈ U, exteriorDerivative (fun y => star (fieldTensor A y)) x = 0 :=
+  VacuumAction.stationary_iff_residual_zero hU hA hfin
+
+example {U : Set Spacetime} (hU : IsOpen U) (A : Potential) (χ : Spacetime → ℝ)
+    (hA : ContDiffOn ℝ 1 A U) (hχ : ContDiffOn ℝ 2 χ U) :
+    Variational.action (volume.restrict U) VacuumAction.lagrangian (gaugeShift A χ) =
+      Variational.action (volume.restrict U) VacuumAction.lagrangian A :=
+  VacuumAction.action_gauge hU A χ hA hχ
+
+example (x : Spacetime) :
+    Variational.density VacuumAction.lagrangian (Examples.uniformPotential 1 0) x = 1 / 2 :=
+  VacuumAction.uniform_electric_density x
+
+end VacuumFieldAction
