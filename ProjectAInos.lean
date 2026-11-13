@@ -320,6 +320,7 @@ public import ProjectAInos.Thermodynamics.HasCalibratorsOfAxioms
 public import ProjectAInos.Thermodynamics.IdealGas
 public import ProjectAInos.Thermodynamics.IdealGasModel
 public import ProjectAInos.Thermodynamics.LocalLines
+public import ProjectAInos.Thermodynamics.LogarithmicThermalModel
 public import ProjectAInos.Thermodynamics.ModelConnections
 public import ProjectAInos.Thermodynamics.Models
 public import ProjectAInos.Thermodynamics.Nonreactive
@@ -327,6 +328,7 @@ public import ProjectAInos.Thermodynamics.Physical
 public import ProjectAInos.Thermodynamics.PhysicalComparison
 public import ProjectAInos.Thermodynamics.PhysicalEntropyPrinciple
 public import ProjectAInos.Thermodynamics.PhysicalReactions
+public import ProjectAInos.Thermodynamics.ReactingReservoir
 public import ProjectAInos.Thermodynamics.ReactionCalibration
 public import ProjectAInos.Thermodynamics.ReactionCycles
 public import ProjectAInos.Thermodynamics.ReactionModels
