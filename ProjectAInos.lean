@@ -20,6 +20,8 @@ public import ProjectAInos.Electrodynamics.ParticleAction
 public import ProjectAInos.Electrodynamics.PolynomialBridge
 public import ProjectAInos.Electrodynamics.PolynomialExamples
 public import ProjectAInos.Electrodynamics.PolynomialRadial
+public import ProjectAInos.Electrodynamics.VacuumAction
+public import ProjectAInos.Electrodynamics.VacuumActionExamples
 public import ProjectAInos.External.YM.Analysis.Homogeneous
 public import ProjectAInos.External.YM.Analysis.Nonnegative
 public import ProjectAInos.External.YM.Analysis.SmoothJets
@@ -105,6 +107,7 @@ public import ProjectAInos.SmoothGeometry.AffineScheme
 public import ProjectAInos.SmoothGeometry.DifferentialForm.BivectorVolume
 public import ProjectAInos.SmoothGeometry.DifferentialForm.Bundle
 public import ProjectAInos.SmoothGeometry.DifferentialForm.Calculus
+public import ProjectAInos.SmoothGeometry.DifferentialForm.CompactStokes
 public import ProjectAInos.SmoothGeometry.DifferentialForm.Coordinates
 public import ProjectAInos.SmoothGeometry.DifferentialForm.Exterior
 public import ProjectAInos.SmoothGeometry.DifferentialForm.FiniteDual
@@ -324,6 +327,7 @@ public import ProjectAInos.Thermodynamics.Physical
 public import ProjectAInos.Thermodynamics.PhysicalComparison
 public import ProjectAInos.Thermodynamics.PhysicalEntropyPrinciple
 public import ProjectAInos.Thermodynamics.PhysicalReactions
+public import ProjectAInos.Thermodynamics.ReactingReservoir
 public import ProjectAInos.Thermodynamics.ReactionCalibration
 public import ProjectAInos.Thermodynamics.ReactionCycles
 public import ProjectAInos.Thermodynamics.ReactionModels

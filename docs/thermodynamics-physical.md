@@ -477,6 +477,17 @@ between disconnected labels remain $+\infty$. The equality-only example
 in [ReactionModels.lean](../ProjectAInos/Thermodynamics/ReactionModels.lean)
 checks that adjoining ancillary labels does not erase such unreachability.
 
+The [two-species reservoir](../ProjectAInos/Thermodynamics/ReactingReservoir.lean)
+gives a finite direct cost between unequal composition labels. The model
+preserves total amount and orders processes by energy. It proves that labels
+with equal total amount can be converted in either direction at equal energy,
+so their direct cost calibrated by energy is exactly zero. The admitted
+positive-energy reservoirs satisfy A1–A7, S1–S3, and T1–T4. With the verified
+`RawNoSinks` condition, `AtomicDomains.exists_weak_entropy` yields a total
+entropy monotone across the unit species conversion and an accessibility
+criterion within every fixed composition. The model uses synthetic
+interconvertible species and a universal thermal relation.
+
 Catalytic invariance makes $F$ descend to the real completion of the label
 monoid. Write
 
