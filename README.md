@@ -191,8 +191,9 @@ momentum, the centre of mass and angular momentum follow for natural
 Lagrangians as membership in the Euler–Lagrange ideal. The standard jet ring is
 the nondegenerate model. The prolongation of a smooth path turns the total
 derivative into `d/dt`, so a conserved element is constant along every smooth
-solution, in particular the energy along solutions of Newton's equations. For
-2.3, Poisson structures on C∞-rings are implemented with
+solution, in particular the energy along solutions of Newton's equations. A
+smooth path is a solution in the jet ring exactly when the action of the real
+analytic model is stationary on every interval. For 2.3, Poisson structures on C∞-rings are implemented with
 Poisson's theorem, the normalizer of a coisotropic ideal, the Hamilton–Jacobi
 and Maupertuis–Jacobi statements, the canonical bracket with Hamilton's
 equations, the rigid body with Euler's equations, the angular momentum of a
