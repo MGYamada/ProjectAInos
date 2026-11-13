@@ -319,6 +319,7 @@ public import ProjectAInos.Thermodynamics.HasCalibratorsOfAxioms
 public import ProjectAInos.Thermodynamics.IdealGas
 public import ProjectAInos.Thermodynamics.IdealGasModel
 public import ProjectAInos.Thermodynamics.LocalLines
+public import ProjectAInos.Thermodynamics.LogarithmicThermalModel
 public import ProjectAInos.Thermodynamics.ModelConnections
 public import ProjectAInos.Thermodynamics.Models
 public import ProjectAInos.Thermodynamics.Nonreactive
