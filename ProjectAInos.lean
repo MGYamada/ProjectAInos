@@ -6,6 +6,7 @@ public import ProjectAInos.Electrodynamics.Current
 public import ProjectAInos.Electrodynamics.CurrentExamples
 public import ProjectAInos.Electrodynamics.Curved
 public import ProjectAInos.Electrodynamics.CurvedExamples
+public import ProjectAInos.Electrodynamics.DivergenceExamples
 public import ProjectAInos.Electrodynamics.Examples
 public import ProjectAInos.Electrodynamics.Field
 public import ProjectAInos.Electrodynamics.GaugeAction
@@ -144,6 +145,7 @@ public import ProjectAInos.SmoothGeometry.Lorentzian.DensityDerivative
 public import ProjectAInos.SmoothGeometry.Lorentzian.Divergence
 public import ProjectAInos.SmoothGeometry.Lorentzian.DivergenceExamples
 public import ProjectAInos.SmoothGeometry.Lorentzian.Dual
+public import ProjectAInos.SmoothGeometry.Lorentzian.DualDerivative
 public import ProjectAInos.SmoothGeometry.Lorentzian.FlatConnection
 public import ProjectAInos.SmoothGeometry.Lorentzian.FlatFrameExamples
 public import ProjectAInos.SmoothGeometry.Lorentzian.FlatTransport
@@ -183,8 +185,11 @@ public import ProjectAInos.SmoothGeometry.Lorentzian.Restriction
 public import ProjectAInos.SmoothGeometry.Lorentzian.Ricci
 public import ProjectAInos.SmoothGeometry.Lorentzian.Tensor
 public import ProjectAInos.SmoothGeometry.Lorentzian.TwoFormDerivative
+public import ProjectAInos.SmoothGeometry.Lorentzian.TwoFormDivergence
+public import ProjectAInos.SmoothGeometry.Lorentzian.TwoFormDivergenceExamples
 public import ProjectAInos.SmoothGeometry.Lorentzian.TwoFormExamples
 public import ProjectAInos.SmoothGeometry.Lorentzian.TwoFormExterior
+public import ProjectAInos.SmoothGeometry.Lorentzian.TwoFormRaised
 public import ProjectAInos.SmoothGeometry.Lorentzian.VariationTesting
 public import ProjectAInos.SmoothGeometry.Lorentzian.VolumeDensity
 public import ProjectAInos.SmoothGeometry.Lorentzian.VolumeExamples

@@ -409,6 +409,30 @@ def verify_two_form_covariant():
     pulled_metric = jacobian.T * metric.subs(substitution) * jacobian
     pulled_form = jacobian.T * form.subs(substitution) * jacobian
     actual = derivative(pulled_form, christoffel(pulled_metric, coordinates), coordinates)
+
+    def divergence(field, geometry, covariant, coords):
+        inverse = geometry.inv()
+        raised = inverse * field * inverse
+        rho = sp.sqrt(sp.Abs(geometry.det()))
+        current = sp.Matrix([sp.simplify(sum(
+            inverse[i, a]*inverse[j, b]*covariant[i][a, b]
+            for i in range(len(coords)) for a in range(len(coords))
+            for b in range(len(coords)))) for j in range(len(coords))])
+        density_current = sp.Matrix([sp.simplify(sum(
+            sp.diff(rho*raised[i, j], coords[i]) for i in range(len(coords))) / rho)
+            for j in range(len(coords))])
+        check_zero("native two-form divergence equals density derivative", current-density_current)
+        return current
+
+    original_current = divergence(form, metric, original, original_coordinates)
+    actual_current = divergence(pulled_form, pulled_metric, actual, coordinates)
+    check_zero("two-form divergence transforms as a vector",
+               actual_current - jacobian.inv()*original_current.subs(substitution))
+    opposite_current = divergence(pulled_form, -pulled_metric,
+                                 derivative(pulled_form, christoffel(-pulled_metric, coordinates),
+                                            coordinates), coordinates)
+    check_zero("raising both indices preserves metric-sign reversal",
+               actual_current-opposite_current)
     for i in range(4):
         check_zero("two-form derivative preserves antisymmetry", actual[i] + actual[i].T)
         for j in range(4):
@@ -430,6 +454,9 @@ def verify_two_form_covariant():
     area = sp.Matrix([[0, 1], [-1, 0]])
     plane_derivative = derivative(area, christoffel(plane_metric, (t, x)), (t, x))
     check_zero("closed coordinate area is not parallel", plane_derivative[1][0, 1] + 4*x)
+    plane_current = divergence(area, plane_metric, plane_derivative, (t, x))
+    check_zero("closed coordinate area has nonzero curved divergence",
+               plane_current-sp.Matrix([-4*x*sp.exp(-4*x**2), 0]))
 
 
 def verify_density_divergence():

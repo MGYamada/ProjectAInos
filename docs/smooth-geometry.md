@@ -1280,6 +1280,25 @@ Exact SymPy checks the nonlinear three-slot transition law and the cyclic
 identity in a curved four-dimensional metric. The sourced Maxwell component
 bridge and the controlled Newtonian limit remain outstanding.
 
+`TwoFormDivergence.lean` contracts the actual three-covariant derivative by
+`sharp` and trace, then raises the resulting covector to a smooth tangent
+section. Local smoothness is proved by evaluating on local smooth fields;
+native fibres retain their existing topologies. Its component formula has the
+two inverse-metric factors derived from the trace construction.
+
+`DualDerivative.lean` derives the covariant product rule for raised covectors
+directly from metric compatibility. `TwoFormRaised.lean` constructs the actual
+coordinate covectors and raises them, proves their local smoothness and dual
+Christoffel rule, then derives the two positive corrections for raised two-form
+components. The symmetric-connection/antisymmetric-form contraction is zero.
+Together with the proved density derivative this gives
+`∇ᵢFⁱʲ = ρ⁻¹ ∂ᵢ(ρ Fⁱʲ)` in every smooth chart, in all Lorentz dimensions and
+both signatures. No global frame, orientation or flatness is assumed.
+
+The curved conformal area example has divergence `(-4x exp(-4x²), 0)`. The
+physical electric example has divergence `-∂x`, equal to its `dH` source.
+The general equivalence between that source and two-form divergence remains.
+
 ## Scope and next stages
 
 These definitions impose neither finite generation nor global Hausdorffness

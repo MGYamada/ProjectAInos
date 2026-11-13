@@ -103,8 +103,24 @@ Typed examples fix the connection formula, equivalences and physical premise.
 Exact SymPy checks all three tensor slots under a nonlinear chart change on a
 curved mixed-coordinate metric, as well as the nonzero cyclic sum.
 
-The sourced component equation `∇ᵢFⁱʲ = jʲ` and its equivalence with `dH = J`
-remain pending in stage F. The Maxwell action and its variational derivation
+`TwoFormDivergence` now constructs the actual smooth vector `∇ᵢFⁱʲ`: metric
+contraction of the first form slot with the derivative direction gives a
+covector, and `sharp` raises the remaining index. The two inverse-metric factors
+in every chart are proved consequences of this construction. `DualDerivative`
+proves that covariant differentiation commutes with raising. `TwoFormRaised`
+uses actual raised coordinate covectors to derive the two positive Christoffel
+corrections; torsion-freeness cancels the antisymmetric contraction and yields
+`∇ᵢFⁱʲ = ρ⁻¹ ∂ᵢ(ρ Fⁱʲ)`. No orientation is needed for these results.
+
+Lean computes the divergence of `dt∧dx` on the curved conformal plane as
+`(-4x exp(-4x²), 0)`. `DivergenceExamples.lean` proves that the existing electric
+field has two-form divergence `-∂x`, exactly its source constructed from `dH`.
+Typed API checks fix the native smoothness, contraction, raising and density
+formulas. Exact SymPy checks the density identity and vector transformation in
+a curved mixed-coordinate metric, including overall metric-sign reversal.
+
+The general equivalence of `∇ᵢFⁱʲ = jʲ` with `dH = J` remains pending in
+stage F. The Maxwell action and its variational derivation
 belong to §4.2 / #44.
 
 ## Actual action and admissible variations

@@ -595,7 +595,16 @@ component equations; no coordinate transformation law is assumed.
 Lean examples include closed coordinate area with nonzero covariant derivative
 on the curved conformal plane and a nonclosed four-dimensional form with
 nonzero cyclic sum. Exact calculations test all three covariant slots under
-a nonlinear chart change in a curved metric. The sourced Maxwell component
-bridge remains. The
+a nonlinear chart change in a curved metric.
+
+`TwoFormDivergence` constructs a smooth vector by contracting and raising the
+native derivative. `DualDerivative` proves the raising product rule from metric
+compatibility. `TwoFormRaised` derives the local dual-frame connection rule,
+the two positive Christoffel corrections, and the vanishing symmetric/skew
+contraction. The resulting density formula is proved for every smooth chart.
+The conformal area example has nonzero divergence, and the physical electric
+example agrees exactly with its source from `dH`. Exact checks also verify
+the vector transformation law under the nonlinear change of chart. The
+general equivalence with the source defined by `dH` remains. The
 [geometry guide](smooth-geometry.md) and
 [electrodynamics guide](electrodynamics.md) record this boundary.

@@ -319,7 +319,9 @@ A time-dependent field has the proved nonzero vector source `j = -∂x`, fixing
 the physical sign. Native two-form covariant differentiation is now constructed,
 smooth and independent of local extensions. Its chart formula has both
 Christoffel corrections; `dF = 0` is equivalent to the cyclic covariant component
-equation in every smooth chart. The sourced Maxwell component bridge remains.
+equation in every smooth chart. The native two-form divergence is a smooth vector,
+with both raised indices and the density formula `∇ᵢFⁱʲ = ρ⁻¹ ∂ᵢ(ρ Fⁱʲ)` proved.
+The general identification of this vector with the source defined by `dH` remains.
 The [GR guide](docs/general-relativity.md)
 records the exact scope and typed contracts.
 The [shared geometry guide](docs/smooth-geometry.md)

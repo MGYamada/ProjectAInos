@@ -146,3 +146,7 @@ example (x : Spacetime) :
   Curved.Examples.magneticExcitation_covariant_cyclic x
 
 end HomogeneousMaxwell
+
+example : (minkowskiMetric .timeNegative 3).twoFormDivergence Curved.Examples.electric =
+    Curved.source (minkowskiMetric .timeNegative 3) (OrientedAtlas.standard 4)
+      Curved.Examples.electric := Curved.Examples.electric_twoFormDivergence_eq_source

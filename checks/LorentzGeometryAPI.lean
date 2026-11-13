@@ -10,6 +10,7 @@ import ProjectAInos.SmoothGeometry.Lorentzian.Dual
 import ProjectAInos.SmoothGeometry.Lorentzian.DivergenceExamples
 import ProjectAInos.SmoothGeometry.Lorentzian.HodgeCurrent
 import ProjectAInos.SmoothGeometry.Lorentzian.TwoFormExamples
+import ProjectAInos.SmoothGeometry.Lorentzian.TwoFormDivergenceExamples
 import ProjectAInos.SmoothGeometry.Lorentzian.PullbackExamples
 import ProjectAInos.SmoothGeometry.Lorentzian.ChartExamples
 import ProjectAInos.SmoothGeometry.Lorentzian.ChartConnection
@@ -1765,3 +1766,48 @@ example (p : LorentzianConformalExample.Plane) :
         -4 * p 1 := LorentzianTwoFormExamples.conformal_area_derivative p
 
 end CovariantTwoForms
+
+section TwoFormDivergence
+
+open DifferentialForm LorentzMetric
+variable {σ : LorentzConvention} {d : ℕ} {M : Type} [TopologicalSpace M]
+  [ChartedSpace (MinkowskiModel d) M] [IsManifold 𝓘(ℝ, MinkowskiModel d) ∞ M]
+  (g : LorentzMetric σ d M) (F : SmoothForm 𝓘(ℝ, MinkowskiModel d) M 2)
+
+example : Cₛ^∞⟮𝓘(ℝ, MinkowskiModel d); MinkowskiModel d,
+    (fun x : M => TangentSpace 𝓘(ℝ, MinkowskiModel d) x)⟯ := g.twoFormDivergence F
+
+example {α : ∀ x : M, TangentSpace 𝓘(ℝ, MinkowskiModel d) x →L[ℝ] ℝ}
+    {V : ∀ x : M, TangentSpace 𝓘(ℝ, MinkowskiModel d) x} {x : M}
+    (hα : MDifferentiableAt 𝓘(ℝ, MinkowskiModel d)
+      (𝓘(ℝ, MinkowskiModel d).prod 𝓘(ℝ, MinkowskiModel d →L[ℝ] ℝ))
+      (fun y => Bundle.TotalSpace.mk' (MinkowskiModel d →L[ℝ] ℝ) y (α y)) x)
+    (hV : MDifferentiableAt 𝓘(ℝ, MinkowskiModel d)
+      (𝓘(ℝ, MinkowskiModel d).prod 𝓘(ℝ, MinkowskiModel d)) (T% V) x)
+    (u : TangentSpace 𝓘(ℝ, MinkowskiModel d) x) :
+    g.form x (g.leviCivita (fun y => g.sharp y (α y)) x u) (V x) =
+      mvfderiv 𝓘(ℝ, MinkowskiModel d) (fun y => α y (V y)) x u - α x (g.leviCivita V x u) :=
+  g.leviCivita_sharp_pairing hα hV u
+
+example {e : OpenPartialHomeomorph M (MinkowskiModel d)}
+    (he : e ∈ IsManifold.maximalAtlas 𝓘(ℝ, MinkowskiModel d) ∞ M)
+    {x : M} (hx : x ∈ e.source) (j : Fin (d + 1)) :
+    chartTangentMap e x (g.twoFormDivergence F x) j = ∑ b, ∑ a, ∑ i,
+      g.twoFormCovariantComponent F e x i a b *
+        g.inverseComponent x (chartTangentEquiv he hx) a i *
+        g.inverseComponent x (chartTangentEquiv he hx) j b := g.twoFormDivergence_chart F he hx j
+
+example {e : OpenPartialHomeomorph M (MinkowskiModel d)}
+    (he : e ∈ IsManifold.maximalAtlas 𝓘(ℝ, MinkowskiModel d) ∞ M)
+    {x : M} (hx : x ∈ e.source) (j : Fin (d + 1)) :
+    chartTangentMap e x (g.twoFormDivergence F x) j = (g.chartDensity e x)⁻¹ *
+      ∑ i, mvfderiv 𝓘(ℝ, MinkowskiModel d)
+        (fun y => g.chartDensity e y * g.raisedTwoFormComponent F e y i j) x
+        (chartField e (Pi.single i 1) x) := g.twoFormDivergence_density F he hx j
+
+example (p : LorentzianConformalExample.Plane) :
+    LorentzianConformalExample.metric.twoFormDivergence LorentzianTwoFormExamples.coordinateArea p =
+      modelField ![-4 * p 1 * Real.exp (-(4 * (p 1)^2)), 0] p :=
+  LorentzianTwoFormExamples.conformal_area_divergence p
+
+end TwoFormDivergence

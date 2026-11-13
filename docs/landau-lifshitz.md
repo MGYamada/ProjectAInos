@@ -207,7 +207,9 @@ nonzero-current example fixes the physical vector sign. Pointwise volume
 contraction and `dJ = (div j) vol` now prove vector-divergence conservation.
 Native two-form covariant differentiation and the homogeneous Maxwell
 component equivalence are now proved, with curved and nonclosed examples.
-The sourced Maxwell component bridge and the
+The smooth native two-form divergence and its density expression are also
+proved, including the nonzero electric-source sign and a curved example.
+The general identification with the source from `dH` and the
 Newtonian motion limit remain in the work
 tracked by [#52](https://github.com/MGYamada/ProjectAInos/issues/52).
 Einstein equations and their Newtonian field-equation limit remain in 5.2;
