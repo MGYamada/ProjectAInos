@@ -198,3 +198,90 @@ example (g : RigidBody.PhaseSpace) : RigidBody.poisson.bracket RigidBody.casimir
   RigidBody.poisson_casimir_left g
 
 end RigidBody
+
+section Morphisms
+
+variable {Q : Type*} [CommRing Q] [Algebra ℝ Q] [SmoothRing Q] {κ : Type*}
+
+/-- A morphism out of a free ring is Poisson if it preserves generator brackets. -/
+example {π : AlmostPoissonStructure (FreeSmoothRing κ)} {ρ : AlmostPoissonStructure Q}
+    {φ : SmoothRingHom (FreeSmoothRing κ) Q}
+    (h : ∀ a b, φ (π.bracket (FreeSmoothRing.generator a) (FreeSmoothRing.generator b)) =
+      ρ.bracket (φ (FreeSmoothRing.generator a)) (φ (FreeSmoothRing.generator b)))
+    (f g : FreeSmoothRing κ) : φ (π.bracket f g) = ρ.bracket (φ f) (φ g) :=
+  FreeSmoothRing.isPoissonHom_of_generators h f g
+
+end Morphisms
+
+section AngularMomentum
+
+open AngularMomentum
+
+example : M = q ⨯₃ p := rfl
+
+example : canonical.bracket (M 0) (M 1) = M 2 := canonical_M_zero_M_one
+
+example : canonical.bracket (M 1) (M 2) = M 0 := canonical_M_one_M_two
+
+example : canonical.bracket (M 2) (M 0) = M 1 := canonical_M_two_M_zero
+
+example : canonical.bracket (M 0) (q 1) = q 2 := canonical_M_q 0 1
+
+example : canonical.bracket (M 0) (p 1) = p 2 := canonical_M_p 0 1
+
+example (a : Fin 3) : canonical.bracket (M a) (q ⬝ᵥ q) = 0 := canonical_M_q_sq a
+
+/-- Conservation of angular momentum for every central Hamiltonian. -/
+example (f : SmoothOperation 3) (a : Fin 3) :
+    canonical.bracket (M a) (op f ![q ⬝ᵥ q, p ⬝ᵥ p, q ⬝ᵥ p]) = 0 :=
+  isIntegral_M f a
+
+/-- The momentum map of the rotations is a Poisson morphism from the rigid-body ring. -/
+example (f g : RigidBody.PhaseSpace) :
+    momentumMap (RigidBody.poisson.bracket f g) =
+      canonical.bracket (momentumMap f) (momentumMap g) :=
+  isPoissonHom_momentumMap f g
+
+example (a : Fin 3) : momentumMap (RigidBody.L a) = -M a := momentumMap_L a
+
+end AngularMomentum
+
+section HeavyTop
+
+open HeavyTop
+
+example : HeavyTop.poisson.bracket (HeavyTop.L 0) (HeavyTop.L 1) = -HeavyTop.L 2 := by
+  rw [HeavyTop.poisson_L_L]
+  rfl
+
+example : HeavyTop.poisson.bracket (HeavyTop.L 0) (Γ 1) = -Γ 2 := by
+  rw [poisson_L_Γ]
+  rfl
+
+example (a b : Fin 3) : HeavyTop.poisson.bracket (Γ a) (Γ b) = 0 := poisson_Γ_Γ a b
+
+/-- The equations of motion of the heavy top. -/
+example (I : Fin 3 → ℝ) (k : ℝ) (χ : Fin 3 → ℝ) (a : Fin 3) :
+    HeavyTop.poisson.bracket (HeavyTop.L a) (HeavyTop.hamiltonian I k χ) =
+      (HeavyTop.L ⨯₃ HeavyTop.angularVelocity I) a + (Γ ⨯₃ weight k χ) a :=
+  poisson_L_hamiltonian I k χ a
+
+example (I : Fin 3 → ℝ) (k : ℝ) (χ : Fin 3 → ℝ) (a : Fin 3) :
+    HeavyTop.poisson.bracket (Γ a) (HeavyTop.hamiltonian I k χ) =
+      (Γ ⨯₃ HeavyTop.angularVelocity I) a :=
+  poisson_Γ_hamiltonian I k χ a
+
+example (I : Fin 3 → ℝ) (k : ℝ) (χ : Fin 3 → ℝ) :
+    HeavyTop.hamiltonian I k χ =
+      ∑ i, algebraMap ℝ HeavyTop.PhaseSpace ((I i)⁻¹ / 2) * (HeavyTop.L i * HeavyTop.L i) +
+        ∑ i, algebraMap ℝ HeavyTop.PhaseSpace (k * χ i) * Γ i :=
+  rfl
+
+/-- The Casimirs of the heavy top. -/
+example (g : HeavyTop.PhaseSpace) : HeavyTop.poisson.bracket (Γ ⬝ᵥ Γ) g = 0 :=
+  poisson_Γ_sq_left g
+
+example (g : HeavyTop.PhaseSpace) : HeavyTop.poisson.bracket (HeavyTop.L ⬝ᵥ Γ) g = 0 :=
+  poisson_L_dot_Γ_left g
+
+end HeavyTop

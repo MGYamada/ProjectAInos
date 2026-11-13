@@ -216,7 +216,13 @@ derivatives.
 `{qᵢ, pⱼ} = δᵢⱼ`, `{qᵢ, qⱼ} = {pᵢ, pⱼ} = 0`. `canonical_bracket` gives
 `{f, g} = Σᵢ (∂f/∂qᵢ ∂g/∂pᵢ − ∂f/∂pᵢ ∂g/∂qᵢ)`, and `canonical_q_bracket` and
 `canonical_p_bracket` are Hamilton's equations `{qᵢ, H} = ∂H/∂pᵢ` and
-`{pᵢ, H} = −∂H/∂qᵢ`. The rigid body is in the
+`{pᵢ, H} = −∂H/∂qᵢ`.
+
+`IsPoissonHom π ρ φ` says that a morphism of C∞-rings preserves the bracket.
+Both sides satisfy the chain rule in each argument, so a morphism out of a free
+C∞-ring is a Poisson morphism if it preserves the brackets of the generators
+(`FreeSmoothRing.isPoissonHom_of_generators`). The rigid body, the angular
+momentum and the heavy top are in the
 [mechanics guide](mechanics.md#poisson-models). This stage is tracked in
 [issue #78](https://github.com/MGYamada/ProjectAInos/issues/78).
 
@@ -236,6 +242,7 @@ derivatives.
 | [Poisson/Ideal](../ProjectAInos/SmoothAlgebra/Poisson/Ideal.lean) | `IsPoissonIdeal`, `IsCoisotropic`, `normalizer`, `bracket_mem_normalizer`, `op_mem_normalizer`, `bracket_sub_bracket_mem`, `hamiltonJacobi`, `maupertuis` |
 | [Poisson/Free](../ProjectAInos/SmoothAlgebra/Poisson/Free.lean) | `jacobiator_eq_zero`, `almostPoisson`, `almostPoisson_bracket_generator`, `poissonOfCoordinates`, `poissonOfConstants` |
 | [Poisson/Canonical](../ProjectAInos/SmoothAlgebra/Poisson/Canonical.lean) | `PhaseSpace`, `canonical`, `canonical_q_p`, `canonical_bracket`, `canonical_q_bracket`, `canonical_p_bracket`, `canonical_hamiltonian_apply` |
+| [Poisson/Hom](../ProjectAInos/SmoothAlgebra/Poisson/Hom.lean) | `IsPoissonHom`, `IsPoissonHom.comp`, `FreeSmoothRing.isPoissonHom_of_generators`, `SmoothRingHom.map_sum`, `SmoothRingHom.map_neg` |
 | [Derivation](../ProjectAInos/SmoothAlgebra/Derivation.lean) | `SmoothDerivation`, `map_mul`, `map_exp`, `toDerivation`, module and Lie-ring instances, `commutator_chain`, `equivInfinitesimalAut`, `equivCoordinates`, `lie_partialDerivation_proj_smul` |
 | [Category](../ProjectAInos/SmoothAlgebra/Category.lean) | `SmoothRingCat`, faithful forgetful functors, isomorphisms from bijective morphisms |
 | [Congruence](../ProjectAInos/SmoothAlgebra/Congruence.lean) | Smooth quotients, projection, factorization, generated smooth congruences |

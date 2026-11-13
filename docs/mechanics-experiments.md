@@ -74,6 +74,8 @@ The variables are three canonical coordinate pairs. Angular momentum supports §
 
 The homogeneous-power expressions are symbolic local identities on domains where the displayed potentials and derivatives are defined.
 
+E4a is now a Lean theorem, `AngularMomentum.canonical_M_M`, for all pairs of indices. `JetRing.conserved_boost` uses the infinitesimal form of E4f; the finite identity and E4b–e have no Lean counterpart.
+
 ## E5: Kepler and Rutherford identities
 
 For `H=p²/(2m)−α/r`, set `M=q×p` and `A=p×M−mαq/r`, with `r=√(q·q)`. These support §§14–15 and 19 away from collision. They do not prove the existence or global completeness of the corresponding orbits.
@@ -103,7 +105,7 @@ The body-frame bracket is `{F,G}=−L·(∇F×∇G)`. These checks support §§3
 
 E6e checks the stated representative numerical ordering, not a symbolic theorem for every ordered inertia triple. E6f's polynomial Jacobi check is likewise example-based.
 
-E6a–d are now Lean theorems: E6a is `RigidBody.poisson_L_L`, E6b is `RigidBody.euler_equations` with its three components, E6c is `RigidBody.poisson_casimir_left` for every element and not only the generators, and E6d is the `jacobi` field of `RigidBody.poisson`, for all elements of the free C∞-ring. E6e and E6f have no Lean counterpart.
+E6a–d are now Lean theorems: E6a is `RigidBody.poisson_L_L`, E6b is `RigidBody.euler_equations` with its three components, E6c is `RigidBody.poisson_casimir_left` for every element and not only the generators, and E6d is the `jacobi` field of `RigidBody.poisson`, for all elements of the free C∞-ring. E6f is also a Lean theorem: the generator brackets are `HeavyTop.poisson_L_L`, `HeavyTop.poisson_L_Γ` and `HeavyTop.poisson_Γ_Γ`, the equations of motion are `HeavyTop.poisson_L_hamiltonian` and `HeavyTop.poisson_Γ_hamiltonian`, the Casimirs are `HeavyTop.poisson_Γ_sq_left` and `HeavyTop.poisson_L_dot_Γ_left`, and the Jacobi identity is the `jacobi` field of `HeavyTop.poisson`, for all elements and not only polynomial test functions. E6e has no Lean counterpart.
 
 ## E7: Singular reduction examples
 
