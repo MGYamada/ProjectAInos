@@ -152,7 +152,7 @@ The velocity derivative of the added density is $\partial_q F$, so the momentum 
 
 **Interface decision.** `Conserved L F` is defined as `D F ∈ eulerLagrangeIdeal L`, and the ideal is proved stable under `D`. Nothing in `Mechanics/Jet` mentions a path. The real analytic statements (`Mechanics.stationary_iff_eulerLagrange` and its relatives) remain separate.
 
-**Proof status.** The algebraic laws are proved. No theorem yet says that energy or momentum is constant along a solution of the Euler–Lagrange equations; the ledger rows for §§6–9 are *proved* for their stated main target, the jet-ring identity. The bridge is a stage of issue #78. [Euler operators](../ProjectAInos/Mechanics/Jet/Euler.lean)
+**Proof status.** The algebraic laws are proved, and the ledger rows for §§6–9 are *proved* for their stated main target, the jet-ring identity. The bridge to smooth trajectories is M29. [Euler operators](../ProjectAInos/Mechanics/Jet/Euler.lean)
 
 ## M20. Bilinearity and the Leibniz rule of a Poisson bracket are theorems
 
@@ -208,7 +208,7 @@ The velocity derivative of the added density is $\partial_q F$, so the momentum 
 
 **Interface decision.** `IsPoissonHom π ρ φ` is a predicate on morphisms of C∞-rings between almost-Poisson structures, with `FreeSmoothRing.isPoissonHom_of_generators` as the criterion. `AngularMomentum.momentumMap` is `FreeSmoothRing.lift fun a => -M a`. No Lie algebra, group action or infinitesimal action is defined; the first condition of Definition 57 is not stated.
 
-**Proof status.** `isPoissonHom_momentumMap` is proved. Momentum maps of a general Lie algebra, and the identification of `X_{Mₐ}` with the infinitesimal rotation, are not formalized. `SmoothRingHom` gained `map_sum`, `map_neg` and `map_sub`; they are stated next to their first use and belong in the morphism file. [Poisson morphisms](../ProjectAInos/SmoothAlgebra/Poisson/Hom.lean) · [Angular momentum](../ProjectAInos/Mechanics/Poisson/AngularMomentum.lean)
+**Proof status.** `isPoissonHom_momentumMap` is proved. Momentum maps of a general Lie algebra, and the identification of `X_{Mₐ}` with the infinitesimal rotation, are not formalized. `SmoothRingHom` gained `map_sum`, `map_neg` and `map_sub`; they were first stated next to their first use and now live in the morphism file. [Poisson morphisms](../ProjectAInos/SmoothAlgebra/Poisson/Hom.lean) · [Angular momentum](../ProjectAInos/Mechanics/Poisson/AngularMomentum.lean)
 
 ## M27. The heavy top: one matrix for the structure constants, vector form for the statements
 
@@ -225,3 +225,11 @@ The velocity derivative of the added density is $\partial_q F$, so the momentum 
 **Interface decision.** Case-analysis proofs in the model files end with `simp [...] <;> ring`. General statements are proved over a variable ring where possible (M22).
 
 **Proof status.** A proof-engineering observation, with no mathematical content. It is recorded because it recurred in the canonical bracket, the angular momentum and the heavy top.
+
+## M29. Prolongation turns ideal membership into constancy along a path
+
+**Observation.** The bridge announced in M19 needs no new structure. The ring of smooth functions of time is the C∞-ring `SmoothOperation 1`, and `d/dt` is its coordinate vector field. A smooth path is a tuple of elements of that ring, and the universal property of the free ring sends the time coordinate to `t` and `qᵢ⁽ᵏ⁾` to the `k`-th derivative of `γᵢ`. That this morphism turns `D` into `d/dt` is checked on generators only: both sides satisfy the chain rule, so a presentation of an arbitrary element reduces the claim to `D t = 1` and `D qᵢ⁽ᵏ⁾ = qᵢ⁽ᵏ⁺¹⁾`. This is the third use of the same argument, after M21 and M26; it is a uniqueness statement for derivations along a morphism, proved without defining them (M12). Calculus enters once, in the statement that a smooth function on the line with zero derivative is constant.
+
+**Interface decision.** `StandardJet.IsSolution L γ` is defined by the prolongation: it annihilates each `Eᵢ(L)`. With this definition the Euler–Lagrange ideal is annihilated by induction on the span, using `prolongation_totalDeriv` for the higher total derivatives, and `prolongation_eq_of_conserved` follows. For natural Lagrangians `isSolution_naturalLagrangian_iff` unfolds the definition to Newton's equations, so the hypothesis of `energy_eq_of_isSolution` is a differential equation and not a statement about ideals. Paths are smooth and defined on all of `ℝ`, which is what a morphism of C∞-rings out of the jet ring requires.
+
+**Proof status.** Proved, with uniform motion as a solution of the free equations. Two things are open. The real analytic model treats `C²` paths on a compact interval and defines solutions by stationarity of the action; no theorem relates `IsSolution` to `Mechanics.Stationary`. And a smooth path on an open interval, or one that leaves a region where the Lagrangian is defined, is not covered. [Prolongation](../ProjectAInos/Mechanics/Jet/Prolongation.lean)

@@ -80,6 +80,16 @@ def toAlgHom (h : SmoothRingHom A B) : A →ₐ[ℝ] B where
 
 @[simp] theorem toAlgHom_apply (h : SmoothRingHom A B) (a : A) : h.toAlgHom a = h a := rfl
 
+theorem map_neg (h : SmoothRingHom A B) (a : A) : h (-a) = -h a :=
+  _root_.map_neg h.toAlgHom a
+
+theorem map_sub (h : SmoothRingHom A B) (a b : A) : h (a - b) = h a - h b :=
+  _root_.map_sub h.toAlgHom a b
+
+theorem map_sum {ι : Type*} (h : SmoothRingHom A B) (s : Finset ι) (f : ι → A) :
+    h (∑ i ∈ s, f i) = ∑ i ∈ s, h (f i) :=
+  _root_.map_sum h.toAlgHom f s
+
 /-- Identity morphism. -/
 def id (A : Type*) [CommRing A] [Algebra ℝ A] [SmoothRing A] : SmoothRingHom A A where
   toFun a := a

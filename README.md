@@ -189,8 +189,10 @@ operators. Total derivatives are null Lagrangians, the energy and Noether
 identities hold in every jet ring, and the conservation laws of energy,
 momentum, the centre of mass and angular momentum follow for natural
 Lagrangians as membership in the Euler–Lagrange ideal. The standard jet ring is
-the nondegenerate model. These identities are not yet connected to actual
-trajectories. For 2.3, Poisson structures on C∞-rings are implemented with
+the nondegenerate model. The prolongation of a smooth path turns the total
+derivative into `d/dt`, so a conserved element is constant along every smooth
+solution, in particular the energy along solutions of Newton's equations. For
+2.3, Poisson structures on C∞-rings are implemented with
 Poisson's theorem, the normalizer of a coisotropic ideal, the Hamilton–Jacobi
 and Maupertuis–Jacobi statements, the canonical bracket with Hamilton's
 equations, the rigid body with Euler's equations, the angular momentum of a

@@ -232,7 +232,7 @@ momentum and the heavy top are in the
 | --- | --- |
 | [Operations](../ProjectAInos/SmoothAlgebra/Operations.lean) | `proj_comp`, `comp_proj`, `comp_assoc`, `exponential_addition` |
 | [Basic](../ProjectAInos/SmoothAlgebra/Basic.lean) | `op_const`, `op_add`, `op_mul`, `op_neg`, `op_sub`, `op_smul`, `op_sum`, `exp_add` |
-| [Hom](../ProjectAInos/SmoothAlgebra/Hom.lean) | `toAlgHom`, identity/composition laws, `map_exp` |
+| [Hom](../ProjectAInos/SmoothAlgebra/Hom.lean) | `toAlgHom`, identity/composition laws, `map_neg`, `map_sub`, `map_sum`, `map_exp` |
 | [Models](../ProjectAInos/SmoothAlgebra/Models.lean) | Real and function-ring instances; `hom_ext`, `lift_unique`, `existsUnique_lift`, `pullback_comp`, `eval_comp_pullback` |
 | [Differential](../ProjectAInos/SmoothAlgebra/Differential.lean) | `directionalEvaluation_op`, the chain rule for every finite smooth operation on the concrete model; `directionalEvaluation_eq_sum` |
 | [PartialDerivative](../ProjectAInos/SmoothAlgebra/PartialDerivative.lean) | `partialDeriv`, `fderiv_apply_eq_sum_partialDeriv`, `partialDeriv_mul`, `partialDeriv_comp`, `partialDeriv_comm`, `partialDeriv_exponential` |
@@ -242,7 +242,7 @@ momentum and the heavy top are in the
 | [Poisson/Ideal](../ProjectAInos/SmoothAlgebra/Poisson/Ideal.lean) | `IsPoissonIdeal`, `IsCoisotropic`, `normalizer`, `bracket_mem_normalizer`, `op_mem_normalizer`, `bracket_sub_bracket_mem`, `hamiltonJacobi`, `maupertuis` |
 | [Poisson/Free](../ProjectAInos/SmoothAlgebra/Poisson/Free.lean) | `jacobiator_eq_zero`, `almostPoisson`, `almostPoisson_bracket_generator`, `poissonOfCoordinates`, `poissonOfConstants` |
 | [Poisson/Canonical](../ProjectAInos/SmoothAlgebra/Poisson/Canonical.lean) | `PhaseSpace`, `canonical`, `canonical_q_p`, `canonical_bracket`, `canonical_q_bracket`, `canonical_p_bracket`, `canonical_hamiltonian_apply` |
-| [Poisson/Hom](../ProjectAInos/SmoothAlgebra/Poisson/Hom.lean) | `IsPoissonHom`, `IsPoissonHom.comp`, `FreeSmoothRing.isPoissonHom_of_generators`, `SmoothRingHom.map_sum`, `SmoothRingHom.map_neg` |
+| [Poisson/Hom](../ProjectAInos/SmoothAlgebra/Poisson/Hom.lean) | `IsPoissonHom`, `IsPoissonHom.comp`, `FreeSmoothRing.isPoissonHom_of_generators` |
 | [Derivation](../ProjectAInos/SmoothAlgebra/Derivation.lean) | `SmoothDerivation`, `map_mul`, `map_exp`, `toDerivation`, module and Lie-ring instances, `commutator_chain`, `equivInfinitesimalAut`, `equivCoordinates`, `lie_partialDerivation_proj_smul` |
 | [Category](../ProjectAInos/SmoothAlgebra/Category.lean) | `SmoothRingCat`, faithful forgetful functors, isomorphisms from bijective morphisms |
 | [Congruence](../ProjectAInos/SmoothAlgebra/Congruence.lean) | Smooth quotients, projection, factorization, generated smooth congruences |

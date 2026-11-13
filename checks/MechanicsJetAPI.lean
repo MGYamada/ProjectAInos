@@ -189,3 +189,61 @@ example (m : ι → ℝ) (k : ℝ) :
   StandardJet.conserved_energy_oscillator m k
 
 end Standard
+
+section Prolongation
+
+variable {ι : Type*} [DecidableEq ι] [Fintype ι]
+
+example (γ : ι → TimeFunction) (i : ι) (k : ℕ) :
+    StandardJet.prolongation γ ((StandardJet.jetRing ι).q i k) = (timeDerivative^[k]) (γ i) :=
+  StandardJet.prolongation_q γ i k
+
+example (f : TimeFunction) : timeDerivative f = SmoothOperation.partialDeriv 0 f := rfl
+
+/-- The prolongation turns the total derivative into `d/dt`. -/
+example (γ : ι → TimeFunction) (F : StandardJet ι) :
+    StandardJet.prolongation γ ((StandardJet.jetRing ι).totalDeriv F) =
+      timeDerivative (StandardJet.prolongation γ F) :=
+  StandardJet.prolongation_totalDeriv γ F
+
+/-- A solution is a path whose prolongation kills the Euler–Lagrange expressions. -/
+example (L : StandardJet ι) (γ : ι → TimeFunction) :
+    StandardJet.IsSolution L γ ↔
+      ∀ i, StandardJet.prolongation γ ((StandardJet.jetRing ι).euler i L) = 0 :=
+  Iff.rfl
+
+/-- Conservation along trajectories. -/
+example {L F : StandardJet ι} {γ : ι → TimeFunction} (h : StandardJet.IsSolution L γ)
+    (hF : (StandardJet.jetRing ι).Conserved L F) (s t : Fin 1 → ℝ) :
+    StandardJet.prolongation γ F s = StandardJet.prolongation γ F t :=
+  StandardJet.prolongation_eq_of_conserved h hF s t
+
+/-- Solutions of a natural Lagrangian are solutions of Newton's equations. -/
+example (m : ι → ℝ) (k : ℝ) (γ : ι → TimeFunction) :
+    StandardJet.IsSolution
+        ((StandardJet.jetRing ι).naturalLagrangian m (StandardJet.oscillatorPotential k)) γ ↔
+      ∀ i, algebraMap ℝ TimeFunction (m i) * (timeDerivative^[2]) (γ i) =
+        -(algebraMap ℝ TimeFunction k * γ i) :=
+  StandardJet.isSolution_oscillator_iff m k γ
+
+/-- Conservation of energy along trajectories. -/
+example (m : ι → ℝ) {U : StandardJet ι} (hU : (StandardJet.jetRing ι).OrderLE U 0)
+    (ht : (StandardJet.jetRing ι).dt U = 0) {γ : ι → TimeFunction}
+    (h : StandardJet.IsSolution ((StandardJet.jetRing ι).naturalLagrangian m U) γ)
+    (s t : Fin 1 → ℝ) :
+    (∑ i, algebraMap ℝ TimeFunction (m i / 2) * (timeDerivative (γ i) * timeDerivative (γ i)) +
+        StandardJet.prolongation γ U) s =
+      (∑ i, algebraMap ℝ TimeFunction (m i / 2) *
+          (timeDerivative (γ i) * timeDerivative (γ i)) + StandardJet.prolongation γ U) t :=
+  StandardJet.energy_eq_of_isSolution m hU ht h s t
+
+/-- Solutions exist: uniform motion solves the free equations. -/
+example (m a b : ι → ℝ) :
+    StandardJet.IsSolution ((StandardJet.jetRing ι).naturalLagrangian m 0)
+      (StandardJet.uniformMotion a b) :=
+  StandardJet.isSolution_uniformMotion m a b
+
+example (a b : ι → ℝ) (i : ι) (t : Fin 1 → ℝ) :
+    StandardJet.uniformMotion a b i t = a i + b i * t 0 := rfl
+
+end Prolongation
