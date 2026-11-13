@@ -24,6 +24,7 @@ noncomputable section
 namespace ProjectAInos.Mechanics
 
 open SmoothAlgebra SmoothRing
+open scoped ContDiff
 
 /-- Smooth functions of time. -/
 abbrev TimeFunction := SmoothOperation 1
@@ -31,6 +32,19 @@ abbrev TimeFunction := SmoothOperation 1
 /-- The derivative `d/dt` of a smooth function of time. -/
 def timeDerivative : SmoothDerivation TimeFunction TimeFunction :=
   SmoothDerivation.partialDerivation 0
+
+/-- A smooth function of time, read as a function of a real variable, is smooth. -/
+theorem TimeFunction.contDiff_apply_const (f : TimeFunction) :
+    ContDiff ℝ ∞ (fun s : ℝ => f (fun _ => s)) :=
+  f.contMDiff.contDiff.comp (contDiff_pi.mpr fun _ => contDiff_id)
+
+/-- Two smooth functions of time are equal if they agree at every time. -/
+theorem TimeFunction.ext_apply_const {f g : TimeFunction}
+    (h : ∀ t : ℝ, f (fun _ => t) = g (fun _ => t)) : f = g := by
+  refine DFunLike.ext f g fun x => ?_
+  have hx : x = fun _ => x 0 := funext fun j => by rw [Subsingleton.elim j 0]
+  rw [hx]
+  exact h (x 0)
 
 /-- `timeDerivative` is the ordinary derivative of the function `s ↦ f s` of a
 real variable. -/

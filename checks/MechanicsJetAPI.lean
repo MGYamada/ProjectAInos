@@ -252,3 +252,62 @@ example (f : TimeFunction) (t : ℝ) :
   TimeFunction.timeDerivative_apply f t
 
 end Prolongation
+
+section Analytic
+
+variable {n : ℕ}
+
+example (f : SmoothOperation (n + n + 1)) :
+    StandardJet.firstOrder f = op f (StandardJet.firstOrderCoordinates n) := rfl
+
+example (γ : Fin n → TimeFunction) (t : ℝ) (i : Fin n) :
+    StandardJet.realPath γ t i = γ i (fun _ => t) := rfl
+
+/-- The prolonged Lagrangian is the analytic Lagrangian along the path. -/
+example (f : SmoothOperation (n + n + 1)) (γ : Fin n → TimeFunction) (t : ℝ) :
+    StandardJet.prolongation γ (StandardJet.firstOrder f) (fun _ => t) =
+      ofSmoothOperation f t (StandardJet.realPath γ t, deriv (StandardJet.realPath γ) t) :=
+  StandardJet.prolongation_firstOrder_apply f γ t
+
+/-- The prolonged Euler operator is the analytic Euler–Lagrange residual. -/
+example (f : SmoothOperation (n + n + 1)) (γ : Fin n → TimeFunction) (i : Fin n) (t : ℝ) :
+    StandardJet.prolongation γ
+        ((StandardJet.jetRing (Fin n)).euler i (StandardJet.firstOrder f)) (fun _ => t) =
+      eulerLagrange (ofSmoothOperation f) (StandardJet.realPath γ) t (Pi.single i 1) :=
+  StandardJet.prolongation_euler_firstOrder_apply f γ i t
+
+/-- Solutions in the jet ring are the stationary paths of the action. -/
+example (f : SmoothOperation (n + n + 1)) (γ : Fin n → TimeFunction) :
+    StandardJet.IsSolution (StandardJet.firstOrder f) γ ↔
+      ∀ a b : ℝ, a < b →
+        Stationary a b (ofSmoothOperation f) (StandardJet.realPath γ) :=
+  StandardJet.isSolution_firstOrder_iff_stationary f γ
+
+/-- Conserved elements are constant along stationary paths. -/
+example {f : SmoothOperation (n + n + 1)} {F : StandardJet (Fin n)} {γ : Fin n → TimeFunction}
+    (h : ∀ a b : ℝ, a < b →
+      Stationary a b (ofSmoothOperation f) (StandardJet.realPath γ))
+    (hF : (StandardJet.jetRing (Fin n)).Conserved (StandardJet.firstOrder f) F)
+    (s t : Fin 1 → ℝ) :
+    StandardJet.prolongation γ F s = StandardJet.prolongation γ F t :=
+  StandardJet.prolongation_eq_of_stationary h hF s t
+
+/-- Conservation of energy along stationary paths of a time-independent Lagrangian. -/
+example {f : SmoothOperation (n + n + 1)} (hf : SmoothOperation.partialDeriv 0 f = 0)
+    {γ : Fin n → TimeFunction}
+    (h : ∀ a b : ℝ, a < b →
+      Stationary a b (ofSmoothOperation f) (StandardJet.realPath γ)) (s t : ℝ) :
+    ∑ i, deriv (StandardJet.realPath γ) s i *
+          SmoothOperation.partialDeriv (StandardJet.velocityIndex i) f
+            (StandardJet.realJet γ s) - f (StandardJet.realJet γ s) =
+      ∑ i, deriv (StandardJet.realPath γ) t i *
+          SmoothOperation.partialDeriv (StandardJet.velocityIndex i) f
+            (StandardJet.realJet γ t) - f (StandardJet.realJet γ t) :=
+  StandardJet.energy_eq_of_stationary hf h s t
+
+example (γ : Fin n → TimeFunction) (t : ℝ) :
+    StandardJet.realJet γ t =
+      Fin.cons t (Fin.append (StandardJet.realPath γ t) (deriv (StandardJet.realPath γ) t)) :=
+  rfl
+
+end Analytic
