@@ -159,7 +159,17 @@ are derivations, every derivation satisfies
 `d f = ∑ i, partialDeriv i f • d (proj i)`, and `equivCoordinates` identifies
 derivations into any module with `n`-tuples of values on the coordinates. The
 regression `lie_partialDerivation_proj_smul` proves `[∂ᵢ, xⱼ ∂ₖ] = δᵢⱼ ∂ₖ`, so
-the bracket is not trivial. This stage is tracked in [issue #74](https://github.com/MGYamada/ProjectAInos/issues/74).
+the bracket is not trivial.
+
+On the free ring `FreeSmoothRing ι` over any set of generators,
+`FreeSmoothRing.derivation w` is the vector field with prescribed values `w` on
+the generators, and `derivation_ext` shows that a derivation is determined by
+those values. Existence uses the universal property of the free ring to build a
+morphism into its dual numbers and reads off the infinitesimal part; no calculus
+on an infinite product is needed. Coordinate vector fields commute because their
+commutator is a derivation that vanishes on every generator. The standard jet
+ring of the [mechanics guide](mechanics.md#jet-rings-and-conservation-laws) is
+built from these. The first stage is tracked in [issue #74](https://github.com/MGYamada/ProjectAInos/issues/74).
 
 ## Proof map and verification
 
@@ -172,6 +182,7 @@ the bracket is not trivial. This stage is tracked in [issue #74](https://github.
 | [Differential](../ProjectAInos/SmoothAlgebra/Differential.lean) | `directionalEvaluation_op`, the chain rule for every finite smooth operation on the concrete model; `directionalEvaluation_eq_sum` |
 | [PartialDerivative](../ProjectAInos/SmoothAlgebra/PartialDerivative.lean) | `partialDeriv`, `fderiv_apply_eq_sum_partialDeriv`, `partialDeriv_mul`, `partialDeriv_comp`, `partialDeriv_comm`, `partialDeriv_exponential` |
 | [DualNumber](../ProjectAInos/SmoothAlgebra/DualNumber.lean) | `SmoothRing (DualNumber A)`, `fst_op`, `snd_op`, `fstHom`, `inlHom`, `exp_inl_add_inr` |
+| [FreeDerivation](../ProjectAInos/SmoothAlgebra/FreeDerivation.lean) | `FreeSmoothRing.derivation`, `derivation_generator`, `derivation_ext`, `derivationEquiv`, `partialDerivation_comm`, `exists_finset_partialDerivation_eq_zero` |
 | [Derivation](../ProjectAInos/SmoothAlgebra/Derivation.lean) | `SmoothDerivation`, `map_mul`, `map_exp`, `toDerivation`, module and Lie-ring instances, `commutator_chain`, `equivInfinitesimalAut`, `equivCoordinates`, `lie_partialDerivation_proj_smul` |
 | [Category](../ProjectAInos/SmoothAlgebra/Category.lean) | `SmoothRingCat`, faithful forgetful functors, isomorphisms from bijective morphisms |
 | [Congruence](../ProjectAInos/SmoothAlgebra/Congruence.lean) | Smooth quotients, projection, factorization, generated smooth congruences |
