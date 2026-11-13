@@ -134,7 +134,7 @@ The Lorentz Levi-Civita connection and smooth curvature tensor are now
 constructed; equivalence of `IsLocallyMinkowski` with vanishing native
 curvature is now proved. Both implications, coordinate flat-frame
 construction and coframe-to-chart integration are implemented in stage D,
-pending review and merge.
+merged through [#52](https://github.com/MGYamada/ProjectAInos/issues/52).
 
 The localization construction follows [Joyce, *Algebraic Geometry over
 C∞-rings*, §2.3](https://arxiv.org/pdf/1001.0023). The requested general

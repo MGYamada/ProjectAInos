@@ -1,10 +1,13 @@
 # Charged Particles and Electromagnetic Fields
 
-This implements research-plan §4.1 of [issue #8](https://github.com/MGYamada/ProjectAInos/issues/8),
-with the free-particle action needed from §3.2, and the fixed-background
-Maxwell form API from §5.1 / [#52](https://github.com/MGYamada/ProjectAInos/issues/52).
-The field-action derivation in §4.2, collision theory and quantum field theory
-remain later stages. Issue #8 is a broader research plan and remains open.
+This guide records the implemented §4.1 local-field and charged-particle core,
+the flat vacuum field-action theorem in §4.2 / [#44](https://github.com/MGYamada/ProjectAInos/issues/44),
+and the fixed-background Maxwell form API from §5.1 / [#52](https://github.com/MGYamada/ProjectAInos/issues/52).
+The free-particle action is shared with §3.2. The
+[C∞ electrodynamics research plan](cinfty-electrodynamics.md) carries forward
+the design from [issue #8](https://github.com/MGYamada/ProjectAInos/issues/8),
+including the remaining sourced-action, stress-energy, wave and radiation
+targets. The flat vacuum result does not complete that wider program.
 
 ## Conventions and local fields
 
@@ -213,7 +216,8 @@ the transformed potential. Endpoints and the potential domain are explicit.
 
 The Maxwell dependency closure consists of 11 upstream modules at commit
 `3456e5e75cf8d4cd558955a5c7638fba2d68f464`. Five were already imported by
-[PR #41](https://github.com/MGYamada/ProjectAInos/pull/41); this change adds six.
+[PR #41](https://github.com/MGYamada/ProjectAInos/pull/41);
+[PR #48](https://github.com/MGYamada/ProjectAInos/pull/48) supplied the remaining six.
 Original `YM` namespaces and mathematical statements are preserved. See the
 [provenance and compatibility record](../ProjectAInos/External/YM/PROVENANCE.md)
 and [NOTICE](../NOTICE).
@@ -273,6 +277,6 @@ separate **Experiments** job remains non-required. It checks Hodge signs,
 invariants, boosts/reflection, gauge curvature, radial coefficients, and the
 hyperbolic worldline. Formal claims rest on the Lean proofs.
 
-Before merging, independent review should check the pinned upstream port and
-its dependency closure separately from the physical signs, open-domain
+Changes to the pinned upstream port and its dependency closure require
+independent review, separately from the physical signs, open-domain
 regularity, and interpretation of the action theorem.

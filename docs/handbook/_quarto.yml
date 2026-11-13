@@ -44,9 +44,12 @@ website:
           - landau-lifshitz.qmd
       - section: Relativity and electrodynamics
         contents:
+          - cinfty-special-relativity.qmd
           - special-relativity.qmd
-          - general-relativity.qmd
+          - cinfty-electrodynamics.qmd
           - electrodynamics.qmd
+          - cinfty-general-relativity.qmd
+          - general-relativity.qmd
       - build.qmd
 
 format:

@@ -2,11 +2,13 @@
 
 This is the implemented foundation for README §3.1 and
 [issue #40](https://github.com/MGYamada/ProjectAInos/issues/40).
-[Electrodynamics #8](https://github.com/MGYamada/ProjectAInos/issues/8) consumes
+The [electrodynamics research plan](cinfty-electrodynamics.md) consumes
 its form calculus and observer decomposition. Particle actions and equations
 of motion belong to §3.2; charged-particle actions also require the shared
 variational foundation tracked by #7. Maxwell's equations are not premises or
 conclusions of this geometry library.
+The [C∞ special relativity research plan](cinfty-special-relativity.md)
+sets out the full §§1–14 program and the remaining §3.2 targets.
 
 ## Conventions and layers
 
