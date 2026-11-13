@@ -90,6 +90,7 @@ public import ProjectAInos.Mechanics.Jet.Euler
 public import ProjectAInos.Mechanics.Jet.Noether
 public import ProjectAInos.Mechanics.Jet.Standard
 public import ProjectAInos.Mechanics.OpenDomain
+public import ProjectAInos.Mechanics.Poisson.RigidBody
 public import ProjectAInos.Mechanics.SmoothLagrangian
 public import ProjectAInos.Mechanics.TotalTimeDerivative
 public import ProjectAInos.QuantumFieldTheory.SmearedField
@@ -112,6 +113,10 @@ public import ProjectAInos.SmoothAlgebra.LocalizationComparison
 public import ProjectAInos.SmoothAlgebra.Models
 public import ProjectAInos.SmoothAlgebra.Operations
 public import ProjectAInos.SmoothAlgebra.PartialDerivative
+public import ProjectAInos.SmoothAlgebra.Poisson.Basic
+public import ProjectAInos.SmoothAlgebra.Poisson.Canonical
+public import ProjectAInos.SmoothAlgebra.Poisson.Free
+public import ProjectAInos.SmoothAlgebra.Poisson.Ideal
 public import ProjectAInos.SmoothAlgebra.SmoothFunctions
 public import ProjectAInos.SmoothGeometry.AffineScheme
 public import ProjectAInos.SmoothGeometry.DifferentialForm.BivectorVolume

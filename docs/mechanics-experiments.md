@@ -37,6 +37,8 @@ These checks support §§40 and 42, including the sign relating commutators of H
 | `E1b` | `[X_f,X_g](h)=−X_{ {f,g} }(h)`. |
 | `E1c` | The canonical bracket satisfies the Jacobi identity, using equality of mixed second derivatives. |
 
+These identities are now Lean theorems for any finite number of canonical pairs: E1a is `PhaseSpace.canonical_q_bracket` with `PhaseSpace.canonical_p_bracket`, E1b is `PoissonStructure.hamiltonian_bracket` in every Poisson C∞-ring, and E1c is the `jacobi` field of `PhaseSpace.canonical`. The experiment remains as independent evidence for the conventions.
+
 ## E2: Closedness and Jacobi
 
 This checks the local geometric identity behind the symplectic/Poisson infrastructure for §§42 and 46. On four coordinates, the test form has blocks `dq₁∧dq₂ + (1+q₁²)dq₃∧dq₄`. It is nondegenerate but not closed. The Jacobiator is deliberately nonzero, so the check tests the sign of the closedness identity rather than silently using a symplectic example. The functions are explicit polynomials.
@@ -101,6 +103,8 @@ The body-frame bracket is `{F,G}=−L·(∇F×∇G)`. These checks support §§3
 
 E6e checks the stated representative numerical ordering, not a symbolic theorem for every ordered inertia triple. E6f's polynomial Jacobi check is likewise example-based.
 
+E6a–d are now Lean theorems: E6a is `RigidBody.poisson_L_L`, E6b is `RigidBody.euler_equations` with its three components, E6c is `RigidBody.poisson_casimir_left` for every element and not only the generators, and E6d is the `jacobi` field of `RigidBody.poisson`, for all elements of the free C∞-ring. E6e and E6f have no Lean counterpart.
+
 ## E7: Singular reduction examples
 
 These targets extend beyond the section-level Volume 1 correspondence. Set `s₁=q·q`, `s₂=p·p`, and `s₃=q·p`.
@@ -150,6 +154,8 @@ These identities support §§13–14, 39, 44, and 45. Polar-coordinate expressio
 | `E10d` | The rotating-frame Hamiltonian gives `q'=p/m−Ω×q`. |
 | `E10e` | The rotating-frame acceleration includes the Coriolis and centrifugal terms with the stated signs. |
 | `E10f` | `{g,f(H−E)}−f{g,H}=(H−E){g,f}`, the algebraic identity for Maupertuis reparametrization on the energy surface. |
+
+E10f is now a Lean theorem in every Poisson C∞-ring, `PoissonStructure.bracket_mul_sub_algebraMap`, and `PoissonStructure.maupertuis` is its consequence modulo the ideal `(H − E)`. E10a–e have no Lean counterpart.
 
 ## E11: Anharmonic frequency shift
 

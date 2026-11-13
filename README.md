@@ -190,8 +190,13 @@ identities hold in every jet ring, and the conservation laws of energy,
 momentum, the centre of mass and angular momentum follow for natural
 Lagrangians as membership in the Euler–Lagrange ideal. The standard jet ring is
 the nondegenerate model. These identities are not yet connected to actual
-trajectories. Galilean symmetry as a group action and the topics of 2.1, 2.3
-and 2.4 have no Lean counterpart yet. The
+trajectories. For 2.3, Poisson structures on C∞-rings are implemented with
+Poisson's theorem, the normalizer of a coisotropic ideal, the Hamilton–Jacobi
+and Maupertuis–Jacobi statements, the canonical bracket with Hamilton's
+equations, and the rigid body with Euler's equations. Symplectic structures,
+the Legendre transformation, Dirac brackets and canonical transformations are
+not implemented. Galilean symmetry as a group action and the topics of 2.1 and
+2.4 have no Lean counterpart yet. The
 [ledger](docs/cinfty-mechanics.md#ledger) gives the status of each section of
 Landau–Lifshitz, and [#78](https://github.com/MGYamada/ProjectAInos/issues/78) tracks completion. See the
 [mechanics guide](docs/mechanics.md) and the

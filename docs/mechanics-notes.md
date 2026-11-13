@@ -102,9 +102,9 @@ The velocity derivative of the added density is $\partial_q F$, so the momentum 
 
 **Observation.** The manuscript's sketch declares `class PoissonCinftyRing (P) extends CinftyRing P, Bracket P P`. Mathlib already gives every ring the instance `Ring.instBracket`, the commutator `⁅x, y⁆ = x * y - y * x`. On a commutative ring this commutator is identically zero. Extending `Bracket P P` would therefore install a second instance on the same type, and `⁅f, g⁆` could resolve to the zero commutator.
 
-**Interface decision.** None yet. The Poisson stage should carry the bracket as its own operation with dedicated notation, or wrap the ring in a type synonym. The problem does not arise for vector fields: `SmoothDerivation A A` is not a ring, so its `Bracket` instance is the only one.
+**Interface decision.** `PoissonStructure P` is a structure with a field `bracket`, written `π.bracket f g`, and no notation. A structure also allows several Poisson structures on one ring, which a class would not: the canonical bracket and a Lie–Poisson bracket can live on the same free ring. The problem does not arise for vector fields: `SmoothDerivation A A` is not a ring, so its `Bracket` instance is the only one, and `hamiltonian_bracket` uses it on the right-hand side.
 
-**Proof status.** Not implemented. This records a constraint for the second half of milestone M2.
+**Proof status.** Implemented in the second half of milestone M2. [Poisson structures](../ProjectAInos/SmoothAlgebra/Poisson/Basic.lean)
 
 ## M14. The standard jet ring is the free ring on time and the jet coordinates
 
@@ -144,7 +144,7 @@ The velocity derivative of the added density is $\partial_q F$, so the momentum 
 
 **Interface decision.** `JetRing ι J` takes any index type, with `[Fintype ι]` where sums occur. Angular momentum uses `ι = κ × Fin 3`: the variation is `n ⨯₃ qₐ`, the kinetic term vanishes by `(n × v) · v = 0`, and `axis_cross_dotProduct` rewrites the charge as `n · (q × p)`. Mathlib provides the Lie ring of the cross product only as a definition, `Cross.lieRing`, because `Fin 3 → R` is already a ring under componentwise multiplication and carries the commutator bracket. This is the same clash as in M13, so the rigid-body stage should use `⨯₃` directly and not bracket notation.
 
-**Proof status.** `conserved_angularMomentum` and `conserved_linear` are proved. The `so(3)` momentum map of the row for §9 belongs to the Poisson stage.
+**Proof status.** `conserved_angularMomentum` and `conserved_linear` are proved. The rigid body of M24 uses `⨯₃` in the same way. The `so(3)` momentum map of the row for §9 is not formalized.
 
 ## M19. Conservation in a jet ring is ideal membership, not constancy along a path
 
@@ -153,3 +153,51 @@ The velocity derivative of the added density is $\partial_q F$, so the momentum 
 **Interface decision.** `Conserved L F` is defined as `D F ∈ eulerLagrangeIdeal L`, and the ideal is proved stable under `D`. Nothing in `Mechanics/Jet` mentions a path. The real analytic statements (`Mechanics.stationary_iff_eulerLagrange` and its relatives) remain separate.
 
 **Proof status.** The algebraic laws are proved. No theorem yet says that energy or momentum is constant along a solution of the Euler–Lagrange equations; the ledger rows for §§6–9 are *proved* for their stated main target, the jet-ring identity. The bridge is a stage of issue #78. [Euler operators](../ProjectAInos/Mechanics/Jet/Euler.lean)
+
+## M20. Bilinearity and the Leibniz rule of a Poisson bracket are theorems
+
+**Observation.** Definition 20 asks for an `ℝ`-bilinear bracket with antisymmetry (P1), the Jacobi identity (P2) and the chain rule in the first argument (P3). Bilinearity is redundant. The chain rule applied to the addition and multiplication operations gives additivity and the Leibniz rule in the first argument, applied to a constant operation it gives `{r, h} = 0`, and antisymmetry transports all three to the second argument. This is the same reduction as for derivations (M08), because (P3) says that `{·, h}` is a C∞-derivation.
+
+**Interface decision.** `AlmostPoissonStructure` has the fields `bracket`, `antisymm` and `chain`; `PoissonStructure` adds `jacobi`. The lemmas `bracket_add_left`, `bracket_mul_left`, `bracket_algebraMap_left`, `bracket_smul_left` and their right-hand versions are derived through `hamiltonian h : SmoothDerivation P P`.
+
+**Proof status.** Proved. `checks/PoissonAPI.lean` pins the derived laws. [Poisson structures](../ProjectAInos/SmoothAlgebra/Poisson/Basic.lean)
+
+## M21. On a free ring the Jacobi identity is a condition on generators
+
+**Observation.** The manuscript marks the Jacobi identity of the canonical bracket and of a Lie–Poisson bracket as needing the symmetry of second derivatives. In Lean that input is used once and abstractly. For any almost-Poisson structure the Jacobiator `{{f, g}, h} + {{g, h}, f} + {{h, f}, g}` satisfies the chain rule in its first argument: the second-order terms of the three summands cancel by `partialDeriv_comm`. It is cyclic, so it is a derivation in each argument, and on a free ring it vanishes as soon as it vanishes on generators.
+
+**Interface decision.** `jacobiator_op` is stated for every C∞-ring. `FreeSmoothRing.jacobiator_eq_zero` is stated for every set of generators, and `poissonOfCoordinates` takes the Jacobi identity on generators as its only hypothesis beyond skewness. For the canonical bracket the generator brackets are constants, so the hypothesis is `0 + 0 + 0 = 0` (`poissonOfConstants`); for the rigid body it is 27 cases decided by `fin_cases`.
+
+**Proof status.** Proved. A general Lie–Poisson structure for a Lie algebra with a finite basis is not stated; `poissonOfCoordinates` reduces it to the Jacobi identity of the structure constants.
+
+## M22. The coordinate bracket is defined for vector fields on any ring, then specialized
+
+**Observation.** The first definition of the bracket `Σ_{a,b} ∂_a f ∂_b g w a b` was written directly on `FreeSmoothRing κ`. Its chain-rule proof timed out in definitional unfolding (`isDefEq`). The likely cause is that the free ring is a subalgebra of a function algebra, so each `ring` or `simp` step has to see its ring instances through that subtype; this was not profiled further. The same formula for a finite family of vector fields `D a` on an arbitrary C∞-ring and a skew family `w a b` elaborates at once, because the ring is a variable.
+
+**Interface decision.** `AlmostPoissonStructure.ofDerivations D w hw` lives in the abstract file, and `FreeSmoothRing.almostPoisson w hw` is its instance with `D = partialDerivation`. The abstract form is also the mathematically natural one: it is the bracket of the bivector `Σ w a b · D_a ∧ D_b`. The same pattern was used for `FreeSmoothRing.derivation` (M15) and is the default for later constructions on free rings: prove over a variable ring, specialize last.
+
+**Proof status.** Proved. `Poisson/Free.lean` compiles in about ten seconds.
+
+## M23. Reduction, Hamilton–Jacobi and Maupertuis are statements about ideals
+
+**Observation.** Proposition 28 concludes that `N(I)/I` is a Poisson C∞-ring, which needs the quotient of a C∞-ring by an ordinary ideal and therefore Hadamard's lemma. Every other part of the proposition is free of quotients: the normalizer is a subalgebra closed under the bracket and under smooth operations, it contains a coisotropic ideal, and the bracket of two normalizer elements changes by an element of `I` when the arguments change by elements of `I`. Propositions 54 and 55 are of the same kind. Proposition 55 assumes that `u` is a unit, but the congruence `{g, H'} ≡ u {g, H}` modulo `(H − E)` holds for every `u`; the unit is needed only to conclude that the two ideals are equal, so that the roles of `H` and `H'` can be exchanged.
+
+**Interface decision.** `normalizer I` is a `Subalgebra ℝ P`, with `bracket_mem_normalizer`, `op_mem_normalizer` and `bracket_sub_bracket_mem` as separate theorems. `hamiltonJacobi` and `maupertuis` are stated as ideal memberships, and `maupertuis` has no unit hypothesis. `bracket_mul_sub_algebraMap` records the exact identity behind it.
+
+**Proof status.** Proved, except the quotient ring. Once quotients by ideals exist, `bracket_sub_bracket_mem` is the well-definedness statement they need. The row for §44 stays at *evidence* and the row for §47 at *informal*, because the Jacobi metric, the variational statement and Jacobi's theorem on complete integrals are not formalized. [Poisson ideals](../ProjectAInos/SmoothAlgebra/Poisson/Ideal.lean)
+
+## M24. The rigid body: sign, the gradient form, and total inverses
+
+**Observation.** With `X_h = {·, h}` and `{q, p} = 1`, the body-frame angular momentum has `{Lᵢ, Lⱼ} = −εᵢⱼₖ Lₖ`, the opposite sign to the space-frame components `q × p`. With this sign the equation of motion for any Hamiltonian is `{Lₐ, H} = (L × ∇H)ₐ`, and the whole bracket is `{f, g} = −L · (∇f × ∇g)`. Euler's equations and the Casimir property of `|L|²` are then instances of two identities of the cross product, `∇H = Ω` and `L · (L × v) = 0`. The kinetic energy `Σ Lᵢ² / 2Iᵢ` divides by the moments of inertia. Lean's real inverse is total, and the identities hold for every `I : Fin 3 → ℝ`, including `I i = 0`, where the corresponding term of the energy is zero.
+
+**Interface decision.** `RigidBody.structureMatrix` is the explicit skew matrix, so that the generator brackets reduce by `rfl` and case analysis. The general statements `poisson_bracket` and `poisson_L_bracket` are in vector form with `⨯₃`, and Euler's equations are stated both in vector form and by components. No positivity or nonvanishing of `I` is assumed, since no proof uses it. `L_ne_zero` evaluates at the point `(1, 1, 1)` through `FreeSmoothRing.lift` to show that the bracket is not the zero bracket.
+
+**Proof status.** Proved: the row for §36 is *proved*. The quotient by `|L|² − r²`, stability of the principal rotations (§37), the heavy top and the link to the Lagrangian on `T(SO(3))` are not formalized. [Rigid body](../ProjectAInos/Mechanics/Poisson/RigidBody.lean)
+
+## M25. The canonical phase space is all of ℝ²ⁿ
+
+**Observation.** Example 22(a) takes `P = C∞(U × ℝⁿ)` for an open `U ⊆ ℝⁿ`. `PhaseSpace ι` is the free ring, which is the case `U = ℝⁿ`. Kepler's problem lives on `ℝ³ ∖ {0}`, where `1/r` is a smooth function; in the free ring `r` is not invertible and `1/r` does not exist. A bracket on an open set needs the bracket to extend to a localization: a derivation extends uniquely to a C∞-localization, so the extension should exist, but it is not proved.
+
+**Interface decision.** None yet. The models of this stage are polynomial or globally smooth, so they need no localization. The Kepler stage has two options: extend a Poisson structure along `GeneralLocalization`, or state the Runge–Lenz identities with an element `ρ` and the hypothesis `ρ * r = 1` in an arbitrary Poisson C∞-ring.
+
+**Proof status.** Not implemented. This records a constraint for the model stage of issue #78. [Canonical bracket](../ProjectAInos/SmoothAlgebra/Poisson/Canonical.lean)

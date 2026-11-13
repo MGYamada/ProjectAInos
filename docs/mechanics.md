@@ -102,6 +102,34 @@ For the natural Lagrangian `Σᵢ ½ mᵢ vᵢ² − U` with a potential of orde
 
 These statements are identities in a ring. They do not yet say that a quantity is constant along a solution of the Euler–Lagrange equations in the real analytic model above; that needs the prolongation of a path and is a later stage of [issue #78](https://github.com/MGYamada/ProjectAInos/issues/78).
 
+## Poisson models
+
+Hamiltonian mechanics uses the Poisson structures of the
+[C∞-ring guide](smooth-algebra.md#poisson-structures). A system is a Poisson
+structure together with one element `H`, and the equation of motion of an
+observable `f` is `{f, H}`. The canonical phase space `PhaseSpace ι`, with
+Hamilton's equations, is in the shared algebra layer.
+
+`RigidBody.PhaseSpace` is the free C∞-ring on the components `L 0`, `L 1`, `L 2`
+of the angular momentum in the body frame. `RigidBody.poisson` has
+`{Lᵢ, Lⱼ} = −εᵢⱼₖ Lₖ`; the Jacobi identity is checked on generators. In vector
+form `{f, g} = −L · (∇f × ∇g)` (`poisson_bracket`), and for every Hamiltonian
+`{Lₐ, H} = (L × ∇H)ₐ` (`poisson_L_bracket`). For the kinetic energy
+`H = Σᵢ Lᵢ² / 2Iᵢ` the gradient is the angular velocity `Ωᵢ = Lᵢ / Iᵢ`, and
+`euler_equations` gives Euler's equations `{Lₐ, H} = (L × Ω)ₐ`, with the
+components
+
+$$
+\{L_0,H\}=\Bigl(\frac1{I_2}-\frac1{I_1}\Bigr)L_1L_2\quad\text{and cyclic permutations.}
+$$
+
+`|L|²` is a Casimir (`poisson_casimir_left`): its bracket with every element
+vanishes, so it is an integral of every Hamiltonian. `L_ne_zero` evaluates at a
+point to show that the generators, and hence the bracket, are not zero. The
+identities use the real inverse `(I i)⁻¹` and hold for every `I`; a physical
+body has `I i > 0`. The quotient by `|L|² − r²`, the ring of functions on the
+sphere, is not constructed.
+
 ## Proof map
 
 | Module | Main declarations |
@@ -116,6 +144,7 @@ These statements are identities in a ring. They do not yet say that a quantity i
 | [Jet/Noether](../ProjectAInos/Mechanics/Jet/Noether.lean) | `momentum`, `energy`, `prolong`, `totalDeriv_energy`, `prolong_eq_euler_add_totalDeriv`, `conserved_noetherCharge`, `conserved_energy` |
 | [Jet/Conservation](../ProjectAInos/Mechanics/Jet/Conservation.lean) | `naturalLagrangian`, `euler_naturalLagrangian`, `conserved_momentum`, `conserved_boost`, `conserved_linear`, `conserved_angularMomentum` |
 | [Jet/Standard](../ProjectAInos/Mechanics/Jet/Standard.lean) | `StandardJet`, `jetRing`, `totalDeriv_eq_derivation`, `euler_q_mul_acceleration`, `euler_oscillator`, `conserved_energy_oscillator`, `conserved_boost_free` |
+| [Poisson/RigidBody](../ProjectAInos/Mechanics/Poisson/RigidBody.lean) | `PhaseSpace`, `L`, `poisson`, `poisson_L_L`, `L_ne_zero`, `poisson_bracket`, `poisson_L_bracket`, `kineticEnergy`, `gradient_kineticEnergy`, `euler_equations`, `euler_equation_zero`, `casimir`, `poisson_casimir_left`, `isIntegral_casimir` |
 | [Examples](../ProjectAInos/Mechanics/Examples.lean) | Newton equation, stationary uniform free motion, rejection of accelerated free motion, endpoint-vanishing polynomial variation and its endpoint derivative, zero-length interval and zero-coordinate system |
 
 For `L = m v²/2 − V(q)`, `stationary_natural_iff` proves `m q'' = −V'(q)` on `(a,b)`. This algebraic equation remains valid at `m = 0`; dividing by the mass would require a separate nonzero premise.
