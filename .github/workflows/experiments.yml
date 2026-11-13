@@ -30,7 +30,7 @@ jobs:
           python-version: "3.12"
       - name: Install the experiment package
         run: python -m pip install ./experiments
-      - name: Verify metric and chart identities exactly
+      - name: Verify metric, chart, curvature and motion identities exactly
         run: python -m ainos_experiments.verify_lorentz_geometry
   electrodynamics:
     name: Electrodynamics checks

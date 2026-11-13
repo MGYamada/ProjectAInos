@@ -125,7 +125,39 @@ arbitrary smooth charts. Both Minkowski presentations have proved zero
 curvature. The curved metric `exp(2x²)(-dt²+dx²)` has proved scalar curvature
 `-4 exp(-2x²)`, including zero connection but nonzero curvature at the origin.
 Stage C's proof endpoints are implemented and awaiting review/merge.
-Motion, curved forms and the Newtonian motion limit remain in the work
+Stage D constructs chart-independent covariant differentiation along
+curves, proves metric preservation for parallel fields and geodesic
+velocity, and derives the coordinate geodesic ODE. The local geodesic
+initial-value problem has proved existence and uniqueness on the actual
+tangent bundle. Reparametrization, both-signature Minkowski lines and the
+nonlinear-chart geodesic/parallel-field examples are proved. Parallel fields
+exist uniquely along prescribed finite segments, and endpoint transport
+preserves the metric, composes under subdivision, reverses by inversion,
+and respects parameter changes. Nonzero null velocities are preserved.
+Finite piecewise-path concatenation has matching native parallel fields,
+continuous lifts, uniquely characterized transport and reversal laws;
+the Minkowski right-angle path is a proved example. Local inertial charts
+now exist at every point with a prescribed Lorentz basis, zero connection
+coefficients and zero first metric derivatives. Their quadratic construction
+is compatible with nonzero curvature at the chosen point. Local Minkowski
+geometry implies zero native curvature. Smooth parallel coframes now
+integrate to local Minkowski charts, with normalization propagated from
+one point. The supporting Volterra solver now proves smooth dependence on
+small continuous coefficient curves and initial values, including a
+time-dependent exact example. Smooth coordinate coefficients lift to
+curve-valued families; radial frames and their inverses are smooth near
+the center, with rescaling and the radial differential equation proved.
+Native chart coefficients admit suitable local extensions. Zero coordinate
+curvature now gives parallelness in every direction and a smooth invertible
+parallel coframe. Native curvature now supplies that coordinate condition,
+and integrating the constructed normalized coframe gives a Minkowski chart
+wherever curvature vanishes near a point. The equivalence
+`IsLocallyMinkowski ↔ ∀ p, curvature p = 0` is proved. Stage D's principal
+proof endpoints, including path independence for finite piecewise paths
+inside a flat neighborhood, are implemented, pending review and merge; global inertial
+coordinates and geodesic completeness are not conclusions.
+Particle variation, curved forms and
+the Newtonian motion limit remain in the work
 tracked by [#52](https://github.com/MGYamada/ProjectAInos/issues/52).
 Einstein equations and their Newtonian field-equation limit remain in 5.2;
 the Maxwell field action remains in 4.2.

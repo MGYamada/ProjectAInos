@@ -147,7 +147,154 @@ origin its connection coefficients vanish but its curvature does not.
 Exact SymPy checks independently cover the same examples and covariance
 of nonzero conformal curvature under the shear.
 
-Stage C is awaiting review/merge. Stages D–G remain subsequent work; differential/contracted
+Stage C is awaiting review/merge. The stage D increment constructs
+`covariantAlong` on the actual tangent fibres using chart components and
+the native Levi-Civita connection. A transition-Jacobian product rule and
+the connection's chart decomposition prove chart independence without
+assuming immersion, nonzero velocity or an ambient extension. Locality,
+linearity, Leibniz, ambient compatibility and metric compatibility are
+proved. The metric proof uses normed models only for coordinate bilinear
+forms; it adds no normed or positive-definite structure to tangent fibres.
+
+`IsParallelOn` and `IsGeodesicOn` include regularity at each parameter,
+including regular extensions when a closed interval is used. Parallel
+metric pairings and geodesic velocity norms are constant on convex sets.
+The arbitrary-chart affine ODE equivalence and the full acceleration
+reparametrization formula are proved, including zero parameter speed.
+Affine changes, including reversal, preserve the affine geodesic equation.
+
+`MotionODE` derives a smooth phase field `(q,v) ↦ (v,−Γ(q)(v,v))`
+from the constructed connection. Mathlib's Picard–Lindelöf theorem supplies
+a local solution; a smaller interval keeps it in the chart target.
+The ODE improves its regularity to `C²`, and the inverse chart lifts it
+to a native geodesic with the prescribed actual tangent velocity.
+Local Lipschitzness follows from smoothness, giving germ uniqueness for
+both the phase equation and intrinsic geodesics. No existence, Lipschitz
+or tangent-trivialization premise is added to the public theorem.
+
+The standard Minkowski affine lines work for both signatures and all
+dimensions. In the nonlinear shear chart, the path `(s,−s²)` is a geodesic,
+and `(a,b−2sa)` is a parallel field with constant inertial components `(a,b)`.
+`AlongCurveRegularity` reconstructs native regularity from chart components.
+`ParallelLocal` derives the time-dependent linear equation
+`V' = -Γ(γ)(γ',V)` and its local existence and uniqueness from the ODE API.
+Solving for finitely many basis vectors produces a common local frame for
+all initial vectors. Pairing against this frame propagates equality on
+convex sets without a global Hausdorff premise. In particular, nonzero null
+geodesic velocity cannot become zero.
+
+Overlapping frames agree after matching their initial values. Gluing them
+and using connectedness proves existence along each prescribed finite
+`C²` segment, with regular extensions at its endpoints. The resulting
+`parallelTransport` is a continuous linear equivalence of actual tangent
+fibres. Its characterization by every parallel field proves metric
+preservation, identity, reversal, subdivision and parameter-change laws.
+The nonlinear-chart example evaluates this intrinsic map as
+`(v₀,v₁) ↦ (v₀,v₁−2(s₁−s₀)v₀)`.
+Exact SymPy checks also cover endpoint transport, subdivision, reversal,
+a nowhere-zero null parallel field, and the full nonaffine acceleration
+transformation.
+
+`RegularPath` packages a `C²` segment with named endpoints and its actual
+continuous `Path`. Canonical equality casts identify tangent fibres.
+`PiecewisePath` retains a finite decomposition and constructs its continuous
+path through ordinary path concatenation. `HasParallelLift` is defined
+independently of transport by native parallel fields on the pieces with
+matching junction values. Its equivalence with the composed endpoint map
+proves existence, endpoint uniqueness and uniqueness of the transport map.
+The fields concatenate to a continuous path in the actual tangent bundle
+projecting exactly to the underlying path. Reversal and regrouping preserve
+the corresponding transport laws, without requiring matching velocities.
+Model affine segments and a time-axis/space-axis corner have native proofs
+for Minkowski geometry. The separate symbolic experiment also checks
+segment ODEs, composition and reversal around a rectangle in the conformal
+curved metric; that rectangle holonomy is not yet a Lean theorem.
+`Manifold.QuadraticChart` realizes an invertible Jacobian and a symmetric
+Hessian by a polynomial local coordinate change. Its analytic inverse is
+restricted to a common smooth neighborhood, then composed with a manifold
+chart; the manifold itself needs only a smooth structure. `LocalInertial`
+bundles the existing Christoffel coefficients as a bilinear map on the
+coordinate model. A chosen Lorentz basis gives `L`, and the correction
+`L(q-q₀) + ½ L(Γ(q-q₀,q-q₀))` cancels the connection coefficients at the
+center by the proved transition law. Metric compatibility then proves all
+first metric derivatives vanish there. The public existence theorem needs
+no global frame, analytic metric, Hausdorffness or completeness premise.
+The shear correction recovers `(t,x+t²)` exactly. The conformal origin is
+an explicit local inertial chart with nonzero native curvature and scalar
+curvature `-4`. Exact calculations also check nonzero base points, a
+nontrivial Lorentz basis and both metric-sign conventions.
+`Manifold.OpenTangent` identifies the derivative of open inclusions in the
+inherited chart coordinates and turns arbitrary smooth maximal-atlas charts
+into diffeomorphisms of open submanifolds. `LocalFlatness` transports native
+curvature through these maps, proving `IsLocallyMinkowski` implies vanishing
+curvature. Consequently the conformal plane is not locally Minkowski,
+although it has a pointwise inertial chart everywhere.
+
+`Manifold.ClosedCoframe` uses the convex-domain Poincaré lemma to integrate
+a smooth closed vector-valued one-form. Its derivative is the original
+form, so the primitive is smooth; invertibility supplies a smooth local
+chart. `ParallelCoframe` derives closedness from torsion-freeness and the
+parallel equation `∂θ = θ Γ`. The connection transformation law then gives
+zero coefficients throughout the constructed chart. Shrinking its target
+to a convex ball and using metric compatibility propagates metric
+normalization from one point. The nonconstant shear coframe instantiates
+the full integration theorem in Lean. Exact checks also integrate it from
+an arbitrary base point and check the conformal curvature obstruction.
+`ODE.Volterra` constructs a bounded linear integral operator on
+`C([0,1], E)`. Its norm is bounded by the coefficient supremum norm. For
+coefficients of norm less than one, a Neumann inverse constructs the unique
+solution; the solution is smooth jointly in the whole coefficient curve and
+initial value. The proof includes the ODE at endpoints as a within derivative,
+uniqueness from the interior differential equation, and a supremum-norm bound.
+`VolterraExamples` proves the constructed solution for `A(t) = (t/2) id` is
+`exp(t²/4) y₀`. The exact Python check also tests its parameter-variation
+equation; the latter is not yet a general Lean variational-equation theorem.
+`ODE.ContinuousFamily` now lifts joint finite or smooth regularity to the
+supremum-norm space after restriction to a fixed compact continuous family.
+A mean-value estimate uniform over the compact index gives strict
+Fréchet differentiability, and induction supplies higher derivatives.
+`ODE.Radial` applies this to `A_x(t) = -Γ(p + t x)(x, ·)`: its norm is small
+near zero displacement, and endpoint maps and their inverses are smooth and
+invertible on a common ball. `RadialReparam` uses ODE uniqueness to prove
+`P(s x)v = solution_x(v)(s)` and `DP(x)(x)v = -Γ(p+x)(x, P(x)v)`.
+`RadialExamples` proves the nonconstant real connection `Γ(q)(u,v) = -(q/2)uv`
+has endpoint `exp(x²/4)v` on all prefixes of the unit ray.
+`Manifold.SmoothExtension` supplies vector-valued cutoffs near compact sets;
+`Lorentzian.RadialFrame` proves bundled native chart coefficients are smooth
+and have an extension agreeing near any selected chart point. No global
+chart or analyticity of the metric is required.
+`ODE.FlatFrame` proves that zero coordinate curvature makes the constructed
+radial frame parallel in every direction. The defect `Q = DP + ΓP` obeys
+an antisymmetric derivative identity from Hessian symmetry and flatness.
+Differentiating `Q(x)(x) = 0` then makes `t Q(t x)(u)v` a transport solution
+with zero initial value. Uniqueness kills the defect, without division by
+time at the center. Differentiating the inverse gives the coframe equation.
+`exists_parallel_radialCoframe` supplies a smooth invertible parallel coframe
+on a smaller ball inside any flat neighborhood, with identity at the center.
+`FlatFrameExamples` verifies the native nonzero shear coefficients and the
+constructed endpoint `P(x)v = (v₀, v₁ - 2x₀v₀)` in Lean. Exact checks also
+test both coordinate directions and retain the curvature term in the
+defect identity for the curved conformal example.
+`ODE.CoordinateCurvature` bundles the coordinate expression as a trilinear
+map and proves basis tests and germ locality. `Lorentzian.FlatConnection`
+identifies its basis coefficients with the native curvature tensor using
+the existing arbitrary-chart Christoffel formula. Thus native zero curvature
+gives the precise compatibility condition of the radial construction.
+`LocalFlatnessConverse` uses a pointwise inertial chart to normalize the
+center, extends its coefficients without changing their germ, and constructs
+the parallel coframe on a ball inside the flat neighborhood. The coframe
+integration theorem yields a Minkowski chart on its whole source.
+The local theorem assumes only curvature zero near the selected point;
+the global predicate equivalence is `IsLocallyMinkowski ↔ ∀ p, curvature p = 0`.
+The shear example now invokes this construction directly from its native
+curvature theorem. Stage D's principal proof endpoints are implemented,
+pending review and merge. `FlatTransport` identifies transport in a flat
+chart with its endpoint tangent equivalences, first for regular segments,
+then for finite piecewise paths using their actual path ranges. Native zero
+curvature near a point consequently yields an open neighborhood with
+path-independent transport; arbitrary nonlinear-shear piecewise paths
+instantiate the theorem. No global inertial chart or completeness follows.
+Stages E–G remain subsequent work; differential/contracted
 Bianchi and Einstein dynamics belong to 5.2.
 
 ## Minkowski Geometry and Relativistic Kinematics

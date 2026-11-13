@@ -212,6 +212,42 @@ have proved zero Riemann, Ricci and scalar curvature. Ricci is symmetric.
 The curved metric `exp(2x²)(-dt²+dx²)` has proved scalar curvature
 `-4 exp(-2x²)`: all connection coefficients vanish at the origin, while
 the native curvature tensor is nonzero there.
+Covariant differentiation along arbitrary differentiable curves now takes
+values in the actual tangent fibres, with chart independence, the Leibniz
+rule, ambient-field compatibility and metric compatibility proved.
+Parallel fields preserve their metric pairing. Affine geodesics have the
+usual coordinate ODE, constant velocity norm, and a proved local
+initial-value existence/uniqueness theorem. Reparametrization includes the
+second-derivative acceleration term; affine changes preserve the geodesic
+equation. Flat lines and the nonlinear-chart parabola have native proofs.
+Parallel fields now have local and finite-segment existence and uniqueness.
+The resulting endpoint linear equivalences preserve the metric and obey
+subdivision, reversal and reparametrization laws. Finite concatenations of
+regular segments admit matching parallel fields and continuous tangent-bundle
+lifts, with uniquely characterized transport, composition and reversal.
+Nonzero null geodesic velocities stay nonzero. A chosen Lorentz basis at any
+point now extends to a smooth local chart with `g = η`, `Γ = 0` and `∂g = 0`
+there, using a quadratic correction and the inverse function theorem.
+The curved conformal example has such a chart at the origin despite nonzero
+curvature. Local Minkowski geometry now implies zero native curvature.
+A smooth invertible parallel coframe integrates to a Minkowski chart,
+with metric normalization needed only at its base point. A Banach-space
+Volterra construction now proves linear-ODE existence, uniqueness and smooth
+dependence on continuous coefficient curves of supremum norm less than one,
+with an exact time-dependent example. Jointly smooth coefficients now lift
+to smooth curve-valued families. Radial endpoint maps and their inverses are
+smooth and invertible near the base point, with rescaling and the radial
+differential equation proved. Native chart coefficients admit smooth local
+extensions for this construction. Zero coordinate curvature now makes the
+radial frame parallel in every direction and constructs a smooth invertible
+parallel coframe on a smaller ball. The nonzero shear connection has a
+proved inverse-Jacobian endpoint formula. Native curvature is now identified
+with the coordinate condition, and the constructed coframe integrates to a
+Minkowski chart wherever curvature vanishes on a neighborhood. This proves
+`IsLocallyMinkowski ↔ ∀ p, curvature p = 0` and completes stage D's principal
+proof endpoints, pending review and merge. Transport is proved independent
+of the piecewise path inside a flat neighborhood. The conclusion is local; it
+does not assert a global inertial chart or geodesic completeness.
 The [shared geometry guide](docs/smooth-geometry.md)
 records the public API and exact checks. [Issue #52](https://github.com/MGYamada/ProjectAInos/issues/52)
 tracks review of the connection and curvature stages, further tensor operations,
