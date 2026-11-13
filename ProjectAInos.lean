@@ -97,6 +97,7 @@ public import ProjectAInos.Mechanics.Poisson.Epsilon
 public import ProjectAInos.Mechanics.Poisson.Galilei
 public import ProjectAInos.Mechanics.Poisson.HeavyTop
 public import ProjectAInos.Mechanics.Poisson.RigidBody
+public import ProjectAInos.Mechanics.Poisson.RotatingFrame
 public import ProjectAInos.Mechanics.Poisson.Trajectory
 public import ProjectAInos.Mechanics.Poisson.Virial
 public import ProjectAInos.Mechanics.SmoothLagrangian

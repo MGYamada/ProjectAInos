@@ -409,3 +409,49 @@ example {H : RigidBody.PhaseSpace} {c : Fin 3 → TimeFunction}
   RigidBody.lift_casimir_eq h s t
 
 end Trajectories
+
+section RotatingFrame
+
+open AngularMomentum RotatingFrame
+
+example (m : ℝ) (U : Space) (Ω : Fin 3 → ℝ) :
+    hamiltonian m U Ω = Galilei.freeHamiltonian m + U - angularVelocity Ω ⬝ᵥ M := rfl
+
+example (m : ℝ) (Ω : Fin 3 → ℝ) (a : Fin 3) :
+    velocity m Ω a = algebraMap ℝ Space m⁻¹ * p a - (angularVelocity Ω ⨯₃ q) a := rfl
+
+example (Ω : Fin 3 → ℝ) (a : Fin 3) : angularVelocity Ω a = algebraMap ℝ Space (Ω a) := rfl
+
+/-- `q̇ = p / m − Ω × q`. -/
+example (m : ℝ) {U : Space}
+    (hU : ∀ a, FreeSmoothRing.partialDerivation (Sum.inr a) U = 0) (Ω : Fin 3 → ℝ)
+    (a : Fin 3) :
+    canonical.bracket (q a) (hamiltonian m U Ω) =
+      algebraMap ℝ Space m⁻¹ * p a - (angularVelocity Ω ⨯₃ q) a :=
+  canonical_q_hamiltonian m hU Ω a
+
+/-- `ṗ = −∇U − Ω × p`. -/
+example (m : ℝ) (U : Space) (Ω : Fin 3 → ℝ) (a : Fin 3) :
+    canonical.bracket (p a) (hamiltonian m U Ω) =
+      -FreeSmoothRing.partialDerivation (Sum.inl a) U - (angularVelocity Ω ⨯₃ p) a :=
+  canonical_p_hamiltonian m U Ω a
+
+/-- The Coriolis and centrifugal accelerations, with their signs. -/
+example (m : ℝ) {U : Space}
+    (hU : ∀ a, FreeSmoothRing.partialDerivation (Sum.inr a) U = 0) (Ω : Fin 3 → ℝ)
+    (a : Fin 3) :
+    canonical.bracket (velocity m Ω a) (hamiltonian m U Ω) =
+      -(algebraMap ℝ Space m⁻¹ * FreeSmoothRing.partialDerivation (Sum.inl a) U) -
+        2 * (angularVelocity Ω ⨯₃ velocity m Ω) a -
+        (angularVelocity Ω ⨯₃ (angularVelocity Ω ⨯₃ q)) a :=
+  canonical_velocity_hamiltonian m hU Ω a
+
+/-- The energy contains the centrifugal potential. -/
+example {m : ℝ} (hm : m ≠ 0) (U : Space) (Ω : Fin 3 → ℝ) :
+    hamiltonian m U Ω =
+      algebraMap ℝ Space (m / 2) * (velocity m Ω ⬝ᵥ velocity m Ω) -
+        algebraMap ℝ Space (m / 2) *
+          ((angularVelocity Ω ⨯₃ q) ⬝ᵥ (angularVelocity Ω ⨯₃ q)) + U :=
+  hamiltonian_eq_velocity hm U Ω
+
+end RotatingFrame

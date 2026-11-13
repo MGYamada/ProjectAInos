@@ -172,6 +172,21 @@ formalized.
 `T = Σᵢ pᵢ² / 2mᵢ` and a potential `U` of the positions with
 `Σᵢ qᵢ ∂U/∂qᵢ = k U`. `virial_oscillator` is the case `k = 2`.
 
+`RotatingFrame` treats one particle in a frame rotating with constant angular
+velocity `Ω`. The Hamiltonian is `hamiltonian m U Ω = |p|² / 2m + U − Ω · M`,
+for a potential `U` that does not depend on the momenta. Its equations of
+motion are `{q, H} = p / m − Ω × q` and `{p, H} = −∇U − Ω × p`. With the
+velocity `v = p / m − Ω × q`, `canonical_velocity_hamiltonian` proves
+
+$$
+\{v,H\}=-\frac1m\nabla U-2\,\Omega\times v-\Omega\times(\Omega\times q),
+$$
+
+the Coriolis and centrifugal accelerations with the signs of Landau–Lifshitz
+§39. The identity needs no hypothesis on the mass. For `m ≠ 0`,
+`hamiltonian_eq_velocity` rewrites the energy as
+`m |v|² / 2 − m |Ω × q|² / 2 + U`, with the centrifugal potential.
+
 `Poisson/Trajectory` connects these models to curves. For a Poisson structure
 on a free C∞-ring and a family `c` of smooth functions of time indexed by the
 generators, `FreeSmoothRing.lift c` evaluates an observable along the curve.
@@ -208,6 +223,7 @@ proved.
 | [Poisson/AngularMomentum](../ProjectAInos/Mechanics/Poisson/AngularMomentum.lean) | `M`, `canonical_M_q`, `canonical_M_p`, `canonical_M_M`, `canonical_M_dotProduct`, `isIntegral_M`, `isIntegral_M_sq`, `momentumMap`, `isPoissonHom_momentumMap` |
 | [Poisson/HeavyTop](../ProjectAInos/Mechanics/Poisson/HeavyTop.lean) | `PhaseSpace`, `L`, `Γ`, `poisson`, `poisson_bracket`, `poisson_L_bracket`, `poisson_Γ_bracket`, `hamiltonian`, `poisson_L_hamiltonian`, `poisson_Γ_hamiltonian`, `poisson_Γ_sq_left`, `poisson_L_dot_Γ_left` |
 | [Poisson/Galilei](../ProjectAInos/Mechanics/Poisson/Galilei.lean) | `K`, `freeHamiltonian`, `canonical_K_p`, `canonical_K_q`, `canonical_K_K`, `canonical_M_K`, `canonical_M_freeHamiltonian`, `canonical_p_freeHamiltonian`, `canonical_K_freeHamiltonian`, `K_sub_K` |
+| [Poisson/RotatingFrame](../ProjectAInos/Mechanics/Poisson/RotatingFrame.lean) | `angularVelocity`, `canonical_bracket_dot_M`, `hamiltonian`, `velocity`, `canonical_q_hamiltonian`, `canonical_p_hamiltonian`, `canonical_velocity_hamiltonian`, `hamiltonian_eq_velocity` |
 | [Poisson/Virial](../ProjectAInos/Mechanics/Poisson/Virial.lean) | `dilation`, `canonical_dilation_bracket`, `canonical_dilation_bracket_add`, `kineticEnergy`, `virial`, `oscillatorPotential`, `virial_oscillator` |
 | [Poisson/Trajectory](../ProjectAInos/Mechanics/Poisson/Trajectory.lean) | `IsTrajectory`, `IsTrajectory.timeDerivative_lift`, `IsTrajectory.lift_eq_of_isIntegral`, `IsTrajectory.lift_hamiltonian_eq`, `isTrajectory_canonical_iff`, `RigidBody.lift_casimir_eq`, `AngularMomentum.lift_M_eq`, `HeavyTop.lift_Γ_sq_eq`, `HeavyTop.lift_L_dot_Γ_eq` |
 | [Examples](../ProjectAInos/Mechanics/Examples.lean) | Newton equation, stationary uniform free motion, rejection of accelerated free motion, endpoint-vanishing polynomial variation and its endpoint derivative, zero-length interval and zero-coordinate system |
