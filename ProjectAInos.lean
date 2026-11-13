@@ -114,6 +114,7 @@ public import ProjectAInos.SmoothGeometry.Lorentzian.ParallelUniqueness
 public import ProjectAInos.SmoothGeometry.Lorentzian.PathExamples
 public import ProjectAInos.SmoothGeometry.Lorentzian.PiecewisePath
 public import ProjectAInos.SmoothGeometry.Lorentzian.Pullback
+public import ProjectAInos.SmoothGeometry.Lorentzian.PullbackExamples
 public import ProjectAInos.SmoothGeometry.Lorentzian.RadialFrame
 public import ProjectAInos.SmoothGeometry.Lorentzian.RegularPath
 public import ProjectAInos.SmoothGeometry.Lorentzian.Regularity
@@ -168,7 +169,9 @@ public import ProjectAInos.SmoothGeometry.Tensor.Bilinear
 public import ProjectAInos.SmoothGeometry.Tensor.Bundle
 public import ProjectAInos.SmoothGeometry.Tensor.BundleOperations
 public import ProjectAInos.SmoothGeometry.Tensor.Contraction
+public import ProjectAInos.SmoothGeometry.Tensor.CovariantPullback
 public import ProjectAInos.SmoothGeometry.Tensor.HomMap
+public import ProjectAInos.SmoothGeometry.Tensor.HomPullback
 public import ProjectAInos.SmoothGeometry.Tensor.Pullback
 public import ProjectAInos.SmoothGeometry.Tensor.Regularity
 public import ProjectAInos.SmoothGeometry.Tensor.Tensoriality

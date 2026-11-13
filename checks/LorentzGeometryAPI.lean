@@ -5,6 +5,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 module
 
 import ProjectAInos.SmoothGeometry.Lorentzian.Dual
+import ProjectAInos.SmoothGeometry.Lorentzian.PullbackExamples
 import ProjectAInos.SmoothGeometry.Lorentzian.ChartExamples
 import ProjectAInos.SmoothGeometry.Lorentzian.ChartConnection
 import ProjectAInos.SmoothGeometry.Lorentzian.ConnectionExamples
@@ -1147,6 +1148,114 @@ example (s t : Shape)
   Shape.partialContract_pullbackField 𝓘(ℝ, MinkowskiModel d) s t f T
 
 end FieldPullback
+
+section CovariantPullback
+
+open Tensor.Shape
+
+variable {E H M F H' N G H'' P : Type}
+  [NormedAddCommGroup E] [NormedSpace ℝ E] [FiniteDimensional ℝ E]
+  [TopologicalSpace H] (I : ModelWithCorners ℝ E H)
+  [TopologicalSpace M] [ChartedSpace H M] [IsManifold I ∞ M]
+  [NormedAddCommGroup F] [NormedSpace ℝ F] [FiniteDimensional ℝ F]
+  [TopologicalSpace H'] (J : ModelWithCorners ℝ F H')
+  [TopologicalSpace N] [ChartedSpace H' N] [IsManifold J ∞ N]
+  [NormedAddCommGroup G] [NormedSpace ℝ G] [FiniteDimensional ℝ G]
+  [TopologicalSpace H''] (K : ModelWithCorners ℝ G H'')
+  [TopologicalSpace P] [ChartedSpace H'' P] [IsManifold K ∞ P]
+
+-- Three independent model spaces: no equal dimension or invertibility premise.
+example (n : ℕ) (f : C^∞⟮I, M; J, N⟯)
+    (T : ((covariant n).bundle J (M := N)).Section J) :
+    ((covariant n).bundle I (M := M)).Section I :=
+  covariantPullbackField I J n f T
+
+example (f : C^∞⟮I, M; J, N⟯)
+    (T : (cotangent.bundle J (M := N)).Section J) (x : M) (v : TangentSpace I x) :
+    covariantPullbackField I J 1 f T x v = T (f x) (mfderiv I J f x v) :=
+  covariantPullbackField_one_apply I J f T x v
+
+example (f : C^∞⟮I, M; J, N⟯)
+    (T : ((covariant 2).bundle J (M := N)).Section J) (x : M)
+    (v w : TangentSpace I x) :
+    covariantPullbackField I J 2 f T x v w =
+      T (f x) (mfderiv I J f x v) (mfderiv I J f x w) :=
+  covariantPullbackField_two_apply I J f T x v w
+
+example (f : C^∞⟮I, M; J, N⟯)
+    (T : ((covariant 3).bundle J (M := N)).Section J) (x : M)
+    (u v w : TangentSpace I x) :
+    covariantPullbackField I J 3 f T x u v w =
+      T (f x) (mfderiv I J f x u) (mfderiv I J f x v) (mfderiv I J f x w) := rfl
+
+example (n : ℕ) (T : ((covariant n).bundle I (M := M)).Section I) :
+    covariantPullbackField I I n (ContMDiffMap.id : C^∞⟮I, M; I, M⟯) T = T :=
+  covariantPullbackField_id I n T
+
+example (n : ℕ) (f : C^∞⟮I, M; J, N⟯) (g : C^∞⟮J, N; K, P⟯)
+    (T : ((covariant n).bundle K (M := P)).Section K) :
+    covariantPullbackField I K n (g.comp f) T =
+      covariantPullbackField I J n f (covariantPullbackField J K n g T) :=
+  covariantPullbackField_comp I J K n f g T
+
+example (n : ℕ) (y : N)
+    (T : ((covariant (n + 1)).bundle J (M := N)).Section J) :
+    covariantPullbackField I J (n + 1) (ContMDiffMap.const y : C^∞⟮I, M; J, N⟯) T = 0 :=
+  covariantPullbackField_const I J n y T
+
+example (n : ℕ) {N' : Type} [TopologicalSpace N'] [ChartedSpace H N']
+    [IsManifold I ∞ N'] (f : M ≃ₘ⟮I, I⟯ N')
+    (T : ((covariant n).bundle I (M := N')).Section I) :
+    covariantPullbackField I I n f.toContMDiffMap T = pullbackField I (covariant n) f T :=
+  covariantPullbackField_diffeomorph I n f T
+
+example (n : ℕ) {a : P → M} {b : P → N} {p : P}
+    (ha : ContMDiffAt K I ∞ a p) (hb : ContMDiffAt K J ∞ b p)
+    (L : ∀ q, TangentSpace I (a q) →L[ℝ] TangentSpace J (b q))
+    (hL : ContMDiffAt K 𝓘(ℝ, E →L[ℝ] F) ∞
+      (fun q => ContinuousLinearMap.inCoordinates E (TangentSpace I) F (TangentSpace J)
+        (a p) (a q) (b p) (b q) (L q)) p) :
+    ContMDiffAt K 𝓘(ℝ, ((covariant n).bundle J (M := N)).Model →L[ℝ]
+      ((covariant n).bundle I (M := M)).Model) ∞
+      (fun q => ContinuousLinearMap.inCoordinates ((covariant n).bundle J (M := N)).Model
+        ((covariant n).bundle J (M := N)).Fiber
+        ((covariant n).bundle I (M := M)).Model ((covariant n).bundle I (M := M)).Fiber
+        (b p) (b q) (a p) (a q) (covariantPullback I J n (L q))) p :=
+  contMDiffAt_covariantPullback I J K n ha hb L hL
+
+end CovariantPullback
+
+section CovariantPullbackExamples
+
+open Tensor.Shape LorentzianCharts
+
+example (t v w : ℝ) :
+    covariantPullbackField 𝓘(ℝ, ℝ) 𝓘(ℝ, Plane) 2
+      (timeAxis : C^∞⟮𝓘(ℝ, ℝ), ℝ; 𝓘(ℝ, Plane), Plane⟯) metric.toTensor t v w =
+      (-1 + 4 * t ^ 2) * v * w := metric_timeAxis_pullback t v w
+
+example (t v w : ℝ) :
+    covariantPullbackField 𝓘(ℝ, ℝ) 𝓘(ℝ, Plane) 2
+      (timeAxis : C^∞⟮𝓘(ℝ, ℝ), ℝ; 𝓘(ℝ, Plane), Plane⟯)
+      (minkowskiMetric .timeNegative 1).toTensor t v w = -(v * w) :=
+  minkowski_timeAxis_pullback t v w
+
+example (v w : ℝ) :
+    covariantPullbackField 𝓘(ℝ, ℝ) 𝓘(ℝ, Plane) 2
+      (timeAxis : C^∞⟮𝓘(ℝ, ℝ), ℝ; 𝓘(ℝ, Plane), Plane⟯)
+      metric.toTensor (1 / 2 : ℝ) v w = 0 := metric_timeAxis_pullback_degenerate v w
+
+example (p q v w : Plane) :
+    covariantPullbackField 𝓘(ℝ, Plane) 𝓘(ℝ, Plane) 2
+      (ContMDiffMap.const p) metric.toTensor q v w = 0 := metric_constant_pullback p q v w
+
+example (p v w : Plane) :
+    covariantPullbackField 𝓘(ℝ, Plane) 𝓘(ℝ, Plane) 2
+      (timeProjection : C^∞⟮𝓘(ℝ, Plane), Plane; 𝓘(ℝ, Plane), Plane⟯)
+      metric.toTensor p v w = (-1 + 4 * (p 0) ^ 2) * v 0 * w 0 :=
+  metric_timeProjection_pullback p v w
+
+end CovariantPullbackExamples
 
 section ManifoldChartConnection
 

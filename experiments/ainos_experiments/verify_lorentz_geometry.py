@@ -97,6 +97,41 @@ def covariant_along(gamma, coordinates, curve, field, parameter):
         (velocity.T * component * field)[0] for component in evaluated])
 
 
+def verify_covariant_pullback(metric, coordinates):
+    """Dimension-changing maps, singular maps, and nonlinear composition."""
+    t, x = coordinates
+    s = sp.symbols("s", real=True)
+    axis = sp.Matrix([s, 0])
+    derivative = axis.jacobian([s])
+    along = metric.subs({t: s, x: 0}, simultaneous=True)
+    induced = derivative.T * along * derivative
+    check_zero("dimension-changing metric pullback", induced - sp.Matrix([[-1 + 4*s**2]]))
+    check_zero("Minkowski time-axis pullback", derivative.T * sp.diag(-1, 1) * derivative
+               + sp.ones(1))
+    check_zero("degenerate induced tensor", induced.subs(s, sp.Rational(1, 2)))
+    projection = sp.Matrix([t, 0])
+    projection_derivative = projection.jacobian(coordinates)
+    check_zero("singular nonconstant pullback", projection_derivative.T
+               * metric.subs(x, 0) * projection_derivative - sp.diag(-1 + 4*t**2, 0))
+    zero_derivative = sp.zeros(2)
+    check_zero("constant-map pullback", zero_derivative.T * metric * zero_derivative)
+
+    # A nonlinear noninvertible map has zero derivative at the origin.
+    # The nonsymmetric tensor tests the two input slots independently.
+    f = sp.Matrix([s**2, s**3])
+    g = sp.Matrix([t, t*x])
+    tensor = sp.Matrix([[1 + t, x], [t - x, 2 + x**2]])
+    g_pullback = g.jacobian(coordinates).T * tensor.subs(
+        dict(zip(coordinates, g)), simultaneous=True) * g.jacobian(coordinates)
+    iterated = f.diff(s).T * g_pullback.subs(
+        dict(zip(coordinates, f)), simultaneous=True) * f.diff(s)
+    composite = g.subs(dict(zip(coordinates, f)), simultaneous=True)
+    direct = composite.diff(s).T * tensor.subs(
+        dict(zip(coordinates, composite)), simultaneous=True) * composite.diff(s)
+    check_zero("nonlinear noninvertible pullback composition", direct - iterated)
+    check_zero("vanishing derivative at origin", direct.subs(s, 0))
+
+
 def verify_motion(metric, coordinates, gamma, jacobian):
     s, a, b, c, d = sp.symbols("s a b c d", real=True)
     curve = sp.Matrix([s, -s**2])
@@ -388,6 +423,7 @@ def verify():
             for a in range(2)), sp.zeros(2))
         check_zero("connection Hessian transformation", gamma[k] - transformed_gamma)
 
+    verify_covariant_pullback(metric, coordinates)
     verify_motion(metric, coordinates, gamma, jacobian)
     verify_parallel_coframe(coordinates, gamma, jacobian, shear)
 
