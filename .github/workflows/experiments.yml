@@ -5,11 +5,13 @@ on:
     branches: [main]
     paths:
       - "experiments/**"
+      - "docs/mechanics-experiments.md"
       - ".github/workflows/experiments.yml"
   push:
     branches: [main]
     paths:
       - "experiments/**"
+      - "docs/mechanics-experiments.md"
       - ".github/workflows/experiments.yml"
   workflow_dispatch:
 

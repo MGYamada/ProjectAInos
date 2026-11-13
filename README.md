@@ -105,9 +105,18 @@ The order of topics after 6 is yet to be determined.
 ## Shared smooth algebra and geometry
 
 `ProjectAInos/SmoothAlgebra/` and `ProjectAInos/SmoothGeometry/` are independent
-mathematical foundations shared by topics 2–5. They must not import
-`Mechanics`, `Variational`, or a field-theory module. `Variational` contains
-variational calculus; physical models belong to their respective topics.
+mathematical foundations shared by topics 2–5. The shared `Variational/`
+layer depends on those foundations. The Lorentzian variation lemmas also
+use generic manifold-variation machinery from `Variational/`. These
+shared modules may import one another and external mathematical libraries.
+Their import graph excludes project physics and the vendored Yang–Mills
+theory.
+
+`ProjectAInos/Integrations/` owns the project-authored Yang–Mills coordinate
+and first-jet adapters. They depend on the shared cores and the pinned upstream
+modules. Their declaration names are preserved and their new module paths are
+imported by `ProjectAInos`. The `checks/CoreImports.lean` CI check enforces the
+project-local import boundary.
 
 The construction follows Joyce, *Algebraic Geometry over C∞-rings*, §§2 and 4,
 and the architecture of the pinned mathlib v4.35.0 (commit `56a005855ea17e0b0958f73ec801ae140b0a1679`).

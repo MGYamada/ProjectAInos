@@ -19,7 +19,7 @@ yet a construction theorem for a specific continuum Yang--Mills model.
    moments into the normalized, gauge-invariant `YM.Wilson.law` API.
 
 2. **Coordinates, affine action, and Fourier phase.**
-   `SmoothGeometry/YangMillsCoordinates.lean` transports time-first points
+   `Integrations/YangMillsCoordinates.lean` transports time-first points
    into the upstream time-last convention and preserves the invariant
    quadratic form, future cone, and distinct insertion points.
    `properLorentz` conjugates project transformations, including boosts,
@@ -34,7 +34,7 @@ yet a construction theorem for a specific continuum Yang--Mills model.
    W0 identity at the same translation argument.
 
 3. **First derivative.**
-   `Variational/YangMillsBridge.lean` identifies the project first-jet
+   `Integrations/YangMillsBridge.lean` identifies the project first-jet
    derivative with the upstream totalized directional Fréchet derivative.
    The statement concerns first derivatives.
 

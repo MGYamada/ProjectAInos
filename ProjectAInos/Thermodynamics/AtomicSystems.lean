@@ -11,8 +11,8 @@ raw composite type and its accessibility relation. This avoids a recursive
 definition in which a simple system's domain would depend on its own atom type.
 
 An admitted simple system is matched to these data by equality of its domain
-and its ambient representation. Its chart, full-domain composition label, and
-nonemptiness obligations then follow. The geometric and thermal axioms remain
+and agreement of its representation on that domain. Its chart, physical-state
+composition label, and nonemptiness obligations then follow. The geometric and thermal axioms remain
 properties of the supplied simple systems and family; no comparison axiom is
 introduced by this interface.
 -/
@@ -96,19 +96,20 @@ def chart (g : Γ) (S : SimpleSystem P (D.dimension g))
     (D.chart g S hdomain x).val = x.val := rfl
 
 theorem chart_represent (g : Γ) (S : SimpleSystem P (D.dimension g))
-    (hdomain : S.domain = D.domain g) (hrepresent : S.represent = D.represent g)
+    (hdomain : S.domain = D.domain g) (hrepresent : Set.EqOn S.represent (D.represent g) (D.domain g))
     (x : D.State g) :
     S.represent (D.chart g S hdomain x) = CompositeState.mk (.atom ⟨g, x⟩) := by
-  rw [hrepresent, D.chart_val, D.represent_state]
+  rw [D.chart_val, hrepresent x.property, D.represent_state]
   rfl
 
 /-- Every coordinate state of the simple system, not only a selected chart
 image, has precisely one unit of its specified composition label. -/
 theorem simpleSystem_label (g : Γ) (S : SimpleSystem P (D.dimension g))
-    (hdomain : S.domain = D.domain g) (hrepresent : S.represent = D.represent g)
+    (hdomain : S.domain = D.domain g) (hrepresent : Set.EqOn S.represent (D.represent g) (D.domain g))
     (x : S.domain) : D.label (S.represent x) = Finsupp.single g 1 := by
-  rw [hrepresent]
-  exact D.label_represent g (hdomain ▸ x.property)
+  have hx : x.val ∈ D.domain g := hdomain ▸ x.property
+  rw [hrepresent hx]
+  exact D.label_represent g hx
 
 theorem simpleSystem_nonempty (g : Γ) (S : SimpleSystem P (D.dimension g))
     (hdomain : S.domain = D.domain g) (hnonempty : (D.domain g).Nonempty) :
@@ -119,7 +120,7 @@ nonemptiness bookkeeping for the calibrated equal-composition entropy theorem. -
 theorem exists_calibrated_entropy (F : ThermalFamily P)
     (S : ∀ g, SimpleSystem P (D.dimension g)) (hS : ∀ g, F.admitted (S g))
     (hdomain : ∀ g, (S g).domain = D.domain g)
-    (hrepresent : ∀ g, (S g).represent = D.represent g)
+    (hrepresent : ∀ g, Set.EqOn (S g).represent (D.represent g) (D.domain g))
     (hnonempty : ∀ g, (D.domain g).Nonempty) :
     ∃ entropy : D.Raw →+ ℝ,
       CalibratedEntropyPrinciple D.label P.relation entropy :=
@@ -134,7 +135,7 @@ transitions; no manual chart or label law is required. -/
 theorem exists_weak_entropy (F : ThermalFamily P)
     (S : ∀ g, SimpleSystem P (D.dimension g)) (hS : ∀ g, F.admitted (S g))
     (hdomain : ∀ g, (S g).domain = D.domain g)
-    (hrepresent : ∀ g, (S g).represent = D.represent g)
+    (hrepresent : ∀ g, Set.EqOn (S g).represent (D.represent g) (D.domain g))
     (hnonempty : ∀ g, (D.domain g).Nonempty)
     (hM : Reactions.RawNoSinks D.label P.relation) :
     ∃ (entropy totalEntropy : D.Raw →+ ℝ) (B : (Γ →₀ ℝ≥0) →ₗ[ℝ≥0] ℝ),
@@ -152,7 +153,7 @@ nonreactive relation. -/
 theorem exchangeComparison (F : ThermalFamily P)
     (S : ∀ g, SimpleSystem P (D.dimension g)) (hS : ∀ g, F.admitted (S g))
     (hdomain : ∀ g, (S g).domain = D.domain g)
-    (hrepresent : ∀ g, (S g).represent = D.represent g)
+    (hrepresent : ∀ g, Set.EqOn (S g).represent (D.represent g) (D.domain g))
     (hpreserved : ∀ {x y}, P.relation x y → D.label x = D.label y) :
     ExchangeComparison P.StateSpace :=
   F.exchangeComparison_of_calibrators F.hasCalibrators_of_axioms D.dimension S hS
@@ -170,7 +171,7 @@ theorem exchangeComparison_nonreactive
       (Nonreactive.generatedAccessibility elementary CompositeState.zero_scale) (D.dimension g))
     (hS : ∀ g, F.admitted (S g))
     (hdomain : ∀ g, (S g).domain = D.domain g)
-    (hrepresent : ∀ g, (S g).represent = D.represent g) :
+    (hrepresent : ∀ g, Set.EqOn (S g).represent (D.represent g) (D.domain g)) :
     ExchangeComparison (Nonreactive.generatedAccessibility elementary CompositeState.zero_scale).StateSpace :=
   D.exchangeComparison F S hS hdomain hrepresent
     (Nonreactive.Generated.label_eq D.label D.label_scale hbasic)
@@ -184,7 +185,7 @@ theorem exchangeComparison_atomicOnly
     (S : ∀ g, SimpleSystem (Nonreactive.accessibility D.State elementary) (D.dimension g))
     (hS : ∀ g, F.admitted (S g))
     (hdomain : ∀ g, (S g).domain = D.domain g)
-    (hrepresent : ∀ g, (S g).represent = D.represent g) :
+    (hrepresent : ∀ g, Set.EqOn (S g).represent (D.represent g) (D.domain g)) :
     ExchangeComparison (Nonreactive.accessibility D.State elementary).StateSpace :=
   D.exchangeComparison F S hS hdomain hrepresent
     (Nonreactive.accessibility_label_eq D.State elementary)
