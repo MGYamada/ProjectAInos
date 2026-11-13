@@ -9,10 +9,11 @@ The original manuscript, *Classical Mechanics over C∞-Rings*, was dated 10 Nov
 - The common mathematical foundation lives in `ProjectAInos/SmoothAlgebra/` and `ProjectAInos/SmoothGeometry/`; `ProjectAInos/Variational/` contains variational calculus. The `SmoothAlgebra` work for issue #7 implemented finite-arity smooth operations, C∞-rings and their morphisms, free generation, and the chain rule for concrete directional derivatives. `SmoothRing` adds structure to an existing commutative real algebra. The [shared geometry guide](smooth-geometry.md) records the subsequent spectrum and scheme construction.
 - **Algebraic core ([issue #74](https://github.com/MGYamada/ProjectAInos/issues/74)).** `SmoothAlgebra` has partial derivatives of smooth operations, with the chain rule as an identity between operations and commuting second partial derivatives (milestone M1). It has the C∞-ring structure on the dual numbers `A[ε]` and C∞-derivations whose only law is the chain rule. The Leibniz rule and real linearity are theorems, vector fields form a Lie ring under the commutator, derivations of `C∞(ℝⁿ)` correspond to tuples of values on the coordinates, and vector fields correspond to morphisms `A → A[ε]` lifting the identity. This covers Example 2(c), Definitions 15 and 17 and Propositions 16(a) and 18, the first half of milestone M2.
 - **Jet algebra ([issue #78](https://github.com/MGYamada/ProjectAInos/issues/78)).** `Mechanics/Jet` has jet C∞-rings over a finite index type, the total derivative as a vector field with the commutators of Lemma 33, Euler operators of every order, and the Euler–Lagrange ideal. It proves that total derivatives are null Lagrangians (Proposition 35), the energy identity (Proposition 36), the Noether identity and its conserved charge (Proposition 37), Newton's equations for natural Lagrangians, and the conservation laws of Corollary 38, including angular momentum of particles in space. The standard jet ring is a jet ring, built from the free C∞-ring without analysis. Conservation here means membership in the Euler–Lagrange ideal; the link to actual trajectories is a later stage.
+- **Poisson C∞-rings ([issue #78](https://github.com/MGYamada/ProjectAInos/issues/78)).** `SmoothAlgebra/Poisson` has Poisson structures on a C∞-ring, with antisymmetry, the chain rule in the first argument and the Jacobi identity as the only laws (Definition 20). It proves that brackets are determined on generators (Lemma 21), Poisson's theorem and the closure of the integrals under smooth operations (Proposition 24), Noether's theorem in Hamiltonian form (Theorem 59), the subring part of coisotropic reduction (Proposition 28), Hamilton–Jacobi (Proposition 54) and Maupertuis–Jacobi (Proposition 55). On a free C∞-ring the Jacobi identity is a condition on generators. The models are the canonical bracket with Hamilton's equations, and the rigid body with Euler's equations and the Casimir `|L|²` (Example 22(a) and (c)).
 - The common analytic layer implements local first jets, directional derivatives of the action, integration by parts, and the Euler–Lagrange equivalence for compactly supported interior variations.
 - **Fixed-endpoint mechanics.** `ProjectAInos/Mechanics/` treats paths `q : ℝ → Q` on a real time interval `[a,b]`. It proves the derivative of the action, the first variation with the boundary term, and the equivalence between fixed-endpoint stationarity and the Euler–Lagrange equations for C² Lagrangians and paths with `a < b`. This includes the generalized coordinates `Q = Fin n → ℝ`. The scalar natural Lagrangian yields Newton’s equation `m q'' = −V'(q)`.
 - **Total time derivatives.** In the real first-order model, adding the total time derivative of `F(t,q)` changes the action by `F(b,q(b)) − F(a,q(a))` and preserves fixed-endpoint stationarity and the pointwise Euler–Lagrange residual. Energy and Noether identities and further natural Lagrangian models are next. Quotients of abstract C∞-rings by ordinary ideals, universal cotangent modules, abstract jet rings, and the comparison between abstract jet rings and the analytic model are separate stages.
-- Later stages include Poisson structures, the Legendre transformation, constraints and reduction, Hamilton–Jacobi theory, and the remaining classical models. The fundamental lemma over general nonreduced coefficient rings and representability of solutions remain open targets in the manuscript.
+- Later stages include the Legendre transformation, quotients by ideals and the reduced Poisson rings, momentum maps, canonical transformations, Jacobi's theorem on complete integrals, and the remaining classical models. The fundamental lemma over general nonreduced coefficient rings and representability of solutions remain open targets in the manuscript.
 
 Paths such as `Cinfty/...` and Lean listings in the manuscript are design sketches. The current guides give the implemented names, assumptions, and proof status. Earlier descriptions of Mathlib record the state of the library at the time of the manuscript. [Shared variational calculus](variational.md) · [C∞-rings](smooth-algebra.md) · [Mechanics proof map](mechanics.md#proof-map) · [Mechanics formalization notes](mechanics-notes.md)
 
@@ -26,7 +27,8 @@ Paths such as `Cinfty/...` and Lean listings in the manuscript are design sketch
 | Jet C∞-rings, total derivative, Euler operators, energy and Noether identities, classical conservation laws | Implemented | `JetRing`, `JetRing.totalDeriv`, `JetRing.euler`, `JetRing.totalDeriv_energy`, `JetRing.conserved_noetherCharge`, `JetRing.conserved_angularMomentum`, `StandardJet.jetRing`. The design sketch uses the same name `JetRing` |
 | Quotients by ordinary ideals, universal cotangent modules, the on-shell ring and regular Lagrangians (Proposition 39) | Planned | Foundation and jet-ring sections below |
 | Action, critical subfunctors, and representability of solutions over general coefficient rings | Open research targets | The available variational proofs apply to real coefficients |
-| Poisson structures, momentum maps, Hamiltonian mechanics, reduction, and remaining models | Later stages | Section-by-section map and ledger below |
+| Poisson C∞-rings, integrals of the motion, coisotropic ideals, Hamilton–Jacobi, Maupertuis–Jacobi, the canonical bracket and the rigid body | Implemented | `PoissonStructure`, `PoissonStructure.IsIntegral.bracket`, `PoissonStructure.normalizer`, `PoissonStructure.hamiltonJacobi`, `PoissonStructure.maupertuis`, `FreeSmoothRing.poissonOfCoordinates`, `PhaseSpace.canonical`, `RigidBody.poisson`. The design sketch calls the structure `PoissonCinftyRing` |
+| Momentum maps, the Legendre transformation, reduced Poisson rings, canonical transformations and remaining models | Later stages | Section-by-section map and ledger below |
 
 <a id="ledger"></a>
 
@@ -44,7 +46,7 @@ The ledger gives one status to each section of Landau–Lifshitz, following the 
 | 6 | Energy | proved | `JetRing.totalDeriv_energy`, `JetRing.conserved_energy`, `JetRing.conserved_energy_naturalLagrangian` |
 | 7 | Momentum | proved | `JetRing.prolong_eq_euler_add_totalDeriv`, `JetRing.conserved_noetherCharge`, `JetRing.conserved_momentum` |
 | 8 | Centre of mass | proved | `JetRing.conserved_boost`, `StandardJet.conserved_boost_free` |
-| 9 | Angular momentum | proved | `JetRing.conserved_angularMomentum`, `JetRing.conserved_linear`, `JetRing.axis_cross_dotProduct`. The momentum-map form belongs to the Poisson stage |
+| 9 | Angular momentum | proved | `JetRing.conserved_angularMomentum`, `JetRing.conserved_linear`, `JetRing.axis_cross_dotProduct`. Noether's theorem in Hamiltonian form: `PoissonStructure.isIntegral_iff_hamiltonian_eq_zero`. Momentum maps (Definition 57) are not formalized |
 | 10 | Mechanical similarity | evidence | E4e |
 | 11 | Motion in one dimension | informal | |
 | 12 | Determination of the potential energy from the period | informal | |
@@ -69,27 +71,27 @@ The ledger gives one status to each section of Landau–Lifshitz, following the 
 | 31 | Angular velocity | informal | |
 | 32 | The inertia tensor | informal | |
 | 33 | Angular momentum of a rigid body | informal | |
-| 34 | The equations of motion of a rigid body | informal | |
+| 34 | The equations of motion of a rigid body | informal | The Lie–Poisson system of the angular momentum is proved: `RigidBody.poisson`, `RigidBody.poisson_L_bracket`. Forces, the momentum and the link to the Lagrangian on `T(SO(3))` are missing |
 | 35 | Eulerian angles | informal | |
-| 36 | Euler's equations | evidence | E6a–d |
-| 37 | The asymmetrical top | evidence | E6e |
+| 36 | Euler's equations | proved | `RigidBody.poisson`, `RigidBody.euler_equations`, `RigidBody.euler_equation_zero`, `RigidBody.poisson_casimir_left`. The quotient by `|L|² − r²` needs quotients by ideals |
+| 37 | The asymmetrical top | evidence | E6e. The two integrals are proved: `RigidBody.isIntegral_kineticEnergy`, `RigidBody.isIntegral_casimir`. Stability and the solution by elliptic functions are missing |
 | 38 | Rigid bodies in contact | informal | |
 | 39 | Motion in a non-inertial frame of reference | evidence | E10d, E10e |
-| 40 | Hamilton's equations | informal | |
+| 40 | Hamilton's equations | informal | Hamilton's equations of the canonical bracket are proved: `PhaseSpace.canonical_q_bracket`, `PhaseSpace.canonical_p_bracket`. The Legendre transformation (Theorem 51) is missing |
 | 41 | The Routhian | informal | |
-| 42 | Poisson brackets | evidence | E1. See [mechanics notes](mechanics-notes.md) M13 for the bracket-notation constraint |
+| 42 | Poisson brackets | proved | `PoissonStructure`, `PoissonStructure.IsIntegral.bracket`, `PoissonStructure.integrals`, `AlmostPoissonStructure.bracket_op_op`, `PhaseSpace.canonical`, `PhaseSpace.canonical_bracket`. See [mechanics notes](mechanics-notes.md) M13 for the bracket-notation constraint |
 | 43 | The action as a function of the co-ordinates | informal | |
-| 44 | Maupertuis' principle | evidence | E10f |
-| 45 | Canonical transformations | informal | |
+| 44 | Maupertuis' principle | evidence | E10f. Proposition 55 is proved: `PoissonStructure.maupertuis`. The Jacobi metric and the variational statement for `∫ p dq` are missing |
+| 45 | Canonical transformations | informal | The motion is infinitesimally canonical: `PoissonStructure.bracket_bracket`, `PoissonStructure.hamiltonian_bracket`. Poisson isomorphisms and generating functions are missing |
 | 46 | Liouville's theorem | informal | |
-| 47 | The Hamilton–Jacobi equation | informal | |
+| 47 | The Hamilton–Jacobi equation | informal | Proposition 54 is proved: `PoissonStructure.hamiltonJacobi`. Jacobi's theorem on complete integrals is missing |
 | 48 | Separation of the variables | informal | |
 | 49 | Adiabatic invariants | informal | Tier D and P |
 | 50 | Canonical variables | informal | |
 | 51 | Accuracy of conservation of the adiabatic invariant | informal | Tier P and D |
 | 52 | Conditionally periodic motion | informal | Tier D |
 
-Count: 5 proved, 12 evidence, 35 informal.
+Count: 7 proved, 10 evidence, 35 informal.
 
 <a id="abstract"></a>
 

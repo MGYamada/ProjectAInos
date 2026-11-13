@@ -171,6 +171,55 @@ commutator is a derivation that vanishes on every generator. The standard jet
 ring of the [mechanics guide](mechanics.md#jet-rings-and-conservation-laws) is
 built from these. The first stage is tracked in [issue #74](https://github.com/MGYamada/ProjectAInos/issues/74).
 
+## Poisson structures
+
+A `PoissonStructure P` on a C∞-ring is a bracket with three laws: antisymmetry,
+the chain rule in the first argument,
+`{Φ_f(c), h} = Σᵢ Φ_{∂ᵢf}(c) {cᵢ, h}`, and the Jacobi identity. Additivity,
+the Leibniz rule and vanishing on constants in both arguments are theorems. The
+bracket is a field of a structure. It is not Mathlib's `Bracket` class, because
+every ring already carries the commutator bracket, which is zero on a
+commutative ring. An `AlmostPoissonStructure` omits the Jacobi identity.
+
+`hamiltonian h` is the vector field `X_h = {·, h}`. The Jacobi identity is
+equivalent to `{{f, g}, h} = {{f, h}, g} + {f, {g, h}}` (`bracket_bracket`), so
+`X_h` is a derivation of the bracket, and `hamiltonian_bracket` gives
+`X_{f, g} = −[X_f, X_g]`. `IsIntegral H f` means `{f, H} = 0`. Integrals of the
+motion are closed under the bracket (Poisson's theorem, `IsIntegral.bracket`),
+under every smooth operation (`IsIntegral.op`) and form the real subalgebra
+`integrals H`. `isIntegral_iff_hamiltonian_eq_zero` is Noether's theorem in
+Hamiltonian form.
+
+For an ideal `I`, `normalizer I` is `{f | {f, I} ⊆ I}`. It is a real subalgebra
+closed under the bracket and under every smooth operation, a coisotropic ideal
+lies in it, and `bracket_sub_bracket_mem` proves that the bracket of the
+normalizer is well defined modulo `I`. `hamiltonJacobi` proves `{I, H} ⊆ I` for
+a coisotropic ideal containing `H − E`. `maupertuis` proves
+`{g, H'} ≡ u {g, H}` modulo `(H − E)` when `H' − E' = u (H − E)`. These are
+statements about ideals. The quotient ring `N(I)/I` is not constructed, because
+quotients of C∞-rings by ordinary ideals are not formalized.
+
+The Jacobiator of an almost-Poisson structure satisfies the chain rule in each
+argument (`jacobiator_op`); the second-order terms cancel by
+`partialDeriv_comm`. Hence on a free C∞-ring the Jacobi identity holds if it
+holds on generators (`FreeSmoothRing.jacobiator_eq_zero`).
+`AlmostPoissonStructure.ofDerivations D w` is the bracket
+`Σ_{a,b} D_a f · D_b g · w a b` of a finite family of vector fields and a skew
+family `w`. On the free ring over a finite type with the coordinate vector
+fields this is `FreeSmoothRing.almostPoisson w`, with `{x_a, x_b} = w a b`.
+`poissonOfCoordinates` requires the Jacobi identity on generators only, and
+`poissonOfConstants` covers generator brackets with vanishing partial
+derivatives.
+
+`PhaseSpace ι` is the free C∞-ring on positions `q i` and momenta `p i`, and
+`PhaseSpace.canonical ι` is its canonical Poisson structure:
+`{qᵢ, pⱼ} = δᵢⱼ`, `{qᵢ, qⱼ} = {pᵢ, pⱼ} = 0`. `canonical_bracket` gives
+`{f, g} = Σᵢ (∂f/∂qᵢ ∂g/∂pᵢ − ∂f/∂pᵢ ∂g/∂qᵢ)`, and `canonical_q_bracket` and
+`canonical_p_bracket` are Hamilton's equations `{qᵢ, H} = ∂H/∂pᵢ` and
+`{pᵢ, H} = −∂H/∂qᵢ`. The rigid body is in the
+[mechanics guide](mechanics.md#poisson-models). This stage is tracked in
+[issue #78](https://github.com/MGYamada/ProjectAInos/issues/78).
+
 ## Proof map and verification
 
 | Module | Main checked results |
@@ -183,6 +232,10 @@ built from these. The first stage is tracked in [issue #74](https://github.com/M
 | [PartialDerivative](../ProjectAInos/SmoothAlgebra/PartialDerivative.lean) | `partialDeriv`, `fderiv_apply_eq_sum_partialDeriv`, `partialDeriv_mul`, `partialDeriv_comp`, `partialDeriv_comm`, `partialDeriv_exponential` |
 | [DualNumber](../ProjectAInos/SmoothAlgebra/DualNumber.lean) | `SmoothRing (DualNumber A)`, `fst_op`, `snd_op`, `fstHom`, `inlHom`, `exp_inl_add_inr` |
 | [FreeDerivation](../ProjectAInos/SmoothAlgebra/FreeDerivation.lean) | `FreeSmoothRing.derivation`, `derivation_generator`, `derivation_ext`, `derivationEquiv`, `partialDerivation_comm`, `exists_finset_partialDerivation_eq_zero` |
+| [Poisson/Basic](../ProjectAInos/SmoothAlgebra/Poisson/Basic.lean) | `AlmostPoissonStructure`, `PoissonStructure`, `hamiltonian`, `bracket_mul_left`, `bracket_op_op`, `jacobiator_op`, `ofDerivations`, `bracket_bracket`, `hamiltonian_bracket`, `IsIntegral.bracket`, `IsIntegral.op`, `integrals`, `isIntegral_iff_hamiltonian_eq_zero` |
+| [Poisson/Ideal](../ProjectAInos/SmoothAlgebra/Poisson/Ideal.lean) | `IsPoissonIdeal`, `IsCoisotropic`, `normalizer`, `bracket_mem_normalizer`, `op_mem_normalizer`, `bracket_sub_bracket_mem`, `hamiltonJacobi`, `maupertuis` |
+| [Poisson/Free](../ProjectAInos/SmoothAlgebra/Poisson/Free.lean) | `jacobiator_eq_zero`, `almostPoisson`, `almostPoisson_bracket_generator`, `poissonOfCoordinates`, `poissonOfConstants` |
+| [Poisson/Canonical](../ProjectAInos/SmoothAlgebra/Poisson/Canonical.lean) | `PhaseSpace`, `canonical`, `canonical_q_p`, `canonical_bracket`, `canonical_q_bracket`, `canonical_p_bracket`, `canonical_hamiltonian_apply` |
 | [Derivation](../ProjectAInos/SmoothAlgebra/Derivation.lean) | `SmoothDerivation`, `map_mul`, `map_exp`, `toDerivation`, module and Lie-ring instances, `commutator_chain`, `equivInfinitesimalAut`, `equivCoordinates`, `lie_partialDerivation_proj_smul` |
 | [Category](../ProjectAInos/SmoothAlgebra/Category.lean) | `SmoothRingCat`, faithful forgetful functors, isomorphisms from bijective morphisms |
 | [Congruence](../ProjectAInos/SmoothAlgebra/Congruence.lean) | Smooth quotients, projection, factorization, generated smooth congruences |
@@ -230,7 +283,8 @@ for local jets and first variations in the [variational guide](variational.md).
 Smooth congruence quotients and general localizations now support the
 [C∞ scheme construction](smooth-geometry.md). Abstract smooth derivations
 satisfying the chain rule for every smooth operation, and the infinitesimal
-thickening `A[ε]`, are implemented as described above. Subsequent algebraic
-stages include quotients by arbitrary ordinary ideals, which need Hadamard's
-lemma, the universal cotangent module with its universal property, derivations
-along a morphism, and comparison theorems with ordinary local jets.
+thickening `A[ε]`, are implemented as described above, and so are Poisson
+structures. Subsequent algebraic stages include quotients by arbitrary ordinary
+ideals, which need Hadamard's lemma and give the reduced Poisson rings, the
+universal cotangent module with its universal property, derivations along a
+morphism, and comparison theorems with ordinary local jets.
