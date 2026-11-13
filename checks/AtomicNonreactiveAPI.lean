@@ -25,3 +25,24 @@ example : ¬ AtomicReservoir.atomicHeating.relation
 #check AtomicReservoir.mixing_example
 #check AtomicReservoir.mixing_raw_distinct
 #check AtomicReservoir.heating_irreversible
+
+section Reacting
+
+open ReactingReservoir
+
+example : Reactions.RawNoSinks domains.label accessibility.relation := noSinks
+
+example :
+    Reactions.calibratedDirectCost domains.label energy accessibility.relation
+      (domains.label (atom false unitEnergy)) (domains.label (atom true unitEnergy)) = 0 :=
+  unitConversion.2.2
+
+example : ∃ (S total : Raw →+ ℝ) (B : Composition →ₗ[ℝ≥0] ℝ),
+    WeakEntropyPrinciple domains.label accessibility.relation S total B :=
+  exists_weak_entropy
+
+example : ∃ total : Raw →+ ℝ, total (atom false unitEnergy) ≤ total (atom true unitEnergy) ∧
+    CalibratedEntropyPrinciple domains.label accessibility.relation total :=
+  exists_monotone_conversion
+
+end Reacting
