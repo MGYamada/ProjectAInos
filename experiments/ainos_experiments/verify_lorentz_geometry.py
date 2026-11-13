@@ -134,6 +134,29 @@ def verify_covariant_pullback(metric, coordinates):
     check_zero("vanishing derivative at origin", direct.subs(s, 0))
 
 
+def verify_tensor_operations(coordinates, shear):
+    """Tensor product, exchange of unequal slots, and partial contraction."""
+    t, _ = coordinates
+    jacobian = shear.jacobian(coordinates)
+    dt, dx = sp.Matrix([1, 0]), sp.Matrix([0, 1])
+    product = dt * dx.T
+    pulled = jacobian.T * product * jacobian
+    check_zero("nonlinear nonsymmetric tensor product", pulled - sp.Matrix([[2*t, 1], [0, 0]]))
+    check_zero("tensor product pullback in each slot",
+               pulled - (jacobian.T * dt) * (jacobian.T * dx).T)
+    check_zero("covariant slot exchange under pullback",
+               pulled.T - jacobian.T * product.T * jacobian)
+
+    # The upper slot and the second lower slot of ∂X ⊗ dT ⊗ dX contract to dT.
+    v = jacobian.inv() * dx
+    a, b = jacobian.T * dt, jacobian.T * dx
+    mixed = sp.Array([v[i] * a[j] * b[k] for i in range(2) for j in range(2)
+                      for k in range(2)], (2, 2, 2))
+    swapped = sp.permutedims(mixed, (1, 0, 2))
+    contraction = sp.Matrix(sp.tensorcontraction(swapped, (1, 2)))
+    check_zero("mixed-slot trace after nonlinear coordinate change", contraction - a)
+
+
 def verify_native_forms():
     """Alternating pullback: nonlinear charts, changed dimension and singular maps."""
     t, x, s, r = sp.symbols("t x s r", real=True)
@@ -1101,6 +1124,7 @@ def verify():
         check_zero("connection Hessian transformation", gamma[k] - transformed_gamma)
 
     verify_covariant_pullback(metric, coordinates)
+    verify_tensor_operations(coordinates, shear)
     verify_native_forms()
     verify_volume_density()
     verify_native_hodge()
@@ -1204,6 +1228,7 @@ def verify():
           "endpoint variations, unconstrained null-velocity variations, "
           "massive non-affine Euler–Lagrange equations, the finite proper-time inverse, "
           "mixed covariant derivatives and densities of curve families, "
+          "native tensor products, slot exchange and contraction, "
           "native alternating-form pullback, graded exterior calculus, "
           "volume density/orientation and divergence, Hodge local formulas, signs and squares, "
           "the time-dependent Maxwell current and constitutive sign, "
