@@ -75,7 +75,7 @@ and `WilsonFamily.law_eq_core` and `finiteMoment_eq_core` transfer the result
 to the actual lattice moments. The remaining upstream extraction and
 continuum construction are not imported.
 
-`ProjectAInos/SmoothGeometry/YangMillsCoordinates.lean` is a project-authored
+`ProjectAInos/Integrations/YangMillsCoordinates.lean` is a project-authored
 adapter between the time-first and time-last conventions. It proves
 compatibility of the affine point action, future cone, and Fourier pairing.
 `SemanticContracts.lean` is a project-authored extension expressing the
@@ -90,7 +90,7 @@ See [SEMANTICS.md](SEMANTICS.md) for the precise statements and open conditions.
 - P⊗AI's `Variational` first-jet API is preserved. The imported jet tools
   are separate, higher-order analytic results; they are not equivalent to a
   general smooth jet-bundle theory. The project-local
-  `Variational/YangMillsBridge.lean` proves that the shared first-jet
+  `Integrations/YangMillsBridge.lean` proves that the shared first-jet
   derivative agrees with the imported directional derivative.
 - P⊗AI's shared Lorentz model uses **time first**, while the imported
   public Yang--Mills spacetime uses **time last**. The point equivalence

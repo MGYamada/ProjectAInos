@@ -171,8 +171,10 @@ derives equality of total amount and monotonicity of total energy as the exact
 accessibility criterion. The thermal family has positive amounts, arbitrary
 finite work dimensions with zero pressure, positive scaling, thermal joins,
 and transversality. `canonical_represent` identifies the unit primitive system
-with the actual atomic presentation, and `exchangeComparison` invokes the
-repaired physical endpoint without a CH/ECH premise.
+with the actual atomic presentation on its positive-energy domain.
+`canonical_represent_ne` checks that the ambient extensions differ at zero
+energy, where the reservoir assigns a reference atom. `exchangeComparison`
+invokes the physical endpoint using domain agreement and no CH/ECH premise.
 
 The checked regression `atomicOnly_mixing_impossible` excludes
 `(1/2)[1] + (1/2)[3] → [2]` for the old atomic-only heating relation: the

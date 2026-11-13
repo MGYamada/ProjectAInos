@@ -16,15 +16,17 @@ open Set
 open scoped NNReal
 namespace ProjectAInos.Thermodynamics.Physical.AtomicReservoir
 
+/-- Outside the positive-energy halfspace, use a reference atom as the
+ambient extension. This choice is compatible with positive scaling. -/
 def represent {n : ℕ} (r : ℝ≥0) (z : SimpleCoordinates n) : Raw :=
-  r • domains.represent () ((r : ℝ)⁻¹ * z.1, 0)
+  if 0 < z.1 then r • domains.represent () ((r : ℝ)⁻¹ * z.1, 0)
+  else r • atom ⟨1, by norm_num⟩
 
 theorem represent_pos {n : ℕ} (r : ℝ≥0) (hr : 0 < r)
     (z : SimpleCoordinates n) (hz : 0 < z.1) :
     represent r z = r • atom ⟨(r : ℝ)⁻¹ * z.1,
       mul_pos (inv_pos.mpr (NNReal.coe_pos.mpr hr)) hz⟩ := by
-  unfold represent
-  rw [domains.represent_of_mem () (mul_pos (inv_pos.mpr (NNReal.coe_pos.mpr hr)) hz)]
+  rw [represent, ite_eq_left hz, domains.represent_of_mem () (mul_pos (inv_pos.mpr (NNReal.coe_pos.mpr hr)) hz)]
   rfl
 
 theorem amount_represent {n : ℕ} (r : ℝ≥0) (hr : 0 < r)
@@ -94,9 +96,19 @@ theorem system_nonempty (n : ℕ) (r : ℝ≥0) (hr : 0 < r) : (system n r hr).d
 
 theorem represent_scale {n : ℕ} (r s : ℝ≥0) (z : SimpleCoordinates n) :
     represent (s*r) z = s • represent r ((s : ℝ)⁻¹ • z) := by
-  simp only [represent, mul_smul, NNReal.coe_mul, mul_inv_rev, Prod.smul_fst, smul_eq_mul]
-  congr 2
-  simp only [mul_assoc]
+  by_cases hs : s = 0
+  · subst s
+    simp [represent]
+  have hspos : 0 < (s : ℝ) := NNReal.coe_pos.mpr (pos_iff_ne_zero.mpr hs)
+  have hz : 0 < (s : ℝ)⁻¹ * z.1 ↔ 0 < z.1 :=
+    mul_pos_iff_of_pos_left (inv_pos.mpr hspos)
+  by_cases h : 0 < z.1
+  · simp only [represent, Prod.smul_fst, smul_eq_mul, ite_eq_left h, ite_eq_left (hz.mpr h),
+      mul_smul, NNReal.coe_mul, mul_inv_rev]
+    congr 2
+    simp only [mul_assoc]
+  · simp only [represent, Prod.smul_fst, smul_eq_mul, ite_eq_right h,
+      ite_eq_right (mt hz.mp h), mul_smul]
 
 def scaled (n : ℕ) (r : ℝ≥0) (hr : 0 < r) (s : ℝ≥0) (hs : 0 < s) :
     ScaledSimpleSystem (system n r hr) s where
@@ -259,15 +271,31 @@ def family : ThermalFamily accessibility where
 theorem family_nontrivial : family.Nontrivial :=
   ⟨0, system 0 1 (by norm_num), ⟨1, by norm_num, rfl⟩, system_nonempty 0 1 (by norm_num)⟩
 
-theorem canonical_represent : (system 0 1 (by norm_num)).represent = domains.represent () := by
-  funext z
-  change (1 : ℝ≥0) • domains.represent () ((1 : ℝ)⁻¹ * z.1, 0) = domains.represent () z
-  simp only [inv_one, one_mul, one_smul]
+theorem canonical_represent :
+    Set.EqOn (system 0 1 (by norm_num)).represent (domains.represent ()) (domains.domain ()) := by
+  intro z hz
+  have hz' : 0 < z.1 := hz
+  change represent 1 z = domains.represent () z
+  simp only [represent, ite_eq_left hz', NNReal.coe_one, inv_one, one_mul, one_smul]
   congr 1
   change (z.1, 0) = (z.1, z.2)
   congr 1
   ext i
   exact Fin.elim0 i
+
+/-- The admitted reservoir agrees with the canonical atom on its proper
+physical domain and takes a different value at the ambient origin. -/
+theorem canonical_represent_ne :
+    (system 0 1 (by norm_num)).represent ≠ domains.represent () := by
+  intro h
+  have hz : (0 : SimpleCoordinates 0) ∉ domains.domain () := by
+    change ¬ (0 : ℝ) < 0
+    simp
+  have he := congrFun h (0 : SimpleCoordinates 0)
+  rw [domains.represent_of_not_mem () hz] at he
+  change represent 1 (0 : SimpleCoordinates 0) = 0 at he
+  have ha := congrArg amount he
+  simp [represent] at ha
 
 /-- The repaired endpoint is instantiated on the actual canonical atoms,
 including all thermal-family premises. Neither CH nor ECH is an input. -/

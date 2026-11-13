@@ -10,6 +10,9 @@ open scoped NNReal
 #check AtomicReservoir.normal_form
 #check AtomicReservoir.relation_iff
 
+example : (AtomicReservoir.system 0 1 (by norm_num)).represent ≠
+    AtomicReservoir.domains.represent () := AtomicReservoir.canonical_represent_ne
+
 example : AtomicReservoir.family.Nontrivial := AtomicReservoir.family_nontrivial
 example : ExchangeComparison AtomicReservoir.accessibility.StateSpace :=
   AtomicReservoir.exchangeComparison

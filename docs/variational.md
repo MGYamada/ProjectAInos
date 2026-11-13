@@ -84,8 +84,23 @@ constructing a global coordinate curve.
 The [Mechanics specialization](mechanics.md) now derives the fixed-endpoint
 Euler–Lagrange equations on a real time interval. It uses compactness of the
 interval to justify the action derivative and `interval_firstVariation_pairing`
-for the covector-valued boundary term. The Electrodynamics specialization,
-coordinate changes and global jet bundles remain subsequent stages.
+for the covector-valued boundary term.
+
+[Electrodynamics §4.1](electrodynamics.md) uses the same variational API for the
+[charged-particle action](../ProjectAInos/Electrodynamics/ParticleAction.lean).
+`stationary_iff_lorentzForce` relates fixed-endpoint stationarity to the
+[Lorentz-force equation](../ProjectAInos/Electrodynamics/LorentzForce.lean) on the
+interval interior. It assumes a C² curve that stays in an open spacetime domain
+with a C² potential and timelike velocity along the closed interval.
+The [gauge-action formula](../ProjectAInos/Electrodynamics/GaugeAction.lean)
+adds the endpoint term `e (χ(γ(b)) − χ(γ(a)))` for a C¹ gauge function on the
+domain. Fixed-endpoint stationarity is gauge invariant under the theorem's C³
+gauge-function hypothesis.
+
+General coordinate changes for field jets and global jet bundles remain
+subsequent stages. The vacuum Maxwell action derivation is tracked in
+[#44](https://github.com/MGYamada/ProjectAInos/issues/44), separately from the
+[curved fixed-background Maxwell equations](electrodynamics.md).
 [Smooth algebra](smooth-algebra.md) supplies the smooth observables used by
 `Mechanics.ofSmoothOperation` and their concrete directional chain rule.
 

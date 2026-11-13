@@ -48,6 +48,69 @@ example (u : Observer 3) (F : TwoForm) :
     (1 / 4 : ℝ) * tensorContraction F (star F) = covectorPairing (electric u F) (magnetic u F) :=
   pseudoscalarInvariant_observer u F
 
+section FlatContracts
+
+open scoped ContDiff
+
+example (m e : ℝ) {A : Potential} {U : Set Spacetime} {γ : ℝ → Spacetime} {a b : ℝ}
+    (hab : a < b) (hγ : ContDiff ℝ 2 γ) (hU : IsOpen U) (hA : ContDiffOn ℝ 2 A U)
+    (hγU : ∀ t ∈ Set.Icc a b, γ t ∈ U) (hv : ∀ t ∈ Set.Icc a b, Timelike (deriv γ t)) :
+    Mechanics.Stationary a b (chargedLagrangian m e A) γ ↔
+      ∀ t ∈ Set.Ioo a b, m • deriv (fun s => fourVelocity (deriv γ s)) t =
+        lorentzForce e (fieldTensor A (γ t)) (deriv γ t) :=
+  stationary_iff_lorentzForce m e hab hγ hU hA hγU hv
+
+example (m e : ℝ) {A : Potential} {χ : Spacetime → ℝ} {U : Set Spacetime}
+    (hU : IsOpen U) (hA : ContinuousOn A U) (hχ : ContDiffOn ℝ 1 χ U)
+    {γ : ℝ → Spacetime} (hγ : ContDiff ℝ 2 γ) (a b : ℝ)
+    (hγU : ∀ t ∈ Set.uIcc a b, γ t ∈ U) :
+    chargedAction m e (gaugeShift A χ) γ a b =
+      chargedAction m e A γ a b + e * (χ (γ b) - χ (γ a)) :=
+  chargedAction_gauge_on m e hU hA hχ hγ a b hγU
+
+example (m e : ℝ) {A : Potential} {χ : Spacetime → ℝ} {U : Set Spacetime}
+    {γ : ℝ → Spacetime} {a b : ℝ} (hab : a < b) (hγ : ContDiff ℝ 2 γ)
+    (hU : IsOpen U) (hA : ContDiffOn ℝ 2 A U) (hχ : ContDiffOn ℝ 3 χ U)
+    (hγU : ∀ t ∈ Set.Icc a b, γ t ∈ U) (hv : ∀ t ∈ Set.Icc a b, Timelike (deriv γ t)) :
+    Mechanics.Stationary a b (chargedLagrangian m e (gaugeShift A χ)) γ ↔
+      Mechanics.Stationary a b (chargedLagrangian m e A) γ :=
+  stationary_gauge_iff_on m e hab hγ hU hA hχ hγU hv
+
+example (A : Potential) (χ : Spacetime → ℝ) {U : Set Spacetime} (hU : IsOpen U)
+    (hA : ContDiffOn ℝ 1 A U) (hχ : ContDiffOn ℝ 2 χ U) :
+    Set.EqOn (fieldTensor (gaugeShift A χ)) (fieldTensor A) U :=
+  fieldTensor_gauge_on A χ hU hA hχ
+
+example (P : PoincareGroup 3) (A : Potential) (hA : Differentiable ℝ A) :
+    fieldTensor (DifferentialForm.pullback P.val A) =
+      DifferentialForm.pullback P.val (fieldTensor A) :=
+  fieldTensor_poincare P A hA
+
+example (L : LorentzGroup 3) (F : TwoForm) :
+    scalarInvariant (lorentzPullback L F) = scalarInvariant F :=
+  scalarInvariant_lorentz L F
+
+example (L : LorentzGroup 3) (hL : L.val.toLinearMap.det = -1) (F : TwoForm) :
+    pseudoscalarInvariant (lorentzPullback L F) = -pseudoscalarInvariant F :=
+  pseudoscalarInvariant_orientationReversing L hL F
+
+example {j : ℕ} {Q : YM.Maxwell.TwoJet ℝ j} (h : YM.Maxwell.ClosedJet Q)
+    (x : Spacetime) (μ ν : Fin 4) :
+    component (fieldTensor (Polynomial.potential Q) x) μ ν = Polynomial.coefficient Q μ ν x :=
+  Polynomial.fieldTensor_potential h x μ ν
+
+example {j : ℕ} (Q : YM.Maxwell.TwoJet ℝ j) (ν : Fin 4) (x : Spacetime) :
+    potentialComponent (Polynomial.potential Q) ν x =
+      (↑(j + 2 : ℕ) : ℝ)⁻¹ * ∑ μ : Fin 4, x μ * Polynomial.coefficient Q μ ν x :=
+  Polynomial.radial_formula Q ν x
+
+example {j : ℕ} {G : YM.Gauge} {Q : YM.Maxwell.TwoJet G.Color j}
+    (h : YM.Maxwell.ClosedJet Q) (ν : YM.Axis) (x : YM.E4) :
+    Polynomial.radial Q ν x = (YM.Maxwell.contracted h).value ν x :=
+  Polynomial.radial_upstream h ν x
+
+end FlatContracts
+
 section CurvedMaxwell
 
 open scoped Manifold ContDiff

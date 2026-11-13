@@ -76,6 +76,8 @@ public import ProjectAInos.GeneralRelativity.VariationBoundary
 public import ProjectAInos.GeneralRelativity.VariationDensity
 public import ProjectAInos.GeneralRelativity.VariationExamples
 public import ProjectAInos.GeneralRelativity.VariationStationary
+public import ProjectAInos.Integrations.YangMillsBridge
+public import ProjectAInos.Integrations.YangMillsCoordinates
 public import ProjectAInos.Mechanics.Basic
 public import ProjectAInos.Mechanics.EulerLagrange
 public import ProjectAInos.Mechanics.Examples
@@ -272,7 +274,6 @@ public import ProjectAInos.SmoothGeometry.Tensor.OperationsExamples
 public import ProjectAInos.SmoothGeometry.Tensor.Pullback
 public import ProjectAInos.SmoothGeometry.Tensor.Regularity
 public import ProjectAInos.SmoothGeometry.Tensor.Tensoriality
-public import ProjectAInos.SmoothGeometry.YangMillsCoordinates
 public import ProjectAInos.SpecialRelativity.Boost
 public import ProjectAInos.SpecialRelativity.Examples
 public import ProjectAInos.SpecialRelativity.FormExamples
@@ -358,4 +359,3 @@ public import ProjectAInos.Variational.LocalExtension
 public import ProjectAInos.Variational.ManifoldCurve
 public import ProjectAInos.Variational.Parameter
 public import ProjectAInos.Variational.Regularity
-public import ProjectAInos.Variational.YangMillsBridge

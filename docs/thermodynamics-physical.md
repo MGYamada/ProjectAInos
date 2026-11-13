@@ -58,8 +58,8 @@ $$
 $$
 
 records the amount of each primitive system. `label_atom` gives one unit of
-the corresponding label, and `label_scale` proves extensivity. Domain and
-representation equality with an admitted `SimpleSystem` give an equivalence
+the corresponding label, and `label_scale` proves extensivity. Domain equality and
+representation agreement on that domain with an admitted `SimpleSystem` give an equivalence
 chart covering its entire domain; `simpleSystem_label` proves the full-domain
 label law. Defining the coordinate domains first avoids a recursive atom type
 depending on its own accessibility structure. These data construct the

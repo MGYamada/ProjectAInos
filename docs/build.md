@@ -90,3 +90,14 @@ python3 -m http.server --bind 127.0.0.1 --directory docbuild/handbook 8000
 Open [the local handbook](http://127.0.0.1:8000/). Use the **Lean API** link in
 the navbar or follow a module link from a guide. In the API sidebar, use
 **Documentation handbook** to return to the handbook.
+
+## Handbook regression tests
+
+Run the Markdown-staging and local HTML-link tests from the repository root:
+
+```sh
+PYTHONPATH=docs python3 -m unittest discover -s docs/tests -v
+```
+
+The tests run in the Handbook tests CI job and require only the Python
+standard library. The full Quarto and doc-gen4 build remains available on demand.
