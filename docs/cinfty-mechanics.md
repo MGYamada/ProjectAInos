@@ -136,6 +136,387 @@ Count: 32 proved, 4 evidence, 16 informal.
 
 Closed with a stated remainder: §§11, 12, 18, 19, 20, 24, 27, 28, 29, 30, 34, 37, 43, 44, 46, 48, 49, 50, 51, 52. Every row is now *proved* or closed with a stated remainder.
 
+<a id="remaining-proof-strategy"></a>
+
+### Proof strategy for the remaining targets
+
+This plan was checked against the library and the pinned Mathlib revision
+`56a005855ea17e0b0958f73ec801ae140b0a1679` (`v4.35.0`) on 15 November 2026.
+It proposes proofs; it adds no Lean declarations and promotes no ledger status.
+“Closed with a stated remainder” records the scope of an earlier delivery, not
+completion of the mathematics. The twenty such rows are covered below. The
+original manuscript's milestones describe the initial construction; this section
+gives the order of work from the present implementation.
+
+#### Available tools and the remaining analytic interface
+
+The general interface (F) is still open, but it need not precede every dynamical
+theorem. Separate a theorem **about a given solution or solution family** from
+the theorem **constructing that family**. Both require explicit hypotheses and
+proved examples. In particular, a smooth initial-value flow does not by itself
+give a smooth solution for prescribed endpoints: that also needs a locally
+invertible endpoint map, away from conjugate points.
+
+| Tool checked in the pinned sources | Use and limit |
+|:---|:---|
+| Mathlib `Analysis/ODE/ExistUnique.lean`: `IsPicardLindelof.exists_forall_mem_closedBall_eq_hasDerivWithinAt_lipschitzOnWith`, `ODE_solution_unique_of_mem_Icc` | Local existence, Lipschitz dependence on the initial point, and uniqueness are available. These do not supply general differentiability in the initial point. |
+| `SmoothGeometry/ODE/Volterra.lean`: `LinearODE.solution_hasDerivWithinAt`, `solution_family_contDiffAt` | A constructed linear solution depends smoothly on its coefficient curve and initial value, on the unit interval with coefficient supremum norm less than one. Time rescaling and finite patching are further work; joint smoothness in time must also be justified. |
+| `SmoothGeometry/ODE/ContinuousFamily.lean`: `ContinuousFamily.slices_contDiff` | Packages a smooth parameter family as a map into continuous functions on a compact set; useful for parameter-dependent integral equations. |
+| `Mechanics.firstVariation_eq_boundary_add_integral`, `contDiff_infty_parametric_intervalIntegral_limits` | The boundary term and smooth parameter integrals are available. Moving-endpoint families still need to be connected to these statements. |
+| Mathlib `Analysis/Calculus/ImplicitContDiff.lean` and `InverseFunctionTheorem/ContDiff.lean` | Local smooth implicit functions and inverses can construct turning-point branches, endpoint solutions and complete Hamilton–Jacobi integrals, once invertibility is proved. |
+| Mathlib `MeasureTheory/Function/Jacobian.lean`, `JacobianOneDim.lean`, and `Integral/Prod.lean` | Change of variables and Fubini/Tonelli are available. Domain, injectivity and integrability obligations remain part of each proof. |
+| Mathlib `RepresentationTheory/Character.lean`, `Maschke.lean`, and `RingTheory/MvPowerSeries/Derivative.lean` | Character calculations, semisimplicity and formal differentiation are starting points. They do not already prove molecular mode classifications or Birkhoff normal form. |
+| Mathlib `Geometry/Manifold/VectorBundle/CovariantDerivative/LeviCivita.lean`; `SmoothGeometry/Lorentzian/AlongCurveReparam.lean` and `Geodesic.lean` | The Riemannian Levi-Civita connection and Lorentzian along-curve calculations are available. The latter are specialized to `LorentzMetric`; applying their pattern to a positive Jacobi metric needs a shared or Riemannian version. |
+
+For a later construction of the nonlinear part of (F), work on a short fixed
+interval and write the ODE as a zero of
+`γ ↦ γ − constant x − ∫ X(γ)`. Prove smoothness of this map on an open set of
+continuous curves whose images stay in the coordinate domain. Its derivative
+in `γ` is the identity minus a linear Volterra operator; a short interval makes
+this difference invertible.
+Apply the Banach-space implicit function theorem, use the equation to recover
+time derivatives, and use uniqueness to patch overlapping intervals. Uniform
+estimates on a compact parameter set must be proved before patching families.
+Completeness is a separate hypothesis for an all-time flow. Put this analysis
+in `SmoothGeometry/ODE/`, without a mechanics import.
+
+#### Work packages and dependencies
+
+| Package | Ledger rows with a remainder | First deliverable | Further work needed for the full target |
+|:---|:---|:---|:---|
+| R1: solution families | 43, 46 | Endpoint-action identity and volume preservation for given regular solution families | Construct local families and, where required, their endpoint parametrization |
+| R2: one-dimensional motion | 11, 12, 50 | Periodicity by reflection; derivative of the enclosed area | Abel inversion and canonical action–angle coordinates on a regular annulus |
+| R3: scattering | 18, 19, 20 | Hyperbolic asymptote geometry and Rutherford measure formula | General deflection integrals and a uniform small-angle error estimate |
+| R4: linear oscillations | 24, 27 | Concrete symmetry decomposition; all monodromy trace cases | Construct fundamental systems and estimate instability-zone widths |
+| R5: perturbation theory | 28, 29, 30 | Finite-order normal form and an averaging lemma with a remainder bound | Formal normal form; nonlinear resonance and rapid-forcing estimates |
+| R6: rigid bodies | 34, 37 | Force/torque balance for a given rigid motion; elliptic-function solution of Euler's equations | Lagrangian correspondence and reconstruction of the rotation |
+| R7: open-domain mechanics | 44, 48 | Jacobi-metric correspondence along curves; actual separated coordinate charts | Variational Maupertuis principle and complete separated integrals |
+| R8: adiabatic estimates | 49, 51 | Oscillator action estimate over a slow-time interval | General one-dimensional theorem, then a precise analytic scattering theorem |
+| R9: invariant tori | 52 | Action–angle theorem with a given torus action and period lattice | Construct the torus action, lattice and neighboring action coordinates |
+
+Start R1's conditional identities and R4's matrix calculations using current
+interfaces, while developing R2's turning-point families. R2 supplies the action
+variable needed by R8; R5 supplies its averaging estimates. R3 reuses turning-point
+analysis and one-dimensional change of variables. R7 supplies the coordinate
+geometry for the later part of R9. R6 can proceed independently. A useful first
+delivery groups the conditional results of §§43 and 46 with the matrix part of
+§27; it must retain the unconstructed-family and instability-width remainders.
+
+<a id="strategy-r1"></a>
+
+#### R1. Endpoint action and finite-time Liouville (§§43, 46)
+
+For §43, take a given sufficiently smooth family of stationary curves, allowing
+both endpoint positions and times to vary. Pull each time interval back to
+`[0, 1]`, differentiate the action under the integral, and integrate by parts.
+The Euler–Lagrange term vanishes, leaving
+
+$$
+dS=p_f\,dq_f-p_i\,dq_i-H_f\,dt_f+H_i\,dt_i.
+$$
+
+With the initial endpoint fixed this is Proposition 49. The first lemma should
+state the identity on the parameter space; only an invertible endpoint
+parametrization turns it into an action function of the endpoints. Instantiate
+it with the free particle for a nonzero time interval, then the oscillator on
+intervals with `sin (ωT) ≠ 0`. This exposes the necessary nonconjugacy condition.
+
+For §46, take a given local family `Φ(t, z)` solving Hamilton's equations with
+`Φ(0, z) = z`, together with regularity sufficient to differentiate in `z` and
+interchange derivatives. First prove the variational equation
+`M' = DX_H(Φ) M` for `M = D_z Φ`. Derive the determinant differential identity
+from multilinearity, and use `divergence_hamiltonian` to obtain `det M = 1`.
+Uniqueness gives injectivity on a common existence domain; apply Mathlib's
+Jacobian theorem to measurable subsets of that domain. State preservation of
+the restricted measure and its image, not of an arbitrary total extension of
+the local flow. A complete flow then gives global measure preservation.
+
+The same variational equation gives `Mᵀ J M = J` and the finite-time canonical
+transformation missing from §45. Free and quadratic Hamiltonians are the first
+instances. These conditional results do not establish the general existence
+statement (F), or promote unrestricted §§43 and 46 on their own.
+
+<a id="strategy-r2"></a>
+
+#### R2. Period, Abel inversion and one-dimensional action–angle (§§11, 12, 50)
+
+Work with `m > 0`, a smooth potential, and an open energy interval on which two
+simple turning points bound a single well. Use the implicit function theorem
+on `U(x) = E` to construct smooth branches `x₁(E) < x₂(E)`. Two applications of
+Hadamard's lemma should give the parameter-dependent factorization
+`E − U(x) = (x − x₁(E))(x₂(E) − x) W(E, x)`. Prove smoothness and positivity of
+`W`, including at the endpoints; use a compact energy subinterval for uniform
+lower bounds. The current turning-point theorem assumes a positive continuous
+factor and does not yet construct this stronger family.
+
+1. For a given motion between turning points, reflect time about each endpoint.
+   At an endpoint the velocity is zero, so the reflected position and velocity
+   glue; Newton's equation supplies the matching acceleration. Local uniqueness
+   identifies the reflected and continued motions. This gives a periodic
+   extension with period twice the already-proved travel time. State initial
+   existence separately, using local ODE existence and continuation in a compact
+   regular energy component.
+2. Put `x = (x₁ + x₂)/2 + (x₂ − x₁)/2 · cos θ`. Both the area integral and the
+   period integral now live on a fixed interval. Differentiate the regularized
+   area and remove the parameter-motion terms by integration by parts. Prove
+   `A'(E) = T(E)` and hence `I'(E) = T(E)/(2π)` for `I = A/(2π)`.
+   Recheck the constants with `A(E) = 2πE/ω` for the oscillator.
+3. For §12, normalize the well minimum to energy zero, take monotone inverse
+   branches and write their width as `w(u) = x₂(u) − x₁(u)`, with `w(0) = 0`.
+   Derive `T(E) = √(2m) ∫₀ᴱ w'(u)/√(E − u) du`. Use Tonelli for the nonnegative
+   kernel, or Fubini after an integrability proof, and evaluate
+   `∫ᵤⱽ dE/√((E − u)(V − E)) = π` by the turning-point substitution.
+   The result is precisely (12.1). A nondegenerate well minimum supplies the
+   integrable behavior of `w'` near zero. Only the width is recovered: common
+   shifts of the inverse branches are not determined by the period.
+4. For §50, restrict to a regular compact energy annulus. Since `I' > 0`, invert
+   `I(E)` locally. Define the angle by normalized travel time from a transverse
+   section, valued in `ℝ/(2πℤ)`, and prove its smoothness across the turning
+   points using solution charts. Verify the canonical bracket and
+   `H'(I) = 2π/T`. A single real-valued angle on the whole annulus is not the
+   target; equilibria and separatrices are excluded.
+
+The oscillator must instantiate every interface, including the inverse problem
+and the circle-valued angle. The angle's smooth family can first be data; its
+construction and overlap proofs remain necessary for the full §50 target.
+
+<a id="strategy-r3"></a>
+
+#### R3. Scattering and cross sections (§§18–20)
+
+Begin with noncollision hyperbolic Kepler trajectories on the **positive**
+inverse-radius branch, `ρ > 0`. The algebraic signed-radius model does not
+identify its radius with spatial distance without this restriction. Connect
+the spatial motion to the polar model on its orbital plane, with an angle lift
+on the time interval, and prove the existence and directions of the incoming
+and outgoing asymptotic velocities. The conic identity then gives the currently
+assumed relation `sin (χ/2) = 1/e`; keep the attractive and repulsive sign
+conventions explicit and use the magnitude of the coupling in the cross section.
+
+For §18, first treat a radial scattering branch with a simple closest approach
+and positive limiting speed. Reuse the finite turning-point substitution and
+prove integrability of the tail to infinity from explicit bounds on the
+potential. Establish that the limiting angular integral is the angle between
+asymptotes. This is a statement about a given incoming/outgoing trajectory;
+existence and completeness of the scattering map are additional results.
+
+Define cross section as the pushforward of area in the impact-parameter plane.
+On a monotone deflection branch away from the polar endpoints, change variables
+from `2πb db` to `2π sin χ dχ` to obtain
+`dσ/dΩ = b |db/dχ| / sin χ`. Cover multiple branches by summing their densities.
+Apply this measure statement to the existing Rutherford derivative calculation;
+the algebraic Jacobian alone is not yet a scattering cross-section theorem.
+
+For §20, first choose a precise small-coupling family `U_ε = εV`, fixed positive
+incoming speed, and a compact impact-parameter range bounded away from collision.
+With explicit decay bounds on derivatives of `V`, compare the force along the
+actual and straight trajectories to derive the transverse-impulse term and a
+uniform remainder, initially of order `ε²`. Prove tail estimates as well as the
+finite-time comparison. Check the coefficient against the expansion of the
+exact Coulomb deflection. No estimate is claimed for arbitrary small impact
+parameters, trapping energies or singular deflection branches.
+
+<a id="strategy-r4"></a>
+
+#### R4. Molecular symmetry and parametric resonance (§§24, 27)
+
+For §24, represent a finite molecular point group on mass-weighted displacements
+and prove that the equilibrium Hessian intertwines this action. Connect the
+existing invariant-mode result to `RepresentationTheory` and decompose a
+concrete molecule first, using characters over `ℂ` and then identifying the
+real mode spaces. Derive the translation and rotation subspaces from the
+particle configuration. A nonlinear free molecule has six rigid directions,
+a linear one five; asserting exactly `3N − 6` or `3N − 5` nonzero frequencies
+also requires that there are no additional zero modes. Prove that condition
+for the example rather than taking a dimension count as a stability proof.
+
+For §27, use the Volterra construction on short intervals and uniqueness to
+build normalized fundamental matrices on one period; bootstrap time regularity
+for a smooth coefficient and extend by periodicity to fit `FundamentalSystem`.
+The current boundedness proofs already cover `|tr M| < 2` and `M = ±1`.
+Add the remaining matrix cases before estimating resonance zones: for
+`|tr M| > 2`, construct an expanding eigenvector and identify the stable line;
+at `tr M = 2σ`, prove `Mⁿ = σⁿ(1 + nσ(M − σ1))` and classify bounded data by
+`ker (M − σ1)`. Not every nonzero solution grows in the hyperbolic case.
+
+Then differentiate the monodromy with respect to forcing amplitude and
+detuning, using the parameter-dependent linear ODE. Estimate the first
+nonvanishing discriminant term and its remainder to locate the instability
+zone. A smooth dependence theorem without these estimates does not determine
+its width. Use the constant-frequency oscillator and explicit determinant-one
+matrices to test all trace regimes and boundary cases.
+
+<a id="strategy-r5"></a>
+
+#### R5. Normal forms, nonlinear resonance and rapid forcing (§§28–30)
+
+For §28, start with homogeneous polynomials through degree four. Split the
+homological operator `{H₂, ·}` into its image and resonant kernel; in one degree
+of freedom the kernel consists of polynomials in `I`. Solve only for the
+nonresonant part, compute the resonant coefficient, and recover the frequency
+correction in Proposition 71. A bracket lowers total degree by two, so each
+truncation must retain enough input degrees. The ideal of terms of degree
+greater than `N` is not a Poisson ideal for the canonical bracket; a finite jet
+quotient cannot simply inherit that bracket.
+
+Next build the formal Poisson bracket on multivariate power series, prove
+filtration estimates, and construct the compatible sequence of Lie transforms
+degree by degree. Defining formal series directly avoids making Borel's
+surjectivity theorem a prerequisite; identifying them with smooth functions
+modulo the flat ideal is a separate bridge. To turn a finite normal form into
+a statement about actual solutions, prove Taylor remainder bounds and a
+comparison on a stated time interval. Formal frequency and convergence of the
+infinite transformation are separate claims.
+
+For §§29–30, develop one shared averaging estimate for a periodic fast phase
+on a compact tube. A near-identity change removes the zero-mean oscillatory
+term; bound the remaining vector field and compare trajectories by Gronwall
+on the declared time scale. For nonlinear resonance, fix the scaling of
+damping, forcing, nonlinearity and detuning, derive the slow amplitude/phase
+system, and then analyze its equilibria. An algebraic amplitude equation
+alone neither constructs nor classifies periodic solutions of the original
+ODE: continuation of a nondegenerate equilibrium requires a return-map or
+implicit-function argument. For rapid forcing, specify the forcing-amplitude
+scaling, compute the effective potential and the micromotion correction, and
+prove an error bound while trajectories remain in the tube. The Duffing
+oscillator and an explicitly forced oscillator provide initial examples.
+
+<a id="strategy-r6"></a>
+
+#### R6. Rigid-body dynamics and the asymmetric top (§§34, 37)
+
+For §34, first take a given motion `q_a(t) = c(t) + R(t)a_a` of finitely many
+point masses, with `R(t) ∈ SO(3)`, body coordinates centered at the centre of
+mass, and specified external forces. Sum the particle equations to obtain
+`P' = F`; sum moments to obtain spatial angular-momentum balance. State the
+cancellation of internal force and torque explicitly. Use the existing `hat`
+map and inertia identities to transport this to the body frame and match the
+Lie–Poisson equations.
+
+For the Lagrangian bridge, vary the rotation through `δR = R hat η`, derive
+`δΩ = η' + Ω × η`, and integrate by parts to obtain the forced Euler equations.
+Prove these are all tangent variations and include the translational part.
+This matrix-curve formulation can precede a general cotangent-bundle API;
+the intrinsic `T(ℝ³ ⋊ SO(3))` identification is a further geometric bridge.
+Use a free body and a body in a uniform external field as proved instances.
+
+For §37, reduce the conserved energy and angular-momentum norm to a scalar
+quartic quadrature in each regular energy regime. No Jacobi elliptic-function
+API with the needed ODEs was found in the pinned sources. Construct `sn`, `cn`,
+`dn` from their polynomial ODE, proving their identities, existence and period
+via boundedness and a turning-point integral; alternatively invert the elliptic
+integral on a monotone branch and glue branches by uniqueness. Substitute the
+scaled functions into Euler's equations and use uniqueness for completeness.
+Treat principal rotations and the separatrix separately. Recovering `R(t)`
+from `R' = R hat Ω` uses the linear ODE construction and preservation of
+`RᵀR = 1`, `det R = 1`; it is distinct from solving for body angular momentum.
+
+<a id="strategy-r7"></a>
+
+#### R7. Maupertuis and separated coordinates (§§44, 48)
+
+For §44, use a positive-definite kinetic metric `g` and the open region `U < E`.
+The Jacobi metric is `g_J = 2(E − U)g`. First prove the coordinate identity
+between Newton's equation at energy `E` and the geodesic equation of `g_J`
+after the explicit change of parameter `ds/dt = 2(E − U)`. Conversely reconstruct
+physical time for a unit-speed Jacobi geodesic. Connect the coordinate connection
+to Mathlib's Riemannian Levi-Civita connection by metric compatibility and
+torsion-freeness; extract the signature-independent reparametrization argument
+from the existing Lorentzian along-curve proofs. Then formulate the abbreviated
+action as Jacobi length for regular curves, with momenta determined by tangent
+direction and energy; its first variation gives the fixed-endpoint variational
+principle with free traversal time. Exclude the degenerate boundary `U = E`.
+Euclidean free motion and a central potential away from turning points are
+the first instances; the existing algebraic `maupertuis` lemma remains a
+separate result.
+
+For §48, build actual position charts for spherical, parabolic and elliptic
+coordinates on explicit regular domains and take their cotangent lifts,
+transforming momenta by the inverse transpose Jacobian. Verify the Hamiltonian
+and canonical bracket before invoking the existing Stäckel verification
+theorems. Use the open-domain analytic model for the poles and denominators;
+do not treat `1/r²` or `1/sin² θ` as globally smooth functions of those free
+generators. Integrate a chosen separated momentum branch where its radicand
+is positive. Differentiate the resulting `S`, prove the mixed Hessian is
+invertible, and use the implicit function theorem to solve the Jacobi
+relations. This also supplies the construction missing after §47. Changes
+of branch at turning points are a later gluing result, not automatic from
+verification of the Hamilton–Jacobi equation. Test with free motion on a
+regular chart and a nonconstant separated potential.
+
+<a id="strategy-r8"></a>
+
+#### R8. Quantitative adiabatic invariance (§§49, 51)
+
+Start §49 with the existing exact oscillator identity. Assume
+`ω(t) = Ω(εt)`, a positive lower bound on `Ω`, and uniform derivative bounds
+on a fixed slow-time interval `[0, T]`. Integrate the oscillatory term by parts
+using a phase with derivative bounded away from zero, or construct a corrected
+action whose derivative is of order `ε²`. Control the solution's energy and
+the endpoint correction to deduce `|I(t) − I(0)| ≤ Cε` for `t ≤ T/ε`, with
+`C` independent of `ε`. A direct Gronwall bound growing as `exp(C/ε)` would not
+prove this target. Constant frequency and a smooth positive varying frequency
+must instantiate the hypotheses. Extend to a general one-dimensional system
+only after R2 gives smooth action–angle coordinates uniformly on a compact
+annulus away from separatrices, and R5 gives the required averaging estimate.
+
+For §51, first formulate an analytic theorem for an oscillator with asymptotically
+constant frequencies. Require a uniform complex strip of analyticity,
+nonvanishing frequency there, and quantitative decay of the time derivatives
+at both ends. Construct successive corrected actions, prove factorial bounds
+on their remainders, and truncate at order proportional to `1/ε`. Then show
+that the corrections vanish at the asymptotic endpoints so that the estimate
+applies to the incoming and outgoing physical actions. Analytic dependence
+alone does not make the change of the uncorrected action on an arbitrary
+finite interval exponentially small. A theorem for a corrected action, the
+existence of scattering limits, and the exponential estimate for those
+limits must be stated separately. General nonlinear systems follow only
+after uniform analytic action–angle charts and remainder bounds are built.
+
+<a id="strategy-r9"></a>
+
+#### R9. Liouville–Arnold and invariant tori (§52)
+
+Separate the topology of one regular compact connected fiber from canonical
+coordinates on a neighborhood. Begin with commuting complete Hamiltonian
+flows and a smoothly varying full-rank period lattice as explicit data, and
+prove the resulting action–angle statement; products of oscillator circles
+with positive actions are the required instance.
+
+To remove that data, prove independence of the commuting fields on the fiber,
+completeness from compactness, transitivity of their `ℝⁿ` action, discreteness
+of the stabilizer, and that compactness makes it a rank-`n` lattice. This gives
+the fiber as a torus. Then construct a local family of cycles and its smooth
+period lattice, integrate the Liouville form to define actions, and prove the
+canonical bracket and the linear angle evolution. For a general symplectic
+manifold, justify the needed local primitive near the Lagrangian torus; the
+canonical phase space already has a primitive. Neither a torus diffeomorphism
+alone nor the Runge–Lenz integrals prove the neighborhood theorem. Keep the
+result local in the regular-value base: global action coordinates can fail
+because of monodromy.
+
+#### Scope and acceptance criteria
+
+The packages above address every row listed as closed with a remainder, but
+rows already marked *proved* also retain explicit scope limits. In particular,
+general momentum maps and spatial rotational reduction, global cotangent
+geometry, the path functor over coefficient rings, hyperregularity criteria,
+and time-dependent canonical transformations remain extensions of the
+current models. R1 addresses finite-time canonicality; R6 and R7 provide
+coordinate and variational bridges. None silently enlarges the scope of a
+proved row or requires changing the signed-radius definitions.
+
+For each delivery, record the exact theorem, domain, regularity and quantitative
+bounds; give a proved instance for each new interface; pin public statements
+in a `checks/*API.lean` file; and run the required Lean and documentation checks.
+Place reusable analysis and geometry in the shared libraries. Promote a ledger
+row only when its whole dictionary target is proved, or explicitly restrict
+the target's scope in that row. Update its count, remainder list, subject guide,
+`docs/proof-development.md` and `README.md` together. A conditional identity,
+a symbolic coefficient calculation or numerical agreement does not discharge
+an existence theorem or an error estimate. The planning observations are
+recorded in [mechanics notes, M77](mechanics-notes.md#mechanics-proof-strategy-observation).
+
 <a id="abstract"></a>
 
 ## Abstract
@@ -1152,7 +1533,7 @@ T(E)=\sqrt{2m}\int_{x_1}^{x_2}\frac{\mathrm{d}x}{\sqrt{E-U(x)}}=\frac{\mathrm{d}
 A(E)=\oint p\,\mathrm{d}x=2\int_{x_1}^{x_2}\sqrt{2m\,(E-U(x))}\,\mathrm{d}x .
 $$
 
-So the period is the derivative of the action variable $I=A/2\pi$ with respect to the energy; this is the case $n=1$ of Theorem [thm:la](#thm:la). The difficulty in a formalization is the improper integral at the turning points.
+Thus $dI/dE=T/(2\pi)$ for the normalized action $I=A/(2\pi)$, and $dH/dI=2\pi/T$; this is the case $n=1$ of Theorem [thm:la](#thm:la). The integrable endpoint singularities are already handled in `TurningPoint.lean`. The remaining work is the smooth dependence on energy, differentiation of the regularized area and periodic continuation by uniqueness, as in [R2](#strategy-r2).
 
 <a id="prop:kepler"></a>
 
@@ -1354,7 +1735,7 @@ Design notes.
 | \(H\) | Hadamard’s lemma (Lemma [lem:hadamard](#lem:hadamard)). | Follows from (I); reported in progress in the same thread. |
 | \(F\) | The flow of a complete smooth vector field on $\mathbb{R}^N$ is smooth in $(t,x)$. | Existence and uniqueness of integral curves and existence of local flows are formalized [\[YinKudryashov\]](#bib:YinKudryashov); smooth dependence on the initial condition was described as planned in early 2025. |
 
-In this repository (S), (I) and (H) are available: (S) is `SmoothOperation.partialDeriv_comm`, (I) is `contDiff_parametric_intervalIntegral` with `contDiff_infty_parametric_intervalIntegral_limits`, and (H) is `SmoothOperation.apply_sub_apply_eq_sum_hadamard`, in a C∞-ring `SmoothRing.op_sub_op`. (F) is not proved. The listing below is the design sketch.
+In this repository (S), (I) and (H) are available: (S) is `SmoothOperation.partialDeriv_comm`, (I) is `contDiff_parametric_intervalIntegral` with `contDiff_infty_parametric_intervalIntegral_limits`, and (H) is `SmoothOperation.apply_sub_apply_eq_sum_hadamard`, in a C∞-ring `SmoothRing.op_sub_op`. General (F) is not proved. The constructed linear ODE family in `SmoothGeometry/ODE/Volterra.lean` gives smooth dependence on coefficients and initial values under its small-norm hypothesis; the [remaining-proof strategy](#remaining-proof-strategy) records the current pinned APIs and the steps needed for nonlinear flows. The listing below is the original design sketch, not an unimplemented replacement for the existing Hadamard theorem.
 
 ```lean
 /-- (H) -/
@@ -1364,7 +1745,7 @@ theorem hadamard {n : ℕ} {f : (Fin n → ℝ) → ℝ} (hf : ContDiff ℝ ∞ 
       ∀ x y, f x - f y = ∑ i, (x i - y i) * g i (x, y) -- proof to be implemented
 ```
 
-Under decisions D1–D3 the following are *not* needed for Volume 1: manifolds and their tangent bundles, differential forms on manifolds (not yet defined in Mathlib in November 2025 [\[ZulipStokes\]](#bib:ZulipStokes)), sheaves of $C^\infty$-rings, Lawvere theories. A search on 10 November 2026 found no $C^\infty$-rings in Mathlib; Mathlib’s `SmoothRing` is a different notion. All statuses in this subsection come from sources dated between early 2025 and March 2026 and must be re-checked before work starts.
+Under decisions D1–D3 the initial algebraic development avoids manifolds and their tangent bundles, differential forms on manifolds (reported absent in November 2025 [\[ZulipStokes\]](#bib:ZulipStokes)), sheaves of $C^\infty$-rings and Lawvere theories. Geometric remainders such as Liouville–Arnold still require the additional constructions described above. A search on 10 November 2026 found no $C^\infty$-rings in Mathlib; Mathlib’s `SmoothRing` is a different notion. The source reports in the table are historical, dated between early 2025 and March 2026; the implementation paragraph and the dated proof strategy give the subsequent local checks.
 
 <a id="modules-and-dependencies"></a>
 
@@ -1438,13 +1819,13 @@ Dependencies: grey = tier A, blue = tier B, dashed = analytic interface; LL labe
 
 6.  *The remainder.* The tier-B rows of Chapters III, V and VII, and the tier-D statements as explicit hypotheses.
 
-M1 and M2 are independent of every analytic lemma except (H), and are the natural first target.
+M1 and M2 are independent of every analytic lemma except (H), and were the initial targets. These are the original milestones; use the [implementation summary](#implementation-plan-and-current-progress) for completed work and the [remaining-proof strategy](#remaining-proof-strategy) for the next deliveries.
 
 <a id="the-ledger"></a>
 
 #### The ledger
 
-Each numbered statement and each row of Table [tab:dictionary](#tab:dictionary) should carry exactly one status: *proved* (Lean, no `sorry`, axioms audited); *proved modulo interface* (depends on a named hypothesis among (H), (I), (F)); *hypothesis* (tier D); *evidence* (checked by computer algebra only); *informal*. A status may only be promoted, and this document must not claim more than the ledger. At the time of writing every statement is *informal*, except the identities of Appendix [app:evidence](#app:evidence), which are *evidence*.
+Each numbered statement and each row of Table [tab:dictionary](#tab:dictionary) should carry exactly one status: *proved* (Lean, no `sorry`, axioms audited); *proved modulo interface* (depends on a named hypothesis among (H), (I), (F)); *hypothesis* (tier D); *evidence* (checked by computer algebra only); *informal*. A status may only be promoted, and this document must not claim more than the ledger. In the original manuscript every statement was *informal*, except the identities of Appendix [app:evidence](#app:evidence), which were *evidence*. The [current ledger](#ledger) supersedes that initial snapshot; a proposed strategy does not change its statuses.
 
 <a id="neighbouring-formalizations"></a>
 
