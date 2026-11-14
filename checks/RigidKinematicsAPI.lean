@@ -194,3 +194,39 @@ example (φ θ ψ φ' θ' ψ' : ℝ) :
   vee_transpose_mul_eulerMatrixDeriv φ θ ψ φ' θ' ψ'
 
 end EulerAngles
+
+section RegularPrecession
+
+example (I1 I3 : ℝ) (Ω : Fin 3 → ℝ) :
+    symmetricTopMomentum I1 I3 Ω = ![I1 * Ω 0, I1 * Ω 1, I3 * Ω 2] := rfl
+
+/-- The fixed axis in the body frame is the third row of the rotation. -/
+example (c1 s1 c2 s2 c3 s3 : ℝ) :
+    (eulerMatrix c1 s1 c2 s2 c3 s3)ᵀ *ᵥ ![0, 0, 1] = ![s2 * s3, s2 * c3, c2] :=
+  transpose_eulerMatrix_mulVec c1 s1 c2 s2 c3 s3
+
+/-- Regular precession of the free symmetric top (Landau–Lifshitz §33, (35.4)). -/
+example {c1 s1 c2 s2 c3 s3 : ℝ} (h1 : c1 ^ 2 + s1 ^ 2 = 1) (h2 : c2 ^ 2 + s2 ^ 2 = 1)
+    (h3 : c3 ^ 2 + s3 ^ 2 = 1) {I1 : ℝ} (hI1 : I1 ≠ 0) (hs2 : s2 ≠ 0) (I3 M w1 w2 w3 : ℝ) :
+    eulerMatrix c1 s1 c2 s2 c3 s3 *ᵥ
+          symmetricTopMomentum I1 I3 (bodyAngularVelocity c2 s2 c3 s3 w1 w2 w3) =
+        ![0, 0, M] ↔
+      w2 = 0 ∧ I1 * w1 = M ∧ I3 * (w1 * c2 + w3) = M * c2 :=
+  eulerMatrix_mulVec_symmetricTopMomentum_iff h1 h2 h3 hI1 hs2 I3 M w1 w2 w3
+
+example {I1 I3 M c2 w1 w3 : ℝ} (hI1 : I1 ≠ 0) (hI3 : I3 ≠ 0) (hw1 : I1 * w1 = M)
+    (hw3 : I3 * (w1 * c2 + w3) = M * c2) : w3 = M * c2 * (I3⁻¹ - I1⁻¹) :=
+  regularPrecession_psi_rate hI1 hI3 hw1 hw3
+
+/-- The regular precession as a motion with uniform rates. -/
+example {I1 I3 : ℝ} (hI1 : I1 ≠ 0) (hI3 : I3 ≠ 0) (M φ₀ θ₀ ψ₀ t : ℝ) :
+    eulerRotation (φ₀ + M / I1 * t) θ₀ (ψ₀ + M * Real.cos θ₀ * (I3⁻¹ - I1⁻¹) * t) *ᵥ
+        symmetricTopMomentum I1 I3
+          (bodyAngularVelocity (Real.cos θ₀) (Real.sin θ₀)
+            (Real.cos (ψ₀ + M * Real.cos θ₀ * (I3⁻¹ - I1⁻¹) * t))
+            (Real.sin (ψ₀ + M * Real.cos θ₀ * (I3⁻¹ - I1⁻¹) * t)) (M / I1) 0
+            (M * Real.cos θ₀ * (I3⁻¹ - I1⁻¹))) =
+      ![0, 0, M] :=
+  eulerRotation_mulVec_symmetricTopMomentum hI1 hI3 M φ₀ θ₀ ψ₀ t
+
+end RegularPrecession

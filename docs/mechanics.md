@@ -155,6 +155,23 @@ $$
 \{L_0,H\}=\Bigl(\frac1{I_2}-\frac1{I_1}\Bigr)L_1L_2\quad\text{and cyclic permutations.}
 $$
 
+`Poisson/RigidBodyMotion` treats trajectories of Euler's equations
+(`isTrajectory_kineticEnergy_iff`). A rotation about a principal axis,
+`L = ℓ eₐ`, is an equilibrium (`isTrajectory_principalRotation`). For a
+symmetric top, `I₀ = I₁`, the curve
+`(a cos νt, a sin νt, ℓ)` with `ν = (1/I₀ − 1/I₂) ℓ` is a trajectory
+(`isTrajectory_symmetricTop`). The element `stabilityForm I a = 2 Iₐ E − |L|²`
+is an integral, and along every trajectory `Σᵢ (Iₐ/Iᵢ − 1) Lᵢ(t)²` keeps its
+value (`sum_mul_sq_eq`). When `Iₐ` is the greatest moment every term is
+non-negative, so each `(Iₐ/Iⱼ − 1) Lⱼ(t)²` is at most the initial value of the
+sum (`mul_sq_le_of_greatest`); `mul_sq_le_of_least` is the statement for the
+least moment. These are bounds for the non-linear motion. For the middle axis
+only the linearized statement is proved: at `L = (0, ℓ, 0)` the linearized
+equations couple the components `0` and `2` with the coefficients
+`(1/I₂ − 1/I₁) ℓ` and `(1/I₁ − 1/I₀) ℓ` (`linearization_zero_two`,
+`linearization_two_zero`), whose product is positive for the middle moment
+(`linearization_mul_pos_of_middle`) and negative for an extreme one.
+
 `|L|²` is a Casimir (`poisson_casimir_left`): its bracket with every element
 vanishes, so it is an integral of every Hamiltonian. `L_ne_zero` evaluates at a
 point to show that the generators, and hence the bracket, are not zero. The
@@ -364,6 +381,25 @@ of time, `hasDerivAt_eulerRotation` proves that the entrywise derivative of the
 rotation is `eulerMatrixDeriv` with the rates `φ'`, `θ'`, `ψ'`, so the formulas
 above are the angular velocities of the actual motion
 (`angularVelocity_eulerRotation`, `vee_transpose_mul_eulerMatrixDeriv`).
+
+`Rigid/RegularPrecession` treats the free symmetric top of Landau–Lifshitz §33
+in Eulerian angles. `symmetricTopMomentum I1 I3 Ω` is the angular momentum
+`(I₁ Ω₁, I₁ Ω₂, I₃ Ω₃)` in the body frame, and the rotation applied to it is
+the angular momentum in the space frame. The fixed axis `Z` has the components
+`(sin θ sin ψ, sin θ cos ψ, cos θ)` in the body frame
+(`transpose_eulerMatrix_mulVec`).
+
+- `eulerMatrix_mulVec_symmetricTopMomentum_iff`: for real angles with
+  `sin θ ≠ 0` and `I₁ ≠ 0`, the angular momentum in the space frame is
+  `(0, 0, M)` exactly when `θ̇ = 0`, `I₁ φ̇ = M` and
+  `I₃ (φ̇ cos θ + ψ̇) = M cos θ`. So `ψ̇ = M cos θ (1/I₃ − 1/I₁)`
+  (`regularPrecession_psi_rate`).
+- `eulerRotation_mulVec_symmetricTopMomentum`: the motion with the angles
+  `φ₀ + (M/I₁) t`, `θ₀`, `ψ₀ + M cos θ₀ (1/I₃ − 1/I₁) t` has the angular
+  momentum `(0, 0, M)` at every time.
+
+The statement that a free motion keeps its angular momentum in the space frame
+is the equation of motion `Ṁ = 0`; it is not derived here from a Lagrangian.
 
 ## Small oscillations
 
@@ -682,6 +718,8 @@ unbounded and the width of the instability zone are not treated.
 | [Poisson/TwoBody](../ProjectAInos/Mechanics/Poisson/TwoBody.lean) | `centre`, `relative`, `totalMomentum`, `relativeMomentum`, `canonical_centre_totalMomentum`, `canonical_relative_relativeMomentum`, `canonical_centre_relativeMomentum`, `canonical_relative_totalMomentum`, `kineticEnergy_eq_centre` |
 | [Rigid/AngularVelocity](../ProjectAInos/Mechanics/Rigid/AngularVelocity.lean) | `hat`, `vee`, `hat_mulVec`, `hat_cross`, `hat_vee`, `hatEquiv`, `hatEquiv_cross`, `velocityField`, `velocityField_add`, `velocityField_injective`, `velocityField_change_of_origin`, `transpose_deriv_mul_transpose`, `angularVelocity`, `hasDerivAt_rigidMotion` |
 | [Rigid/EulerAngles](../ProjectAInos/Mechanics/Rigid/EulerAngles.lean) | `rotZ`, `rotX`, `eulerMatrix`, `eulerMatrixDeriv`, `bodyAngularVelocity`, `spaceAngularVelocity`, `eulerMatrix_mul_transpose`, `det_eulerMatrix`, `transpose_mul_eulerMatrixDeriv`, `eulerMatrixDeriv_mul_transpose`, `eulerMatrix_mulVec_bodyAngularVelocity`, `symmetricTop_energy`, `det_eulerJacobian`, `eulerRotation`, `eulerRotation_mem_specialOrthogonalGroup`, `hasDerivAt_eulerRotation`, `angularVelocity_eulerRotation` |
+| [Rigid/RegularPrecession](../ProjectAInos/Mechanics/Rigid/RegularPrecession.lean) | `symmetricTopMomentum`, `verticalAxis`, `eulerMatrix_mulVec_verticalAxis`, `transpose_eulerMatrix_mulVec`, `eulerMatrix_mulVec_symmetricTopMomentum`, `eulerMatrix_mulVec_symmetricTopMomentum_iff`, `regularPrecession_psi_rate`, `eulerRotation_mulVec_symmetricTopMomentum` |
+| [Poisson/RigidBodyMotion](../ProjectAInos/Mechanics/Poisson/RigidBodyMotion.lean) | `isTrajectory_kineticEnergy_iff`, `isTrajectory_principalRotation`, `isTrajectory_symmetricTop`, `stabilityForm`, `isIntegral_stabilityForm`, `sum_mul_sq_eq`, `mul_sq_le_of_greatest`, `mul_sq_le_of_least`, `linearization_zero_two`, `linearization_two_zero`, `linearization_mul_pos_of_middle`, `linearization_mul_neg_of_greatest`, `linearization_mul_neg_of_least` |
 | [Rigid/InertiaTensor](../ProjectAInos/Mechanics/Rigid/InertiaTensor.lean) | `inertia`, `transpose_inertia`, `inertia_mulVec`, `dotProduct_inertia_mulVec`, `dotProduct_inertia_mulVec_nonneg`, `trace_inertia`, `two_mul_dotProduct_inertia_mulVec_le_trace`, `inertia_add_apply`, `principalMoments`, `principalAxes`, `inertia_mulVec_principalAxes`, `principalMoments_nonneg`, `principalMoments_two_le` |
 | [Oscillations/Harmonic](../ProjectAInos/Mechanics/Oscillations/Harmonic.lean) | `TimeFunction.cosMul`, `TimeFunction.sinMul`, `TimeFunction.timeDerivative_cosMul`, `TimeFunction.timeDerivative_sinMul`, `amplitude`, `phase`, `amplitude_mul_cos_add`, `IsHarmonic`, `isHarmonic_cosMul`, `isHarmonic_sinMul`, `IsHarmonic.combination`, `IsHarmonic.eq_cos_add_sin`, `isHarmonic_iff`, `IsHarmonic.eq_of_initial`, `IsHarmonic.apply_eq_amplitude_mul_cos`, `IsHarmonic.apply_add_period`, `IsHarmonic.energy_eq`, `IsHarmonic.energy_eq_amplitude` |
 | [Oscillations/Oscillator](../ProjectAInos/Mechanics/Oscillations/Oscillator.lean) | `StandardJet.isSolution_oscillator_iff_isHarmonic`, `Oscillator.hamiltonian`, `Oscillator.isTrajectory_iff`, `Oscillator.isTrajectory_iff_isHarmonic`, `Oscillator.flowMatrix`, `Oscillator.flowMatrix_zero`, `Oscillator.flowMatrix_add`, `Oscillator.det_flowMatrix`, `Oscillator.flowMatrix_add_period`, `Oscillator.apply_eq_flowMatrix_mulVec`, `Oscillator.flowCurve`, `Oscillator.isTrajectory_flowCurve` |

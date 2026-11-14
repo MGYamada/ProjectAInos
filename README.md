@@ -206,7 +206,8 @@ generator: the Runge–Lenz identities are proved, and the Runge–Lenz vector i
 constant along smooth solutions of the inverse-square law. The kinematics of a
 rigid body is proved by linear algebra:
 `so(3) ≅ ℝ³`, the angular velocity, the inertia tensor of point masses with
-its principal moments, and Eulerian angles. The algebra of two bodies is proved: the reduced mass,
+its principal moments, Eulerian angles, the regular precession of the symmetric
+top, and the stability of the permanent rotations. The algebra of two bodies is proved: the reduced mass,
 disintegration, and elastic collisions. Free oscillations in one dimension are
 proved: the general solution of `ẍ + ω² x = 0`, the flow of the oscillator, and
 the linearization at an equilibrium. Damped oscillations are proved in their
