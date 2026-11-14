@@ -6,7 +6,8 @@ module
 import ProjectAInos
 
 /-! Public consumers of the two-body API: the reduced mass, disintegration,
-elastic collisions and the canonical variables of the centre of mass. Default
+elastic collisions, the canonical variables of the centre of mass and the
+identities of Rutherford's formula. Default
 elaborator options are intentional: these checks must not rely on the
 implementation's transparency settings. Every statement is pinned with its
 type. -/
@@ -149,3 +150,28 @@ example {m₁ m₂ : ℝ} (h₁ : m₁ ≠ 0) (h₂ : m₂ ≠ 0) (hM : m₁ + m
   kineticEnergy_eq_centre h₁ h₂ hM
 
 end CanonicalVariables
+
+section Rutherford
+
+open Rutherford Real
+
+example {m α : ℝ} (hm : m ≠ 0) (hα : α ≠ 0) (v ρ : ℝ) :
+    2 * (m * v ^ 2 / 2) * (m * ρ * v) ^ 2 / (m * α ^ 2) = (m * v ^ 2 * ρ / α) ^ 2 :=
+  eccentricity_sq_sub_one hm hα v ρ
+
+/-- `cot (χ/2) = m v² ρ/α` (Landau–Lifshitz (19.1)). -/
+example {χ e k : ℝ} (hχ : 0 < χ) (hχπ : χ < π) (he : sin (χ / 2) = 1 / e) (hk : 0 ≤ k)
+    (hek : e ^ 2 - 1 = k ^ 2) : cos (χ / 2) / sin (χ / 2) = k :=
+  cot_half_eq hχ hχπ he hk hek
+
+example (a : ℝ) {χ : ℝ} (hs : sin (χ / 2) ≠ 0) :
+    HasDerivAt (fun x => a * (cos (x / 2) / sin (x / 2))) (-(a / (2 * sin (χ / 2) ^ 2))) χ :=
+  hasDerivAt_impactParameter a hs
+
+/-- Rutherford's formula (Landau–Lifshitz (19.3)). -/
+example (a : ℝ) {χ : ℝ} (hs : sin (χ / 2) ≠ 0) (hc : cos (χ / 2) ≠ 0) :
+    a * (cos (χ / 2) / sin (χ / 2)) * (a / (2 * sin (χ / 2) ^ 2)) / sin χ =
+      (a / 2) ^ 2 / sin (χ / 2) ^ 4 :=
+  rutherford a hs hc
+
+end Rutherford
