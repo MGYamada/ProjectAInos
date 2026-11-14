@@ -367,8 +367,8 @@ above are the angular velocities of the actual motion
 
 ## Small oscillations
 
-`Mechanics/Oscillations` covers Landau–Lifshitz §21, and §§25, 26 and 22 in
-the next three sections.
+`Mechanics/Oscillations` covers Landau–Lifshitz §21, and §§25, 26, 22, 23 and
+27 in the sections that follow.
 
 `Oscillations/Harmonic` treats the equation `ẍ + ω² x = 0` for a smooth
 function of time. `IsHarmonic ω x` is the equation `ẍ = −ω² x` in the ring
@@ -587,6 +587,66 @@ The energy transfer of Landau–Lifshitz (22.12) is the limit of the formula
 above for a force acting during all time, with improper integrals; it is not
 proved. Beats near resonance are not treated.
 
+## Normal modes
+
+`Oscillations/NormalModes` treats the equations
+`Σₖ (mᵢₖ ẍₖ + kᵢₖ xₖ) = 0` of Landau–Lifshitz §23 for real matrices `M` and
+`K` on a finite index type.
+
+- `exists_simultaneous_diagonalization`: for a positive definite `M` and a
+  symmetric `K` there are a matrix `S` and numbers `λₐ` with `Sᵀ M S = 1` and
+  `Sᵀ K S = diag λ`. The proof uses Mathlib's spectral theorem twice: once to
+  bring `M` to the unit form, once for the symmetric matrix `Bᵀ K B`.
+- The remaining statements take `S` and `λ` with these two properties as
+  hypotheses. `mul_eq_mul_mul_diagonal`: `K S = M S diag λ`, so the columns of
+  `S` are the normal modes. `det_sub_smul_eq_zero_iff`: the roots of
+  `det (K − c M) = 0` are the `λₐ`. `lam_pos`: they are positive when `K` is
+  positive definite.
+- `IsSmallOscillation M K x` is the system of equations for a family
+  `x : n → TimeFunction`. `normalCoordinates S M x` is `Θ = Sᵀ M x`, and
+  `x = S Θ` (`map_mulVec_normalCoordinates`).
+- `isSmallOscillation_iff`: `x` is a solution exactly when
+  `Θ̈ₐ = −λₐ Θₐ` for every `a`. With `ωₐ² = λₐ`, each `Θₐ` is a free
+  oscillation (`IsSmallOscillation.isHarmonic_normalCoordinates`), every
+  superposition `S Θ` of free oscillations is a solution
+  (`isSmallOscillation_map_mulVec`), and `IsSmallOscillation.apply_eq` writes
+  each co-ordinate as the sum of the normal oscillations.
+
+Proposition 70 of the manuscript, on the Lie algebra of quadratic
+Hamiltonians and the normal form as a linear canonical transformation, is not
+proved, and the equations are not derived here from the Lagrangian
+`½ Σ (mᵢₖ ẋᵢ ẋₖ − kᵢₖ xᵢ xₖ)`.
+
+## Parametric resonance
+
+`Oscillations/Parametric` treats `ẍ + p(t) x = 0` (Landau–Lifshitz §27).
+`IsHill p x` is the equation in the ring `TimeFunction`, and
+`TimeFunction.shift T f` is the translate `t ↦ f(t + T)`; the coefficient has
+period `T` when `TimeFunction.shift T p = p`.
+
+- `IsHill.wronskian_eq`: the Wronskian `x ẏ − ẋ y` of two solutions is
+  constant.
+- `FundamentalSystem p` is the data of the two solutions with the initial
+  values `(1, 0)` and `(0, 1)`. Its Wronskian is one, and every solution is
+  `x(0) x₁ + ẋ(0) x₂` (`FundamentalSystem.eq_combination`); so a solution is
+  determined by its initial data. `FundamentalSystem.harmonic` is the system
+  `cos ωt`, `sin ωt / ω` of the oscillator.
+- `FundamentalSystem.matrix t` is the matrix `Φ(t)`, with `Φ(0) = 1`,
+  `det Φ(t) = 1` (`det_matrix`) and `state x t = Φ(t) (state x 0)`
+  (`state_eq`). For a coefficient of period `T`,
+  `Φ(s + nT) = Φ(s) Φ(T)ⁿ` (`matrix_add_nat_mul_period`).
+- `mul_self_eq`, `sin_smul_pow_succ`, `exists_abs_pow_apply_le`: for a real
+  `2 × 2` matrix of determinant one, `A² = (tr A) A − 1`; with
+  `tr A = 2 cos θ`, `sin θ · Aᵏ⁺¹ = sin (k+1)θ · A − sin kθ · 1`; so the powers
+  are bounded when `|tr A| < 2`.
+- `FundamentalSystem.exists_abs_apply_le_of_abs_trace_lt`,
+  `FundamentalSystem.exists_abs_apply_le_of_eq`: if `|tr Φ(T)| < 2`, or
+  `Φ(T) = ±1`, every solution is bounded for `t ≥ 0`.
+
+The existence of a fundamental system for a general smooth coefficient is not
+proved; it is the data of the theorems. The cases in which solutions are
+unbounded and the width of the instability zone are not treated.
+
 ## Proof map
 
 | Module | Main declarations |
@@ -631,6 +691,8 @@ proved. Beats near resonance are not treated.
 | [Oscillations/Forced](../ProjectAInos/Mechanics/Oscillations/Forced.lean) | `IsForced`, `isForced_zero_iff`, `IsForced.add`, `IsForced.sub`, `IsForced.eq_of_initial`, `IsForced.timeDerivative_energy`, `IsDamped.tendsto_zero`, `IsForced.tendsto_sub`, `responseDenominator`, `steadyState`, `isForced_steadyState`, `steadyState_const_mul`, `steadyAmplitude`, `steadyPhase`, `steadyState_apply`, `sin_steadyPhase_nonpos`, `IsForced.apply_eq_transient_add_steadyState`, `IsForced.tendsto_sub_steadyState`, `steadyAmplitude_le`, `steadyAmplitude_eq_max`, `absorption`, `two_mul_dissipation_steadyState`, `mean_dissipation_steadyState`, `absorption_le`, `absorption_resonance`, `absorption_eq_half_max_iff` |
 | [TimePrimitive](../ProjectAInos/Mechanics/TimePrimitive.lean) | `TimeFunction.hasDerivAt_apply_const`, `TimeFunction.continuous_apply_const`, `TimeFunction.apply_sub_apply_eq_integral`, `TimeFunction.primitive`, `TimeFunction.primitive_apply`, `TimeFunction.timeDerivative_primitive` |
 | [Oscillations/Duhamel](../ProjectAInos/Mechanics/Oscillations/Duhamel.lean) | `isForced_zero_damping_iff`, `complexAmplitudeRe`, `complexAmplitudeIm`, `integral_mul_sin_sub`, `IsForced.complexAmplitudeRe_eq`, `IsForced.complexAmplitudeIm_eq`, `IsForced.timeDerivative_apply_eq_integral`, `IsForced.apply_eq_integral`, `IsForced.energy_apply`, `IsForced.energy_transfer`, `duhamel`, `isForced_duhamel`, `duhamel_apply`, `exists_isForced`, `isForced_cos_of_sq_ne`, `steadyState_zero_damping`, `IsForced.apply_eq_of_sq_ne`, `isForced_resonance`, `IsForced.eq_resonance_of_rest`, `IsForced.exists_abs_gt_of_resonance` |
+| [Oscillations/NormalModes](../ProjectAInos/Mechanics/Oscillations/NormalModes.lean) | `exists_orthogonal_diagonalization`, `exists_transpose_mul_mul_eq_one`, `exists_simultaneous_diagonalization`, `mul_eq_mul_mul_diagonal`, `det_sub_smul_eq_zero_iff`, `lam_pos`, `IsSmallOscillation`, `normalCoordinates`, `map_mulVec_normalCoordinates`, `isSmallOscillation_iff`, `IsSmallOscillation.isHarmonic_normalCoordinates`, `isSmallOscillation_map_mulVec`, `IsSmallOscillation.apply_eq` |
+| [Oscillations/Parametric](../ProjectAInos/Mechanics/Oscillations/Parametric.lean) | `mul_self_eq`, `sin_smul_pow_succ`, `exists_abs_pow_apply_le`, `IsHill`, `wronskian`, `IsHill.wronskian_eq`, `TimeFunction.shift`, `IsHill.shift`, `state`, `FundamentalSystem`, `FundamentalSystem.eq_combination`, `FundamentalSystem.matrix`, `FundamentalSystem.det_matrix`, `FundamentalSystem.state_eq`, `FundamentalSystem.matrix_add_nat_mul_period`, `FundamentalSystem.exists_abs_apply_le`, `FundamentalSystem.exists_abs_apply_le_of_abs_trace_lt`, `FundamentalSystem.harmonic` |
 | [Examples](../ProjectAInos/Mechanics/Examples.lean) | Newton equation, stationary uniform free motion, rejection of accelerated free motion, endpoint-vanishing polynomial variation and its endpoint derivative, zero-length interval and zero-coordinate system |
 
 For `L = m v²/2 − V(q)`, `stationary_natural_iff` proves `m q'' = −V'(q)` on `(a,b)`. This algebraic equation remains valid at `m = 0`; dividing by the mass would require a separate nonzero premise.

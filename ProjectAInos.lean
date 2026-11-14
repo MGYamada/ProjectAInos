@@ -100,7 +100,9 @@ public import ProjectAInos.Mechanics.Oscillations.Duhamel
 public import ProjectAInos.Mechanics.Oscillations.Forced
 public import ProjectAInos.Mechanics.Oscillations.Harmonic
 public import ProjectAInos.Mechanics.Oscillations.Linearization
+public import ProjectAInos.Mechanics.Oscillations.NormalModes
 public import ProjectAInos.Mechanics.Oscillations.Oscillator
+public import ProjectAInos.Mechanics.Oscillations.Parametric
 public import ProjectAInos.Mechanics.Poisson.AngularMomentum
 public import ProjectAInos.Mechanics.Poisson.Epsilon
 public import ProjectAInos.Mechanics.Poisson.Galilei

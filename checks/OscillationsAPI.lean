@@ -9,10 +9,11 @@ import ProjectAInos
 `ẍ + ω² x = 0`, amplitude and phase, the energy and the period, the oscillator
 as a Lagrangian and as a Hamiltonian system with its flow, the linearization
 at an equilibrium, damped oscillations, the dissipative function, forced
-oscillations under friction with the resonance curve, and Duhamel's formula
-with the energy transfer. Default elaborator options are intentional: these
-checks must not rely on the implementation's transparency settings. Every
-statement is pinned with its type. -/
+oscillations under friction with the resonance curve, Duhamel's formula with
+the energy transfer, normal modes, and the monodromy matrix of parametric
+resonance. Default elaborator options are intentional: these checks must not
+rely on the implementation's transparency settings. Every statement is pinned
+with its type. -/
 noncomputable section
 open ProjectAInos.SmoothAlgebra ProjectAInos.SmoothAlgebra.SmoothRing
 open ProjectAInos.SmoothAlgebra.FreeSmoothRing ProjectAInos.SmoothAlgebra.PhaseSpace
@@ -605,3 +606,134 @@ example {ω F : ℝ} {x : TimeFunction}
   hx.exists_abs_gt_of_resonance hω hF B
 
 end Duhamel
+
+section NormalModes
+
+open NormalModes
+
+variable {n : Type*} [Fintype n] [DecidableEq n]
+
+/-- Simultaneous diagonalization (Landau–Lifshitz (23.12)). -/
+example {M K : Matrix n n ℝ} (hM : M.PosDef) (hK : K.IsSymm) :
+    ∃ (S : Matrix n n ℝ) (lam : n → ℝ), Sᵀ * M * S = 1 ∧ Sᵀ * K * S = diagonal lam :=
+  exists_simultaneous_diagonalization hM hK
+
+/-- The columns of `S` are the normal modes (Landau–Lifshitz (23.7)). -/
+example {M K S : Matrix n n ℝ} {lam : n → ℝ} (hSM : Sᵀ * M * S = 1)
+    (hSK : Sᵀ * K * S = diagonal lam) : K * S = M * S * diagonal lam :=
+  mul_eq_mul_mul_diagonal hSM hSK
+
+/-- The characteristic equation (Landau–Lifshitz (23.8)). -/
+example {M K S : Matrix n n ℝ} {lam : n → ℝ} (hSM : Sᵀ * M * S = 1)
+    (hSK : Sᵀ * K * S = diagonal lam) (c : ℝ) : (K - c • M).det = 0 ↔ ∃ a, c = lam a :=
+  det_sub_smul_eq_zero_iff hSM hSK c
+
+example {M K S : Matrix n n ℝ} {lam : n → ℝ} (hSM : Sᵀ * M * S = 1)
+    (hSK : Sᵀ * K * S = diagonal lam) (hK : K.PosDef) (a : n) : 0 < lam a :=
+  lam_pos hSM hSK hK a
+
+example (M K : Matrix n n ℝ) (x : n → TimeFunction) :
+    IsSmallOscillation M K x ↔
+      M.map (algebraMap ℝ TimeFunction) *ᵥ (fun k => timeDerivative (timeDerivative (x k))) +
+        K.map (algebraMap ℝ TimeFunction) *ᵥ x = 0 :=
+  Iff.rfl
+
+example (S M : Matrix n n ℝ) (x : n → TimeFunction) :
+    normalCoordinates S M x = (Sᵀ * M).map (algebraMap ℝ TimeFunction) *ᵥ x := rfl
+
+/-- The normal co-ordinates separate the equations. -/
+example {M K S : Matrix n n ℝ} {lam : n → ℝ} (hSM : Sᵀ * M * S = 1)
+    (hSK : Sᵀ * K * S = diagonal lam) (x : n → TimeFunction) :
+    IsSmallOscillation M K x ↔
+      ∀ a, timeDerivative (timeDerivative (normalCoordinates S M x a)) =
+        -(algebraMap ℝ TimeFunction (lam a) * normalCoordinates S M x a) :=
+  isSmallOscillation_iff hSM hSK x
+
+example {M S : Matrix n n ℝ} (hSM : Sᵀ * M * S = 1) (x : n → TimeFunction) :
+    S.map (algebraMap ℝ TimeFunction) *ᵥ normalCoordinates S M x = x :=
+  map_mulVec_normalCoordinates hSM x
+
+example {M K S : Matrix n n ℝ} {lam : n → ℝ} (hSM : Sᵀ * M * S = 1)
+    (hSK : Sᵀ * K * S = diagonal lam) {ω : n → ℝ} (hω : ∀ a, ω a ^ 2 = lam a)
+    {x : n → TimeFunction} (h : IsSmallOscillation M K x) (a : n) :
+    IsHarmonic (ω a) (normalCoordinates S M x a) :=
+  h.isHarmonic_normalCoordinates hSM hSK hω a
+
+/-- A superposition of normal modes is a small oscillation. -/
+example {M K S : Matrix n n ℝ} {lam : n → ℝ} (hSM : Sᵀ * M * S = 1)
+    (hSK : Sᵀ * K * S = diagonal lam) {ω : n → ℝ} (hω : ∀ a, ω a ^ 2 = lam a)
+    {Θ : n → TimeFunction} (hΘ : ∀ a, IsHarmonic (ω a) (Θ a)) :
+    IsSmallOscillation M K (S.map (algebraMap ℝ TimeFunction) *ᵥ Θ) :=
+  isSmallOscillation_map_mulVec hSM hSK hω hΘ
+
+/-- The general small oscillation (Landau–Lifshitz (23.9), (23.10)). -/
+example {M K S : Matrix n n ℝ} {lam : n → ℝ} (hSM : Sᵀ * M * S = 1)
+    (hSK : Sᵀ * K * S = diagonal lam) {ω : n → ℝ} (hω : ∀ a, ω a ^ 2 = lam a)
+    (hω0 : ∀ a, ω a ≠ 0) {x : n → TimeFunction} (h : IsSmallOscillation M K x) (k : n)
+    (t : ℝ) :
+    x k (fun _ => t) =
+      ∑ a, S k a * (normalCoordinates S M x a (fun _ => 0) * Real.cos (ω a * t) +
+        timeDerivative (normalCoordinates S M x a) (fun _ => 0) / ω a * Real.sin (ω a * t)) :=
+  h.apply_eq hSM hSK hω hω0 k t
+
+end NormalModes
+
+section Parametric
+
+open Parametric
+
+/-- Cayley–Hamilton for a `2 × 2` matrix of determinant one. -/
+example {A : Matrix (Fin 2) (Fin 2) ℝ} (hdet : A.det = 1) : A * A = A.trace • A - 1 :=
+  mul_self_eq hdet
+
+/-- The powers are bounded when `|tr A| < 2`. -/
+example {A : Matrix (Fin 2) (Fin 2) ℝ} (hdet : A.det = 1) (htr : |A.trace| < 2) :
+    ∃ C : ℝ, ∀ (k : ℕ) (i j : Fin 2), |(A ^ k) i j| ≤ C :=
+  exists_abs_pow_apply_le hdet htr
+
+example (p x : TimeFunction) :
+    IsHill p x ↔ timeDerivative (timeDerivative x) = -(p * x) := Iff.rfl
+
+example (x y : TimeFunction) :
+    wronskian x y = x * timeDerivative y - timeDerivative x * y := rfl
+
+example {p x y : TimeFunction} (hx : IsHill p x) (hy : IsHill p y) :
+    wronskian x y = algebraMap ℝ TimeFunction (wronskian x y fun _ => 0) :=
+  hx.wronskian_eq hy
+
+example (T : ℝ) (f : TimeFunction) (t : ℝ) :
+    TimeFunction.shift T f (fun _ => t) = f fun _ => t + T := rfl
+
+/-- Every solution is determined by its initial data. -/
+example {p : TimeFunction} (Φ : FundamentalSystem p) {x : TimeFunction} (hx : IsHill p x) :
+    x = algebraMap ℝ TimeFunction (x fun _ => 0) * Φ.x₁ +
+      algebraMap ℝ TimeFunction (timeDerivative x fun _ => 0) * Φ.x₂ :=
+  Φ.eq_combination hx
+
+/-- Liouville's theorem for the equation. -/
+example {p : TimeFunction} (Φ : FundamentalSystem p) (t : ℝ) : (Φ.matrix t).det = 1 :=
+  Φ.det_matrix t
+
+/-- The monodromy relation. -/
+example {p : TimeFunction} (Φ : FundamentalSystem p) {T : ℝ}
+    (hp : TimeFunction.shift T p = p) (n : ℕ) (s : ℝ) :
+    Φ.matrix (s + n * T) = Φ.matrix s * Φ.matrix T ^ n :=
+  Φ.matrix_add_nat_mul_period hp n s
+
+/-- Stability when the trace of the monodromy matrix is less than two. -/
+example {p : TimeFunction} (Φ : FundamentalSystem p) {T : ℝ}
+    (hp : TimeFunction.shift T p = p) (hT : 0 < T) (htr : |(Φ.matrix T).trace| < 2)
+    {x : TimeFunction} (hx : IsHill p x) : ∃ B : ℝ, ∀ t : ℝ, 0 ≤ t → |x fun _ => t| ≤ B :=
+  Φ.exists_abs_apply_le_of_abs_trace_lt hp hT htr hx
+
+example {p : TimeFunction} (Φ : FundamentalSystem p) {T : ℝ}
+    (hp : TimeFunction.shift T p = p) (hT : 0 < T) (hM : Φ.matrix T = 1 ∨ Φ.matrix T = -1)
+    {x : TimeFunction} (hx : IsHill p x) : ∃ B : ℝ, ∀ t : ℝ, 0 ≤ t → |x fun _ => t| ≤ B :=
+  Φ.exists_abs_apply_le_of_eq hp hT hM hx
+
+/-- Fundamental systems exist: the oscillator. -/
+example {ω : ℝ} (hω : ω ≠ 0) (T : ℝ) :
+    ((FundamentalSystem.harmonic hω).matrix T).trace = 2 * Real.cos (ω * T) :=
+  FundamentalSystem.trace_matrix_harmonic hω T
+
+end Parametric
