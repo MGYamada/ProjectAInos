@@ -1137,6 +1137,71 @@ the Lagrangian does not depend explicitly on time. The Euler–Lagrange
 equations of `R` and of `−R` are the same; Landau–Lifshitz use `−R` as the
 Lagrangian of the remaining co-ordinates.
 
+## Motion in a central field
+
+`Mechanics/Elementary` defines the cosine and the sine of an element of a
+C∞-ring, `ringCos a` and `ringSin a`, by the smooth operations of one
+variable, as `SmoothRing.exp a` is defined. `exp_mul_exp_neg`:
+`exp a · exp (−a) = 1`. `apply_exp`, `apply_ringCos`, `apply_ringSin`: a vector
+field differentiates them by the chain rule.
+
+`Poisson/CentralField` treats Landau–Lifshitz §14 for a particle in the plane.
+The polar co-ordinates are taken with the logarithm `s` of the radius, so that
+all functions are elements of a free C∞-ring: `Polar` is the phase space of
+`(s, φ)` with the momenta `p_s = r p_r` and `p_φ`, and `r = exp s`,
+`1/r = exp (−s)`.
+
+- `polarCoordinates` is the morphism from the phase space of the plane with
+  `x ↦ r cos φ`, `y ↦ r sin φ`, `p_x ↦ (p_s cos φ − p_φ sin φ)/r`,
+  `p_y ↦ (p_s sin φ + p_φ cos φ)/r`. `isPoissonHom_polarCoordinates`: it is a
+  Poisson morphism, so the polar co-ordinates are canonical.
+- `polarCoordinates_p_sq`: `|p|² = (p_s² + p_φ²)/r²`, which is
+  `p_r² + p_φ²/r²`. `polarCoordinates_angularMomentum`: `x p_y − y p_x = p_φ`.
+- `polarHamiltonian m V` is `(p_s² + p_φ²)/2mr² + V(s)`.
+  `polarCoordinates_hamiltonian`: it is the Hamiltonian `|p|²/2m + U(|q|²)`
+  of the plane for `V = logPotential U`.
+  `partialDerivation_polarHamiltonian`: the angle is cyclic.
+- `reductionHom_radialHamiltonian`: in the reduced ring at `p_φ = ℓ` the class
+  of the Hamiltonian is `radialHamiltonian m V ℓ`. `radialHamiltonian_eq`:
+  it is `p_r²/2m + ℓ²/2mr² + V` with `radialMomentum = p_s / r`, and
+  `canonical_radius_radialMomentum`: `{r, p_r} = 1`. The centrifugal energy
+  comes from the reduction.
+- `isTrajectory_radial`, `timeDerivative_angle`, `pφ_eq_algebraMap`: along a
+  trajectory `p_φ` is constant, the radial part is a trajectory of the radial
+  Hamiltonian, and `φ̇ = p_φ/mr²`. `isTrajectory_plane`: a trajectory in polar
+  co-ordinates gives a trajectory in the plane.
+- `sum_q_mul_M_eq_zero`: along a trajectory of a central Hamiltonian in space
+  the position is orthogonal to the angular momentum at the time `0`. The orbit
+  lies in a plane.
+
+In polar co-ordinates the potential energy `V` is a smooth function of
+`s = log r`, an arbitrary smooth function of the radius `r > 0`; Coulomb's
+potential is included. The comparison with the plane needs a potential energy
+that is a smooth function of `|q|²`. The polar co-ordinates cover the plane
+without the origin, and `polarCoordinates` is not an isomorphism: a trajectory
+in the plane is not lifted to polar co-ordinates here.
+
+`Mechanics/Quadrature` is real analysis. If `r` has a continuous positive
+derivative `r'` on an interval and `r'(t)² = F(r(t))`, then
+`∫ w(r(t)) dt = ∫ w(u)/√F(u) du` (`integral_comp_eq_integral_div_sqrt`).
+`sub_eq_sqrt_mul_integral_of_energy` is Landau–Lifshitz (11.3):
+`t₁ − t₀ = √(m/2) ∫ dx/√(E − U(x))` when `m ẋ²/2 + U(x) = E` and `ẋ > 0`.
+
+`Poisson/OrbitIntegral` applies it to the radial motion. `radiusAt y t` and
+`radialVelocityAt m y t` are the radius and `p_r/m` at the time `t`.
+
+- `hasDerivAt_radiusAt`: the radial velocity is the derivative of the radius.
+- `radialVelocityAt_sq`: `ṙ² = (2/m)(E − V) − ℓ²/m²r²` (14.5), with
+  `radialSpeedSq m V ℓ E` for the right side as a function of the radius.
+- `sub_eq_integral_radius`: `t₁ − t₀ = ∫ dr/√((2/m)(E − V) − ℓ²/m²r²)` (14.6).
+- `angle_sub_eq_integral_radius`:
+  `φ(t₁) − φ(t₀) = ∫ (ℓ/mr²) dr/√((2/m)(E − V) − ℓ²/m²r²)` (14.7).
+
+The two integrals are over an interval of time where the radial velocity is
+positive. The integrals up to a turning point are improper and are not
+treated, so the angle between the apsides and the condition for a closed orbit
+are not proved.
+
 ## Mechanical similarity
 
 `Mechanics/Similarity` covers Landau–Lifshitz §10. `TimeFunction.scale β` is
@@ -1247,6 +1312,10 @@ semi-major axis is not computed.
 | [Poisson/CyclicReduction](../ProjectAInos/Mechanics/Poisson/CyclicReduction.lean) | `momentumEquation`, `momentumIdeal`, `inclusion`, `restriction`, `restriction_inclusion`, `bracket_momentumEquation`, `mem_normalizer_iff`, `isCoisotropic_momentumIdeal`, `inclusion_mem_normalizer`, `isPoissonHom_inclusion`, `sub_fixMomenta_mem`, `partialDerivation_fixMomenta`, `sub_inclusion_restriction_mem`, `reductionHom`, `reductionHom_bijective`, `isPoissonHom_reductionHom`, `reductionHom_restriction`, `mem_normalizer_of_cyclic`, `isIntegral_p_of_cyclic`, `p_eq_algebraMap_of_cyclic`, `isTrajectory_restriction`, `map_mem_normalizer`, `apply_mem_normalizer`, `canonicalReductionHom`, `canonicalReductionHom_bijective`, `isPoissonHom_canonicalReductionHom`, `canonicalReductionHom_restriction` |
 | [Poisson/ReducedMass](../ProjectAInos/Mechanics/Poisson/ReducedMass.lean) | `CentreSpace`, `centreCoordinates`, `particleCoordinates`, `centreCoordinates_particleCoordinates`, `particleCoordinates_centreCoordinates`, `isPoissonHom_centreCoordinates`, `totalMomentumIdeal`, `reducedMassHom`, `reducedMassHom_bijective`, `isPoissonHom_reducedMassHom`, `hamiltonian`, `relativeHamiltonian`, `particleCoordinates_hamiltonian`, `restriction_particleCoordinates_hamiltonian`, `hamiltonian_mem_normalizer`, `reducedMassHom_relativeHamiltonian`, `isIntegral_totalMomentum`, `isTrajectory_relative` |
 | [Routhian](../ProjectAInos/Mechanics/Routhian.lean) | `RouthSpace`, `Routhian.partialLegendre`, `partialEnergy`, `partialHessian`, `apply_partialLegendre`, `IsPartiallyHyperregular`, `routhian`, `IsPartiallyHyperregular.inversePartialHessian_mul_partialHessian`, `IsPartiallyHyperregular.partialLegendre_partialDerivation_p_routhian`, `IsPartiallyHyperregular.partialLegendre_partialDerivation_q_routhian`, `IsPartiallyHyperregular.partialLegendre_partialDerivation_v_routhian`, `IsPartiallyHyperregular.partialDerivation_q_routhian_eq_zero`, `routhCurve`, `lift_routhCurve`, `IsRouthTrajectory`, `IsPartiallyHyperregular.isRouthTrajectory_routhCurve_iff`, `IsPartiallyHyperregular.eq_routhCurve`, `restriction`, `reducedRouthian`, `IsRouthTrajectory.p_eq_algebraMap`, `IsRouthTrajectory.isSolution_reducedRouthian`, `naturalInverse`, `isPartiallyHyperregular_natural` |
+| [Elementary](../ProjectAInos/Mechanics/Elementary.lean) | `ringCos`, `ringSin`, `ringCos_mul_ringCos_add_ringSin_mul_ringSin`, `apply_ringCos`, `apply_ringSin`, `map_ringCos`, `map_ringSin`, `exp_zero`, `exp_mul_exp_neg`, `apply_exp` |
+| [Poisson/CentralField](../ProjectAInos/Mechanics/Poisson/CentralField.lean) | `Plane`, `Polar`, `Radial`, `r`, `rInv`, `cosφ`, `sinφ`, `bracket_eq`, `polarCoordinates`, `isPoissonHom_polarCoordinates`, `polarCoordinates_q_sq`, `polarCoordinates_p_sq`, `angularMomentum`, `polarCoordinates_angularMomentum`, `hamiltonian`, `polarHamiltonian`, `logPotential`, `polarCoordinates_hamiltonian`, `partialDerivation_polarHamiltonian`, `radialHamiltonian`, `restriction_polarHamiltonian`, `radius`, `radialMomentum`, `radialHamiltonian_eq`, `canonical_radius_radialMomentum`, `polarHamiltonian_mem_normalizer`, `reductionHom_radialHamiltonian`, `isTrajectory_plane`, `lift_angularMomentum`, `pφ_eq_algebraMap`, `isTrajectory_radial`, `timeDerivative_angle`, `q_dotProduct_M`, `sum_q_mul_M_eq_zero` |
+| [Quadrature](../ProjectAInos/Mechanics/Quadrature.lean) | `integral_comp_eq_integral_div_sqrt`, `sub_eq_integral_one_div_sqrt`, `sub_eq_sqrt_mul_integral_of_energy` |
+| [Poisson/OrbitIntegral](../ProjectAInos/Mechanics/Poisson/OrbitIntegral.lean) | `canonical_radius_radialHamiltonian`, `radiusAt`, `radialVelocityAt`, `radialSpeedSq`, `lift_radialHamiltonian_apply`, `hasDerivAt_radiusAt`, `continuous_radialVelocityAt`, `radialVelocityAt_sq`, `continuousOn_radialSpeedSq`, `sub_eq_integral_radius`, `angle_sub_eq_integral_radius` |
 | [Similarity](../ProjectAInos/Mechanics/Similarity.lean) | `TimeFunction.scale`, `TimeFunction.timeDerivative_scale`, `TimeFunction.scale_lift`, `dilate`, `lift_dilate`, `IsHomogeneous`, `IsHomogeneous.dilate_partialDerivation`, `StandardJet.IsSolution.similar`, `similar_apply_add_period` |
 | [Poisson/VirialAverage](../ProjectAInos/Mechanics/Poisson/VirialAverage.lean) | `TimeFunction.tendsto_average_timeDerivative`, `IsTrajectory.tendsto_average_virial` |
 | [Poisson/KeplerOrbit](../ProjectAInos/Mechanics/Poisson/KeplerOrbit.lean) | `IsKeplerMotion.conic`, `IsKeplerMotion.similar`, `similar_period` |
