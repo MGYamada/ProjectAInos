@@ -14,6 +14,13 @@ The implementation baseline is `main` at commit `61d8fdf`, inspected on
 13 November 2026. This manuscript specifies future formalization; completing
 the manuscript does not complete those proofs.
 
+**Revision of 14 November 2026.** The mechanics programme is complete
+([issue #78](https://github.com/MGYamada/ProjectAInos/issues/78), `main` at
+`fd0ccaa`). [After the mechanics programme](#after-the-mechanics-programme)
+records the prerequisites it supplies, what it found out of reach, and the
+resulting changes to this plan. The SR modules are those of the baseline, and
+status labels elsewhere in this document still refer to `61d8fdf`.
+
 ## Implementation plan and current progress
 
 The [research plan](../README.md) assigns Minkowski geometry and kinematics to
@@ -36,11 +43,96 @@ section. Proposed names later in this document are design names.
 | Observer energy, coordinate-time Hamiltonian and systematic free-particle Noether theory | Targets | Build on the existing free action; do not replace it |
 | Mass-shell integration, distributions and invariant collision rates | Targets | A measure-theoretic interface is needed in addition to the shell equations |
 | Decays, scattering kinematics and angular-momentum charges | Targets | Finite-particle algebra first; interaction dynamics are additional premises |
+| Canonical Poisson structures, Poisson morphisms, quotients by ideals and reduced Poisson rings | Implemented in the shared algebra by the mechanics programme | `PhaseSpace.canonical`, `IsPoissonHom`, `SmoothRingCon.ofIdeal`, `PoissonStructure.Reduction`; prerequisites of SR-C6, SR-D7 and SR-D8 |
+| Hamilton's equations along curves, the Legendre correspondence with an inverse morphism, cyclic co-ordinates | Implemented in `Mechanics` for free C∞-rings | `IsTrajectory`, `VelocitySpace.IsHyperregular`, `CyclicReduction`; the velocity ball of SR-D4 is not a free ring in the velocity |
 | Universal C∞ cotangent comparison and nonreduced families of solutions | Research targets | Not consequences of the present manifold-to-scheme functor |
 
 The existing `Electrodynamics.mass_shell` is a downstream verification of the
 normalization of `m • fourVelocity v`. It is not evidence that a complete
 SR momentum, collision or mass-shell measure API already exists.
+
+### After the mechanics programme
+
+The [mechanics plan](cinfty-mechanics.md) was carried out between the baseline
+and `fd0ccaa`. Its [ledger](cinfty-mechanics.md#ledger) ends with 31 of the 52
+sections *proved* and the other 21 closed with their proved part and the
+reason for the remainder. The work went in this order: the algebraic core and
+its models; the rows that are algebra over a free C∞-ring; the analytic
+interface lemmas and the quotients that depend on them; the integrals within
+reach. It was delivered as pull requests that each closed several rows, with
+typed examples in a file under `checks/` and observations in
+[the formalization notes](mechanics-notes.md). Three kinds of result matter
+for this volume.
+
+**Prerequisites that now exist.** They are in the shared algebra or in
+`Mechanics`, and none imports a relativity module.
+
+| Prerequisite named in this plan | Declarations | What they do not cover |
+| --- | --- | --- |
+| Derivations with the smooth chain rule (SR-F2) | `SmoothDerivation`, `FreeSmoothRing.derivationEquiv` | The universal module `Ω_A` and its comparison with the cotangent bundle |
+| Tangent points as morphisms to dual numbers (SR-F5) | `SmoothRing (DualNumber A)`, `TangentPoint`, `FreeSmoothRing.tangentPointEquiv`, `FreeSmoothRing.presentedTangentPointEquiv` | Coefficient rings other than `ℝ`; Lorentz signature over a nonreduced base |
+| Quotients by ordinary ideals (SR-F2) | `SmoothRingCon.ofIdeal`, `SmoothRingCon.ofIdealHomEquiv`, from Hadamard's lemma `SmoothRing.op_sub_op` | Completeness and fairness of the quotient |
+| Canonical Poisson API (SR-C6) | `PhaseSpace.canonical`, `IsPoissonHom`, `PhaseSpace.isPoissonHom_of_canonical`, `PoissonStructure.isIntegral_iff_hamiltonian_eq_zero` | Momentum maps of a general group action |
+| Constraints and reduction (SR-D8) | `PoissonStructure.isCoisotropic_span`, `PoissonStructure.Reduction`, `PoissonStructure.toReduction_bijective`, `CyclicReduction.canonicalReductionHom_bijective` | The Dirac bracket; reduction by a non-abelian group |
+| Hamilton's equations along a curve (SR-D4, SR-D7) | `IsTrajectory`, `isTrajectory_canonical_iff`, `IsTrajectory.lift_eq_of_isIntegral` | Existence of trajectories; Hamiltonians that depend on time |
+| Legendre correspondence (SR-D4) | `VelocitySpace.IsHyperregular.isTrajectory_iff_isSolution` | Lagrangians that are smooth only on an open set of velocities |
+| Model proofs of a symmetry algebra (SR-C6) | `AngularMomentum.canonical_M_M`, `AngularMomentum.isPoissonHom_momentumMap`, `Galilei.canonical_K_p` | The Poincaré algebra |
+| Finite reactions without relativity (SR-C1–C3) | `TwoBody.disintegration_momentum_sq`, `TwoBody.isElastic_iff` | Relativistic shells and thresholds |
+
+**What mechanics found out of reach.** These findings set expectations for
+the rows of this volume.
+
+- *Measures and improper integrals.* Six mechanics rows are closed with a
+  remainder because they need the push-forward of a measure, an integral
+  over a closed curve, or an integral that is improper at a turning point or
+  at infinity (cross-sections, periods). §§10 and 12 of this volume are of
+  the same kind. SR-I4 stays an interface of its own, and these rows are
+  expected to close with a stated remainder unless shell measures are built
+  first.
+- *Asymptotic statements.* Six mechanics rows state an approximation for
+  which the text gives no error estimate. What could be proved was an exact
+  identity next to each. For SR-K5 and the expansion of §9, the theorem with
+  its estimate has to be chosen before the work starts. The uniform particle
+  limit of the GR volume is the existing model of such a statement.
+- *Domains that are not all of `ℝⁿ`.* A free C∞-ring is the ring of smooth
+  functions on all of `ℝⁿ`. Mechanics used three devices for other domains: a
+  global chart (`s = log r` for the radius), an adjoined inverse whose
+  relation is kept as an element (`1/r` in Kepler's problem), and the
+  open-domain analytic model. The velocity ball `‖v‖ < 1` and the timelike
+  cone are such domains. A theorem stated for coefficient functions in a free
+  ring does not apply to a co-ordinate system with singular coefficients.
+
+**Changes to this plan.**
+
+1. *SR-C6 is not conditional any more.* It is a finite list of bracket
+   identities on generators, as `AngularMomentum.canonical_M_M` is, and
+   belongs to SR5 without a prerequisite. The Galilei algebra with the mass
+   as its central term is `Galilei.canonical_K_p`; the passage from one
+   algebra to the other is a statement about a family in `c` and is a
+   separate target.
+2. *New target SR-D7:* the coordinate-time Hamiltonian as an element of a
+   free ring. It is the Hamiltonian half of SR-D4 and needs no velocity ball.
+3. *New target SR-D8:* the mass shell as a coisotropic ideal, with its
+   reduced ring. It gives the algebraic meaning of the parameter degeneracy
+   of SR-D2 and uses the reduction theorem that gave the reduced mass in
+   mechanics.
+4. *SR-D4 fixes its velocity chart first.* The Legendre correspondence of
+   mechanics is for Lagrangians in a free ring. In the velocity,
+   `−m√(1 − ‖v‖²)` is not one. The global chart of the ball is the proper
+   velocity `w = γv`: there `v = w/√(1 + ‖w‖²)`, the Lagrangian and
+   `p = m w` are smooth on all of `ℝᵈ`. SR-D4 is stated in this chart or in
+   the open-domain model, and the choice is recorded before implementation.
+5. *SR3 takes the form of `TwoBody`.* Decay and elastic kinematics are real
+   vector algebra, with statements of the form "the conservation laws hold
+   exactly when the outgoing data are …". The nonrelativistic statements are
+   regression targets for the limit.
+6. *Completion criterion.* The criterion that closed the mechanics issue is
+   adopted for §§1–14. A row is closed when it is proved, or when it names
+   its proved part and gives the reason why the rest is not proved. A status
+   is only promoted, and a promotion in a restricted scope writes the scope
+   in the row. A theorem whose hypotheses are identities in a free C∞-ring
+   comes with an instance, because such hypotheses quantify over all values
+   of the generators (note M66 of the mechanics notes).
 
 ## Abstract
 
@@ -162,8 +254,11 @@ $$
 
 The comparison must commute with restriction and smooth pullback before
 transporting the native metric and tensors into algebraic language. General
-C∞ localizations and gluing exist; universal cotangent modules, arbitrary
-ordinary ideal quotients, completeness theory and these bundle comparisons
+C∞ localizations and gluing exist. Since the mechanics programme, so do
+quotients by ordinary ideals (`SmoothRingCon.ofIdeal`) and derivations that
+satisfy this chain rule (`SmoothDerivation`), which for a free ring are
+determined by their values on the generators. The universal cotangent module
+with its universal property, completeness theory and the bundle comparisons
 are separate remaining stages. No SR milestone below silently assumes them.
 
 ### Affine events, vectors and symmetries
@@ -208,6 +303,12 @@ native tangent vector and derivative. A Lorentz form on a finite projective
 module can be specified algebraically, but signature, future orientation
 and positivity must be interpreted on real fibres or by a separately proved
 notion over the base. Ordering an arbitrary nonreduced ring is not assumed.
+
+For `B = ℝ` the first half exists. `TangentPoint A` is the type of morphisms
+`A → ℝ[ε]`. For a free ring these are the pairs of a point and a vector, and
+for a ring presented by equations they are the pairs that satisfy the
+equations and their linearizations. The comparison with the native tangent
+vector of Minkowski space, and coefficients other than `ℝ`, remain targets.
 
 Null constraints can retain infinitesimal information at singular points.
 In particular the cone vertex is not discarded when studying a scheme of
@@ -376,6 +477,14 @@ $$
 The `O(c⁻²)` statement uses the uniform compact-velocity contract SR-K5.
 Subtracting the constant rest energy preserves Hamilton's equations.
 
+**Target SR-D7 [A].** For `m > 0` the function `√(m² + ‖p‖²)` is smooth on
+all momenta, so `H` is an element of the canonical phase space
+`PhaseSpace (Fin d)` of the shared algebra. Prove with
+`isTrajectory_canonical_iff` that along a trajectory `p` is constant and
+`q̇ = p/H`, that `‖q̇‖ < 1`, and that the momentum, the energy and the orbital
+angular momentum are integrals of the motion. This uses the canonical bracket
+and no velocity chart. The comparison with SR-D1 goes through SR-D4.
+
 ### Massive and massless shells
 
 **Target SR-D5 [A*,C].** Define the positive-energy shell for `m≥0` by
@@ -406,6 +515,21 @@ null motion without normalizing a null vector by its zero proper speed.
 The transformation of `e` under parameter changes is part of the action's
 invariance theorem. These are new targets, not properties of the existing
 total definition `fourVelocity` at a null vector.
+
+**Target SR-D8 [A].** On the canonical phase space of an event `x` and its
+momentum covector `p`, the ideal `I = (g(p,p) + m²)` is coisotropic. The
+momenta `p_μ` and the orbital charges `x_μ p_ν − x_ν p_μ` have zero bracket
+with its generator, so they lie in the normalizer `N(I)`, and their classes
+in the reduced ring `N(I)/I` satisfy the relations of SR-C6. For `m > 0` and
+the future sheet, take the ideal generated by `p₀ + √(m² + ‖𝐩‖²)`. After the
+canonical change of variables `Q⁰ = x⁰`, `𝐐 = 𝐱 − x⁰ ∂E/∂𝐩`,
+`P₀ = p₀ + E(𝐩)`, `𝐏 = 𝐩` with `E = √(m² + ‖𝐩‖²)`, this generator is a
+momentum co-ordinate. Then `CyclicReduction.canonicalReductionHom_bijective`
+identifies the reduced ring with the phase space of the initial data
+`(𝐐, 𝐏)`, as a Poisson C∞-ring. The proof has the shape of
+`TwoBody.reducedMassHom_bijective`: an explicit isomorphism of Poisson
+C∞-rings, then the general theorem. The quotient ring and the smooth shell
+of SR-D5 are compared by a separate theorem.
 
 ## Distributions, collisions and conservation
 
@@ -532,8 +656,8 @@ total four-momentum. This energy-weighted center replaces the nonrelativistic
 mass-weighted center; it is observer dependent. A universal rigid-body
 interpretation or Lorentz-covariant spatial center is not assumed.
 
-**Target SR-C6 [A,A*; conditional].** Once the canonical cotangent Poisson
-API from the mechanics programme is available, represent translations and
+**Target SR-C6 [A,A*].** With the canonical Poisson API of the shared
+algebra (`PhaseSpace.canonical`, `IsPoissonHom`), represent translations and
 Lorentz transformations by momentum functions and prove their brackets on
 canonical generators. Compare these functions with the action's Noether
 boundary terms. This is the Poincaré algebra of classical orbital charges;
@@ -560,13 +684,13 @@ supports the numbering. Page numbers vary between reprints.
 | 5 | Relative velocity, subluminality and collinear composition | Future unit observers or velocity-ball elements | A*, B; SR-F4, SR-K1 | Implemented; noncollinear composition retained as a group action |
 | 6 | Four-vectors, covectors, tensors and invariant contractions | Specified variance; invertible Lorentz action for mixed tensors | A*, C; SR-F2–F4 and shared tensor APIs | Native operations implemented; universal C∞ cotangent comparison target |
 | 7 | Four-velocity, acceleration orthogonality and massive/null distinction | Timelike differentiable curve for normalization; C² for acceleration | A*, B; SR-K3, SR-D5–D6 | Unit four-velocity implemented; systematic acceleration and massless package targets |
-| 8 | Massive variational principle, free motion and parameter degeneracy | C² path, `a<b`, timelike reference jets; `m>0` for inertial-motion conclusion | B, P; SR-D1–D2 | Actual action and stationary/EL equivalence implemented; full SR dynamics target |
-| 9 | Observer energy/momentum, mass shell, coordinate-time Hamiltonian and Newtonian expansion | Future massive momentum; fixed observer; `m>0`; compact velocity bound for limit | A*, B; SR-D3–D5, SR-K5 | Momentum covector implemented; complete energy/Hamiltonian/limit API targets |
+| 8 | Massive variational principle, free motion and parameter degeneracy | C² path, `a<b`, timelike reference jets; `m>0` for inertial-motion conclusion | A, B, P; SR-D1–D2, SR-D8 | Actual action and stationary/EL equivalence implemented; full SR dynamics and the constraint form SR-D8 are targets |
+| 9 | Observer energy/momentum, mass shell, coordinate-time Hamiltonian and Newtonian expansion | Future massive momentum; fixed observer; `m>0`; compact velocity bound for limit | A, A*, B; SR-D3–D5, SR-D7, SR-K5 | Momentum covector implemented; complete energy/Hamiltonian/limit API targets; SR-D7 needs only the shared Poisson API |
 | 10 | Covariance of shell distributions and number flux | Nonnegative measurable distribution; spacelike slice; integrability | B, C; SR-M1–M2 | Target |
 | 11 | Two-body decay energies, thresholds and frame conversion | Parent `M>0`; daughter future shells; conservation; nonzero daughter energies | A*; SR-C1–C2 | Target |
 | 12 | Invariant phase-space rate and cross-section construction | Regular constraint locus; nonzero incoming flux; scalar transition weight | B, C, P; SR-M1, SR-C4 | Conditional target; no interaction weight is supplied by SR |
 | 13 | Elastic two-body kinematics and invariant relations | Future mass shells; timelike total momentum; conservation | A*; SR-C1–C3 | Target |
-| 14 | Orbital Lorentz charges and center-of-energy motion | Finite isolated free system or explicit event-balance premises; positive total energy | A*, B; SR-C5–C6 | Target; field contributions belong to ED |
+| 14 | Orbital Lorentz charges and center-of-energy motion | Finite isolated free system or explicit event-balance premises; positive total energy | A, A*, B; SR-C5–C6 | Target; the Poisson prerequisite of SR-C6 exists; field contributions belong to ED |
 
 Chapter I is §§1–7 and Chapter II is §§8–14. The ED manuscript owns §§15–80;
 the GR manuscript owns §§81–119. Their curved Maxwell and gravitational
@@ -640,8 +764,8 @@ by [`checks/CoreImports.lean`](../checks/CoreImports.lean).
 | SR-I1: compact curve calculus | Local C¹/C² regularity, chain rule, interval substitution and integration by parts | Used by existing proper-time and free-action theorems; reuse their actual hypotheses |
 | SR-I2: localized variations | Small fixed-endpoint perturbations remain in an open timelike jet domain; actual action differentiation and fundamental lemma | Supplied by `Mechanics.OpenDomain` for the present flat model |
 | SR-I3: convexity and clock comparison | Reverse Cauchy–Schwarz, integral inequality and continuous equality case | New proof targets for inertial maximality |
-| SR-I4: shell change of variables | Jacobians, integration on smooth level sets and pushforward equality | Needed for distributions and phase-space rates; no placeholder axiom |
-| SR-I5: asymptotic estimates | Uniform Taylor remainders on a compact velocity range, with explicit `c` domain | New target; does not substitute for ODE stability |
+| SR-I4: shell change of variables | Jacobians, integration on smooth level sets and pushforward equality | Needed for distributions and phase-space rates; no placeholder axiom. Mechanics built no push-forward measure, so there is no shared precursor |
+| SR-I5: asymptotic estimates | Uniform Taylor remainders on a compact velocity range, with explicit `c` domain | New target; does not substitute for ODE stability. The theorem with its estimate is chosen first |
 | SR-I6: generalized coefficients | Cotangent comparison and extension of smooth families to nilpotent coefficient algebras | Research stage; no real-coefficient theorem is promoted without this bridge |
 
 Standard mathlib results should discharge these interfaces where available
@@ -659,14 +783,15 @@ whose only role is to assert the desired conclusion.
    Review and ratify the proposed shared interfaces with the ED and GR
    consumers before committing to new public APIs. This manuscript records
    the proposal; completing its Markdown does not complete that review gate.
-2. **SR1 — free massive dynamics.** Prove SR-D2–D4, acceleration orthogonality
-   and observer energy positivity. Acceptance: a nonzero boosted particle,
+2. **SR1 — free massive dynamics.** Prove SR-D2–D4 and SR-D7, acceleration
+   orthogonality and observer energy positivity. Acceptance: a nonzero boosted particle,
    a nonlinear regular reparametrization and the spatial Legendre inverse
    all exercise the actual action and momentum definitions.
 3. **SR2 — shells and massless motion.** Construct smooth positive shells and
    the auxiliary-field variational model. Acceptance: massive rest momentum,
    a nonzero null momentum and exclusion of the null cone vertex; massive
-   elimination reproduces the existing action.
+   elimination reproduces the existing action. Prove SR-D8 for the massive
+   future sheet.
 4. **SR3 — algebra of finite reactions.** Prove invariant-mass inequalities,
    two-body decay formulas and elastic collision identities. Acceptance:
    unequal masses, threshold, forbidden threshold with a massless daughter,
@@ -676,8 +801,8 @@ whose only role is to assert the desired conclusion.
    boost pushforward equality is a measure theorem; rate claims disclose
    the transition-weight and regularity hypotheses.
 6. **SR5 — orbital symmetry and limits.** Prove the center-of-energy theorem,
-   charge transformation and compact-velocity Newtonian estimates. Extend
-   to Poisson momentum maps when the mechanics prerequisite is available.
+   charge transformation and compact-velocity Newtonian estimates. Prove
+   SR-C6 with the shared Poisson API.
 7. **SR6 — C∞ family refinement.** Implement the universal cotangent bridge
    and selected nonreduced shell/variation examples. Acceptance: native and
    algebraic tangent descriptions agree on the real smooth locus, and every
@@ -687,10 +812,18 @@ SR3 can proceed after the momentum definitions without waiting for shell
 integration. SR4 owns analytic rate questions. SR6 enriches the foundations
 without blocking the ordinary real-model particle programme.
 
+SR-D7, SR-D8 and SR-C6 use only the shared algebra and can be done first.
+A milestone is delivered as in the mechanics programme: a small number of
+pull requests that each close several rows, typed examples in a check file
+run by `checks/run.sh`, and a note for each observation that changes an
+interface. The [completion criterion](#after-the-mechanics-programme) decides
+when the volume is done.
+
 ## Evidence and proof ledger
 
-“Implemented” means the cited declarations exist with proofs at `61d8fdf`;
-it does not report a new build performed by this manuscript. “Target” is an
+“Implemented” means the cited declarations exist with proofs at `61d8fdf`,
+and for SR-E11 at `fd0ccaa`; it does not report a new build performed by this
+manuscript. “Target” is an
 unimplemented theorem in the specified real model. “Conditional target”
 includes a named mathematical or physical premise. “Research target” needs
 a new framework or comparison. SymPy checks remain evidence rather than
@@ -708,6 +841,7 @@ Lean proof, even when they simplify exactly to zero.
 | SR-E8 | Decay and elastic kinematics | Target; no newly executed experiment claimed | Exact Lean examples for masses, threshold and boosted data |
 | SR-E9 | Rest-energy subtraction and `c→∞` remainder | Target | Quantified uniform estimate, not a formal series alone |
 | SR-E10 | Universal C∞/native tangent comparison | Research target | Prove restriction and pullback compatibility before reuse |
+| SR-E11 | Shared prerequisites supplied by the mechanics programme | The declarations of [After the mechanics programme](#after-the-mechanics-programme), pinned by `checks/PoissonAPI.lean`, `checks/CanonicalAPI.lean` and `checks/ReductionAPI.lean` | SR-owned consumer examples for SR-D7, SR-D8 and SR-C6 |
 
 The existing experiment package contains
 [`verify_electrodynamics.py`](../experiments/ainos_experiments/verify_electrodynamics.py)
@@ -749,6 +883,9 @@ other two manuscripts' conventions and dependency boundaries.
   stated hypotheses; this reference does not itself constitute a Lean proof.
 - [C∞ mechanics research plan](cinfty-mechanics.md): tier conventions,
   variational identities, constrained Hamiltonian systems and proof ledger.
+  [Mechanics formalization notes](mechanics-notes.md): M37 and M74 on domains
+  that are not all of `ℝⁿ`, M66 on hypotheses that need an instance, M70–M72
+  on quotients and reduction.
 - [Shared smooth geometry](smooth-geometry.md) and
   [formalization notes](smooth-geometry-notes.md): constructed spectra,
   manifold schemes, native bundles and the outstanding algebraic comparisons.

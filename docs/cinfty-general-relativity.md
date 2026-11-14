@@ -19,6 +19,13 @@ This document completes the GR design contribution to
 Writing the programme does not complete its future mathematical milestones,
 the remaining API design review, or the classical-to-quantum correspondence.
 
+**Revision of 14 November 2026.** The mechanics programme is complete
+([issue #78](https://github.com/MGYamada/ProjectAInos/issues/78), `main` at
+`fd0ccaa`). [After the mechanics programme](#after-the-mechanics-programme)
+records the prerequisites it supplies, what it found out of reach, and the
+resulting changes to this plan. The GR modules are those of the baseline, and
+status labels elsewhere in this document still refer to `61d8fdf`.
+
 ## Implementation plan and current progress
 
 The existing library already goes substantially beyond a coordinate
@@ -41,11 +48,101 @@ The next major step is to make the metric dynamical.
 | Controlled Newtonian particle limit | Proved for time-dependent coefficient families | The separate Newtonian limit of the gravitational field equations |
 | Einstein–Hilbert action, Einstein equations and stress-energy | Planned | Compactly supported metric variations first |
 | Exact gravitating solutions, gravitational waves and cosmology | Planned | Explicit solution checks before existence or classification claims |
+| C∞-derivations, dual numbers, tangent points and quotients by ideals | Constructed in the shared algebra by the mechanics programme | The universal cotangent module `Ω_A` and its comparison |
+| Jet C∞-rings for curves and their comparison with stationary paths | Constructed in `Mechanics` | Jets of fields and of the metric |
+| Hamiltonian particle API: Hamilton's equations along curves, Noether's theorem for brackets, cyclic co-ordinates, reduction, quadrature | Constructed in the shared algebra and `Mechanics` | The geodesic Hamiltonian and its comparison with native geodesics (stage G-H) |
 
 “Constructed” means that the relevant objects and advertised properties have
 Lean definitions and proofs. A future theorem statement, a symbolic calculation,
 or a reference to a classical result does not change that status.
 The detailed evidence table near the end identifies the actual source modules.
+
+### After the mechanics programme
+
+The [mechanics plan](cinfty-mechanics.md) was carried out between the baseline
+and `fd0ccaa`. Its [ledger](cinfty-mechanics.md#ledger) ends with 31 of the 52
+sections *proved* and the other 21 closed with their proved part and the
+reason for the remainder. The
+[SR volume](cinfty-special-relativity.md#after-the-mechanics-programme)
+describes how the work was carried out. The results that matter for this
+volume are the following.
+
+**Prerequisites that now exist.** They are in the shared algebra or in
+`Mechanics`. They are not results about gravitation.
+
+| Use in this plan | Declarations | What they do not cover |
+| --- | --- | --- |
+| The chain rule of the universal derivation | `SmoothDerivation`, `FreeSmoothRing.derivationEquiv`, `SmoothDerivation.equivInfinitesimalAut` | The module `Ω¹_A`, its sheaf and the comparison with the cotangent bundle |
+| Dual-number coefficients, as for `g + εh` | `SmoothRing (DualNumber A)`, `TangentPoint` | Signature over a nonreduced base |
+| Algebraic jets of curves (§87) | `StandardJet.jetRing`, `StandardJet.prolongation`, `StandardJet.isSolution_firstOrder_iff_stationary`, `JetRing.metricLagrangian`, `JetRing.euler_metricLagrangian_eq` | The second jet of a metric; curvature |
+| Geodesics as a Hamiltonian system (§§87, 88, 101) | `PhaseSpace.canonical`, `isTrajectory_canonical_iff`, `PoissonStructure.isIntegral_iff_hamiltonian_eq_zero`, `IsTrajectory.lift_eq_of_isIntegral` | The comparison with the native geodesic equation; existence |
+| Cyclic co-ordinates and effective potentials (§101) | `CyclicReduction.reductionHom_bijective`, `CyclicReduction.isTrajectory_restriction`, `CentralField.reductionHom_radialHamiltonian` | Co-ordinates with singular coefficients |
+| Orbit and scale-factor integrals (§§101, 112, 113) | `integral_comp_eq_integral_div_sqrt`, `sub_eq_integral_one_div_sqrt` | Integrals up to a turning point |
+| The Hamilton–Jacobi method (§101) | `CompleteIntegral.IsHamiltonJacobi`, `CompleteIntegral.isTrajectory_of_isHamiltonJacobi`, `CompleteIntegral.isHamiltonJacobi_nested_of_separated` | `1/r²` and `1/sin²θ` as coefficients |
+| The Newtonian comparison (§§81, 99, 101, 106) | `KeplerModel.IsKeplerMotion.conic`, `Kepler.IsFrame.rungeLenz_hamiltonian`, `TwoBody.reducedMassHom_bijective` | Relativistic corrections |
+| Constraints in finite dimension | `PoissonStructure.IsCoisotropic`, `PoissonStructure.Reduction`, `PoissonStructure.toReduction_bijective` | Phase spaces of fields |
+
+**What mechanics found out of reach.**
+
+- *Flows.* The interface ODE below asks for smooth dependence on the initial
+  data, for Jacobi fields and for congruences from a slice. The pinned
+  Mathlib does not have it, and mechanics did not prove it. The existing
+  local theorems on geodesics and transport are not affected. A statement on
+  Jacobi fields, congruences or developments takes this dependence as a
+  named hypothesis until it is proved, or is stated for a given family of
+  solutions.
+- *Improper integrals.* Six mechanics rows are closed with a remainder
+  because they need a measure, an integral over a closed curve, or an
+  integral that is improper at a turning point or at infinity. The
+  perihelion shift and the deflection of light of §101 are integrals between
+  turning points or to infinity, and approximations as well. They meet two
+  obstacles, and their rows are expected to close with a stated remainder.
+- *Asymptotic statements.* Six mechanics rows state an approximation without
+  an error estimate. The theorem with its estimate is chosen first; the
+  uniform particle limit of §81 is the existing model.
+- *Coefficients with singularities.* A free C∞-ring is the ring of smooth
+  functions on all of `ℝⁿ`, and a theorem for coefficient functions in it
+  does not apply to `1 − 2G_NM/r`, to `1/a` or to `1/sin²θ`. Mechanics used
+  a global chart (`s = log r`) or an adjoined inverse whose relation is kept
+  as an element. For the Schwarzschild exterior, `s = log (r − 2G_NM)` is a
+  global chart of the radial domain.
+- *Parametric integrals.* The interface Variation is a parametric integral
+  over a compact region. Mechanics proved the case of an interval, by
+  induction on the order of differentiability with the parameter space and
+  the space of values in one universe. That proof is a model; it does not
+  give the interface.
+
+**Changes to this plan.**
+
+1. *New stage G-H,* the Hamiltonian particle layer, under
+   [Particle action and its existing variational equivalences](#particle-action-and-its-existing-variational-equivalences).
+   It is algebra on the shared Poisson API and can proceed in parallel with
+   G1–G3.
+2. *§88:* the conservation of the Killing energy along a given geodesic is
+   part of G-H. The redshift statement keeps its hypotheses.
+3. *§101 and G6:* the effective potential is the reduction with respect to
+   the cyclic co-ordinates `t` and `φ`, and the orbit integrals on an
+   interval without a turning point come from the quadrature lemma. The
+   perihelion shift and the deflection of light stay conditional.
+4. *§§112, 113 and G8:* for a density that is a function of the scale
+   factor, the Friedmann equation has the form `ȧ² = F(a)`. On an interval
+   where `ȧ > 0` the time is the integral of `1/√F` over the
+   scale factor (`sub_eq_integral_one_div_sqrt`). The parametric solutions
+   are verified in the ring of smooth functions of time, as the solutions of
+   the oscillator were.
+5. *Smooth jets versus formal jets:* for curves the algebraic jet ring and
+   its comparison exist. For the metric, the field jet ring E3a of the
+   [ED volume](cinfty-electrodynamics.md#sections-jets-and-local-lagrangians)
+   is the proposed carrier; the contracted Bianchi identity is then the
+   second Noether identity of the invariance under diffeomorphisms. This is
+   a later comparison and does not replace G1.
+6. *Completion criterion.* The criterion that closed the mechanics issue is
+   adopted for §§81–119. A row is closed when it is proved, or when it names
+   its proved part and gives the reason why the rest is not proved. A status
+   is only promoted, and a promotion in a restricted scope writes the scope
+   in the row. A theorem whose hypotheses are identities in a free C∞-ring
+   comes with an instance (note M66 of the
+   [mechanics notes](mechanics-notes.md)).
 
 ## Abstract
 
@@ -216,7 +313,10 @@ d_A\Phi_f(a)=\sum_i\Phi_{\partial_i f}(a)\,d_Aa_i.
 $$
 
 Its universal property represents derivations satisfying the smooth chain
-rule. Sheafifying these modules and comparing them with the existing smooth
+rule. Derivations with this chain rule are implemented as `SmoothDerivation`,
+and for a free ring they are determined by their values on the generators.
+The representing module `Ω¹_A` is not constructed. Sheafifying these modules
+and comparing them with the existing smooth
 cotangent bundle is a theorem to prove, not a change of notation.
 On the manifold sector, exterior powers and tensor operations must agree
 with the native bundles already used in Lorentz geometry.
@@ -229,7 +329,8 @@ chain rule. Its scope must name the category of sheaves and modules involved.
 
 For a test ring with nilpotents, formal metric perturbations may be encoded
 by symmetric bilinear forms with invertible determinant. Invertibility of
-`g + εh` for `ε² = 0` has a finite inverse formula and is an [A] target.
+`g + εh` for `ε² = 0` has a finite inverse formula and is an [A] target;
+the C∞-ring structure on `A[ε]` that it uses exists.
 Lorentz signature and positivity are not defined by ordering nilpotents.
 A future family notion must specify the real-point signature and its
 compatibility with base change before being used in physics.
@@ -239,7 +340,10 @@ compatibility with base change before being used in physics.
 Current curvature and variational formulas use actual derivatives in charts
 or on native bundles. A coordinate first or second jet records values of
 these derivatives with their transformation laws. A universal algebraic jet
-ring is a different object whose comparison remains to be constructed.
+ring is a different object. For curves it is constructed in `Mechanics`,
+with its comparison: a smooth path is a solution in the jet ring exactly when
+the action is stationary. For the jets of a metric the comparison remains to
+be constructed.
 
 Proposed **metric jet compatibility** [A*,C]: prove that the coordinate
 formula for curvature depends on the second jet of the metric on the
@@ -354,6 +458,34 @@ admissible variations. Derive the covariant Lorentz force and its gauge
 endpoint term. Prove exact agreement with the existing flat theorem under
 the Minkowski specialization. The support/localization argument must preserve
 timelikeness uniformly on the compact reference segment.
+
+Proposed **Hamiltonian particle layer** (stage G-H) [A]: take a chart whose
+domain is all of `ℝⁿ` and whose inverse metric coefficients `g^{μν}` are
+elements of the free C∞-ring on the co-ordinates, and set
+`H = ½ g^{μν}(x) p_μ p_ν` in the canonical phase space of the shared algebra.
+
+- Prove with `isTrajectory_canonical_iff` that a curve is a trajectory of `H`
+  exactly when its positions satisfy the geodesic equation of the chart and
+  `p = g(ẋ, ·)`. Compare with `quadraticStationary_iff_geodesic`.
+- For a vector field `ξ` of the chart,
+  `{ξ^μ p_μ, H} = −½ (L_ξ g⁻¹)^{μν} p_μ p_ν`. So `ξ^μ p_μ` is an integral of
+  the motion exactly when `ξ` is a Killing field
+  (`PoissonStructure.isIntegral_iff_hamiltonian_eq_zero`), and a co-ordinate
+  on which the metric does not depend has a constant momentum.
+- `H` is an integral, and the ideal `(H + m²/2)` is coisotropic. This is the
+  mass shell, shared with SR-D8 of the SR volume.
+- For cyclic co-ordinates, `CyclicReduction.reductionHom_bijective` gives the
+  reduced Hamiltonian of the remaining co-ordinates. For a static spherical
+  metric, with the energy and the angular momentum fixed, this is the radial
+  problem with its effective potential.
+
+A chart with singular coefficients is not an instance. The Schwarzschild
+exterior is given in a chart whose coefficients are smooth on all of `ℝⁿ`,
+for example the equatorial plane with the co-ordinates `(t, s, φ)`,
+`r = 2G_NM + exp s`, and the angle read on the real line. That an orbit
+stays in such a plane is a separate statement, as it was for the central
+field of mechanics. G-H is about given curves; the existence of geodesics
+stays with the native ODE results.
 
 ### Stationary observers and rotation
 
@@ -838,7 +970,7 @@ The dependency names refer to the interfaces and milestones below.
 | 85 | Covariant differentiation: extend the connection to all tensor types | Smooth sections and the stated derivative regularity | [C] / tensor derivative extension | Existing vector/two-form cases; general extension planned |
 | 86 | Metric connection: derive uniqueness and Christoffel coefficients | Smooth nondegenerate Lorentz metric, torsion-free compatibility | [C] / Levi-Civita | Existing |
 | 87 | Free gravitational motion: identify stationary curves with geodesics | Fixed endpoints; massive reference timelike, quadratic case allows null | [B: Variation,C] / particle foundation | Existing variational equivalences |
-| 88 | Stationary gravitational effects: prove Killing energy and redshift | Timelike Killing region and a supplied connecting null geodesic | [C,B: ODE] / Killing theory | Planned |
+| 88 | Stationary gravitational effects: prove Killing energy and redshift | Timelike Killing region and a supplied connecting null geodesic | [A,C,B: ODE] / G-H, Killing theory | Planned; conservation along a given geodesic is algebra in G-H |
 | 89 | Rotating observations: compute stationary-domain clocks and timing | Explicit rotating chart, timelike range, prescribed paths and events | [A*,C] / observers | Planned |
 | 90 | Electromagnetism on curved backgrounds: form/component equations and coupling | Oriented four-dimensional metric, current sign contract; smooth fields | [C,B: Variation] / ED bridge | Existing Maxwell; coupled actions planned |
 | 91 | Curvature: construct the native tensor and its coordinate expression | Smooth metric; local extension regularity retained | [C] / curvature | Existing |
@@ -851,7 +983,7 @@ The dependency names refer to the interfaces and milestones below.
 | 98 | Frame formulation: prove tetrad/metric equation equivalence locally | Local coframe, Lorentz transition maps, torsion-free connection | [A*,C] / frame and Einstein APIs | Planned |
 | 99 | Newtonian field equation: derive a controlled Poisson limit | Einstein–matter family, explicit scaling and derivative remainders | [P,B: Limit,C] / G5 | Planned; distinct from §81 |
 | 100 | Spherical vacuum fields: verify Schwarzschild and prove local classification | Regular spherical domain; extra symmetry assumptions for classification | [A*,C,B: ODE] / G6 | Planned |
-| 101 | Spherical-field trajectories: orbital integrals and controlled observations | Timelike/null geodesics, turning-point domains, small-parameter bounds | [A*,B: ODE,Asymptotics] / G6 | Planned |
+| 101 | Spherical-field trajectories: orbital integrals and controlled observations | Timelike/null geodesics, turning-point domains, small-parameter bounds | [A,A*,B: ODE,Asymptotics] / G-H, G6 | Planned; reduction with respect to cyclic co-ordinates and the quadrature exist in `Mechanics` |
 | 102 | Spherical collapse: match interior/exterior geometry and track trapping | Specified matter solution, junction data, causal domains | [C,D] / G4,G6 | Planned |
 | 103 | Dust collapse: derive reduced evolution and matching | Nonnegative density, dust conservation, pre-shell-crossing interval | [C,B: ODE,D] / matter and junctions | Planned |
 | 104 | Rotation and nonspherical collapse: exact rotating metrics and bounded claims | Regular metric domain; global collapse/uniqueness hypotheses separate | [A*,C,D,P] / G6 | Planned |
@@ -862,8 +994,8 @@ The dependency names refer to the interfaces and milestones below.
 | 109 | Nonlinear wave geometries: verify exact examples | Smooth Lorentz domain and exact Ricci residual, not only first order | [A*,C] / G7 | Planned |
 | 110 | Gravitational emission: derive retarded multipoles and radiation flux | Conserved source, Green contract, far-zone and slow-source bounds | [P,B: Asymptotics,D] / G7 | Planned |
 | 111 | Spatial isotropy: build constant-curvature spatial models | Homogeneity/isotropy or explicit model, topology stated | [C] / G8 | Planned |
-| 112 | Positive-curvature expansion: derive and solve selected Friedmann models | Positive scale factor, equation of state, physical interval | [A*,C,B: ODE] / G8 | Planned |
-| 113 | Negative-curvature expansion: derive the corresponding evolution | Chosen hyperbolic spatial model, matter and initial data | [A*,C,B: ODE] / G8 | Planned |
+| 112 | Positive-curvature expansion: derive and solve selected Friedmann models | Positive scale factor, equation of state, physical interval | [A*,C,B: ODE] / G8 | Planned; the quadrature on an interval of monotone expansion exists in `Mechanics` |
+| 113 | Negative-curvature expansion: derive the corresponding evolution | Chosen hyperbolic spatial model, matter and initial data | [A*,C,B: ODE] / G8 | Planned; the quadrature on an interval of monotone expansion exists in `Mechanics` |
 | 114 | Cosmological photon measurements: prove the scale-factor redshift law | Comoving observers and specified null propagation | [C,B: ODE] / G8 | Planned |
 | 115 | Cosmological perturbations: state and analyse gauge-aware growth | Background solution, perturbation variables, mode/domain assumptions | [C,D,P] / G7,G8 | Planned |
 | 116 | Homogeneous spatial geometry: derive invariant-frame reductions | Structure constants and compatible homogeneous metric | [A*,C] / G8 | Planned |
@@ -942,7 +1074,9 @@ asymptotic completeness, or cosmic censorship by an overbroad typeclass.
 set for parameters near zero, prove differentiation of its integral and
 continuity of the derivative. A metric-family adapter derives these hypotheses
 from signature preservation and local formulas. If an absolute action is used,
-its integrability is separately supplied or proved.
+its integrability is separately supplied or proved. The case of an integral
+over an interval with a parameter in a finite-dimensional space is proved in
+the shared algebra (`contDiff_parametric_intervalIntegral`).
 
 **Support.** Construct chart-local symmetric tensor tests with arbitrary value
 at a point, smooth compact support in the region, and extension by zero.
@@ -959,7 +1093,10 @@ provide the global hypersurface theorem.
 **ODE.** Reuse local geodesic and transport results. Add smooth dependence on
 initial data where needed for Jacobi fields, slice congruences, and reduced
 cosmological equations. State continuation domains and prevent conclusions
-beyond a caustic, metric degeneracy, or singular coefficient.
+beyond a caustic, metric degeneracy, or singular coefficient. Smooth
+dependence on the initial data is not in the pinned Mathlib; the mechanics
+programme left it unproved as its interface (F). Until it is proved it is a
+named hypothesis of the statements that use it.
 
 **Limit.** A family on a common domain carries explicit coordinate norms and
 uniform derivative bounds. Output estimates precede convergence theorems.
@@ -999,6 +1136,7 @@ completion closes the design task; these proof milestones remain future work.
 | ID | Deliverable | Acceptance condition |
 | --- | --- | --- |
 | G0 | Ratify the shared/public API design and trilogy conventions | Review current interfaces, explicit hypotheses, source-current signs and module ownership; record decisions without marking unproved results complete |
+| G-H | Hamiltonian particle layer on the shared Poisson API | Geodesic Hamiltonian with its chart comparison, Killing momenta as integrals, reduction with respect to cyclic co-ordinates, an exterior Schwarzschild chart as an instance |
 | G1 | Tensor covariant derivative, differential Bianchi, Einstein tensor | Native smooth identities, coordinate comparison, contracted divergence zero, nonzero-curvature regressions |
 | G2 | Compact metric variations and Einstein–Hilbert derivative | Uniform signature interval, actual relative action derivative, vanishing compact divergence term |
 | G3 | Matter Hilbert tensor and Einstein stationarity equivalence | Realized arbitrary symmetric tests, both implications, scalar/Maxwell examples, signed exchange law |
@@ -1015,6 +1153,14 @@ G4's geometric constraints can proceed before its deep evolution theorem.
 G6/G8 exact examples can proceed once the field predicate exists, while their
 global or stability conclusions wait for the required analytic milestones.
 G10 is a parallel foundation programme and does not block real-manifold GR.
+G-H uses the existing foundation and the shared algebra, and can proceed
+before G1.
+
+A milestone is delivered as in the mechanics programme: a small number of
+pull requests that each close several rows, typed examples in a check file
+run by `checks/run.sh`, and a note for each observation that changes an
+interface. The [completion criterion](#after-the-mechanics-programme) decides
+when the volume is done.
 
 The classical-to-QFT boundary is an explicit later interface: classical
 solution spaces, symplectic/constraint reduction, and linearized observables
@@ -1029,7 +1175,8 @@ assumptions, not a proof of that correspondence.
 
 ### Existing Lean evidence
 
-The entries below describe source present at the baseline. The existing
+The entries below describe source present at the baseline, and the last
+row source present at `fd0ccaa`. The existing
 [GR guide](general-relativity.md) and
 [geometry guide](smooth-geometry.md) give finer regularity and API details.
 
@@ -1049,6 +1196,7 @@ The entries below describe source present at the baseline. The existing
 | Flat vacuum Maxwell action | [VacuumAction](../ProjectAInos/Electrodynamics/VacuumAction.lean): `stationary_iff_vacuum` |
 | Uniform particle Newtonian limit | [NewtonianLimit](../ProjectAInos/GeneralRelativity/NewtonianLimit.lean): `exists_uniform_newtonian_limit`, `exists_newtonian_limit_with_rate` |
 | Nontrivial trajectory regression | [NewtonianLimitExamples](../ProjectAInos/GeneralRelativity/NewtonianLimitExamples.lean): `polynomial_trajectory_limit` |
+| Shared prerequisites from the mechanics programme | [Reduction](../ProjectAInos/SmoothAlgebra/Poisson/Reduction.lean): `PoissonStructure.Reduction`; [CyclicReduction](../ProjectAInos/Mechanics/Poisson/CyclicReduction.lean): `CyclicReduction.reductionHom_bijective`; [Quadrature](../ProjectAInos/Mechanics/Quadrature.lean): `integral_comp_eq_integral_div_sqrt`; [Trajectory](../ProjectAInos/Mechanics/Poisson/Trajectory.lean): `IsTrajectory` |
 
 The nonlinear flat chart and conformal curved example test coordinate
 covariance, connection terms, and nonzero curvature independently.
