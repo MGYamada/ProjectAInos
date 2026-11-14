@@ -24,6 +24,14 @@ every assertion in the corresponding textbook section has been formalized.
 means that a named analytic result must first be proved or supplied as an
 explicit hypothesis. No new theorem is claimed by writing this manuscript.
 
+**Revision of 14 November 2026.** The mechanics programme is complete
+([issue #78](https://github.com/MGYamada/ProjectAInos/issues/78), `main` at
+`fd0ccaa`). [After the mechanics programme](#after-the-mechanics-programme)
+records the prerequisites it supplies, what it found out of reach, and the
+resulting changes to this plan. The electrodynamics modules are those of the
+baseline apart from the corrections of `b805b4a`, and status labels elsewhere
+in this document still refer to `61d8fdf`.
+
 | Component | Status at the baseline | Reuse and remaining obligation |
 | --- | --- | --- |
 | C∞ spectra, schemes, localization, open gluing and manifold comparison | Implemented shared foundation | Reuse actual structure sheaves; universal cotangent comparison and arbitrary nonreduced dynamics remain targets |
@@ -36,12 +44,92 @@ explicit hypothesis. No new theorem is claimed by writing this manuscript.
 | Sourced and curved field-action derivations; electromagnetic stress tensor and matter exchange | Targets | Preserve the explicit source-sign bridge below; fixed-background equations alone do not supply these proofs |
 | Static boundary problems, wave evolution, optics, retarded fields and radiation | Targets or conditional targets | Need independently specified function spaces, domains, boundary conditions and error estimates |
 | Nontrivial gauge bundles, media, singular sources and self-force | Separate extensions | Do not silently strengthen the smooth-potential API |
+| Smooth parametric integrals and Hadamard's lemma | Proved in the shared algebra by the mechanics programme | `contDiff_parametric_intervalIntegral`, `SmoothOperation.apply_sub_apply_eq_sum_hadamard`; the smoothness half of the interface HOM |
+| Jet C∞-rings in one independent variable, Euler operators and the Noether identity | Proved in `Mechanics` | `JetRing`, `JetRing.euler`, `JetRing.conserved_noetherCharge`; the model for the field jet ring of E3a |
+| Hamiltonian particle API: trajectories, Poisson morphisms, Hamilton–Jacobi, generating functions, cyclic co-ordinates | Proved in the shared algebra and `Mechanics` | `IsTrajectory`, `CompleteIntegral.IsHamiltonJacobi`, `GeneratingFunction.IsFree`, `CyclicReduction`; prerequisites of E9a and of §§19–22, 39, 45 and 53–55 |
 
 The [electrodynamics API guide](electrodynamics.md) records declaration-level
 contracts. The [shared geometry guide](smooth-geometry.md) records the
 underlying tensor and form operations. The geometric results delivered by
 [#52](https://github.com/MGYamada/ProjectAInos/issues/52) are already on `main`;
 they are not pending prerequisites for this document's fixed-background work.
+
+### After the mechanics programme
+
+The [mechanics plan](cinfty-mechanics.md) was carried out between the baseline
+and `fd0ccaa`. Its [ledger](cinfty-mechanics.md#ledger) ends with 31 of the 52
+sections *proved* and the other 21 closed with their proved part and the
+reason for the remainder. The
+[SR volume](cinfty-special-relativity.md#after-the-mechanics-programme)
+describes how the work was carried out. The results that matter for this
+volume are the following.
+
+**Prerequisites that now exist.** They are in the shared algebra or in
+`Mechanics`. They are not electrodynamic results.
+
+| Use in this plan | Declarations | What they do not cover |
+| --- | --- | --- |
+| HOM: a smooth parameter integral and its derivative (E7) | `hasFDerivAt_parametric_intervalIntegral`, `contDiff_parametric_intervalIntegral`, `contDiff_infty_parametric_intervalIntegral_limits` | The homotopy identity for forms of positive degree. In degree zero it is Hadamard's lemma, `SmoothOperation.apply_sub_apply_eq_sum_hadamard` |
+| Local Lagrangians in jets (E3, E5) | `JetRing`, `JetRing.totalDeriv`, `JetRing.euler`, `JetRing.euler_totalDeriv`, `JetRing.totalDeriv_energy`, `JetRing.conserved_noetherCharge`, `StandardJet.jetRing` | More than one independent variable; bundles |
+| Jets and actual solutions (E4) | `StandardJet.prolongation`, `StandardJet.IsSolution`, `StandardJet.isSolution_firstOrder_iff_stationary` | Fields; chart-independent integration |
+| Hamiltonian form of charged motion (E9a, §§19–22) | `PhaseSpace.canonical`, `isTrajectory_canonical_iff`, `IsTrajectory.lift_hamiltonian_eq`, `IsTrajectory.lift_eq_of_isIntegral`, `CyclicReduction.isIntegral_p_of_cyclic` | Existence of trajectories; Hamiltonians that depend on time |
+| A central electric field (§39) | `CentralField.isPoissonHom_polarCoordinates`, `CentralField.reductionHom_radialHamiltonian`, `integral_comp_eq_integral_div_sqrt`, `Kepler.IsFrame.rungeLenz_hamiltonian`, `KeplerModel.IsKeplerMotion.conic` | The relativistic kinetic energy; integrals up to a turning point; fall to the centre |
+| The rotating frame (§45) | `RotatingFrame.hamiltonian`, `RotatingFrame.canonical_velocity_hamiltonian` | The magnetic term, and a bound for the term that is neglected |
+| Rays (§§53–55) | `CompleteIntegral.IsHamiltonJacobi`, `CompleteIntegral.isTrajectory_of_isHamiltonJacobi`, `GeneratingFunction.IsFree.isPoissonHom_transformation`, `PoissonStructure.maupertuis` | The high-frequency limit of Maxwell's equations; the variational form of Fermat's principle |
+| Constraint ideals and quotients (E5) | `SmoothRingCon.ofIdeal`, `PoissonStructure.IsCoisotropic`, `PoissonStructure.Reduction` | Spaces of fields; the quotient by gauge transformations |
+
+**What mechanics found out of reach.**
+
+- *Flows.* The pinned Mathlib has no flow of a vector field with smooth
+  dependence on the initial condition, and mechanics did not prove it. Every
+  dynamical theorem there is about a given curve (`IsTrajectory`,
+  `StandardJet.IsSolution`); existence appears as an explicit solution or as
+  data. The interface ODE of this plan asks for existence, uniqueness and
+  parameter dependence together. Only the statements "for every solution"
+  are within reach now, and §§19–22, 39 and the ray targets are split in this
+  way.
+- *Hamiltonians that depend on time* are not formalized. A charge in a
+  static field is covered by the existing API; a time-dependent field needs
+  the extended phase space or a new definition.
+- *Improper integrals and measures.* Six mechanics rows are closed with a
+  remainder because they need a measure, an integral over a closed curve, or
+  an integral that is improper at a turning point or at infinity. The energy radiated over all time, the
+  cross-sections of §§68–70 and 78–80 and the Fourier integrals are of the
+  same kind.
+- *Asymptotic statements.* Six mechanics rows state an approximation
+  without an error estimate, and what could be proved was an exact identity
+  next to each. For the rows that use ASYM, OSC or RAD, the theorem with its
+  estimate is chosen first, and the exact identity is proved separately.
+- *Coefficients with singularities.* A theorem for coefficient functions in
+  a free C∞-ring does not apply to `1/r`; the mechanics row on the separation
+  of variables is closed with this remainder. For a Coulomb potential the
+  chart `s = log r` (`CentralField.polarHamiltonian`) or an adjoined inverse
+  (Kepler's problem) is used.
+
+**Changes to this plan.**
+
+1. *HOM is half discharged.* The smoothness of the radial homotopy operator
+   and differentiation under its integral follow from the shared parametric
+   integral. E7 keeps one obligation, the identity `dK + Kd = id` in the
+   native exterior calculus.
+2. *New target E3a,* the field jet ring, under
+   [Sections, jets and local Lagrangians](#sections-jets-and-local-lagrangians).
+   It gives the local identities of §§29, 32 and 33 as algebra, before any
+   integral.
+3. *New target E9a,* the Hamiltonian form of charged motion, under
+   [Actual worldline variation](#actual-worldline-variation). The first
+   integrals of §19 along a given trajectory become algebra.
+4. *§§39, 45 and 53–55* have their prerequisites, and their rows say which
+   part is an identity and which part is an approximation.
+5. *A stage ED-A* collects E3a and E9a. It needs no analytic hypothesis and
+   can precede ED1.
+6. *Completion criterion.* The criterion that closed the mechanics issue is
+   adopted for §§15–80. A row is closed when it is proved, or when it names
+   its proved part and gives the reason why the rest is not proved. A status
+   is only promoted, and a promotion in a restricted scope writes the scope
+   in the row. A theorem whose hypotheses are identities in a free C∞-ring
+   comes with an instance (note M66 of the
+   [mechanics notes](mechanics-notes.md)).
 
 ## Abstract
 
@@ -216,6 +304,27 @@ additional transition and gluing proofs. Those proofs belong to the
 shared mathematical layers, while the particular Maxwell Lagrangian and
 source law belong to `Electrodynamics`.
 
+**Target E3a (field jet ring, A).** Generalize the jet ring of mechanics,
+`JetRing`, from one independent variable to `n`. The data are a C∞-ring with
+co-ordinates `x^μ` and field co-ordinates `u^a_J` for the multi-indices `J`,
+commuting total derivatives `D_μ`, and the vector fields `∂/∂u^a_J`, with
+`[∂/∂u^a_J, D_μ] = ∂/∂u^a_{J−μ}` and zero when `μ` does not occur in `J`.
+The standard model is the free C∞-ring on these co-ordinates, as
+`StandardJet.jetRing` is for paths. Prove in every such ring that the Euler
+operators annihilate total divergences, Noether's first identity for a
+prolonged vector field with its current, and the second identity for a
+symmetry that depends on an arbitrary function. For the Maxwell Lagrangian
+these are, as identities of the ring: the divergence identity
+`D_ν E^ν(L) = 0` of gauge invariance, the canonical stress tensor of the
+translations, and its difference from the symmetric tensor of E18, which is
+a total divergence modulo the ideal of the field equations. A smooth field on a chart gives a morphism from the standard
+model to the smooth functions on its domain, as `StandardJet.prolongation`
+does for a path; this is the bridge to E4. Mechanics proved the one-variable
+statements in this way (`JetRing.euler_totalDeriv`,
+`JetRing.conserved_noetherCharge`, `JetRing.totalDeriv_energy`), without
+integration. The jet ring gives local identities only; the integral balances
+still need INT and STOKES.
+
 **Target E4 (descent of first variation, C, B:INT).** Given a density and
 compatible local variations supported in a compact subset of a manifold,
 prove chart-independent differentiation of its integral. Glue the local
@@ -275,6 +384,14 @@ domain, construct a homotopy operator for forms with the required parameter
 integrability and differentiability. Prove $dK+Kd=\mathrm{id}$ in positive
 degree. A closed two-form then has a constructed local potential.
 Extend to suitable covers; do not infer global exactness.
+
+The analytic half of HOM is proved in the shared algebra: the integral over
+`[0, 1]` of a smooth function of a point and the parameter is smooth in the
+point, and its derivative is the integral of the derivative
+(`contDiff_parametric_intervalIntegral`,
+`hasFDerivAt_parametric_intervalIntegral`). In degree zero the homotopy
+identity is Hadamard's lemma, which is proved. What remains for E7 is the
+operator on forms of positive degree and its identity.
 
 **Target E8 (global gauge data, C).** Use a principal $U(1)$ bundle with a
 connection, or equivalent transition functions $g_{ij}:U_i\cap U_j\to U(1)$
@@ -347,6 +464,27 @@ Gauge change adds the endpoint term
 $e[\chi(\gamma(b))-\chi(\gamma(a))]$. The integral identity needs $C^1$
 regularity of $\chi$ along the curve, while the local $C^2$ variational
 comparison uses $C^3\chi$ so that the shifted potential is $C^2$.
+
+**Target E9a (Hamiltonian form of charged motion, A).** Fix an inertial
+observer, and let the potentials `φ` and `a` not depend on time and be
+smooth on all of space. Then
+
+$$
+H=\sqrt{m^2+\|p-e\,a\|^2}+e\,\varphi
+$$
+
+is an element of the canonical phase space `PhaseSpace (Fin 3)` of the
+shared algebra. Prove with `isTrajectory_canonical_iff` that along a
+trajectory the velocity is `(p − e a)/√(m² + ‖p − e a‖²)` and the kinetic
+momentum `p − e a` satisfies the three-dimensional Lorentz force law; that
+the energy is constant; that a co-ordinate on which the potentials do not
+depend has a constant canonical momentum
+(`CyclicReduction.isIntegral_p_of_cyclic`); and that the gauge change
+`a ↦ a + ∇χ` is the canonical transformation `p ↦ p + e∇χ`. The uniform
+fields of §§20–22 are instances with potentials that are linear in the
+co-ordinates. The comparison with `stationary_iff_lorentzForce` uses the
+Legendre correspondence in the velocity chart of SR-D4. A field that depends
+on time is outside this target.
 
 **Target E10 (curved charged variation, C, B:INT).** Combine the existing
 intrinsic massive-particle variation with the first variation of the line
@@ -798,7 +936,7 @@ of the textbook's derivations.
 | 16 | Treat potentials as covector sections and transport their coordinate representations | C / E6, SR | Proved flat local core; bundle version target |
 | 17 | Derive force from fixed-endpoint stationarity on the open timelike domain | B:INT / E9 | Proved flat core; E10 target |
 | 18 | Compare curvature and action under exact gauge changes with the required regularity | C, B:INT / E6, E9 | Proved local core; E8 global target |
-| 19 | Derive a stationary-background particle first integral with a specified gauge-compatible symmetry | B:ODE / E9 | Target |
+| 19 | Derive a stationary-background particle first integral with a specified gauge-compatible symmetry | A, B:ODE / E9, E9a | Target; along a given trajectory the first integral is algebra (E9a) |
 | 20 | Verify and classify uniformly accelerated electric-field trajectories with timelike data | A*, B:ODE / E9 | Nonzero hyperbola proved; general initial-data target |
 | 21 | Construct magnetic-field helices and prove their conservation relations | A*, B:ODE / E9 | Target |
 | 22 | Solve constant-field motion through a Lorentz-skew linear generator, including degenerate invariant cases | A*, B:ODE / E9 | Target |
@@ -816,7 +954,7 @@ of the textbook's derivations.
 | 29 | Derive local charge balance and hypersurface charge conservation with controlled boundary flux | C, B:STOKES / E11 | Local divergence proved; integrated balance target |
 | 30 | Obtain the inhomogeneous equation variationally and establish its observer decomposition | B:INT, C / E15–E16 | Vacuum action and sourced component core proved; sourced action target |
 | 31 | Derive observer energy and Poynting balance with finite integrals | C, B:STOKES / E18–E21 | Target |
-| 32 | Relate translation currents to metric variation under actual symmetry and boundary hypotheses | C, B:MET / E19 | Target |
+| 32 | Relate translation currents to metric variation under actual symmetry and boundary hypotheses | A, C, B:MET / E3a, E19 | Target; the translation current is an identity of the field jet ring (E3a) |
 | 33 | Construct the native field stress tensor and prove exchange with the signed matter current | C, A* / E18–E20 | Target |
 | 34 | Integrate stress moments to a virial identity with finite spatial moments and time-endpoint control | B:STOKES / E21 | Target |
 | 35 | Model smooth charged continuum matter and prove total stress balance on its equations | C, P / E20, GR | Target |
@@ -828,13 +966,13 @@ of the textbook's derivations.
 | 36 | Construct decaying electrostatic potentials for smooth compact sources and prove uniqueness | B:ELL / E22 | Target |
 | 37 | Compare source-potential and field energy when both integrals are finite | B:ELL, STOKES / E18, E22 | Target; point self-energy excluded |
 | 38 | Transport a static source solution by a proper orthochronous Lorentz map | C, B:RET / E22, E29 | Covariance core proved; sourced solution target |
-| 39 | Analyze test-particle orbits in a central electric potential away from its singularity | B:ODE / E9, E22 | Target |
+| 39 | Analyze test-particle orbits in a central electric potential away from its singularity | A, B:ODE / E9a, E22, Mechanics | Target; polar co-ordinates, the reduction by the angle and the quadrature exist in `Mechanics` for the nonrelativistic kinetic energy |
 | 40 | Define first source moments and bound their far-field truncation error | B:ASYM / E23 | Target |
 | 41 | Construct higher multipoles with translation laws and uniform remainder estimates | B:ASYM / E23 | Target |
 | 42 | Derive force and torque of a localized source in a controlled external-field expansion | B:ASYM, STOKES / E20, E23 | Target |
 | 43 | Construct static magnetic solutions from conserved localized currents | B:ELL / E22 | Target |
 | 44 | Compare loop-current moments, far fields and angular momentum under an explicit matter model | B:ASYM, P / E23 | Target |
-| 45 | Bound the rotating-frame weak-magnetic-field approximation in a nonrelativistic regime | B:ODE, ASYM, P / E9, Mechanics | Conditional target |
+| 45 | Bound the rotating-frame weak-magnetic-field approximation in a nonrelativistic regime | A, B:ODE, ASYM, P / E9a, Mechanics | The exact Hamiltonian in the rotating frame is a target on `RotatingFrame.hamiltonian`; the bound for the neglected term is a conditional target |
 
 ### Chapter VI: §§46–52
 
@@ -852,9 +990,9 @@ of the textbook's derivations.
 
 | § | Formalization target and hypotheses | Tier / dependency | Status |
 | --- | --- | --- | --- |
-| 53 | Derive the eikonal equation from a high-frequency Maxwell family and identify its ray flow | C, B:ASYM / E26 | Formal expansion target; rigorous limit separate |
+| 53 | Derive the eikonal equation from a high-frequency Maxwell family and identify its ray flow | A, C, B:ASYM / E26, Mechanics | Formal expansion target; rigorous limit separate; the rays of a complete integral of the eikonal equation are trajectories by Jacobi's theorem of `Mechanics` |
 | 54 | Derive amplitude transport and intensity balance before caustics | C, B:ASYM / E21, E26 | Target |
-| 55 | Use a nondegenerate phase generating function to describe angular ray data | C, B:ODE / E26, Mechanics | Target |
+| 55 | Use a nondegenerate phase generating function to describe angular ray data | A, C, B:ODE / E26, Mechanics | Target; the canonical property of a free generating function is proved in `Mechanics` |
 | 56 | Linearize the transverse ray map and control a narrow beam on a regular segment | C, B:ODE / E26 | Target |
 | 57 | Relate finite-aperture ray maps to image data under explicit invertibility assumptions | C, P / E26 | Target |
 | 58 | Bound geometric-optics error and identify the loss of the estimate near caustics or short scales | B:ASYM, P / E26 | Conditional target |
@@ -953,10 +1091,10 @@ the result labelled conditional, and later replace that premise by a proof.
 | Name | Required input and conclusion | Initial use |
 | --- | --- | --- |
 | INT | Differentiation of a finite action under compactly supported smooth variations, with domination and endpoint terms | E4, E9, E12–E15 |
-| HOM | Smooth parameter integral for the radial homotopy operator, differentiation and the homotopy identity | E7 |
+| HOM | Smooth parameter integral for the radial homotopy operator, differentiation and the homotopy identity | E7; the parameter integral and its differentiation are proved in the shared algebra |
 | STOKES | Integration of exact forms on a specified domain, oriented boundary and integrable traces or decay | E21 |
 | MET | Differentiation of inverse metrics, volume and Hodge through a compactly supported nondegenerate family | E19 |
-| ODE | Local existence, uniqueness, parameter dependence and continuation conditions for particle/ray equations | E9, E26 |
+| ODE | Local existence, uniqueness, parameter dependence and continuation conditions for particle/ray equations | E9, E26; smooth dependence on the initial condition is not in the pinned Mathlib, so the statements for a given solution come first |
 | ELL | Elliptic Green solution, boundary/decay uniqueness and regularity in the stated source class | E22 |
 | PDE | Cauchy well-posedness in a stated topology, including source compatibility and propagated constraints | E17, E24 |
 | FOURIER | Transform/inversion and distributional differentiation with normalization and function-space bounds | Wave and spectral stages |
@@ -966,7 +1104,8 @@ the result labelled conditional, and later replace that premise by a proof.
 | RET | Retarded Green support and retarded-time existence, uniqueness and regularity | E29 |
 | RAD | Far-zone field and flux limits with uniform estimates allowing integration and limits to commute | E30–E32 |
 
-The existing real flat INT theorem is reusable now. The table does not
+The existing real flat INT theorem is reusable now, and so is the parameter
+integral of HOM. The table does not
 claim that all other interfaces are missing from mathlib or that one
 abstract assumption proves every application. Before each implementation,
 inspect the pinned library and specify the exact specialization required.
@@ -990,6 +1129,7 @@ rather than being relegated to prose after an overstrong API is defined.
 | Stage | Deliverable | Acceptance gate |
 | --- | --- | --- |
 | ED0 | Consolidated current proof map | Verify declarations, flat/curved distinctions and exact existing regressions |
+| ED-A | Algebraic layer on the shared Poisson and jet APIs | E9a with nonzero uniform-field instances; E3a with the Maxwell identities; no analytic hypothesis |
 | ED1 | Sourced flat action and source/matter sign bridge | Derive E15 from the actual functional; nonzero source and gauge tests; recover #44 at zero source |
 | ED2 | Curved charged and field variation | Intrinsic manifold test families, compact-support integration, exact flat specialization |
 | ED3 | Native Hilbert stress and local exchange | Symmetry, trace, observer positivity, metric variation and E20 with the same current sign |
@@ -1003,6 +1143,13 @@ ED8 is not one indivisible release. Its three extension families can proceed
 independently once their dependencies are supplied. The abstract C∞ module
 comparison can likewise proceed alongside the real-manifold physics; no
 downstream theorem may claim it before the bridge is proved.
+
+ED-A uses only the shared algebra and `Mechanics`, and can precede ED1. A
+stage is delivered as in the mechanics programme: a small number of pull
+requests that each close several rows, typed examples in a check file run by
+`checks/run.sh`, and a note for each observation that changes an interface.
+The [completion criterion](#after-the-mechanics-programme) decides when the
+volume is done.
 
 Closing issue #8 records the completion of this documentation migration.
 These milestones remain research work. The issue's former interface
@@ -1021,6 +1168,7 @@ treated as a stable public API.
 | Exact flat electromagnetic calculations | [SymPy runner](../experiments/ainos_experiments/verify_electrodynamics.py) | Independent sign, invariant, gauge, radial and worldline checks |
 | Exact nonlinear and curved coordinate calculations | [Lorentz SymPy runner](../experiments/ainos_experiments/verify_lorentz_geometry.py) | Hodge/current/density/component comparisons in nonconstant examples |
 | Public typed contracts | [Electrodynamics API checks](../checks/ElectrodynamicsAPI.lean) | Existing declarations remain usable under default elaboration settings |
+| Shared prerequisites from the mechanics programme, at `fd0ccaa` | [Reduction](../checks/ReductionAPI.lean), [central field](../checks/CentralFieldAPI.lean), [canonical formalism](../checks/CanonicalAPI.lean) and [jet](../checks/MechanicsJetAPI.lean) API checks | The declarations cited in [After the mechanics programme](#after-the-mechanics-programme) exist with their stated types; they are not electrodynamic results |
 
 The existing symbolic runners use exact expressions, no random seed and
 no floating-point tolerance. This manuscript does not add or report a new
