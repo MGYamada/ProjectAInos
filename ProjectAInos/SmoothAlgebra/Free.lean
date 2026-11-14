@@ -183,6 +183,14 @@ theorem presentation_eq (s : FreeSmoothRing ι) :
   funext i
   exact h _
 
+/-- A morphism after a substitution is the substitution of the images. -/
+theorem map_lift {A B : Type*} [CommRing A] [Algebra ℝ A] [SmoothRing A]
+    [CommRing B] [Algebra ℝ B] [SmoothRing B] (φ : SmoothRingHom A B) (a : ι → A)
+    (s : FreeSmoothRing ι) : φ (lift a s) = lift (fun i => φ (a i)) s :=
+  congrArg (fun χ : SmoothRingHom (FreeSmoothRing ι) B => χ s)
+    (hom_ext (f := φ.comp (lift a)) (g := lift fun i => φ (a i)) fun i => by
+      rw [SmoothRingHom.comp_apply, lift_generator, lift_generator])
+
 theorem existsUnique_lift {A : Type*} [CommRing A] [Algebra ℝ A] [SmoothRing A]
     (a : ι → A) : ∃! f : SmoothRingHom (FreeSmoothRing ι) A, ∀ i, f (generator i) = a i := by
   refine ⟨lift a, lift_generator a, fun f hf => ?_⟩

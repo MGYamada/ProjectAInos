@@ -70,6 +70,27 @@ theorem lift_eq_of_bracket_mem (h : IsTrajectory π H c) {I : Ideal (FreeSmoothR
   refine TimeFunction.eq_of_timeDerivative_eq_zero ?_ s t
   rw [h.timeDerivative_lift, hI _ hf]
 
+/-- A Poisson morphism of free rings carries trajectories back: if `c` is a
+trajectory of `φ K`, the curve `a ↦ (φ xₐ)(c)` is a trajectory of `K`. For a
+canonical transformation `φ` these are the equations of motion in the new
+variables. -/
+theorem of_isPoissonHom {κ' : Type*} {ρ : PoissonStructure (FreeSmoothRing κ')}
+    {φ : SmoothRingHom (FreeSmoothRing κ') (FreeSmoothRing κ)}
+    (hφ : IsPoissonHom ρ.toAlmostPoissonStructure π.toAlmostPoissonStructure φ)
+    {K : FreeSmoothRing κ'} (h : IsTrajectory π (φ K) c) :
+    IsTrajectory ρ K fun a => FreeSmoothRing.lift c (φ (generator a)) := by
+  have hlift (g : FreeSmoothRing κ') :
+      FreeSmoothRing.lift (fun a => FreeSmoothRing.lift c (φ (generator a))) g =
+        FreeSmoothRing.lift c (φ g) :=
+    congrArg (fun χ : SmoothRingHom (FreeSmoothRing κ') TimeFunction => χ g)
+      (FreeSmoothRing.hom_ext
+        (f := FreeSmoothRing.lift fun a => FreeSmoothRing.lift c (φ (generator a)))
+        (g := (FreeSmoothRing.lift c).comp φ) fun a => by
+          rw [lift_generator, SmoothRingHom.comp_apply])
+  intro a
+  rw [hlift, hφ]
+  exact h.timeDerivative_lift _
+
 /-- The Hamiltonian is constant along its trajectories. -/
 theorem lift_hamiltonian_eq (h : IsTrajectory π H c) (s t : Fin 1 → ℝ) :
     FreeSmoothRing.lift c H s = FreeSmoothRing.lift c H t :=

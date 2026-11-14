@@ -73,6 +73,32 @@ theorem isPoissonIdeal_span_singleton {c : P}
   exact add_mem (Ideal.mul_mem_left _ _ (h g))
     (Ideal.mul_mem_right _ _ (Ideal.subset_span rfl))
 
+/-- An element is in the normalizer of a generated ideal if its brackets with
+the generators are in the ideal. -/
+theorem mem_normalizer_span {s : Set P} {f : P}
+    (h : ∀ a ∈ s, π.bracket f a ∈ Ideal.span s) : f ∈ π.normalizer (Ideal.span s) := by
+  intro g hg
+  refine Submodule.span_induction (p := fun x _ => π.bracket f x ∈ Ideal.span s) h ?_ ?_ ?_ hg
+  · rw [π.toAlmostPoissonStructure.bracket_zero_right]
+    exact zero_mem _
+  · intro x y _ _ hx hy
+    rw [π.toAlmostPoissonStructure.bracket_add_right]
+    exact add_mem hx hy
+  · intro r x hx' hx
+    rw [smul_eq_mul, π.toAlmostPoissonStructure.bracket_mul_right]
+    exact add_mem (Ideal.mul_mem_left _ _ hx) (Ideal.mul_mem_right _ _ hx')
+
+/-- An ideal is coisotropic if the brackets of its generators are in it. -/
+theorem isCoisotropic_span {s : Set P}
+    (h : ∀ a ∈ s, ∀ b ∈ s, π.bracket a b ∈ Ideal.span s) : π.IsCoisotropic (Ideal.span s) := by
+  intro f hf
+  refine Submodule.span_induction (p := fun x _ => x ∈ π.normalizer (Ideal.span s))
+    (fun a ha => mem_normalizer_span (h a ha)) (zero_mem _) (fun x y _ _ hx hy => add_mem hx hy)
+    ?_ hf
+  intro r x hx' hx g hg
+  rw [smul_eq_mul, π.toAlmostPoissonStructure.bracket_mul_left]
+  exact add_mem (Ideal.mul_mem_left _ _ (hx g hg)) (Ideal.mul_mem_right _ _ hx')
+
 /-- A coisotropic ideal lies in its normalizer. -/
 theorem IsCoisotropic.le_normalizer {I : Ideal P} (h : π.IsCoisotropic I) {f : P}
     (hf : f ∈ I) : f ∈ π.normalizer I := fun g hg => h f hf g hg
