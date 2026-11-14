@@ -482,9 +482,12 @@ depend has a constant canonical momentum
 (`CyclicReduction.isIntegral_p_of_cyclic`); and that the gauge change
 `a ↦ a + ∇χ` is the canonical transformation `p ↦ p + e∇χ`. The uniform
 fields of §§20–22 are instances with potentials that are linear in the
-co-ordinates. The comparison with `stationary_iff_lorentzForce` uses the
-Legendre correspondence in the velocity chart of SR-D4. A field that depends
-on time is outside this target.
+co-ordinates. The comparison with `stationary_iff_lorentzForce` is the
+Legendre correspondence of SR-D4. The Legendre API of mechanics does not
+give it as it stands, for the reason stated in the
+[SR volume](cinfty-special-relativity.md#after-the-mechanics-programme): the
+relativistic Lagrangian is not an element of a free ring in the velocity. A
+field that depends on time is outside this target.
 
 **Target E10 (curved charged variation, C, B:INT).** Combine the existing
 intrinsic massive-particle variation with the first variation of the line
