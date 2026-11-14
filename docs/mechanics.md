@@ -683,6 +683,96 @@ The existence of a fundamental system for a general smooth coefficient is not
 proved; it is the data of the theorems. The cases in which solutions are
 unbounded and the width of the instability zone are not treated.
 
+## Canonical formalism
+
+`Mechanics/Legendre` treats the Legendre transformation of the natural
+Lagrangian `L = Σᵢ ½ mᵢ q̇ᵢ² − U(q)` (Landau–Lifshitz §40). A potential is an
+element `u` of the free C∞-ring on the positions; `positionsToJet u` reads it
+in the jet ring and `positionsToPhase u` on the phase space.
+
+- `legendre m` is the morphism from the phase space to the jet ring with
+  `qᵢ ↦ qᵢ` and `pᵢ ↦ mᵢ q̇ᵢ`. It takes `pᵢ` to the momentum `∂L/∂q̇ᵢ`
+  (`legendre_p_eq_momentum`) and, for non-zero masses, the Hamiltonian
+  `Σᵢ pᵢ²/2mᵢ + U` to the energy of `L` (`legendre_hamiltonian`).
+- `isSolution_natural_iff`, `isTrajectory_natural_iff`: Newton's equations
+  `mᵢ γ̈ᵢ = −(∂ᵢu)(γ)` and Hamilton's equations along curves.
+- `isTrajectory_natural_iff_isSolution`: a curve of the phase space is a
+  trajectory of the Hamiltonian exactly when its positions solve the
+  Euler–Lagrange equations of `L` and `pᵢ = mᵢ q̇ᵢ`.
+
+Theorem 51 of the manuscript for a general hyperregular Lagrangian, and the
+correspondence of the symplectic forms, are not proved.
+
+`Poisson/CompleteIntegral` proves Jacobi's theorem (Landau–Lifshitz §47). The
+functions of the co-ordinates `q`, of as many parameters `α` and of the time
+form the free C∞-ring `ActionSpace ι`. For `S` in this ring,
+`substitution S` is the morphism `qᵢ ↦ qᵢ`, `pᵢ ↦ ∂S/∂qᵢ` from the phase
+space, and `IsHamiltonJacobi H S` is the equation
+`∂S/∂t + H(q, ∂S/∂q) = 0`. `along Q α` evaluates along a curve `q(t)` with
+fixed parameters.
+
+- `isTrajectory_of_isHamiltonJacobi`: if `S` satisfies the Hamilton–Jacobi
+  equation, every `∂S/∂αᵢ` has zero time derivative along the curve, and the
+  matrix `∂²S/∂αᵢ∂qₖ` along the curve has no kernel, then `q(t)` with the
+  momenta `pᵢ = ∂S/∂qᵢ` is a trajectory of `H`.
+- `isHamiltonJacobi_freeAction`, `isTrajectory_freeAction`: for the free
+  particle, `S = α q − α² t / 2m` satisfies the equation, and the theorem
+  gives the uniform motion `q = β + (α/m) t`.
+
+The curve is a hypothesis of the theorem: solving `∂S/∂αᵢ = βᵢ` for `q(t)` by
+the implicit function theorem is not proved. The Hamiltonian has no explicit
+dependence on time.
+
+`Poisson/Liouville` defines the divergence `Σₐ ∂ₐ (X xₐ)` of a vector field on
+a free C∞-ring with finitely many generators. `divergence_hamiltonian`: a
+Hamiltonian vector field of the canonical bracket has zero divergence, the
+infinitesimal form of Liouville's theorem (Landau–Lifshitz §46).
+`divergence_dissipativeField`: with friction the divergence is
+`−Σᵢ ∂fᵢ/∂pᵢ`, and for the oscillator with the friction coefficients `aᵢ` it
+is the constant `−Σᵢ aᵢ/mᵢ` (`Oscillator.divergence_dissipativeField`). The
+invariance of the Lebesgue measure under a flow is not proved.
+
+## Mechanical similarity
+
+`Mechanics/Similarity` covers Landau–Lifshitz §10. `TimeFunction.scale β` is
+the morphism `f ↦ f(βt)` of the ring of functions of time, with
+`d/dt f(βt) = β f'(βt)` (`TimeFunction.timeDerivative_scale`). `dilate α` is
+the morphism `xᵢ ↦ α xᵢ` of the free ring on the positions, and
+`IsHomogeneous k u` says that `dilate α u = α^k u` for every `α > 0`.
+
+- `IsHomogeneous.dilate_partialDerivation`: the partial derivatives of a
+  function homogeneous of degree `k` are homogeneous of degree `k − 1`. The
+  proof applies `∂ⱼ` to the defining identity and uses the chain rule for a
+  substitution.
+- `StandardJet.IsSolution.similar`: for the Lagrangian
+  `Σᵢ ½ mᵢ q̇ᵢ² − U(q)` with `U` homogeneous of degree `k`, if `γ(t)` is a
+  solution, so is `α γ(βt)` with `β = α^{(k − 2)/2}`.
+- `similar_apply_add_period`: if `γ` has the period `T`, the similar path has
+  the period `T/β = α^{1 − k/2} T`.
+
+`Poisson/VirialAverage` proves the virial theorem for time averages.
+`TimeFunction.tendsto_average_timeDerivative`: for a bounded function `G` of
+time, `(1/τ) ∫₀^τ Ġ dt → 0` as `τ → ∞`. `IsTrajectory.tendsto_average_virial`:
+along a trajectory of `Σᵢ pᵢ²/2mᵢ + U` on which `Σᵢ qᵢ pᵢ` is bounded, with `U`
+satisfying Euler's relation of degree `k`, the time average of `2T − kU`
+tends to zero.
+
+`Poisson/KeplerOrbit` applies the same ideas to Kepler motions.
+`IsKeplerMotion.conic`: at every time,
+`A · q(t) = |M|² − m α r(t)` with the constant vectors `A = A(0)` and
+`M = M(0)`, the equation of a conic with a focus at the centre.
+`IsKeplerMotion.similar`: if `(Q, P, R)` is a Kepler motion and
+`β² λ³ = 1`, then `(λ Q(βt), λ β P(βt), R(βt)/λ)` is a Kepler motion.
+`similar_period`: the similar orbit has the period `T/β`, and
+`(T/β)² = λ³ T²`, so the squares of the periods are as the cubes of the
+linear dimensions.
+
+The scaling is a statement about solutions; the corresponding automorphism of
+the jet ring is not constructed. Euler's relation `Σ qᵢ ∂U/∂qᵢ = kU`, the
+hypothesis of the virial identity, is not derived from the scaling property
+`u(αx) = α^k u(x)`. The period of an elliptic orbit as a function of its
+semi-major axis is not computed.
+
 ## Proof map
 
 | Module | Main declarations |
@@ -731,6 +821,12 @@ unbounded and the width of the instability zone are not treated.
 | [Oscillations/Duhamel](../ProjectAInos/Mechanics/Oscillations/Duhamel.lean) | `isForced_zero_damping_iff`, `complexAmplitudeRe`, `complexAmplitudeIm`, `integral_mul_sin_sub`, `IsForced.complexAmplitudeRe_eq`, `IsForced.complexAmplitudeIm_eq`, `IsForced.timeDerivative_apply_eq_integral`, `IsForced.apply_eq_integral`, `IsForced.energy_apply`, `IsForced.energy_transfer`, `duhamel`, `isForced_duhamel`, `duhamel_apply`, `exists_isForced`, `isForced_cos_of_sq_ne`, `steadyState_zero_damping`, `IsForced.apply_eq_of_sq_ne`, `isForced_resonance`, `IsForced.eq_resonance_of_rest`, `IsForced.exists_abs_gt_of_resonance` |
 | [Oscillations/NormalModes](../ProjectAInos/Mechanics/Oscillations/NormalModes.lean) | `exists_orthogonal_diagonalization`, `exists_transpose_mul_mul_eq_one`, `exists_simultaneous_diagonalization`, `mul_eq_mul_mul_diagonal`, `det_sub_smul_eq_zero_iff`, `lam_pos`, `IsSmallOscillation`, `normalCoordinates`, `map_mulVec_normalCoordinates`, `isSmallOscillation_iff`, `IsSmallOscillation.isHarmonic_normalCoordinates`, `isSmallOscillation_map_mulVec`, `IsSmallOscillation.apply_eq` |
 | [Oscillations/Parametric](../ProjectAInos/Mechanics/Oscillations/Parametric.lean) | `mul_self_eq`, `sin_smul_pow_succ`, `exists_abs_pow_apply_le`, `IsHill`, `wronskian`, `IsHill.wronskian_eq`, `TimeFunction.shift`, `IsHill.shift`, `state`, `FundamentalSystem`, `FundamentalSystem.eq_combination`, `FundamentalSystem.matrix`, `FundamentalSystem.det_matrix`, `FundamentalSystem.state_eq`, `FundamentalSystem.matrix_add_nat_mul_period`, `FundamentalSystem.exists_abs_apply_le`, `FundamentalSystem.exists_abs_apply_le_of_abs_trace_lt`, `FundamentalSystem.harmonic` |
+| [Legendre](../ProjectAInos/Mechanics/Legendre.lean) | `positionsToJet`, `positionsToPhase`, `d_zero_positionsToJet`, `orderLE_positionsToJet`, `legendre`, `legendre_p_eq_momentum`, `legendre_hamiltonian`, `isTrajectory_natural_iff`, `isSolution_natural_iff`, `isTrajectory_natural_iff_isSolution` |
+| [Poisson/CompleteIntegral](../ProjectAInos/Mechanics/Poisson/CompleteIntegral.lean) | `ActionSpace`, `substitution`, `IsHamiltonJacobi`, `along`, `momentum`, `timeDerivative_along`, `partialDerivation_substitution_q`, `isTrajectory_of_isHamiltonJacobi`, `freeAction`, `isHamiltonJacobi_freeAction`, `isTrajectory_freeAction` |
+| [Poisson/Liouville](../ProjectAInos/Mechanics/Poisson/Liouville.lean) | `divergence`, `divergence_eq`, `divergence_hamiltonian`, `divergence_dissipativeField`, `Oscillator.divergence_dissipativeField` |
+| [Similarity](../ProjectAInos/Mechanics/Similarity.lean) | `TimeFunction.scale`, `TimeFunction.timeDerivative_scale`, `TimeFunction.scale_lift`, `dilate`, `lift_dilate`, `IsHomogeneous`, `IsHomogeneous.dilate_partialDerivation`, `StandardJet.IsSolution.similar`, `similar_apply_add_period` |
+| [Poisson/VirialAverage](../ProjectAInos/Mechanics/Poisson/VirialAverage.lean) | `TimeFunction.tendsto_average_timeDerivative`, `IsTrajectory.tendsto_average_virial` |
+| [Poisson/KeplerOrbit](../ProjectAInos/Mechanics/Poisson/KeplerOrbit.lean) | `IsKeplerMotion.conic`, `IsKeplerMotion.similar`, `similar_period` |
 | [Examples](../ProjectAInos/Mechanics/Examples.lean) | Newton equation, stationary uniform free motion, rejection of accelerated free motion, endpoint-vanishing polynomial variation and its endpoint derivative, zero-length interval and zero-coordinate system |
 
 For `L = m v²/2 − V(q)`, `stationary_natural_iff` proves `m q'' = −V'(q)` on `(a,b)`. This algebraic equation remains valid at `m = 0`; dividing by the mass would require a separate nonzero premise.
