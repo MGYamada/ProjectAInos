@@ -188,7 +188,9 @@ In the algebraic model, jet C∞-rings carry a total derivative and Euler
 operators. Total derivatives are null Lagrangians, the energy and Noether
 identities hold in every jet ring, and the conservation laws of energy,
 momentum, the centre of mass and angular momentum follow for natural
-Lagrangians as membership in the Euler–Lagrange ideal. The standard jet ring is
+Lagrangians as membership in the Euler–Lagrange ideal. Natural Lagrangians with
+a position-dependent kinetic form have their Lagrange equations and energy, with
+plane polar co-ordinates as a model. The standard jet ring is
 the nondegenerate model. The prolongation of a smooth path turns the total
 derivative into `d/dt`, so a conserved element is constant along every smooth
 solution, in particular the energy along solutions of Newton's equations. A
