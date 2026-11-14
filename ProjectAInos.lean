@@ -114,6 +114,7 @@ public import ProjectAInos.Mechanics.Poisson.AngularMomentum
 public import ProjectAInos.Mechanics.Poisson.CompleteIntegral
 public import ProjectAInos.Mechanics.Poisson.Epsilon
 public import ProjectAInos.Mechanics.Poisson.Galilei
+public import ProjectAInos.Mechanics.Poisson.GeneratingFunction
 public import ProjectAInos.Mechanics.Poisson.HeavyTop
 public import ProjectAInos.Mechanics.Poisson.Kepler
 public import ProjectAInos.Mechanics.Poisson.KeplerModel

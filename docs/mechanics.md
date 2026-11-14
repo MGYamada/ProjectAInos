@@ -863,6 +863,35 @@ Hyperregularity is a hypothesis: no criterion for the existence of the
 inverse morphism is proved. The Lagrangian does not depend explicitly on
 time, and the form `ω_L` is represented by the transported bracket.
 
+`Poisson/GeneratingFunction` treats canonical transformations given by a
+generating function `F(q, Q)` of the old and the new positions
+(Landau–Lifshitz §45). `F` is an element of `PositionPair ι`, the free C∞-ring
+on `oldPosition i` and `newPosition i`; `gradOld` and `gradNew` are the
+gradients with respect to the two groups of variables.
+
+- `oldMap F` is the morphism from the phase space with `qᵢ ↦ qᵢ` and
+  `pᵢ ↦ ∂F/∂qᵢ`; `newMap F` is the one with `Qᵢ ↦ Qᵢ` and `Pᵢ ↦ −∂F/∂Qᵢ`.
+  `IsFree F G` says that `G` is an inverse morphism of `oldMap F`, and
+  `transformation F G = G ∘ newMap F` expresses a function of `(Q, P)` in the
+  variables `(q, p)`.
+- `IsFree.inverseMixed_mul_mixedHessian`: the mixed matrix `∂²F/∂qₖ∂Qₗ` is
+  invertible over the ring; its inverse `B` is the matrix `∂Qⱼ/∂pₖ`.
+- `IsFree.oldMap_bracket`: in the co-ordinates `(q, Q)` the canonical bracket
+  is `{x, y} = ∂x/∂q · (∂y/∂Q · B) − (∂x/∂Q · B) · ∂y/∂q`.
+- `IsFree.isPoissonHom_transformation`: the transformation is a Poisson
+  morphism, that is, `{Qᵢ, Qⱼ} = 0`, `{Qᵢ, Pⱼ} = δᵢⱼ` and `{Pᵢ, Pⱼ} = 0` as
+  functions of `(q, p)`. If `newMap F` also has an inverse `G'`, the
+  transformation has the inverse `G' ∘ oldMap F`
+  (`IsFree.transformation_comp_inverse`, `IsFree.inverse_comp_transformation`).
+- `exchange` is `Σ qᵢ Qᵢ`. It is free with `G` the identity
+  (`isFree_exchange`), and its transformation is `Qᵢ = pᵢ`, `Pᵢ = −qᵢ`
+  (`transformation_exchange_q`, `transformation_exchange_p`).
+
+The generating function does not depend on time, and only the first kind
+`F(q, Q)` is treated. That the mixed matrix is invertible is a consequence of
+the hypothesis; the converse, which needs the inverse function theorem, is not
+proved.
+
 `Poisson/CompleteIntegral` proves Jacobi's theorem (Landau–Lifshitz §47). The
 functions of the co-ordinates `q`, of as many parameters `α` and of the time
 form the free C∞-ring `ActionSpace ι`. For `S` in this ring,
@@ -989,6 +1018,7 @@ semi-major axis is not computed.
 | [Oscillations/Parametric](../ProjectAInos/Mechanics/Oscillations/Parametric.lean) | `mul_self_eq`, `sin_smul_pow_succ`, `exists_abs_pow_apply_le`, `IsHill`, `wronskian`, `IsHill.wronskian_eq`, `TimeFunction.shift`, `IsHill.shift`, `state`, `FundamentalSystem`, `FundamentalSystem.eq_combination`, `FundamentalSystem.matrix`, `FundamentalSystem.det_matrix`, `FundamentalSystem.state_eq`, `FundamentalSystem.matrix_add_nat_mul_period`, `FundamentalSystem.exists_abs_apply_le`, `FundamentalSystem.exists_abs_apply_le_of_abs_trace_lt`, `FundamentalSystem.harmonic` |
 | [Legendre](../ProjectAInos/Mechanics/Legendre.lean) | `positionsToJet`, `positionsToPhase`, `d_zero_positionsToJet`, `orderLE_positionsToJet`, `legendre`, `legendre_p_eq_momentum`, `legendre_hamiltonian`, `isTrajectory_natural_iff`, `isSolution_natural_iff`, `isTrajectory_natural_iff_isSolution` |
 | [Hyperregular](../ProjectAInos/Mechanics/Hyperregular.lean) | `JetRing.sum_mul_d_q_self`, `VelocitySpace`, `VelocitySpace.momentum`, `VelocitySpace.legendre`, `VelocitySpace.energy`, `VelocitySpace.hessian`, `VelocitySpace.apply_legendre`, `VelocitySpace.IsHyperregular`, `VelocitySpace.hamiltonian`, `VelocitySpace.inverseHessian`, `IsHyperregular.inverseHessian_mul_hessian`, `IsHyperregular.legendre_hamiltonian`, `IsHyperregular.legendre_partialDerivation_inr_hamiltonian`, `IsHyperregular.legendre_partialDerivation_inl_hamiltonian`, `VelocitySpace.velocityCurve`, `VelocitySpace.toJet`, `VelocitySpace.prolongation_toJet`, `VelocitySpace.isSolution_toJet_iff`, `IsHyperregular.isTrajectory_iff`, `IsHyperregular.isTrajectory_iff_isSolution`, `VelocitySpace.lagrangeBracket`, `IsHyperregular.legendre_bracket`, `IsHyperregular.lagrangeBracket_q_v`, `VelocitySpace.natural`, `VelocitySpace.isHyperregular_natural`, `VelocitySpace.hamiltonian_natural`, `VelocitySpace.toJet_natural` |
+| [Poisson/GeneratingFunction](../ProjectAInos/Mechanics/Poisson/GeneratingFunction.lean) | `PositionPair`, `oldPosition`, `newPosition`, `gradOld`, `gradNew`, `oldMap`, `newMap`, `mixedHessian`, `oldHessian`, `apply_oldMap`, `gradNew_oldMap`, `gradOld_oldMap`, `IsFree`, `transformation`, `momentumPart`, `positionPart`, `inverseMixed`, `IsFree.inverseMixed_mul_mixedHessian`, `IsFree.momentumPart_eq`, `IsFree.oldMap_bracket`, `IsFree.bracket_apply`, `IsFree.bracket_newPosition_gradNew`, `IsFree.bracket_gradNew_gradNew`, `IsFree.isPoissonHom_transformation`, `IsFree.transformation_comp_inverse`, `IsFree.inverse_comp_transformation`, `exchange`, `isFree_exchange`, `transformation_exchange_q`, `transformation_exchange_p` |
 | [Poisson/CompleteIntegral](../ProjectAInos/Mechanics/Poisson/CompleteIntegral.lean) | `ActionSpace`, `substitution`, `IsHamiltonJacobi`, `along`, `momentum`, `timeDerivative_along`, `partialDerivation_substitution_q`, `isTrajectory_of_isHamiltonJacobi`, `freeAction`, `isHamiltonJacobi_freeAction`, `isTrajectory_freeAction` |
 | [Poisson/Liouville](../ProjectAInos/Mechanics/Poisson/Liouville.lean) | `divergence`, `divergence_eq`, `divergence_hamiltonian`, `divergence_dissipativeField`, `Oscillator.divergence_dissipativeField` |
 | [Similarity](../ProjectAInos/Mechanics/Similarity.lean) | `TimeFunction.scale`, `TimeFunction.timeDerivative_scale`, `TimeFunction.scale_lift`, `dilate`, `lift_dilate`, `IsHomogeneous`, `IsHomogeneous.dilate_partialDerivation`, `StandardJet.IsSolution.similar`, `similar_apply_add_period` |
