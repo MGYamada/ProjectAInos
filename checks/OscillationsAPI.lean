@@ -12,9 +12,10 @@ at an equilibrium, damped oscillations, the dissipative function, forced
 oscillations under friction with the resonance curve, Duhamel's formula with
 the energy transfer, normal modes, quadratic Hamiltonians with their normal
 form and the Lagrangian of small oscillations, symmetries of the normal modes,
-and the monodromy matrix of parametric resonance. Default elaborator options
-are intentional: these checks must not rely on the implementation's
-transparency settings. Every statement is pinned with its type. -/
+the monodromy matrix of parametric resonance, and the action variable of an
+oscillator with a variable frequency. Default elaborator options are
+intentional: these checks must not rely on the implementation's transparency
+settings. Every statement is pinned with its type. -/
 noncomputable section
 open ProjectAInos.SmoothAlgebra ProjectAInos.SmoothAlgebra.SmoothRing
 open ProjectAInos.SmoothAlgebra.FreeSmoothRing ProjectAInos.SmoothAlgebra.PhaseSpace
@@ -1000,3 +1001,30 @@ example {ω : ℝ} (hω : ω ≠ 0) (T : ℝ) :
   FundamentalSystem.trace_matrix_harmonic hω T
 
 end Parametric
+
+section Adiabatic
+
+open Parametric
+
+example (ω ωinv x : TimeFunction) :
+    action ω ωinv x =
+      algebraMap ℝ TimeFunction (1 / 2) * ωinv *
+        (timeDerivative x * timeDerivative x + ω * ω * (x * x)) :=
+  rfl
+
+example {ω ωinv : TimeFunction} (hω : ω * ωinv = 1) :
+    timeDerivative ωinv = -(timeDerivative ω * (ωinv * ωinv)) :=
+  timeDerivative_inv hω
+
+/-- The exact derivative of the action variable (Landau–Lifshitz §49). -/
+example {ω ωinv x : TimeFunction} (hω : ω * ωinv = 1) (hx : IsHill (ω * ω) x) :
+    timeDerivative (action ω ωinv x) =
+      algebraMap ℝ TimeFunction (1 / 2) * (timeDerivative ω * (ωinv * ωinv)) *
+        (ω * ω * (x * x) - timeDerivative x * timeDerivative x) :=
+  timeDerivative_action hω hx
+
+example {ω ωinv x : TimeFunction} (hω : ω * ωinv = 1) (hx : IsHill (ω * ω) x)
+    (hconst : timeDerivative ω = 0) : timeDerivative (action ω ωinv x) = 0 :=
+  timeDerivative_action_of_const hω hx hconst
+
+end Adiabatic

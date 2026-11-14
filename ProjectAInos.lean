@@ -99,6 +99,7 @@ public import ProjectAInos.Mechanics.Jet.Prolongation
 public import ProjectAInos.Mechanics.Jet.Standard
 public import ProjectAInos.Mechanics.Legendre
 public import ProjectAInos.Mechanics.OpenDomain
+public import ProjectAInos.Mechanics.Oscillations.Adiabatic
 public import ProjectAInos.Mechanics.Oscillations.Damped
 public import ProjectAInos.Mechanics.Oscillations.Dissipation
 public import ProjectAInos.Mechanics.Oscillations.Duhamel
