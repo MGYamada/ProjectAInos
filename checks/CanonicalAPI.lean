@@ -338,14 +338,16 @@ example (m : ℝ) (Ψ g u : ι → FreeSmoothRing ι) :
             positionsToPhase (ι := ι) (u i)) :=
   rfl
 
-/-- Stäckel's theorem in the direction of verification. -/
+/-- Stäckel's theorem in the direction of verification, with separation
+constants `c j`. -/
 example {m : ℝ} {Ψ g u : ι → FreeSmoothRing ι} {Φ : Matrix ι ι (FreeSmoothRing ι)} {j₀ : ι}
     (hΨ : ∀ j, ∑ i, Ψ i * Φ i j = if j = j₀ then 1 else 0) {S : ActionSpace ι}
+    {c : ι → ActionSpace ι}
     (hS : ∀ i, algebraMap ℝ (ActionSpace ι) (1 / (2 * m)) *
         (positionsToAction ι (g i) *
           (partialDerivation (qIndex i) S * partialDerivation (qIndex i) S)) +
-        positionsToAction ι (u i) = ∑ j, positionsToAction ι (Φ i j) * parameter j)
-    (ht : partialDerivation tIndex S = -parameter j₀) :
+        positionsToAction ι (u i) = ∑ j, positionsToAction ι (Φ i j) * c j)
+    (ht : partialDerivation tIndex S = -c j₀) :
     IsHamiltonJacobi (stackelHamiltonian m Ψ g u) S :=
   isHamiltonJacobi_stackel hΨ hS ht
 
@@ -360,14 +362,13 @@ example (m : ℝ) (S : ActionSpace (Fin 3)) (i : Fin 3) :
         (partialDerivation (qIndex i) S * partialDerivation (qIndex i) S) :=
   rfl
 
-/-- Separation of the variables in the form of spherical co-ordinates. -/
-example {m : ℝ} {ρ σ a b c : FreeSmoothRing (Fin 3)} {S : ActionSpace (Fin 3)}
-    (h0 : kinetic m S 0 + positionsToAction (Fin 3) a =
-      parameter (0 : Fin 3) - positionsToAction (Fin 3) ρ * parameter (1 : Fin 3))
-    (h1 : kinetic m S 1 + positionsToAction (Fin 3) b =
-      parameter (1 : Fin 3) - positionsToAction (Fin 3) σ * parameter (2 : Fin 3))
-    (h2 : kinetic m S 2 + positionsToAction (Fin 3) c = parameter (2 : Fin 3))
-    (ht : partialDerivation tIndex S = -parameter (0 : Fin 3)) :
+/-- Separation of the variables in the form of spherical co-ordinates, with
+separation constants `E`, `β`, `γ`. -/
+example {m : ℝ} {ρ σ a b c : FreeSmoothRing (Fin 3)} {S E β γ : ActionSpace (Fin 3)}
+    (h0 : kinetic m S 0 + positionsToAction (Fin 3) a = E - positionsToAction (Fin 3) ρ * β)
+    (h1 : kinetic m S 1 + positionsToAction (Fin 3) b = β - positionsToAction (Fin 3) σ * γ)
+    (h2 : kinetic m S 2 + positionsToAction (Fin 3) c = γ)
+    (ht : partialDerivation tIndex S = -E) :
     IsHamiltonJacobi (nestedHamiltonian m ρ σ a b c) S :=
   isHamiltonJacobi_nested_of_separated h0 h1 h2 ht
 
@@ -377,19 +378,42 @@ example (m : ℝ) (lam g₀ g₁ κ₀ κ₁ u₀ u₁ u₂ : FreeSmoothRing (Fi
   rfl
 
 /-- Separation of the variables in the form of parabolic and elliptic
-co-ordinates. -/
+co-ordinates, with separation constants `E`, `β`, `γ`. -/
 example {m : ℝ} {lam w₀ w₁ g₀ g₁ κ₀ κ₁ u₀ u₁ u₂ : FreeSmoothRing (Fin 3)}
-    (h : lam * (w₀ + w₁) = 1) {S : ActionSpace (Fin 3)}
+    (h : lam * (w₀ + w₁) = 1) {S E β γ : ActionSpace (Fin 3)}
     (h0 : positionsToAction (Fin 3) g₀ * kinetic m S 0 + positionsToAction (Fin 3) u₀ =
-      positionsToAction (Fin 3) w₀ * parameter (0 : Fin 3) + parameter (1 : Fin 3) -
-        positionsToAction (Fin 3) κ₀ * parameter (2 : Fin 3))
+      positionsToAction (Fin 3) w₀ * E + β - positionsToAction (Fin 3) κ₀ * γ)
     (h1 : positionsToAction (Fin 3) g₁ * kinetic m S 1 + positionsToAction (Fin 3) u₁ =
-      positionsToAction (Fin 3) w₁ * parameter (0 : Fin 3) - parameter (1 : Fin 3) -
-        positionsToAction (Fin 3) κ₁ * parameter (2 : Fin 3))
-    (h2 : kinetic m S 2 + positionsToAction (Fin 3) u₂ = parameter (2 : Fin 3))
-    (ht : partialDerivation tIndex S = -parameter (0 : Fin 3)) :
+      positionsToAction (Fin 3) w₁ * E - β - positionsToAction (Fin 3) κ₁ * γ)
+    (h2 : kinetic m S 2 + positionsToAction (Fin 3) u₂ = γ)
+    (ht : partialDerivation tIndex S = -E) :
     IsHamiltonJacobi (liouvilleHamiltonian m lam g₀ g₁ κ₀ κ₁ u₀ u₁ u₂) S :=
   isHamiltonJacobi_liouville_of_separated h h0 h1 h2 ht
+
+example (E : ActionSpace (Fin 3)) :
+    linearAction E =
+      ∑ i, parameter i * FreeSmoothRing.generator (qIndex i) -
+        E * FreeSmoothRing.generator tIndex :=
+  rfl
+
+example (w : Fin 3 → ℝ) :
+    quadraticEnergy w =
+      ∑ i, algebraMap ℝ (ActionSpace (Fin 3)) (w i) * (parameter i * parameter i) :=
+  rfl
+
+/-- The hypotheses can be satisfied: the free particle in three dimensions
+is an instance of the nested form. -/
+example (m : ℝ) :
+    IsHamiltonJacobi (nestedHamiltonian m 1 1 0 0 0)
+      (linearAction (quadraticEnergy fun _ => 1 / (2 * m))) :=
+  isHamiltonJacobi_nested_freeAction m
+
+/-- An instance of the form of Liouville. -/
+example (m : ℝ) :
+    IsHamiltonJacobi
+      (liouvilleHamiltonian m (algebraMap ℝ (FreeSmoothRing (Fin 3)) (1 / 2)) 1 1 0 0 0 0 0)
+      (linearAction (quadraticEnergy ![1 / (4 * m), 1 / (4 * m), 0])) :=
+  isHamiltonJacobi_liouville_freeAction m
 
 end Separation
 

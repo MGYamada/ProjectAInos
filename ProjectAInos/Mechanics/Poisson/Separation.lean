@@ -18,18 +18,25 @@ Landau–Lifshitz §48. A Hamiltonian of Stäckel's form is
 the inverse of a matrix `Φ`: `Σᵢ Ψᵢ Φᵢⱼ = δⱼ,ⱼ₀`. If the derivatives of `S`
 satisfy the separated equations
 
-`gᵢ (∂S/∂qᵢ)²/2m + uᵢ = Σⱼ Φᵢⱼ αⱼ`, `∂S/∂t = −αⱼ₀`,
+`gᵢ (∂S/∂qᵢ)²/2m + uᵢ = Σⱼ Φᵢⱼ cⱼ`, `∂S/∂t = −cⱼ₀`,
 
 then `S` satisfies the Hamilton–Jacobi equation (`isHamiltonJacobi_stackel`).
+The separation constants `cⱼ` are functions of the parameters. They are not
+the parameters themselves: the left side of a separated equation is bounded
+below for a positive mass, and a parameter takes every real value.
 
 Two cases on three co-ordinates cover the separable systems of §48:
 
-* `isHamiltonJacobi_nested`: `H = p₀²/2m + a + ρ (p₁²/2m + b + σ (p₂²/2m + c))`,
-  the form of the Hamiltonian in spherical co-ordinates, with `ρ = 1/r²` and
-  `σ = 1/sin²θ`;
-* `isHamiltonJacobi_liouville`:
+* `isHamiltonJacobi_nested_of_separated`:
+  `H = p₀²/2m + a + ρ (p₁²/2m + b + σ (p₂²/2m + c))`, the form of the
+  Hamiltonian in spherical co-ordinates, with `ρ = 1/r²` and `σ = 1/sin²θ`;
+* `isHamiltonJacobi_liouville_of_separated`:
   `H = λ (g₀ p₀²/2m + u₀ + g₁ p₁²/2m + u₁ + (κ₀ + κ₁)(p₂²/2m + u₂))` with
   `λ (w₀ + w₁) = 1`, the form in parabolic and in elliptic co-ordinates.
+
+`isHamiltonJacobi_nested_freeAction` and
+`isHamiltonJacobi_liouville_freeAction` are instances: free particles, with
+actions of the form `Σ αᵢ qᵢ − E(α) t`.
 -/
 
 @[expose] public section
@@ -104,16 +111,17 @@ theorem sum_positionsToAction_mul_eq_ite {Ψ : ι → FreeSmoothRing ι}
   · rw [SmoothRingHom.map_zero]
 
 /-- Stäckel's theorem, in the direction of verification: an action whose
-derivatives satisfy the separated equations is a solution of the
-Hamilton–Jacobi equation. -/
+derivatives satisfy the separated equations, with separation constants `cⱼ`,
+is a solution of the Hamilton–Jacobi equation. -/
 theorem isHamiltonJacobi_stackel {m : ℝ} {Ψ g u : ι → FreeSmoothRing ι}
     {Φ : Matrix ι ι (FreeSmoothRing ι)} {j₀ : ι}
     (hΨ : ∀ j, ∑ i, Ψ i * Φ i j = if j = j₀ then 1 else 0) {S : ActionSpace ι}
+    {c : ι → ActionSpace ι}
     (hS : ∀ i, algebraMap ℝ (ActionSpace ι) (1 / (2 * m)) *
         (positionsToAction ι (g i) *
           (partialDerivation (qIndex i) S * partialDerivation (qIndex i) S)) +
-        positionsToAction ι (u i) = ∑ j, positionsToAction ι (Φ i j) * parameter j)
-    (ht : partialDerivation tIndex S = -parameter j₀) :
+        positionsToAction ι (u i) = ∑ j, positionsToAction ι (Φ i j) * c j)
+    (ht : partialDerivation tIndex S = -c j₀) :
     IsHamiltonJacobi (stackelHamiltonian m Ψ g u) S := by
   rw [IsHamiltonJacobi, ht, substitution_stackelHamiltonian]
   simp only [hS, Finset.mul_sum]
@@ -132,7 +140,8 @@ def nestedHamiltonian (m : ℝ) (ρ σ a b c : FreeSmoothRing (Fin 3)) : PhaseSp
   stackelHamiltonian m ![1, ρ, ρ * σ] ![1, 1, 1] ![a, b, c]
 
 /-- The matrix of Stäckel for the nested form. -/
-def nestedMatrix (ρ σ : FreeSmoothRing (Fin 3)) : Matrix (Fin 3) (Fin 3) (FreeSmoothRing (Fin 3)) :=
+def nestedMatrix (ρ σ : FreeSmoothRing (Fin 3)) :
+    Matrix (Fin 3) (Fin 3) (FreeSmoothRing (Fin 3)) :=
   !![1, -ρ, 0; 0, 1, -σ; 0, 0, 1]
 
 theorem sum_mul_nestedMatrix (ρ σ : FreeSmoothRing (Fin 3)) (j : Fin 3) :
@@ -147,18 +156,16 @@ theorem sum_mul_nestedMatrix (ρ σ : FreeSmoothRing (Fin 3)) (j : Fin 3) :
   · change 1 * 0 + ρ * -σ + ρ * σ * 1 = 0
     ring
 
-/-- Separation of the variables for the nested form: the equations
-`p₀²/2m + a = E − ρ β`, `p₁²/2m + b = β − σ γ`, `p₂²/2m + c = γ` for the
-derivatives of the action give a solution of the Hamilton–Jacobi equation
-with the energy `E = α₀`. -/
+/-- Separation of the variables for the nested form, with the separated
+equations indexed by the co-ordinate. -/
 theorem isHamiltonJacobi_nested {m : ℝ} {ρ σ a b c : FreeSmoothRing (Fin 3)}
-    {S : ActionSpace (Fin 3)}
+    {S : ActionSpace (Fin 3)} {e : Fin 3 → ActionSpace (Fin 3)}
     (hS : ∀ i, algebraMap ℝ (ActionSpace (Fin 3)) (1 / (2 * m)) *
         (positionsToAction (Fin 3) ((![1, 1, 1] : Fin 3 → FreeSmoothRing (Fin 3)) i) *
           (partialDerivation (qIndex i) S * partialDerivation (qIndex i) S)) +
         positionsToAction (Fin 3) ((![a, b, c] : Fin 3 → FreeSmoothRing (Fin 3)) i) =
-          ∑ j, positionsToAction (Fin 3) (nestedMatrix ρ σ i j) * parameter j)
-    (ht : partialDerivation tIndex S = -parameter (0 : Fin 3)) :
+          ∑ j, positionsToAction (Fin 3) (nestedMatrix ρ σ i j) * e j)
+    (ht : partialDerivation tIndex S = -e 0) :
     IsHamiltonJacobi (nestedHamiltonian m ρ σ a b c) S :=
   isHamiltonJacobi_stackel (sum_mul_nestedMatrix ρ σ) hS ht
 
@@ -168,47 +175,43 @@ def kinetic (m : ℝ) (S : ActionSpace (Fin 3)) (i : Fin 3) : ActionSpace (Fin 3
     (partialDerivation (qIndex i) S * partialDerivation (qIndex i) S)
 
 theorem stackel_row {m : ℝ} {S : ActionSpace (Fin 3)} {i : Fin 3}
-    {gi ui x₀ x₁ x₂ : FreeSmoothRing (Fin 3)} {r : ActionSpace (Fin 3)}
+    {gi ui x₀ x₁ x₂ : FreeSmoothRing (Fin 3)} {r e₀ e₁ e₂ : ActionSpace (Fin 3)}
     (hg : positionsToAction (Fin 3) gi * kinetic m S i + positionsToAction (Fin 3) ui = r)
-    (hr : r = positionsToAction (Fin 3) x₀ * parameter (0 : Fin 3) +
-      positionsToAction (Fin 3) x₁ * parameter (1 : Fin 3) +
-      positionsToAction (Fin 3) x₂ * parameter (2 : Fin 3)) :
+    (hr : r = positionsToAction (Fin 3) x₀ * e₀ + positionsToAction (Fin 3) x₁ * e₁ +
+      positionsToAction (Fin 3) x₂ * e₂) :
     algebraMap ℝ (ActionSpace (Fin 3)) (1 / (2 * m)) *
         (positionsToAction (Fin 3) gi *
           (partialDerivation (qIndex i) S * partialDerivation (qIndex i) S)) +
       positionsToAction (Fin 3) ui =
-        positionsToAction (Fin 3) x₀ * parameter (0 : Fin 3) +
-          positionsToAction (Fin 3) x₁ * parameter (1 : Fin 3) +
-          positionsToAction (Fin 3) x₂ * parameter (2 : Fin 3) := by
+        positionsToAction (Fin 3) x₀ * e₀ + positionsToAction (Fin 3) x₁ * e₁ +
+          positionsToAction (Fin 3) x₂ * e₂ := by
   rw [← hr, ← hg, kinetic]
   ring
 
 /-- Separation of the variables in the nested form, with the three separated
 equations written out: `(∂S/∂q₀)²/2m + a = E − ρ β`,
-`(∂S/∂q₁)²/2m + b = β − σ γ`, `(∂S/∂q₂)²/2m + c = γ`, where
-`(E, β, γ) = (α₀, α₁, α₂)`. -/
+`(∂S/∂q₁)²/2m + b = β − σ γ`, `(∂S/∂q₂)²/2m + c = γ` and `∂S/∂t = −E`, for
+separation constants `E`, `β`, `γ`. -/
 theorem isHamiltonJacobi_nested_of_separated {m : ℝ} {ρ σ a b c : FreeSmoothRing (Fin 3)}
-    {S : ActionSpace (Fin 3)}
-    (h0 : kinetic m S 0 + positionsToAction (Fin 3) a =
-      parameter (0 : Fin 3) - positionsToAction (Fin 3) ρ * parameter (1 : Fin 3))
-    (h1 : kinetic m S 1 + positionsToAction (Fin 3) b =
-      parameter (1 : Fin 3) - positionsToAction (Fin 3) σ * parameter (2 : Fin 3))
-    (h2 : kinetic m S 2 + positionsToAction (Fin 3) c = parameter (2 : Fin 3))
-    (ht : partialDerivation tIndex S = -parameter (0 : Fin 3)) :
+    {S E β γ : ActionSpace (Fin 3)}
+    (h0 : kinetic m S 0 + positionsToAction (Fin 3) a = E - positionsToAction (Fin 3) ρ * β)
+    (h1 : kinetic m S 1 + positionsToAction (Fin 3) b = β - positionsToAction (Fin 3) σ * γ)
+    (h2 : kinetic m S 2 + positionsToAction (Fin 3) c = γ)
+    (ht : partialDerivation tIndex S = -E) :
     IsHamiltonJacobi (nestedHamiltonian m ρ σ a b c) S := by
-  refine isHamiltonJacobi_nested (fun i => ?_) ht
+  refine isHamiltonJacobi_nested (e := ![E, β, γ]) (fun i => ?_) ht
   rw [Fin.sum_univ_three]
   fin_cases i
   · exact stackel_row (gi := 1) (ui := a) (x₀ := 1) (x₁ := -ρ) (x₂ := 0)
-      (r := parameter (0 : Fin 3) - positionsToAction (Fin 3) ρ * parameter (1 : Fin 3))
+      (e₀ := E) (e₁ := β) (e₂ := γ) (r := E - positionsToAction (Fin 3) ρ * β)
       (by rw [SmoothRingHom.map_one, one_mul]; exact h0)
       (by rw [SmoothRingHom.map_one, SmoothRingHom.map_neg, SmoothRingHom.map_zero]; ring)
   · exact stackel_row (gi := 1) (ui := b) (x₀ := 0) (x₁ := 1) (x₂ := -σ)
-      (r := parameter (1 : Fin 3) - positionsToAction (Fin 3) σ * parameter (2 : Fin 3))
+      (e₀ := E) (e₁ := β) (e₂ := γ) (r := β - positionsToAction (Fin 3) σ * γ)
       (by rw [SmoothRingHom.map_one, one_mul]; exact h1)
       (by rw [SmoothRingHom.map_one, SmoothRingHom.map_neg, SmoothRingHom.map_zero]; ring)
   · exact stackel_row (gi := 1) (ui := c) (x₀ := 0) (x₁ := 0) (x₂ := 1)
-      (r := parameter (2 : Fin 3))
+      (e₀ := E) (e₁ := β) (e₂ := γ) (r := γ)
       (by rw [SmoothRingHom.map_one, one_mul]; exact h2)
       (by rw [SmoothRingHom.map_one, SmoothRingHom.map_zero]; ring)
 
@@ -241,46 +244,165 @@ theorem sum_mul_liouvilleMatrix {lam w₀ w₁ : FreeSmoothRing (Fin 3)} (h : la
   · change lam * -κ₀ + lam * -κ₁ + lam * (κ₀ + κ₁) * 1 = 0
     ring
 
-/-- Separation of the variables for the form of Liouville: the equations
-`g₀ p₀²/2m + u₀ = E w₀ + β − κ₀ γ`, `g₁ p₁²/2m + u₁ = E w₁ − β − κ₁ γ`,
-`p₂²/2m + u₂ = γ` for the derivatives of the action give a solution of the
-Hamilton–Jacobi equation with the energy `E = α₀`. -/
-theorem isHamiltonJacobi_liouville {m : ℝ} {lam w₀ w₁ g₀ g₁ κ₀ κ₁ u₀ u₁ u₂ : FreeSmoothRing (Fin 3)}
-    (h : lam * (w₀ + w₁) = 1) {S : ActionSpace (Fin 3)}
+/-- Separation of the variables for the form of Liouville, with the separated
+equations indexed by the co-ordinate. -/
+theorem isHamiltonJacobi_liouville {m : ℝ}
+    {lam w₀ w₁ g₀ g₁ κ₀ κ₁ u₀ u₁ u₂ : FreeSmoothRing (Fin 3)} (h : lam * (w₀ + w₁) = 1)
+    {S : ActionSpace (Fin 3)} {e : Fin 3 → ActionSpace (Fin 3)}
     (hS : ∀ i, algebraMap ℝ (ActionSpace (Fin 3)) (1 / (2 * m)) *
         (positionsToAction (Fin 3) ((![g₀, g₁, 1] : Fin 3 → FreeSmoothRing (Fin 3)) i) *
           (partialDerivation (qIndex i) S * partialDerivation (qIndex i) S)) +
         positionsToAction (Fin 3) ((![u₀, u₁, u₂] : Fin 3 → FreeSmoothRing (Fin 3)) i) =
-          ∑ j, positionsToAction (Fin 3) (liouvilleMatrix w₀ w₁ κ₀ κ₁ i j) * parameter j)
-    (ht : partialDerivation tIndex S = -parameter (0 : Fin 3)) :
+          ∑ j, positionsToAction (Fin 3) (liouvilleMatrix w₀ w₁ κ₀ κ₁ i j) * e j)
+    (ht : partialDerivation tIndex S = -e 0) :
     IsHamiltonJacobi (liouvilleHamiltonian m lam g₀ g₁ κ₀ κ₁ u₀ u₁ u₂) S :=
   isHamiltonJacobi_stackel (sum_mul_liouvilleMatrix h κ₀ κ₁) hS ht
 
 /-- Separation of the variables in the form of Liouville, with the three
-separated equations written out: `g₀ (∂S/∂q₀)²/2m + u₀ = E w₀ + β − κ₀ γ`,
-`g₁ (∂S/∂q₁)²/2m + u₁ = E w₁ − β − κ₁ γ`, `(∂S/∂q₂)²/2m + u₂ = γ`. -/
+separated equations written out: `g₀ (∂S/∂q₀)²/2m + u₀ = w₀ E + β − κ₀ γ`,
+`g₁ (∂S/∂q₁)²/2m + u₁ = w₁ E − β − κ₁ γ`, `(∂S/∂q₂)²/2m + u₂ = γ` and
+`∂S/∂t = −E`, for separation constants `E`, `β`, `γ`. -/
 theorem isHamiltonJacobi_liouville_of_separated {m : ℝ}
     {lam w₀ w₁ g₀ g₁ κ₀ κ₁ u₀ u₁ u₂ : FreeSmoothRing (Fin 3)} (h : lam * (w₀ + w₁) = 1)
-    {S : ActionSpace (Fin 3)}
+    {S E β γ : ActionSpace (Fin 3)}
     (h0 : positionsToAction (Fin 3) g₀ * kinetic m S 0 + positionsToAction (Fin 3) u₀ =
-      positionsToAction (Fin 3) w₀ * parameter (0 : Fin 3) + parameter (1 : Fin 3) -
-        positionsToAction (Fin 3) κ₀ * parameter (2 : Fin 3))
+      positionsToAction (Fin 3) w₀ * E + β - positionsToAction (Fin 3) κ₀ * γ)
     (h1 : positionsToAction (Fin 3) g₁ * kinetic m S 1 + positionsToAction (Fin 3) u₁ =
-      positionsToAction (Fin 3) w₁ * parameter (0 : Fin 3) - parameter (1 : Fin 3) -
-        positionsToAction (Fin 3) κ₁ * parameter (2 : Fin 3))
-    (h2 : kinetic m S 2 + positionsToAction (Fin 3) u₂ = parameter (2 : Fin 3))
-    (ht : partialDerivation tIndex S = -parameter (0 : Fin 3)) :
+      positionsToAction (Fin 3) w₁ * E - β - positionsToAction (Fin 3) κ₁ * γ)
+    (h2 : kinetic m S 2 + positionsToAction (Fin 3) u₂ = γ)
+    (ht : partialDerivation tIndex S = -E) :
     IsHamiltonJacobi (liouvilleHamiltonian m lam g₀ g₁ κ₀ κ₁ u₀ u₁ u₂) S := by
-  refine isHamiltonJacobi_liouville h (fun i => ?_) ht
+  refine isHamiltonJacobi_liouville (e := ![E, β, γ]) h (fun i => ?_) ht
   rw [Fin.sum_univ_three]
   fin_cases i
-  · exact stackel_row (gi := g₀) (ui := u₀) (x₀ := w₀) (x₁ := 1) (x₂ := -κ₀) h0
+  · exact stackel_row (gi := g₀) (ui := u₀) (x₀ := w₀) (x₁ := 1) (x₂ := -κ₀)
+      (e₀ := E) (e₁ := β) (e₂ := γ) h0
       (by rw [SmoothRingHom.map_one, SmoothRingHom.map_neg]; ring)
-  · exact stackel_row (gi := g₁) (ui := u₁) (x₀ := w₁) (x₁ := -1) (x₂ := -κ₁) h1
+  · exact stackel_row (gi := g₁) (ui := u₁) (x₀ := w₁) (x₁ := -1) (x₂ := -κ₁)
+      (e₀ := E) (e₁ := β) (e₂ := γ) h1
       (by rw [SmoothRingHom.map_neg, SmoothRingHom.map_neg, SmoothRingHom.map_one]; ring)
   · exact stackel_row (gi := 1) (ui := u₂) (x₀ := 0) (x₁ := 0) (x₂ := 1)
-      (r := parameter (2 : Fin 3))
+      (e₀ := E) (e₁ := β) (e₂ := γ) (r := γ)
       (by rw [SmoothRingHom.map_one, one_mul]; exact h2)
       (by rw [SmoothRingHom.map_one, SmoothRingHom.map_zero]; ring)
+
+/-! ### Instances: free particles in three dimensions -/
+
+/-- The action `Σ αᵢ qᵢ − E t`, for an energy `E` that is a function of the
+parameters. -/
+def linearAction (E : ActionSpace (Fin 3)) : ActionSpace (Fin 3) :=
+  ∑ i, parameter i * generator (qIndex i) - E * generator tIndex
+
+theorem partialDerivation_parameter_of_ne {x : Fin 3 ⊕ Fin 3 ⊕ Unit} (i : Fin 3)
+    (hx : αIndex i ≠ x) : partialDerivation x (parameter i) = 0 :=
+  partialDerivation_generator_of_ne hx
+
+/-- A polynomial of degree two in the parameters with constant coefficients
+does not depend on a variable that is not a parameter. -/
+theorem partialDerivation_sum_parameter_sq_of_ne (w : Fin 3 → ℝ) {x : Fin 3 ⊕ Fin 3 ⊕ Unit}
+    (hx : ∀ i : Fin 3, αIndex i ≠ x) :
+    partialDerivation x
+      (∑ i, algebraMap ℝ (ActionSpace (Fin 3)) (w i) * (parameter i * parameter i)) = 0 := by
+  rw [map_sum]
+  refine Finset.sum_eq_zero fun i _ => ?_
+  rw [SmoothDerivation.map_algebraMap_mul, SmoothDerivation.map_mul,
+    partialDerivation_parameter_of_ne i (hx i), smul_zero, add_zero, smul_zero]
+
+theorem partialDerivation_q_linearAction {E : ActionSpace (Fin 3)}
+    (hE : ∀ k : Fin 3, partialDerivation (qIndex k) E = 0) (k : Fin 3) :
+    partialDerivation (qIndex k) (linearAction E) = parameter k := by
+  have hterm (i : Fin 3) : partialDerivation (qIndex k) (parameter i * generator (qIndex i)) =
+      if i = k then parameter i else 0 := by
+    rw [SmoothDerivation.map_mul, partialDerivation_parameter_of_ne i (by simp),
+      partialDerivation_generator]
+    simp only [Sum.inl.injEq, add_zero, smul_eq_mul, mul_ite, mul_one, mul_zero]
+  rw [linearAction, map_sub, map_sum, SmoothDerivation.map_mul, hE k,
+    partialDerivation_generator_of_ne (by simp), smul_zero, smul_zero, add_zero, sub_zero]
+  simp only [hterm, Finset.sum_ite_eq', Finset.mem_univ, ↓reduceIte]
+
+theorem partialDerivation_t_linearAction {E : ActionSpace (Fin 3)}
+    (hE : partialDerivation tIndex E = 0) :
+    partialDerivation tIndex (linearAction E) = -E := by
+  have hterm (i : Fin 3) : partialDerivation tIndex (parameter i * generator (qIndex i)) = 0 := by
+    rw [SmoothDerivation.map_mul, partialDerivation_parameter_of_ne i (by simp),
+      partialDerivation_generator_of_ne (by simp), smul_zero, smul_zero, add_zero]
+  rw [linearAction, map_sub, map_sum, Finset.sum_eq_zero fun i _ => hterm i,
+    SmoothDerivation.map_mul, hE, partialDerivation_generator_self, smul_zero, add_zero,
+    smul_eq_mul, mul_one, zero_sub]
+
+/-- The energy `Σ wᵢ αᵢ²` as a function of the parameters. -/
+def quadraticEnergy (w : Fin 3 → ℝ) : ActionSpace (Fin 3) :=
+  ∑ i, algebraMap ℝ (ActionSpace (Fin 3)) (w i) * (parameter i * parameter i)
+
+/-- The derivatives of the action `Σ αᵢ qᵢ − (Σ wᵢ αᵢ²) t`. -/
+theorem partialDerivation_q_linearAction_quadraticEnergy (w : Fin 3 → ℝ) (k : Fin 3) :
+    partialDerivation (qIndex k) (linearAction (quadraticEnergy w)) = parameter k :=
+  partialDerivation_q_linearAction
+    (fun k => partialDerivation_sum_parameter_sq_of_ne w (by simp)) k
+
+theorem partialDerivation_t_linearAction_quadraticEnergy (w : Fin 3 → ℝ) :
+    partialDerivation tIndex (linearAction (quadraticEnergy w)) = -quadraticEnergy w :=
+  partialDerivation_t_linearAction (partialDerivation_sum_parameter_sq_of_ne w (by simp))
+
+/-- The free particle in three dimensions is an instance of the nested form:
+the action `Σ αᵢ qᵢ − (Σ αᵢ²/2m) t` satisfies the separated equations with
+the separation constants `E = Σ αᵢ²/2m`, `β = (α₁² + α₂²)/2m`, `γ = α₂²/2m`,
+and so the Hamilton–Jacobi equation of `(p₀² + p₁² + p₂²)/2m`. -/
+theorem isHamiltonJacobi_nested_freeAction (m : ℝ) :
+    IsHamiltonJacobi (nestedHamiltonian m 1 1 0 0 0)
+      (linearAction (quadraticEnergy fun _ => 1 / (2 * m))) := by
+  refine isHamiltonJacobi_nested_of_separated (E := quadraticEnergy fun _ => 1 / (2 * m))
+    (β := algebraMap ℝ (ActionSpace (Fin 3)) (1 / (2 * m)) *
+      (parameter (1 : Fin 3) * parameter (1 : Fin 3) +
+        parameter (2 : Fin 3) * parameter (2 : Fin 3)))
+    (γ := algebraMap ℝ (ActionSpace (Fin 3)) (1 / (2 * m)) *
+      (parameter (2 : Fin 3) * parameter (2 : Fin 3))) ?_ ?_ ?_
+    (partialDerivation_t_linearAction_quadraticEnergy _)
+  · rw [kinetic, partialDerivation_q_linearAction_quadraticEnergy, SmoothRingHom.map_zero,
+      SmoothRingHom.map_one, quadraticEnergy, Fin.sum_univ_three]
+    ring
+  · rw [kinetic, partialDerivation_q_linearAction_quadraticEnergy, SmoothRingHom.map_zero,
+      SmoothRingHom.map_one]
+    ring
+  · rw [kinetic, partialDerivation_q_linearAction_quadraticEnergy, SmoothRingHom.map_zero,
+      add_zero]
+
+/-- An instance of the form of Liouville: for `H = ½ (p₀²/2m + p₁²/2m)`, the
+action `Σ αᵢ qᵢ − ((α₀² + α₁²)/4m) t` satisfies the separated equations with
+the separation constants `E = (α₀² + α₁²)/4m`, `β = (α₀² − α₁²)/4m` and
+`γ = α₂²/2m`. -/
+theorem isHamiltonJacobi_liouville_freeAction (m : ℝ) :
+    IsHamiltonJacobi
+      (liouvilleHamiltonian m (algebraMap ℝ (FreeSmoothRing (Fin 3)) (1 / 2)) 1 1 0 0 0 0 0)
+      (linearAction (quadraticEnergy ![1 / (4 * m), 1 / (4 * m), 0])) := by
+  have hlam : algebraMap ℝ (FreeSmoothRing (Fin 3)) (1 / 2) * (1 + 1) = 1 := by
+    have h := JetRing.algebraMap_half_mul_two (J := FreeSmoothRing (Fin 3)) 1
+    rw [map_one] at h
+    linear_combination h
+  have hc : algebraMap ℝ (ActionSpace (Fin 3)) (1 / (4 * m)) * 2 =
+      algebraMap ℝ (ActionSpace (Fin 3)) (1 / (2 * m)) := by
+    rw [← map_ofNat (algebraMap ℝ (ActionSpace (Fin 3))) 2, ← map_mul]
+    congr 1
+    ring
+  refine isHamiltonJacobi_liouville_of_separated (w₀ := 1) (w₁ := 1) hlam
+    (E := quadraticEnergy ![1 / (4 * m), 1 / (4 * m), 0])
+    (β := algebraMap ℝ (ActionSpace (Fin 3)) (1 / (4 * m)) *
+      (parameter (0 : Fin 3) * parameter (0 : Fin 3) -
+        parameter (1 : Fin 3) * parameter (1 : Fin 3)))
+    (γ := algebraMap ℝ (ActionSpace (Fin 3)) (1 / (2 * m)) *
+      (parameter (2 : Fin 3) * parameter (2 : Fin 3))) ?_ ?_ ?_
+    (partialDerivation_t_linearAction_quadraticEnergy _)
+  · rw [kinetic, partialDerivation_q_linearAction_quadraticEnergy, SmoothRingHom.map_zero,
+      SmoothRingHom.map_one, quadraticEnergy, Fin.sum_univ_three]
+    simp only [Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.cons_val_two, Matrix.tail_cons,
+      Matrix.head_cons, map_zero, zero_mul, add_zero]
+    linear_combination (-(parameter (0 : Fin 3) * parameter (0 : Fin 3))) * hc
+  · rw [kinetic, partialDerivation_q_linearAction_quadraticEnergy, SmoothRingHom.map_zero,
+      SmoothRingHom.map_one, quadraticEnergy, Fin.sum_univ_three]
+    simp only [Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.cons_val_two, Matrix.tail_cons,
+      Matrix.head_cons, map_zero, zero_mul, add_zero]
+    linear_combination (-(parameter (1 : Fin 3) * parameter (1 : Fin 3))) * hc
+  · rw [kinetic, partialDerivation_q_linearAction_quadraticEnergy, SmoothRingHom.map_zero,
+      add_zero]
 
 end ProjectAInos.Mechanics.CompleteIntegral
