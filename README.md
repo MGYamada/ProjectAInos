@@ -230,7 +230,10 @@ and the transformation given by a free generating function `F(q, Q)` is
 canonical. Hadamard's lemma is proved, so quotients of C∞-rings by ideals and
 the reduced Poisson rings `N(I)/I` exist; the reduced mass is proved as the
 reduction of two particles by translations, and the Routhian with its
-equations of motion and cyclic co-ordinates is proved. Symplectic forms and
+equations of motion and cyclic co-ordinates is proved. Motion in a central
+field is proved in polar co-ordinates: the radial Hamiltonian with the
+centrifugal energy, and the time and the angle as integrals over the radius
+between two points without a turning point. Symplectic forms and
 Dirac brackets are not implemented. Galilean symmetry as a group action and the topics of 2.1 and
 2.4 have no Lean counterpart yet. The
 [ledger](docs/cinfty-mechanics.md#ledger) gives the status of each section of
