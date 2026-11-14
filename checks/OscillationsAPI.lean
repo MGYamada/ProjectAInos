@@ -8,10 +8,10 @@ import ProjectAInos
 /-! Public consumers of the oscillation API: the general solution of
 `ẍ + ω² x = 0`, amplitude and phase, the energy and the period, the oscillator
 as a Lagrangian and as a Hamiltonian system with its flow, the linearization
-at an equilibrium, damped oscillations, and the dissipative function. Default
-elaborator options are intentional: these checks must not rely on the
-implementation's transparency settings. Every statement is pinned with its
-type. -/
+at an equilibrium, damped oscillations, the dissipative function, and forced
+oscillations under friction with the resonance curve. Default elaborator
+options are intentional: these checks must not rely on the implementation's
+transparency settings. Every statement is pinned with its type. -/
 noncomputable section
 open ProjectAInos.SmoothAlgebra ProjectAInos.SmoothAlgebra.SmoothRing
 open ProjectAInos.SmoothAlgebra.FreeSmoothRing ProjectAInos.SmoothAlgebra.PhaseSpace
@@ -365,3 +365,130 @@ example {m a γ ω₀ : ι → ℝ} {k : ℝ} (hm : ∀ i, m i ≠ 0) (hk : ∀ 
   Oscillator.isIntegralCurve_dissipativeField_iff_isDamped hm hk ha c
 
 end Dissipation
+
+section Forced
+
+open Filter Topology
+
+example (γ ω₀ : ℝ) (g x : TimeFunction) :
+    IsForced γ ω₀ g x ↔
+      timeDerivative (timeDerivative x) =
+        g - algebraMap ℝ TimeFunction (2 * γ) * timeDerivative x -
+          algebraMap ℝ TimeFunction (ω₀ ^ 2) * x :=
+  Iff.rfl
+
+example {γ ω₀ : ℝ} {x : TimeFunction} : IsForced γ ω₀ 0 x ↔ IsDamped γ ω₀ x := isForced_zero_iff
+
+/-- Superposition. -/
+example {γ ω₀ : ℝ} {g g' x y : TimeFunction} (hx : IsForced γ ω₀ g x)
+    (hy : IsForced γ ω₀ g' y) : IsForced γ ω₀ (g + g') (x + y) :=
+  hx.add hy
+
+example {γ ω₀ : ℝ} {g x y : TimeFunction} (hx : IsForced γ ω₀ g x) (hy : IsForced γ ω₀ g y) :
+    IsDamped γ ω₀ (x - y) :=
+  hx.sub hy
+
+example {γ ω₀ : ℝ} {g x y : TimeFunction} (hx : IsForced γ ω₀ g x) (hy : IsForced γ ω₀ g y)
+    (h0 : x (fun _ => 0) = y fun _ => 0)
+    (h1 : timeDerivative x (fun _ => 0) = timeDerivative y fun _ => 0) : x = y :=
+  hx.eq_of_initial hy h0 h1
+
+/-- Every solution of the damped equation tends to zero. -/
+example {γ ω₀ : ℝ} {x : TimeFunction} (h : IsDamped γ ω₀ x) (hγ : 0 < γ) (hω₀ : ω₀ ≠ 0) :
+    Tendsto (fun t : ℝ => x fun _ => t) atTop (𝓝 0) :=
+  h.tendsto_zero hγ hω₀
+
+/-- The motion forgets its initial conditions. -/
+example {γ ω₀ : ℝ} {g x y : TimeFunction} (hx : IsForced γ ω₀ g x) (hy : IsForced γ ω₀ g y)
+    (hγ : 0 < γ) (hω₀ : ω₀ ≠ 0) :
+    Tendsto (fun t : ℝ => x (fun _ => t) - y fun _ => t) atTop (𝓝 0) :=
+  hx.tendsto_sub hy hγ hω₀
+
+example (γ ω₀ Ω : ℝ) :
+    responseDenominator γ ω₀ Ω = (ω₀ ^ 2 - Ω ^ 2) ^ 2 + 4 * γ ^ 2 * Ω ^ 2 := rfl
+
+example (γ ω₀ F Ω : ℝ) :
+    steadyState γ ω₀ F Ω =
+      algebraMap ℝ TimeFunction (F * (ω₀ ^ 2 - Ω ^ 2) / responseDenominator γ ω₀ Ω) *
+          TimeFunction.cosMul Ω +
+        algebraMap ℝ TimeFunction (F * (2 * γ * Ω) / responseDenominator γ ω₀ Ω) *
+          TimeFunction.sinMul Ω := rfl
+
+/-- The steady state solves the equation with the force `F cos Ωt`. -/
+example {γ ω₀ Ω : ℝ} (hD : responseDenominator γ ω₀ Ω ≠ 0) (F : ℝ) :
+    IsForced γ ω₀ (algebraMap ℝ TimeFunction F * TimeFunction.cosMul Ω) (steadyState γ ω₀ F Ω) :=
+  isForced_steadyState hD F
+
+example (γ ω₀ F Ω : ℝ) :
+    steadyAmplitude γ ω₀ F Ω = |F| / Real.sqrt (responseDenominator γ ω₀ Ω) := rfl
+
+/-- Amplitude and phase of the steady state (Landau–Lifshitz (26.3), (26.4)). -/
+example {γ ω₀ Ω : ℝ} (hD : responseDenominator γ ω₀ Ω ≠ 0) (F t : ℝ) :
+    steadyState γ ω₀ F Ω (fun _ => t) =
+      steadyAmplitude γ ω₀ F Ω * Real.cos (Ω * t + steadyPhase γ ω₀ F Ω) :=
+  steadyState_apply hD F t
+
+example {γ ω₀ Ω : ℝ} (hD : responseDenominator γ ω₀ Ω ≠ 0) (F : ℝ) :
+    steadyAmplitude γ ω₀ F Ω * Real.cos (steadyPhase γ ω₀ F Ω) =
+      F * (ω₀ ^ 2 - Ω ^ 2) / responseDenominator γ ω₀ Ω :=
+  steadyAmplitude_mul_cos_steadyPhase hD F
+
+example {γ ω₀ Ω : ℝ} (hD : responseDenominator γ ω₀ Ω ≠ 0) (F : ℝ) :
+    steadyAmplitude γ ω₀ F Ω * Real.sin (steadyPhase γ ω₀ F Ω) =
+      -(F * (2 * γ * Ω) / responseDenominator γ ω₀ Ω) :=
+  steadyAmplitude_mul_sin_steadyPhase hD F
+
+/-- The oscillation lags behind the force. -/
+example {γ ω₀ F Ω : ℝ} (hD : responseDenominator γ ω₀ Ω ≠ 0) (hF : 0 < F) (hγ : 0 ≤ γ)
+    (hΩ : 0 ≤ Ω) : Real.sin (steadyPhase γ ω₀ F Ω) ≤ 0 :=
+  sin_steadyPhase_nonpos hD hF hγ hΩ
+
+/-- The response is linear in the force. -/
+example (γ ω₀ c F Ω : ℝ) :
+    steadyState γ ω₀ (c * F) Ω = algebraMap ℝ TimeFunction c * steadyState γ ω₀ F Ω :=
+  steadyState_const_mul γ ω₀ c F Ω
+
+/-- Every solution approaches the steady state. -/
+example {γ ω₀ F Ω : ℝ} {x : TimeFunction}
+    (hx : IsForced γ ω₀ (algebraMap ℝ TimeFunction F * TimeFunction.cosMul Ω) x) (hγ : 0 < γ)
+    (hω₀ : ω₀ ≠ 0) :
+    Tendsto (fun t : ℝ => x (fun _ => t) -
+      steadyAmplitude γ ω₀ F Ω * Real.cos (Ω * t + steadyPhase γ ω₀ F Ω)) atTop (𝓝 0) :=
+  hx.tendsto_sub_steadyState hγ hω₀
+
+/-- The amplitude is largest at `Ω² = ω₀² − 2γ²`. -/
+example {γ ω₀ ω : ℝ} (hγ : 0 < γ) (hω : 0 < ω) (hω2 : ω ^ 2 = ω₀ ^ 2 - γ ^ 2) (F Ω : ℝ) :
+    steadyAmplitude γ ω₀ F Ω ≤ |F| / (2 * γ * ω) :=
+  steadyAmplitude_le hγ hω hω2 F Ω
+
+example {γ ω₀ ω Ω : ℝ} (hγ : 0 < γ) (hω : 0 < ω) (hω2 : ω ^ 2 = ω₀ ^ 2 - γ ^ 2)
+    (hΩ : Ω ^ 2 = ω₀ ^ 2 - 2 * γ ^ 2) (F : ℝ) :
+    steadyAmplitude γ ω₀ F Ω = |F| / (2 * γ * ω) :=
+  steadyAmplitude_eq_max hγ hω hω2 hΩ F
+
+example (m γ ω₀ F Ω : ℝ) :
+    absorption m γ ω₀ F Ω = m * γ * steadyAmplitude γ ω₀ F Ω ^ 2 * Ω ^ 2 := rfl
+
+/-- The absorption is the mean dissipated power (Landau–Lifshitz (26.8)). -/
+example {γ ω₀ Ω : ℝ} (hD : responseDenominator γ ω₀ Ω ≠ 0) (hΩ : Ω ≠ 0) (m F : ℝ) :
+    Ω / (2 * Real.pi) * ∫ t in (0 : ℝ)..(2 * Real.pi / Ω),
+        2 * m * γ * timeDerivative (steadyState γ ω₀ F Ω) (fun _ => t) ^ 2 =
+      absorption m γ ω₀ F Ω :=
+  mean_dissipation_steadyState hD hΩ m F
+
+/-- The absorption is largest at resonance. -/
+example {m γ ω₀ : ℝ} (hm : 0 ≤ m) (hγ : 0 < γ) (hω₀ : ω₀ ≠ 0) (F Ω : ℝ) :
+    absorption m γ ω₀ F Ω ≤ m * F ^ 2 / (4 * γ) :=
+  absorption_le hm hγ hω₀ F Ω
+
+example {γ ω₀ : ℝ} (hγ : γ ≠ 0) (hω₀ : ω₀ ≠ 0) (m F : ℝ) :
+    absorption m γ ω₀ F ω₀ = m * F ^ 2 / (4 * γ) :=
+  absorption_resonance hγ hω₀ m F
+
+/-- The width of the resonance curve is `2γ`. -/
+example {m γ ω₀ F Ω : ℝ} (hm : m ≠ 0) (hF : F ≠ 0) (hγ : 0 < γ) (hΩ : 0 < Ω) :
+    absorption m γ ω₀ F Ω = m * F ^ 2 / (8 * γ) ↔
+      Ω = Real.sqrt (ω₀ ^ 2 + γ ^ 2) + γ ∨ Ω = Real.sqrt (ω₀ ^ 2 + γ ^ 2) - γ :=
+  absorption_eq_half_max_iff hm hF hγ hΩ
+
+end Forced

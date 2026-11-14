@@ -367,8 +367,8 @@ above are the angular velocities of the actual motion
 
 ## Small oscillations
 
-`Mechanics/Oscillations` covers Landau–Lifshitz §21, and §25 in the next
-section.
+`Mechanics/Oscillations` covers Landau–Lifshitz §21, and §§25 and 26 in the
+next two sections.
 
 `Oscillations/Harmonic` treats the equation `ẍ + ω² x = 0` for a smooth
 function of time. `IsHarmonic ω x` is the equation `ẍ = −ω² x` in the ring
@@ -494,6 +494,57 @@ The vector field `X` is not Hamiltonian. That it does not preserve the bracket
 and that the phase volume contracts are not proved. No theorem asserts that an
 integral curve exists for a general Hamiltonian.
 
+## Forced oscillations under friction
+
+`Oscillations/Forced` treats the equation `ẍ + 2γ ẋ + ω₀² x = g` of
+Landau–Lifshitz §26. `IsForced γ ω₀ g x` is the equation
+`ẍ = g − 2γ ẋ − ω₀² x` in the ring `TimeFunction`, with `g` the force divided
+by the mass. The frequency of the force is written `Ω`; Landau–Lifshitz write
+`γ` for it and `λ` for the damping coefficient.
+
+- `IsForced.add`, `IsForced.const_mul`: superposition. `IsForced.sub`: two
+  solutions for the same force differ by a solution of the damped equation.
+  `IsForced.eq_of_initial`: a solution is determined by `x(0)` and `ẋ(0)`.
+- `IsDamped.tendsto_zero`: for `γ > 0` and `ω₀ ≠ 0` every solution of the
+  damped equation tends to zero as `t → ∞`, in each of the three cases. So two
+  solutions for the same force approach each other (`IsForced.tendsto_sub`).
+- `IsForced.timeDerivative_energy`:
+  `d/dt (ẋ² + ω₀² x²) = 2 ẋ g − 4γ ẋ²`.
+
+For the force `F cos Ωt`, with `D = (ω₀² − Ω²)² + 4γ² Ω²`
+(`responseDenominator`):
+
+- `steadyState γ ω₀ F Ω` is
+  `(F (ω₀² − Ω²)/D) cos Ωt + (2 F γ Ω/D) sin Ωt`, and it is a solution when
+  `D ≠ 0` (`isForced_steadyState`). It is linear in `F`
+  (`steadyState_const_mul`).
+- `steadyState_apply`: the steady state is `b cos (Ωt + δ)` with
+  `b = |F| / √D` (`steadyAmplitude`). The phase satisfies
+  `b cos δ = F (ω₀² − Ω²)/D` and `b sin δ = −2 F γ Ω/D`, so `sin δ ≤ 0` for
+  positive `F` and non-negative `γ`, `Ω` (`sin_steadyPhase_nonpos`).
+- `IsForced.apply_eq_transient_add_steadyState`: for weak damping,
+  `x = a e^{−γt} cos (ωt + α) + b cos (Ωt + δ)`.
+  `IsForced.tendsto_sub_steadyState`: for `γ > 0` and `ω₀ ≠ 0` every solution
+  approaches the steady state.
+- `steadyAmplitude_le`, `steadyAmplitude_eq_max`: with `ω² = ω₀² − γ²`, the
+  amplitude is at most `|F|/(2γω)`, and it has this value at
+  `Ω² = ω₀² − 2γ²`.
+- `absorption m γ ω₀ F Ω` is `m γ b² Ω²`. It is the mean over a period of
+  twice the dissipative function `m γ ẋ²` in the steady state
+  (`mean_dissipation_steadyState`, an interval integral), because
+  `2 m γ ẋ² = I (1 − cos 2(Ωt + δ))` (`two_mul_dissipation_steadyState`).
+- `absorption_le`, `absorption_resonance`: the absorption is at most
+  `m F²/4γ`, and it has this value at `Ω = ω₀`.
+- `absorption_eq_half_max_iff`: for positive `γ` and `Ω`, the absorption is
+  `m F²/8γ` exactly at `Ω = √(ω₀² + γ²) + γ` and `Ω = √(ω₀² + γ²) − γ`. These
+  two frequencies differ by `2γ`.
+
+The resonance curve here is the exact function
+`m γ F² Ω² / ((ω₀² − Ω²)² + 4γ² Ω²)`. The approximation of Landau–Lifshitz near
+resonance for small damping, a Lorentzian in `Ω − ω₀`, is an asymptotic
+statement and is not proved. A force with a phase, `F cos (Ωt + β)`, and a
+general force are not treated.
+
 ## Proof map
 
 | Module | Main declarations |
@@ -535,6 +586,7 @@ integral curve exists for a general Hamiltonian.
 | [Oscillations/Linearization](../ProjectAInos/Mechanics/Oscillations/Linearization.lean) | `lift_curve_apply`, `lift_const_curve`, `isTrajectory_const_iff`, `isTrajectory_canonical_const_iff`, `displacement`, `hessian`, `hessian_symm`, `linearization`, `quadraticPart`, `partialDerivation_quadraticPart`, `canonical_bracket_quadraticPart`, `linearization_quadraticPart`, `isTrajectory_quadraticPart_iff`, `naturalHamiltonian`, `restPoint`, `isTrajectory_restPoint_iff`, `isHarmonic_of_isTrajectory_quadraticPart`, `isHarmonic_sqrt_of_isTrajectory_quadraticPart`, `pendulumHamiltonian`, `isHarmonic_pendulum` |
 | [Oscillations/Damped](../ProjectAInos/Mechanics/Oscillations/Damped.lean) | `TimeFunction.expMul`, `TimeFunction.time`, `TimeFunction.eq_add_mul_time`, `TimeFunction.antitone_of_timeDerivative_nonpos`, `IsDamped`, `isDamped_zero_iff`, `isDamped_iff_expMul_mul`, `isDamped_iff_isHarmonic`, `IsDamped.apply_eq_underdamped`, `IsDamped.apply_eq_amplitude_mul_exp_mul_cos`, `IsDamped.abs_apply_le`, `IsDamped.apply_eq_critical`, `IsDamped.apply_eq_overdamped`, `IsDamped.eq_of_initial`, `IsDamped.timeDerivative_energy`, `IsDamped.energy_antitone`, `isDamped_expMul`, `isDamped_time_mul_expMul`, `IsHarmonic.isDamped_expMul_neg_mul` |
 | [Oscillations/Dissipation](../ProjectAInos/Mechanics/Oscillations/Dissipation.lean) | `IsIntegralCurve`, `isIntegralCurve_hamiltonian_iff`, `IsIntegralCurve.timeDerivative_lift`, `velocity`, `frictionalForce`, `dissipativeFunction`, `dissipativeField`, `dissipativeField_q`, `dissipativeField_p`, `dissipativeField_self`, `lift_dissipativeFunction_nonneg`, `IsIntegralCurve.timeDerivative_energy`, `IsIntegralCurve.energy_antitone`, `Oscillator.isIntegralCurve_dissipativeField_iff`, `Oscillator.isIntegralCurve_dissipativeField_iff_isDamped`, `Oscillator.energy_antitone` |
+| [Oscillations/Forced](../ProjectAInos/Mechanics/Oscillations/Forced.lean) | `IsForced`, `isForced_zero_iff`, `IsForced.add`, `IsForced.sub`, `IsForced.eq_of_initial`, `IsForced.timeDerivative_energy`, `IsDamped.tendsto_zero`, `IsForced.tendsto_sub`, `responseDenominator`, `steadyState`, `isForced_steadyState`, `steadyState_const_mul`, `steadyAmplitude`, `steadyPhase`, `steadyState_apply`, `sin_steadyPhase_nonpos`, `IsForced.apply_eq_transient_add_steadyState`, `IsForced.tendsto_sub_steadyState`, `steadyAmplitude_le`, `steadyAmplitude_eq_max`, `absorption`, `two_mul_dissipation_steadyState`, `mean_dissipation_steadyState`, `absorption_le`, `absorption_resonance`, `absorption_eq_half_max_iff` |
 | [Examples](../ProjectAInos/Mechanics/Examples.lean) | Newton equation, stationary uniform free motion, rejection of accelerated free motion, endpoint-vanishing polynomial variation and its endpoint derivative, zero-length interval and zero-coordinate system |
 
 For `L = m v²/2 − V(q)`, `stationary_natural_iff` proves `m q'' = −V'(q)` on `(a,b)`. This algebraic equation remains valid at `m = 0`; dividing by the mass would require a separate nonzero premise.

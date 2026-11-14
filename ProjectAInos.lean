@@ -96,6 +96,7 @@ public import ProjectAInos.Mechanics.Jet.Standard
 public import ProjectAInos.Mechanics.OpenDomain
 public import ProjectAInos.Mechanics.Oscillations.Damped
 public import ProjectAInos.Mechanics.Oscillations.Dissipation
+public import ProjectAInos.Mechanics.Oscillations.Forced
 public import ProjectAInos.Mechanics.Oscillations.Harmonic
 public import ProjectAInos.Mechanics.Oscillations.Linearization
 public import ProjectAInos.Mechanics.Oscillations.Oscillator
