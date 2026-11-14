@@ -146,3 +146,69 @@ example (i j k : Fin n) :
   SmoothDerivation.lie_partialDerivation_proj_smul i j k
 
 end Free
+
+section Points
+
+open FreeSmoothRing
+
+variable {ι K : Type*}
+
+example (A : Type*) [CommRing A] [Algebra ℝ A] [SmoothRing A] :
+    Point A = SmoothRingHom A ℝ := rfl
+
+example (A : Type*) [CommRing A] [Algebra ℝ A] [SmoothRing A] :
+    TangentPoint A = SmoothRingHom A (DualNumber ℝ) := rfl
+
+/-- The tangent vectors of the free ring are the states `(a, v)`. -/
+example : TangentPoint (FreeSmoothRing ι) ≃ (ι → ℝ) × (ι → ℝ) := tangentPointEquiv
+
+example (a v : ι → ℝ) (s : FreeSmoothRing ι) :
+    (tangentPoint a v s).fst = FreeSmoothRing.lift a s :=
+  fst_tangentPoint a v s
+
+/-- `s(a + εv) = s(a) + ε Σᵢ (∂ᵢ s)(a) vᵢ`. -/
+example [Fintype ι] [DecidableEq ι] (a v : ι → ℝ) (s : FreeSmoothRing ι) :
+    (tangentPoint a v s).snd = ∑ i, FreeSmoothRing.lift a (partialDerivation i s) * v i :=
+  snd_tangentPoint a v s
+
+/-- A change of co-ordinates acts on states by the Jacobian. -/
+example [Fintype ι] [DecidableEq ι] (y : ι → FreeSmoothRing ι) (a v : ι → ℝ) :
+    TangentPoint.map (FreeSmoothRing.lift y) (tangentPoint a v) =
+      tangentPoint (fun i => FreeSmoothRing.lift a (y i))
+        fun i => ∑ j, FreeSmoothRing.lift a (partialDerivation j (y i)) * v j :=
+  tangentPoint_map_lift y a v
+
+/-- An isomorphism of C-infinity rings induces a bijection of the tangent vectors. -/
+example {A B : Type*} [CommRing A] [Algebra ℝ A] [SmoothRing A] [CommRing B] [Algebra ℝ B]
+    [SmoothRing B] (f : SmoothRingHom A B) (g : SmoothRingHom B A)
+    (hfg : f.comp g = SmoothRingHom.id B) (hgf : g.comp f = SmoothRingHom.id A) :
+    TangentPoint B ≃ TangentPoint A :=
+  TangentPoint.congr f g hfg hgf
+
+/-- Morphisms out of a quotient by relations. -/
+example {A B : Type*} [CommRing A] [Algebra ℝ A] [SmoothRing A] [CommRing B] [Algebra ℝ B]
+    [SmoothRing B] (r : A → A → Prop) :
+    SmoothRingHom (SmoothRingCon.generate r).Quotient B ≃
+      {f : SmoothRingHom A B // ∀ a b, r a b → f a = f b} :=
+  SmoothRingCon.generateHomEquiv r
+
+/-- The points of a presented ring are the zeros of the equations. -/
+example (e : K → FreeSmoothRing ι) :
+    Point (Presented e) ≃ {a : ι → ℝ // ∀ k, FreeSmoothRing.lift a (e k) = 0} :=
+  presentedPointEquiv e
+
+/-- The tangent vectors of a presented ring are the states tangent to the equations. -/
+example [Fintype ι] [DecidableEq ι] (e : K → FreeSmoothRing ι) :
+    TangentPoint (Presented e) ≃
+      {av : (ι → ℝ) × (ι → ℝ) // ∀ k, FreeSmoothRing.lift av.1 (e k) = 0 ∧
+        ∑ i, FreeSmoothRing.lift av.1 (partialDerivation i (e k)) * av.2 i = 0} :=
+  presentedTangentPointEquiv e
+
+/-- The states of the circle. -/
+example :
+    TangentPoint (Presented circleEquation) ≃
+      {av : (Fin 2 → ℝ) × (Fin 2 → ℝ) // av.1 0 * av.1 0 + av.1 1 * av.1 1 = 1 ∧
+        av.1 0 * av.2 0 + av.1 1 * av.2 1 = 0} :=
+  circleTangentPointEquiv
+
+end Points

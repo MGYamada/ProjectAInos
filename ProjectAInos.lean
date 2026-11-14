@@ -153,6 +153,7 @@ public import ProjectAInos.SmoothAlgebra.LocalizationComparison
 public import ProjectAInos.SmoothAlgebra.Models
 public import ProjectAInos.SmoothAlgebra.Operations
 public import ProjectAInos.SmoothAlgebra.PartialDerivative
+public import ProjectAInos.SmoothAlgebra.Point
 public import ProjectAInos.SmoothAlgebra.Poisson.Basic
 public import ProjectAInos.SmoothAlgebra.Poisson.Canonical
 public import ProjectAInos.SmoothAlgebra.Poisson.Free
