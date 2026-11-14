@@ -209,6 +209,27 @@ theorem sub_eq_integral_radius (hm : m ≠ 0)
 
 variable {x : (Fin 1 ⊕ Fin 1) ⊕ (Fin 1 ⊕ Fin 1) → TimeFunction}
 
+/-- The angular velocity at the time `t`: `φ̇ = ℓ/mr²`
+(Landau–Lifshitz (14.3)). -/
+theorem timeDerivative_angle_apply (hm : m ≠ 0)
+    (hx : IsTrajectory (PhaseSpace.canonical (Fin 1 ⊕ Fin 1)) (polarHamiltonian m V) x)
+    (hℓ : x (Sum.inr (Sum.inr 0)) = algebraMap ℝ TimeFunction ℓ) (t : ℝ) :
+    timeDerivative (x (Sum.inl (Sum.inr 0))) (fun _ => t) =
+      ℓ / (m * (radiusAt (fun a => x (Sum.map Sum.inl Sum.inl a)) t *
+        radiusAt (fun a => x (Sum.map Sum.inl Sum.inl a)) t)) := by
+  have hr := (radiusAt_pos (fun a => x (Sum.map Sum.inl Sum.inl a)) t).ne'
+  have hi : FreeSmoothRing.lift (fun a => x a fun _ => t) rInv =
+      (radiusAt (fun a => x (Sum.map Sum.inl Sum.inl a)) t)⁻¹ := by
+    rw [rInv, SmoothRingHom.map_exp, SmoothRingHom.map_neg, s, PhaseSpace.q, lift_generator,
+      radiusAt, ← Real.exp_neg]
+    rfl
+  have hp : FreeSmoothRing.lift (fun a => x a fun _ => t) pφ = ℓ := by
+    rw [pφ, PhaseSpace.p, lift_generator, hℓ, TimeFunction.algebraMap_apply]
+  rw [timeDerivative_angle hx, lift_curve_apply, SmoothRingHom.map_mul, SmoothRingHom.map_mul,
+    SmoothRingHom.map_mul, SmoothRingHom.map_algebraMap, hi, hp]
+  change m⁻¹ * (_ * _ * ℓ) = _
+  field_simp
+
 /-- The angle as a function of the radius (Landau–Lifshitz (14.7)): along a
 trajectory with the angular momentum `ℓ`, on an interval where the radial
 velocity is positive,
@@ -225,21 +246,7 @@ theorem angle_sub_eq_integral_radius (hm : m ≠ 0)
           (FreeSmoothRing.lift (fun a => x (Sum.map Sum.inl Sum.inl a))
             (radialHamiltonian m V ℓ) fun _ => t₀) u) := by
   have hy := isTrajectory_radial hx hℓ
-  have hφ (t : ℝ) : timeDerivative (x (Sum.inl (Sum.inr 0))) (fun _ => t) =
-      ℓ / (m * (radiusAt (fun a => x (Sum.map Sum.inl Sum.inl a)) t *
-        radiusAt (fun a => x (Sum.map Sum.inl Sum.inl a)) t)) := by
-    have hr := (radiusAt_pos (fun a => x (Sum.map Sum.inl Sum.inl a)) t).ne'
-    have hi : FreeSmoothRing.lift (fun a => x a fun _ => t) rInv =
-        (radiusAt (fun a => x (Sum.map Sum.inl Sum.inl a)) t)⁻¹ := by
-      rw [rInv, SmoothRingHom.map_exp, SmoothRingHom.map_neg, s, PhaseSpace.q, lift_generator,
-        radiusAt, ← Real.exp_neg]
-      rfl
-    have hp : FreeSmoothRing.lift (fun a => x a fun _ => t) pφ = ℓ := by
-      rw [pφ, PhaseSpace.p, lift_generator, hℓ, TimeFunction.algebraMap_apply]
-    rw [timeDerivative_angle hx, lift_curve_apply, SmoothRingHom.map_mul, SmoothRingHom.map_mul,
-      SmoothRingHom.map_mul, SmoothRingHom.map_algebraMap, hi, hp]
-    change m⁻¹ * (_ * _ * ℓ) = _
-    field_simp
+  have hφ (t : ℝ) := timeDerivative_angle_apply hm hx hℓ t
   rw [TimeFunction.apply_sub_apply_eq_integral]
   simp only [hφ]
   exact integral_comp_eq_integral_div_sqrt (w := fun u => ℓ / (m * (u * u)))

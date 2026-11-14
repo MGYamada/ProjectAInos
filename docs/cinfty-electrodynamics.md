@@ -57,8 +57,8 @@ they are not pending prerequisites for this document's fixed-background work.
 ### After the mechanics programme
 
 The [mechanics plan](cinfty-mechanics.md) was carried out between the baseline
-and `fd0ccaa`. Its [ledger](cinfty-mechanics.md#ledger) ends with 31 of the 52
-sections *proved* and the other 21 closed with their proved part and the
+and `fd0ccaa`. Its [ledger](cinfty-mechanics.md#ledger) now has 32 of the 52
+sections *proved* and the other 20 closed with their proved part and the
 reason for the remainder. The
 [SR volume](cinfty-special-relativity.md#after-the-mechanics-programme)
 describes how the work was carried out. The results that matter for this
@@ -91,11 +91,14 @@ volume are the following.
 - *Hamiltonians that depend on time* are not formalized. A charge in a
   static field is covered by the existing API; a time-dependent field needs
   the extended phase space or a new definition.
-- *Improper integrals and measures.* Six mechanics rows are closed with a
-  remainder because they need a measure, an integral over a closed curve, or
-  an integral that is improper at a turning point or at infinity. The energy radiated over all time, the
+- *Measures and integrals to infinity.* Several mechanics rows are closed
+  with a remainder because they need a measure, an integral over a closed
+  curve, or an integral to infinity. The energy radiated over all time, the
   cross-sections of §§68–70 and 78–80 and the Fourier integrals are of the
-  same kind.
+  same kind. Integrals up to a simple turning point are not: they are
+  Lebesgue integrals with an integrable singularity and are proved in
+  mechanics (`integral_comp_eq_integral_div_sqrt_turning`), with the period
+  of Kepler's problem as an application (`CentralField.kepler_period`).
 - *Asymptotic statements.* Six mechanics rows state an approximation
   without an error estimate, and what could be proved was an exact identity
   next to each. For the rows that use ASYM, OSC or RAD, the theorem with its

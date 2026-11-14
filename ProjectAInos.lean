@@ -117,6 +117,7 @@ public import ProjectAInos.Mechanics.Oscillations.QuadraticLagrangian
 public import ProjectAInos.Mechanics.Oscillations.Symmetry
 public import ProjectAInos.Mechanics.Poisson.ActionFunction
 public import ProjectAInos.Mechanics.Poisson.AngularMomentum
+public import ProjectAInos.Mechanics.Poisson.Apsides
 public import ProjectAInos.Mechanics.Poisson.CentralField
 public import ProjectAInos.Mechanics.Poisson.CompleteIntegral
 public import ProjectAInos.Mechanics.Poisson.CyclicReduction
@@ -152,6 +153,7 @@ public import ProjectAInos.Mechanics.SmoothLagrangian
 public import ProjectAInos.Mechanics.TimeFunction
 public import ProjectAInos.Mechanics.TimePrimitive
 public import ProjectAInos.Mechanics.TotalTimeDerivative
+public import ProjectAInos.Mechanics.TurningPoint
 public import ProjectAInos.Mechanics.TwoBody.Collisions
 public import ProjectAInos.Mechanics.TwoBody.Kinematics
 public import ProjectAInos.QuantumFieldTheory.SmearedField
