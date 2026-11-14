@@ -218,7 +218,8 @@ formula and the energy transfer. Normal modes and the stability criterion of
 parametric resonance are proved. Integrals of the motion are constant along
 trajectories of a Hamiltonian on a free C∞-ring. The Legendre correspondence
 for natural Lagrangians, Jacobi's theorem on complete integrals and Liouville's
-theorem in infinitesimal form are proved. Symplectic structures, the Legendre
+theorem in infinitesimal form are proved, as are mechanical similarity and the
+virial theorem for time averages. Symplectic structures, the Legendre
 transformation of a general Lagrangian, Dirac brackets and canonical
 transformations with generating functions are not implemented. Galilean symmetry as a group action and the topics of 2.1 and
 2.4 have no Lean counterpart yet. The

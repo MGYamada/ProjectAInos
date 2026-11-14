@@ -449,3 +449,27 @@ The velocity derivative of the added density is $\partial_q F$, so the momentum 
 **Interface decision.** `divergence` is defined for every vector field of a free ring on a finite index type, with respect to its generators; it is not invariant under a change of generators, and no claim of invariance is made.
 
 **Proof status.** Proved in infinitesimal form; row 46 stays *informal*. Not formalized: the invariance of the measure under the flow of a Hamiltonian, and the two-form `ω` with `L_{X_H} ω = 0`. [Liouville's theorem](../ProjectAInos/Mechanics/Poisson/Liouville.lean)
+
+## M57. Mechanical similarity is two morphisms and one exponent
+
+**Observation.** The similarity of §10 uses two changes of scale: of the lengths, a morphism `xᵢ ↦ α xᵢ` of the ring of functions of the positions, and of the time, a morphism `f ↦ f(βt)` of the ring of functions of time. A potential is homogeneous of degree `k` when the first morphism multiplies it by `α^k`. Applying `∂ⱼ` to this identity and using the chain rule for a substitution (M53) gives that the gradient is homogeneous of degree `k − 1`; no derivative with respect to the scale `α` is taken. The derivative of `f(βt)` is `β f'(βt)`, so two time derivatives give `β²`, and Newton's equations are preserved exactly when `α β² = α^{k−1}`. Euler's relation `Σ qᵢ ∂U/∂qᵢ = kU`, which the virial identity uses, is the derivative of the homogeneity identity with respect to `α` at `α = 1`. That derivative is not available inside the ring, so the two notions of homogeneity are used side by side and not connected.
+
+**Interface decision.** `IsHomogeneous k u` quantifies over `α > 0`, with a real exponent, so that degrees such as `−1` and non-integer degrees are covered; a homogeneous smooth function on all of the positions has a restricted set of possible degrees, and potentials with a singularity at the origin are outside this file (Kepler's problem is treated through its own equations, M59). The theorem is about solutions: `α γ(βt)` is a solution when `γ` is. The automorphism of the jet ring that scales `qᵢ⁽ⁿ⁾` by `α βⁿ` and preserves the Euler–Lagrange ideal is the corresponding algebraic statement and is not constructed.
+
+**Proof status.** Proved on solutions; row 10 is *proved* with this reading. Not formalized: the scaling as an automorphism of the jet ring, the equivalence of the two notions of homogeneity, and the consequences for the times of motion in particular fields listed in §10. [Mechanical similarity](../ProjectAInos/Mechanics/Similarity.lean)
+
+## M58. The virial theorem is the fundamental theorem of calculus divided by the time
+
+**Observation.** The time average of the derivative of a bounded function tends to zero, because the integral of the derivative over `[0, τ]` is the increment, bounded by twice the bound, and it is divided by `τ`. With `G = Σ qᵢ pᵢ` and `Ġ = 2T − kU` along a trajectory, this is the virial theorem. The statement proved is about the average of the combination `2T − kU`. It does not assert that the averages of `T` and of `U` exist separately; when they do, the statement gives `2⟨T⟩ = k⟨U⟩`. The hypothesis is the boundedness of `Σ qᵢ pᵢ` along the trajectory, which holds when the positions and the momenta are bounded.
+
+**Interface decision.** The limit is Mathlib's `Tendsto` along `atTop`, and the average is `(1/τ) ∫₀^τ` with the interval integral, as in M48. The general lemma about bounded functions of time is separate from the mechanical statement.
+
+**Proof status.** Proved. [The virial theorem](../ProjectAInos/Mechanics/Poisson/VirialAverage.lean)
+
+## M59. Kepler's third law: the similarity form is algebra, the period of an orbit is not
+
+**Observation.** The equations of a Kepler motion with the inverse distance as a function of time (M37) are preserved by `q ↦ λ q(βt)`, `p ↦ λ β p(βt)`, `ρ ↦ ρ(βt)/λ` exactly when `β² λ³ = 1`. This is the third law in the form of §10: similar orbits have periods whose squares are as the cubes of their sizes. Stating the condition as `β² λ³ = 1` avoids real powers. The stronger statement of §15, that the period of an elliptic orbit is `2π a^{3/2} √(m/α)` whatever its eccentricity, compares orbits that are not similar; it needs the area of the ellipse and the areal velocity, and is not proved. The equation of the orbit, by contrast, costs nothing: the identity `A · q = |M|² − m α r` holds in every commutative ring, and along a motion `A` and `M` are constants.
+
+**Interface decision.** `IsKeplerMotion.conic` is stated at each time with the values of `A` and `M` at time zero. `IsKeplerMotion.similar` takes `λ ≠ 0` and `β` with `β² λ³ = 1` as hypotheses; negative `λ` and `β` are allowed, since the equations permit them.
+
+**Proof status.** Proved as stated; row 15 stays *evidence*. Not formalized: the period of an elliptic orbit, the classification of the conic by the sign of the energy, and the eccentricity as a function of `H` and `|M|²` along a motion. [The orbit of a Kepler motion](../ProjectAInos/Mechanics/Poisson/KeplerOrbit.lean)

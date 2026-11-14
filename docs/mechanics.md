@@ -732,6 +732,47 @@ infinitesimal form of Liouville's theorem (Landau–Lifshitz §46).
 is the constant `−Σᵢ aᵢ/mᵢ` (`Oscillator.divergence_dissipativeField`). The
 invariance of the Lebesgue measure under a flow is not proved.
 
+## Mechanical similarity
+
+`Mechanics/Similarity` covers Landau–Lifshitz §10. `TimeFunction.scale β` is
+the morphism `f ↦ f(βt)` of the ring of functions of time, with
+`d/dt f(βt) = β f'(βt)` (`TimeFunction.timeDerivative_scale`). `dilate α` is
+the morphism `xᵢ ↦ α xᵢ` of the free ring on the positions, and
+`IsHomogeneous k u` says that `dilate α u = α^k u` for every `α > 0`.
+
+- `IsHomogeneous.dilate_partialDerivation`: the partial derivatives of a
+  function homogeneous of degree `k` are homogeneous of degree `k − 1`. The
+  proof applies `∂ⱼ` to the defining identity and uses the chain rule for a
+  substitution.
+- `StandardJet.IsSolution.similar`: for the Lagrangian
+  `Σᵢ ½ mᵢ q̇ᵢ² − U(q)` with `U` homogeneous of degree `k`, if `γ(t)` is a
+  solution, so is `α γ(βt)` with `β = α^{(k − 2)/2}`.
+- `similar_apply_add_period`: if `γ` has the period `T`, the similar path has
+  the period `T/β = α^{1 − k/2} T`.
+
+`Poisson/VirialAverage` proves the virial theorem for time averages.
+`TimeFunction.tendsto_average_timeDerivative`: for a bounded function `G` of
+time, `(1/τ) ∫₀^τ Ġ dt → 0` as `τ → ∞`. `IsTrajectory.tendsto_average_virial`:
+along a trajectory of `Σᵢ pᵢ²/2mᵢ + U` on which `Σᵢ qᵢ pᵢ` is bounded, with `U`
+satisfying Euler's relation of degree `k`, the time average of `2T − kU`
+tends to zero.
+
+`Poisson/KeplerOrbit` applies the same ideas to Kepler motions.
+`IsKeplerMotion.conic`: at every time,
+`A · q(t) = |M|² − m α r(t)` with the constant vectors `A = A(0)` and
+`M = M(0)`, the equation of a conic with a focus at the centre.
+`IsKeplerMotion.similar`: if `(Q, P, R)` is a Kepler motion and
+`β² λ³ = 1`, then `(λ Q(βt), λ β P(βt), R(βt)/λ)` is a Kepler motion.
+`similar_period`: the similar orbit has the period `T/β`, and
+`(T/β)² = λ³ T²`, so the squares of the periods are as the cubes of the
+linear dimensions.
+
+The scaling is a statement about solutions; the corresponding automorphism of
+the jet ring is not constructed. Euler's relation `Σ qᵢ ∂U/∂qᵢ = kU`, the
+hypothesis of the virial identity, is not derived from the scaling property
+`u(αx) = α^k u(x)`. The period of an elliptic orbit as a function of its
+semi-major axis is not computed.
+
 ## Proof map
 
 | Module | Main declarations |
@@ -783,6 +824,9 @@ invariance of the Lebesgue measure under a flow is not proved.
 | [Legendre](../ProjectAInos/Mechanics/Legendre.lean) | `positionsToJet`, `positionsToPhase`, `d_zero_positionsToJet`, `orderLE_positionsToJet`, `legendre`, `legendre_p_eq_momentum`, `legendre_hamiltonian`, `isTrajectory_natural_iff`, `isSolution_natural_iff`, `isTrajectory_natural_iff_isSolution` |
 | [Poisson/CompleteIntegral](../ProjectAInos/Mechanics/Poisson/CompleteIntegral.lean) | `ActionSpace`, `substitution`, `IsHamiltonJacobi`, `along`, `momentum`, `timeDerivative_along`, `partialDerivation_substitution_q`, `isTrajectory_of_isHamiltonJacobi`, `freeAction`, `isHamiltonJacobi_freeAction`, `isTrajectory_freeAction` |
 | [Poisson/Liouville](../ProjectAInos/Mechanics/Poisson/Liouville.lean) | `divergence`, `divergence_eq`, `divergence_hamiltonian`, `divergence_dissipativeField`, `Oscillator.divergence_dissipativeField` |
+| [Similarity](../ProjectAInos/Mechanics/Similarity.lean) | `TimeFunction.scale`, `TimeFunction.timeDerivative_scale`, `TimeFunction.scale_lift`, `dilate`, `lift_dilate`, `IsHomogeneous`, `IsHomogeneous.dilate_partialDerivation`, `StandardJet.IsSolution.similar`, `similar_apply_add_period` |
+| [Poisson/VirialAverage](../ProjectAInos/Mechanics/Poisson/VirialAverage.lean) | `TimeFunction.tendsto_average_timeDerivative`, `IsTrajectory.tendsto_average_virial` |
+| [Poisson/KeplerOrbit](../ProjectAInos/Mechanics/Poisson/KeplerOrbit.lean) | `IsKeplerMotion.conic`, `IsKeplerMotion.similar`, `similar_period` |
 | [Examples](../ProjectAInos/Mechanics/Examples.lean) | Newton equation, stationary uniform free motion, rejection of accelerated free motion, endpoint-vanishing polynomial variation and its endpoint derivative, zero-length interval and zero-coordinate system |
 
 For `L = m v²/2 − V(q)`, `stationary_natural_iff` proves `m q'' = −V'(q)` on `(a,b)`. This algebraic equation remains valid at `m = 0`; dividing by the mass would require a separate nonzero premise.

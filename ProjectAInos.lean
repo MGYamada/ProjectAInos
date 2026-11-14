@@ -112,6 +112,7 @@ public import ProjectAInos.Mechanics.Poisson.HeavyTop
 public import ProjectAInos.Mechanics.Poisson.Kepler
 public import ProjectAInos.Mechanics.Poisson.KeplerModel
 public import ProjectAInos.Mechanics.Poisson.KeplerMotion
+public import ProjectAInos.Mechanics.Poisson.KeplerOrbit
 public import ProjectAInos.Mechanics.Poisson.Liouville
 public import ProjectAInos.Mechanics.Poisson.RigidBody
 public import ProjectAInos.Mechanics.Poisson.RigidBodyMotion
@@ -119,10 +120,12 @@ public import ProjectAInos.Mechanics.Poisson.RotatingFrame
 public import ProjectAInos.Mechanics.Poisson.Trajectory
 public import ProjectAInos.Mechanics.Poisson.TwoBody
 public import ProjectAInos.Mechanics.Poisson.Virial
+public import ProjectAInos.Mechanics.Poisson.VirialAverage
 public import ProjectAInos.Mechanics.Rigid.AngularVelocity
 public import ProjectAInos.Mechanics.Rigid.EulerAngles
 public import ProjectAInos.Mechanics.Rigid.InertiaTensor
 public import ProjectAInos.Mechanics.Rigid.RegularPrecession
+public import ProjectAInos.Mechanics.Similarity
 public import ProjectAInos.Mechanics.SmoothLagrangian
 public import ProjectAInos.Mechanics.TimeFunction
 public import ProjectAInos.Mechanics.TimePrimitive
