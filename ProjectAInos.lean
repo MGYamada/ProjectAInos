@@ -110,6 +110,7 @@ public import ProjectAInos.Mechanics.Oscillations.NormalModes
 public import ProjectAInos.Mechanics.Oscillations.Oscillator
 public import ProjectAInos.Mechanics.Oscillations.Parametric
 public import ProjectAInos.Mechanics.Oscillations.QuadraticLagrangian
+public import ProjectAInos.Mechanics.Oscillations.Symmetry
 public import ProjectAInos.Mechanics.Poisson.AngularMomentum
 public import ProjectAInos.Mechanics.Poisson.CompleteIntegral
 public import ProjectAInos.Mechanics.Poisson.Epsilon
@@ -125,6 +126,7 @@ public import ProjectAInos.Mechanics.Poisson.Quadratic
 public import ProjectAInos.Mechanics.Poisson.RigidBody
 public import ProjectAInos.Mechanics.Poisson.RigidBodyMotion
 public import ProjectAInos.Mechanics.Poisson.RotatingFrame
+public import ProjectAInos.Mechanics.Poisson.Separation
 public import ProjectAInos.Mechanics.Poisson.Trajectory
 public import ProjectAInos.Mechanics.Poisson.TwoBody
 public import ProjectAInos.Mechanics.Poisson.Virial

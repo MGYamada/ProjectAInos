@@ -782,6 +782,24 @@ The correspondence with `sp(2n, ℝ)` is stated by these identities and is not
 bundled as an isomorphism of Lie algebras. The matrices `M` and `K` are
 constants.
 
+## Symmetry of the normal modes
+
+`Oscillations/Symmetry` gives the part of Landau–Lifshitz §24 that is linear
+algebra. `modeSpace M K c` is the space of the vectors with `K v = c M v`.
+
+- `mulVec_mem_modeSpace`: a matrix `P` that commutes with `M` and `K`
+  preserves `modeSpace M K c`. For a group of such matrices, each of these
+  spaces carries a representation of the group.
+- `isSmallOscillation_symmetry`: such a matrix takes small oscillations to
+  small oscillations.
+- `card_ne_zero_eq_rank`: with `Sᵀ M S = 1` and `Sᵀ K S = diag λ`, the number
+  of non-zero `λₐ` is the rank of `K`. The modes with zero frequency are the
+  kernel of `K`; for a molecule they contain the translations and the
+  rotations.
+
+The decomposition of the space of the modes into irreducible representations
+and the number of modes of each symmetry type are not proved.
+
 ## Parametric resonance
 
 `Oscillations/Parametric` treats `ẍ + p(t) x = 0` (Landau–Lifshitz §27).
@@ -912,6 +930,35 @@ The curve is a hypothesis of the theorem: solving `∂S/∂αᵢ = βᵢ` for `q
 the implicit function theorem is not proved. The Hamiltonian has no explicit
 dependence on time.
 
+`Poisson/Separation` treats the separation of the variables (Landau–Lifshitz
+§48). `positionsToAction ι u` reads a function `u` of the co-ordinates as a
+function of `(q, α, t)`, and `parameter i` is `αᵢ`.
+
+- `stackelHamiltonian m Ψ g u` is `Σᵢ Ψᵢ(q) (gᵢ(q) pᵢ²/2m + uᵢ(q))`.
+  `isHamiltonJacobi_stackel`: if `Σᵢ Ψᵢ Φᵢⱼ = δⱼ,ⱼ₀` for a matrix `Φ` of
+  functions of the co-ordinates, and the derivatives of `S` satisfy
+  `gᵢ (∂S/∂qᵢ)²/2m + uᵢ = Σⱼ Φᵢⱼ αⱼ` and `∂S/∂t = −αⱼ₀`, then `S` satisfies the
+  Hamilton–Jacobi equation.
+- `nestedHamiltonian m ρ σ a b c` is
+  `p₀²/2m + a + ρ (p₁²/2m + b + σ (p₂²/2m + c))`.
+  `isHamiltonJacobi_nested_of_separated`: the equations
+  `(∂S/∂q₀)²/2m + a = α₀ − ρ α₁`, `(∂S/∂q₁)²/2m + b = α₁ − σ α₂`,
+  `(∂S/∂q₂)²/2m + c = α₂` and `∂S/∂t = −α₀` give a solution. In spherical
+  co-ordinates `ρ = 1/r²` and `σ = 1/sin²θ`.
+- `liouvilleHamiltonian m λ g₀ g₁ κ₀ κ₁ u₀ u₁ u₂` is
+  `λ (g₀ p₀²/2m + u₀ + g₁ p₁²/2m + u₁ + (κ₀ + κ₁)(p₂²/2m + u₂))`.
+  `isHamiltonJacobi_liouville_of_separated`: with `λ (w₀ + w₁) = 1`, the
+  equations `g₀ (∂S/∂q₀)²/2m + u₀ = w₀ α₀ + α₁ − κ₀ α₂`,
+  `g₁ (∂S/∂q₁)²/2m + u₁ = w₁ α₀ − α₁ − κ₁ α₂`, `(∂S/∂q₂)²/2m + u₂ = α₂` and
+  `∂S/∂t = −α₀` give a solution. This is the form in parabolic and in
+  elliptic co-ordinates.
+
+The coefficient functions are elements of the free C∞-ring, smooth on all of
+`ℝ³`. The coefficients `1/r²`, `1/sin²θ` and `1/(ξ + η)` of the classical
+co-ordinate systems are smooth only on open subsets, so those systems are not
+instances as stated. The quadratures that give `S` are not constructed, and
+the completeness of the integral is not checked.
+
 `Poisson/Liouville` defines the divergence `Σₐ ∂ₐ (X xₐ)` of a vector field on
 a free C∞-ring with finitely many generators. `divergence_hamiltonian`: a
 Hamiltonian vector field of the canonical bracket has zero divergence, the
@@ -1015,11 +1062,13 @@ semi-major axis is not computed.
 | [Poisson/Quadratic](../ProjectAInos/Mechanics/Poisson/Quadratic.lean) | `eulerField`, `IsEulerHomogeneous`, `IsEulerHomogeneous.mul`, `IsEulerHomogeneous.partialDerivation`, `IsEulerHomogeneous.canonical_bracket`, `bilinearForm`, `quadraticForm`, `partialDerivation_quadraticForm`, `quadraticForm_injective`, `PhaseSpace.canonicalForm`, `PhaseSpace.canonical_bracket_generator_quadraticForm`, `PhaseSpace.canonical_bracket_quadraticForm`, `PhaseSpace.mem_sp_iff`, `PhaseSpace.canonicalForm_mul_mem_sp_iff`, `PhaseSpace.spHamiltonian`, `PhaseSpace.canonical_bracket_generator_spHamiltonian`, `PhaseSpace.canonical_bracket_spHamiltonian`, `PhaseSpace.spHamiltonian_injective` |
 | [Oscillations/NormalForm](../ProjectAInos/Mechanics/Oscillations/NormalForm.lean) | `linearQ`, `linearP`, `canonical_linearQ_linearP`, `linearTransformation`, `linearTransformation_comp`, `isPoissonHom_linearTransformation`, `quadraticHamiltonian`, `quadraticHamiltonian_eq`, `quadraticHamiltonian_eq_normalForm`, `linearTransformation_normalForm`, `isPoissonHom_normalTransformation`, `linearTransformation_comp_inverse`, `linearTransformation_inverse_comp`, `isTrajectory_quadraticForm_iff`, `isTrajectory_quadraticHamiltonian_iff`, `isTrajectory_quadraticHamiltonian_iff_isSmallOscillation` |
 | [Oscillations/QuadraticLagrangian](../ProjectAInos/Mechanics/Oscillations/QuadraticLagrangian.lean) | `JetRing.quadraticLagrangian`, `JetRing.momentum_quadraticLagrangian`, `JetRing.euler_quadraticLagrangian`, `StandardJet.isSolution_quadraticLagrangian_iff`, `NormalModes.isSymm_of_mul_eq_one`, `NormalModes.isTrajectory_quadraticHamiltonian_iff_isSolution` |
+| [Oscillations/Symmetry](../ProjectAInos/Mechanics/Oscillations/Symmetry.lean) | `modeSpace`, `mem_modeSpace`, `mulVec_mem_modeSpace`, `isSmallOscillation_symmetry`, `card_ne_zero_eq_rank` |
 | [Oscillations/Parametric](../ProjectAInos/Mechanics/Oscillations/Parametric.lean) | `mul_self_eq`, `sin_smul_pow_succ`, `exists_abs_pow_apply_le`, `IsHill`, `wronskian`, `IsHill.wronskian_eq`, `TimeFunction.shift`, `IsHill.shift`, `state`, `FundamentalSystem`, `FundamentalSystem.eq_combination`, `FundamentalSystem.matrix`, `FundamentalSystem.det_matrix`, `FundamentalSystem.state_eq`, `FundamentalSystem.matrix_add_nat_mul_period`, `FundamentalSystem.exists_abs_apply_le`, `FundamentalSystem.exists_abs_apply_le_of_abs_trace_lt`, `FundamentalSystem.harmonic` |
 | [Legendre](../ProjectAInos/Mechanics/Legendre.lean) | `positionsToJet`, `positionsToPhase`, `d_zero_positionsToJet`, `orderLE_positionsToJet`, `legendre`, `legendre_p_eq_momentum`, `legendre_hamiltonian`, `isTrajectory_natural_iff`, `isSolution_natural_iff`, `isTrajectory_natural_iff_isSolution` |
 | [Hyperregular](../ProjectAInos/Mechanics/Hyperregular.lean) | `JetRing.sum_mul_d_q_self`, `VelocitySpace`, `VelocitySpace.momentum`, `VelocitySpace.legendre`, `VelocitySpace.energy`, `VelocitySpace.hessian`, `VelocitySpace.apply_legendre`, `VelocitySpace.IsHyperregular`, `VelocitySpace.hamiltonian`, `VelocitySpace.inverseHessian`, `IsHyperregular.inverseHessian_mul_hessian`, `IsHyperregular.legendre_hamiltonian`, `IsHyperregular.legendre_partialDerivation_inr_hamiltonian`, `IsHyperregular.legendre_partialDerivation_inl_hamiltonian`, `VelocitySpace.velocityCurve`, `VelocitySpace.toJet`, `VelocitySpace.prolongation_toJet`, `VelocitySpace.isSolution_toJet_iff`, `IsHyperregular.isTrajectory_iff`, `IsHyperregular.isTrajectory_iff_isSolution`, `VelocitySpace.lagrangeBracket`, `IsHyperregular.legendre_bracket`, `IsHyperregular.lagrangeBracket_q_v`, `VelocitySpace.natural`, `VelocitySpace.isHyperregular_natural`, `VelocitySpace.hamiltonian_natural`, `VelocitySpace.toJet_natural` |
 | [Poisson/GeneratingFunction](../ProjectAInos/Mechanics/Poisson/GeneratingFunction.lean) | `PositionPair`, `oldPosition`, `newPosition`, `gradOld`, `gradNew`, `oldMap`, `newMap`, `mixedHessian`, `oldHessian`, `apply_oldMap`, `gradNew_oldMap`, `gradOld_oldMap`, `IsFree`, `transformation`, `momentumPart`, `positionPart`, `inverseMixed`, `IsFree.inverseMixed_mul_mixedHessian`, `IsFree.momentumPart_eq`, `IsFree.oldMap_bracket`, `IsFree.bracket_apply`, `IsFree.bracket_newPosition_gradNew`, `IsFree.bracket_gradNew_gradNew`, `IsFree.isPoissonHom_transformation`, `IsFree.transformation_comp_inverse`, `IsFree.inverse_comp_transformation`, `exchange`, `isFree_exchange`, `transformation_exchange_q`, `transformation_exchange_p` |
 | [Poisson/CompleteIntegral](../ProjectAInos/Mechanics/Poisson/CompleteIntegral.lean) | `ActionSpace`, `substitution`, `IsHamiltonJacobi`, `along`, `momentum`, `timeDerivative_along`, `partialDerivation_substitution_q`, `isTrajectory_of_isHamiltonJacobi`, `freeAction`, `isHamiltonJacobi_freeAction`, `isTrajectory_freeAction` |
+| [Poisson/Separation](../ProjectAInos/Mechanics/Poisson/Separation.lean) | `positionsToAction`, `parameter`, `substitution_p`, `substitution_positionsToPhase`, `stackelHamiltonian`, `substitution_stackelHamiltonian`, `isHamiltonJacobi_stackel`, `nestedHamiltonian`, `nestedMatrix`, `isHamiltonJacobi_nested`, `kinetic`, `isHamiltonJacobi_nested_of_separated`, `liouvilleHamiltonian`, `liouvilleMatrix`, `isHamiltonJacobi_liouville`, `isHamiltonJacobi_liouville_of_separated` |
 | [Poisson/Liouville](../ProjectAInos/Mechanics/Poisson/Liouville.lean) | `divergence`, `divergence_eq`, `divergence_hamiltonian`, `divergence_dissipativeField`, `Oscillator.divergence_dissipativeField` |
 | [Similarity](../ProjectAInos/Mechanics/Similarity.lean) | `TimeFunction.scale`, `TimeFunction.timeDerivative_scale`, `TimeFunction.scale_lift`, `dilate`, `lift_dilate`, `IsHomogeneous`, `IsHomogeneous.dilate_partialDerivation`, `StandardJet.IsSolution.similar`, `similar_apply_add_period` |
 | [Poisson/VirialAverage](../ProjectAInos/Mechanics/Poisson/VirialAverage.lean) | `TimeFunction.tendsto_average_timeDerivative`, `IsTrajectory.tendsto_average_virial` |

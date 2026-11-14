@@ -8,8 +8,8 @@ import ProjectAInos
 /-! Public consumers of the canonical-formalism API: the chain rule for a
 substitution, the Legendre transformation of a natural Lagrangian and of a
 hyperregular Lagrangian, canonical transformations from a generating function,
-Jacobi's theorem on complete integrals, and Liouville's theorem in
-infinitesimal form.
+Jacobi's theorem on complete integrals, separation of the variables, and
+Liouville's theorem in infinitesimal form.
 Default elaborator options are intentional: these checks must not rely on the
 implementation's transparency settings. Every statement is pinned with its
 type. -/
@@ -315,6 +315,83 @@ example (m α₀ β : ℝ) :
   isTrajectory_freeAction m α₀ β
 
 end CompleteIntegral
+
+section Separation
+
+open CompleteIntegral Matrix
+
+variable {ι : Type*} [DecidableEq ι] [Fintype ι]
+
+example (S : ActionSpace ι) (i : ι) :
+    substitution S (PhaseSpace.p i) = partialDerivation (qIndex i) S :=
+  substitution_p S i
+
+example (S : ActionSpace ι) (u : FreeSmoothRing ι) :
+    substitution S (positionsToPhase (ι := ι) u) = positionsToAction ι u :=
+  substitution_positionsToPhase S u
+
+example (m : ℝ) (Ψ g u : ι → FreeSmoothRing ι) :
+    stackelHamiltonian m Ψ g u =
+      ∑ i, positionsToPhase (ι := ι) (Ψ i) *
+        (algebraMap ℝ (PhaseSpace ι) (1 / (2 * m)) *
+          (positionsToPhase (ι := ι) (g i) * (PhaseSpace.p i * PhaseSpace.p i)) +
+            positionsToPhase (ι := ι) (u i)) :=
+  rfl
+
+/-- Stäckel's theorem in the direction of verification. -/
+example {m : ℝ} {Ψ g u : ι → FreeSmoothRing ι} {Φ : Matrix ι ι (FreeSmoothRing ι)} {j₀ : ι}
+    (hΨ : ∀ j, ∑ i, Ψ i * Φ i j = if j = j₀ then 1 else 0) {S : ActionSpace ι}
+    (hS : ∀ i, algebraMap ℝ (ActionSpace ι) (1 / (2 * m)) *
+        (positionsToAction ι (g i) *
+          (partialDerivation (qIndex i) S * partialDerivation (qIndex i) S)) +
+        positionsToAction ι (u i) = ∑ j, positionsToAction ι (Φ i j) * parameter j)
+    (ht : partialDerivation tIndex S = -parameter j₀) :
+    IsHamiltonJacobi (stackelHamiltonian m Ψ g u) S :=
+  isHamiltonJacobi_stackel hΨ hS ht
+
+example (m : ℝ) (ρ σ a b c : FreeSmoothRing (Fin 3)) :
+    nestedHamiltonian m ρ σ a b c =
+      stackelHamiltonian m ![1, ρ, ρ * σ] ![1, 1, 1] ![a, b, c] :=
+  rfl
+
+example (m : ℝ) (S : ActionSpace (Fin 3)) (i : Fin 3) :
+    kinetic m S i =
+      algebraMap ℝ (ActionSpace (Fin 3)) (1 / (2 * m)) *
+        (partialDerivation (qIndex i) S * partialDerivation (qIndex i) S) :=
+  rfl
+
+/-- Separation of the variables in the form of spherical co-ordinates. -/
+example {m : ℝ} {ρ σ a b c : FreeSmoothRing (Fin 3)} {S : ActionSpace (Fin 3)}
+    (h0 : kinetic m S 0 + positionsToAction (Fin 3) a =
+      parameter (0 : Fin 3) - positionsToAction (Fin 3) ρ * parameter (1 : Fin 3))
+    (h1 : kinetic m S 1 + positionsToAction (Fin 3) b =
+      parameter (1 : Fin 3) - positionsToAction (Fin 3) σ * parameter (2 : Fin 3))
+    (h2 : kinetic m S 2 + positionsToAction (Fin 3) c = parameter (2 : Fin 3))
+    (ht : partialDerivation tIndex S = -parameter (0 : Fin 3)) :
+    IsHamiltonJacobi (nestedHamiltonian m ρ σ a b c) S :=
+  isHamiltonJacobi_nested_of_separated h0 h1 h2 ht
+
+example (m : ℝ) (lam g₀ g₁ κ₀ κ₁ u₀ u₁ u₂ : FreeSmoothRing (Fin 3)) :
+    liouvilleHamiltonian m lam g₀ g₁ κ₀ κ₁ u₀ u₁ u₂ =
+      stackelHamiltonian m ![lam, lam, lam * (κ₀ + κ₁)] ![g₀, g₁, 1] ![u₀, u₁, u₂] :=
+  rfl
+
+/-- Separation of the variables in the form of parabolic and elliptic
+co-ordinates. -/
+example {m : ℝ} {lam w₀ w₁ g₀ g₁ κ₀ κ₁ u₀ u₁ u₂ : FreeSmoothRing (Fin 3)}
+    (h : lam * (w₀ + w₁) = 1) {S : ActionSpace (Fin 3)}
+    (h0 : positionsToAction (Fin 3) g₀ * kinetic m S 0 + positionsToAction (Fin 3) u₀ =
+      positionsToAction (Fin 3) w₀ * parameter (0 : Fin 3) + parameter (1 : Fin 3) -
+        positionsToAction (Fin 3) κ₀ * parameter (2 : Fin 3))
+    (h1 : positionsToAction (Fin 3) g₁ * kinetic m S 1 + positionsToAction (Fin 3) u₁ =
+      positionsToAction (Fin 3) w₁ * parameter (0 : Fin 3) - parameter (1 : Fin 3) -
+        positionsToAction (Fin 3) κ₁ * parameter (2 : Fin 3))
+    (h2 : kinetic m S 2 + positionsToAction (Fin 3) u₂ = parameter (2 : Fin 3))
+    (ht : partialDerivation tIndex S = -parameter (0 : Fin 3)) :
+    IsHamiltonJacobi (liouvilleHamiltonian m lam g₀ g₁ κ₀ κ₁ u₀ u₁ u₂) S :=
+  isHamiltonJacobi_liouville_of_separated h h0 h1 h2 ht
+
+end Separation
 
 section Liouville
 

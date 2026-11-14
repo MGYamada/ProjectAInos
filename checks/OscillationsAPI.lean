@@ -11,10 +11,10 @@ as a Lagrangian and as a Hamiltonian system with its flow, the linearization
 at an equilibrium, damped oscillations, the dissipative function, forced
 oscillations under friction with the resonance curve, Duhamel's formula with
 the energy transfer, normal modes, quadratic Hamiltonians with their normal
-form and the Lagrangian of small oscillations, and the monodromy matrix of
-parametric resonance. Default elaborator options are intentional: these checks must not
-rely on the implementation's transparency settings. Every statement is pinned
-with its type. -/
+form and the Lagrangian of small oscillations, symmetries of the normal modes,
+and the monodromy matrix of parametric resonance. Default elaborator options
+are intentional: these checks must not rely on the implementation's
+transparency settings. Every statement is pinned with its type. -/
 noncomputable section
 open ProjectAInos.SmoothAlgebra ProjectAInos.SmoothAlgebra.SmoothRing
 open ProjectAInos.SmoothAlgebra.FreeSmoothRing ProjectAInos.SmoothAlgebra.PhaseSpace
@@ -913,6 +913,33 @@ example {M W K : Matrix n n ℝ} (hM : M.IsSymm) (hMW : M * W = 1) (hK : K.IsSym
   isTrajectory_quadraticHamiltonian_iff_isSolution hM hMW hK c
 
 end QuadraticHamiltonians
+
+section Symmetry
+
+open NormalModes
+
+variable {n : Type*} [Fintype n] [DecidableEq n]
+
+example {M K : Matrix n n ℝ} {c : ℝ} {v : n → ℝ} :
+    v ∈ modeSpace M K c ↔ K *ᵥ v = c • (M *ᵥ v) :=
+  mem_modeSpace
+
+/-- A symmetry preserves the space of the modes of each frequency. -/
+example {M K P : Matrix n n ℝ} (hM : P * M = M * P) (hK : P * K = K * P) {c : ℝ}
+    {v : n → ℝ} (hv : v ∈ modeSpace M K c) : P *ᵥ v ∈ modeSpace M K c :=
+  mulVec_mem_modeSpace hM hK hv
+
+example {M K P : Matrix n n ℝ} (hM : P * M = M * P) (hK : P * K = K * P)
+    {x : n → TimeFunction} (h : IsSmallOscillation M K x) :
+    IsSmallOscillation M K (P.map (algebraMap ℝ TimeFunction) *ᵥ x) :=
+  isSmallOscillation_symmetry hM hK h
+
+/-- The number of non-zero frequencies is the rank of `K`. -/
+example {M K S : Matrix n n ℝ} {lam : n → ℝ} (hSM : Sᵀ * M * S = 1)
+    (hSK : Sᵀ * K * S = diagonal lam) : Fintype.card {a // lam a ≠ 0} = K.rank :=
+  card_ne_zero_eq_rank hSM hSK
+
+end Symmetry
 
 section Parametric
 
