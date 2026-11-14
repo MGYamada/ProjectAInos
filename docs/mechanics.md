@@ -98,6 +98,28 @@ For a Lagrangian of order at most one, with momenta `pᵢ = ∂L/∂vᵢ` and en
 
 For the natural Lagrangian `Σᵢ ½ mᵢ vᵢ² − U` with a potential of order zero, `euler_naturalLagrangian` gives Newton's equations `Eᵢ(L) = −∂ᵢU − mᵢ aᵢ`. The conservation laws of Landau–Lifshitz §§6–9 follow: energy for `∂ₜU = 0`, momentum and the centre-of-mass integral for a potential invariant along a direction, the charge of a linear symmetry with `mᵢ Aᵢⱼ + mⱼ Aⱼᵢ = 0`, and angular momentum about an axis for a rotation-invariant potential. The boost law needs a time coordinate `τ` with `∂ₜτ = 1`, which is an explicit hypothesis.
 
+`Jet/Metric` treats the general natural Lagrangian of Landau–Lifshitz §5,
+`metricLagrangian a U = ½ Σᵢₖ aᵢₖ vᵢ vₖ − U`, where the kinetic coefficients
+`aᵢₖ` and the potential have order zero. For a symmetric `a`:
+
+- `momentum_metricLagrangian`: `pᵢ = Σₖ aᵢₖ vₖ`;
+- `euler_metricLagrangian_eq`: Lagrange's equations
+  `Eᵢ(L) = −Σₖ aᵢₖ q̈ₖ − Σⱼₖ (∂ⱼaᵢₖ − ½ ∂ᵢaⱼₖ) vⱼ vₖ − Σₖ ∂ₜaᵢₖ vₖ − ∂ᵢU`;
+- `energy_metricLagrangian`: the energy is `½ Σᵢₖ aᵢₖ vᵢ vₖ + U`, conserved when
+  `a` and `U` do not depend explicitly on time
+  (`conserved_energy_metricLagrangian`);
+- `energy_metricLagrangian_eq_inverse`: if `b` is inverse to `a`, the energy is
+  `½ Σᵢⱼ bᵢⱼ pᵢ pⱼ + U`.
+
+`metricLagrangian_diagonal` recovers the constant-mass Lagrangian, and
+`conserved_momentum_of_cyclic` proves, for any first-order Lagrangian, that the
+momentum conjugate to a co-ordinate on which the Lagrangian does not depend is
+conserved. `Jet/Polar` is a model with a kinetic form that depends on the
+position: plane polar co-ordinates, `a = diag(1, r²)`. Its equations are
+`E_r = −r̈ + r φ̇² − ∂U/∂r`, with the centrifugal term, and
+`E_φ = −(r² φ̈ + 2 r ṙ φ̇) − ∂U/∂φ`; the angular momentum `r² φ̇` is conserved
+when `U` does not depend on `φ`.
+
 `StandardJet ι` is the free C∞-ring on the time coordinate and the jet coordinates. `StandardJet.jetRing` makes it a jet ring, so the structure is not vacuous. Its vector fields come from the universal property of the free ring and the dual numbers, without analysis. The examples have nonzero values: `Eᵢ(q q̈) = 2 q̈`, `Eᵢ(q̇²) = −2 q̈`, Newton's equation of the isotropic oscillator, and the centre-of-mass integral of free particles.
 
 These statements are identities in a ring. The prolongation of a path turns them into statements about trajectories. `TimeFunction` is the C∞-ring of smooth functions of time and `timeDerivative` is `d/dt`; `TimeFunction.timeDerivative_apply` proves that it is Mathlib's `deriv` of the function of a real variable. Both live in their own module and are shared with the Hamiltonian trajectories below. For a smooth path `γ : ι → TimeFunction`, `StandardJet.prolongation γ` is the morphism from the standard jet ring that sends the time coordinate to `t` and `qᵢ⁽ᵏ⁾` to the `k`-th derivative of `γᵢ`. `prolongation_totalDeriv` proves that it turns the total derivative into `d/dt`. `IsSolution L γ` means that the prolongation annihilates every `Eᵢ(L)`; it then annihilates the Euler–Lagrange ideal, and `prolongation_eq_of_conserved` proves that a conserved element takes the same value at all times along a solution.
@@ -332,6 +354,8 @@ triangle inequality `I₂ ≤ I₀ + I₁`. The basis-free statement behind it i
 | [Jet/Conservation](../ProjectAInos/Mechanics/Jet/Conservation.lean) | `naturalLagrangian`, `euler_naturalLagrangian`, `conserved_momentum`, `conserved_boost`, `conserved_linear`, `conserved_angularMomentum` |
 | [TimeFunction](../ProjectAInos/Mechanics/TimeFunction.lean) | `TimeFunction`, `timeDerivative`, `TimeFunction.contDiff_apply_const`, `TimeFunction.ext_apply_const`, `TimeFunction.timeDerivative_apply`, `TimeFunction.eq_of_timeDerivative_eq_zero`, `TimeFunction.cos`, `TimeFunction.sin`, `TimeFunction.timeDerivative_cos`, `TimeFunction.timeDerivative_sin` |
 | [Jet/Prolongation](../ProjectAInos/Mechanics/Jet/Prolongation.lean) | `prolongation`, `prolongation_totalDeriv`, `IsSolution`, `prolongation_eq_zero_of_mem`, `prolongation_eq_of_conserved`, `isSolution_naturalLagrangian_iff`, `energy_eq_of_isSolution`, `isSolution_oscillator_iff`, `isSolution_uniformMotion` |
+| [Jet/Metric](../ProjectAInos/Mechanics/Jet/Metric.lean) | `kineticForm`, `metricLagrangian`, `conserved_momentum_of_cyclic`, `d_one_kineticForm`, `momentum_metricLagrangian`, `euler_metricLagrangian`, `euler_metricLagrangian_eq`, `energy_metricLagrangian`, `conserved_energy_metricLagrangian`, `energy_metricLagrangian_eq_inverse`, `metricLagrangian_diagonal` |
+| [Jet/Polar](../ProjectAInos/Mechanics/Jet/Polar.lean) | `Polar.metric`, `Polar.lagrangian`, `Polar.euler_radial`, `Polar.euler_angular`, `Polar.momentum_angular`, `Polar.conserved_angularMomentum` |
 | [Jet/Analytic](../ProjectAInos/Mechanics/Jet/Analytic.lean) | `firstOrder`, `orderLE_firstOrder`, `euler_firstOrder`, `realPath`, `realJet`, `prolongation_firstOrder_apply`, `fderiv_ofSmoothOperation`, `eulerLagrange_ofSmoothOperation`, `prolongation_euler_firstOrder_apply`, `isSolution_firstOrder_iff`, `isSolution_firstOrder_iff_stationary`, `prolongation_eq_of_stationary`, `energy_eq_of_stationary` |
 | [Jet/Standard](../ProjectAInos/Mechanics/Jet/Standard.lean) | `StandardJet`, `jetRing`, `totalDeriv_eq_derivation`, `euler_q_mul_acceleration`, `euler_oscillator`, `conserved_energy_oscillator`, `conserved_boost_free` |
 | [Poisson/RigidBody](../ProjectAInos/Mechanics/Poisson/RigidBody.lean) | `PhaseSpace`, `L`, `poisson`, `poisson_L_L`, `L_ne_zero`, `poisson_bracket`, `poisson_L_bracket`, `kineticEnergy`, `gradient_kineticEnergy`, `euler_equations`, `euler_equation_zero`, `casimir`, `poisson_casimir_left`, `isIntegral_casimir` |

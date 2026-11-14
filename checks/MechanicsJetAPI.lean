@@ -311,3 +311,91 @@ example (γ : Fin n → TimeFunction) (t : ℝ) :
   rfl
 
 end Analytic
+
+section KineticForm
+
+variable {ι J : Type*} [CommRing J] [Algebra ℝ J] [SmoothRing J] [Fintype ι] [DecidableEq ι]
+  (R : JetRing ι J) {a : ι → ι → J} {U : J}
+
+example (a : ι → ι → J) (U : J) :
+    R.metricLagrangian a U =
+      algebraMap ℝ J (1 / 2) * (∑ i, ∑ k, a i k * (R.q i 1 * R.q k 1)) - U := rfl
+
+/-- The momenta `pⱼ = Σₖ aⱼₖ vₖ`. -/
+example (ha : ∀ i k, R.OrderLE (a i k) 0) (hsymm : ∀ i k, a i k = a k i)
+    (hU : R.OrderLE U 0) (j : ι) :
+    R.momentum (R.metricLagrangian a U) j = ∑ k, a j k * R.q k 1 :=
+  JetRing.momentum_metricLagrangian ha hsymm hU j
+
+/-- Lagrange's equations. -/
+example (ha : ∀ i k, R.OrderLE (a i k) 0) (hsymm : ∀ i k, a i k = a k i)
+    (hU : R.OrderLE U 0) (i : ι) :
+    R.euler i (R.metricLagrangian a U) =
+      -(∑ k, a i k * R.q k 2) -
+          ∑ j, ∑ k, (R.d j 0 (a i k) - algebraMap ℝ J (1 / 2) * R.d i 0 (a j k)) *
+            (R.q j 1 * R.q k 1) -
+        ∑ k, R.dt (a i k) * R.q k 1 - R.d i 0 U :=
+  JetRing.euler_metricLagrangian_eq ha hsymm hU i
+
+/-- The energy is `½ Σ a v v + U`, and it is conserved. -/
+example (ha : ∀ i k, R.OrderLE (a i k) 0) (hsymm : ∀ i k, a i k = a k i)
+    (hU : R.OrderLE U 0) (hat : ∀ i k, R.dt (a i k) = 0) (hUt : R.dt U = 0) :
+    R.energy (R.metricLagrangian a U) = algebraMap ℝ J (1 / 2) * R.kineticForm a + U ∧
+      R.Conserved (R.metricLagrangian a U) (algebraMap ℝ J (1 / 2) * R.kineticForm a + U) :=
+  ⟨JetRing.energy_metricLagrangian ha hsymm hU,
+    JetRing.conserved_energy_metricLagrangian ha hsymm hU hat hUt⟩
+
+/-- The energy in the momenta, for an inverse `b` of `a`. -/
+example (ha : ∀ i k, R.OrderLE (a i k) 0) (hsymm : ∀ i k, a i k = a k i)
+    (hU : R.OrderLE U 0) (b : ι → ι → J)
+    (hb : ∀ i l, ∑ j, b i j * a j l = if i = l then 1 else 0) :
+    R.energy (R.metricLagrangian a U) =
+      algebraMap ℝ J (1 / 2) *
+          ∑ i, ∑ j, b i j *
+            (R.momentum (R.metricLagrangian a U) i * R.momentum (R.metricLagrangian a U) j) +
+        U :=
+  JetRing.energy_metricLagrangian_eq_inverse ha hsymm hU b hb
+
+/-- Constant masses are the diagonal case. -/
+example (m : ι → ℝ) (U : J) :
+    R.metricLagrangian (fun i k => if i = k then algebraMap ℝ J (m i) else 0) U =
+      R.naturalLagrangian m U :=
+  JetRing.metricLagrangian_diagonal m U
+
+/-- A cyclic co-ordinate has a conserved momentum. -/
+example {L : J} (hL : R.OrderLE L 1) (i : ι) (h : R.d i 0 L = 0) :
+    R.Conserved L (R.momentum L i) :=
+  JetRing.conserved_momentum_of_cyclic hL i h
+
+end KineticForm
+
+section Polar
+
+open StandardJet
+
+example :
+    Polar.metric = ![![1, 0], ![0, (jetRing (Fin 2)).q 0 0 * (jetRing (Fin 2)).q 0 0]] := rfl
+
+/-- The radial equation has the centrifugal term. -/
+example {U : StandardJet (Fin 2)} (hU : (jetRing (Fin 2)).OrderLE U 0) :
+    (jetRing (Fin 2)).euler 0 (Polar.lagrangian U) =
+      -(jetRing (Fin 2)).q 0 2 +
+          Polar.radius * ((jetRing (Fin 2)).q 1 1 * (jetRing (Fin 2)).q 1 1) -
+        (jetRing (Fin 2)).d 0 0 U :=
+  Polar.euler_radial hU
+
+example {U : StandardJet (Fin 2)} (hU : (jetRing (Fin 2)).OrderLE U 0) :
+    (jetRing (Fin 2)).euler 1 (Polar.lagrangian U) =
+      -(Polar.radius * Polar.radius * (jetRing (Fin 2)).q 1 2 +
+          2 * Polar.radius * ((jetRing (Fin 2)).q 0 1 * (jetRing (Fin 2)).q 1 1)) -
+        (jetRing (Fin 2)).d 1 0 U :=
+  Polar.euler_angular hU
+
+/-- Conservation of the angular momentum `r² φ̇`. -/
+example {U : StandardJet (Fin 2)} (hU : (jetRing (Fin 2)).OrderLE U 0)
+    (hφ : (jetRing (Fin 2)).d 1 0 U = 0) :
+    (jetRing (Fin 2)).Conserved (Polar.lagrangian U)
+      (Polar.radius * Polar.radius * (jetRing (Fin 2)).q 1 1) :=
+  Polar.conserved_angularMomentum hU hφ
+
+end Polar
