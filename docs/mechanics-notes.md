@@ -609,3 +609,36 @@ The velocity derivative of the added density is $\partial_q F$, so the momentum 
 **Interface decision.** Keep the definitions, theorem statements and proofs unchanged. Use “signed radius” for `Kepler.distance` on the real constraint locus and “inverse signed radius” for `R` along a motion. The unconstrained element `ρ` in a Kepler frame is a formal inverse radius. The orbit identity uses the signed radius; the textbook and experimental convention `r = |q|` corresponds to the positive branch. The polar model `r = exp s` already has positive radius.
 
 **Proof status.** The existing identities `R_mul_distance` and `distance_mul_distance` are unchanged. This is a documentation correction, with no new positivity theorem or comparison between the spatial and polar models. Ledger statuses, counts and remainders are unchanged. [Kepler motions](../ProjectAInos/Mechanics/Poisson/KeplerMotion.lean) · [Kepler orbit](../ProjectAInos/Mechanics/Poisson/KeplerOrbit.lean)
+
+<a id="mechanics-proof-strategy-observation"></a>
+
+## M77. Proof strategies after the algebraic core
+
+**Observation.** The absence of a general smooth nonlinear flow does not prevent
+proving identities for a given regular family of solutions. Mathlib supplies
+local ODE existence, uniqueness and Lipschitz dependence; the shared
+`SmoothGeometry/ODE/Volterra.lean` additionally constructs linear solutions with
+smooth dependence on coefficient curves and initial values when the coefficient
+supremum norm on the unit interval is less than one. Extending this construction
+by rescaling and patching is further work. A family parametrized by prescribed
+endpoints needs an invertible endpoint map as well as initial-value dependence.
+The prose after Proposition 68 also missed the normalization factor: for
+`I = A/(2π)`, the identity to prove is `I'(E) = T(E)/(2π)`, not `I'(E) = T(E)`.
+The period formula displayed in that proposition was already normalized for `A`.
+
+**Interface decision.** Plan conditional endpoint-action and Liouville theorems
+first, with explicit solution-family hypotheses and free-particle or oscillator
+instances; keep construction of the families as a separate obligation. Develop
+energy-dependent turning-point integrals before Abel inversion and action–angle
+variables. Keep finite-degree normal forms, formal series and quantitative
+trajectory estimates separate: finite jet ideals are not Poisson ideals for
+the canonical bracket. For exponential adiabatic conservation, specify analytic
+and asymptotic hypotheses and distinguish corrected actions from incoming and
+outgoing physical actions. The nine packages in the
+[remaining-proof strategy](cinfty-mechanics.md#remaining-proof-strategy) give
+the domains, dependencies and completion criteria for all twenty remainder rows.
+
+**Proof status.** Planning and explanatory corrections only. No new Lean result,
+flow interface, normal form or asymptotic bound is implemented. Ledger statuses,
+counts and row scopes are unchanged. The pinned sources were checked on
+15 November 2026 against Mathlib `56a005855ea17e0b0958f73ec801ae140b0a1679`.
