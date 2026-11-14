@@ -134,6 +134,45 @@ For a natural Lagrangian, `isSolution_naturalLagrangian_iff` identifies the solu
 
 Hence `prolongation_eq_of_stationary`: a conserved element of the jet ring takes the same value at all times along a smooth stationary path. `energy_eq_of_stationary` is the case of the energy `Σᵢ q̇ᵢ ∂L/∂q̇ᵢ − L` for a Lagrangian with `∂f/∂t = 0`, stated with real derivatives and no jet ring in the conclusion. The statement quantifies over all intervals because a solution in the jet ring is a condition at all times; paths that are only `C²` or defined on one interval are not covered.
 
+## The Lagrangian of a free particle
+
+`Jet/FreeParticle` proves Theorem 66 of the manuscript (Landau–Lifshitz §4)
+in the standard jet ring. `DependsOnVelocities L` says that `∂L/∂t = 0` and
+`∂L/∂qᵢ⁽ᵏ⁾ = 0` for `k ≠ 1`. The infinitesimal boost with the velocity `u` is
+`boost u L`, the prolongation of the variation `δqᵢ = t uᵢ`; on a function of
+the velocities it is `Σ uᵢ ∂L/∂vᵢ` (`boost_eq`). `IsBoostQuasiInvariant L`
+says that for every `u` the boost of `L` is the total derivative of a function
+of the time and the positions.
+
+- `isBoostQuasiInvariant_iff`: a function of the velocities is quasi-invariant
+  under boosts exactly when it is `velocityPolynomial m b c`
+  `= ½ Σ mᵢⱼ vᵢ vⱼ + Σ bᵢ vᵢ + c` for a symmetric matrix `m`.
+- `velocityPolynomial_eq_add_totalDeriv`: the terms of degree at most one are
+  `D(Σ bᵢ qᵢ + c t)`.
+- `IsIsotropic L` says `L(A v) = L(v)` for every matrix `A` with `Aᵀ A = 1`,
+  where `velocityValue L w` is the value of `L` at the velocities `w`.
+  `eq_smul_one_of_isIsotropic`: an isotropic polynomial has `m = μ · 1` and
+  `b = 0`. `exists_eq_of_isIsotropic`: a function of the velocities that is
+  quasi-invariant under boosts and isotropic is
+  `naturalLagrangian (fun _ => μ) 0 + c`, that is, `½ μ |v|² + c`.
+- `freeLagrangian_boost`: `½ μ |v + u|² − ½ μ |v|² = D(μ u · q + ½ μ |u|² t)`
+  (Landau–Lifshitz (4.2)).
+
+The proof of the first statement applies `∂/∂vⱼ` to `Σ uᵢ ∂L/∂vᵢ = D F_u`.
+The left side then depends only on the velocities and the right side only on
+the time and the positions, so all the partial derivatives of both vanish.
+`Constants` proves that such an element of a free C∞-ring is a constant
+(`eq_algebraMap_of_partialDerivation_eq_zero`): along the segment between two
+points it is a function of time with zero derivative. This is the only
+analytic step. A function with constant second derivatives is then a
+polynomial of degree at most two by the same lemma applied twice.
+
+Isotropy uses three orthogonal matrices: `−1` removes the linear term, the
+change of sign of one co-ordinate removes the off-diagonal entries, and the
+exchange of two co-ordinates makes the diagonal entries equal. The action of
+the orthogonal group on the jet ring is not defined; the hypothesis is on the
+values of `L`.
+
 ## Poisson models
 
 Hamiltonian mechanics uses the Poisson structures of the
@@ -842,6 +881,8 @@ semi-major axis is not computed.
 | [Jet/Polar](../ProjectAInos/Mechanics/Jet/Polar.lean) | `Polar.metric`, `Polar.lagrangian`, `Polar.euler_radial`, `Polar.euler_angular`, `Polar.momentum_angular`, `Polar.conserved_angularMomentum` |
 | [Jet/Analytic](../ProjectAInos/Mechanics/Jet/Analytic.lean) | `firstOrder`, `orderLE_firstOrder`, `euler_firstOrder`, `realPath`, `realJet`, `prolongation_firstOrder_apply`, `fderiv_ofSmoothOperation`, `eulerLagrange_ofSmoothOperation`, `prolongation_euler_firstOrder_apply`, `isSolution_firstOrder_iff`, `isSolution_firstOrder_iff_stationary`, `prolongation_eq_of_stationary`, `energy_eq_of_stationary` |
 | [Jet/Standard](../ProjectAInos/Mechanics/Jet/Standard.lean) | `StandardJet`, `jetRing`, `totalDeriv_eq_derivation`, `euler_q_mul_acceleration`, `euler_oscillator`, `conserved_energy_oscillator`, `conserved_boost_free` |
+| [Constants](../ProjectAInos/Mechanics/Constants.lean) | `lift_eq_of_partialDerivation_eq_zero`, `eq_algebraMap_of_partialDerivation_eq_zero` |
+| [Jet/FreeParticle](../ProjectAInos/Mechanics/Jet/FreeParticle.lean) | `JetRing.d_sum_mul_q`, `JetRing.d_sum_mul_q_mul_q_of_isSymm`, `StandardJet.DependsOnVelocities`, `StandardJet.eq_algebraMap_of_dt_eq_zero_of_d_eq_zero`, `StandardJet.boost`, `StandardJet.IsBoostQuasiInvariant`, `StandardJet.boost_eq`, `StandardJet.d_one_d_one_eq_algebraMap`, `StandardJet.velocityPolynomial`, `StandardJet.isBoostQuasiInvariant_velocityPolynomial`, `StandardJet.exists_eq_velocityPolynomial`, `StandardJet.massMatrix`, `StandardJet.isBoostQuasiInvariant_iff`, `StandardJet.velocityPolynomial_eq_add_totalDeriv`, `StandardJet.velocityValue`, `StandardJet.velocityValue_velocityPolynomial`, `StandardJet.IsIsotropic`, `StandardJet.eq_smul_one_of_isIsotropic`, `StandardJet.exists_eq_of_isIsotropic`, `StandardJet.freeLagrangian_boost` |
 | [Poisson/RigidBody](../ProjectAInos/Mechanics/Poisson/RigidBody.lean) | `PhaseSpace`, `L`, `poisson`, `poisson_L_L`, `L_ne_zero`, `poisson_bracket`, `poisson_L_bracket`, `kineticEnergy`, `gradient_kineticEnergy`, `euler_equations`, `euler_equation_zero`, `casimir`, `poisson_casimir_left`, `isIntegral_casimir` |
 | [Poisson/Epsilon](../ProjectAInos/Mechanics/Poisson/Epsilon.lean) | `epsilon`, `epsilon_skew`, `sum_epsilon_mul` |
 | [Poisson/AngularMomentum](../ProjectAInos/Mechanics/Poisson/AngularMomentum.lean) | `M`, `canonical_M_q`, `canonical_M_p`, `canonical_M_M`, `canonical_M_dotProduct`, `isIntegral_M`, `isIntegral_M_sq`, `momentumMap`, `isPoissonHom_momentumMap` |

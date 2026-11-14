@@ -211,4 +211,10 @@ example :
         av.1 0 * av.2 0 + av.1 1 * av.2 1 = 0} :=
   circleTangentPointEquiv
 
+/-- An element of the free ring is determined by its values at the points. -/
+example (a : ι → ℝ) (s : FreeSmoothRing ι) : lift a s = s.val a := lift_real a s
+
+example {s s' : FreeSmoothRing ι} (h : ∀ a : ι → ℝ, lift a s = lift a s') : s = s' :=
+  ext_lift h
+
 end Points

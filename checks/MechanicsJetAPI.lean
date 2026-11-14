@@ -399,3 +399,110 @@ example {U : StandardJet (Fin 2)} (hU : (jetRing (Fin 2)).OrderLE U 0)
   Polar.conserved_angularMomentum hU hφ
 
 end Polar
+
+section FreeParticle
+
+open StandardJet
+
+variable {ι : Type*} [DecidableEq ι] [Fintype ι]
+
+/-- A vector field is a finite combination of the coordinate vector fields. -/
+example {κ M : Type*} [DecidableEq κ] [AddCommGroup M] [Module (FreeSmoothRing κ) M]
+    (E : SmoothDerivation (FreeSmoothRing κ) M) (s : FreeSmoothRing κ) :
+    E s = ∑ a ∈ Finset.univ.image (FreeSmoothRing.presentation s).indices,
+      FreeSmoothRing.partialDerivation a s • E (FreeSmoothRing.generator a) :=
+  FreeSmoothRing.apply_eq_sum_partialDerivation E s
+
+/-- An element of a free ring with vanishing partial derivatives is a constant. -/
+example {κ : Type*} [DecidableEq κ] {s : FreeSmoothRing κ}
+    (h : ∀ a, FreeSmoothRing.partialDerivation a s = 0) (x y : κ → ℝ) :
+    FreeSmoothRing.lift x s = FreeSmoothRing.lift y s :=
+  lift_eq_of_partialDerivation_eq_zero h x y
+
+example {κ : Type*} [DecidableEq κ] {s : FreeSmoothRing κ}
+    (h : ∀ a, FreeSmoothRing.partialDerivation a s = 0) (x₀ : κ → ℝ) :
+    s = algebraMap ℝ (FreeSmoothRing κ) (FreeSmoothRing.lift x₀ s) :=
+  eq_algebraMap_of_partialDerivation_eq_zero h x₀
+
+example (L : StandardJet ι) :
+    DependsOnVelocities L ↔
+      (jetRing ι).dt L = 0 ∧ ∀ i k, k ≠ 1 → (jetRing ι).d i k L = 0 :=
+  Iff.rfl
+
+example (u : ι → ℝ) (L : StandardJet ι) :
+    boost u L =
+      (jetRing ι).prolong (fun i => time ι * algebraMap ℝ (StandardJet ι) (u i)) L :=
+  rfl
+
+example (L : StandardJet ι) :
+    IsBoostQuasiInvariant L ↔
+      ∀ u : ι → ℝ, ∃ F, (jetRing ι).OrderLE F 0 ∧ boost u L = (jetRing ι).totalDeriv F :=
+  Iff.rfl
+
+/-- On a function of the velocities the boost is `Σ uᵢ ∂/∂vᵢ`. -/
+example {L : StandardJet ι} (hL : DependsOnVelocities L) (u : ι → ℝ) :
+    boost u L = ∑ i, algebraMap ℝ (StandardJet ι) (u i) * (jetRing ι).d i 1 L :=
+  boost_eq hL u
+
+example (m : Matrix ι ι ℝ) (b : ι → ℝ) (c : ℝ) :
+    velocityPolynomial m b c =
+      ∑ i, ∑ j, algebraMap ℝ (StandardJet ι) (m i j / 2) *
+          ((jetRing ι).q i 1 * (jetRing ι).q j 1) +
+        ∑ i, algebraMap ℝ (StandardJet ι) (b i) * (jetRing ι).q i 1 +
+          algebraMap ℝ (StandardJet ι) c :=
+  rfl
+
+/-- Landau–Lifshitz §4 (Theorem 66): quasi-invariance under boosts is being a
+polynomial of degree at most two in the velocities. -/
+example {L : StandardJet ι} (hL : DependsOnVelocities L) :
+    IsBoostQuasiInvariant L ↔
+      ∃ (m : Matrix ι ι ℝ) (b : ι → ℝ) (c : ℝ), m.IsSymm ∧ L = velocityPolynomial m b c :=
+  isBoostQuasiInvariant_iff hL
+
+/-- The terms of degree at most one are a total derivative. -/
+example (m : Matrix ι ι ℝ) (b : ι → ℝ) (c : ℝ) :
+    velocityPolynomial m b c =
+      ∑ i, ∑ j, algebraMap ℝ (StandardJet ι) (m i j / 2) *
+          ((jetRing ι).q i 1 * (jetRing ι).q j 1) +
+        (jetRing ι).totalDeriv (∑ i, algebraMap ℝ (StandardJet ι) (b i) * (jetRing ι).q i 0 +
+          algebraMap ℝ (StandardJet ι) c * time ι) :=
+  velocityPolynomial_eq_add_totalDeriv m b c
+
+example (L : StandardJet ι) (w : ι → ℝ) :
+    velocityValue L w = FreeSmoothRing.lift (velocityPoint w) L := rfl
+
+example (m : Matrix ι ι ℝ) (b : ι → ℝ) (c : ℝ) (w : ι → ℝ) :
+    velocityValue (velocityPolynomial m b c) w = w ⬝ᵥ m *ᵥ w / 2 + b ⬝ᵥ w + c :=
+  velocityValue_velocityPolynomial m b c w
+
+example (L : StandardJet ι) :
+    IsIsotropic L ↔
+      ∀ A : Matrix ι ι ℝ, Aᵀ * A = 1 →
+        ∀ w : ι → ℝ, velocityValue L (A *ᵥ w) = velocityValue L w :=
+  Iff.rfl
+
+example {m : Matrix ι ι ℝ} (hm : m.IsSymm) {b : ι → ℝ} {c : ℝ}
+    (h : IsIsotropic (velocityPolynomial m b c)) :
+    (∃ μ : ℝ, m = μ • (1 : Matrix ι ι ℝ)) ∧ b = 0 :=
+  eq_smul_one_of_isIsotropic hm h
+
+/-- Landau–Lifshitz §4: a function of the velocities that is quasi-invariant
+under boosts and isotropic is `½ μ |v|² + c`. -/
+example {L : StandardJet ι} (hL : DependsOnVelocities L) (hq : IsBoostQuasiInvariant L)
+    (hiso : IsIsotropic L) :
+    ∃ μ c : ℝ,
+      L = (jetRing ι).naturalLagrangian (fun _ => μ) 0 + algebraMap ℝ (StandardJet ι) c :=
+  exists_eq_of_isIsotropic hL hq hiso
+
+/-- The finite boost of the free Lagrangian (Landau–Lifshitz (4.2)). -/
+example (μ : ℝ) (u : ι → ℝ) :
+    ∑ i, algebraMap ℝ (StandardJet ι) (μ / 2) *
+          (((jetRing ι).q i 1 + algebraMap ℝ (StandardJet ι) (u i)) *
+            ((jetRing ι).q i 1 + algebraMap ℝ (StandardJet ι) (u i))) -
+        ∑ i, algebraMap ℝ (StandardJet ι) (μ / 2) * ((jetRing ι).q i 1 * (jetRing ι).q i 1) =
+      (jetRing ι).totalDeriv
+        (∑ i, algebraMap ℝ (StandardJet ι) (μ * u i) * (jetRing ι).q i 0 +
+          algebraMap ℝ (StandardJet ι) (∑ i, μ / 2 * (u i * u i)) * time ι) :=
+  freeLagrangian_boost μ u
+
+end FreeParticle

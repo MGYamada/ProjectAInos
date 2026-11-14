@@ -64,6 +64,47 @@ theorem derivation_lift {B M : Type*} [CommRing B] [Algebra ℝ B] [SmoothRing B
   · intro h
     exact absurd (Finset.mem_univ _) h
 
+omit [Fintype κ] in
+/-- A vector field on the free ring is the combination `Σₐ (∂ₐ s) E(xₐ)` of the
+coordinate vector fields. The sum is over the generators of a presentation, so
+the index type need not be finite. -/
+theorem apply_eq_sum_partialDerivation {M : Type*} [AddCommGroup M]
+    [Module (FreeSmoothRing κ) M] (E : SmoothDerivation (FreeSmoothRing κ) M)
+    (s : FreeSmoothRing κ) :
+    E s = ∑ a ∈ Finset.univ.image (presentation s).indices,
+      partialDerivation a s • E (generator a) := by
+  have hE : E s = ∑ i, op (partialDeriv i (presentation s).operation)
+      (fun j => generator ((presentation s).indices j)) •
+        E (generator ((presentation s).indices i)) := by
+    conv_lhs => rw [presentation_eq s]
+    rw [E.chain]
+  have hp (a : κ) : partialDerivation a s =
+      ∑ i, op (partialDeriv i (presentation s).operation)
+        (fun j => generator ((presentation s).indices j)) *
+          (if (presentation s).indices i = a then 1 else 0) := by
+    conv_lhs => rw [presentation_eq s]
+    rw [SmoothDerivation.chain]
+    simp only [smul_eq_mul, partialDerivation_generator]
+  rw [hE]
+  simp only [hp, Finset.sum_smul]
+  rw [Finset.sum_comm]
+  refine Finset.sum_congr rfl fun i _ => ?_
+  rw [Finset.sum_eq_single ((presentation s).indices i)]
+  · simp only [↓reduceIte, mul_one]
+  · intro b _ hb
+    simp only [Ne.symm hb, ↓reduceIte, mul_zero, zero_smul]
+  · intro h
+    exact absurd (Finset.mem_image_of_mem _ (Finset.mem_univ i)) h
+
+omit [Fintype κ] in
+/-- A vector field vanishes on an element whose partial derivatives all
+vanish. -/
+theorem apply_eq_zero_of_partialDerivation_eq_zero {M : Type*} [AddCommGroup M]
+    [Module (FreeSmoothRing κ) M] (E : SmoothDerivation (FreeSmoothRing κ) M)
+    {s : FreeSmoothRing κ} (h : ∀ a, partialDerivation a s = 0) : E s = 0 := by
+  rw [apply_eq_sum_partialDerivation E s]
+  exact Finset.sum_eq_zero fun a _ => by rw [h a, zero_smul]
+
 /-- The chain rule for a substitution, for a vector field of the target. -/
 theorem derivation_lift_mul {B : Type*} [CommRing B] [Algebra ℝ B] [SmoothRing B]
     (y : κ → B) (E : SmoothDerivation B B) (s : FreeSmoothRing κ) :

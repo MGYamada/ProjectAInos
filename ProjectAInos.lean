@@ -81,6 +81,7 @@ public import ProjectAInos.GeneralRelativity.VariationStationary
 public import ProjectAInos.Integrations.YangMillsBridge
 public import ProjectAInos.Integrations.YangMillsCoordinates
 public import ProjectAInos.Mechanics.Basic
+public import ProjectAInos.Mechanics.Constants
 public import ProjectAInos.Mechanics.EulerLagrange
 public import ProjectAInos.Mechanics.Examples
 public import ProjectAInos.Mechanics.FirstVariation
@@ -88,6 +89,7 @@ public import ProjectAInos.Mechanics.Jet.Analytic
 public import ProjectAInos.Mechanics.Jet.Basic
 public import ProjectAInos.Mechanics.Jet.Conservation
 public import ProjectAInos.Mechanics.Jet.Euler
+public import ProjectAInos.Mechanics.Jet.FreeParticle
 public import ProjectAInos.Mechanics.Jet.Metric
 public import ProjectAInos.Mechanics.Jet.Noether
 public import ProjectAInos.Mechanics.Jet.Polar
