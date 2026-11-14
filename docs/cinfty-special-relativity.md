@@ -54,8 +54,8 @@ SR momentum, collision or mass-shell measure API already exists.
 ### After the mechanics programme
 
 The [mechanics plan](cinfty-mechanics.md) was carried out between the baseline
-and `fd0ccaa`. Its [ledger](cinfty-mechanics.md#ledger) ends with 31 of the 52
-sections *proved* and the other 21 closed with their proved part and the
+and `fd0ccaa`. Its [ledger](cinfty-mechanics.md#ledger) now has 32 of the 52
+sections *proved* and the other 20 closed with their proved part and the
 reason for the remainder. The work went in this order: the algebraic core and
 its models; the rows that are algebra over a free C∞-ring; the analytic
 interface lemmas and the quotients that depend on them; the integrals within
@@ -82,13 +82,17 @@ for this volume.
 **What mechanics found out of reach.** These findings set expectations for
 the rows of this volume.
 
-- *Measures and improper integrals.* Six mechanics rows are closed with a
-  remainder because they need the push-forward of a measure, an integral
-  over a closed curve, or an integral that is improper at a turning point or
-  at infinity (cross-sections, periods). §§10 and 12 of this volume are of
-  the same kind. SR-I4 stays an interface of its own, and these rows are
-  expected to close with a stated remainder unless shell measures are built
-  first.
+- *Measures and integrals to infinity.* Several mechanics rows are closed
+  with a remainder because they need the push-forward of a measure, an
+  integral over a closed curve, or an integral to infinity (cross-sections,
+  the angle of scattering). §§10 and 12 of this volume are of the same kind.
+  SR-I4 stays an interface of its own, and these rows are expected to close
+  with a stated remainder unless shell measures are built first. Integrals up
+  to a simple turning point were first recorded as out of reach. They are
+  Lebesgue integrals with an integrable singularity, and they were proved
+  afterwards (`integral_comp_eq_integral_div_sqrt_turning`): an obstacle of
+  this kind is to be checked against the integral that Mathlib has before it
+  is written into a row.
 - *Asymptotic statements.* Six mechanics rows state an approximation for
   which the text gives no error estimate. What could be proved was an exact
   identity next to each. For SR-K5 and the expansion of §9, the theorem with

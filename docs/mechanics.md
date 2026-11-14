@@ -1198,9 +1198,56 @@ derivative `r'` on an interval and `r'(t)² = F(r(t))`, then
   `φ(t₁) − φ(t₀) = ∫ (ℓ/mr²) dr/√((2/m)(E − V) − ℓ²/m²r²)` (14.7).
 
 The two integrals are over an interval of time where the radial velocity is
-positive. The integrals up to a turning point are improper and are not
-treated, so the angle between the apsides and the condition for a closed orbit
-are not proved.
+positive, so the interval contains no turning point.
+
+`Mechanics/TurningPoint` treats the integrals up to the turning points. For
+simple turning points `u₁ < u₂`, `ẋ² = (x − u₁)(u₂ − x) G(x)` with `G > 0`,
+the function `1/√((u − u₁)(u₂ − u) G(u))` is unbounded at both ends and
+integrable, and `turningParam u₁ u₂ θ = (u₁ + u₂)/2 + (u₂ − u₁)/2 · cos θ`
+removes the singularity.
+
+- `integral_div_sqrt_turning`:
+  `∫ w(u) du/√((u − u₁)(u₂ − u) G(u)) = ∫₀^π w(u(θ)) dθ/√G(u(θ))`, for all
+  functions `w` and `G`. `integrableOn_div_sqrt_turning`: the integrand is
+  integrable when `w` and `G` are continuous and `G > 0`.
+- `integral_comp_eq_integral_div_sqrt_turning`: if `x` increases from `u₁`
+  to `u₂` on `[t₁, t₂]`, with the velocity allowed to vanish at both ends,
+  then `∫ w(x(t)) dt = ∫ w(u) du/√((u − u₁)(u₂ − u) G(u))`.
+  `integral_comp_eq_integral_div_sqrt_turning_of_neg` is the same for a
+  decreasing motion.
+- `sub_eq_sqrt_mul_integral_of_energy_turning` is Landau–Lifshitz (11.5):
+  `t₂ − t₁ = √(m/2) ∫ dx/√(E − U(x))` between two turning points, when
+  `E − U = (x − x₁)(x₂ − x) W` with `W > 0`.
+- `sqrt_mul_integral_oscillator`: for the oscillator the formula gives `π/ω`.
+  `sub_eq_sqrt_mul_integral_oscillator`: the motion `−a cos ωt` satisfies the
+  hypotheses.
+
+The integrals are Lebesgue integrals; no limit at a turning point is taken.
+The change of variables uses Mathlib's formula for an injective
+differentiable map, which needs no integrability hypothesis.
+
+`Poisson/Apsides` applies this to the radial motion. An apsis is a time at
+which the radial velocity vanishes.
+
+- `sub_eq_integral_turningParam_radius`,
+  `angle_sub_eq_integral_turningParam_radius`: between two apsides at which
+  `ṙ²` has simple zeros, the time and the angle (14.10) are regular integrals
+  in `θ`.
+- `keplerPotential α` is `−α/r` as a function of `s = log r`.
+  `kepler_radialSpeedSq_eq`: the two apsides `r₁ < r₂` determine the energy
+  and the angular momentum, and `ṙ² = (r − r₁)(r₂ − r) · 2α/(m (r₁ + r₂) r²)`.
+- `kepler_sub_eq`, `kepler_sub_eq_of_neg`: the time from one apsis to the
+  next is `π a √(m a/α)`, with `a = (r₁ + r₂)/2`.
+- `kepler_period`: if the radius increases from an apsis at `t₁` to an apsis
+  at `t₂` and decreases to an apsis at `t₃`, then `r(t₃) = r(t₁)` and
+  `t₃ − t₁ = 2π a √(m a/α)`. This is Landau–Lifshitz (15.8),
+  `T = 2π a^{3/2} √(m/α)`.
+
+In Kepler's problem `θ` is the eccentric anomaly, up to the direction in
+which it is counted. The statements are for a given trajectory with its
+apsides. The integrals to infinity of the scattering problem, the condition
+for a closed orbit and the periodicity of the motion as a whole are not
+proved.
 
 ## Mechanical similarity
 
@@ -1315,7 +1362,9 @@ semi-major axis is not computed.
 | [Elementary](../ProjectAInos/Mechanics/Elementary.lean) | `ringCos`, `ringSin`, `ringCos_mul_ringCos_add_ringSin_mul_ringSin`, `apply_ringCos`, `apply_ringSin`, `map_ringCos`, `map_ringSin`, `exp_zero`, `exp_mul_exp_neg`, `apply_exp` |
 | [Poisson/CentralField](../ProjectAInos/Mechanics/Poisson/CentralField.lean) | `Plane`, `Polar`, `Radial`, `r`, `rInv`, `cosφ`, `sinφ`, `bracket_eq`, `polarCoordinates`, `isPoissonHom_polarCoordinates`, `polarCoordinates_q_sq`, `polarCoordinates_p_sq`, `angularMomentum`, `polarCoordinates_angularMomentum`, `hamiltonian`, `polarHamiltonian`, `logPotential`, `polarCoordinates_hamiltonian`, `partialDerivation_polarHamiltonian`, `radialHamiltonian`, `restriction_polarHamiltonian`, `radius`, `radialMomentum`, `radialHamiltonian_eq`, `canonical_radius_radialMomentum`, `polarHamiltonian_mem_normalizer`, `reductionHom_radialHamiltonian`, `isTrajectory_plane`, `lift_angularMomentum`, `pφ_eq_algebraMap`, `isTrajectory_radial`, `timeDerivative_angle`, `q_dotProduct_M`, `sum_q_mul_M_eq_zero` |
 | [Quadrature](../ProjectAInos/Mechanics/Quadrature.lean) | `integral_comp_eq_integral_div_sqrt`, `sub_eq_integral_one_div_sqrt`, `sub_eq_sqrt_mul_integral_of_energy` |
-| [Poisson/OrbitIntegral](../ProjectAInos/Mechanics/Poisson/OrbitIntegral.lean) | `canonical_radius_radialHamiltonian`, `radiusAt`, `radialVelocityAt`, `radialSpeedSq`, `lift_radialHamiltonian_apply`, `hasDerivAt_radiusAt`, `continuous_radialVelocityAt`, `radialVelocityAt_sq`, `continuousOn_radialSpeedSq`, `sub_eq_integral_radius`, `angle_sub_eq_integral_radius` |
+| [Poisson/OrbitIntegral](../ProjectAInos/Mechanics/Poisson/OrbitIntegral.lean) | `canonical_radius_radialHamiltonian`, `radiusAt`, `radialVelocityAt`, `radialSpeedSq`, `lift_radialHamiltonian_apply`, `hasDerivAt_radiusAt`, `continuous_radialVelocityAt`, `radialVelocityAt_sq`, `continuousOn_radialSpeedSq`, `sub_eq_integral_radius`, `angle_sub_eq_integral_radius`, `timeDerivative_angle_apply` |
+| [TurningPoint](../ProjectAInos/Mechanics/TurningPoint.lean) | `turningParam`, `turningParam_image`, `turningParam_sub_mul_sub`, `integral_turningParam`, `integral_div_sqrt_turning`, `integrableOn_div_sqrt_turning`, `integral_comp_eq_integral_div_sqrt_turning`, `integral_comp_eq_integral_div_sqrt_turning_of_neg`, `sub_eq_integral_turningParam`, `sub_eq_sqrt_mul_integral_of_energy_turning`, `sqrt_mul_integral_oscillator`, `sub_eq_sqrt_mul_integral_oscillator` |
+| [Poisson/Apsides](../ProjectAInos/Mechanics/Poisson/Apsides.lean) | `integral_comp_radiusAt_eq_integral_turningParam`, `integral_comp_radiusAt_eq_integral_turningParam_of_neg`, `sub_eq_integral_turningParam_radius`, `angle_sub_eq_integral_turningParam_radius`, `keplerPotential`, `radialSpeedSq_kepler`, `kepler_radialSpeedSq_eq`, `kepler_integral_turningParam`, `kepler_sub_eq`, `kepler_sub_eq_of_neg`, `kepler_period` |
 | [Similarity](../ProjectAInos/Mechanics/Similarity.lean) | `TimeFunction.scale`, `TimeFunction.timeDerivative_scale`, `TimeFunction.scale_lift`, `dilate`, `lift_dilate`, `IsHomogeneous`, `IsHomogeneous.dilate_partialDerivation`, `StandardJet.IsSolution.similar`, `similar_apply_add_period` |
 | [Poisson/VirialAverage](../ProjectAInos/Mechanics/Poisson/VirialAverage.lean) | `TimeFunction.tendsto_average_timeDerivative`, `IsTrajectory.tendsto_average_virial` |
 | [Poisson/KeplerOrbit](../ProjectAInos/Mechanics/Poisson/KeplerOrbit.lean) | `IsKeplerMotion.conic`, `IsKeplerMotion.similar`, `similar_period` |

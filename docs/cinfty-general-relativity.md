@@ -60,8 +60,8 @@ The detailed evidence table near the end identifies the actual source modules.
 ### After the mechanics programme
 
 The [mechanics plan](cinfty-mechanics.md) was carried out between the baseline
-and `fd0ccaa`. Its [ledger](cinfty-mechanics.md#ledger) ends with 31 of the 52
-sections *proved* and the other 21 closed with their proved part and the
+and `fd0ccaa`. Its [ledger](cinfty-mechanics.md#ledger) now has 32 of the 52
+sections *proved* and the other 20 closed with their proved part and the
 reason for the remainder. The
 [SR volume](cinfty-special-relativity.md#after-the-mechanics-programme)
 describes how the work was carried out. The results that matter for this
@@ -91,12 +91,17 @@ volume are the following.
   Jacobi fields, congruences or developments takes this dependence as a
   named hypothesis until it is proved, or is stated for a given family of
   solutions.
-- *Improper integrals.* Six mechanics rows are closed with a remainder
-  because they need a measure, an integral over a closed curve, or an
-  integral that is improper at a turning point or at infinity. The
-  perihelion shift and the deflection of light of §101 are integrals between
-  turning points or to infinity, and approximations as well. They meet two
-  obstacles, and their rows are expected to close with a stated remainder.
+- *Integrals to infinity.* Several mechanics rows are closed with a
+  remainder because they need a measure, an integral over a closed curve, or
+  an integral to infinity. Integrals between two simple turning points are
+  not of this kind: they are Lebesgue integrals with an integrable
+  singularity and are proved in mechanics, with the angle between two
+  apsides and the period of Kepler's problem as applications
+  (`CentralField.angle_sub_eq_integral_turningParam_radius`,
+  `CentralField.kepler_period`). So the angle between two apsides of an orbit
+  of §101 is within reach as an exact integral. The perihelion shift is an
+  approximation of it in a small parameter, and the deflection of light is
+  an integral to infinity; these two keep their obstacles.
 - *Asymptotic statements.* Six mechanics rows state an approximation without
   an error estimate. The theorem with its estimate is chosen first; the
   uniform particle limit of §81 is the existing model.
@@ -121,9 +126,10 @@ volume are the following.
 2. *§88:* the conservation of the Killing energy along a given geodesic is
    part of G-H. The redshift statement keeps its hypotheses.
 3. *§101 and G6:* the effective potential is the reduction with respect to
-   the cyclic co-ordinates `t` and `φ`, and the orbit integrals on an
-   interval without a turning point come from the quadrature lemma. The
-   perihelion shift and the deflection of light stay conditional.
+   the cyclic co-ordinates `t` and `φ`, and the orbit integrals come from
+   the quadrature lemmas, on an interval without a turning point and between
+   two simple turning points (`integral_comp_eq_integral_div_sqrt_turning`).
+   The perihelion shift and the deflection of light stay conditional.
 4. *§§112, 113 and G8:* for a density that is a function of the scale
    factor, the Friedmann equation has the form `ȧ² = F(a)`. On an interval
    where `ȧ > 0` the time is the integral of `1/√F` over the
