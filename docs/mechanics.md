@@ -648,10 +648,60 @@ proved. Beats near resonance are not treated.
   (`isSmallOscillation_map_mulVec`), and `IsSmallOscillation.apply_eq` writes
   each co-ordinate as the sum of the normal oscillations.
 
-Proposition 70 of the manuscript, on the Lie algebra of quadratic
-Hamiltonians and the normal form as a linear canonical transformation, is not
-proved, and the equations are not derived here from the Lagrangian
-`½ Σ (mᵢₖ ẋᵢ ẋₖ − kᵢₖ xᵢ xₖ)`.
+The equations are derived from the Lagrangian and from the Hamiltonian in the
+next section.
+
+## Quadratic Hamiltonians and the normal form
+
+`Poisson/Quadratic`, `Oscillations/NormalForm` and
+`Oscillations/QuadraticLagrangian` prove Proposition 70 of the manuscript and
+connect `M ẍ + K x = 0` with the Lagrangian and the Hamiltonian
+(Landau–Lifshitz §23).
+
+- `eulerField` is the vector field `Σₐ xₐ ∂ₐ` of a free C∞-ring, and
+  `IsEulerHomogeneous k f` is `Σₐ xₐ ∂ₐ f = k f`. Generators have the degree
+  one and constants the degree zero, the degrees add under products, and a
+  partial derivative lowers the degree by one.
+  `IsEulerHomogeneous.canonical_bracket`: for the canonical bracket, the
+  bracket of elements of degrees `j` and `k` has the degree `j + k − 2`.
+- `quadraticForm S` is `½ Σ S_ab x_a x_b`, and `PhaseSpace.canonicalForm ι`
+  is the matrix `J` of the canonical bracket. For symmetric `S` and `T`,
+  `{Q_S, Q_T} = Q_{SJT − TJS}` (`PhaseSpace.canonical_bracket_quadraticForm`),
+  and `Q_S` determines `S` (`quadraticForm_injective`).
+- `PhaseSpace.canonicalForm_mul_mem_sp_iff`: `J S` is in Mathlib's
+  `LieAlgebra.Symplectic.sp` exactly when `S` is symmetric. With
+  `PhaseSpace.spHamiltonian A = Q_{−JA}`, for `A` and `B` in `sp(2n, ℝ)`,
+  `{xₐ, H_A} = Σ_c Aₐ_c x_c` (`canonical_bracket_generator_spHamiltonian`),
+  `{H_A, H_B} = H_{[A, B]}` (`canonical_bracket_spHamiltonian`), and
+  `A ↦ H_A` is injective (`spHamiltonian_injective`). Every quadratic form is
+  `H_{JS}` (`quadraticForm_eq_spHamiltonian`).
+- `NormalModes.linearTransformation A B` is the morphism `q ↦ A q`,
+  `p ↦ B p` of phase space. It is a Poisson morphism when `A Bᵀ = 1`
+  (`isPoissonHom_linearTransformation`), and these morphisms compose by the
+  product of the matrices (`linearTransformation_comp`).
+- `NormalModes.quadraticHamiltonian W K` is `½ pᵀ W p + ½ qᵀ K q`. With
+  `Sᵀ M S = 1` and `Sᵀ K S = diag λ` for a symmetric `M`, the inverse of `M`
+  is `S Sᵀ`, and `quadraticHamiltonian_eq_normalForm` is
+  `H = Σₐ ½ (Pₐ² + λₐ Qₐ²)` for `Q = Sᵀ M q` and `P = Sᵀ p`. The
+  transformation is canonical (`isPoissonHom_normalTransformation`) with the
+  inverse `q ↦ S q`, `p ↦ M S p` (`linearTransformation_comp_inverse`,
+  `linearTransformation_inverse_comp`).
+- `NormalModes.isTrajectory_quadraticForm_iff`: a trajectory of `Q_S`
+  satisfies `ẋ = J S x`.
+  `NormalModes.isTrajectory_quadraticHamiltonian_iff_isSmallOscillation`: for
+  `M W = 1`, the trajectories of `½ pᵀ W p + ½ qᵀ K q` are the solutions of
+  `M ẍ + K x = 0` with `p = M ẋ`.
+- `JetRing.quadraticLagrangian M K` is `½ Σ (mᵢₖ vᵢ vₖ − kᵢₖ qᵢ qₖ)`
+  (Landau–Lifshitz (23.3)). For symmetric `M` and `K` its Euler–Lagrange
+  expressions are `−Σₖ kᵢₖ qₖ − Σₖ mᵢₖ q̈ₖ`
+  (`JetRing.euler_quadraticLagrangian`), its solutions are the small
+  oscillations (`StandardJet.isSolution_quadraticLagrangian_iff`), and
+  `NormalModes.isTrajectory_quadraticHamiltonian_iff_isSolution` is the
+  Legendre correspondence with the Hamiltonian.
+
+The correspondence with `sp(2n, ℝ)` is stated by these identities and is not
+bundled as an isomorphism of Lie algebras. The matrices `M` and `K` are
+constants.
 
 ## Parametric resonance
 
@@ -820,6 +870,9 @@ semi-major axis is not computed.
 | [TimePrimitive](../ProjectAInos/Mechanics/TimePrimitive.lean) | `TimeFunction.hasDerivAt_apply_const`, `TimeFunction.continuous_apply_const`, `TimeFunction.apply_sub_apply_eq_integral`, `TimeFunction.primitive`, `TimeFunction.primitive_apply`, `TimeFunction.timeDerivative_primitive` |
 | [Oscillations/Duhamel](../ProjectAInos/Mechanics/Oscillations/Duhamel.lean) | `isForced_zero_damping_iff`, `complexAmplitudeRe`, `complexAmplitudeIm`, `integral_mul_sin_sub`, `IsForced.complexAmplitudeRe_eq`, `IsForced.complexAmplitudeIm_eq`, `IsForced.timeDerivative_apply_eq_integral`, `IsForced.apply_eq_integral`, `IsForced.energy_apply`, `IsForced.energy_transfer`, `duhamel`, `isForced_duhamel`, `duhamel_apply`, `exists_isForced`, `isForced_cos_of_sq_ne`, `steadyState_zero_damping`, `IsForced.apply_eq_of_sq_ne`, `isForced_resonance`, `IsForced.eq_resonance_of_rest`, `IsForced.exists_abs_gt_of_resonance` |
 | [Oscillations/NormalModes](../ProjectAInos/Mechanics/Oscillations/NormalModes.lean) | `exists_orthogonal_diagonalization`, `exists_transpose_mul_mul_eq_one`, `exists_simultaneous_diagonalization`, `mul_eq_mul_mul_diagonal`, `det_sub_smul_eq_zero_iff`, `lam_pos`, `IsSmallOscillation`, `normalCoordinates`, `map_mulVec_normalCoordinates`, `isSmallOscillation_iff`, `IsSmallOscillation.isHarmonic_normalCoordinates`, `isSmallOscillation_map_mulVec`, `IsSmallOscillation.apply_eq` |
+| [Poisson/Quadratic](../ProjectAInos/Mechanics/Poisson/Quadratic.lean) | `eulerField`, `IsEulerHomogeneous`, `IsEulerHomogeneous.mul`, `IsEulerHomogeneous.partialDerivation`, `IsEulerHomogeneous.canonical_bracket`, `bilinearForm`, `quadraticForm`, `partialDerivation_quadraticForm`, `quadraticForm_injective`, `PhaseSpace.canonicalForm`, `PhaseSpace.canonical_bracket_generator_quadraticForm`, `PhaseSpace.canonical_bracket_quadraticForm`, `PhaseSpace.mem_sp_iff`, `PhaseSpace.canonicalForm_mul_mem_sp_iff`, `PhaseSpace.spHamiltonian`, `PhaseSpace.canonical_bracket_generator_spHamiltonian`, `PhaseSpace.canonical_bracket_spHamiltonian`, `PhaseSpace.spHamiltonian_injective` |
+| [Oscillations/NormalForm](../ProjectAInos/Mechanics/Oscillations/NormalForm.lean) | `linearQ`, `linearP`, `canonical_linearQ_linearP`, `linearTransformation`, `linearTransformation_comp`, `isPoissonHom_linearTransformation`, `quadraticHamiltonian`, `quadraticHamiltonian_eq`, `quadraticHamiltonian_eq_normalForm`, `linearTransformation_normalForm`, `isPoissonHom_normalTransformation`, `linearTransformation_comp_inverse`, `linearTransformation_inverse_comp`, `isTrajectory_quadraticForm_iff`, `isTrajectory_quadraticHamiltonian_iff`, `isTrajectory_quadraticHamiltonian_iff_isSmallOscillation` |
+| [Oscillations/QuadraticLagrangian](../ProjectAInos/Mechanics/Oscillations/QuadraticLagrangian.lean) | `JetRing.quadraticLagrangian`, `JetRing.momentum_quadraticLagrangian`, `JetRing.euler_quadraticLagrangian`, `StandardJet.isSolution_quadraticLagrangian_iff`, `NormalModes.isSymm_of_mul_eq_one`, `NormalModes.isTrajectory_quadraticHamiltonian_iff_isSolution` |
 | [Oscillations/Parametric](../ProjectAInos/Mechanics/Oscillations/Parametric.lean) | `mul_self_eq`, `sin_smul_pow_succ`, `exists_abs_pow_apply_le`, `IsHill`, `wronskian`, `IsHill.wronskian_eq`, `TimeFunction.shift`, `IsHill.shift`, `state`, `FundamentalSystem`, `FundamentalSystem.eq_combination`, `FundamentalSystem.matrix`, `FundamentalSystem.det_matrix`, `FundamentalSystem.state_eq`, `FundamentalSystem.matrix_add_nat_mul_period`, `FundamentalSystem.exists_abs_apply_le`, `FundamentalSystem.exists_abs_apply_le_of_abs_trace_lt`, `FundamentalSystem.harmonic` |
 | [Legendre](../ProjectAInos/Mechanics/Legendre.lean) | `positionsToJet`, `positionsToPhase`, `d_zero_positionsToJet`, `orderLE_positionsToJet`, `legendre`, `legendre_p_eq_momentum`, `legendre_hamiltonian`, `isTrajectory_natural_iff`, `isSolution_natural_iff`, `isTrajectory_natural_iff_isSolution` |
 | [Poisson/CompleteIntegral](../ProjectAInos/Mechanics/Poisson/CompleteIntegral.lean) | `ActionSpace`, `substitution`, `IsHamiltonJacobi`, `along`, `momentum`, `timeDerivative_along`, `partialDerivation_substitution_q`, `isTrajectory_of_isHamiltonJacobi`, `freeAction`, `isHamiltonJacobi_freeAction`, `isTrajectory_freeAction` |

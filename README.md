@@ -214,8 +214,9 @@ the linearization at an equilibrium. Damped oscillations are proved in their
 three cases, with the loss of energy `−2F` for a dissipative function `F`.
 Forced oscillations under friction are proved with the approach to the steady
 state and the exact resonance curve, and without friction with Duhamel's
-formula and the energy transfer. Normal modes and the stability criterion of
-parametric resonance are proved. Integrals of the motion are constant along
+formula and the energy transfer. Normal modes, the normal form of a quadratic
+Hamiltonian as a linear canonical transformation, and the stability criterion
+of parametric resonance are proved. Integrals of the motion are constant along
 trajectories of a Hamiltonian on a free C∞-ring. The Legendre correspondence
 for natural Lagrangians, Jacobi's theorem on complete integrals and Liouville's
 theorem in infinitesimal form are proved, as are the description of states as

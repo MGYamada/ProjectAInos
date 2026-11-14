@@ -10,8 +10,9 @@ import ProjectAInos
 as a Lagrangian and as a Hamiltonian system with its flow, the linearization
 at an equilibrium, damped oscillations, the dissipative function, forced
 oscillations under friction with the resonance curve, Duhamel's formula with
-the energy transfer, normal modes, and the monodromy matrix of parametric
-resonance. Default elaborator options are intentional: these checks must not
+the energy transfer, normal modes, quadratic Hamiltonians with their normal
+form and the Lagrangian of small oscillations, and the monodromy matrix of
+parametric resonance. Default elaborator options are intentional: these checks must not
 rely on the implementation's transparency settings. Every statement is pinned
 with its type. -/
 noncomputable section
@@ -677,6 +678,241 @@ example {M K S : Matrix n n ℝ} {lam : n → ℝ} (hSM : Sᵀ * M * S = 1)
   h.apply_eq hSM hSK hω hω0 k t
 
 end NormalModes
+
+section QuadraticHamiltonians
+
+open NormalModes
+
+variable {n : Type*} [Fintype n] [DecidableEq n]
+
+example (k : ℝ) (f : FreeSmoothRing n) :
+    IsEulerHomogeneous k f ↔ eulerField f = algebraMap ℝ (FreeSmoothRing n) k * f :=
+  Iff.rfl
+
+example (a : n) : eulerField (generator a : FreeSmoothRing n) = generator a :=
+  eulerField_generator a
+
+example (a : n) : IsEulerHomogeneous 1 (generator a : FreeSmoothRing n) :=
+  isEulerHomogeneous_generator a
+
+example {j k : ℝ} {f g : FreeSmoothRing n} (hf : IsEulerHomogeneous j f)
+    (hg : IsEulerHomogeneous k g) : IsEulerHomogeneous (j + k) (f * g) :=
+  hf.mul hg
+
+example {k : ℝ} {f g : FreeSmoothRing n} (hf : IsEulerHomogeneous k f)
+    (hg : IsEulerHomogeneous k g) : IsEulerHomogeneous k (f + g) :=
+  hf.add hg
+
+example {k : ℝ} {f : FreeSmoothRing n} (hf : IsEulerHomogeneous k f) (a : n) :
+    IsEulerHomogeneous (k - 1) (partialDerivation a f) :=
+  hf.partialDerivation a
+
+/-- The bracket of homogeneous elements of degrees `j` and `k` is homogeneous
+of degree `j + k − 2` (Proposition 70). -/
+example {j k : ℝ} {f g : PhaseSpace n} (hf : IsEulerHomogeneous j f)
+    (hg : IsEulerHomogeneous k g) :
+    IsEulerHomogeneous (j + k - 2) ((canonical n).bracket f g) :=
+  hf.canonical_bracket hg
+
+example (S : Matrix n n ℝ) :
+    quadraticForm S =
+      ∑ a, ∑ b, algebraMap ℝ (FreeSmoothRing n) (((1 / 2 : ℝ) • S) a b) *
+        (generator a * generator b) :=
+  rfl
+
+example (S : Matrix n n ℝ) : IsEulerHomogeneous 2 (quadraticForm S) :=
+  isEulerHomogeneous_quadraticForm S
+
+example {S : Matrix n n ℝ} (hS : S.IsSymm) (c : n) :
+    partialDerivation c (quadraticForm S) =
+      ∑ a, algebraMap ℝ (FreeSmoothRing n) (S c a) * generator a :=
+  partialDerivation_quadraticForm hS c
+
+example {S T : Matrix n n ℝ} (hS : S.IsSymm) (hT : T.IsSymm)
+    (h : quadraticForm S = quadraticForm T) : S = T :=
+  quadraticForm_injective hS hT h
+
+example : canonicalForm n = Matrix.fromBlocks 0 1 (-1) 0 := rfl
+
+example : canonicalForm n * canonicalForm n = -1 := canonicalForm_mul_self
+
+/-- The quadratic forms are closed under the bracket. -/
+example {S T : Matrix (n ⊕ n) (n ⊕ n) ℝ} (hS : S.IsSymm) (hT : T.IsSymm) :
+    (canonical n).bracket (quadraticForm S) (quadraticForm T) =
+      quadraticForm (S * canonicalForm n * T - T * canonicalForm n * S) :=
+  canonical_bracket_quadraticForm hS hT
+
+example (A : Matrix (n ⊕ n) (n ⊕ n) ℝ) :
+    A ∈ LieAlgebra.Symplectic.sp n ℝ ↔ Aᵀ * canonicalForm n + canonicalForm n * A = 0 :=
+  mem_sp_iff A
+
+example (S : Matrix (n ⊕ n) (n ⊕ n) ℝ) :
+    canonicalForm n * S ∈ LieAlgebra.Symplectic.sp n ℝ ↔ S.IsSymm :=
+  canonicalForm_mul_mem_sp_iff S
+
+example (A : Matrix (n ⊕ n) (n ⊕ n) ℝ) :
+    spHamiltonian A = quadraticForm (-(canonicalForm n * A)) := rfl
+
+example (S : Matrix (n ⊕ n) (n ⊕ n) ℝ) :
+    quadraticForm S = spHamiltonian (canonicalForm n * S) :=
+  quadraticForm_eq_spHamiltonian S
+
+/-- The Hamiltonian vector field of a quadratic Hamiltonian is linear. -/
+example {A : Matrix (n ⊕ n) (n ⊕ n) ℝ} (hA : A ∈ LieAlgebra.Symplectic.sp n ℝ) (a : n ⊕ n) :
+    (canonical n).bracket (generator a) (spHamiltonian A) =
+      ∑ c, algebraMap ℝ (PhaseSpace n) (A a c) * generator c :=
+  canonical_bracket_generator_spHamiltonian hA a
+
+/-- The quadratic Hamiltonians form the Lie algebra `sp(2n, ℝ)` (Proposition 70). -/
+example {A B : Matrix (n ⊕ n) (n ⊕ n) ℝ} (hA : A ∈ LieAlgebra.Symplectic.sp n ℝ)
+    (hB : B ∈ LieAlgebra.Symplectic.sp n ℝ) :
+    (canonical n).bracket (spHamiltonian A) (spHamiltonian B) = spHamiltonian ⁅A, B⁆ :=
+  canonical_bracket_spHamiltonian hA hB
+
+example {A B : Matrix (n ⊕ n) (n ⊕ n) ℝ} (hA : A ∈ LieAlgebra.Symplectic.sp n ℝ)
+    (hB : B ∈ LieAlgebra.Symplectic.sp n ℝ) (h : spHamiltonian A = spHamiltonian B) : A = B :=
+  spHamiltonian_injective hA hB h
+
+example (A : Matrix n n ℝ) (a : n) :
+    linearQ A a = ∑ k, algebraMap ℝ (PhaseSpace n) (A a k) * q k := rfl
+
+example (B : Matrix n n ℝ) (a : n) :
+    linearP B a = ∑ k, algebraMap ℝ (PhaseSpace n) (B a k) * p k := rfl
+
+example (A B : Matrix n n ℝ) (a b : n) :
+    (canonical n).bracket (linearQ A a) (linearP B b) =
+      algebraMap ℝ (PhaseSpace n) ((A * Bᵀ) a b) :=
+  canonical_linearQ_linearP A B a b
+
+example (A B : Matrix n n ℝ) (a b : n) :
+    (canonical n).bracket (linearQ A a) (linearQ B b) = 0 :=
+  canonical_linearQ_linearQ A B a b
+
+example (A B : Matrix n n ℝ) (a b : n) :
+    (canonical n).bracket (linearP A a) (linearP B b) = 0 :=
+  canonical_linearP_linearP A B a b
+
+example (A B : Matrix n n ℝ) (a : n) : linearTransformation A B (q a) = linearQ A a :=
+  linearTransformation_q A B a
+
+example (A B : Matrix n n ℝ) (a : n) : linearTransformation A B (p a) = linearP B a :=
+  linearTransformation_p A B a
+
+example (A B A' B' : Matrix n n ℝ) :
+    (linearTransformation A B).comp (linearTransformation A' B') =
+      linearTransformation (A' * A) (B' * B) :=
+  linearTransformation_comp A B A' B'
+
+example : linearTransformation (1 : Matrix n n ℝ) 1 = SmoothRingHom.id (PhaseSpace n) :=
+  linearTransformation_one
+
+/-- A linear transformation `q ↦ A q`, `p ↦ B p` with `A Bᵀ = 1` is canonical. -/
+example {A B : Matrix n n ℝ} (h : A * Bᵀ = 1) :
+    IsPoissonHom (canonical n).toAlmostPoissonStructure (canonical n).toAlmostPoissonStructure
+      (linearTransformation A B) :=
+  isPoissonHom_linearTransformation h
+
+example (W K : Matrix n n ℝ) :
+    quadraticHamiltonian W K = quadraticForm (Matrix.fromBlocks K 0 0 W) := rfl
+
+example (W K : Matrix n n ℝ) :
+    quadraticHamiltonian W K =
+      ∑ i, ∑ k, algebraMap ℝ (PhaseSpace n) (W i k / 2) * (p i * p k) +
+        ∑ i, ∑ k, algebraMap ℝ (PhaseSpace n) (K i k / 2) * (q i * q k) :=
+  quadraticHamiltonian_eq W K
+
+example {M S : Matrix n n ℝ} (hSM : Sᵀ * M * S = 1) : M * (S * Sᵀ) = 1 :=
+  mul_mul_transpose_self hSM
+
+/-- The normal form of the Hamiltonian (Proposition 70). -/
+example {M K S : Matrix n n ℝ} {lam : n → ℝ} (hM : M.IsSymm) (hSM : Sᵀ * M * S = 1)
+    (hSK : Sᵀ * K * S = diagonal lam) :
+    quadraticHamiltonian (S * Sᵀ) K =
+      ∑ a, (algebraMap ℝ (PhaseSpace n) (1 / 2) * (linearP Sᵀ a * linearP Sᵀ a) +
+        algebraMap ℝ (PhaseSpace n) (lam a / 2) *
+          (linearQ (Sᵀ * M) a * linearQ (Sᵀ * M) a)) :=
+  quadraticHamiltonian_eq_normalForm hM hSM hSK
+
+example {M K S : Matrix n n ℝ} {lam : n → ℝ} (hM : M.IsSymm) (hSM : Sᵀ * M * S = 1)
+    (hSK : Sᵀ * K * S = diagonal lam) :
+    linearTransformation (Sᵀ * M) Sᵀ
+        (∑ a, (algebraMap ℝ (PhaseSpace n) (1 / 2) * (p a * p a) +
+          algebraMap ℝ (PhaseSpace n) (lam a / 2) * (q a * q a))) =
+      quadraticHamiltonian (S * Sᵀ) K :=
+  linearTransformation_normalForm hM hSM hSK
+
+/-- The transformation to the normal co-ordinates is canonical and invertible. -/
+example {M S : Matrix n n ℝ} (hSM : Sᵀ * M * S = 1) :
+    IsPoissonHom (canonical n).toAlmostPoissonStructure (canonical n).toAlmostPoissonStructure
+      (linearTransformation (Sᵀ * M) Sᵀ) :=
+  isPoissonHom_normalTransformation hSM
+
+example {M S : Matrix n n ℝ} (hSM : Sᵀ * M * S = 1) :
+    (linearTransformation (Sᵀ * M) Sᵀ).comp (linearTransformation S (M * S)) =
+      SmoothRingHom.id (PhaseSpace n) :=
+  linearTransformation_comp_inverse hSM
+
+example {M S : Matrix n n ℝ} (hSM : Sᵀ * M * S = 1) :
+    (linearTransformation S (M * S)).comp (linearTransformation (Sᵀ * M) Sᵀ) =
+      SmoothRingHom.id (PhaseSpace n) :=
+  linearTransformation_inverse_comp hSM
+
+/-- Along a trajectory of a quadratic Hamiltonian, `ẋ = J S x`. -/
+example {S : Matrix (n ⊕ n) (n ⊕ n) ℝ} (hS : S.IsSymm) (c : n ⊕ n → TimeFunction) :
+    IsTrajectory (canonical n) (quadraticForm S) c ↔
+      ∀ a, timeDerivative (c a) =
+        ∑ b, algebraMap ℝ TimeFunction ((canonicalForm n * S) a b) * c b :=
+  isTrajectory_quadraticForm_iff hS c
+
+example {W K : Matrix n n ℝ} (hW : W.IsSymm) (hK : K.IsSymm) (c : n ⊕ n → TimeFunction) :
+    IsTrajectory (canonical n) (quadraticHamiltonian W K) c ↔
+      (fun i => timeDerivative (c (Sum.inl i))) =
+          W.map (algebraMap ℝ TimeFunction) *ᵥ (fun k => c (Sum.inr k)) ∧
+        (fun i => timeDerivative (c (Sum.inr i))) =
+          -(K.map (algebraMap ℝ TimeFunction) *ᵥ fun k => c (Sum.inl k)) :=
+  isTrajectory_quadraticHamiltonian_iff hW hK c
+
+/-- The trajectories are the small oscillations with `p = M ẋ`. -/
+example {M W K : Matrix n n ℝ} (hMW : M * W = 1) (hW : W.IsSymm) (hK : K.IsSymm)
+    (c : n ⊕ n → TimeFunction) :
+    IsTrajectory (canonical n) (quadraticHamiltonian W K) c ↔
+      IsSmallOscillation M K (fun i => c (Sum.inl i)) ∧
+        (fun i => c (Sum.inr i)) =
+          M.map (algebraMap ℝ TimeFunction) *ᵥ fun k => timeDerivative (c (Sum.inl k)) :=
+  isTrajectory_quadraticHamiltonian_iff_isSmallOscillation hMW hW hK c
+
+example (M K : Matrix n n ℝ) :
+    (StandardJet.jetRing n).quadraticLagrangian M K =
+      ∑ i, ∑ k, algebraMap ℝ (StandardJet n) (M i k / 2) *
+          ((StandardJet.jetRing n).q i 1 * (StandardJet.jetRing n).q k 1) -
+        ∑ i, ∑ k, algebraMap ℝ (StandardJet n) (K i k / 2) *
+          ((StandardJet.jetRing n).q i 0 * (StandardJet.jetRing n).q k 0) :=
+  rfl
+
+/-- The Euler–Lagrange expressions of the Lagrangian (23.3). -/
+example {M K : Matrix n n ℝ} (hM : M.IsSymm) (hK : K.IsSymm) (j : n) :
+    (StandardJet.jetRing n).euler j ((StandardJet.jetRing n).quadraticLagrangian M K) =
+      -∑ k, algebraMap ℝ (StandardJet n) (K j k) * (StandardJet.jetRing n).q k 0 -
+        ∑ k, algebraMap ℝ (StandardJet n) (M j k) * (StandardJet.jetRing n).q k 2 :=
+  JetRing.euler_quadraticLagrangian hM hK j
+
+/-- The equations of motion (Landau–Lifshitz (23.5)). -/
+example {M K : Matrix n n ℝ} (hM : M.IsSymm) (hK : K.IsSymm) (γ : n → TimeFunction) :
+    StandardJet.IsSolution ((StandardJet.jetRing n).quadraticLagrangian M K) γ ↔
+      IsSmallOscillation M K γ :=
+  StandardJet.isSolution_quadraticLagrangian_iff hM hK γ
+
+/-- The Legendre correspondence for small oscillations. -/
+example {M W K : Matrix n n ℝ} (hM : M.IsSymm) (hMW : M * W = 1) (hK : K.IsSymm)
+    (c : n ⊕ n → TimeFunction) :
+    IsTrajectory (canonical n) (quadraticHamiltonian W K) c ↔
+      StandardJet.IsSolution ((StandardJet.jetRing n).quadraticLagrangian M K)
+          (fun i => c (Sum.inl i)) ∧
+        (fun i => c (Sum.inr i)) =
+          M.map (algebraMap ℝ TimeFunction) *ᵥ fun k => timeDerivative (c (Sum.inl k)) :=
+  isTrajectory_quadraticHamiltonian_iff_isSolution hM hMW hK c
+
+end QuadraticHamiltonians
 
 section Parametric
 
