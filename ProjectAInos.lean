@@ -94,6 +94,9 @@ public import ProjectAInos.Mechanics.Jet.Polar
 public import ProjectAInos.Mechanics.Jet.Prolongation
 public import ProjectAInos.Mechanics.Jet.Standard
 public import ProjectAInos.Mechanics.OpenDomain
+public import ProjectAInos.Mechanics.Oscillations.Harmonic
+public import ProjectAInos.Mechanics.Oscillations.Linearization
+public import ProjectAInos.Mechanics.Oscillations.Oscillator
 public import ProjectAInos.Mechanics.Poisson.AngularMomentum
 public import ProjectAInos.Mechanics.Poisson.Epsilon
 public import ProjectAInos.Mechanics.Poisson.Galilei

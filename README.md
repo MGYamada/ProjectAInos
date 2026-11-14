@@ -207,7 +207,9 @@ constant along smooth solutions of the inverse-square law. The kinematics of a
 rigid body is proved by linear algebra:
 `so(3) ≅ ℝ³`, the angular velocity, the inertia tensor of point masses with
 its principal moments, and Eulerian angles. The algebra of two bodies is proved: the reduced mass,
-disintegration, and elastic collisions. Integrals of the motion are constant along
+disintegration, and elastic collisions. Free oscillations in one dimension are
+proved: the general solution of `ẍ + ω² x = 0`, the flow of the oscillator, and
+the linearization at an equilibrium. Integrals of the motion are constant along
 trajectories of a Hamiltonian on a free C∞-ring. Symplectic structures,
 the Legendre transformation, Dirac brackets and canonical transformations are
 not implemented. Galilean symmetry as a group action and the topics of 2.1 and

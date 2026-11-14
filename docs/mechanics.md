@@ -365,6 +365,76 @@ rotation is `eulerMatrixDeriv` with the rates `φ'`, `θ'`, `ψ'`, so the formul
 above are the angular velocities of the actual motion
 (`angularVelocity_eulerRotation`, `vee_transpose_mul_eulerMatrixDeriv`).
 
+## Small oscillations
+
+`Mechanics/Oscillations` covers Landau–Lifshitz §21.
+
+`Oscillations/Harmonic` treats the equation `ẍ + ω² x = 0` for a smooth
+function of time. `IsHarmonic ω x` is the equation `ẍ = −ω² x` in the ring
+`TimeFunction`, and `TimeFunction.cosMul ω`, `TimeFunction.sinMul ω` are the
+functions `cos ωt`, `sin ωt`.
+
+- `IsHarmonic.eq_cos_add_sin`: for `ω ≠ 0`,
+  `x = x(0) cos ωt + (ẋ(0)/ω) sin ωt`. The combinations
+  `x cos ωt − (ẋ/ω) sin ωt` and `x sin ωt + (ẋ/ω) cos ωt` have zero derivative,
+  so they are constants. `isHarmonic_iff` states the result as an equivalence,
+  and `IsHarmonic.eq_of_initial` as uniqueness for given `x(0)` and `ẋ(0)`.
+- `amplitude_mul_cos_add`, `IsHarmonic.apply_eq_amplitude_mul_cos`:
+  `x(t) = a cos (ωt + α)` with `a = √(x(0)² + (ẋ(0)/ω)²)`. The phase `α` is the
+  argument of the complex number `x(0) − i ẋ(0)/ω`.
+- `IsHarmonic.apply_add_period`: the period is `2π/ω` for every amplitude.
+- `IsHarmonic.energy_eq`, `IsHarmonic.energy_eq_amplitude`:
+  `½ m (ẋ² + ω² x²)` is constant and equals `½ m ω² a²`.
+
+`Oscillations/Oscillator` connects the equation to the Lagrangian and the
+Hamiltonian of the oscillator. The hypotheses are `mᵢ ≠ 0` and `k = mᵢ ωᵢ²`.
+
+- `StandardJet.isSolution_oscillator_iff_isHarmonic`: a path solves the
+  Euler–Lagrange equations of `Σᵢ ½ mᵢ q̇ᵢ² − ½ k qᵢ²` exactly when each
+  component is a free oscillation of frequency `ωᵢ`.
+- `Oscillator.isTrajectory_iff_isHarmonic`: a curve is a trajectory of
+  `Σᵢ pᵢ²/2mᵢ + ½ k qᵢ²` exactly when each `qᵢ` is a free oscillation and
+  `pᵢ = mᵢ q̇ᵢ`.
+- `Oscillator.flowMatrix m ω t` is the matrix of the flow on a pair `(q, p)`.
+  It is a one-parameter group (`flowMatrix_zero`, `flowMatrix_add`) of
+  determinant one (`det_flowMatrix`) with period `2π/ω`
+  (`flowMatrix_add_period`). Every trajectory is the flow of its initial point
+  (`apply_eq_flowMatrix_mulVec`), and every point lies on a trajectory
+  (`isTrajectory_flowCurve`).
+
+`Oscillations/Linearization` treats an equilibrium of a Hamiltonian on a free
+C∞-ring. A point `x₀` is an equilibrium when the constant curve at `x₀` is a
+trajectory.
+
+- `isTrajectory_const_iff`: `x₀` is an equilibrium exactly when the brackets
+  `{x_a, H}` vanish at `x₀`. For the canonical bracket this is a critical point
+  of `H` (`isTrajectory_canonical_const_iff`).
+- `linearization π H x₀` is the matrix `∂_c {x_a, H}(x₀)`. `hessian H x₀` is
+  the matrix of second partial derivatives at `x₀`, and `quadraticPart H x₀` is
+  `½ Σ H_ab(x₀) ξ_a ξ_b` with the displacements `ξ_a = x_a − x₀ a`.
+- `canonical_bracket_quadraticPart`: for the canonical bracket,
+  `{x_a, quadraticPart H x₀} = Σ_c A_ac ξ_c` with `A` the linearization of `H`
+  at `x₀`. So `H` and its quadratic part have the same linearization
+  (`linearization_quadraticPart`), and the trajectories of the quadratic part
+  are the solutions of `d/dt ξ_a = Σ_c A_ac ξ_c`
+  (`isTrajectory_quadraticPart_iff`).
+- One degree of freedom: `naturalHamiltonian b U` is `½ b(q) p² + U(q)`. The
+  point `(q₀, 0)` is an equilibrium exactly when `U'(q₀) = 0`
+  (`isTrajectory_restPoint_iff`). Along a solution of the linearized equations
+  the displacement `q − q₀` is a free oscillation with `ω² = b(q₀) U''(q₀)`
+  (`isHarmonic_of_isTrajectory_quadraticPart`). At a non-degenerate minimum with
+  a positive mass, `ω = √(b(q₀) U''(q₀))`
+  (`isHarmonic_sqrt_of_isTrajectory_quadraticPart`).
+- `isHarmonic_pendulum`: for the pendulum `p²/(2 m l²) − m g l cos q`,
+  `ω² = g/l`.
+
+The linearization is the derivative of the Hamiltonian vector field at the
+equilibrium. No theorem here compares the solutions of the non-linear
+equations with those of the linearized equations. The Hamiltonian
+`½ b(q) p² + U(q)` corresponds to the Lagrangian `½ a(q) q̇² − U(q)` of
+Landau–Lifshitz with `b = 1/a`; the Legendre transformation between them is
+not formalized.
+
 ## Proof map
 
 | Module | Main declarations |
@@ -401,6 +471,9 @@ above are the angular velocities of the actual motion
 | [Rigid/AngularVelocity](../ProjectAInos/Mechanics/Rigid/AngularVelocity.lean) | `hat`, `vee`, `hat_mulVec`, `hat_cross`, `hat_vee`, `hatEquiv`, `hatEquiv_cross`, `velocityField`, `velocityField_add`, `velocityField_injective`, `velocityField_change_of_origin`, `transpose_deriv_mul_transpose`, `angularVelocity`, `hasDerivAt_rigidMotion` |
 | [Rigid/EulerAngles](../ProjectAInos/Mechanics/Rigid/EulerAngles.lean) | `rotZ`, `rotX`, `eulerMatrix`, `eulerMatrixDeriv`, `bodyAngularVelocity`, `spaceAngularVelocity`, `eulerMatrix_mul_transpose`, `det_eulerMatrix`, `transpose_mul_eulerMatrixDeriv`, `eulerMatrixDeriv_mul_transpose`, `eulerMatrix_mulVec_bodyAngularVelocity`, `symmetricTop_energy`, `det_eulerJacobian`, `eulerRotation`, `eulerRotation_mem_specialOrthogonalGroup`, `hasDerivAt_eulerRotation`, `angularVelocity_eulerRotation` |
 | [Rigid/InertiaTensor](../ProjectAInos/Mechanics/Rigid/InertiaTensor.lean) | `inertia`, `transpose_inertia`, `inertia_mulVec`, `dotProduct_inertia_mulVec`, `dotProduct_inertia_mulVec_nonneg`, `trace_inertia`, `two_mul_dotProduct_inertia_mulVec_le_trace`, `inertia_add_apply`, `principalMoments`, `principalAxes`, `inertia_mulVec_principalAxes`, `principalMoments_nonneg`, `principalMoments_two_le` |
+| [Oscillations/Harmonic](../ProjectAInos/Mechanics/Oscillations/Harmonic.lean) | `TimeFunction.cosMul`, `TimeFunction.sinMul`, `TimeFunction.timeDerivative_cosMul`, `TimeFunction.timeDerivative_sinMul`, `amplitude`, `phase`, `amplitude_mul_cos_add`, `IsHarmonic`, `isHarmonic_cosMul`, `isHarmonic_sinMul`, `IsHarmonic.combination`, `IsHarmonic.eq_cos_add_sin`, `isHarmonic_iff`, `IsHarmonic.eq_of_initial`, `IsHarmonic.apply_eq_amplitude_mul_cos`, `IsHarmonic.apply_add_period`, `IsHarmonic.energy_eq`, `IsHarmonic.energy_eq_amplitude` |
+| [Oscillations/Oscillator](../ProjectAInos/Mechanics/Oscillations/Oscillator.lean) | `StandardJet.isSolution_oscillator_iff_isHarmonic`, `Oscillator.hamiltonian`, `Oscillator.isTrajectory_iff`, `Oscillator.isTrajectory_iff_isHarmonic`, `Oscillator.flowMatrix`, `Oscillator.flowMatrix_zero`, `Oscillator.flowMatrix_add`, `Oscillator.det_flowMatrix`, `Oscillator.flowMatrix_add_period`, `Oscillator.apply_eq_flowMatrix_mulVec`, `Oscillator.flowCurve`, `Oscillator.isTrajectory_flowCurve` |
+| [Oscillations/Linearization](../ProjectAInos/Mechanics/Oscillations/Linearization.lean) | `lift_curve_apply`, `lift_const_curve`, `isTrajectory_const_iff`, `isTrajectory_canonical_const_iff`, `displacement`, `hessian`, `hessian_symm`, `linearization`, `quadraticPart`, `partialDerivation_quadraticPart`, `canonical_bracket_quadraticPart`, `linearization_quadraticPart`, `isTrajectory_quadraticPart_iff`, `naturalHamiltonian`, `restPoint`, `isTrajectory_restPoint_iff`, `isHarmonic_of_isTrajectory_quadraticPart`, `isHarmonic_sqrt_of_isTrajectory_quadraticPart`, `pendulumHamiltonian`, `isHarmonic_pendulum` |
 | [Examples](../ProjectAInos/Mechanics/Examples.lean) | Newton equation, stationary uniform free motion, rejection of accelerated free motion, endpoint-vanishing polynomial variation and its endpoint derivative, zero-length interval and zero-coordinate system |
 
 For `L = m v²/2 − V(q)`, `stationary_natural_iff` proves `m q'' = −V'(q)` on `(a,b)`. This algebraic equation remains valid at `m = 0`; dividing by the mass would require a separate nonzero premise.
