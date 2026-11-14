@@ -5,6 +5,12 @@
 - Use `README.md` as the research plan and subject outline.
 - Put definitions and machine-checked proofs in the Lean library. Keep
   `ProjectAInos.lean` current with the library modules.
+- Put shared mathematics in `ProjectAInos/SmoothAlgebra/`,
+  `ProjectAInos/SmoothGeometry/` and `ProjectAInos/Variational/`. These
+  directories import no physics module; `checks/CoreImports.lean` enforces it.
+- Use the plans `docs/cinfty-*.md` for the targets of each textbook section
+  and their ledgers, the guides `docs/<subject>.md` for the implemented
+  declarations, and `docs/*-notes.md` for observations.
 - Put symbolic and numerical Python experiments in `experiments/` as an
   independent package. Start with SymPy for exact calculations. Add SciPy
   when an experiment needs numerical solvers.
@@ -16,12 +22,14 @@
 
 ## Verification
 
-- Require the **Lean build** job for merges into `main`. Its checks cover Lean
-  warnings, root-module imports, and transitive axiom dependencies. The
-  axiom allowlist is `propext`, `Classical.choice`, and `Quot.sound`. Express
-  physical premises as explicit hypotheses or predicates.
-- The job runs every file in `checks/` in parallel through `checks/run.sh`. Add
-  a check as a new `checks/*.lean` file; the workflow needs no new step. For a
+- Require the **Lean build** and **Handbook tests** jobs for merges into
+  `main`. The Lean checks cover Lean warnings, root-module imports, and
+  transitive axiom dependencies. The axiom allowlist is `propext`,
+  `Classical.choice`, and `Quot.sound`. Express physical premises as explicit
+  hypotheses or predicates.
+- The Lean build job runs every file in `checks/` in parallel through
+  `checks/run.sh`. Add a check as a new `checks/*.lean` file; the workflow
+  needs no new step. For a
   pull request that changes no Lean source, check, toolchain, manifest, or the
   CI workflow, the job skips its Lean steps and reports success. The push run
   on `main` always executes them.
@@ -33,6 +41,72 @@
   formal claims in Lean.
 - Generate API documentation on demand using `docs/build.md`. Keep
   doc-gen4 generation separate from the required Lean job.
+
+## Lean conventions
+
+- Start each file with the copyright header of the existing files and
+  `module`. Import with `public import`, and import a module that is used only
+  for its tactics with `import`. Open the declarations with
+  `@[expose] public section`.
+- Write every binder: `autoImplicit` is off. Do not use `sorry`, `axiom`,
+  `set_option maxHeartbeats` or `set_option backward.*`. Keep lines within
+  100 characters.
+- After adding a module, run `lake exe mk_all --lib ProjectAInos`.
+- Pin each new public statement with a typed `example` in a `checks/*API.lean`
+  file.
+- Make an index type an explicit argument of a definition when its other
+  arguments do not determine it, and give a generator written with nested
+  `Sum.inl` and `Sum.inr` a definition with its full type. Otherwise the
+  coercion to a function is searched with a metavariable in the type, and
+  each application costs about a second.
+
+## Stating theorems
+
+- Give a proved instance for every structure, and for every theorem whose
+  hypotheses are identities in a free C∞-ring. Such a hypothesis holds for
+  all real values of the generators, so it can be unsatisfiable while the
+  statement type-checks.
+- State a dynamical theorem for a given curve or solution. The pinned Mathlib
+  has no flow of a vector field with smooth dependence on the initial
+  condition. Existence is an explicit solution, or data.
+- A free C∞-ring is the ring of smooth functions on all of `ℝⁿ`. For another
+  domain use a global chart of the positions, with which the conjugate
+  momenta change; an adjoined inverse whose relation is kept as an element;
+  or the open-domain analytic model. A chart of the velocities changes the
+  derivative that defines the momentum, so the Legendre correspondence does
+  not carry over to it.
+- Before recording that a statement is out of reach, check the reason against
+  Mathlib. An integral whose integrand has an integrable singularity is a
+  Lebesgue integral, and the change-of-variables lemmas cover it.
+
+## Ledgers and notes
+
+- Each plan `docs/cinfty-*.md` has one row for each textbook section. A row
+  has one status, and a status is only promoted. The mechanics ledger uses
+  *proved*, *proved modulo interface*, *hypothesis*, *evidence* and
+  *informal*.
+- Close a row when it is *proved*, or when its remark names the proved part
+  and gives the reason why the rest is not proved.
+- Promote a row to *proved* when its whole target in the dictionary is
+  proved. If the proof has a restricted scope, write the scope in the row.
+- When a row changes, update the count line and the list of rows closed with
+  a remainder, the guide of the subject with its proof map,
+  `docs/proof-development.md` and the paragraph of the subject in `README.md`.
+- Record an observation that changes an interface, or corrects an earlier
+  judgement, as a numbered entry in `docs/*-notes.md` with **Observation**,
+  **Interface decision** and **Proof status**.
+
+## Pull requests
+
+- `main` requires an up-to-date branch and resolved review threads in
+  addition to the two jobs. Merge `origin/main` into the branch before the
+  final push. A stack of `n` pull requests costs `n − 1` further CI runs.
+- Close several ledger rows in one pull request. Give the body a summary, a
+  list of what is not in the pull request, and the validation commands that
+  were run.
+- Read the automated review before merging. If it has not finished, say so.
+  Fix a valid finding first, in the pull request or in a follow-up when it is
+  merged, then reply on the thread and resolve it.
 
 ## Run the Lean checks locally
 
@@ -47,6 +121,14 @@ checks/run.sh
 
 `checks/run.sh` compiles every check file with warnings as errors and prints
 one verdict per file. Set `JOBS` to change its parallelism.
+
+## Run the documentation tests locally
+
+The **Handbook tests** job needs only the Python standard library.
+
+```sh
+PYTHONPATH=docs python3 -m unittest discover -s docs/tests
+```
 
 ## Run the Python checks locally
 
