@@ -75,7 +75,7 @@ for this volume.
 | Canonical Poisson API (SR-C6) | `PhaseSpace.canonical`, `IsPoissonHom`, `PhaseSpace.isPoissonHom_of_canonical`, `PoissonStructure.isIntegral_iff_hamiltonian_eq_zero` | Momentum maps of a general group action |
 | Constraints and reduction (SR-D8) | `PoissonStructure.isCoisotropic_span`, `PoissonStructure.Reduction`, `PoissonStructure.toReduction_bijective`, `CyclicReduction.canonicalReductionHom_bijective` | The Dirac bracket; reduction by a non-abelian group |
 | Hamilton's equations along a curve (SR-D4, SR-D7) | `IsTrajectory`, `isTrajectory_canonical_iff`, `IsTrajectory.lift_eq_of_isIntegral` | Existence of trajectories; Hamiltonians that depend on time |
-| Legendre correspondence (SR-D4) | `VelocitySpace.IsHyperregular.isTrajectory_iff_isSolution` | Lagrangians that are smooth only on an open set of velocities |
+| Legendre correspondence (SR-D4) | `VelocitySpace.IsHyperregular.isTrajectory_iff_isSolution` | Lagrangians that are smooth only on an open set of velocities; a velocity chart other than the velocity itself, because the momentum is the derivative in the velocity generator |
 | Model proofs of a symmetry algebra (SR-C6) | `AngularMomentum.canonical_M_M`, `AngularMomentum.isPoissonHom_momentumMap`, `Galilei.canonical_K_p` | The Poincaré algebra |
 | Finite reactions without relativity (SR-C1–C3) | `TwoBody.disintegration_momentum_sq`, `TwoBody.isElastic_iff` | Relativistic shells and thresholds |
 
@@ -101,6 +101,10 @@ the rows of this volume.
   open-domain analytic model. The velocity ball `‖v‖ < 1` and the timelike
   cone are such domains. A theorem stated for coefficient functions in a free
   ring does not apply to a co-ordinate system with singular coefficients.
+  The first device was used for positions, where the conjugate momenta
+  change with the chart and the bracket is kept. A chart of the velocities
+  is different: the momentum is a derivative in the velocity, and the chart
+  changes that derivative (item 4 below).
 
 **Changes to this plan.**
 
@@ -116,12 +120,25 @@ the rows of this volume.
    reduced ring. It gives the algebraic meaning of the parameter degeneracy
    of SR-D2 and uses the reduction theorem that gave the reduced mass in
    mechanics.
-4. *SR-D4 fixes its velocity chart first.* The Legendre correspondence of
-   mechanics is for Lagrangians in a free ring. In the velocity,
-   `−m√(1 − ‖v‖²)` is not one. The global chart of the ball is the proper
-   velocity `w = γv`: there `v = w/√(1 + ‖w‖²)`, the Lagrangian and
-   `p = m w` are smooth on all of `ℝᵈ`. SR-D4 is stated in this chart or in
-   the open-domain model, and the choice is recorded before implementation.
+4. *SR-D4 cannot reuse the Legendre API of mechanics as it stands.* That
+   API is for a Lagrangian in a free ring whose generators are the positions
+   and the velocities: `VelocitySpace.momentum` differentiates with respect
+   to the velocity generator, and
+   `VelocitySpace.IsHyperregular.isTrajectory_iff_isSolution` identifies that
+   generator with the time derivative of the position. In the velocity,
+   `−m√(1 − ‖v‖²)` is not an element of a free ring. The proper velocity
+   `w = γv` is a global chart of the ball, and `v = w/√(1 + ‖w‖²)`, the
+   Lagrangian `−m/√(1 + ‖w‖²)` and the momentum `m w` are smooth functions
+   of `w`. But `m w` is the derivative of the Lagrangian with respect to
+   `v`, not with respect to `w`: for `d = 1`,
+   `∂L/∂w = m w/(1 + w²)^{3/2}`, which is not invertible. A statement in
+   this chart therefore needs two things that the API does not have: the
+   vertical derivatives transported to the chart,
+   `∂/∂vᵢ = Σⱼ (∂wⱼ/∂vᵢ) ∂/∂wⱼ`, and the relation `q̇ = v(w)` along a curve
+   in place of `q̇ = w`. The alternative is the open-domain analytic model
+   that SR-D1 already uses. The choice between the two is recorded before
+   implementation; smoothness in the chart alone does not justify the cited
+   API.
 5. *SR3 takes the form of `TwoBody`.* Decay and elastic kinematics are real
    vector algebra, with statements of the form "the conservation laws hold
    exactly when the outgoing data are …". The nonrelativistic statements are
