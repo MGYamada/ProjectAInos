@@ -205,8 +205,8 @@ rotating frame. Kepler's problem is treated with the inverse distance as a
 generator: the Runge–Lenz identities are proved, and the Runge–Lenz vector is
 constant along smooth solutions of the inverse-square law. The kinematics of a
 rigid body is proved by linear algebra:
-`so(3) ≅ ℝ³`, the angular velocity, and the inertia tensor of point masses with
-its principal moments. The algebra of two bodies is proved: the reduced mass,
+`so(3) ≅ ℝ³`, the angular velocity, the inertia tensor of point masses with
+its principal moments, and Eulerian angles. The algebra of two bodies is proved: the reduced mass,
 disintegration, and elastic collisions. Integrals of the motion are constant along
 trajectories of a Hamiltonian on a free C∞-ring. Symplectic structures,
 the Legendre transformation, Dirac brackets and canonical transformations are

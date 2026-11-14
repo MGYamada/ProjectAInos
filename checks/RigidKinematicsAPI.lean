@@ -120,3 +120,77 @@ example {m : ι → ℝ} (hm : ∀ a, 0 ≤ m a) (r : ι → Fin 3 → ℝ) :
   principalMoments_zero_le hm r
 
 end InertiaTensor
+
+section EulerAngles
+
+variable {K : Type*} [CommRing K] {c1 s1 c2 s2 c3 s3 w1 w2 w3 : K}
+
+example (c1 s1 c2 s2 c3 s3 : K) :
+    eulerMatrix c1 s1 c2 s2 c3 s3 = rotZ c1 s1 * rotX c2 s2 * rotZ c3 s3 := rfl
+
+example (c s : K) : rotZ c s = !![c, -s, 0; s, c, 0; 0, 0, 1] := rfl
+
+example (c s : K) : rotX c s = !![1, 0, 0; 0, c, -s; 0, s, c] := rfl
+
+example (c2 s2 c3 s3 w1 w2 w3 : K) :
+    bodyAngularVelocity c2 s2 c3 s3 w1 w2 w3 =
+      ![w1 * s2 * s3 + w2 * c3, w1 * s2 * c3 - w2 * s3, w1 * c2 + w3] := rfl
+
+/-- The rotation is orthogonal with determinant one. -/
+example (h1 : c1 ^ 2 + s1 ^ 2 = 1) (h2 : c2 ^ 2 + s2 ^ 2 = 1) (h3 : c3 ^ 2 + s3 ^ 2 = 1) :
+    eulerMatrix c1 s1 c2 s2 c3 s3 * (eulerMatrix c1 s1 c2 s2 c3 s3)ᵀ = 1 ∧
+      (eulerMatrix c1 s1 c2 s2 c3 s3).det = 1 :=
+  ⟨eulerMatrix_mul_transpose h1 h2 h3, det_eulerMatrix h1 h2 h3⟩
+
+/-- The angular velocity in the body frame. -/
+example (h1 : c1 ^ 2 + s1 ^ 2 = 1) (h2 : c2 ^ 2 + s2 ^ 2 = 1) (h3 : c3 ^ 2 + s3 ^ 2 = 1) :
+    (eulerMatrix c1 s1 c2 s2 c3 s3)ᵀ * eulerMatrixDeriv c1 s1 c2 s2 c3 s3 w1 w2 w3 =
+      hat (bodyAngularVelocity c2 s2 c3 s3 w1 w2 w3) :=
+  transpose_mul_eulerMatrixDeriv h1 h2 h3
+
+/-- The angular velocity in the space frame, and the relation `ω = R Ω`. -/
+example (h1 : c1 ^ 2 + s1 ^ 2 = 1) (h2 : c2 ^ 2 + s2 ^ 2 = 1) (h3 : c3 ^ 2 + s3 ^ 2 = 1) :
+    eulerMatrixDeriv c1 s1 c2 s2 c3 s3 w1 w2 w3 * (eulerMatrix c1 s1 c2 s2 c3 s3)ᵀ =
+        hat (spaceAngularVelocity c1 s1 c2 s2 w1 w2 w3) ∧
+      eulerMatrix c1 s1 c2 s2 c3 s3 *ᵥ bodyAngularVelocity c2 s2 c3 s3 w1 w2 w3 =
+        spaceAngularVelocity c1 s1 c2 s2 w1 w2 w3 :=
+  ⟨eulerMatrixDeriv_mul_transpose h1 h2 h3, eulerMatrix_mulVec_bodyAngularVelocity h2 h3⟩
+
+/-- The kinetic energy of the symmetric top in Eulerian angles. -/
+example (I1 I3 : K) (h3 : c3 ^ 2 + s3 ^ 2 = 1) :
+    I1 * (bodyAngularVelocity c2 s2 c3 s3 w1 w2 w3 0 ^ 2 +
+          bodyAngularVelocity c2 s2 c3 s3 w1 w2 w3 1 ^ 2) +
+        I3 * bodyAngularVelocity c2 s2 c3 s3 w1 w2 w3 2 ^ 2 =
+      I1 * (w2 ^ 2 + w1 ^ 2 * s2 ^ 2) + I3 * (w1 * c2 + w3) ^ 2 :=
+  symmetricTop_energy I1 I3 h3
+
+/-- The angles are non-degenerate co-ordinates where `sin θ` is invertible. -/
+example (c2 : K) (h3 : c3 ^ 2 + s3 ^ 2 = 1) : (eulerJacobian c2 s2 c3 s3).det = -s2 :=
+  det_eulerJacobian c2 h3
+
+example (c2 s2 c3 s3 w1 w2 w3 : K) :
+    eulerJacobian c2 s2 c3 s3 *ᵥ ![w1, w2, w3] = bodyAngularVelocity c2 s2 c3 s3 w1 w2 w3 :=
+  eulerJacobian_mulVec c2 s2 c3 s3 w1 w2 w3
+
+/-- The rotation with real Eulerian angles is in `SO(3)`. -/
+example (φ θ ψ : ℝ) : eulerRotation φ θ ψ ∈ Matrix.specialOrthogonalGroup (Fin 3) ℝ :=
+  eulerRotation_mem_specialOrthogonalGroup φ θ ψ
+
+/-- The derivative of the rotation for time-dependent angles. -/
+example {φ θ ψ : ℝ → ℝ} {φ' θ' ψ' t : ℝ} (hφ : HasDerivAt φ φ' t) (hθ : HasDerivAt θ θ' t)
+    (hψ : HasDerivAt ψ ψ' t) (i j : Fin 3) :
+    HasDerivAt (fun s => eulerRotation (φ s) (θ s) (ψ s) i j)
+      (eulerMatrixDeriv (Real.cos (φ t)) (Real.sin (φ t)) (Real.cos (θ t)) (Real.sin (θ t))
+        (Real.cos (ψ t)) (Real.sin (ψ t)) φ' θ' ψ' i j) t :=
+  hasDerivAt_eulerRotation hφ hθ hψ i j
+
+/-- The body-frame angular velocity of Landau–Lifshitz (35.1). -/
+example (φ θ ψ φ' θ' ψ' : ℝ) :
+    vee ((eulerRotation φ θ ψ)ᵀ *
+        eulerMatrixDeriv (Real.cos φ) (Real.sin φ) (Real.cos θ) (Real.sin θ) (Real.cos ψ)
+          (Real.sin ψ) φ' θ' ψ') =
+      ![φ' * Real.sin θ * Real.sin ψ + θ' * Real.cos ψ,
+        φ' * Real.sin θ * Real.cos ψ - θ' * Real.sin ψ, φ' * Real.cos θ + ψ'] :=
+  vee_transpose_mul_eulerMatrixDeriv φ θ ψ φ' θ' ψ'
+
+end EulerAngles

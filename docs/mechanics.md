@@ -339,6 +339,32 @@ triangle inequality `I₂ ≤ I₀ + I₁`. The basis-free statement behind it i
 `two_mul_dotProduct_inertia_mulVec_le_trace`: for a unit vector `n`,
 `2 n · I n ≤ tr I`.
 
+`Rigid/EulerAngles` covers Landau–Lifshitz §35. The rotation with Eulerian
+angles is `eulerMatrix = R_z(φ) R_x(θ) R_z(ψ)`. The algebraic statements are
+over a commutative ring: the cosines and sines are elements `cₖ`, `sₖ` with
+`cₖ² + sₖ² = 1`, the rates of the angles are elements `wₖ`, and
+`eulerMatrixDeriv` is the derivative of the rotation given by the product rule.
+
+- `eulerMatrix_mul_transpose`, `det_eulerMatrix`: the rotation is orthogonal
+  with determinant one.
+- `transpose_mul_eulerMatrixDeriv`: `Rᵀ Ṙ = hat Ω` with the angular velocity in
+  the body frame
+  `Ω = (φ̇ sin θ sin ψ + θ̇ cos ψ, φ̇ sin θ cos ψ − θ̇ sin ψ, φ̇ cos θ + ψ̇)`.
+- `eulerMatrixDeriv_mul_transpose`: `Ṙ Rᵀ = hat ω` with the angular velocity in
+  the space frame; `eulerMatrix_mulVec_bodyAngularVelocity`: `ω = R Ω`.
+- `symmetricTop_energy`: twice the kinetic energy of a symmetric top is
+  `I₁ (θ̇² + φ̇² sin² θ) + I₃ (φ̇ cos θ + ψ̇)²`.
+- `det_eulerJacobian`: the linear map from the rates of the angles to `Ω` has
+  determinant `−sin θ`, so the angles are non-degenerate co-ordinates where
+  `sin θ` is invertible.
+
+For real angles, `eulerRotation φ θ ψ` is an element of Mathlib's
+`specialOrthogonalGroup (Fin 3) ℝ`. For differentiable functions `φ`, `θ`, `ψ`
+of time, `hasDerivAt_eulerRotation` proves that the entrywise derivative of the
+rotation is `eulerMatrixDeriv` with the rates `φ'`, `θ'`, `ψ'`, so the formulas
+above are the angular velocities of the actual motion
+(`angularVelocity_eulerRotation`, `vee_transpose_mul_eulerMatrixDeriv`).
+
 ## Proof map
 
 | Module | Main declarations |
@@ -373,6 +399,7 @@ triangle inequality `I₂ ≤ I₀ + I₁`. The basis-free statement behind it i
 | [TwoBody/Collisions](../ProjectAInos/Mechanics/TwoBody/Collisions.lean) | `disintegration_momentum_sq`, `disintegration_kinetic_one`, `disintegration_energy_nonneg`, `IsElastic`, `outgoingOne`, `outgoingTwo`, `IsElastic.relative_speed`, `isElastic_outgoing`, `isElastic_iff`, `outgoingOne_rest_dotProduct_self`, `outgoingTwo_rest_dotProduct_self`, `outgoingOne_headOn`, `energy_transfer_le`, `outgoing_rest_dotProduct_eq_zero` |
 | [Poisson/TwoBody](../ProjectAInos/Mechanics/Poisson/TwoBody.lean) | `centre`, `relative`, `totalMomentum`, `relativeMomentum`, `canonical_centre_totalMomentum`, `canonical_relative_relativeMomentum`, `canonical_centre_relativeMomentum`, `canonical_relative_totalMomentum`, `kineticEnergy_eq_centre` |
 | [Rigid/AngularVelocity](../ProjectAInos/Mechanics/Rigid/AngularVelocity.lean) | `hat`, `vee`, `hat_mulVec`, `hat_cross`, `hat_vee`, `hatEquiv`, `hatEquiv_cross`, `velocityField`, `velocityField_add`, `velocityField_injective`, `velocityField_change_of_origin`, `transpose_deriv_mul_transpose`, `angularVelocity`, `hasDerivAt_rigidMotion` |
+| [Rigid/EulerAngles](../ProjectAInos/Mechanics/Rigid/EulerAngles.lean) | `rotZ`, `rotX`, `eulerMatrix`, `eulerMatrixDeriv`, `bodyAngularVelocity`, `spaceAngularVelocity`, `eulerMatrix_mul_transpose`, `det_eulerMatrix`, `transpose_mul_eulerMatrixDeriv`, `eulerMatrixDeriv_mul_transpose`, `eulerMatrix_mulVec_bodyAngularVelocity`, `symmetricTop_energy`, `det_eulerJacobian`, `eulerRotation`, `eulerRotation_mem_specialOrthogonalGroup`, `hasDerivAt_eulerRotation`, `angularVelocity_eulerRotation` |
 | [Rigid/InertiaTensor](../ProjectAInos/Mechanics/Rigid/InertiaTensor.lean) | `inertia`, `transpose_inertia`, `inertia_mulVec`, `dotProduct_inertia_mulVec`, `dotProduct_inertia_mulVec_nonneg`, `trace_inertia`, `two_mul_dotProduct_inertia_mulVec_le_trace`, `inertia_add_apply`, `principalMoments`, `principalAxes`, `inertia_mulVec_principalAxes`, `principalMoments_nonneg`, `principalMoments_two_le` |
 | [Examples](../ProjectAInos/Mechanics/Examples.lean) | Newton equation, stationary uniform free motion, rejection of accelerated free motion, endpoint-vanishing polynomial variation and its endpoint derivative, zero-length interval and zero-coordinate system |
 
