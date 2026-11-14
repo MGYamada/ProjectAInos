@@ -7,10 +7,11 @@ import ProjectAInos
 
 /-! Public consumers of the oscillation API: the general solution of
 `ẍ + ω² x = 0`, amplitude and phase, the energy and the period, the oscillator
-as a Lagrangian and as a Hamiltonian system with its flow, and the
-linearization at an equilibrium. Default elaborator options are intentional:
-these checks must not rely on the implementation's transparency settings.
-Every statement is pinned with its type. -/
+as a Lagrangian and as a Hamiltonian system with its flow, the linearization
+at an equilibrium, damped oscillations, and the dissipative function. Default
+elaborator options are intentional: these checks must not rely on the
+implementation's transparency settings. Every statement is pinned with its
+type. -/
 noncomputable section
 open ProjectAInos.SmoothAlgebra ProjectAInos.SmoothAlgebra.SmoothRing
 open ProjectAInos.SmoothAlgebra.FreeSmoothRing ProjectAInos.SmoothAlgebra.PhaseSpace
@@ -220,3 +221,147 @@ example (m l g : ℝ) :
   isTrajectory_pendulum_restPoint m l g
 
 end Linearization
+
+section Damped
+
+example (γ ω₀ : ℝ) (x : TimeFunction) :
+    IsDamped γ ω₀ x ↔
+      timeDerivative (timeDerivative x) =
+        -(algebraMap ℝ TimeFunction (2 * γ) * timeDerivative x) -
+          algebraMap ℝ TimeFunction (ω₀ ^ 2) * x :=
+  Iff.rfl
+
+example {ω₀ : ℝ} {x : TimeFunction} : IsDamped 0 ω₀ x ↔ IsHarmonic ω₀ x := isDamped_zero_iff
+
+example (a t : ℝ) : TimeFunction.expMul a (fun _ => t) = Real.exp (a * t) := rfl
+
+/-- The substitution `y = e^{γt} x` removes the first-order term. -/
+example (γ ω₀ : ℝ) (x : TimeFunction) :
+    IsDamped γ ω₀ x ↔
+      timeDerivative (timeDerivative (TimeFunction.expMul γ * x)) =
+        -(algebraMap ℝ TimeFunction (ω₀ ^ 2 - γ ^ 2) * (TimeFunction.expMul γ * x)) :=
+  isDamped_iff_expMul_mul γ ω₀ x
+
+example {γ ω₀ ω : ℝ} (hω : ω ^ 2 = ω₀ ^ 2 - γ ^ 2) (x : TimeFunction) :
+    IsDamped γ ω₀ x ↔ IsHarmonic ω (TimeFunction.expMul γ * x) :=
+  isDamped_iff_isHarmonic hω x
+
+/-- Weak damping (Landau–Lifshitz (25.4)). -/
+example {γ ω₀ ω : ℝ} {x : TimeFunction} (h : IsDamped γ ω₀ x) (hω : ω ^ 2 = ω₀ ^ 2 - γ ^ 2)
+    (hω0 : ω ≠ 0) (t : ℝ) :
+    x (fun _ => t) =
+      amplitude (x fun _ => 0) ((timeDerivative x (fun _ => 0) + γ * x fun _ => 0) / ω) *
+        Real.exp (-γ * t) *
+        Real.cos (ω * t +
+          phase (x fun _ => 0) ((timeDerivative x (fun _ => 0) + γ * x fun _ => 0) / ω)) :=
+  h.apply_eq_amplitude_mul_exp_mul_cos hω hω0 t
+
+/-- The envelope of a weakly damped oscillation. -/
+example {γ ω₀ ω : ℝ} {x : TimeFunction} (h : IsDamped γ ω₀ x) (hω : ω ^ 2 = ω₀ ^ 2 - γ ^ 2)
+    (hω0 : ω ≠ 0) (t : ℝ) :
+    |x fun _ => t| ≤
+      amplitude (x fun _ => 0) ((timeDerivative x (fun _ => 0) + γ * x fun _ => 0) / ω) *
+        Real.exp (-γ * t) :=
+  h.abs_apply_le hω hω0 t
+
+/-- Critical damping (Landau–Lifshitz (25.7)). -/
+example {γ ω₀ : ℝ} {x : TimeFunction} (h : IsDamped γ ω₀ x) (hc : ω₀ ^ 2 = γ ^ 2) (t : ℝ) :
+    x (fun _ => t) = Real.exp (-γ * t) *
+      (x (fun _ => 0) + (timeDerivative x (fun _ => 0) + γ * x fun _ => 0) * t) :=
+  h.apply_eq_critical hc t
+
+/-- Strong damping (Landau–Lifshitz (25.6)). -/
+example {γ ω₀ β : ℝ} {x : TimeFunction} (h : IsDamped γ ω₀ x) (hβ : β ^ 2 = γ ^ 2 - ω₀ ^ 2)
+    (hβ0 : β ≠ 0) (t : ℝ) :
+    x (fun _ => t) =
+      ((γ + β) * x (fun _ => 0) + timeDerivative x fun _ => 0) / (2 * β) *
+          Real.exp (-(γ - β) * t) -
+        ((γ - β) * x (fun _ => 0) + timeDerivative x fun _ => 0) / (2 * β) *
+          Real.exp (-(γ + β) * t) :=
+  h.apply_eq_overdamped hβ hβ0 t
+
+/-- Uniqueness for all real `γ` and `ω₀`. -/
+example {γ ω₀ : ℝ} {x y : TimeFunction} (hx : IsDamped γ ω₀ x) (hy : IsDamped γ ω₀ y)
+    (h0 : x (fun _ => 0) = y fun _ => 0)
+    (h1 : timeDerivative x (fun _ => 0) = timeDerivative y fun _ => 0) : x = y :=
+  hx.eq_of_initial hy h0 h1
+
+/-- Existence: exponentials of the characteristic roots. -/
+example {γ ω₀ r : ℝ} (hr : r ^ 2 + 2 * γ * r + ω₀ ^ 2 = 0) :
+    IsDamped γ ω₀ (TimeFunction.expMul r) :=
+  isDamped_expMul hr
+
+example {γ ω₀ : ℝ} (hc : ω₀ ^ 2 = γ ^ 2) :
+    IsDamped γ ω₀ (TimeFunction.time * TimeFunction.expMul (-γ)) :=
+  isDamped_time_mul_expMul hc
+
+example {γ ω₀ ω : ℝ} {y : TimeFunction} (hy : IsHarmonic ω y) (hω : ω ^ 2 = ω₀ ^ 2 - γ ^ 2) :
+    IsDamped γ ω₀ (TimeFunction.expMul (-γ) * y) :=
+  hy.isDamped_expMul_neg_mul hω
+
+/-- The rate of loss of energy. -/
+example {γ ω₀ : ℝ} {x : TimeFunction} (h : IsDamped γ ω₀ x) :
+    timeDerivative (timeDerivative x * timeDerivative x +
+        algebraMap ℝ TimeFunction (ω₀ ^ 2) * (x * x)) =
+      -(algebraMap ℝ TimeFunction (4 * γ) * (timeDerivative x * timeDerivative x)) :=
+  h.timeDerivative_energy
+
+example {γ ω₀ : ℝ} {x : TimeFunction} (h : IsDamped γ ω₀ x) (hγ : 0 ≤ γ) :
+    Antitone fun t : ℝ => timeDerivative x (fun _ => t) ^ 2 + ω₀ ^ 2 * x (fun _ => t) ^ 2 :=
+  h.energy_antitone hγ
+
+end Damped
+
+section Dissipation
+
+variable {ι : Type*} [DecidableEq ι] [Fintype ι]
+
+example {κ : Type*} (X : SmoothDerivation (FreeSmoothRing κ) (FreeSmoothRing κ))
+    (c : κ → TimeFunction) :
+    IsIntegralCurve X c ↔
+      ∀ a, timeDerivative (c a) = FreeSmoothRing.lift c (X (generator a)) :=
+  Iff.rfl
+
+example {κ : Type*} (π : PoissonStructure (FreeSmoothRing κ)) (H : FreeSmoothRing κ)
+    (c : κ → TimeFunction) : IsIntegralCurve (π.hamiltonian H) c ↔ IsTrajectory π H c :=
+  isIntegralCurve_hamiltonian_iff π H c
+
+example (H : PhaseSpace ι) (i : ι) : velocity H i = partialDerivation (Sum.inr i) H := rfl
+
+example (α : Matrix ι ι ℝ) (H : PhaseSpace ι) :
+    dissipativeFunction α H =
+      ∑ i, ∑ k, algebraMap ℝ (PhaseSpace ι) (α i k / 2) * (velocity H i * velocity H k) := rfl
+
+example (α : Matrix ι ι ℝ) (H f : PhaseSpace ι) :
+    dissipativeField α H f =
+      (canonical ι).bracket f H - ∑ i, frictionalForce α H i * partialDerivation (Sum.inr i) f :=
+  dissipativeField_apply α H f
+
+example (α : Matrix ι ι ℝ) (H : PhaseSpace ι) (i : ι) :
+    dissipativeField α H (p i) = -partialDerivation (Sum.inl i) H - frictionalForce α H i :=
+  dissipativeField_p α H i
+
+/-- The rate of loss of energy (Landau–Lifshitz (25.13)). -/
+example (α : Matrix ι ι ℝ) (H : PhaseSpace ι) :
+    dissipativeField α H H = -(2 * dissipativeFunction α H) :=
+  dissipativeField_self α H
+
+example {α : Matrix ι ι ℝ} (hα : ∀ v : ι → ℝ, 0 ≤ v ⬝ᵥ α *ᵥ v) (H : PhaseSpace ι)
+    (x₀ : ι ⊕ ι → ℝ) : 0 ≤ FreeSmoothRing.lift x₀ (dissipativeFunction α H) :=
+  lift_dissipativeFunction_nonneg hα H x₀
+
+/-- The energy does not increase along a motion with friction. -/
+example {α : Matrix ι ι ℝ} (hα : ∀ v : ι → ℝ, 0 ≤ v ⬝ᵥ α *ᵥ v) {H : PhaseSpace ι}
+    {c : ι ⊕ ι → TimeFunction} (h : IsIntegralCurve (dissipativeField α H) c) :
+    Antitone fun t : ℝ => FreeSmoothRing.lift c H fun _ => t :=
+  h.energy_antitone hα
+
+/-- The oscillator with friction is the damped oscillator (Landau–Lifshitz (25.1)). -/
+example {m a γ ω₀ : ι → ℝ} {k : ℝ} (hm : ∀ i, m i ≠ 0) (hk : ∀ i, k = m i * ω₀ i ^ 2)
+    (ha : ∀ i, a i = 2 * m i * γ i) (c : ι ⊕ ι → TimeFunction) :
+    IsIntegralCurve (dissipativeField (Matrix.diagonal a) (Oscillator.hamiltonian m k)) c ↔
+      ∀ i, IsDamped (γ i) (ω₀ i) (c (Sum.inl i)) ∧
+        c (Sum.inr i) = algebraMap ℝ TimeFunction (m i) * timeDerivative (c (Sum.inl i)) :=
+  Oscillator.isIntegralCurve_dissipativeField_iff_isDamped hm hk ha c
+
+end Dissipation

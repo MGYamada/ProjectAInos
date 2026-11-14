@@ -367,7 +367,8 @@ above are the angular velocities of the actual motion
 
 ## Small oscillations
 
-`Mechanics/Oscillations` covers Landau–Lifshitz §21.
+`Mechanics/Oscillations` covers Landau–Lifshitz §21, and §25 in the next
+section.
 
 `Oscillations/Harmonic` treats the equation `ẍ + ω² x = 0` for a smooth
 function of time. `IsHarmonic ω x` is the equation `ẍ = −ω² x` in the ring
@@ -435,6 +436,64 @@ equations with those of the linearized equations. The Hamiltonian
 Landau–Lifshitz with `b = 1/a`; the Legendre transformation between them is
 not formalized.
 
+## Damped oscillations
+
+`Oscillations/Damped` treats the equation `ẍ + 2γ ẋ + ω₀² x = 0` of
+Landau–Lifshitz §25. The damping coefficient is written `γ`, because `λ` is a
+reserved word of Lean. `IsDamped γ ω₀ x` is the equation
+`ẍ = −2γ ẋ − ω₀² x` in the ring `TimeFunction`; `TimeFunction.expMul a` is the
+function `e^{at}` and `TimeFunction.time` is `t`.
+
+- `isDamped_iff_expMul_mul`: `x` is a solution exactly when `y = e^{γt} x`
+  satisfies `ÿ = −(ω₀² − γ²) y`.
+- Weak damping, `ω₀² − γ² = ω²` with `ω ≠ 0`: `y` is a free oscillation
+  (`isDamped_iff_isHarmonic`), so
+  `x = e^{−γt} (x(0) cos ωt + ((ẋ(0) + γ x(0))/ω) sin ωt)`
+  (`IsDamped.apply_eq_underdamped`). In amplitude and phase,
+  `x = a e^{−γt} cos (ωt + α)` (`IsDamped.apply_eq_amplitude_mul_exp_mul_cos`),
+  and `|x(t)| ≤ a e^{−γt}` (`IsDamped.abs_apply_le`).
+- Critical damping, `ω₀² = γ²`:
+  `x = (x(0) + (ẋ(0) + γ x(0)) t) e^{−γt}` (`IsDamped.apply_eq_critical`).
+- Strong damping, `γ² − ω₀² = β²` with `β ≠ 0`:
+  `x = c₁ e^{−(γ−β)t} + c₂ e^{−(γ+β)t}` with the constants given by `x(0)` and
+  `ẋ(0)` (`IsDamped.apply_eq_overdamped`).
+- `IsDamped.eq_of_initial`: for all real `γ` and `ω₀`, a solution is determined
+  by `x(0)` and `ẋ(0)`. The proof is the trichotomy of `ω₀²` and `γ²`.
+- Existence: `isDamped_expMul` for `e^{rt}` with `r² + 2γ r + ω₀² = 0`,
+  `isDamped_time_mul_expMul` for `t e^{−γt}` at critical damping,
+  `IsHarmonic.isDamped_expMul_neg_mul` for weak damping, and sums and constant
+  multiples (`IsDamped.add`, `IsDamped.const_mul`).
+- `IsDamped.timeDerivative_energy`: `d/dt (ẋ² + ω₀² x²) = −4γ ẋ²`. For `γ ≥ 0`
+  the energy does not increase (`IsDamped.energy_antitone`).
+
+`Oscillations/Dissipation` treats friction on the canonical phase space.
+`IsIntegralCurve X c` says that the curve `c` evolves by the vector field `X`;
+a trajectory of a Hamiltonian is an integral curve of its Hamiltonian vector
+field (`isIntegralCurve_hamiltonian_iff`), and `d/dt f(c) = X(f)(c)` along an
+integral curve (`IsIntegralCurve.timeDerivative_lift`).
+
+For a real matrix `α` and a Hamiltonian `H`, with the velocities
+`vᵢ = ∂H/∂pᵢ`:
+
+- `frictionalForce α H i` is `fᵢ = Σₖ αᵢₖ vₖ`, `dissipativeFunction α H` is
+  `F = ½ Σ αᵢₖ vᵢ vₖ`, and `dissipativeField α H` is the vector field
+  `X = X_H − Σᵢ fᵢ ∂/∂pᵢ`.
+- `dissipativeField_q`, `dissipativeField_p`: `X(qᵢ) = ∂H/∂pᵢ` and
+  `X(pᵢ) = −∂H/∂qᵢ − fᵢ`.
+- `dissipativeField_self`: `X(H) = −2F`. The identity does not use the symmetry
+  of `α`.
+- `lift_dissipativeFunction_nonneg`: if `v · α v ≥ 0` for every real vector
+  `v`, then `F` is non-negative at every point.
+- `IsIntegralCurve.energy_antitone`: under the same hypothesis the energy does
+  not increase along an integral curve of `X`.
+- `Oscillator.isIntegralCurve_dissipativeField_iff_isDamped`: for the oscillator
+  with the diagonal matrix `αᵢᵢ = 2 mᵢ γᵢ`, the integral curves are the curves
+  with `IsDamped γᵢ ω₀ᵢ` for every position and `pᵢ = mᵢ q̇ᵢ`.
+
+The vector field `X` is not Hamiltonian. That it does not preserve the bracket
+and that the phase volume contracts are not proved. No theorem asserts that an
+integral curve exists for a general Hamiltonian.
+
 ## Proof map
 
 | Module | Main declarations |
@@ -474,6 +533,8 @@ not formalized.
 | [Oscillations/Harmonic](../ProjectAInos/Mechanics/Oscillations/Harmonic.lean) | `TimeFunction.cosMul`, `TimeFunction.sinMul`, `TimeFunction.timeDerivative_cosMul`, `TimeFunction.timeDerivative_sinMul`, `amplitude`, `phase`, `amplitude_mul_cos_add`, `IsHarmonic`, `isHarmonic_cosMul`, `isHarmonic_sinMul`, `IsHarmonic.combination`, `IsHarmonic.eq_cos_add_sin`, `isHarmonic_iff`, `IsHarmonic.eq_of_initial`, `IsHarmonic.apply_eq_amplitude_mul_cos`, `IsHarmonic.apply_add_period`, `IsHarmonic.energy_eq`, `IsHarmonic.energy_eq_amplitude` |
 | [Oscillations/Oscillator](../ProjectAInos/Mechanics/Oscillations/Oscillator.lean) | `StandardJet.isSolution_oscillator_iff_isHarmonic`, `Oscillator.hamiltonian`, `Oscillator.isTrajectory_iff`, `Oscillator.isTrajectory_iff_isHarmonic`, `Oscillator.flowMatrix`, `Oscillator.flowMatrix_zero`, `Oscillator.flowMatrix_add`, `Oscillator.det_flowMatrix`, `Oscillator.flowMatrix_add_period`, `Oscillator.apply_eq_flowMatrix_mulVec`, `Oscillator.flowCurve`, `Oscillator.isTrajectory_flowCurve` |
 | [Oscillations/Linearization](../ProjectAInos/Mechanics/Oscillations/Linearization.lean) | `lift_curve_apply`, `lift_const_curve`, `isTrajectory_const_iff`, `isTrajectory_canonical_const_iff`, `displacement`, `hessian`, `hessian_symm`, `linearization`, `quadraticPart`, `partialDerivation_quadraticPart`, `canonical_bracket_quadraticPart`, `linearization_quadraticPart`, `isTrajectory_quadraticPart_iff`, `naturalHamiltonian`, `restPoint`, `isTrajectory_restPoint_iff`, `isHarmonic_of_isTrajectory_quadraticPart`, `isHarmonic_sqrt_of_isTrajectory_quadraticPart`, `pendulumHamiltonian`, `isHarmonic_pendulum` |
+| [Oscillations/Damped](../ProjectAInos/Mechanics/Oscillations/Damped.lean) | `TimeFunction.expMul`, `TimeFunction.time`, `TimeFunction.eq_add_mul_time`, `TimeFunction.antitone_of_timeDerivative_nonpos`, `IsDamped`, `isDamped_zero_iff`, `isDamped_iff_expMul_mul`, `isDamped_iff_isHarmonic`, `IsDamped.apply_eq_underdamped`, `IsDamped.apply_eq_amplitude_mul_exp_mul_cos`, `IsDamped.abs_apply_le`, `IsDamped.apply_eq_critical`, `IsDamped.apply_eq_overdamped`, `IsDamped.eq_of_initial`, `IsDamped.timeDerivative_energy`, `IsDamped.energy_antitone`, `isDamped_expMul`, `isDamped_time_mul_expMul`, `IsHarmonic.isDamped_expMul_neg_mul` |
+| [Oscillations/Dissipation](../ProjectAInos/Mechanics/Oscillations/Dissipation.lean) | `IsIntegralCurve`, `isIntegralCurve_hamiltonian_iff`, `IsIntegralCurve.timeDerivative_lift`, `velocity`, `frictionalForce`, `dissipativeFunction`, `dissipativeField`, `dissipativeField_q`, `dissipativeField_p`, `dissipativeField_self`, `lift_dissipativeFunction_nonneg`, `IsIntegralCurve.timeDerivative_energy`, `IsIntegralCurve.energy_antitone`, `Oscillator.isIntegralCurve_dissipativeField_iff`, `Oscillator.isIntegralCurve_dissipativeField_iff_isDamped`, `Oscillator.energy_antitone` |
 | [Examples](../ProjectAInos/Mechanics/Examples.lean) | Newton equation, stationary uniform free motion, rejection of accelerated free motion, endpoint-vanishing polynomial variation and its endpoint derivative, zero-length interval and zero-coordinate system |
 
 For `L = m v²/2 − V(q)`, `stationary_natural_iff` proves `m q'' = −V'(q)` on `(a,b)`. This algebraic equation remains valid at `m = 0`; dividing by the mass would require a separate nonzero premise.
