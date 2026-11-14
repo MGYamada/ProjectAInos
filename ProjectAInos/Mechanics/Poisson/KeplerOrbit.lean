@@ -16,7 +16,8 @@ import Mathlib.Tactic.Ring
 
 Along a Kepler motion the Runge–Lenz vector `A` and the angular momentum `M`
 are constant, so the identity `A · q = |M|² − m α r` is the equation of the
-orbit: a conic with a focus at the centre (Landau–Lifshitz §15).
+orbit in terms of the signed radius `r = R |Q|²` (Landau–Lifshitz §15).
+The ordinary distance is `|r|`; the branch `R > 0` gives `r = |Q|`.
 
 The equations of a Kepler motion permit similar motions: if `q(t)` is a
 motion, so is `λ q(βt)` whenever `β² λ³ = 1`. The periods of similar orbits
@@ -36,8 +37,9 @@ namespace IsKeplerMotion
 
 variable {m α : ℝ} {Q Pm : Fin 3 → TimeFunction} {R : TimeFunction}
 
-/-- The orbit is a conic (Landau–Lifshitz §15): with the constant vectors
-`A = A(0)` and `M = M(0)`, `A · q(t) = |M|² − m α r(t)` at every time. -/
+/-- The conic orbit identity (Landau–Lifshitz §15): with the constant vectors
+`A = A(0)` and `M = M(0)`, `A · q(t) = |M|² − m α r(t)` at every time.
+Here `r(t)` is the signed radius, equal to the ordinary distance when `R(t) > 0`. -/
 theorem conic (h : IsKeplerMotion m α Q Pm R) (hm : m ≠ 0) (t : ℝ) :
     ∑ a, Kepler.rungeLenz m α Q Pm R a (fun _ => 0) * Q a (fun _ => t) =
       ∑ a, Kepler.angularMomentum Q Pm a (fun _ => 0) ^ 2 -

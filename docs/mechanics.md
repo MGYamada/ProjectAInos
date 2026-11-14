@@ -308,7 +308,7 @@ the Coriolis and centrifugal accelerations with the signs of Landau–Lifshitz
 `Kepler` treats Landau–Lifshitz §15. The Hamiltonian `|p|² / 2m − α / r`
 contains `1 / r`, which is not an element of the free ring on `q` and `p`. A
 *Kepler frame* in a Poisson C∞-ring is a triple `q`, `p`, `ρ` with the canonical
-brackets and the brackets of the inverse distance, `{ρ, qⱼ} = 0` and
+brackets and the brackets of a formal inverse radius, `{ρ, qⱼ} = 0` and
 `{ρ, pⱼ} = −ρ³ qⱼ` (`Kepler.IsFrame`). The relation `ρ² |q|² = 1` is not
 assumed. It is the element `constraint = ρ² |q|² − 1`, and each statement says
 how it enters. With `H = |p|² / 2m − α ρ`, `M = q × p`,
@@ -324,6 +324,9 @@ how it enters. With `H = |p|² / 2m − α ρ`, `M = q × p`,
 | `A · q = M · M − m α r` | `rungeLenz_dotProduct_q` | exact |
 
 Also `{Mₐ, H} = 0` exactly, and `ρ r = 1`, `r² = |q|²` up to the constraint.
+At real points where the constraint vanishes, both `ρ = ±1/|q|` are allowed.
+Thus `Kepler.distance` is a signed radius: the ordinary distance is `|r|`,
+and `r = |q|` requires the positive branch `ρ > 0`.
 
 `KeplerModel` shows that Kepler frames exist: the free C∞-ring on `q`, `p` and
 `ρ` with these generator brackets is a Poisson structure (`KeplerModel.poisson`;
@@ -335,13 +338,16 @@ compatible with the bracket.
 `KeplerMotion` turns this into statements about solutions. A *Kepler motion* is
 a triple of smooth functions of time with `R² |Q|² = 1`, `Q̇ = P / m` and
 `Ṗ = −α R³ Q`: Newton's equations for the inverse-square force with `R` the
-inverse distance. `IsKeplerMotion.timeDerivative_R` derives the evolution of `R`
+inverse signed radius. Both signs of `R` are allowed; for fixed `α`, switching
+the sign reverses the force. `IsKeplerMotion.timeDerivative_R` derives the evolution of `R`
 from the constraint, `isTrajectory` shows that the motion is a trajectory of the
 Kepler Hamiltonian, and `rungeLenz_eq`, `angularMomentum_eq` and
 `hamiltonian_eq` prove that the Runge–Lenz vector, the angular momentum and the
 energy, computed from `Q`, `P` and `R`, take the same value at all times. The
-orbit identity then holds at every time with `r` the distance
-(`R_mul_distance`, `distance_mul_distance`). `isKeplerMotion_circular` is the
+orbit identity then holds at every time with `r = R |Q|²` the signed radius:
+`R r = 1` and `r² = |Q|²` (`R_mul_distance`, `distance_mul_distance`).
+Pointwise, `r = |Q|` when `R > 0`, whereas `r = -|Q|` when `R < 0`.
+`isKeplerMotion_circular` is the
 uniform circular motion of unit radius, so Kepler motions exist. Kepler's third
 law and the description of the orbit as a conic in polar co-ordinates are not
 formalized.
@@ -1277,7 +1283,8 @@ tends to zero.
 `Poisson/KeplerOrbit` applies the same ideas to Kepler motions.
 `IsKeplerMotion.conic`: at every time,
 `A · q(t) = |M|² − m α r(t)` with the constant vectors `A = A(0)` and
-`M = M(0)`, the equation of a conic with a focus at the centre.
+`M = M(0)`. Here `r(t) = R(t) |Q(t)|²` is the signed radius; the ordinary
+distance is `|r(t)|`, and equals `r(t)` on the branch `R(t) > 0`.
 `IsKeplerMotion.similar`: if `(Q, P, R)` is a Kepler motion and
 `β² λ³ = 1`, then `(λ Q(βt), λ β P(βt), R(βt)/λ)` is a Kepler motion.
 `similar_period`: the similar orbit has the period `T/β`, and

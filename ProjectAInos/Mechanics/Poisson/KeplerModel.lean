@@ -19,9 +19,12 @@ canonical brackets of `q` and `p` and
 
 `{ρ, pⱼ} = −ρ³ qⱼ`, `{ρ, qⱼ} = 0`,
 
-which is what `ρ = 1 / |q|` satisfies. This bracket is a Poisson structure: the
-Jacobi identity is checked on generators. It is a model of the relations of
-`Kepler.IsFrame`, so the identities proved there are not vacuous.
+which both `ρ = ±1 / |q|` satisfy. The generator `ρ` has no constraint or sign
+condition. At real points where `ρ² |q|² = 1`, `r = ρ |q|²` is a signed
+radius; it equals the ordinary distance only on the branch `ρ > 0`.
+This bracket is a Poisson structure: the Jacobi identity is checked on
+generators. It is a model of the relations of `Kepler.IsFrame`, so the
+identities proved there are not vacuous.
 -/
 
 @[expose] public section
@@ -45,7 +48,7 @@ def q (i : Fin 3) : PhaseSpace := generator (some (Sum.inl i))
 /-- The momentum. -/
 def p (i : Fin 3) : PhaseSpace := generator (some (Sum.inr i))
 
-/-- The inverse distance `ρ = 1 / r`, as an independent generator. -/
+/-- The formal inverse radius `ρ`, as an independent generator with no sign condition. -/
 def ρ : PhaseSpace := generator none
 
 /-- The brackets of the generators. -/
@@ -182,8 +185,8 @@ theorem isFrame : Kepler.IsFrame poisson q p ρ where
   ρ_q := almostPoisson_ρ_q
   ρ_p := almostPoisson_ρ_p
 
-/-- The constraint ideal `(ρ² |q|² − 1)`: the functions that vanish where `ρ` is
-the inverse distance. -/
+/-- The constraint ideal `(ρ² |q|² − 1)`. Its elements vanish on both real
+branches `ρ = ±1 / |q|`; the ideal does not select a sign. -/
 def constraintIdeal : Ideal PhaseSpace := Ideal.span {Kepler.constraint q ρ}
 
 theorem bracket_constraint_mem (g : PhaseSpace) :
