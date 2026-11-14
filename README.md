@@ -212,7 +212,8 @@ proved: the general solution of `ẍ + ω² x = 0`, the flow of the oscillator, 
 the linearization at an equilibrium. Damped oscillations are proved in their
 three cases, with the loss of energy `−2F` for a dissipative function `F`.
 Forced oscillations under friction are proved with the approach to the steady
-state and the exact resonance curve. Integrals of the motion are constant along
+state and the exact resonance curve, and without friction with Duhamel's
+formula and the energy transfer. Integrals of the motion are constant along
 trajectories of a Hamiltonian on a free C∞-ring. Symplectic structures,
 the Legendre transformation, Dirac brackets and canonical transformations are
 not implemented. Galilean symmetry as a group action and the topics of 2.1 and

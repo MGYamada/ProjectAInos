@@ -96,6 +96,7 @@ public import ProjectAInos.Mechanics.Jet.Standard
 public import ProjectAInos.Mechanics.OpenDomain
 public import ProjectAInos.Mechanics.Oscillations.Damped
 public import ProjectAInos.Mechanics.Oscillations.Dissipation
+public import ProjectAInos.Mechanics.Oscillations.Duhamel
 public import ProjectAInos.Mechanics.Oscillations.Forced
 public import ProjectAInos.Mechanics.Oscillations.Harmonic
 public import ProjectAInos.Mechanics.Oscillations.Linearization
@@ -117,6 +118,7 @@ public import ProjectAInos.Mechanics.Rigid.EulerAngles
 public import ProjectAInos.Mechanics.Rigid.InertiaTensor
 public import ProjectAInos.Mechanics.SmoothLagrangian
 public import ProjectAInos.Mechanics.TimeFunction
+public import ProjectAInos.Mechanics.TimePrimitive
 public import ProjectAInos.Mechanics.TotalTimeDerivative
 public import ProjectAInos.Mechanics.TwoBody.Collisions
 public import ProjectAInos.Mechanics.TwoBody.Kinematics

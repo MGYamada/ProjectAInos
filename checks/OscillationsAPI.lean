@@ -8,10 +8,11 @@ import ProjectAInos
 /-! Public consumers of the oscillation API: the general solution of
 `ẍ + ω² x = 0`, amplitude and phase, the energy and the period, the oscillator
 as a Lagrangian and as a Hamiltonian system with its flow, the linearization
-at an equilibrium, damped oscillations, the dissipative function, and forced
-oscillations under friction with the resonance curve. Default elaborator
-options are intentional: these checks must not rely on the implementation's
-transparency settings. Every statement is pinned with its type. -/
+at an equilibrium, damped oscillations, the dissipative function, forced
+oscillations under friction with the resonance curve, and Duhamel's formula
+with the energy transfer. Default elaborator options are intentional: these
+checks must not rely on the implementation's transparency settings. Every
+statement is pinned with its type. -/
 noncomputable section
 open ProjectAInos.SmoothAlgebra ProjectAInos.SmoothAlgebra.SmoothRing
 open ProjectAInos.SmoothAlgebra.FreeSmoothRing ProjectAInos.SmoothAlgebra.PhaseSpace
@@ -492,3 +493,115 @@ example {m γ ω₀ F Ω : ℝ} (hm : m ≠ 0) (hF : F ≠ 0) (hγ : 0 < γ) (h�
   absorption_eq_half_max_iff hm hF hγ hΩ
 
 end Forced
+
+section Duhamel
+
+example {ω : ℝ} {g x : TimeFunction} :
+    IsForced 0 ω g x ↔
+      timeDerivative (timeDerivative x) = g - algebraMap ℝ TimeFunction (ω ^ 2) * x :=
+  isForced_zero_damping_iff
+
+/-- The fundamental theorem of calculus for functions of time. -/
+example (f : TimeFunction) (a b : ℝ) :
+    f (fun _ => b) - f (fun _ => a) = ∫ s in a..b, timeDerivative f fun _ => s :=
+  TimeFunction.apply_sub_apply_eq_integral f a b
+
+example (f : TimeFunction) (t : ℝ) :
+    TimeFunction.primitive f (fun _ => t) = ∫ s in (0 : ℝ)..t, f fun _ => s := rfl
+
+example (f : TimeFunction) : timeDerivative (TimeFunction.primitive f) = f :=
+  TimeFunction.timeDerivative_primitive f
+
+example (ω : ℝ) (x : TimeFunction) (t : ℝ) :
+    complexAmplitudeRe ω x (fun _ => t) =
+      timeDerivative x (fun _ => t) * Real.cos (ω * t) +
+        ω * (x (fun _ => t) * Real.sin (ω * t)) := rfl
+
+example (ω : ℝ) (x : TimeFunction) (t : ℝ) :
+    complexAmplitudeIm ω x (fun _ => t) =
+      ω * (x (fun _ => t) * Real.cos (ω * t)) -
+        timeDerivative x (fun _ => t) * Real.sin (ω * t) := rfl
+
+/-- The real part of `(ẋ + iωx) e^{−iωt}` (Landau–Lifshitz (22.10)). -/
+example {ω : ℝ} {g x : TimeFunction} (h : IsForced 0 ω g x) (t : ℝ) :
+    complexAmplitudeRe ω x (fun _ => t) =
+      timeDerivative x (fun _ => 0) + ∫ s in (0 : ℝ)..t, g (fun _ => s) * Real.cos (ω * s) :=
+  h.complexAmplitudeRe_eq t
+
+/-- The imaginary part of `(ẋ + iωx) e^{−iωt}` (Landau–Lifshitz (22.10)). -/
+example {ω : ℝ} {g x : TimeFunction} (h : IsForced 0 ω g x) (t : ℝ) :
+    complexAmplitudeIm ω x (fun _ => t) =
+      ω * x (fun _ => 0) - ∫ s in (0 : ℝ)..t, g (fun _ => s) * Real.sin (ω * s) :=
+  h.complexAmplitudeIm_eq t
+
+/-- Duhamel's formula. -/
+example {ω : ℝ} {g x : TimeFunction} (h : IsForced 0 ω g x) (hω : ω ≠ 0) (t : ℝ) :
+    x (fun _ => t) =
+      x (fun _ => 0) * Real.cos (ω * t) + timeDerivative x (fun _ => 0) / ω * Real.sin (ω * t) +
+        (∫ s in (0 : ℝ)..t, g (fun _ => s) * Real.sin (ω * (t - s))) / ω :=
+  h.apply_eq_integral hω t
+
+/-- The energy at time `t` (Landau–Lifshitz (22.11)). -/
+example {ω : ℝ} {g x : TimeFunction} (h : IsForced 0 ω g x) (t : ℝ) :
+    timeDerivative x (fun _ => t) ^ 2 + ω ^ 2 * x (fun _ => t) ^ 2 =
+      (timeDerivative x (fun _ => 0) +
+          ∫ s in (0 : ℝ)..t, g (fun _ => s) * Real.cos (ω * s)) ^ 2 +
+        (ω * x (fun _ => 0) - ∫ s in (0 : ℝ)..t, g (fun _ => s) * Real.sin (ω * s)) ^ 2 :=
+  h.energy_apply t
+
+/-- The energy transferred in a finite time (Landau–Lifshitz (22.12)). -/
+example {ω m : ℝ} {F x : TimeFunction} (hm : m ≠ 0)
+    (h : IsForced 0 ω (algebraMap ℝ TimeFunction m⁻¹ * F) x) (h0 : x (fun _ => 0) = 0)
+    (h1 : timeDerivative x (fun _ => 0) = 0) (T : ℝ) :
+    m / 2 * (timeDerivative x (fun _ => T) ^ 2 + ω ^ 2 * x (fun _ => T) ^ 2) =
+      ((∫ s in (0 : ℝ)..T, F (fun _ => s) * Real.cos (ω * s)) ^ 2 +
+        (∫ s in (0 : ℝ)..T, F (fun _ => s) * Real.sin (ω * s)) ^ 2) / (2 * m) :=
+  h.energy_transfer hm h0 h1 T
+
+/-- Duhamel's formula defines a solution at rest at time zero. -/
+example {ω : ℝ} (hω : ω ≠ 0) (g : TimeFunction) : IsForced 0 ω g (duhamel ω g) :=
+  isForced_duhamel hω g
+
+example (ω : ℝ) (g : TimeFunction) (t : ℝ) :
+    duhamel ω g (fun _ => t) =
+      (∫ s in (0 : ℝ)..t, g (fun _ => s) * Real.sin (ω * (t - s))) / ω :=
+  duhamel_apply ω g t
+
+/-- Existence for every force and all initial data. -/
+example {ω : ℝ} (hω : ω ≠ 0) (g : TimeFunction) (x₀ v₀ : ℝ) :
+    ∃ x : TimeFunction, IsForced 0 ω g x ∧ x (fun _ => 0) = x₀ ∧
+      timeDerivative x (fun _ => 0) = v₀ :=
+  exists_isForced hω g x₀ v₀
+
+/-- The forced oscillation away from resonance (Landau–Lifshitz (22.3)). -/
+example {ω Ω : ℝ} (hne : ω ^ 2 ≠ Ω ^ 2) (F : ℝ) :
+    IsForced 0 ω (algebraMap ℝ TimeFunction F * TimeFunction.cosMul Ω)
+      (algebraMap ℝ TimeFunction (F / (ω ^ 2 - Ω ^ 2)) * TimeFunction.cosMul Ω) :=
+  isForced_cos_of_sq_ne hne F
+
+example {ω Ω : ℝ} (hne : ω ^ 2 ≠ Ω ^ 2) (F : ℝ) :
+    steadyState 0 ω F Ω =
+      algebraMap ℝ TimeFunction (F / (ω ^ 2 - Ω ^ 2)) * TimeFunction.cosMul Ω :=
+  steadyState_zero_damping hne F
+
+/-- The forced oscillation at resonance (Landau–Lifshitz (22.5)). -/
+example {ω : ℝ} (hω : ω ≠ 0) (F : ℝ) :
+    IsForced 0 ω (algebraMap ℝ TimeFunction F * TimeFunction.cosMul ω)
+      (algebraMap ℝ TimeFunction (F / (2 * ω)) *
+        (TimeFunction.time * TimeFunction.sinMul ω)) :=
+  isForced_resonance hω F
+
+example {ω F : ℝ} {x : TimeFunction}
+    (hx : IsForced 0 ω (algebraMap ℝ TimeFunction F * TimeFunction.cosMul ω) x) (hω : ω ≠ 0)
+    (h0 : x (fun _ => 0) = 0) (h1 : timeDerivative x (fun _ => 0) = 0) :
+    x = algebraMap ℝ TimeFunction (F / (2 * ω)) *
+      (TimeFunction.time * TimeFunction.sinMul ω) :=
+  hx.eq_resonance_of_rest hω h0 h1
+
+/-- At resonance no solution is bounded. -/
+example {ω F : ℝ} {x : TimeFunction}
+    (hx : IsForced 0 ω (algebraMap ℝ TimeFunction F * TimeFunction.cosMul ω) x) (hω : 0 < ω)
+    (hF : F ≠ 0) (B : ℝ) : ∃ t : ℝ, B < |x fun _ => t| :=
+  hx.exists_abs_gt_of_resonance hω hF B
+
+end Duhamel

@@ -367,8 +367,8 @@ above are the angular velocities of the actual motion
 
 ## Small oscillations
 
-`Mechanics/Oscillations` covers Landau–Lifshitz §21, and §§25 and 26 in the
-next two sections.
+`Mechanics/Oscillations` covers Landau–Lifshitz §21, and §§25, 26 and 22 in
+the next three sections.
 
 `Oscillations/Harmonic` treats the equation `ẍ + ω² x = 0` for a smooth
 function of time. `IsHarmonic ω x` is the equation `ẍ = −ω² x` in the ring
@@ -542,8 +542,50 @@ For the force `F cos Ωt`, with `D = (ω₀² − Ω²)² + 4γ² Ω²`
 The resonance curve here is the exact function
 `m γ F² Ω² / ((ω₀² − Ω²)² + 4γ² Ω²)`. The approximation of Landau–Lifshitz near
 resonance for small damping, a Lorentzian in `Ω − ω₀`, is an asymptotic
-statement and is not proved. A force with a phase, `F cos (Ωt + β)`, and a
-general force are not treated.
+statement and is not proved. A force with a phase, `F cos (Ωt + β)`, is not
+treated; a general force is treated without friction in the next section.
+
+## Forced oscillations without friction
+
+`Oscillations/Duhamel` treats the equation `ẍ + ω² x = g` of Landau–Lifshitz
+§22, which is `IsForced 0 ω g x` (`isForced_zero_damping_iff`). The force `g`
+per unit mass is any smooth function of time.
+
+`Mechanics/TimePrimitive` provides the calculus: the increment of a smooth
+function of time is the integral of its derivative
+(`TimeFunction.apply_sub_apply_eq_integral`), and `TimeFunction.primitive f`
+is the smooth function `t ↦ ∫₀ᵗ f` with derivative `f`.
+
+- `complexAmplitudeRe ω x` and `complexAmplitudeIm ω x` are
+  `ẋ cos ωt + ω x sin ωt` and `ω x cos ωt − ẋ sin ωt`, the real and the
+  imaginary part of `(ẋ + iωx) e^{−iωt}`. For a solution their derivatives are
+  `g cos ωt` and `−g sin ωt`, so
+  `Re = ẋ(0) + ∫₀ᵗ g cos ωs ds` and `Im = ω x(0) − ∫₀ᵗ g sin ωs ds`
+  (`IsForced.complexAmplitudeRe_eq`, `IsForced.complexAmplitudeIm_eq`). These
+  hold for every `ω`.
+- `IsForced.apply_eq_integral`: Duhamel's formula, for `ω ≠ 0`,
+  `x(t) = x(0) cos ωt + (ẋ(0)/ω) sin ωt + (1/ω) ∫₀ᵗ g(s) sin ω(t − s) ds`.
+  `IsForced.timeDerivative_apply_eq_integral` gives the velocity.
+- `IsForced.energy_apply`: `ẋ² + ω² x² = Re² + Im²` at every time.
+  `IsForced.energy_transfer`: for the force `F` on a particle of mass `m` at
+  rest at time zero, the energy at time `T` is
+  `((∫₀ᵀ F cos ωt)² + (∫₀ᵀ F sin ωt)²) / 2m`.
+- `duhamel ω g` is the function `(1/ω) ∫₀ᵗ g(s) sin ω(t − s) ds`
+  (`duhamel_apply`). It is a solution (`isForced_duhamel`) at rest at time
+  zero, so for every smooth force and all initial data a solution exists
+  (`exists_isForced`); it is unique by `IsForced.eq_of_initial`.
+- `isForced_cos_of_sq_ne`: for `Ω² ≠ ω²` the forced oscillation is
+  `F/(ω² − Ω²) cos Ωt`, which is the steady state of the previous section with
+  `γ = 0` (`steadyState_zero_damping`). `IsForced.apply_eq_of_sq_ne` is the
+  general solution.
+- `isForced_resonance`: for `Ω = ω` the forced oscillation is
+  `(F/2ω) t sin ωt`. It is the motion from rest
+  (`IsForced.eq_resonance_of_rest`), and no solution is bounded
+  (`IsForced.exists_abs_gt_of_resonance`).
+
+The energy transfer of Landau–Lifshitz (22.12) is the limit of the formula
+above for a force acting during all time, with improper integrals; it is not
+proved. Beats near resonance are not treated.
 
 ## Proof map
 
@@ -587,6 +629,8 @@ general force are not treated.
 | [Oscillations/Damped](../ProjectAInos/Mechanics/Oscillations/Damped.lean) | `TimeFunction.expMul`, `TimeFunction.time`, `TimeFunction.eq_add_mul_time`, `TimeFunction.antitone_of_timeDerivative_nonpos`, `IsDamped`, `isDamped_zero_iff`, `isDamped_iff_expMul_mul`, `isDamped_iff_isHarmonic`, `IsDamped.apply_eq_underdamped`, `IsDamped.apply_eq_amplitude_mul_exp_mul_cos`, `IsDamped.abs_apply_le`, `IsDamped.apply_eq_critical`, `IsDamped.apply_eq_overdamped`, `IsDamped.eq_of_initial`, `IsDamped.timeDerivative_energy`, `IsDamped.energy_antitone`, `isDamped_expMul`, `isDamped_time_mul_expMul`, `IsHarmonic.isDamped_expMul_neg_mul` |
 | [Oscillations/Dissipation](../ProjectAInos/Mechanics/Oscillations/Dissipation.lean) | `IsIntegralCurve`, `isIntegralCurve_hamiltonian_iff`, `IsIntegralCurve.timeDerivative_lift`, `velocity`, `frictionalForce`, `dissipativeFunction`, `dissipativeField`, `dissipativeField_q`, `dissipativeField_p`, `dissipativeField_self`, `lift_dissipativeFunction_nonneg`, `IsIntegralCurve.timeDerivative_energy`, `IsIntegralCurve.energy_antitone`, `Oscillator.isIntegralCurve_dissipativeField_iff`, `Oscillator.isIntegralCurve_dissipativeField_iff_isDamped`, `Oscillator.energy_antitone` |
 | [Oscillations/Forced](../ProjectAInos/Mechanics/Oscillations/Forced.lean) | `IsForced`, `isForced_zero_iff`, `IsForced.add`, `IsForced.sub`, `IsForced.eq_of_initial`, `IsForced.timeDerivative_energy`, `IsDamped.tendsto_zero`, `IsForced.tendsto_sub`, `responseDenominator`, `steadyState`, `isForced_steadyState`, `steadyState_const_mul`, `steadyAmplitude`, `steadyPhase`, `steadyState_apply`, `sin_steadyPhase_nonpos`, `IsForced.apply_eq_transient_add_steadyState`, `IsForced.tendsto_sub_steadyState`, `steadyAmplitude_le`, `steadyAmplitude_eq_max`, `absorption`, `two_mul_dissipation_steadyState`, `mean_dissipation_steadyState`, `absorption_le`, `absorption_resonance`, `absorption_eq_half_max_iff` |
+| [TimePrimitive](../ProjectAInos/Mechanics/TimePrimitive.lean) | `TimeFunction.hasDerivAt_apply_const`, `TimeFunction.continuous_apply_const`, `TimeFunction.apply_sub_apply_eq_integral`, `TimeFunction.primitive`, `TimeFunction.primitive_apply`, `TimeFunction.timeDerivative_primitive` |
+| [Oscillations/Duhamel](../ProjectAInos/Mechanics/Oscillations/Duhamel.lean) | `isForced_zero_damping_iff`, `complexAmplitudeRe`, `complexAmplitudeIm`, `integral_mul_sin_sub`, `IsForced.complexAmplitudeRe_eq`, `IsForced.complexAmplitudeIm_eq`, `IsForced.timeDerivative_apply_eq_integral`, `IsForced.apply_eq_integral`, `IsForced.energy_apply`, `IsForced.energy_transfer`, `duhamel`, `isForced_duhamel`, `duhamel_apply`, `exists_isForced`, `isForced_cos_of_sq_ne`, `steadyState_zero_damping`, `IsForced.apply_eq_of_sq_ne`, `isForced_resonance`, `IsForced.eq_resonance_of_rest`, `IsForced.exists_abs_gt_of_resonance` |
 | [Examples](../ProjectAInos/Mechanics/Examples.lean) | Newton equation, stationary uniform free motion, rejection of accelerated free motion, endpoint-vanishing polynomial variation and its endpoint derivative, zero-length interval and zero-coordinate system |
 
 For `L = m v²/2 − V(q)`, `stationary_natural_iff` proves `m q'' = −V'(q)` on `(a,b)`. This algebraic equation remains valid at `m = 0`; dividing by the mass would require a separate nonzero premise.
