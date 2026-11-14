@@ -621,3 +621,28 @@ example (μ : ℝ) : IsInertial ((jetRing ι).naturalLagrangian (fun _ => μ) 0)
   isInertial_naturalLagrangian μ
 
 end Galilei
+
+section KnifeEdge
+
+open KnifeEdge
+
+example : cosθ * cosθ + sinθ * sinθ = 1 := cos_mul_cos_add_sin_mul_sin
+
+example (v : Fin 3 → Configuration) : constraint v = v 0 * sinθ - v 1 * cosθ := rfl
+
+example : constraint (fun c => along (FreeSmoothRing.generator c)) = 0 := constraint_along
+
+example : constraint (fun c => turn (FreeSmoothRing.generator c)) = 0 := constraint_turn
+
+example : constraint (fun c => across (FreeSmoothRing.generator c)) = -1 := constraint_across
+
+/-- The commutator of the admissible fields is the forbidden direction. -/
+example : ⁅turn, along⁆ = across := commutator_turn_along
+
+/-- A function annihilated by the admissible motions is a constant: the
+constraint of the knife edge is not holonomic. -/
+example {f : Configuration} (h1 : along f = 0) (h2 : turn f = 0) :
+    f = algebraMap ℝ Configuration (FreeSmoothRing.lift (fun _ => 0) f) :=
+  eq_algebraMap_of_along_eq_zero_of_turn_eq_zero h1 h2
+
+end KnifeEdge

@@ -1028,3 +1028,20 @@ example {ω ωinv x : TimeFunction} (hω : ω * ωinv = 1) (hx : IsHill (ω * ω
   timeDerivative_action_of_const hω hx hconst
 
 end Adiabatic
+
+section PhaseVolume
+
+open MeasureTheory
+
+/-- Liouville's theorem for the oscillator. -/
+example {m ω : ℝ} (hm : m ≠ 0) (hω : ω ≠ 0) (t : ℝ) :
+    Measure.map (Matrix.toLin' (Oscillator.flowMatrix m ω t))
+      (volume : Measure (Fin 2 → ℝ)) = volume :=
+  Oscillator.map_flowMatrix_volume hm hω t
+
+example {m ω : ℝ} (hm : m ≠ 0) (hω : ω ≠ 0) (t : ℝ) :
+    MeasurePreserving (Matrix.toLin' (Oscillator.flowMatrix m ω t))
+      (volume : Measure (Fin 2 → ℝ)) volume :=
+  Oscillator.measurePreserving_flowMatrix hm hω t
+
+end PhaseVolume

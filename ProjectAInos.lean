@@ -97,6 +97,7 @@ public import ProjectAInos.Mechanics.Jet.Noether
 public import ProjectAInos.Mechanics.Jet.Polar
 public import ProjectAInos.Mechanics.Jet.Prolongation
 public import ProjectAInos.Mechanics.Jet.Standard
+public import ProjectAInos.Mechanics.KnifeEdge
 public import ProjectAInos.Mechanics.Legendre
 public import ProjectAInos.Mechanics.OpenDomain
 public import ProjectAInos.Mechanics.Oscillations.Adiabatic
@@ -110,8 +111,10 @@ public import ProjectAInos.Mechanics.Oscillations.NormalForm
 public import ProjectAInos.Mechanics.Oscillations.NormalModes
 public import ProjectAInos.Mechanics.Oscillations.Oscillator
 public import ProjectAInos.Mechanics.Oscillations.Parametric
+public import ProjectAInos.Mechanics.Oscillations.PhaseVolume
 public import ProjectAInos.Mechanics.Oscillations.QuadraticLagrangian
 public import ProjectAInos.Mechanics.Oscillations.Symmetry
+public import ProjectAInos.Mechanics.Poisson.ActionFunction
 public import ProjectAInos.Mechanics.Poisson.AngularMomentum
 public import ProjectAInos.Mechanics.Poisson.CompleteIntegral
 public import ProjectAInos.Mechanics.Poisson.Epsilon
@@ -136,6 +139,7 @@ public import ProjectAInos.Mechanics.Rigid.AngularVelocity
 public import ProjectAInos.Mechanics.Rigid.EulerAngles
 public import ProjectAInos.Mechanics.Rigid.InertiaTensor
 public import ProjectAInos.Mechanics.Rigid.RegularPrecession
+public import ProjectAInos.Mechanics.Rutherford
 public import ProjectAInos.Mechanics.Similarity
 public import ProjectAInos.Mechanics.SmoothLagrangian
 public import ProjectAInos.Mechanics.TimeFunction

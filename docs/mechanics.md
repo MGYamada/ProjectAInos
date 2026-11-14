@@ -845,6 +845,46 @@ The derivative of `I` is proportional to `ω̇`, and its second factor
 oscillates about zero. The adiabatic theorem, that the change of `I` stays
 small over a long time when `ω` varies slowly, is not proved.
 
+## A non-holonomic constraint
+
+`KnifeEdge` treats the standard example of Landau–Lifshitz §38: a blade that
+touches a plane at `(x, y)` and makes the angle `θ` with the `x`-axis, with
+the constraint `ẋ sin θ − ẏ cos θ = 0`. `Configuration` is the free C∞-ring
+on the three co-ordinates, and `cosθ`, `sinθ` are obtained by the operations
+of the ring.
+
+- `along` is `cos θ ∂ₓ + sin θ ∂_y`, `turn` is `∂_θ` and `across` is
+  `−sin θ ∂ₓ + cos θ ∂_y`. `constraint_along`, `constraint_turn`,
+  `constraint_across`: the first two fields satisfy the constraint, and the
+  third has the value `−1`.
+- `commutator_turn_along`: `[turn, along] = across`. The admissible fields
+  are not closed under the commutator.
+- `eq_algebraMap_of_along_eq_zero_of_turn_eq_zero`: a function annihilated by
+  `along` and `turn` is a constant. No equation between the co-ordinates
+  follows from the constraint.
+
+A holonomic constraint is a ring presented by equations, and its states are
+those of [the shared algebra](smooth-algebra.md#points-and-tangent-vectors).
+The equations of motion with reactions are not treated.
+
+## Rutherford's formula
+
+`Rutherford` proves the identities of Landau–Lifshitz §19 between real
+numbers. `eccentricity_sq_sub_one`: `2 E M²/m α² = (m v² ρ/α)²` for
+`E = ½ m v²` and `M = m ρ v`. `cot_half_eq`: if `sin (χ/2) = 1/e`,
+`0 < χ < π` and `e² − 1 = k²` with `k ≥ 0`, then `cot (χ/2) = k`.
+`hasDerivAt_impactParameter` and `rutherford`: for `ρ(χ) = a cot (χ/2)`,
+`ρ |dρ/dχ| / sin χ = (a/2)² / sin⁴ (χ/2)`. The angle of deflection as a limit
+along the orbit and the cross-section as a measure are not defined.
+
+## The phase volume of the oscillator
+
+`Oscillations/PhaseVolume`: the flow matrix of the oscillator has determinant
+one, so it preserves the Lebesgue measure of the phase plane
+(`Oscillator.map_flowMatrix_volume`, `Oscillator.measurePreserving_flowMatrix`).
+This is Liouville's theorem (Landau–Lifshitz §46) for a linear flow; for a
+general Hamiltonian only the infinitesimal form is proved.
+
 ## Canonical formalism
 
 `Mechanics/Legendre` treats the Legendre transformation of the natural
@@ -968,8 +1008,14 @@ function of `(q, α, t)`, and `parameter i` is `αᵢ`.
   `∂S/∂t = −α₀` give a solution. This is the form in parabolic and in
   elliptic co-ordinates.
 
-The coefficient functions are elements of the free C∞-ring, smooth on all of
-`ℝ³`. The coefficients `1/r²`, `1/sin²θ` and `1/(ξ + η)` of the classical
+`Poisson/ActionFunction` gives the relation `dS = p dq − H dt` of
+Landau–Lifshitz §43 along curves: for a solution `S` of the Hamilton–Jacobi
+equation and any curve `q(t)`,
+`IsHamiltonJacobi.timeDerivative_along` is `dS/dt = Σ pᵢ q̇ᵢ − H(q, p)` with
+`pᵢ = ∂S/∂qᵢ`.
+
+The coefficient functions of `Poisson/Separation` are elements of the free
+C∞-ring, smooth on all of `ℝ³`. The coefficients `1/r²`, `1/sin²θ` and `1/(ξ + η)` of the classical
 co-ordinate systems are smooth only on open subsets, so those systems are not
 instances as stated. The quadratures that give `S` are not constructed, and
 the completeness of the integral is not checked.
@@ -1085,6 +1131,10 @@ semi-major axis is not computed.
 | [Poisson/GeneratingFunction](../ProjectAInos/Mechanics/Poisson/GeneratingFunction.lean) | `PositionPair`, `oldPosition`, `newPosition`, `gradOld`, `gradNew`, `oldMap`, `newMap`, `mixedHessian`, `oldHessian`, `apply_oldMap`, `gradNew_oldMap`, `gradOld_oldMap`, `IsFree`, `transformation`, `momentumPart`, `positionPart`, `inverseMixed`, `IsFree.inverseMixed_mul_mixedHessian`, `IsFree.momentumPart_eq`, `IsFree.oldMap_bracket`, `IsFree.bracket_apply`, `IsFree.bracket_newPosition_gradNew`, `IsFree.bracket_gradNew_gradNew`, `IsFree.isPoissonHom_transformation`, `IsFree.transformation_comp_inverse`, `IsFree.inverse_comp_transformation`, `exchange`, `isFree_exchange`, `transformation_exchange_q`, `transformation_exchange_p` |
 | [Poisson/CompleteIntegral](../ProjectAInos/Mechanics/Poisson/CompleteIntegral.lean) | `ActionSpace`, `substitution`, `IsHamiltonJacobi`, `along`, `momentum`, `timeDerivative_along`, `partialDerivation_substitution_q`, `isTrajectory_of_isHamiltonJacobi`, `freeAction`, `isHamiltonJacobi_freeAction`, `isTrajectory_freeAction` |
 | [Poisson/Separation](../ProjectAInos/Mechanics/Poisson/Separation.lean) | `positionsToAction`, `parameter`, `substitution_p`, `substitution_positionsToPhase`, `stackelHamiltonian`, `substitution_stackelHamiltonian`, `isHamiltonJacobi_stackel`, `nestedHamiltonian`, `nestedMatrix`, `isHamiltonJacobi_nested`, `kinetic`, `isHamiltonJacobi_nested_of_separated`, `liouvilleHamiltonian`, `liouvilleMatrix`, `isHamiltonJacobi_liouville`, `isHamiltonJacobi_liouville_of_separated` |
+| [Poisson/ActionFunction](../ProjectAInos/Mechanics/Poisson/ActionFunction.lean) | `CompleteIntegral.IsHamiltonJacobi.timeDerivative_along` |
+| [KnifeEdge](../ProjectAInos/Mechanics/KnifeEdge.lean) | `Configuration`, `cosθ`, `sinθ`, `cos_mul_cos_add_sin_mul_sin`, `along`, `turn`, `across`, `constraint`, `constraint_across`, `commutator_turn_along`, `derivation_apply`, `eq_algebraMap_of_along_eq_zero_of_turn_eq_zero` |
+| [Rutherford](../ProjectAInos/Mechanics/Rutherford.lean) | `eccentricity_sq_sub_one`, `cot_half_eq`, `hasDerivAt_impactParameter`, `rutherford` |
+| [Oscillations/PhaseVolume](../ProjectAInos/Mechanics/Oscillations/PhaseVolume.lean) | `Oscillator.map_flowMatrix_volume`, `Oscillator.measurePreserving_flowMatrix` |
 | [Poisson/Liouville](../ProjectAInos/Mechanics/Poisson/Liouville.lean) | `divergence`, `divergence_eq`, `divergence_hamiltonian`, `divergence_dissipativeField`, `Oscillator.divergence_dissipativeField` |
 | [Similarity](../ProjectAInos/Mechanics/Similarity.lean) | `TimeFunction.scale`, `TimeFunction.timeDerivative_scale`, `TimeFunction.scale_lift`, `dilate`, `lift_dilate`, `IsHomogeneous`, `IsHomogeneous.dilate_partialDerivation`, `StandardJet.IsSolution.similar`, `similar_apply_add_period` |
 | [Poisson/VirialAverage](../ProjectAInos/Mechanics/Poisson/VirialAverage.lean) | `TimeFunction.tendsto_average_timeDerivative`, `IsTrajectory.tendsto_average_virial` |

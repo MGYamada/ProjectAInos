@@ -393,6 +393,22 @@ example {m : ℝ} {lam w₀ w₁ g₀ g₁ κ₀ κ₁ u₀ u₁ u₂ : FreeSmoo
 
 end Separation
 
+section ActionFunction
+
+open CompleteIntegral
+
+variable {ι : Type*} [DecidableEq ι] [Fintype ι]
+
+/-- `dS/dt = Σ pᵢ q̇ᵢ − H` along a curve (Landau–Lifshitz §43). -/
+example {H : PhaseSpace ι} {S : ActionSpace ι} (h : IsHamiltonJacobi H S)
+    (Q : ι → TimeFunction) (α : ι → ℝ) :
+    timeDerivative (along Q α S) =
+      ∑ k, momentum S Q α k * timeDerivative (Q k) -
+        FreeSmoothRing.lift (Sum.elim Q (momentum S Q α)) H :=
+  h.timeDerivative_along Q α
+
+end ActionFunction
+
 section Liouville
 
 variable {ι : Type*} [DecidableEq ι] [Fintype ι]
