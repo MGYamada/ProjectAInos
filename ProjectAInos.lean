@@ -96,10 +96,13 @@ public import ProjectAInos.Mechanics.Jet.Standard
 public import ProjectAInos.Mechanics.OpenDomain
 public import ProjectAInos.Mechanics.Oscillations.Damped
 public import ProjectAInos.Mechanics.Oscillations.Dissipation
+public import ProjectAInos.Mechanics.Oscillations.Duhamel
 public import ProjectAInos.Mechanics.Oscillations.Forced
 public import ProjectAInos.Mechanics.Oscillations.Harmonic
 public import ProjectAInos.Mechanics.Oscillations.Linearization
+public import ProjectAInos.Mechanics.Oscillations.NormalModes
 public import ProjectAInos.Mechanics.Oscillations.Oscillator
+public import ProjectAInos.Mechanics.Oscillations.Parametric
 public import ProjectAInos.Mechanics.Poisson.AngularMomentum
 public import ProjectAInos.Mechanics.Poisson.Epsilon
 public import ProjectAInos.Mechanics.Poisson.Galilei
@@ -108,6 +111,7 @@ public import ProjectAInos.Mechanics.Poisson.Kepler
 public import ProjectAInos.Mechanics.Poisson.KeplerModel
 public import ProjectAInos.Mechanics.Poisson.KeplerMotion
 public import ProjectAInos.Mechanics.Poisson.RigidBody
+public import ProjectAInos.Mechanics.Poisson.RigidBodyMotion
 public import ProjectAInos.Mechanics.Poisson.RotatingFrame
 public import ProjectAInos.Mechanics.Poisson.Trajectory
 public import ProjectAInos.Mechanics.Poisson.TwoBody
@@ -115,8 +119,10 @@ public import ProjectAInos.Mechanics.Poisson.Virial
 public import ProjectAInos.Mechanics.Rigid.AngularVelocity
 public import ProjectAInos.Mechanics.Rigid.EulerAngles
 public import ProjectAInos.Mechanics.Rigid.InertiaTensor
+public import ProjectAInos.Mechanics.Rigid.RegularPrecession
 public import ProjectAInos.Mechanics.SmoothLagrangian
 public import ProjectAInos.Mechanics.TimeFunction
+public import ProjectAInos.Mechanics.TimePrimitive
 public import ProjectAInos.Mechanics.TotalTimeDerivative
 public import ProjectAInos.Mechanics.TwoBody.Collisions
 public import ProjectAInos.Mechanics.TwoBody.Kinematics

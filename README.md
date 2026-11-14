@@ -206,13 +206,16 @@ generator: the Runge–Lenz identities are proved, and the Runge–Lenz vector i
 constant along smooth solutions of the inverse-square law. The kinematics of a
 rigid body is proved by linear algebra:
 `so(3) ≅ ℝ³`, the angular velocity, the inertia tensor of point masses with
-its principal moments, and Eulerian angles. The algebra of two bodies is proved: the reduced mass,
+its principal moments, Eulerian angles, the regular precession of the symmetric
+top, and the stability of the permanent rotations. The algebra of two bodies is proved: the reduced mass,
 disintegration, and elastic collisions. Free oscillations in one dimension are
 proved: the general solution of `ẍ + ω² x = 0`, the flow of the oscillator, and
 the linearization at an equilibrium. Damped oscillations are proved in their
 three cases, with the loss of energy `−2F` for a dissipative function `F`.
 Forced oscillations under friction are proved with the approach to the steady
-state and the exact resonance curve. Integrals of the motion are constant along
+state and the exact resonance curve, and without friction with Duhamel's
+formula and the energy transfer. Normal modes and the stability criterion of
+parametric resonance are proved. Integrals of the motion are constant along
 trajectories of a Hamiltonian on a free C∞-ring. Symplectic structures,
 the Legendre transformation, Dirac brackets and canonical transformations are
 not implemented. Galilean symmetry as a group action and the topics of 2.1 and

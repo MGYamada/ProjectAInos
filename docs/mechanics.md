@@ -155,6 +155,23 @@ $$
 \{L_0,H\}=\Bigl(\frac1{I_2}-\frac1{I_1}\Bigr)L_1L_2\quad\text{and cyclic permutations.}
 $$
 
+`Poisson/RigidBodyMotion` treats trajectories of Euler's equations
+(`isTrajectory_kineticEnergy_iff`). A rotation about a principal axis,
+`L = ℓ eₐ`, is an equilibrium (`isTrajectory_principalRotation`). For a
+symmetric top, `I₀ = I₁`, the curve
+`(a cos νt, a sin νt, ℓ)` with `ν = (1/I₀ − 1/I₂) ℓ` is a trajectory
+(`isTrajectory_symmetricTop`). The element `stabilityForm I a = 2 Iₐ E − |L|²`
+is an integral, and along every trajectory `Σᵢ (Iₐ/Iᵢ − 1) Lᵢ(t)²` keeps its
+value (`sum_mul_sq_eq`). When `Iₐ` is the greatest moment every term is
+non-negative, so each `(Iₐ/Iⱼ − 1) Lⱼ(t)²` is at most the initial value of the
+sum (`mul_sq_le_of_greatest`); `mul_sq_le_of_least` is the statement for the
+least moment. These are bounds for the non-linear motion. For the middle axis
+only the linearized statement is proved: at `L = (0, ℓ, 0)` the linearized
+equations couple the components `0` and `2` with the coefficients
+`(1/I₂ − 1/I₁) ℓ` and `(1/I₁ − 1/I₀) ℓ` (`linearization_zero_two`,
+`linearization_two_zero`), whose product is positive for the middle moment
+(`linearization_mul_pos_of_middle`) and negative for an extreme one.
+
 `|L|²` is a Casimir (`poisson_casimir_left`): its bracket with every element
 vanishes, so it is an integral of every Hamiltonian. `L_ne_zero` evaluates at a
 point to show that the generators, and hence the bracket, are not zero. The
@@ -365,10 +382,29 @@ rotation is `eulerMatrixDeriv` with the rates `φ'`, `θ'`, `ψ'`, so the formul
 above are the angular velocities of the actual motion
 (`angularVelocity_eulerRotation`, `vee_transpose_mul_eulerMatrixDeriv`).
 
+`Rigid/RegularPrecession` treats the free symmetric top of Landau–Lifshitz §33
+in Eulerian angles. `symmetricTopMomentum I1 I3 Ω` is the angular momentum
+`(I₁ Ω₁, I₁ Ω₂, I₃ Ω₃)` in the body frame, and the rotation applied to it is
+the angular momentum in the space frame. The fixed axis `Z` has the components
+`(sin θ sin ψ, sin θ cos ψ, cos θ)` in the body frame
+(`transpose_eulerMatrix_mulVec`).
+
+- `eulerMatrix_mulVec_symmetricTopMomentum_iff`: for real angles with
+  `sin θ ≠ 0` and `I₁ ≠ 0`, the angular momentum in the space frame is
+  `(0, 0, M)` exactly when `θ̇ = 0`, `I₁ φ̇ = M` and
+  `I₃ (φ̇ cos θ + ψ̇) = M cos θ`. So `ψ̇ = M cos θ (1/I₃ − 1/I₁)`
+  (`regularPrecession_psi_rate`).
+- `eulerRotation_mulVec_symmetricTopMomentum`: the motion with the angles
+  `φ₀ + (M/I₁) t`, `θ₀`, `ψ₀ + M cos θ₀ (1/I₃ − 1/I₁) t` has the angular
+  momentum `(0, 0, M)` at every time.
+
+The statement that a free motion keeps its angular momentum in the space frame
+is the equation of motion `Ṁ = 0`; it is not derived here from a Lagrangian.
+
 ## Small oscillations
 
-`Mechanics/Oscillations` covers Landau–Lifshitz §21, and §§25 and 26 in the
-next two sections.
+`Mechanics/Oscillations` covers Landau–Lifshitz §21, and §§25, 26, 22, 23 and
+27 in the sections that follow.
 
 `Oscillations/Harmonic` treats the equation `ẍ + ω² x = 0` for a smooth
 function of time. `IsHarmonic ω x` is the equation `ẍ = −ω² x` in the ring
@@ -542,8 +578,110 @@ For the force `F cos Ωt`, with `D = (ω₀² − Ω²)² + 4γ² Ω²`
 The resonance curve here is the exact function
 `m γ F² Ω² / ((ω₀² − Ω²)² + 4γ² Ω²)`. The approximation of Landau–Lifshitz near
 resonance for small damping, a Lorentzian in `Ω − ω₀`, is an asymptotic
-statement and is not proved. A force with a phase, `F cos (Ωt + β)`, and a
-general force are not treated.
+statement and is not proved. A force with a phase, `F cos (Ωt + β)`, is not
+treated; a general force is treated without friction in the next section.
+
+## Forced oscillations without friction
+
+`Oscillations/Duhamel` treats the equation `ẍ + ω² x = g` of Landau–Lifshitz
+§22, which is `IsForced 0 ω g x` (`isForced_zero_damping_iff`). The force `g`
+per unit mass is any smooth function of time.
+
+`Mechanics/TimePrimitive` provides the calculus: the increment of a smooth
+function of time is the integral of its derivative
+(`TimeFunction.apply_sub_apply_eq_integral`), and `TimeFunction.primitive f`
+is the smooth function `t ↦ ∫₀ᵗ f` with derivative `f`.
+
+- `complexAmplitudeRe ω x` and `complexAmplitudeIm ω x` are
+  `ẋ cos ωt + ω x sin ωt` and `ω x cos ωt − ẋ sin ωt`, the real and the
+  imaginary part of `(ẋ + iωx) e^{−iωt}`. For a solution their derivatives are
+  `g cos ωt` and `−g sin ωt`, so
+  `Re = ẋ(0) + ∫₀ᵗ g cos ωs ds` and `Im = ω x(0) − ∫₀ᵗ g sin ωs ds`
+  (`IsForced.complexAmplitudeRe_eq`, `IsForced.complexAmplitudeIm_eq`). These
+  hold for every `ω`.
+- `IsForced.apply_eq_integral`: Duhamel's formula, for `ω ≠ 0`,
+  `x(t) = x(0) cos ωt + (ẋ(0)/ω) sin ωt + (1/ω) ∫₀ᵗ g(s) sin ω(t − s) ds`.
+  `IsForced.timeDerivative_apply_eq_integral` gives the velocity.
+- `IsForced.energy_apply`: `ẋ² + ω² x² = Re² + Im²` at every time.
+  `IsForced.energy_transfer`: for the force `F` on a particle of mass `m` at
+  rest at time zero, the energy at time `T` is
+  `((∫₀ᵀ F cos ωt)² + (∫₀ᵀ F sin ωt)²) / 2m`.
+- `duhamel ω g` is the function `(1/ω) ∫₀ᵗ g(s) sin ω(t − s) ds`
+  (`duhamel_apply`). It is a solution (`isForced_duhamel`) at rest at time
+  zero, so for every smooth force and all initial data a solution exists
+  (`exists_isForced`); it is unique by `IsForced.eq_of_initial`.
+- `isForced_cos_of_sq_ne`: for `Ω² ≠ ω²` the forced oscillation is
+  `F/(ω² − Ω²) cos Ωt`, which is the steady state of the previous section with
+  `γ = 0` (`steadyState_zero_damping`). `IsForced.apply_eq_of_sq_ne` is the
+  general solution.
+- `isForced_resonance`: for `Ω = ω` the forced oscillation is
+  `(F/2ω) t sin ωt`. It is the motion from rest
+  (`IsForced.eq_resonance_of_rest`), and no solution is bounded
+  (`IsForced.exists_abs_gt_of_resonance`).
+
+The energy transfer of Landau–Lifshitz (22.12) is the limit of the formula
+above for a force acting during all time, with improper integrals; it is not
+proved. Beats near resonance are not treated.
+
+## Normal modes
+
+`Oscillations/NormalModes` treats the equations
+`Σₖ (mᵢₖ ẍₖ + kᵢₖ xₖ) = 0` of Landau–Lifshitz §23 for real matrices `M` and
+`K` on a finite index type.
+
+- `exists_simultaneous_diagonalization`: for a positive definite `M` and a
+  symmetric `K` there are a matrix `S` and numbers `λₐ` with `Sᵀ M S = 1` and
+  `Sᵀ K S = diag λ`. The proof uses Mathlib's spectral theorem twice: once to
+  bring `M` to the unit form, once for the symmetric matrix `Bᵀ K B`.
+- The remaining statements take `S` and `λ` with these two properties as
+  hypotheses. `mul_eq_mul_mul_diagonal`: `K S = M S diag λ`, so the columns of
+  `S` are the normal modes. `det_sub_smul_eq_zero_iff`: the roots of
+  `det (K − c M) = 0` are the `λₐ`. `lam_pos`: they are positive when `K` is
+  positive definite.
+- `IsSmallOscillation M K x` is the system of equations for a family
+  `x : n → TimeFunction`. `normalCoordinates S M x` is `Θ = Sᵀ M x`, and
+  `x = S Θ` (`map_mulVec_normalCoordinates`).
+- `isSmallOscillation_iff`: `x` is a solution exactly when
+  `Θ̈ₐ = −λₐ Θₐ` for every `a`. With `ωₐ² = λₐ`, each `Θₐ` is a free
+  oscillation (`IsSmallOscillation.isHarmonic_normalCoordinates`), every
+  superposition `S Θ` of free oscillations is a solution
+  (`isSmallOscillation_map_mulVec`), and `IsSmallOscillation.apply_eq` writes
+  each co-ordinate as the sum of the normal oscillations.
+
+Proposition 70 of the manuscript, on the Lie algebra of quadratic
+Hamiltonians and the normal form as a linear canonical transformation, is not
+proved, and the equations are not derived here from the Lagrangian
+`½ Σ (mᵢₖ ẋᵢ ẋₖ − kᵢₖ xᵢ xₖ)`.
+
+## Parametric resonance
+
+`Oscillations/Parametric` treats `ẍ + p(t) x = 0` (Landau–Lifshitz §27).
+`IsHill p x` is the equation in the ring `TimeFunction`, and
+`TimeFunction.shift T f` is the translate `t ↦ f(t + T)`; the coefficient has
+period `T` when `TimeFunction.shift T p = p`.
+
+- `IsHill.wronskian_eq`: the Wronskian `x ẏ − ẋ y` of two solutions is
+  constant.
+- `FundamentalSystem p` is the data of the two solutions with the initial
+  values `(1, 0)` and `(0, 1)`. Its Wronskian is one, and every solution is
+  `x(0) x₁ + ẋ(0) x₂` (`FundamentalSystem.eq_combination`); so a solution is
+  determined by its initial data. `FundamentalSystem.harmonic` is the system
+  `cos ωt`, `sin ωt / ω` of the oscillator.
+- `FundamentalSystem.matrix t` is the matrix `Φ(t)`, with `Φ(0) = 1`,
+  `det Φ(t) = 1` (`det_matrix`) and `state x t = Φ(t) (state x 0)`
+  (`state_eq`). For a coefficient of period `T`,
+  `Φ(s + nT) = Φ(s) Φ(T)ⁿ` (`matrix_add_nat_mul_period`).
+- `mul_self_eq`, `sin_smul_pow_succ`, `exists_abs_pow_apply_le`: for a real
+  `2 × 2` matrix of determinant one, `A² = (tr A) A − 1`; with
+  `tr A = 2 cos θ`, `sin θ · Aᵏ⁺¹ = sin (k+1)θ · A − sin kθ · 1`; so the powers
+  are bounded when `|tr A| < 2`.
+- `FundamentalSystem.exists_abs_apply_le_of_abs_trace_lt`,
+  `FundamentalSystem.exists_abs_apply_le_of_eq`: if `|tr Φ(T)| < 2`, or
+  `Φ(T) = ±1`, every solution is bounded for `t ≥ 0`.
+
+The existence of a fundamental system for a general smooth coefficient is not
+proved; it is the data of the theorems. The cases in which solutions are
+unbounded and the width of the instability zone are not treated.
 
 ## Proof map
 
@@ -580,6 +718,8 @@ general force are not treated.
 | [Poisson/TwoBody](../ProjectAInos/Mechanics/Poisson/TwoBody.lean) | `centre`, `relative`, `totalMomentum`, `relativeMomentum`, `canonical_centre_totalMomentum`, `canonical_relative_relativeMomentum`, `canonical_centre_relativeMomentum`, `canonical_relative_totalMomentum`, `kineticEnergy_eq_centre` |
 | [Rigid/AngularVelocity](../ProjectAInos/Mechanics/Rigid/AngularVelocity.lean) | `hat`, `vee`, `hat_mulVec`, `hat_cross`, `hat_vee`, `hatEquiv`, `hatEquiv_cross`, `velocityField`, `velocityField_add`, `velocityField_injective`, `velocityField_change_of_origin`, `transpose_deriv_mul_transpose`, `angularVelocity`, `hasDerivAt_rigidMotion` |
 | [Rigid/EulerAngles](../ProjectAInos/Mechanics/Rigid/EulerAngles.lean) | `rotZ`, `rotX`, `eulerMatrix`, `eulerMatrixDeriv`, `bodyAngularVelocity`, `spaceAngularVelocity`, `eulerMatrix_mul_transpose`, `det_eulerMatrix`, `transpose_mul_eulerMatrixDeriv`, `eulerMatrixDeriv_mul_transpose`, `eulerMatrix_mulVec_bodyAngularVelocity`, `symmetricTop_energy`, `det_eulerJacobian`, `eulerRotation`, `eulerRotation_mem_specialOrthogonalGroup`, `hasDerivAt_eulerRotation`, `angularVelocity_eulerRotation` |
+| [Rigid/RegularPrecession](../ProjectAInos/Mechanics/Rigid/RegularPrecession.lean) | `symmetricTopMomentum`, `verticalAxis`, `eulerMatrix_mulVec_verticalAxis`, `transpose_eulerMatrix_mulVec`, `eulerMatrix_mulVec_symmetricTopMomentum`, `eulerMatrix_mulVec_symmetricTopMomentum_iff`, `regularPrecession_psi_rate`, `eulerRotation_mulVec_symmetricTopMomentum` |
+| [Poisson/RigidBodyMotion](../ProjectAInos/Mechanics/Poisson/RigidBodyMotion.lean) | `isTrajectory_kineticEnergy_iff`, `isTrajectory_principalRotation`, `isTrajectory_symmetricTop`, `stabilityForm`, `isIntegral_stabilityForm`, `sum_mul_sq_eq`, `mul_sq_le_of_greatest`, `mul_sq_le_of_least`, `linearization_zero_two`, `linearization_two_zero`, `linearization_mul_pos_of_middle`, `linearization_mul_neg_of_greatest`, `linearization_mul_neg_of_least` |
 | [Rigid/InertiaTensor](../ProjectAInos/Mechanics/Rigid/InertiaTensor.lean) | `inertia`, `transpose_inertia`, `inertia_mulVec`, `dotProduct_inertia_mulVec`, `dotProduct_inertia_mulVec_nonneg`, `trace_inertia`, `two_mul_dotProduct_inertia_mulVec_le_trace`, `inertia_add_apply`, `principalMoments`, `principalAxes`, `inertia_mulVec_principalAxes`, `principalMoments_nonneg`, `principalMoments_two_le` |
 | [Oscillations/Harmonic](../ProjectAInos/Mechanics/Oscillations/Harmonic.lean) | `TimeFunction.cosMul`, `TimeFunction.sinMul`, `TimeFunction.timeDerivative_cosMul`, `TimeFunction.timeDerivative_sinMul`, `amplitude`, `phase`, `amplitude_mul_cos_add`, `IsHarmonic`, `isHarmonic_cosMul`, `isHarmonic_sinMul`, `IsHarmonic.combination`, `IsHarmonic.eq_cos_add_sin`, `isHarmonic_iff`, `IsHarmonic.eq_of_initial`, `IsHarmonic.apply_eq_amplitude_mul_cos`, `IsHarmonic.apply_add_period`, `IsHarmonic.energy_eq`, `IsHarmonic.energy_eq_amplitude` |
 | [Oscillations/Oscillator](../ProjectAInos/Mechanics/Oscillations/Oscillator.lean) | `StandardJet.isSolution_oscillator_iff_isHarmonic`, `Oscillator.hamiltonian`, `Oscillator.isTrajectory_iff`, `Oscillator.isTrajectory_iff_isHarmonic`, `Oscillator.flowMatrix`, `Oscillator.flowMatrix_zero`, `Oscillator.flowMatrix_add`, `Oscillator.det_flowMatrix`, `Oscillator.flowMatrix_add_period`, `Oscillator.apply_eq_flowMatrix_mulVec`, `Oscillator.flowCurve`, `Oscillator.isTrajectory_flowCurve` |
@@ -587,6 +727,10 @@ general force are not treated.
 | [Oscillations/Damped](../ProjectAInos/Mechanics/Oscillations/Damped.lean) | `TimeFunction.expMul`, `TimeFunction.time`, `TimeFunction.eq_add_mul_time`, `TimeFunction.antitone_of_timeDerivative_nonpos`, `IsDamped`, `isDamped_zero_iff`, `isDamped_iff_expMul_mul`, `isDamped_iff_isHarmonic`, `IsDamped.apply_eq_underdamped`, `IsDamped.apply_eq_amplitude_mul_exp_mul_cos`, `IsDamped.abs_apply_le`, `IsDamped.apply_eq_critical`, `IsDamped.apply_eq_overdamped`, `IsDamped.eq_of_initial`, `IsDamped.timeDerivative_energy`, `IsDamped.energy_antitone`, `isDamped_expMul`, `isDamped_time_mul_expMul`, `IsHarmonic.isDamped_expMul_neg_mul` |
 | [Oscillations/Dissipation](../ProjectAInos/Mechanics/Oscillations/Dissipation.lean) | `IsIntegralCurve`, `isIntegralCurve_hamiltonian_iff`, `IsIntegralCurve.timeDerivative_lift`, `velocity`, `frictionalForce`, `dissipativeFunction`, `dissipativeField`, `dissipativeField_q`, `dissipativeField_p`, `dissipativeField_self`, `lift_dissipativeFunction_nonneg`, `IsIntegralCurve.timeDerivative_energy`, `IsIntegralCurve.energy_antitone`, `Oscillator.isIntegralCurve_dissipativeField_iff`, `Oscillator.isIntegralCurve_dissipativeField_iff_isDamped`, `Oscillator.energy_antitone` |
 | [Oscillations/Forced](../ProjectAInos/Mechanics/Oscillations/Forced.lean) | `IsForced`, `isForced_zero_iff`, `IsForced.add`, `IsForced.sub`, `IsForced.eq_of_initial`, `IsForced.timeDerivative_energy`, `IsDamped.tendsto_zero`, `IsForced.tendsto_sub`, `responseDenominator`, `steadyState`, `isForced_steadyState`, `steadyState_const_mul`, `steadyAmplitude`, `steadyPhase`, `steadyState_apply`, `sin_steadyPhase_nonpos`, `IsForced.apply_eq_transient_add_steadyState`, `IsForced.tendsto_sub_steadyState`, `steadyAmplitude_le`, `steadyAmplitude_eq_max`, `absorption`, `two_mul_dissipation_steadyState`, `mean_dissipation_steadyState`, `absorption_le`, `absorption_resonance`, `absorption_eq_half_max_iff` |
+| [TimePrimitive](../ProjectAInos/Mechanics/TimePrimitive.lean) | `TimeFunction.hasDerivAt_apply_const`, `TimeFunction.continuous_apply_const`, `TimeFunction.apply_sub_apply_eq_integral`, `TimeFunction.primitive`, `TimeFunction.primitive_apply`, `TimeFunction.timeDerivative_primitive` |
+| [Oscillations/Duhamel](../ProjectAInos/Mechanics/Oscillations/Duhamel.lean) | `isForced_zero_damping_iff`, `complexAmplitudeRe`, `complexAmplitudeIm`, `integral_mul_sin_sub`, `IsForced.complexAmplitudeRe_eq`, `IsForced.complexAmplitudeIm_eq`, `IsForced.timeDerivative_apply_eq_integral`, `IsForced.apply_eq_integral`, `IsForced.energy_apply`, `IsForced.energy_transfer`, `duhamel`, `isForced_duhamel`, `duhamel_apply`, `exists_isForced`, `isForced_cos_of_sq_ne`, `steadyState_zero_damping`, `IsForced.apply_eq_of_sq_ne`, `isForced_resonance`, `IsForced.eq_resonance_of_rest`, `IsForced.exists_abs_gt_of_resonance` |
+| [Oscillations/NormalModes](../ProjectAInos/Mechanics/Oscillations/NormalModes.lean) | `exists_orthogonal_diagonalization`, `exists_transpose_mul_mul_eq_one`, `exists_simultaneous_diagonalization`, `mul_eq_mul_mul_diagonal`, `det_sub_smul_eq_zero_iff`, `lam_pos`, `IsSmallOscillation`, `normalCoordinates`, `map_mulVec_normalCoordinates`, `isSmallOscillation_iff`, `IsSmallOscillation.isHarmonic_normalCoordinates`, `isSmallOscillation_map_mulVec`, `IsSmallOscillation.apply_eq` |
+| [Oscillations/Parametric](../ProjectAInos/Mechanics/Oscillations/Parametric.lean) | `mul_self_eq`, `sin_smul_pow_succ`, `exists_abs_pow_apply_le`, `IsHill`, `wronskian`, `IsHill.wronskian_eq`, `TimeFunction.shift`, `IsHill.shift`, `state`, `FundamentalSystem`, `FundamentalSystem.eq_combination`, `FundamentalSystem.matrix`, `FundamentalSystem.det_matrix`, `FundamentalSystem.state_eq`, `FundamentalSystem.matrix_add_nat_mul_period`, `FundamentalSystem.exists_abs_apply_le`, `FundamentalSystem.exists_abs_apply_le_of_abs_trace_lt`, `FundamentalSystem.harmonic` |
 | [Examples](../ProjectAInos/Mechanics/Examples.lean) | Newton equation, stationary uniform free motion, rejection of accelerated free motion, endpoint-vanishing polynomial variation and its endpoint derivative, zero-length interval and zero-coordinate system |
 
 For `L = m v²/2 − V(q)`, `stationary_natural_iff` proves `m q'' = −V'(q)` on `(a,b)`. This algebraic equation remains valid at `m = 0`; dividing by the mass would require a separate nonzero premise.

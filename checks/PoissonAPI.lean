@@ -563,3 +563,80 @@ example :
   KeplerModel.isKeplerMotion_circular
 
 end Kepler
+
+section RigidBodyMotion
+
+open RigidBody
+
+/-- Euler's equations along a curve. -/
+example (I : Fin 3 → ℝ) (c : Fin 3 → TimeFunction) :
+    IsTrajectory RigidBody.poisson (kineticEnergy I) c ↔
+      timeDerivative (c 0) = algebraMap ℝ TimeFunction ((I 2)⁻¹ - (I 1)⁻¹) * (c 1 * c 2) ∧
+      timeDerivative (c 1) = algebraMap ℝ TimeFunction ((I 0)⁻¹ - (I 2)⁻¹) * (c 2 * c 0) ∧
+      timeDerivative (c 2) = algebraMap ℝ TimeFunction ((I 1)⁻¹ - (I 0)⁻¹) * (c 0 * c 1) :=
+  isTrajectory_kineticEnergy_iff I c
+
+/-- Rotations about the principal axes are equilibria. -/
+example (I : Fin 3 → ℝ) (a : Fin 3) (ℓ : ℝ) :
+    IsTrajectory RigidBody.poisson (kineticEnergy I)
+      fun i => algebraMap ℝ TimeFunction ((Pi.single a ℓ : Fin 3 → ℝ) i) :=
+  isTrajectory_principalRotation I a ℓ
+
+/-- The free symmetric top (Landau–Lifshitz (36.6), (36.7)). -/
+example {I : Fin 3 → ℝ} (hI : I 0 = I 1) (a ℓ : ℝ) :
+    IsTrajectory RigidBody.poisson (kineticEnergy I)
+      ![algebraMap ℝ TimeFunction a * TimeFunction.cosMul (((I 0)⁻¹ - (I 2)⁻¹) * ℓ),
+        algebraMap ℝ TimeFunction a * TimeFunction.sinMul (((I 0)⁻¹ - (I 2)⁻¹) * ℓ),
+        algebraMap ℝ TimeFunction ℓ] :=
+  isTrajectory_symmetricTop hI a ℓ
+
+example (I : Fin 3 → ℝ) (a : Fin 3) :
+    stabilityForm I a = algebraMap ℝ RigidBody.PhaseSpace (2 * I a) * kineticEnergy I - casimir :=
+  rfl
+
+/-- `Σᵢ (Iₐ/Iᵢ − 1) Lᵢ²` is constant along every trajectory. -/
+example {I : Fin 3 → ℝ} (hI : ∀ i, I i ≠ 0) (a : Fin 3) {c : Fin 3 → TimeFunction}
+    (h : IsTrajectory RigidBody.poisson (kineticEnergy I) c) (t : ℝ) :
+    ∑ i, (I a / I i - 1) * c i (fun _ => t) ^ 2 =
+      ∑ i, (I a / I i - 1) * c i (fun _ => 0) ^ 2 :=
+  sum_mul_sq_eq hI a h t
+
+/-- Stability of the rotation about the axis of the greatest moment. -/
+example {I : Fin 3 → ℝ} (hI : ∀ i, 0 < I i) {a : Fin 3} (ha : ∀ i, I i ≤ I a)
+    {c : Fin 3 → TimeFunction} (h : IsTrajectory RigidBody.poisson (kineticEnergy I) c)
+    (j : Fin 3) (t : ℝ) :
+    (I a / I j - 1) * c j (fun _ => t) ^ 2 ≤ ∑ i, (I a / I i - 1) * c i (fun _ => 0) ^ 2 :=
+  mul_sq_le_of_greatest hI ha h j t
+
+/-- Stability of the rotation about the axis of the least moment. -/
+example {I : Fin 3 → ℝ} (hI : ∀ i, 0 < I i) {a : Fin 3} (ha : ∀ i, I a ≤ I i)
+    {c : Fin 3 → TimeFunction} (h : IsTrajectory RigidBody.poisson (kineticEnergy I) c)
+    (j : Fin 3) (t : ℝ) :
+    (1 - I a / I j) * c j (fun _ => t) ^ 2 ≤ ∑ i, (1 - I a / I i) * c i (fun _ => 0) ^ 2 :=
+  mul_sq_le_of_least hI ha h j t
+
+/-- The linearized equations at a rotation about the axis `1`. -/
+example (I : Fin 3 → ℝ) (ℓ : ℝ) :
+    linearization RigidBody.poisson (kineticEnergy I) (Pi.single 1 ℓ) 0 2 =
+      ((I 2)⁻¹ - (I 1)⁻¹) * ℓ :=
+  linearization_zero_two I ℓ
+
+example (I : Fin 3 → ℝ) (ℓ : ℝ) :
+    linearization RigidBody.poisson (kineticEnergy I) (Pi.single 1 ℓ) 2 0 =
+      ((I 1)⁻¹ - (I 0)⁻¹) * ℓ :=
+  linearization_two_zero I ℓ
+
+/-- The middle axis is linearly unstable, the extreme axes are linearly stable. -/
+example {I : Fin 3 → ℝ} (hI : ∀ i, 0 < I i) (h01 : I 0 < I 1) (h12 : I 1 < I 2) {ℓ : ℝ}
+    (hℓ : ℓ ≠ 0) :
+    0 < linearization RigidBody.poisson (kineticEnergy I) (Pi.single 1 ℓ) 0 2 *
+      linearization RigidBody.poisson (kineticEnergy I) (Pi.single 1 ℓ) 2 0 :=
+  linearization_mul_pos_of_middle hI h01 h12 hℓ
+
+example {I : Fin 3 → ℝ} (hI : ∀ i, 0 < I i) (h01 : I 0 < I 1) (h21 : I 2 < I 1) {ℓ : ℝ}
+    (hℓ : ℓ ≠ 0) :
+    linearization RigidBody.poisson (kineticEnergy I) (Pi.single 1 ℓ) 0 2 *
+      linearization RigidBody.poisson (kineticEnergy I) (Pi.single 1 ℓ) 2 0 < 0 :=
+  linearization_mul_neg_of_greatest hI h01 h21 hℓ
+
+end RigidBodyMotion
