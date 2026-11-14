@@ -173,6 +173,46 @@ exchange of two co-ordinates makes the diagonal entries equal. The action of
 the orthogonal group on the jet ring is not defined; the hypothesis is on the
 values of `L`.
 
+## The Galilei algebra on the jet ring
+
+`Jet/Galilei` treats Galileo's relativity principle (Landau–Lifshitz §3) at
+the level of vector fields on the standard jet ring.
+
+- `JetRing.prolongField ξ` is the prolongation `pr ξ = Σₖ Σᵢ (Dᵏ ξᵢ) ∂ᵢ⁽ᵏ⁾` of
+  a variation as a vector field, in every jet ring; its values are the
+  `prolong ξ F` of Noether's theorem (`JetRing.prolong_op` is its chain rule).
+  On the standard jet ring `evolutionary ξ` is the vector field with `t ↦ 0`
+  and `qᵢ⁽ᵏ⁾ ↦ Dᵏ ξᵢ`; it commutes with the total derivative
+  (`evolutionary_totalDeriv`) and equals the prolongation
+  (`evolutionary_eq_prolongField`, `evolutionary_apply`).
+- `galileiField A a u` is the field of `δqₗ = Σₘ Aₗₘ qₘ + aₗ + t uₗ`: a linear
+  map, a translation and a boost. `galileiField_q`:
+  `X qₗ⁽ⁿ⁾ = Σₘ Aₗₘ qₘ⁽ⁿ⁾ + Dⁿ(aₗ + t uₗ)`, where `affineShift a u n` is
+  `a + t u`, `u`, `0` for `n = 0`, `1`, `≥ 2`. `boost_eq_galileiField`: the
+  boost of the previous section is `galileiField 0 0 u`.
+- `commutator_galileiField`:
+  `[X_{A,a,u}, X_{A',a',u'}] = X_{A'A − AA', A'a − Aa', A'u − Au'}`.
+  `commutator_dt_galileiField`: `[∂/∂t, X_{A,a,u}] = X_{0,u,0}`, so the
+  commutator of the time translation with a boost is a translation. With `A`
+  antisymmetric these are the relations of the Galilei algebra; boosts and
+  translations commute on the jet ring, and the mass appears as a central
+  term only for the Poisson bracket (`Galilei.canonical_K_p`).
+- `d_galileiField`: `[∂ₗ⁽ᵏ⁾, X_{A,a,u}] = Σᵢ Aᵢₗ ∂ᵢ⁽ᵏ⁾`. `JetRing.euler_apply`
+  turns such a relation, for a vector field commuting with `D`, into
+  `Eₗ(X F) = X(Eₗ F) + Σᵢ cₗᵢ Eᵢ(F)`; `euler_galileiField` is the case of the
+  Galilei fields.
+- `galileiField_mem_eulerLagrangeIdeal`: if `X L = D F`, then `X` maps the
+  Euler–Lagrange ideal of `L` into itself. `JetRing.dt_mem_eulerLagrangeIdeal`
+  is the same statement for `∂/∂t`.
+- `galileiField_naturalLagrangian`: for `L = Σ ½ mᵢ vᵢ² − U` with
+  `mᵢ Aᵢⱼ + mⱼ Aⱼᵢ = 0` and `X U = 0`, `X L = D(Σ mᵢ uᵢ qᵢ)`.
+- `IsInertial L` says that the Euler–Lagrange ideal of `L` is invariant under
+  `∂/∂t` and under `galileiField A a u` for every antisymmetric `A`.
+  `isInertial_naturalLagrangian`: the free system `Σ ½ μ vᵢ²` is inertial.
+
+The finite transformations of the Galilei group are not defined, and no
+statement asserts that an inertial frame exists: that is the physical premise.
+
 ## Poisson models
 
 Hamiltonian mechanics uses the Poisson structures of the
@@ -883,6 +923,7 @@ semi-major axis is not computed.
 | [Jet/Standard](../ProjectAInos/Mechanics/Jet/Standard.lean) | `StandardJet`, `jetRing`, `totalDeriv_eq_derivation`, `euler_q_mul_acceleration`, `euler_oscillator`, `conserved_energy_oscillator`, `conserved_boost_free` |
 | [Constants](../ProjectAInos/Mechanics/Constants.lean) | `lift_eq_of_partialDerivation_eq_zero`, `eq_algebraMap_of_partialDerivation_eq_zero` |
 | [Jet/FreeParticle](../ProjectAInos/Mechanics/Jet/FreeParticle.lean) | `JetRing.d_sum_mul_q`, `JetRing.d_sum_mul_q_mul_q_of_isSymm`, `StandardJet.DependsOnVelocities`, `StandardJet.eq_algebraMap_of_dt_eq_zero_of_d_eq_zero`, `StandardJet.boost`, `StandardJet.IsBoostQuasiInvariant`, `StandardJet.boost_eq`, `StandardJet.d_one_d_one_eq_algebraMap`, `StandardJet.velocityPolynomial`, `StandardJet.isBoostQuasiInvariant_velocityPolynomial`, `StandardJet.exists_eq_velocityPolynomial`, `StandardJet.massMatrix`, `StandardJet.isBoostQuasiInvariant_iff`, `StandardJet.velocityPolynomial_eq_add_totalDeriv`, `StandardJet.velocityValue`, `StandardJet.velocityValue_velocityPolynomial`, `StandardJet.IsIsotropic`, `StandardJet.eq_smul_one_of_isIsotropic`, `StandardJet.exists_eq_of_isIsotropic`, `StandardJet.freeLagrangian_boost` |
+| [Jet/Galilei](../ProjectAInos/Mechanics/Jet/Galilei.lean) | `JetRing.euler_apply`, `JetRing.apply_mem_eulerLagrangeIdeal`, `JetRing.dt_mem_eulerLagrangeIdeal`, `JetRing.prolong_eq_sum`, `JetRing.prolong_op`, `JetRing.prolongField`, `JetRing.prolong_q`, `JetRing.sum_sum_antisymm_eq_zero`, `StandardJet.evolutionary`, `StandardJet.evolutionary_totalDeriv`, `StandardJet.evolutionary_eq_prolongField`, `StandardJet.evolutionary_apply`, `StandardJet.affineShift`, `StandardJet.galileiCharacteristic`, `StandardJet.galileiField`, `StandardJet.galileiField_q`, `StandardJet.galileiField_totalDeriv`, `StandardJet.commutator_galileiField`, `StandardJet.commutator_dt_galileiField`, `StandardJet.d_galileiField`, `StandardJet.euler_galileiField`, `StandardJet.galileiField_mem_eulerLagrangeIdeal`, `StandardJet.galileiField_naturalLagrangian`, `StandardJet.boost_eq_galileiField`, `StandardJet.IsInertial`, `StandardJet.isInertial_naturalLagrangian` |
 | [Poisson/RigidBody](../ProjectAInos/Mechanics/Poisson/RigidBody.lean) | `PhaseSpace`, `L`, `poisson`, `poisson_L_L`, `L_ne_zero`, `poisson_bracket`, `poisson_L_bracket`, `kineticEnergy`, `gradient_kineticEnergy`, `euler_equations`, `euler_equation_zero`, `casimir`, `poisson_casimir_left`, `isIntegral_casimir` |
 | [Poisson/Epsilon](../ProjectAInos/Mechanics/Poisson/Epsilon.lean) | `epsilon`, `epsilon_skew`, `sum_epsilon_mul` |
 | [Poisson/AngularMomentum](../ProjectAInos/Mechanics/Poisson/AngularMomentum.lean) | `M`, `canonical_M_q`, `canonical_M_p`, `canonical_M_M`, `canonical_M_dotProduct`, `isIntegral_M`, `isIntegral_M_sq`, `momentumMap`, `isPoissonHom_momentumMap` |

@@ -222,7 +222,9 @@ for natural Lagrangians, Jacobi's theorem on complete integrals and Liouville's
 theorem in infinitesimal form are proved, as are the description of states as
 morphisms to the dual numbers, mechanical similarity and the
 virial theorem for time averages. The Lagrangian of a free particle is
-characterized by quasi-invariance under boosts and isotropy. Symplectic structures, the Legendre
+characterized by quasi-invariance under boosts and isotropy, and the Galilei
+algebra acts on the jet ring by vector fields that preserve the Euler–Lagrange
+ideal of a quasi-invariant Lagrangian. Symplectic structures, the Legendre
 transformation of a general Lagrangian, Dirac brackets and canonical
 transformations with generating functions are not implemented. Galilean symmetry as a group action and the topics of 2.1 and
 2.4 have no Lean counterpart yet. The

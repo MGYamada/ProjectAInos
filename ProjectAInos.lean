@@ -90,6 +90,7 @@ public import ProjectAInos.Mechanics.Jet.Basic
 public import ProjectAInos.Mechanics.Jet.Conservation
 public import ProjectAInos.Mechanics.Jet.Euler
 public import ProjectAInos.Mechanics.Jet.FreeParticle
+public import ProjectAInos.Mechanics.Jet.Galilei
 public import ProjectAInos.Mechanics.Jet.Metric
 public import ProjectAInos.Mechanics.Jet.Noether
 public import ProjectAInos.Mechanics.Jet.Polar

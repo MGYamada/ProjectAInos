@@ -506,3 +506,118 @@ example (μ : ℝ) (u : ι → ℝ) :
   freeLagrangian_boost μ u
 
 end FreeParticle
+
+section Galilei
+
+open StandardJet
+
+variable {ι : Type*} [DecidableEq ι] [Fintype ι]
+
+/-- The prolongation of a variation is a vector field. -/
+example {J : Type*} [CommRing J] [Algebra ℝ J] [SmoothRing J] (R : JetRing ι J) (ξ : ι → J)
+    (F : J) : R.prolongField ξ F = R.prolong ξ F := rfl
+
+/-- The Euler operators and a vector field with `[∂ₗ⁽ᵏ⁾, X] = Σᵢ cₗᵢ ∂ᵢ⁽ᵏ⁾`. -/
+example {J : Type*} [CommRing J] [Algebra ℝ J] [SmoothRing J] {R : JetRing ι J}
+    (X : SmoothDerivation J J) (c : ι → ι → ℝ)
+    (hD : ∀ F, X (R.totalDeriv F) = R.totalDeriv (X F))
+    (hd : ∀ l k F, R.d l k (X F) = X (R.d l k F) + ∑ i, algebraMap ℝ J (c l i) * R.d i k F)
+    (l : ι) (F : J) :
+    R.euler l (X F) = X (R.euler l F) + ∑ i, algebraMap ℝ J (c l i) * R.euler i F :=
+  JetRing.euler_apply X c hD hd l F
+
+example {J : Type*} [CommRing J] [Algebra ℝ J] [SmoothRing J] {R : JetRing ι J} {L F : J}
+    (h : R.dt L = R.totalDeriv F) {x : J} (hx : x ∈ R.eulerLagrangeIdeal L) :
+    R.dt x ∈ R.eulerLagrangeIdeal L :=
+  JetRing.dt_mem_eulerLagrangeIdeal h hx
+
+example (ξ : ι → StandardJet ι) : evolutionary ξ (time ι) = 0 := evolutionary_time ξ
+
+example (ξ : ι → StandardJet ι) (i : ι) (k : ℕ) :
+    evolutionary ξ ((jetRing ι).q i k) = ((jetRing ι).totalDeriv^[k]) (ξ i) :=
+  evolutionary_q ξ i k
+
+example (ξ : ι → StandardJet ι) (F : StandardJet ι) :
+    evolutionary ξ ((jetRing ι).totalDeriv F) = (jetRing ι).totalDeriv (evolutionary ξ F) :=
+  evolutionary_totalDeriv ξ F
+
+/-- An evolutionary vector field is the prolongation of Noether's theorem. -/
+example (ξ : ι → StandardJet ι) (F : StandardJet ι) :
+    evolutionary ξ F = (jetRing ι).prolong ξ F :=
+  evolutionary_apply ξ F
+
+example (a u : ℝ) :
+    affineShift (ι := ι) a u 0 =
+      algebraMap ℝ (StandardJet ι) a + time ι * algebraMap ℝ (StandardJet ι) u := rfl
+
+example (a u : ℝ) : affineShift (ι := ι) a u 1 = algebraMap ℝ (StandardJet ι) u := rfl
+
+example (a u : ℝ) (n : ℕ) : affineShift (ι := ι) a u (n + 2) = 0 := rfl
+
+example (A : Matrix ι ι ℝ) (a u : ι → ℝ) : galileiField A a u (time ι) = 0 :=
+  galileiField_time A a u
+
+/-- The action of `δqₗ = Σₘ Aₗₘ qₘ + aₗ + t uₗ` on the co-ordinates. -/
+example (A : Matrix ι ι ℝ) (a u : ι → ℝ) (l : ι) (n : ℕ) :
+    galileiField A a u ((jetRing ι).q l n) =
+      ∑ m, algebraMap ℝ (StandardJet ι) (A l m) * (jetRing ι).q m n +
+        affineShift (a l) (u l) n :=
+  galileiField_q A a u l n
+
+/-- The commutators of rotations, translations and boosts. -/
+example (A A' : Matrix ι ι ℝ) (a u a' u' : ι → ℝ) :
+    ⁅galileiField A a u, galileiField A' a' u'⁆ =
+      galileiField (A' * A - A * A') (A' *ᵥ a - A *ᵥ a') (A' *ᵥ u - A *ᵥ u') :=
+  commutator_galileiField A A' a u a' u'
+
+/-- The commutator of the time translation with a boost is a translation. -/
+example (A : Matrix ι ι ℝ) (a u : ι → ℝ) :
+    ⁅(jetRing ι).dt, galileiField A a u⁆ = galileiField 0 u 0 :=
+  commutator_dt_galileiField A a u
+
+example (A : Matrix ι ι ℝ) (a u : ι → ℝ) (l : ι) (k : ℕ) (F : StandardJet ι) :
+    (jetRing ι).d l k (galileiField A a u F) =
+      galileiField A a u ((jetRing ι).d l k F) +
+        ∑ i, algebraMap ℝ (StandardJet ι) (A i l) * (jetRing ι).d i k F :=
+  d_galileiField A a u l k F
+
+example (A : Matrix ι ι ℝ) (a u : ι → ℝ) (l : ι) (F : StandardJet ι) :
+    (jetRing ι).euler l (galileiField A a u F) =
+      galileiField A a u ((jetRing ι).euler l F) +
+        ∑ i, algebraMap ℝ (StandardJet ι) (A i l) * (jetRing ι).euler i F :=
+  euler_galileiField A a u l F
+
+/-- A field that changes the Lagrangian by a total derivative preserves the
+Euler–Lagrange ideal. -/
+example (A : Matrix ι ι ℝ) (a u : ι → ℝ) {L F : StandardJet ι}
+    (h : galileiField A a u L = (jetRing ι).totalDeriv F) {x : StandardJet ι}
+    (hx : x ∈ (jetRing ι).eulerLagrangeIdeal L) :
+    galileiField A a u x ∈ (jetRing ι).eulerLagrangeIdeal L :=
+  galileiField_mem_eulerLagrangeIdeal A a u h hx
+
+/-- Quasi-invariance of a natural Lagrangian with an invariant potential. -/
+example {m : ι → ℝ} {A : Matrix ι ι ℝ} (hA : ∀ i j, m i * A i j + m j * A j i = 0)
+    (a u : ι → ℝ) {U : StandardJet ι} (hU : galileiField A a u U = 0) :
+    galileiField A a u ((jetRing ι).naturalLagrangian m U) =
+      (jetRing ι).totalDeriv
+        (∑ i, algebraMap ℝ (StandardJet ι) (m i * u i) * (jetRing ι).q i 0) :=
+  galileiField_naturalLagrangian hA a u hU
+
+example (u : ι → ℝ) (L : StandardJet ι) : boost u L = galileiField 0 0 u L :=
+  boost_eq_galileiField u L
+
+example (L : StandardJet ι) :
+    IsInertial L ↔
+      (∀ x ∈ (jetRing ι).eulerLagrangeIdeal L,
+          (jetRing ι).dt x ∈ (jetRing ι).eulerLagrangeIdeal L) ∧
+        ∀ (A : Matrix ι ι ℝ) (a u : ι → ℝ), Aᵀ = -A →
+          ∀ x ∈ (jetRing ι).eulerLagrangeIdeal L,
+            galileiField A a u x ∈ (jetRing ι).eulerLagrangeIdeal L :=
+  Iff.rfl
+
+/-- The Euler–Lagrange ideal of a free system of equal masses is invariant
+under the Galilei algebra. -/
+example (μ : ℝ) : IsInertial ((jetRing ι).naturalLagrangian (fun _ => μ) 0) :=
+  isInertial_naturalLagrangian μ
+
+end Galilei
