@@ -829,8 +829,39 @@ in the jet ring and `positionsToPhase u` on the phase space.
   trajectory of the Hamiltonian exactly when its positions solve the
   Euler–Lagrange equations of `L` and `pᵢ = mᵢ q̇ᵢ`.
 
-Theorem 51 of the manuscript for a general hyperregular Lagrangian, and the
-correspondence of the symplectic forms, are not proved.
+`Mechanics/Hyperregular` proves Theorem 51 of the manuscript for a general
+Lagrangian `L(q, v)`, an element of `VelocitySpace ι`, the free C∞-ring on the
+positions `q i` and the velocities `v i`.
+
+- `VelocitySpace.momentum L i` is `∂L/∂vᵢ`, `energy L` is `Σ vᵢ ∂L/∂vᵢ − L`,
+  and `legendre L` is the morphism `FL` from the phase space with `qᵢ ↦ qᵢ`
+  and `pᵢ ↦ ∂L/∂vᵢ`. `IsHyperregular L G` says that `G` is an inverse
+  morphism of `FL`, and `hamiltonian L G` is `G (energy L)`.
+- `IsHyperregular.inverseHessian_mul_hessian`: the matrix `∂²L/∂vᵢ∂vⱼ`
+  (`hessian L`) is invertible over the ring, with the inverse
+  `FL(∂(G vₖ)/∂pᵢ)`.
+- `IsHyperregular.legendre_hamiltonian`: `FL(H) = E`.
+  `legendre_partialDerivation_inr_hamiltonian`: `FL(∂H/∂pᵢ) = vᵢ`.
+  `legendre_partialDerivation_inl_hamiltonian`: `FL(∂H/∂qᵢ) = −∂L/∂qᵢ`.
+- `toJet` reads a function of the positions and the velocities in the jet
+  ring, and `velocityCurve γ` is the curve `(γ, γ̇)`. `isSolution_toJet_iff`:
+  a path solves the Euler–Lagrange equations of `L` exactly when
+  `d/dt (∂L/∂vᵢ) = ∂L/∂qᵢ` along it.
+- `IsHyperregular.isTrajectory_iff_isSolution`: a curve of the phase space is
+  a trajectory of `H` exactly when its positions solve the Euler–Lagrange
+  equations of `L` and `pᵢ = ∂L/∂vᵢ` along it.
+- `lagrangeBracket L G` is the canonical bracket transported by `FL`
+  (`IsHyperregular.legendre_bracket`). `lagrangeBracket_q_q`: `{qᵢ, qⱼ} = 0`.
+  `lagrangeBracket_q_v`: `{qᵢ, vⱼ}` is the entry of the inverse of
+  `∂²L/∂v∂v`. `lagrangeBracket_q_energy`: `{qᵢ, E} = vᵢ`.
+- `isHyperregular_natural`, `hamiltonian_natural`: for non-zero masses the
+  natural Lagrangian `natural m u` is hyperregular with the inverse
+  `vᵢ ↦ pᵢ/mᵢ`, and its Hamiltonian is `Σ pᵢ²/2mᵢ + U`. `toJet_natural`
+  identifies it with the natural Lagrangian of the jet ring.
+
+Hyperregularity is a hypothesis: no criterion for the existence of the
+inverse morphism is proved. The Lagrangian does not depend explicitly on
+time, and the form `ω_L` is represented by the transported bracket.
 
 `Poisson/CompleteIntegral` proves Jacobi's theorem (Landau–Lifshitz §47). The
 functions of the co-ordinates `q`, of as many parameters `α` and of the time
@@ -957,6 +988,7 @@ semi-major axis is not computed.
 | [Oscillations/QuadraticLagrangian](../ProjectAInos/Mechanics/Oscillations/QuadraticLagrangian.lean) | `JetRing.quadraticLagrangian`, `JetRing.momentum_quadraticLagrangian`, `JetRing.euler_quadraticLagrangian`, `StandardJet.isSolution_quadraticLagrangian_iff`, `NormalModes.isSymm_of_mul_eq_one`, `NormalModes.isTrajectory_quadraticHamiltonian_iff_isSolution` |
 | [Oscillations/Parametric](../ProjectAInos/Mechanics/Oscillations/Parametric.lean) | `mul_self_eq`, `sin_smul_pow_succ`, `exists_abs_pow_apply_le`, `IsHill`, `wronskian`, `IsHill.wronskian_eq`, `TimeFunction.shift`, `IsHill.shift`, `state`, `FundamentalSystem`, `FundamentalSystem.eq_combination`, `FundamentalSystem.matrix`, `FundamentalSystem.det_matrix`, `FundamentalSystem.state_eq`, `FundamentalSystem.matrix_add_nat_mul_period`, `FundamentalSystem.exists_abs_apply_le`, `FundamentalSystem.exists_abs_apply_le_of_abs_trace_lt`, `FundamentalSystem.harmonic` |
 | [Legendre](../ProjectAInos/Mechanics/Legendre.lean) | `positionsToJet`, `positionsToPhase`, `d_zero_positionsToJet`, `orderLE_positionsToJet`, `legendre`, `legendre_p_eq_momentum`, `legendre_hamiltonian`, `isTrajectory_natural_iff`, `isSolution_natural_iff`, `isTrajectory_natural_iff_isSolution` |
+| [Hyperregular](../ProjectAInos/Mechanics/Hyperregular.lean) | `JetRing.sum_mul_d_q_self`, `VelocitySpace`, `VelocitySpace.momentum`, `VelocitySpace.legendre`, `VelocitySpace.energy`, `VelocitySpace.hessian`, `VelocitySpace.apply_legendre`, `VelocitySpace.IsHyperregular`, `VelocitySpace.hamiltonian`, `VelocitySpace.inverseHessian`, `IsHyperregular.inverseHessian_mul_hessian`, `IsHyperregular.legendre_hamiltonian`, `IsHyperregular.legendre_partialDerivation_inr_hamiltonian`, `IsHyperregular.legendre_partialDerivation_inl_hamiltonian`, `VelocitySpace.velocityCurve`, `VelocitySpace.toJet`, `VelocitySpace.prolongation_toJet`, `VelocitySpace.isSolution_toJet_iff`, `IsHyperregular.isTrajectory_iff`, `IsHyperregular.isTrajectory_iff_isSolution`, `VelocitySpace.lagrangeBracket`, `IsHyperregular.legendre_bracket`, `IsHyperregular.lagrangeBracket_q_v`, `VelocitySpace.natural`, `VelocitySpace.isHyperregular_natural`, `VelocitySpace.hamiltonian_natural`, `VelocitySpace.toJet_natural` |
 | [Poisson/CompleteIntegral](../ProjectAInos/Mechanics/Poisson/CompleteIntegral.lean) | `ActionSpace`, `substitution`, `IsHamiltonJacobi`, `along`, `momentum`, `timeDerivative_along`, `partialDerivation_substitution_q`, `isTrajectory_of_isHamiltonJacobi`, `freeAction`, `isHamiltonJacobi_freeAction`, `isTrajectory_freeAction` |
 | [Poisson/Liouville](../ProjectAInos/Mechanics/Poisson/Liouville.lean) | `divergence`, `divergence_eq`, `divergence_hamiltonian`, `divergence_dissipativeField`, `Oscillator.divergence_dissipativeField` |
 | [Similarity](../ProjectAInos/Mechanics/Similarity.lean) | `TimeFunction.scale`, `TimeFunction.timeDerivative_scale`, `TimeFunction.scale_lift`, `dilate`, `lift_dilate`, `IsHomogeneous`, `IsHomogeneous.dilate_partialDerivation`, `StandardJet.IsSolution.similar`, `similar_apply_add_period` |
