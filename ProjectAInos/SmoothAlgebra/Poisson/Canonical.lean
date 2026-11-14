@@ -5,6 +5,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 module
 
 public import ProjectAInos.SmoothAlgebra.Poisson.Free
+public import ProjectAInos.SmoothAlgebra.Poisson.Hom
 import Mathlib.Tactic.Ring
 
 /-!
@@ -180,6 +181,31 @@ theorem canonical_hamiltonian_apply (H f : PhaseSpace ι) :
   refine Finset.sum_congr rfl fun i _ => ?_
   rw [canonical_q_bracket, canonical_p_bracket]
   ring
+
+/-- A morphism out of a canonical phase space is a Poisson morphism if the
+images of the co-ordinates and the momenta satisfy the canonical relations. -/
+theorem isPoissonHom_of_canonical {Q : Type*} [CommRing Q] [Algebra ℝ Q] [SmoothRing Q]
+    {ρ : AlmostPoissonStructure Q} {φ : SmoothRingHom (PhaseSpace ι) Q}
+    (hqq : ∀ i j, ρ.bracket (φ (q i)) (φ (q j)) = 0)
+    (hpp : ∀ i j, ρ.bracket (φ (p i)) (φ (p j)) = 0)
+    (hqp : ∀ i j, ρ.bracket (φ (q i)) (φ (p j)) = if i = j then 1 else 0) :
+    IsPoissonHom (canonical ι).toAlmostPoissonStructure ρ φ := by
+  refine FreeSmoothRing.isPoissonHom_of_generators fun a b => ?_
+  rw [canonical_bracket_generator]
+  rcases a with i | i <;> rcases b with j | j
+  · rw [canonicalMatrix_inl_inl, SmoothRingHom.map_zero]
+    exact (hqq i j).symm
+  · rw [canonicalMatrix_inl_inr, apply_ite φ, SmoothRingHom.map_one, SmoothRingHom.map_zero]
+    exact (hqp i j).symm
+  · rw [canonicalMatrix_inr_inl, apply_ite φ, SmoothRingHom.map_neg, SmoothRingHom.map_one,
+      SmoothRingHom.map_zero, ρ.antisymm]
+    refine ((congrArg Neg.neg (hqp j i)).trans ?_).symm
+    by_cases h : i = j
+    · subst h
+      simp only [↓reduceIte]
+    · simp only [h, Ne.symm h, ↓reduceIte, neg_zero]
+  · rw [canonicalMatrix_inr_inr, SmoothRingHom.map_zero]
+    exact (hpp i j).symm
 
 end PhaseSpace
 

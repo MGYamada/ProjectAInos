@@ -227,7 +227,11 @@ algebra acts on the jet ring by vector fields that preserve the Euler–Lagrange
 ideal of a quasi-invariant Lagrangian. The Legendre correspondence is proved
 for every Lagrangian whose Legendre transformation has an inverse morphism,
 and the transformation given by a free generating function `F(q, Q)` is
-canonical. Symplectic forms and Dirac brackets are not implemented. Galilean symmetry as a group action and the topics of 2.1 and
+canonical. Hadamard's lemma is proved, so quotients of C∞-rings by ideals and
+the reduced Poisson rings `N(I)/I` exist; the reduced mass is proved as the
+reduction of two particles by translations, and the Routhian with its
+equations of motion and cyclic co-ordinates is proved. Symplectic forms and
+Dirac brackets are not implemented. Galilean symmetry as a group action and the topics of 2.1 and
 2.4 have no Lean counterpart yet. The
 [ledger](docs/cinfty-mechanics.md#ledger) gives the status of each section of
 Landau–Lifshitz, and [#78](https://github.com/MGYamada/ProjectAInos/issues/78) tracks completion. See the
