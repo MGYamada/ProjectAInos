@@ -937,21 +937,30 @@ function of `(q, α, t)`, and `parameter i` is `αᵢ`.
 - `stackelHamiltonian m Ψ g u` is `Σᵢ Ψᵢ(q) (gᵢ(q) pᵢ²/2m + uᵢ(q))`.
   `isHamiltonJacobi_stackel`: if `Σᵢ Ψᵢ Φᵢⱼ = δⱼ,ⱼ₀` for a matrix `Φ` of
   functions of the co-ordinates, and the derivatives of `S` satisfy
-  `gᵢ (∂S/∂qᵢ)²/2m + uᵢ = Σⱼ Φᵢⱼ αⱼ` and `∂S/∂t = −αⱼ₀`, then `S` satisfies the
-  Hamilton–Jacobi equation.
+  `gᵢ (∂S/∂qᵢ)²/2m + uᵢ = Σⱼ Φᵢⱼ cⱼ` and `∂S/∂t = −cⱼ₀` for separation
+  constants `cⱼ`, then `S` satisfies the Hamilton–Jacobi equation. The
+  separation constants are functions of the parameters and not the parameters
+  themselves: for a positive mass the left side is bounded below, and a
+  parameter takes every real value.
 - `nestedHamiltonian m ρ σ a b c` is
   `p₀²/2m + a + ρ (p₁²/2m + b + σ (p₂²/2m + c))`.
   `isHamiltonJacobi_nested_of_separated`: the equations
-  `(∂S/∂q₀)²/2m + a = α₀ − ρ α₁`, `(∂S/∂q₁)²/2m + b = α₁ − σ α₂`,
-  `(∂S/∂q₂)²/2m + c = α₂` and `∂S/∂t = −α₀` give a solution. In spherical
+  `(∂S/∂q₀)²/2m + a = E − ρ β`, `(∂S/∂q₁)²/2m + b = β − σ γ`,
+  `(∂S/∂q₂)²/2m + c = γ` and `∂S/∂t = −E` give a solution. In spherical
   co-ordinates `ρ = 1/r²` and `σ = 1/sin²θ`.
 - `liouvilleHamiltonian m λ g₀ g₁ κ₀ κ₁ u₀ u₁ u₂` is
   `λ (g₀ p₀²/2m + u₀ + g₁ p₁²/2m + u₁ + (κ₀ + κ₁)(p₂²/2m + u₂))`.
   `isHamiltonJacobi_liouville_of_separated`: with `λ (w₀ + w₁) = 1`, the
-  equations `g₀ (∂S/∂q₀)²/2m + u₀ = w₀ α₀ + α₁ − κ₀ α₂`,
-  `g₁ (∂S/∂q₁)²/2m + u₁ = w₁ α₀ − α₁ − κ₁ α₂`, `(∂S/∂q₂)²/2m + u₂ = α₂` and
-  `∂S/∂t = −α₀` give a solution. This is the form in parabolic and in
+  equations `g₀ (∂S/∂q₀)²/2m + u₀ = w₀ E + β − κ₀ γ`,
+  `g₁ (∂S/∂q₁)²/2m + u₁ = w₁ E − β − κ₁ γ`, `(∂S/∂q₂)²/2m + u₂ = γ` and
+  `∂S/∂t = −E` give a solution. This is the form in parabolic and in
   elliptic co-ordinates.
+- `linearAction E` is `Σ αᵢ qᵢ − E t`, and `quadraticEnergy w` is `Σ wᵢ αᵢ²`.
+  `isHamiltonJacobi_nested_freeAction`: the free particle
+  `(p₀² + p₁² + p₂²)/2m` is an instance of the nested form, with
+  `E = Σ αᵢ²/2m`, `β = (α₁² + α₂²)/2m` and `γ = α₂²/2m`.
+  `isHamiltonJacobi_liouville_freeAction` is an instance of the form of
+  Liouville. So the hypotheses of both theorems can be satisfied.
 
 The coefficient functions are elements of the free C∞-ring, smooth on all of
 `ℝ³`. The coefficients `1/r²`, `1/sin²θ` and `1/(ξ + η)` of the classical
@@ -1068,7 +1077,7 @@ semi-major axis is not computed.
 | [Hyperregular](../ProjectAInos/Mechanics/Hyperregular.lean) | `JetRing.sum_mul_d_q_self`, `VelocitySpace`, `VelocitySpace.momentum`, `VelocitySpace.legendre`, `VelocitySpace.energy`, `VelocitySpace.hessian`, `VelocitySpace.apply_legendre`, `VelocitySpace.IsHyperregular`, `VelocitySpace.hamiltonian`, `VelocitySpace.inverseHessian`, `IsHyperregular.inverseHessian_mul_hessian`, `IsHyperregular.legendre_hamiltonian`, `IsHyperregular.legendre_partialDerivation_inr_hamiltonian`, `IsHyperregular.legendre_partialDerivation_inl_hamiltonian`, `VelocitySpace.velocityCurve`, `VelocitySpace.toJet`, `VelocitySpace.prolongation_toJet`, `VelocitySpace.isSolution_toJet_iff`, `IsHyperregular.isTrajectory_iff`, `IsHyperregular.isTrajectory_iff_isSolution`, `VelocitySpace.lagrangeBracket`, `IsHyperregular.legendre_bracket`, `IsHyperregular.lagrangeBracket_q_v`, `VelocitySpace.natural`, `VelocitySpace.isHyperregular_natural`, `VelocitySpace.hamiltonian_natural`, `VelocitySpace.toJet_natural` |
 | [Poisson/GeneratingFunction](../ProjectAInos/Mechanics/Poisson/GeneratingFunction.lean) | `PositionPair`, `oldPosition`, `newPosition`, `gradOld`, `gradNew`, `oldMap`, `newMap`, `mixedHessian`, `oldHessian`, `apply_oldMap`, `gradNew_oldMap`, `gradOld_oldMap`, `IsFree`, `transformation`, `momentumPart`, `positionPart`, `inverseMixed`, `IsFree.inverseMixed_mul_mixedHessian`, `IsFree.momentumPart_eq`, `IsFree.oldMap_bracket`, `IsFree.bracket_apply`, `IsFree.bracket_newPosition_gradNew`, `IsFree.bracket_gradNew_gradNew`, `IsFree.isPoissonHom_transformation`, `IsFree.transformation_comp_inverse`, `IsFree.inverse_comp_transformation`, `exchange`, `isFree_exchange`, `transformation_exchange_q`, `transformation_exchange_p` |
 | [Poisson/CompleteIntegral](../ProjectAInos/Mechanics/Poisson/CompleteIntegral.lean) | `ActionSpace`, `substitution`, `IsHamiltonJacobi`, `along`, `momentum`, `timeDerivative_along`, `partialDerivation_substitution_q`, `isTrajectory_of_isHamiltonJacobi`, `freeAction`, `isHamiltonJacobi_freeAction`, `isTrajectory_freeAction` |
-| [Poisson/Separation](../ProjectAInos/Mechanics/Poisson/Separation.lean) | `positionsToAction`, `parameter`, `substitution_p`, `substitution_positionsToPhase`, `stackelHamiltonian`, `substitution_stackelHamiltonian`, `isHamiltonJacobi_stackel`, `nestedHamiltonian`, `nestedMatrix`, `isHamiltonJacobi_nested`, `kinetic`, `isHamiltonJacobi_nested_of_separated`, `liouvilleHamiltonian`, `liouvilleMatrix`, `isHamiltonJacobi_liouville`, `isHamiltonJacobi_liouville_of_separated` |
+| [Poisson/Separation](../ProjectAInos/Mechanics/Poisson/Separation.lean) | `positionsToAction`, `parameter`, `substitution_p`, `substitution_positionsToPhase`, `stackelHamiltonian`, `substitution_stackelHamiltonian`, `isHamiltonJacobi_stackel`, `nestedHamiltonian`, `nestedMatrix`, `isHamiltonJacobi_nested`, `kinetic`, `isHamiltonJacobi_nested_of_separated`, `liouvilleHamiltonian`, `liouvilleMatrix`, `isHamiltonJacobi_liouville`, `isHamiltonJacobi_liouville_of_separated`, `linearAction`, `quadraticEnergy`, `isHamiltonJacobi_nested_freeAction`, `isHamiltonJacobi_liouville_freeAction` |
 | [Poisson/Liouville](../ProjectAInos/Mechanics/Poisson/Liouville.lean) | `divergence`, `divergence_eq`, `divergence_hamiltonian`, `divergence_dissipativeField`, `Oscillator.divergence_dissipativeField` |
 | [Similarity](../ProjectAInos/Mechanics/Similarity.lean) | `TimeFunction.scale`, `TimeFunction.timeDerivative_scale`, `TimeFunction.scale_lift`, `dilate`, `lift_dilate`, `IsHomogeneous`, `IsHomogeneous.dilate_partialDerivation`, `StandardJet.IsSolution.similar`, `similar_apply_add_period` |
 | [Poisson/VirialAverage](../ProjectAInos/Mechanics/Poisson/VirialAverage.lean) | `TimeFunction.tendsto_average_timeDerivative`, `IsTrajectory.tendsto_average_virial` |
