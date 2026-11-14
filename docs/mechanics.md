@@ -134,6 +134,85 @@ For a natural Lagrangian, `isSolution_naturalLagrangian_iff` identifies the solu
 
 Hence `prolongation_eq_of_stationary`: a conserved element of the jet ring takes the same value at all times along a smooth stationary path. `energy_eq_of_stationary` is the case of the energy `Σᵢ q̇ᵢ ∂L/∂q̇ᵢ − L` for a Lagrangian with `∂f/∂t = 0`, stated with real derivatives and no jet ring in the conclusion. The statement quantifies over all intervals because a solution in the jet ring is a condition at all times; paths that are only `C²` or defined on one interval are not covered.
 
+## The Lagrangian of a free particle
+
+`Jet/FreeParticle` proves Theorem 66 of the manuscript (Landau–Lifshitz §4)
+in the standard jet ring. `DependsOnVelocities L` says that `∂L/∂t = 0` and
+`∂L/∂qᵢ⁽ᵏ⁾ = 0` for `k ≠ 1`. The infinitesimal boost with the velocity `u` is
+`boost u L`, the prolongation of the variation `δqᵢ = t uᵢ`; on a function of
+the velocities it is `Σ uᵢ ∂L/∂vᵢ` (`boost_eq`). `IsBoostQuasiInvariant L`
+says that for every `u` the boost of `L` is the total derivative of a function
+of the time and the positions.
+
+- `isBoostQuasiInvariant_iff`: a function of the velocities is quasi-invariant
+  under boosts exactly when it is `velocityPolynomial m b c`
+  `= ½ Σ mᵢⱼ vᵢ vⱼ + Σ bᵢ vᵢ + c` for a symmetric matrix `m`.
+- `velocityPolynomial_eq_add_totalDeriv`: the terms of degree at most one are
+  `D(Σ bᵢ qᵢ + c t)`.
+- `IsIsotropic L` says `L(A v) = L(v)` for every matrix `A` with `Aᵀ A = 1`,
+  where `velocityValue L w` is the value of `L` at the velocities `w`.
+  `eq_smul_one_of_isIsotropic`: an isotropic polynomial has `m = μ · 1` and
+  `b = 0`. `exists_eq_of_isIsotropic`: a function of the velocities that is
+  quasi-invariant under boosts and isotropic is
+  `naturalLagrangian (fun _ => μ) 0 + c`, that is, `½ μ |v|² + c`.
+- `freeLagrangian_boost`: `½ μ |v + u|² − ½ μ |v|² = D(μ u · q + ½ μ |u|² t)`
+  (Landau–Lifshitz (4.2)).
+
+The proof of the first statement applies `∂/∂vⱼ` to `Σ uᵢ ∂L/∂vᵢ = D F_u`.
+The left side then depends only on the velocities and the right side only on
+the time and the positions, so all the partial derivatives of both vanish.
+`Constants` proves that such an element of a free C∞-ring is a constant
+(`eq_algebraMap_of_partialDerivation_eq_zero`): along the segment between two
+points it is a function of time with zero derivative. This is the only
+analytic step. A function with constant second derivatives is then a
+polynomial of degree at most two by the same lemma applied twice.
+
+Isotropy uses three orthogonal matrices: `−1` removes the linear term, the
+change of sign of one co-ordinate removes the off-diagonal entries, and the
+exchange of two co-ordinates makes the diagonal entries equal. The action of
+the orthogonal group on the jet ring is not defined; the hypothesis is on the
+values of `L`.
+
+## The Galilei algebra on the jet ring
+
+`Jet/Galilei` treats Galileo's relativity principle (Landau–Lifshitz §3) at
+the level of vector fields on the standard jet ring.
+
+- `JetRing.prolongField ξ` is the prolongation `pr ξ = Σₖ Σᵢ (Dᵏ ξᵢ) ∂ᵢ⁽ᵏ⁾` of
+  a variation as a vector field, in every jet ring; its values are the
+  `prolong ξ F` of Noether's theorem (`JetRing.prolong_op` is its chain rule).
+  On the standard jet ring `evolutionary ξ` is the vector field with `t ↦ 0`
+  and `qᵢ⁽ᵏ⁾ ↦ Dᵏ ξᵢ`; it commutes with the total derivative
+  (`evolutionary_totalDeriv`) and equals the prolongation
+  (`evolutionary_eq_prolongField`, `evolutionary_apply`).
+- `galileiField A a u` is the field of `δqₗ = Σₘ Aₗₘ qₘ + aₗ + t uₗ`: a linear
+  map, a translation and a boost. `galileiField_q`:
+  `X qₗ⁽ⁿ⁾ = Σₘ Aₗₘ qₘ⁽ⁿ⁾ + Dⁿ(aₗ + t uₗ)`, where `affineShift a u n` is
+  `a + t u`, `u`, `0` for `n = 0`, `1`, `≥ 2`. `boost_eq_galileiField`: the
+  boost of the previous section is `galileiField 0 0 u`.
+- `commutator_galileiField`:
+  `[X_{A,a,u}, X_{A',a',u'}] = X_{A'A − AA', A'a − Aa', A'u − Au'}`.
+  `commutator_dt_galileiField`: `[∂/∂t, X_{A,a,u}] = X_{0,u,0}`, so the
+  commutator of the time translation with a boost is a translation. With `A`
+  antisymmetric these are the relations of the Galilei algebra; boosts and
+  translations commute on the jet ring, and the mass appears as a central
+  term only for the Poisson bracket (`Galilei.canonical_K_p`).
+- `d_galileiField`: `[∂ₗ⁽ᵏ⁾, X_{A,a,u}] = Σᵢ Aᵢₗ ∂ᵢ⁽ᵏ⁾`. `JetRing.euler_apply`
+  turns such a relation, for a vector field commuting with `D`, into
+  `Eₗ(X F) = X(Eₗ F) + Σᵢ cₗᵢ Eᵢ(F)`; `euler_galileiField` is the case of the
+  Galilei fields.
+- `galileiField_mem_eulerLagrangeIdeal`: if `X L = D F`, then `X` maps the
+  Euler–Lagrange ideal of `L` into itself. `JetRing.dt_mem_eulerLagrangeIdeal`
+  is the same statement for `∂/∂t`.
+- `galileiField_naturalLagrangian`: for `L = Σ ½ mᵢ vᵢ² − U` with
+  `mᵢ Aᵢⱼ + mⱼ Aⱼᵢ = 0` and `X U = 0`, `X L = D(Σ mᵢ uᵢ qᵢ)`.
+- `IsInertial L` says that the Euler–Lagrange ideal of `L` is invariant under
+  `∂/∂t` and under `galileiField A a u` for every antisymmetric `A`.
+  `isInertial_naturalLagrangian`: the free system `Σ ½ μ vᵢ²` is inertial.
+
+The finite transformations of the Galilei group are not defined, and no
+statement asserts that an inertial frame exists: that is the physical premise.
+
 ## Poisson models
 
 Hamiltonian mechanics uses the Poisson structures of the
@@ -648,10 +727,60 @@ proved. Beats near resonance are not treated.
   (`isSmallOscillation_map_mulVec`), and `IsSmallOscillation.apply_eq` writes
   each co-ordinate as the sum of the normal oscillations.
 
-Proposition 70 of the manuscript, on the Lie algebra of quadratic
-Hamiltonians and the normal form as a linear canonical transformation, is not
-proved, and the equations are not derived here from the Lagrangian
-`½ Σ (mᵢₖ ẋᵢ ẋₖ − kᵢₖ xᵢ xₖ)`.
+The equations are derived from the Lagrangian and from the Hamiltonian in the
+next section.
+
+## Quadratic Hamiltonians and the normal form
+
+`Poisson/Quadratic`, `Oscillations/NormalForm` and
+`Oscillations/QuadraticLagrangian` prove Proposition 70 of the manuscript and
+connect `M ẍ + K x = 0` with the Lagrangian and the Hamiltonian
+(Landau–Lifshitz §23).
+
+- `eulerField` is the vector field `Σₐ xₐ ∂ₐ` of a free C∞-ring, and
+  `IsEulerHomogeneous k f` is `Σₐ xₐ ∂ₐ f = k f`. Generators have the degree
+  one and constants the degree zero, the degrees add under products, and a
+  partial derivative lowers the degree by one.
+  `IsEulerHomogeneous.canonical_bracket`: for the canonical bracket, the
+  bracket of elements of degrees `j` and `k` has the degree `j + k − 2`.
+- `quadraticForm S` is `½ Σ S_ab x_a x_b`, and `PhaseSpace.canonicalForm ι`
+  is the matrix `J` of the canonical bracket. For symmetric `S` and `T`,
+  `{Q_S, Q_T} = Q_{SJT − TJS}` (`PhaseSpace.canonical_bracket_quadraticForm`),
+  and `Q_S` determines `S` (`quadraticForm_injective`).
+- `PhaseSpace.canonicalForm_mul_mem_sp_iff`: `J S` is in Mathlib's
+  `LieAlgebra.Symplectic.sp` exactly when `S` is symmetric. With
+  `PhaseSpace.spHamiltonian A = Q_{−JA}`, for `A` and `B` in `sp(2n, ℝ)`,
+  `{xₐ, H_A} = Σ_c Aₐ_c x_c` (`canonical_bracket_generator_spHamiltonian`),
+  `{H_A, H_B} = H_{[A, B]}` (`canonical_bracket_spHamiltonian`), and
+  `A ↦ H_A` is injective (`spHamiltonian_injective`). Every quadratic form is
+  `H_{JS}` (`quadraticForm_eq_spHamiltonian`).
+- `NormalModes.linearTransformation A B` is the morphism `q ↦ A q`,
+  `p ↦ B p` of phase space. It is a Poisson morphism when `A Bᵀ = 1`
+  (`isPoissonHom_linearTransformation`), and these morphisms compose by the
+  product of the matrices (`linearTransformation_comp`).
+- `NormalModes.quadraticHamiltonian W K` is `½ pᵀ W p + ½ qᵀ K q`. With
+  `Sᵀ M S = 1` and `Sᵀ K S = diag λ` for a symmetric `M`, the inverse of `M`
+  is `S Sᵀ`, and `quadraticHamiltonian_eq_normalForm` is
+  `H = Σₐ ½ (Pₐ² + λₐ Qₐ²)` for `Q = Sᵀ M q` and `P = Sᵀ p`. The
+  transformation is canonical (`isPoissonHom_normalTransformation`) with the
+  inverse `q ↦ S q`, `p ↦ M S p` (`linearTransformation_comp_inverse`,
+  `linearTransformation_inverse_comp`).
+- `NormalModes.isTrajectory_quadraticForm_iff`: a trajectory of `Q_S`
+  satisfies `ẋ = J S x`.
+  `NormalModes.isTrajectory_quadraticHamiltonian_iff_isSmallOscillation`: for
+  `M W = 1`, the trajectories of `½ pᵀ W p + ½ qᵀ K q` are the solutions of
+  `M ẍ + K x = 0` with `p = M ẋ`.
+- `JetRing.quadraticLagrangian M K` is `½ Σ (mᵢₖ vᵢ vₖ − kᵢₖ qᵢ qₖ)`
+  (Landau–Lifshitz (23.3)). For symmetric `M` and `K` its Euler–Lagrange
+  expressions are `−Σₖ kᵢₖ qₖ − Σₖ mᵢₖ q̈ₖ`
+  (`JetRing.euler_quadraticLagrangian`), its solutions are the small
+  oscillations (`StandardJet.isSolution_quadraticLagrangian_iff`), and
+  `NormalModes.isTrajectory_quadraticHamiltonian_iff_isSolution` is the
+  Legendre correspondence with the Hamiltonian.
+
+The correspondence with `sp(2n, ℝ)` is stated by these identities and is not
+bundled as an isomorphism of Lie algebras. The matrices `M` and `K` are
+constants.
 
 ## Parametric resonance
 
@@ -792,6 +921,9 @@ semi-major axis is not computed.
 | [Jet/Polar](../ProjectAInos/Mechanics/Jet/Polar.lean) | `Polar.metric`, `Polar.lagrangian`, `Polar.euler_radial`, `Polar.euler_angular`, `Polar.momentum_angular`, `Polar.conserved_angularMomentum` |
 | [Jet/Analytic](../ProjectAInos/Mechanics/Jet/Analytic.lean) | `firstOrder`, `orderLE_firstOrder`, `euler_firstOrder`, `realPath`, `realJet`, `prolongation_firstOrder_apply`, `fderiv_ofSmoothOperation`, `eulerLagrange_ofSmoothOperation`, `prolongation_euler_firstOrder_apply`, `isSolution_firstOrder_iff`, `isSolution_firstOrder_iff_stationary`, `prolongation_eq_of_stationary`, `energy_eq_of_stationary` |
 | [Jet/Standard](../ProjectAInos/Mechanics/Jet/Standard.lean) | `StandardJet`, `jetRing`, `totalDeriv_eq_derivation`, `euler_q_mul_acceleration`, `euler_oscillator`, `conserved_energy_oscillator`, `conserved_boost_free` |
+| [Constants](../ProjectAInos/Mechanics/Constants.lean) | `lift_eq_of_partialDerivation_eq_zero`, `eq_algebraMap_of_partialDerivation_eq_zero` |
+| [Jet/FreeParticle](../ProjectAInos/Mechanics/Jet/FreeParticle.lean) | `JetRing.d_sum_mul_q`, `JetRing.d_sum_mul_q_mul_q_of_isSymm`, `StandardJet.DependsOnVelocities`, `StandardJet.eq_algebraMap_of_dt_eq_zero_of_d_eq_zero`, `StandardJet.boost`, `StandardJet.IsBoostQuasiInvariant`, `StandardJet.boost_eq`, `StandardJet.d_one_d_one_eq_algebraMap`, `StandardJet.velocityPolynomial`, `StandardJet.isBoostQuasiInvariant_velocityPolynomial`, `StandardJet.exists_eq_velocityPolynomial`, `StandardJet.massMatrix`, `StandardJet.isBoostQuasiInvariant_iff`, `StandardJet.velocityPolynomial_eq_add_totalDeriv`, `StandardJet.velocityValue`, `StandardJet.velocityValue_velocityPolynomial`, `StandardJet.IsIsotropic`, `StandardJet.eq_smul_one_of_isIsotropic`, `StandardJet.exists_eq_of_isIsotropic`, `StandardJet.freeLagrangian_boost` |
+| [Jet/Galilei](../ProjectAInos/Mechanics/Jet/Galilei.lean) | `JetRing.euler_apply`, `JetRing.apply_mem_eulerLagrangeIdeal`, `JetRing.dt_mem_eulerLagrangeIdeal`, `JetRing.prolong_eq_sum`, `JetRing.prolong_op`, `JetRing.prolongField`, `JetRing.prolong_q`, `JetRing.sum_sum_antisymm_eq_zero`, `StandardJet.evolutionary`, `StandardJet.evolutionary_totalDeriv`, `StandardJet.evolutionary_eq_prolongField`, `StandardJet.evolutionary_apply`, `StandardJet.affineShift`, `StandardJet.galileiCharacteristic`, `StandardJet.galileiField`, `StandardJet.galileiField_q`, `StandardJet.galileiField_totalDeriv`, `StandardJet.commutator_galileiField`, `StandardJet.commutator_dt_galileiField`, `StandardJet.d_galileiField`, `StandardJet.euler_galileiField`, `StandardJet.galileiField_mem_eulerLagrangeIdeal`, `StandardJet.galileiField_naturalLagrangian`, `StandardJet.boost_eq_galileiField`, `StandardJet.IsInertial`, `StandardJet.isInertial_naturalLagrangian` |
 | [Poisson/RigidBody](../ProjectAInos/Mechanics/Poisson/RigidBody.lean) | `PhaseSpace`, `L`, `poisson`, `poisson_L_L`, `L_ne_zero`, `poisson_bracket`, `poisson_L_bracket`, `kineticEnergy`, `gradient_kineticEnergy`, `euler_equations`, `euler_equation_zero`, `casimir`, `poisson_casimir_left`, `isIntegral_casimir` |
 | [Poisson/Epsilon](../ProjectAInos/Mechanics/Poisson/Epsilon.lean) | `epsilon`, `epsilon_skew`, `sum_epsilon_mul` |
 | [Poisson/AngularMomentum](../ProjectAInos/Mechanics/Poisson/AngularMomentum.lean) | `M`, `canonical_M_q`, `canonical_M_p`, `canonical_M_M`, `canonical_M_dotProduct`, `isIntegral_M`, `isIntegral_M_sq`, `momentumMap`, `isPoissonHom_momentumMap` |
@@ -820,6 +952,9 @@ semi-major axis is not computed.
 | [TimePrimitive](../ProjectAInos/Mechanics/TimePrimitive.lean) | `TimeFunction.hasDerivAt_apply_const`, `TimeFunction.continuous_apply_const`, `TimeFunction.apply_sub_apply_eq_integral`, `TimeFunction.primitive`, `TimeFunction.primitive_apply`, `TimeFunction.timeDerivative_primitive` |
 | [Oscillations/Duhamel](../ProjectAInos/Mechanics/Oscillations/Duhamel.lean) | `isForced_zero_damping_iff`, `complexAmplitudeRe`, `complexAmplitudeIm`, `integral_mul_sin_sub`, `IsForced.complexAmplitudeRe_eq`, `IsForced.complexAmplitudeIm_eq`, `IsForced.timeDerivative_apply_eq_integral`, `IsForced.apply_eq_integral`, `IsForced.energy_apply`, `IsForced.energy_transfer`, `duhamel`, `isForced_duhamel`, `duhamel_apply`, `exists_isForced`, `isForced_cos_of_sq_ne`, `steadyState_zero_damping`, `IsForced.apply_eq_of_sq_ne`, `isForced_resonance`, `IsForced.eq_resonance_of_rest`, `IsForced.exists_abs_gt_of_resonance` |
 | [Oscillations/NormalModes](../ProjectAInos/Mechanics/Oscillations/NormalModes.lean) | `exists_orthogonal_diagonalization`, `exists_transpose_mul_mul_eq_one`, `exists_simultaneous_diagonalization`, `mul_eq_mul_mul_diagonal`, `det_sub_smul_eq_zero_iff`, `lam_pos`, `IsSmallOscillation`, `normalCoordinates`, `map_mulVec_normalCoordinates`, `isSmallOscillation_iff`, `IsSmallOscillation.isHarmonic_normalCoordinates`, `isSmallOscillation_map_mulVec`, `IsSmallOscillation.apply_eq` |
+| [Poisson/Quadratic](../ProjectAInos/Mechanics/Poisson/Quadratic.lean) | `eulerField`, `IsEulerHomogeneous`, `IsEulerHomogeneous.mul`, `IsEulerHomogeneous.partialDerivation`, `IsEulerHomogeneous.canonical_bracket`, `bilinearForm`, `quadraticForm`, `partialDerivation_quadraticForm`, `quadraticForm_injective`, `PhaseSpace.canonicalForm`, `PhaseSpace.canonical_bracket_generator_quadraticForm`, `PhaseSpace.canonical_bracket_quadraticForm`, `PhaseSpace.mem_sp_iff`, `PhaseSpace.canonicalForm_mul_mem_sp_iff`, `PhaseSpace.spHamiltonian`, `PhaseSpace.canonical_bracket_generator_spHamiltonian`, `PhaseSpace.canonical_bracket_spHamiltonian`, `PhaseSpace.spHamiltonian_injective` |
+| [Oscillations/NormalForm](../ProjectAInos/Mechanics/Oscillations/NormalForm.lean) | `linearQ`, `linearP`, `canonical_linearQ_linearP`, `linearTransformation`, `linearTransformation_comp`, `isPoissonHom_linearTransformation`, `quadraticHamiltonian`, `quadraticHamiltonian_eq`, `quadraticHamiltonian_eq_normalForm`, `linearTransformation_normalForm`, `isPoissonHom_normalTransformation`, `linearTransformation_comp_inverse`, `linearTransformation_inverse_comp`, `isTrajectory_quadraticForm_iff`, `isTrajectory_quadraticHamiltonian_iff`, `isTrajectory_quadraticHamiltonian_iff_isSmallOscillation` |
+| [Oscillations/QuadraticLagrangian](../ProjectAInos/Mechanics/Oscillations/QuadraticLagrangian.lean) | `JetRing.quadraticLagrangian`, `JetRing.momentum_quadraticLagrangian`, `JetRing.euler_quadraticLagrangian`, `StandardJet.isSolution_quadraticLagrangian_iff`, `NormalModes.isSymm_of_mul_eq_one`, `NormalModes.isTrajectory_quadraticHamiltonian_iff_isSolution` |
 | [Oscillations/Parametric](../ProjectAInos/Mechanics/Oscillations/Parametric.lean) | `mul_self_eq`, `sin_smul_pow_succ`, `exists_abs_pow_apply_le`, `IsHill`, `wronskian`, `IsHill.wronskian_eq`, `TimeFunction.shift`, `IsHill.shift`, `state`, `FundamentalSystem`, `FundamentalSystem.eq_combination`, `FundamentalSystem.matrix`, `FundamentalSystem.det_matrix`, `FundamentalSystem.state_eq`, `FundamentalSystem.matrix_add_nat_mul_period`, `FundamentalSystem.exists_abs_apply_le`, `FundamentalSystem.exists_abs_apply_le_of_abs_trace_lt`, `FundamentalSystem.harmonic` |
 | [Legendre](../ProjectAInos/Mechanics/Legendre.lean) | `positionsToJet`, `positionsToPhase`, `d_zero_positionsToJet`, `orderLE_positionsToJet`, `legendre`, `legendre_p_eq_momentum`, `legendre_hamiltonian`, `isTrajectory_natural_iff`, `isSolution_natural_iff`, `isTrajectory_natural_iff_isSolution` |
 | [Poisson/CompleteIntegral](../ProjectAInos/Mechanics/Poisson/CompleteIntegral.lean) | `ActionSpace`, `substitution`, `IsHamiltonJacobi`, `along`, `momentum`, `timeDerivative_along`, `partialDerivation_substitution_q`, `isTrajectory_of_isHamiltonJacobi`, `freeAction`, `isHamiltonJacobi_freeAction`, `isTrajectory_freeAction` |

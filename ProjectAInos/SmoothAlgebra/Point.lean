@@ -89,6 +89,14 @@ def pointEquiv : Point (FreeSmoothRing ι) ≃ (ι → ℝ) where
   left_inv _ := hom_ext fun i => lift_generator _ i
   right_inv a := funext fun i => lift_generator a i
 
+/-- The value of an element at a point is its value as a function. -/
+theorem lift_real (a : ι → ℝ) (s : FreeSmoothRing ι) : lift a s = s.val a :=
+  ((presentation s).sound a).symm
+
+/-- An element of the free ring is determined by its values at the points. -/
+theorem ext_lift {s s' : FreeSmoothRing ι} (h : ∀ a : ι → ℝ, lift a s = lift a s') : s = s' :=
+  Subtype.ext (funext fun a => by rw [← lift_real, ← lift_real, h a])
+
 /-- The dual number `a + ε v`. -/
 def dual (a v : ℝ) : DualNumber ℝ := inl a + inr v
 

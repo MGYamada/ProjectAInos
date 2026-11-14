@@ -81,6 +81,7 @@ public import ProjectAInos.GeneralRelativity.VariationStationary
 public import ProjectAInos.Integrations.YangMillsBridge
 public import ProjectAInos.Integrations.YangMillsCoordinates
 public import ProjectAInos.Mechanics.Basic
+public import ProjectAInos.Mechanics.Constants
 public import ProjectAInos.Mechanics.EulerLagrange
 public import ProjectAInos.Mechanics.Examples
 public import ProjectAInos.Mechanics.FirstVariation
@@ -88,6 +89,8 @@ public import ProjectAInos.Mechanics.Jet.Analytic
 public import ProjectAInos.Mechanics.Jet.Basic
 public import ProjectAInos.Mechanics.Jet.Conservation
 public import ProjectAInos.Mechanics.Jet.Euler
+public import ProjectAInos.Mechanics.Jet.FreeParticle
+public import ProjectAInos.Mechanics.Jet.Galilei
 public import ProjectAInos.Mechanics.Jet.Metric
 public import ProjectAInos.Mechanics.Jet.Noether
 public import ProjectAInos.Mechanics.Jet.Polar
@@ -101,9 +104,11 @@ public import ProjectAInos.Mechanics.Oscillations.Duhamel
 public import ProjectAInos.Mechanics.Oscillations.Forced
 public import ProjectAInos.Mechanics.Oscillations.Harmonic
 public import ProjectAInos.Mechanics.Oscillations.Linearization
+public import ProjectAInos.Mechanics.Oscillations.NormalForm
 public import ProjectAInos.Mechanics.Oscillations.NormalModes
 public import ProjectAInos.Mechanics.Oscillations.Oscillator
 public import ProjectAInos.Mechanics.Oscillations.Parametric
+public import ProjectAInos.Mechanics.Oscillations.QuadraticLagrangian
 public import ProjectAInos.Mechanics.Poisson.AngularMomentum
 public import ProjectAInos.Mechanics.Poisson.CompleteIntegral
 public import ProjectAInos.Mechanics.Poisson.Epsilon
@@ -114,6 +119,7 @@ public import ProjectAInos.Mechanics.Poisson.KeplerModel
 public import ProjectAInos.Mechanics.Poisson.KeplerMotion
 public import ProjectAInos.Mechanics.Poisson.KeplerOrbit
 public import ProjectAInos.Mechanics.Poisson.Liouville
+public import ProjectAInos.Mechanics.Poisson.Quadratic
 public import ProjectAInos.Mechanics.Poisson.RigidBody
 public import ProjectAInos.Mechanics.Poisson.RigidBodyMotion
 public import ProjectAInos.Mechanics.Poisson.RotatingFrame

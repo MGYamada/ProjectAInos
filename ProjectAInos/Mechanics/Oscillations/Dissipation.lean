@@ -31,18 +31,6 @@ integral curves are the damped oscillations of `Oscillations/Damped`.
 
 noncomputable section
 
-namespace ProjectAInos.SmoothAlgebra.SmoothDerivation
-
-/-- A finite sum of derivations is evaluated termwise. -/
-theorem sum_apply {A M : Type*} [CommRing A] [Algebra ℝ A] [SmoothRing A] [AddCommGroup M]
-    [Module A M] {ι : Type*} (s : Finset ι) (d : ι → SmoothDerivation A M) (a : A) :
-    (∑ i ∈ s, d i) a = ∑ i ∈ s, d i a := by
-  have h := congrFun (map_sum (coeFnAddMonoidHom (A := A) (M := M)) d s) a
-  rw [Finset.sum_apply] at h
-  exact h
-
-end ProjectAInos.SmoothAlgebra.SmoothDerivation
-
 namespace ProjectAInos.Mechanics
 
 open SmoothAlgebra SmoothRing FreeSmoothRing PhaseSpace Matrix
