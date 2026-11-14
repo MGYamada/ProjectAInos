@@ -6,8 +6,10 @@ module
 import ProjectAInos
 
 /-! Public consumers of the canonical-formalism API: the chain rule for a
-substitution, the Legendre transformation of a natural Lagrangian, Jacobi's
-theorem on complete integrals, and Liouville's theorem in infinitesimal form.
+substitution, the Legendre transformation of a natural Lagrangian and of a
+hyperregular Lagrangian, canonical transformations from a generating function,
+Jacobi's theorem on complete integrals, and Liouville's theorem in
+infinitesimal form.
 Default elaborator options are intentional: these checks must not rely on the
 implementation's transparency settings. Every statement is pinned with its
 type. -/
@@ -75,6 +77,205 @@ example {m : ι → ℝ} (hm : ∀ i, m i ≠ 0) (u : FreeSmoothRing ι) (c : ι
   isTrajectory_natural_iff_isSolution hm u c
 
 end Legendre
+
+section Hyperregular
+
+open VelocitySpace
+
+variable {ι : Type*} [DecidableEq ι] [Fintype ι]
+
+example (L : VelocitySpace ι) (i : ι) :
+    momentum L i = partialDerivation (Sum.inr i) L := rfl
+
+example (L : VelocitySpace ι) : energy L = ∑ i, v i * momentum L i - L := rfl
+
+example (L : VelocitySpace ι) (i : ι) : legendre L (PhaseSpace.q i) = VelocitySpace.q i :=
+  legendre_q L i
+
+example (L : VelocitySpace ι) (i : ι) : legendre L (PhaseSpace.p i) = momentum L i :=
+  legendre_p L i
+
+example (L : VelocitySpace ι) (i j : ι) :
+    VelocitySpace.hessian L i j = partialDerivation (Sum.inr j) (momentum L i) := rfl
+
+example (L : VelocitySpace ι) (G : SmoothRingHom (VelocitySpace ι) (PhaseSpace ι)) :
+    IsHyperregular L G ↔
+      G.comp (legendre L) = SmoothRingHom.id (PhaseSpace ι) ∧
+        (legendre L).comp G = SmoothRingHom.id (VelocitySpace ι) :=
+  ⟨fun h => ⟨h.left_inv, h.right_inv⟩, fun h => ⟨h.1, h.2⟩⟩
+
+example (L : VelocitySpace ι) (G : SmoothRingHom (VelocitySpace ι) (PhaseSpace ι)) :
+    hamiltonian L G = G (energy L) := rfl
+
+variable {L : VelocitySpace ι} {G : SmoothRingHom (VelocitySpace ι) (PhaseSpace ι)}
+
+/-- The matrix `∂²L/∂vᵢ∂vⱼ` of a hyperregular Lagrangian is invertible. -/
+example (h : IsHyperregular L G) : inverseHessian L G * VelocitySpace.hessian L = 1 :=
+  h.inverseHessian_mul_hessian
+
+example (h : IsHyperregular L G) : VelocitySpace.hessian L * inverseHessian L G = 1 :=
+  h.hessian_mul_inverseHessian
+
+/-- The Legendre transformation takes the Hamiltonian to the energy. -/
+example (h : IsHyperregular L G) : legendre L (hamiltonian L G) = energy L :=
+  h.legendre_hamiltonian
+
+/-- `FL(∂H/∂pᵢ) = vᵢ`. -/
+example (h : IsHyperregular L G) (i : ι) :
+    legendre L (partialDerivation (Sum.inr i) (hamiltonian L G)) = v i :=
+  h.legendre_partialDerivation_inr_hamiltonian i
+
+/-- `FL(∂H/∂qᵢ) = −∂L/∂qᵢ`. -/
+example (h : IsHyperregular L G) (i : ι) :
+    legendre L (partialDerivation (Sum.inl i) (hamiltonian L G)) =
+      -partialDerivation (Sum.inl i) L :=
+  h.legendre_partialDerivation_inl_hamiltonian i
+
+example (γ : ι → TimeFunction) :
+    velocityCurve γ = Sum.elim γ fun i => timeDerivative (γ i) := rfl
+
+example (γ : ι → TimeFunction) (s : VelocitySpace ι) :
+    StandardJet.prolongation γ (toJet s) = FreeSmoothRing.lift (velocityCurve γ) s :=
+  prolongation_toJet γ s
+
+/-- The Euler–Lagrange equations of `L(q, v)` along a path. -/
+example (L : VelocitySpace ι) (γ : ι → TimeFunction) :
+    StandardJet.IsSolution (toJet L) γ ↔
+      ∀ i, timeDerivative (FreeSmoothRing.lift (velocityCurve γ) (momentum L i)) =
+        FreeSmoothRing.lift (velocityCurve γ) (partialDerivation (Sum.inl i) L) :=
+  isSolution_toJet_iff L γ
+
+/-- The Legendre correspondence (Landau–Lifshitz §40, Theorem 51). -/
+example (h : IsHyperregular L G) (c : ι ⊕ ι → TimeFunction) :
+    IsTrajectory (canonical ι) (hamiltonian L G) c ↔
+      StandardJet.IsSolution (toJet L) (fun i => c (Sum.inl i)) ∧
+        ∀ i, c (Sum.inr i) =
+          FreeSmoothRing.lift (velocityCurve fun i => c (Sum.inl i)) (momentum L i) :=
+  h.isTrajectory_iff_isSolution c
+
+example (L : VelocitySpace ι) (G : SmoothRingHom (VelocitySpace ι) (PhaseSpace ι))
+    (f g : VelocitySpace ι) :
+    lagrangeBracket L G f g = legendre L ((canonical ι).bracket (G f) (G g)) := rfl
+
+example (h : IsHyperregular L G) (f g : PhaseSpace ι) :
+    legendre L ((canonical ι).bracket f g) =
+      lagrangeBracket L G (legendre L f) (legendre L g) :=
+  h.legendre_bracket f g
+
+/-- `{qᵢ, vⱼ}` is the inverse of the matrix `∂²L/∂vᵢ∂vⱼ`. -/
+example (h : IsHyperregular L G) (i j : ι) :
+    lagrangeBracket L G (VelocitySpace.q i) (v j) = inverseHessian L G j i :=
+  h.lagrangeBracket_q_v i j
+
+example (h : IsHyperregular L G) (i : ι) :
+    lagrangeBracket L G (VelocitySpace.q i) (energy L) = v i :=
+  h.lagrangeBracket_q_energy i
+
+/-- A natural Lagrangian with non-zero masses is hyperregular, with the
+Hamiltonian `Σ pᵢ² / 2mᵢ + U(q)`. -/
+example {m : ι → ℝ} (hm : ∀ i, m i ≠ 0) (u : FreeSmoothRing ι) :
+    IsHyperregular (natural m u) (naturalInverse m) :=
+  isHyperregular_natural hm u
+
+example {m : ι → ℝ} (hm : ∀ i, m i ≠ 0) (u : FreeSmoothRing ι) :
+    hamiltonian (natural m u) (naturalInverse m) = kineticEnergy m + positionsToPhase u :=
+  hamiltonian_natural hm u
+
+example (m : ι → ℝ) (u : FreeSmoothRing ι) :
+    toJet (natural m u) = (StandardJet.jetRing ι).naturalLagrangian m (positionsToJet u) :=
+  toJet_natural m u
+
+end Hyperregular
+
+section GeneratingFunction
+
+open GeneratingFunction Matrix
+
+variable {ι : Type*} [DecidableEq ι] [Fintype ι]
+
+example (x : PositionPair ι) (k : ι) : gradOld x k = partialDerivation (Sum.inl k) x := rfl
+
+example (x : PositionPair ι) (l : ι) : gradNew x l = partialDerivation (Sum.inr l) x := rfl
+
+/-- `qᵢ ↦ qᵢ`, `pᵢ ↦ ∂F/∂qᵢ`. -/
+example (F : PositionPair ι) (i : ι) : oldMap F (PhaseSpace.q i) = oldPosition i :=
+  oldMap_q F i
+
+example (F : PositionPair ι) (i : ι) : oldMap F (PhaseSpace.p i) = gradOld F i :=
+  oldMap_p F i
+
+/-- `Qᵢ ↦ Qᵢ`, `Pᵢ ↦ −∂F/∂Qᵢ`. -/
+example (F : PositionPair ι) (i : ι) : newMap F (PhaseSpace.q i) = newPosition i :=
+  newMap_q F i
+
+example (F : PositionPair ι) (i : ι) : newMap F (PhaseSpace.p i) = -gradNew F i :=
+  newMap_p F i
+
+example (F : PositionPair ι) (G : SmoothRingHom (PositionPair ι) (PhaseSpace ι)) :
+    IsFree F G ↔
+      G.comp (oldMap F) = SmoothRingHom.id (PhaseSpace ι) ∧
+        (oldMap F).comp G = SmoothRingHom.id (PositionPair ι) :=
+  ⟨fun h => ⟨h.left_inv, h.right_inv⟩, fun h => ⟨h.1, h.2⟩⟩
+
+example (F : PositionPair ι) (G : SmoothRingHom (PositionPair ι) (PhaseSpace ι)) :
+    transformation F G = G.comp (newMap F) := rfl
+
+example (F : PositionPair ι) (k l : ι) :
+    mixedHessian F k l = partialDerivation (Sum.inr l) (partialDerivation (Sum.inl k) F) := rfl
+
+variable {F : PositionPair ι} {G : SmoothRingHom (PositionPair ι) (PhaseSpace ι)}
+
+/-- The mixed matrix `∂²F/∂qₖ∂Qₗ` of a free generating function is invertible. -/
+example (h : IsFree F G) : inverseMixed F G * mixedHessian F = 1 :=
+  h.inverseMixed_mul_mixedHessian
+
+example (h : IsFree F G) : mixedHessian F * inverseMixed F G = 1 :=
+  h.mixedHessian_mul_inverseMixed
+
+/-- The canonical bracket in the co-ordinates `(q, Q)`. -/
+example (h : IsFree F G) (x y : PositionPair ι) :
+    oldMap F ((canonical ι).bracket (G x) (G y)) =
+      gradOld x ⬝ᵥ (gradNew y ᵥ* inverseMixed F G) -
+        (gradNew x ᵥ* inverseMixed F G) ⬝ᵥ gradOld y :=
+  h.oldMap_bracket x y
+
+example (h : IsFree F G) (i j : ι) :
+    (canonical ι).bracket (G (newPosition i)) (G (gradNew F j)) = if i = j then -1 else 0 :=
+  h.bracket_newPosition_gradNew i j
+
+/-- The transformation generated by a free generating function is canonical
+(Landau–Lifshitz §45). -/
+example (h : IsFree F G) :
+    IsPoissonHom (canonical ι).toAlmostPoissonStructure (canonical ι).toAlmostPoissonStructure
+      (transformation F G) :=
+  h.isPoissonHom_transformation
+
+example (h : IsFree F G) {G' : SmoothRingHom (PositionPair ι) (PhaseSpace ι)}
+    (hr : (newMap F).comp G' = SmoothRingHom.id (PositionPair ι)) :
+    (transformation F G).comp (G'.comp (oldMap F)) = SmoothRingHom.id (PhaseSpace ι) :=
+  h.transformation_comp_inverse hr
+
+example (h : IsFree F G) {G' : SmoothRingHom (PositionPair ι) (PhaseSpace ι)}
+    (hl : G'.comp (newMap F) = SmoothRingHom.id (PhaseSpace ι)) :
+    (G'.comp (oldMap F)).comp (transformation F G) = SmoothRingHom.id (PhaseSpace ι) :=
+  h.inverse_comp_transformation hl
+
+example : (exchange : PositionPair ι) = ∑ k, oldPosition k * newPosition k := rfl
+
+/-- `Σ qᵢ Qᵢ` generates `Qᵢ = pᵢ`, `Pᵢ = −qᵢ`. -/
+example : IsFree (exchange (ι := ι)) (SmoothRingHom.id (PhaseSpace ι)) := isFree_exchange
+
+example (i : ι) :
+    transformation (exchange (ι := ι)) (SmoothRingHom.id (PhaseSpace ι)) (PhaseSpace.q i) =
+      PhaseSpace.p i :=
+  transformation_exchange_q i
+
+example (i : ι) :
+    transformation (exchange (ι := ι)) (SmoothRingHom.id (PhaseSpace ι)) (PhaseSpace.p i) =
+      -PhaseSpace.q i :=
+  transformation_exchange_p i
+
+end GeneratingFunction
 
 section CompleteIntegral
 

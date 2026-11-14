@@ -224,9 +224,10 @@ morphisms to the dual numbers, mechanical similarity and the
 virial theorem for time averages. The Lagrangian of a free particle is
 characterized by quasi-invariance under boosts and isotropy, and the Galilei
 algebra acts on the jet ring by vector fields that preserve the Euler–Lagrange
-ideal of a quasi-invariant Lagrangian. Symplectic structures, the Legendre
-transformation of a general Lagrangian, Dirac brackets and canonical
-transformations with generating functions are not implemented. Galilean symmetry as a group action and the topics of 2.1 and
+ideal of a quasi-invariant Lagrangian. The Legendre correspondence is proved
+for every Lagrangian whose Legendre transformation has an inverse morphism,
+and the transformation given by a free generating function `F(q, Q)` is
+canonical. Symplectic forms and Dirac brackets are not implemented. Galilean symmetry as a group action and the topics of 2.1 and
 2.4 have no Lean counterpart yet. The
 [ledger](docs/cinfty-mechanics.md#ledger) gives the status of each section of
 Landau–Lifshitz, and [#78](https://github.com/MGYamada/ProjectAInos/issues/78) tracks completion. See the
