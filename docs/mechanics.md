@@ -683,6 +683,55 @@ The existence of a fundamental system for a general smooth coefficient is not
 proved; it is the data of the theorems. The cases in which solutions are
 unbounded and the width of the instability zone are not treated.
 
+## Canonical formalism
+
+`Mechanics/Legendre` treats the Legendre transformation of the natural
+Lagrangian `L = Σᵢ ½ mᵢ q̇ᵢ² − U(q)` (Landau–Lifshitz §40). A potential is an
+element `u` of the free C∞-ring on the positions; `positionsToJet u` reads it
+in the jet ring and `positionsToPhase u` on the phase space.
+
+- `legendre m` is the morphism from the phase space to the jet ring with
+  `qᵢ ↦ qᵢ` and `pᵢ ↦ mᵢ q̇ᵢ`. It takes `pᵢ` to the momentum `∂L/∂q̇ᵢ`
+  (`legendre_p_eq_momentum`) and, for non-zero masses, the Hamiltonian
+  `Σᵢ pᵢ²/2mᵢ + U` to the energy of `L` (`legendre_hamiltonian`).
+- `isSolution_natural_iff`, `isTrajectory_natural_iff`: Newton's equations
+  `mᵢ γ̈ᵢ = −(∂ᵢu)(γ)` and Hamilton's equations along curves.
+- `isTrajectory_natural_iff_isSolution`: a curve of the phase space is a
+  trajectory of the Hamiltonian exactly when its positions solve the
+  Euler–Lagrange equations of `L` and `pᵢ = mᵢ q̇ᵢ`.
+
+Theorem 51 of the manuscript for a general hyperregular Lagrangian, and the
+correspondence of the symplectic forms, are not proved.
+
+`Poisson/CompleteIntegral` proves Jacobi's theorem (Landau–Lifshitz §47). The
+functions of the co-ordinates `q`, of as many parameters `α` and of the time
+form the free C∞-ring `ActionSpace ι`. For `S` in this ring,
+`substitution S` is the morphism `qᵢ ↦ qᵢ`, `pᵢ ↦ ∂S/∂qᵢ` from the phase
+space, and `IsHamiltonJacobi H S` is the equation
+`∂S/∂t + H(q, ∂S/∂q) = 0`. `along Q α` evaluates along a curve `q(t)` with
+fixed parameters.
+
+- `isTrajectory_of_isHamiltonJacobi`: if `S` satisfies the Hamilton–Jacobi
+  equation, every `∂S/∂αᵢ` has zero time derivative along the curve, and the
+  matrix `∂²S/∂αᵢ∂qₖ` along the curve has no kernel, then `q(t)` with the
+  momenta `pᵢ = ∂S/∂qᵢ` is a trajectory of `H`.
+- `isHamiltonJacobi_freeAction`, `isTrajectory_freeAction`: for the free
+  particle, `S = α q − α² t / 2m` satisfies the equation, and the theorem
+  gives the uniform motion `q = β + (α/m) t`.
+
+The curve is a hypothesis of the theorem: solving `∂S/∂αᵢ = βᵢ` for `q(t)` by
+the implicit function theorem is not proved. The Hamiltonian has no explicit
+dependence on time.
+
+`Poisson/Liouville` defines the divergence `Σₐ ∂ₐ (X xₐ)` of a vector field on
+a free C∞-ring with finitely many generators. `divergence_hamiltonian`: a
+Hamiltonian vector field of the canonical bracket has zero divergence, the
+infinitesimal form of Liouville's theorem (Landau–Lifshitz §46).
+`divergence_dissipativeField`: with friction the divergence is
+`−Σᵢ ∂fᵢ/∂pᵢ`, and for the oscillator with the friction coefficients `aᵢ` it
+is the constant `−Σᵢ aᵢ/mᵢ` (`Oscillator.divergence_dissipativeField`). The
+invariance of the Lebesgue measure under a flow is not proved.
+
 ## Proof map
 
 | Module | Main declarations |
@@ -731,6 +780,9 @@ unbounded and the width of the instability zone are not treated.
 | [Oscillations/Duhamel](../ProjectAInos/Mechanics/Oscillations/Duhamel.lean) | `isForced_zero_damping_iff`, `complexAmplitudeRe`, `complexAmplitudeIm`, `integral_mul_sin_sub`, `IsForced.complexAmplitudeRe_eq`, `IsForced.complexAmplitudeIm_eq`, `IsForced.timeDerivative_apply_eq_integral`, `IsForced.apply_eq_integral`, `IsForced.energy_apply`, `IsForced.energy_transfer`, `duhamel`, `isForced_duhamel`, `duhamel_apply`, `exists_isForced`, `isForced_cos_of_sq_ne`, `steadyState_zero_damping`, `IsForced.apply_eq_of_sq_ne`, `isForced_resonance`, `IsForced.eq_resonance_of_rest`, `IsForced.exists_abs_gt_of_resonance` |
 | [Oscillations/NormalModes](../ProjectAInos/Mechanics/Oscillations/NormalModes.lean) | `exists_orthogonal_diagonalization`, `exists_transpose_mul_mul_eq_one`, `exists_simultaneous_diagonalization`, `mul_eq_mul_mul_diagonal`, `det_sub_smul_eq_zero_iff`, `lam_pos`, `IsSmallOscillation`, `normalCoordinates`, `map_mulVec_normalCoordinates`, `isSmallOscillation_iff`, `IsSmallOscillation.isHarmonic_normalCoordinates`, `isSmallOscillation_map_mulVec`, `IsSmallOscillation.apply_eq` |
 | [Oscillations/Parametric](../ProjectAInos/Mechanics/Oscillations/Parametric.lean) | `mul_self_eq`, `sin_smul_pow_succ`, `exists_abs_pow_apply_le`, `IsHill`, `wronskian`, `IsHill.wronskian_eq`, `TimeFunction.shift`, `IsHill.shift`, `state`, `FundamentalSystem`, `FundamentalSystem.eq_combination`, `FundamentalSystem.matrix`, `FundamentalSystem.det_matrix`, `FundamentalSystem.state_eq`, `FundamentalSystem.matrix_add_nat_mul_period`, `FundamentalSystem.exists_abs_apply_le`, `FundamentalSystem.exists_abs_apply_le_of_abs_trace_lt`, `FundamentalSystem.harmonic` |
+| [Legendre](../ProjectAInos/Mechanics/Legendre.lean) | `positionsToJet`, `positionsToPhase`, `d_zero_positionsToJet`, `orderLE_positionsToJet`, `legendre`, `legendre_p_eq_momentum`, `legendre_hamiltonian`, `isTrajectory_natural_iff`, `isSolution_natural_iff`, `isTrajectory_natural_iff_isSolution` |
+| [Poisson/CompleteIntegral](../ProjectAInos/Mechanics/Poisson/CompleteIntegral.lean) | `ActionSpace`, `substitution`, `IsHamiltonJacobi`, `along`, `momentum`, `timeDerivative_along`, `partialDerivation_substitution_q`, `isTrajectory_of_isHamiltonJacobi`, `freeAction`, `isHamiltonJacobi_freeAction`, `isTrajectory_freeAction` |
+| [Poisson/Liouville](../ProjectAInos/Mechanics/Poisson/Liouville.lean) | `divergence`, `divergence_eq`, `divergence_hamiltonian`, `divergence_dissipativeField`, `Oscillator.divergence_dissipativeField` |
 | [Examples](../ProjectAInos/Mechanics/Examples.lean) | Newton equation, stationary uniform free motion, rejection of accelerated free motion, endpoint-vanishing polynomial variation and its endpoint derivative, zero-length interval and zero-coordinate system |
 
 For `L = m v²/2 − V(q)`, `stationary_natural_iff` proves `m q'' = −V'(q)` on `(a,b)`. This algebraic equation remains valid at `m = 0`; dividing by the mass would require a separate nonzero premise.

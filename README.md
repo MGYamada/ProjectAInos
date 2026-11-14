@@ -216,9 +216,11 @@ Forced oscillations under friction are proved with the approach to the steady
 state and the exact resonance curve, and without friction with Duhamel's
 formula and the energy transfer. Normal modes and the stability criterion of
 parametric resonance are proved. Integrals of the motion are constant along
-trajectories of a Hamiltonian on a free C∞-ring. Symplectic structures,
-the Legendre transformation, Dirac brackets and canonical transformations are
-not implemented. Galilean symmetry as a group action and the topics of 2.1 and
+trajectories of a Hamiltonian on a free C∞-ring. The Legendre correspondence
+for natural Lagrangians, Jacobi's theorem on complete integrals and Liouville's
+theorem in infinitesimal form are proved. Symplectic structures, the Legendre
+transformation of a general Lagrangian, Dirac brackets and canonical
+transformations with generating functions are not implemented. Galilean symmetry as a group action and the topics of 2.1 and
 2.4 have no Lean counterpart yet. The
 [ledger](docs/cinfty-mechanics.md#ledger) gives the status of each section of
 Landau–Lifshitz, and [#78](https://github.com/MGYamada/ProjectAInos/issues/78) tracks completion. See the

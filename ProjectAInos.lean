@@ -93,6 +93,7 @@ public import ProjectAInos.Mechanics.Jet.Noether
 public import ProjectAInos.Mechanics.Jet.Polar
 public import ProjectAInos.Mechanics.Jet.Prolongation
 public import ProjectAInos.Mechanics.Jet.Standard
+public import ProjectAInos.Mechanics.Legendre
 public import ProjectAInos.Mechanics.OpenDomain
 public import ProjectAInos.Mechanics.Oscillations.Damped
 public import ProjectAInos.Mechanics.Oscillations.Dissipation
@@ -104,12 +105,14 @@ public import ProjectAInos.Mechanics.Oscillations.NormalModes
 public import ProjectAInos.Mechanics.Oscillations.Oscillator
 public import ProjectAInos.Mechanics.Oscillations.Parametric
 public import ProjectAInos.Mechanics.Poisson.AngularMomentum
+public import ProjectAInos.Mechanics.Poisson.CompleteIntegral
 public import ProjectAInos.Mechanics.Poisson.Epsilon
 public import ProjectAInos.Mechanics.Poisson.Galilei
 public import ProjectAInos.Mechanics.Poisson.HeavyTop
 public import ProjectAInos.Mechanics.Poisson.Kepler
 public import ProjectAInos.Mechanics.Poisson.KeplerModel
 public import ProjectAInos.Mechanics.Poisson.KeplerMotion
+public import ProjectAInos.Mechanics.Poisson.Liouville
 public import ProjectAInos.Mechanics.Poisson.RigidBody
 public import ProjectAInos.Mechanics.Poisson.RigidBodyMotion
 public import ProjectAInos.Mechanics.Poisson.RotatingFrame
@@ -136,6 +139,7 @@ public import ProjectAInos.SmoothAlgebra.Derivation
 public import ProjectAInos.SmoothAlgebra.Differential
 public import ProjectAInos.SmoothAlgebra.DualNumber
 public import ProjectAInos.SmoothAlgebra.Free
+public import ProjectAInos.SmoothAlgebra.FreeChainRule
 public import ProjectAInos.SmoothAlgebra.FreeDerivation
 public import ProjectAInos.SmoothAlgebra.GeneralLocalization
 public import ProjectAInos.SmoothAlgebra.Hom
