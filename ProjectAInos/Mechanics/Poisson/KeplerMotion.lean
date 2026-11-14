@@ -15,11 +15,14 @@ import Mathlib.Tactic.Ring
 
 A Kepler motion consists of smooth functions of time `Q`, `P` and `R` with
 `R² |Q|² = 1`, `Q̇ = P / m` and `Ṗ = −α R³ Q`: Newton's equations for the
-inverse-square force, with `R` the inverse distance. Such a motion is a
-trajectory of the Kepler Hamiltonian in the phase space with `ρ` adjoined, and
-it lies on the locus of the constraint. Hence the Runge–Lenz vector, the angular
+inverse-square force, with `R` the inverse signed radius. The constraint
+allows both `R = ±1 / |Q|`: `r = R |Q|²` satisfies `|r| = |Q|`, and equals
+the ordinary distance when `R > 0`. Changing the sign of `R` reverses the
+force for fixed `α`. Such a motion is a trajectory of the Kepler Hamiltonian
+in the phase space with `ρ` adjoined, and it lies on the locus of the constraint.
+Hence the Runge–Lenz vector, the angular
 momentum and the energy, computed from `Q`, `P` and `R`, take the same value at
-all times, and the orbit identity `A · Q = |M|² − m α r` holds at every time
+all times, and the orbit identity `A · Q = |M|² − m α r` uses this signed radius
 (Landau–Lifshitz §15). The uniform circular motion of unit radius is a Kepler
 motion.
 -/
@@ -33,7 +36,7 @@ namespace ProjectAInos.Mechanics.KeplerModel
 open SmoothAlgebra SmoothRing FreeSmoothRing Matrix
 
 /-- The curve in the Kepler phase space with positions `Q`, momenta `Pm` and
-inverse distance `R`. -/
+formal inverse-radius coordinate `R`. -/
 def curve (Q Pm : Fin 3 → TimeFunction) (R : TimeFunction) : Index → TimeFunction
   | none => R
   | some (Sum.inl i) => Q i
@@ -51,7 +54,8 @@ def curve (Q Pm : Fin 3 → TimeFunction) (R : TimeFunction) : Index → TimeFun
     FreeSmoothRing.lift (curve Q Pm R) ρ = R :=
   lift_generator _ _
 
-/-- A Kepler motion: `R² |Q|² = 1`, `Q̇ = P / m` and `Ṗ = −α R³ Q`. -/
+/-- A Kepler motion: `R² |Q|² = 1`, `Q̇ = P / m` and `Ṗ = −α R³ Q`.
+Both signs of `R` are allowed; `R` is the inverse signed radius. -/
 structure IsKeplerMotion (m α : ℝ) (Q Pm : Fin 3 → TimeFunction) (R : TimeFunction) :
     Prop where
   constraint : R * R * (Q ⬝ᵥ Q) = 1
@@ -62,7 +66,7 @@ namespace IsKeplerMotion
 
 variable {m α : ℝ} {Q Pm : Fin 3 → TimeFunction} {R : TimeFunction}
 
-/-- The inverse distance evolves by `Ṙ = −R³ (Q · P) / m`. This follows from the
+/-- The inverse signed radius evolves by `Ṙ = −R³ (Q · P) / m`. This follows from the
 constraint and the equation for `Q`. -/
 theorem timeDerivative_R (h : IsKeplerMotion m α Q Pm R) :
     timeDerivative R = -(algebraMap ℝ TimeFunction m⁻¹ * (R * R * R) * (Q ⬝ᵥ Pm)) := by
@@ -80,11 +84,12 @@ theorem timeDerivative_R (h : IsKeplerMotion m α Q Pm R) :
     (-(algebraMap ℝ TimeFunction m⁻¹ * (R * R * R) * (Q 0 * Pm 0 + Q 1 * Pm 1 + Q 2 * Pm 2) +
       R * R * (Q 0 * Q 0 + Q 1 * Q 1 + Q 2 * Q 2) * timeDerivative R)) * half
 
-/-- Along a Kepler motion `r = ρ |q|²` is the inverse of `ρ`. -/
+/-- Along a Kepler motion the signed radius `r = R |Q|²` is the inverse of `R`. -/
 theorem R_mul_distance (h : IsKeplerMotion m α Q Pm R) : R * Kepler.distance Q R = 1 := by
   rw [Kepler.ρ_mul_distance, Kepler.constraint, h.constraint, sub_self, add_zero]
 
-/-- Along a Kepler motion `r² = |Q|²`: `r` is the distance. -/
+/-- Along a Kepler motion `r² = |Q|²`, where `r = R |Q|²` is the signed radius.
+Pointwise, `|r|` is the ordinary distance; `r` itself equals it when `R > 0`. -/
 theorem distance_mul_distance (h : IsKeplerMotion m α Q Pm R) :
     Kepler.distance Q R * Kepler.distance Q R = Q ⬝ᵥ Q := by
   rw [Kepler.distance_mul_distance, Kepler.constraint, h.constraint, sub_self, mul_zero,

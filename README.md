@@ -201,9 +201,11 @@ and Maupertuis–Jacobi statements, the canonical bracket with Hamilton's
 equations, the rigid body with Euler's equations, the angular momentum of a
 particle with its momentum map, the heavy top, the Galilei algebra of a free
 particle, the virial identity, and the equations of motion in a uniformly
-rotating frame. Kepler's problem is treated with the inverse distance as a
+rotating frame. Kepler's problem is treated with a formal inverse radius as a
 generator: the Runge–Lenz identities are proved, and the Runge–Lenz vector is
-constant along smooth solutions of the inverse-square law. The kinematics of a
+constant along smooth solutions of the inverse-square law. The constraint
+allows both signs: `r = ρ |q|²` is a signed radius, with `|r| = |q|`;
+`r` is the ordinary distance on the branch `ρ > 0`. The kinematics of a
 rigid body is proved by linear algebra:
 `so(3) ≅ ℝ³`, the angular velocity, the inertia tensor of point masses with
 its principal moments, Eulerian angles, the regular precession of the symmetric
