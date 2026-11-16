@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 module
 
-import ProjectAInos.SmoothGeometry.GluingExample
+import ProjectAInos.SmoothGeometry.GluingExampleIso
 import ProjectAInos.SmoothGeometry.DifferentialForm.NativeCoordinates
 import ProjectAInos.SmoothGeometry.DifferentialForm.NativeGluing
 import ProjectAInos.SmoothGeometry.DifferentialForm.NativeExteriorExamples
@@ -64,7 +64,182 @@ example : IsLimit
       ((overlapToPiece_comp false).trans (overlapToPiece_comp true).symm)) :=
   overlapIsPullback
 
+example : overlapToPiece false ≫ datum.ι false = overlapToPiece true ≫ datum.ι true :=
+  overlapToPiece_ι
+
+example (i : Bool) (w : overlap) :
+    ((overlapToPiece i).toSmoothLRSHom.base w).val = w.val := overlapToPiece_val i w
+
+example (i : datum.J) (y : datum.U i) :
+    toLine.toSmoothLRSHom.base ((datum.ι i).toSmoothLRSHom.base y) = y.val :=
+  toLine_ι_apply i y
+
+example (i j : Bool) (y : piece i) (z : piece j) (h : y.val = z.val) :
+    (datum.ι i).toSmoothLRSHom.base y = (datum.ι j).toSmoothLRSHom.base z :=
+  ι_eq_of_val_eq i j y z h
+
+example : Function.Injective toLine.toSmoothLRSHom.base := toLine_injective
+
+example : Function.Bijective toLine.toSmoothLRSHom.base := toLine_bijective
+
+example : Scheme.IsOpenImmersion toLine := inferInstance
+
+example : IsIso toLine := inferInstance
+
+example : datum.glued ≅ line := gluedIsoLine
+
+example : gluedIsoLine.hom = toLine := gluedIsoLine_hom
+
+example : gluedIsoLine.inv = fromLine := gluedIsoLine_inv
+
+example : toLine ≫ fromLine = 𝟙 datum.glued := toLine_fromLine
+
+example : fromLine ≫ toLine = 𝟙 line := fromLine_toLine
+
+example (i : datum.J) : pieceInclusion i ≫ fromLine = datum.ι i := pieceInclusion_fromLine i
+
+example (x : datum.glued) : IsIso (toLine.toSmoothLRSHom.toLRSHom.stalkMap x) :=
+  toLine_stalkMap_isIso x
+
+example {X : Scheme} {f g : line ⟶ X}
+    (h : ∀ i : datum.J, pieceInclusion i ≫ f = pieceInclusion i ≫ g) : f = g :=
+  line_hom_ext h
+
 end ConcreteGluing
+
+section CoordinateSection
+
+open GluingExample ProjectAInos.SmoothAlgebra
+
+example {X Y Z : Scheme.{u}} (f : X ⟶ Y) (g : Y ⟶ Z) (s : Z.sections ⊤) :
+    Scheme.Γ.map (f ≫ g).op s = Scheme.Γ.map f.op (Scheme.Γ.map g.op s) :=
+  Scheme.Γ_map_comp_apply f g s
+
+example {X Y : Scheme.{u}} {f g : X ⟶ Y} (h : f = g) (s : Y.sections ⊤) :
+    Scheme.Γ.map f.op s = Scheme.Γ.map g.op s := Scheme.Γ_map_congr h s
+
+example {U : Opens (Fin 1 → ℝ)} {s t : line.sections U}
+    (h : ∀ (x : Fin 1 → ℝ) (hx : x ∈ U), sectionEval s x hx = sectionEval t x hx) : s = t :=
+  sectionEval_ext h
+
+example {U : Opens (Fin 1 → ℝ)} {n : ℕ} (g : SmoothOperation n)
+    (a : Fin n → line.sections U) (x : Fin 1 → ℝ) (hx : x ∈ U) :
+    sectionEval (SmoothRing.op g a) x hx = g fun k => sectionEval (a k) x hx :=
+  sectionEval_op g a x hx
+
+example (x : Fin 1 → ℝ) : sectionEval coordinate x trivial = x 0 := sectionEval_coordinate x
+
+example :
+    sectionEval coordinate (fun _ => 0) trivial ≠ sectionEval coordinate (fun _ => 1) trivial :=
+  coordinate_nonconstant
+
+example (i : Bool) (s : line.sections ⊤) (y : piece i) :
+    pieceEval i (Scheme.Γ.map (pieceInclusion i).op s) y = sectionEval s y.val trivial :=
+  pieceEval_restrict i s y
+
+example (s : line.sections ⊤) (w : overlap) :
+    overlapEval (Scheme.Γ.map overlapInclusion.op s) w = sectionEval s w.val trivial :=
+  overlapEval_restrict s w
+
+example {s t : line.sections ⊤}
+    (h : ∀ i : Bool, Scheme.Γ.map (pieceInclusion i).op s =
+      Scheme.Γ.map (pieceInclusion i).op t) : s = t :=
+  line_section_ext h
+
+example (i : Bool) (y : piece i) : pieceEval i (pieceCoordinate i) y = y.val 0 :=
+  pieceEval_pieceCoordinate i y
+
+example (i : Bool) :
+    Scheme.Γ.map (overlapToPiece i).op (pieceCoordinate i) =
+      Scheme.Γ.map overlapInclusion.op coordinate :=
+  overlapToPiece_pieceCoordinate i
+
+example :
+    Scheme.Γ.map (overlapToPiece false).op (pieceCoordinate false) =
+      Scheme.Γ.map (overlapToPiece true).op (pieceCoordinate true) :=
+  pieceCoordinate_overlap
+
+example (i : Bool) (w : overlap) :
+    overlapEval (Scheme.Γ.map (overlapToPiece i).op (pieceCoordinate i)) w = w.val 0 :=
+  overlapEval_pieceCoordinate i w
+
+example (i : datum.J) : Scheme.Γ.map (datum.ι i).op gluedCoordinate = pieceCoordinate i :=
+  ι_gluedCoordinate i
+
+example : Scheme.Γ.map fromLine.op gluedCoordinate = coordinate := fromLine_gluedCoordinate
+
+example {s t : datum.glued.sections ⊤}
+    (h : ∀ i : datum.J, Scheme.Γ.map (datum.ι i).op s = Scheme.Γ.map (datum.ι i).op t) :
+    s = t :=
+  glued_section_ext h
+
+example {s : datum.glued.sections ⊤}
+    (h : ∀ i : datum.J, Scheme.Γ.map (datum.ι i).op s = pieceCoordinate i) :
+    s = gluedCoordinate :=
+  gluedCoordinate_unique h
+
+example (g : SmoothOperation 1) (i : Bool) (y : piece i) :
+    pieceEval i (Scheme.Γ.map (datum.ι i).op
+      (SmoothRing.op g fun _ => gluedCoordinate)) y = g fun _ => y.val 0 :=
+  pieceEval_op_gluedCoordinate g i y
+
+end CoordinateSection
+
+section OpenCovers
+
+example {ι : Type*} {X Y : LocallyRingedSpace.{u}} {U : ι → LocallyRingedSpace.{u}}
+    (g : ∀ i, U i ⟶ Y) (h : Y ⟶ X) [∀ i, LocallyRingedSpace.IsOpenImmersion (g i)]
+    [∀ i, LocallyRingedSpace.IsOpenImmersion (g i ≫ h)]
+    (hg : ∀ y : Y, ∃ (i : ι) (z : U i), (g i).base z = y) (y : Y) :
+    IsIso (h.toLRSHom.stalkMap y) :=
+  LocallyRingedSpace.stalkMap_isIso_of_cover g h hg y
+
+example {ι : Type*} {X Y : LocallyRingedSpace.{u}} {U : ι → LocallyRingedSpace.{u}}
+    (g : ∀ i, U i ⟶ Y) (h : Y ⟶ X) [∀ i, LocallyRingedSpace.IsOpenImmersion (g i)]
+    [∀ i, LocallyRingedSpace.IsOpenImmersion (g i ≫ h)]
+    (hg : ∀ y : Y, ∃ (i : ι) (z : U i), (g i).base z = y) : IsOpenMap h.base :=
+  LocallyRingedSpace.isOpenMap_of_cover g h hg
+
+example {ι : Type*} {X Y : LocallyRingedSpace.{u}} {U : ι → LocallyRingedSpace.{u}}
+    (g : ∀ i, U i ⟶ Y) (h : Y ⟶ X) [∀ i, LocallyRingedSpace.IsOpenImmersion (g i)]
+    [∀ i, LocallyRingedSpace.IsOpenImmersion (g i ≫ h)]
+    (hg : ∀ y : Y, ∃ (i : ι) (z : U i), (g i).base z = y)
+    (hinj : Function.Injective h.base) : LocallyRingedSpace.IsOpenImmersion h :=
+  LocallyRingedSpace.isOpenImmersion_of_cover g h hg hinj
+
+example {ι : Type*} {X Y : LocallyRingedSpace.{u}} {U : ι → LocallyRingedSpace.{u}}
+    (g : ∀ i, U i ⟶ Y) (h : Y ⟶ X) [∀ i, LocallyRingedSpace.IsOpenImmersion (g i)]
+    [∀ i, LocallyRingedSpace.IsOpenImmersion (g i ≫ h)]
+    (hg : ∀ y : Y, ∃ (i : ι) (z : U i), (g i).base z = y)
+    (hbij : Function.Bijective h.base) : IsIso h :=
+  LocallyRingedSpace.isIso_of_cover g h hg hbij
+
+example {ι : Type*} {X Y : Scheme.{u}} {U : ι → Scheme.{u}} (g : ∀ i, U i ⟶ Y) (h : Y ⟶ X)
+    [∀ i, Scheme.IsOpenImmersion (g i)] [∀ i, Scheme.IsOpenImmersion (g i ≫ h)]
+    (hg : ∀ y : Y, ∃ (i : ι) (z : U i), (g i).toSmoothLRSHom.base z = y)
+    (hinj : Function.Injective h.toSmoothLRSHom.base) : Scheme.IsOpenImmersion h :=
+  Scheme.isOpenImmersion_of_cover g h hg hinj
+
+example {ι : Type*} {X Y : Scheme.{u}} {U : ι → Scheme.{u}} (g : ∀ i, U i ⟶ Y) (h : Y ⟶ X)
+    [∀ i, Scheme.IsOpenImmersion (g i)] [∀ i, Scheme.IsOpenImmersion (g i ≫ h)]
+    (hg : ∀ y : Y, ∃ (i : ι) (z : U i), (g i).toSmoothLRSHom.base z = y)
+    (hbij : Function.Bijective h.toSmoothLRSHom.base) : IsIso h :=
+  Scheme.isIso_of_cover g h hg hbij
+
+example (D : Scheme.GlueData.{u}) {X : Scheme.{u}} (f : ∀ i, D.U i ⟶ X)
+    (hf : ∀ i j, D.t i j ≫ D.f j i ≫ f j = D.f i j ≫ f i)
+    [∀ i, Scheme.IsOpenImmersion (f i)]
+    (hinj : Function.Injective (D.desc f hf).toSmoothLRSHom.base) :
+    Scheme.IsOpenImmersion (D.desc f hf) :=
+  D.desc_isOpenImmersion f hf hinj
+
+example (D : Scheme.GlueData.{u}) {X : Scheme.{u}} (f : ∀ i, D.U i ⟶ X)
+    (hf : ∀ i j, D.t i j ≫ D.f j i ≫ f j = D.f i j ≫ f i)
+    [∀ i, Scheme.IsOpenImmersion (f i)]
+    (hbij : Function.Bijective (D.desc f hf).toSmoothLRSHom.base) : IsIso (D.desc f hf) :=
+  D.desc_isIso f hf hbij
+
+end OpenCovers
 
 section LocallyRingedGluing
 

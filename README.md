@@ -158,7 +158,9 @@ Implementation order:
 Stages 1–5 are implemented, including the spectrum functor, the category of
 C∞ schemes, affine schemes, global sections, affine spaces, and the empty
 scheme. The [smooth-geometry guide](docs/smooth-geometry.md) maps these
-constructions to mathlib and records the scope of stage 6.
+constructions to mathlib and records the scope of stage 6. Open subschemes
+and gluing are implemented, and the gluing of two overlapping half-lines is
+proved isomorphic to the smooth affine line as a C∞ scheme.
 The algebra layer also has partial derivatives of smooth operations, the
 C∞-ring of dual numbers, and C∞-derivations with their commutator: the first
 algebraic stage of the [mechanics plan](docs/cinfty-mechanics.md), tracked in
@@ -449,7 +451,11 @@ See the [proof development record](docs/proof-development.md) for the history of
 The [scalar smeared-field prototype](docs/quantum-field-theory-prototype.md)
 formalizes a common dense domain, operator closability, and positivity of
 finite vacuum words for the prospective QFT program in
-[#46](https://github.com/MGYamada/ProjectAInos/issues/46).
+[#46](https://github.com/MGYamada/ProjectAInos/issues/46). Its locality
+predicate has causality-sensitive regressions: bump tests with explicit
+spacelike and timelike supports, and a two-point field with noncommuting
+insertions that is local exactly when its two points are not spacelike to
+each other. These are regression models, not Wightman fields.
 The [qubit comparison prototype](docs/quantum-mechanics-prototype.md) is a
 provisional finite-dimensional study for
 [#45](https://github.com/MGYamada/ProjectAInos/issues/45).

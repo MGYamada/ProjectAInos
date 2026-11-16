@@ -156,6 +156,7 @@ public import ProjectAInos.Mechanics.TotalTimeDerivative
 public import ProjectAInos.Mechanics.TurningPoint
 public import ProjectAInos.Mechanics.TwoBody.Collisions
 public import ProjectAInos.Mechanics.TwoBody.Kinematics
+public import ProjectAInos.QuantumFieldTheory.LocalityExamples
 public import ProjectAInos.QuantumFieldTheory.SmearedField
 public import ProjectAInos.QuantumMechanics.Pauli
 public import ProjectAInos.QuantumMechanics.Qubit
@@ -225,6 +226,7 @@ public import ProjectAInos.SmoothGeometry.DifferentialForm.WedgeAlgebra
 public import ProjectAInos.SmoothGeometry.Examples
 public import ProjectAInos.SmoothGeometry.Gluing
 public import ProjectAInos.SmoothGeometry.GluingExample
+public import ProjectAInos.SmoothGeometry.GluingExampleIso
 public import ProjectAInos.SmoothGeometry.Localization
 public import ProjectAInos.SmoothGeometry.LocallyRingedSpace
 public import ProjectAInos.SmoothGeometry.Lorentzian
@@ -338,6 +340,7 @@ public import ProjectAInos.SmoothGeometry.ODE.RadialExamples
 public import ProjectAInos.SmoothGeometry.ODE.RadialReparam
 public import ProjectAInos.SmoothGeometry.ODE.Volterra
 public import ProjectAInos.SmoothGeometry.ODE.VolterraExamples
+public import ProjectAInos.SmoothGeometry.OpenCover
 public import ProjectAInos.SmoothGeometry.OpenImmersion
 public import ProjectAInos.SmoothGeometry.OpenPullback
 public import ProjectAInos.SmoothGeometry.RealSpectrum

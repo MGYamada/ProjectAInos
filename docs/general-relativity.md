@@ -321,8 +321,11 @@ indices and the density formula are proved. The source defined by `dH` is now
 proved equal to this divergence on every oriented physical background. Both
 Maxwell equations are equivalent to the covariant component equations in every
 smooth chart. Stage F’s principal endpoints are implemented and merged into `main`;
-stage G proves the controlled time-dependent Newtonian motion and trajectory limit. Einstein dynamics
-belongs to §5.2 and the Maxwell field action to §4.2 / #44.
+stage G proves the controlled time-dependent Newtonian motion and trajectory limit.
+Einstein dynamics belongs to §5.2 and is not proved here. The flat vacuum
+Maxwell field action is proved in §4.2 / #44 and recorded in the
+[electrodynamics guide](electrodynamics.md#vacuum-field-action-42); a sourced
+or curved field action is not.
 
 ## Newtonian coordinate families and trajectory limits
 
