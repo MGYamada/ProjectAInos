@@ -27,6 +27,7 @@ commit `56a005855ea17e0b0958f73ec801ae140b0a1679`.
 | `AlgebraicGeometry.AffineScheme` | `SmoothGeometry.AffineScheme` | Essential image of C∞ Spec |
 | Open immersions and scheme restriction | `SmoothGeometry.OpenImmersion`, `Restrict` | Principal C∞ localizations give affine open neighbourhoods |
 | `AlgebraicGeometry.Gluing` | `SmoothGeometry.Gluing` | Open gluing data, constructed glued schemes, and their universal property |
+| `Scheme.Cover.fromGlued` | `SmoothGeometry.OpenCover` | A descent of open immersions that is bijective on points is an isomorphism |
 | `Geometry.Manifold.Sheaf` | `SmoothGeometry.Manifold` | Actual smooth-function sheaves and their local-affine comparison |
 
 The topology, presheaves, gluing condition, stalk colimits, and restrictions use
@@ -189,6 +190,54 @@ surjective morphism `toLine`. Its restriction to each canonical inclusion
 recovers the original open inclusion, and its sheaf maps preserve every
 smooth operation. The public API check exercises these constructions on
 the populated datum.
+
+`SmoothGeometry/OpenCover.lean` gives the general criterion. Let `g i : U i ⟶ Y`
+be a jointly surjective family of open immersions and `h : Y ⟶ X` a morphism
+such that every `g i ≫ h` is an open immersion. Then the stalk maps of `h` are
+isomorphisms (`stalkMap_isIso_of_cover`) and `h` is an open map
+(`isOpenMap_of_cover`). If `h` is injective on points it is an open immersion
+(`isOpenImmersion_of_cover`), and if it is bijective on points it is an
+isomorphism (`isIso_of_cover`). The statements hold for smooth locally ringed
+spaces and for C∞ schemes. `Scheme.GlueData.desc_isOpenImmersion` and
+`desc_isIso` are the case of the descent of open immersions out of a gluing.
+Injectivity on points is a hypothesis: it is the statement that the overlaps
+of the gluing datum are the whole intersections of the images.
+
+`SmoothGeometry/GluingExampleIso.lean` proves that hypothesis for the two
+half-lines. `overlapToPiece_ι` extracts from the gluing condition that the two
+inclusions of the overlap agree in the gluing, so two points of the pieces
+over the same point of the line are equal there (`ι_eq_of_val_eq`,
+`toLine_injective`). Hence `toLine` is an open immersion and an isomorphism of
+C∞ schemes. `gluedIsoLine : datum.glued ≅ line` has `toLine` as its morphism
+and `fromLine` as its inverse, with `toLine_fromLine`, `fromLine_toLine` and
+`pieceInclusion_fromLine`. `toLine_stalkMap_isIso` states the isomorphism of
+the local rings, and `line_hom_ext` that a morphism out of the line is
+determined by its restrictions to the two pieces.
+
+The same module follows one section through the gluing. Sections of the line
+and of its open pieces are smooth real functions; `sectionEval`, `pieceEval`
+and `overlapEval` take their values, and `sectionEval_op` computes a smooth
+operation on values. `coordinate` is the function `x ↦ x 0`, which is not
+constant. Its restriction `pieceCoordinate i` has the value `y 0` at a point
+`y` of the piece. The two restrictions agree on the overlap
+(`pieceCoordinate_overlap`), where both have the value of the coordinate
+(`overlapEval_pieceCoordinate`). `gluedCoordinate` is the corresponding global
+section of the gluing: it restricts to `pieceCoordinate i` on each piece
+(`ι_gluedCoordinate`), `fromLine` sends it to `coordinate`
+(`fromLine_gluedCoordinate`), and it is the only global section with these
+restrictions (`gluedCoordinate_unique`, from `glued_section_ext`). A smooth
+operation `g` applied to it has the value `g (y 0)` on each piece
+(`pieceEval_op_gluedCoordinate`).
+
+| Claim | Main declarations | Source |
+| --- | --- | --- |
+| Open immersion and isomorphism on a cover | `LocallyRingedSpace.isOpenImmersion_of_cover`, `isIso_of_cover`, `Scheme.isIso_of_cover` | [OpenCover](../ProjectAInos/SmoothGeometry/OpenCover.lean) |
+| Descent of open immersions | `Scheme.GlueData.desc_isOpenImmersion`, `desc_isIso` | [OpenCover](../ProjectAInos/SmoothGeometry/OpenCover.lean) |
+| The gluing is the line | `toLine_bijective`, `toLine_isIso`, `gluedIsoLine`, `fromLine` | [GluingExampleIso](../ProjectAInos/SmoothGeometry/GluingExampleIso.lean) |
+| Coordinate section | `pieceCoordinate_overlap`, `ι_gluedCoordinate`, `gluedCoordinate_unique` | [GluingExampleIso](../ProjectAInos/SmoothGeometry/GluingExampleIso.lean) |
+
+The comparison is for this model. A Γ–Spec equivalence and the gluing of
+morphisms of arbitrary schemes along an open cover are not used and not proved.
 
 ## GR 5.1: metric duality and the first chart regression
 

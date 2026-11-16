@@ -103,6 +103,31 @@ locally ringed space and scheme constructions prove `gluedIsColimit` for
 the actual gluing diagram. The cocycle data are inputs; existence of a
 glued scheme is a theorem of the construction.
 
+## Recovering a scheme from a gluing needs injectivity on points
+
+**Observation.** The universal property of `GlueData.glued` gives the descent
+morphism to any scheme that receives the pieces compatibly, and joint
+surjectivity of the pieces gives surjectivity on points. It does not give
+injectivity: the overlaps `V (i, j)` of a gluing datum may be smaller than the
+intersections of the images, and then two points over the same point of the
+target stay distinct in the gluing. For the two half-lines, injectivity is the
+statement that the overlap of the datum is the whole interval `-1 < x < 1`.
+`CategoryTheory.GlueData.ofGlueData'` chooses its overlaps by a classical case
+distinction on `i = j`, so `datum.V (false, true)` is equal to `overlap`
+propositionally and not by definition; the gluing condition has to be read
+through `eqToHom` (`overlapToPiece_ι`).
+
+**Interface decision.** `OpenCover` states the criterion with injectivity or
+bijectivity on points as a hypothesis, for an arbitrary jointly surjective
+family of open immersions, and `GlueData.desc_isIso` specializes it. The new
+modules use no `set_option backward.*`; the modules they import still do.
+
+**Proof status.** `toLine` is proved to be an isomorphism of C∞ schemes, with
+the coordinate function followed through the gluing as a section. Gluing of
+morphisms out of an arbitrary scheme along an open cover, mathlib's
+`Scheme.Cover.glueMorphisms`, is not proved; for the line it follows from the
+isomorphism (`line_hom_ext` gives uniqueness).
+
 ## Lorentz metrics and the common geometric base
 
 The smooth structure of a spacetime is independent of its Lorentz metric.

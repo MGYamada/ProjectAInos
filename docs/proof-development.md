@@ -53,6 +53,8 @@ The geometry follows mathlib's progression from ringed spaces through `Spec` to 
 
 Free C∞-rings on arbitrary sets give general localizations with their smooth universal property. Their spectra are identified with the surviving-point subspaces; principal localizations give open immersions. These supply open subschemes and pullbacks along open immersions. Open gluing data construct actual C∞ schemes, with descent and uniqueness of compatible morphisms proved as a categorical colimit. The manifold comparison identifies the Euclidean smooth-function sheaf with its affine spectrum, then proves local affineness for boundaryless finite-dimensional smooth manifolds using coordinate charts. Smooth maps induce scheme morphisms with identity and composition laws.
 
+`SmoothGeometry/OpenCover` proves that a morphism which is an open immersion on each member of a jointly surjective family of open immersions has isomorphisms on stalks and is an open map; it is an open immersion when it is injective on points and an isomorphism when it is bijective on points. `Scheme.GlueData.desc_isIso` is the case of a descent morphism. `GluingExampleIso` applies it to the two half-lines `x < 1` and `-1 < x`: the descent morphism `toLine` is an isomorphism of C∞ schemes, `gluedIsoLine : datum.glued ≅ line`, with inverse `fromLine` and both inverse identities. The coordinate function is followed through the gluing as a section: its restrictions to the pieces take the value of the coordinate, they agree on the overlap, and `gluedCoordinate` is the only global section of the gluing that restricts to them ([issue #71](https://github.com/MGYamada/ProjectAInos/issues/71)). [Smooth-geometry guide](smooth-geometry.md#a-two-piece-gluing-of-the-smooth-affine-line)
+
 The algebra layer also differentiates. Partial derivatives of smooth operations are again operations, with the chain rule as an identity between operations and commuting second partial derivatives. Dual numbers `A[ε]` over any C∞-ring carry the smooth operations whose infinitesimal part is the first-order Taylor term. C∞-derivations have the chain rule as their only law; the Leibniz rule and real linearity follow. Vector fields form a Lie ring under the commutator and correspond to the morphisms `A → A[ε]` lifting the identity, and derivations of `C∞(ℝⁿ)` correspond to tuples of values on the coordinates. This is the first algebraic stage of the mechanics plan ([issue #74](https://github.com/MGYamada/ProjectAInos/issues/74)). [Smooth-algebra guide](smooth-algebra.md#partial-derivatives-dual-numbers-and-derivations)
 
 `LorentzMetric` equips the actual tangent bundle with a smooth bilinear form of Lorentz signature, without requiring a global frame. `LorentzManifold.toScheme` uses the same manifold construction for every such metric. Minkowski space is an instance with constant coefficients, a proved affine scheme comparison, and proved local inertial coordinates. The [smooth-geometry guide](smooth-geometry.md) and [formalization notes](smooth-geometry-notes.md) record these constructions and their scope. The Γ–Spec adjunction, full faithfulness of the manifold construction and universal cotangent modules are subsequent stages; connection and curvature progress is recorded below.
@@ -122,8 +124,8 @@ nonlinear two-chart example now has Lean proofs of all eight connection
 coefficients (`Γˣ_tt = 2` is the only nonzero one), the actual transition's
 Hessian, and the corresponding connection transformation identity. Typed
 examples fix the finite-regularity and coordinate contracts. Exact SymPy
-checks also cover the conformal metric's coefficients; that curved example
-still needs Lean proofs.
+checks also cover the conformal metric's coefficients; the Lean proofs for
+that curved example are in the stage C paragraph below.
 
 Koszul and Levi-Civita naturality hold under
 smooth metric-preserving maps, without global bijectivity. The native
@@ -350,7 +352,8 @@ without restricting variations to any causal class.
 
 This is a model-manifold variational endpoint, with an arbitrary curved metric;
 the native manifold equivalences proved below now remove that restriction.
-Those variation gluing arguments remain in E. F–G are subsequent work.
+Those variation gluing arguments are part of stage E. Stages F and G are
+recorded in the sections below.
 The [GR guide](general-relativity.md) records the hypotheses. New typed GR
 contracts run under default elaborator settings in the required Lean job;
 the audit includes the namespace. Exact SymPy checks independently test the
@@ -681,3 +684,9 @@ tube, where clipping is the identity. The resulting trajectories converge
 uniformly, with a rate from the two terms of the Gronwall bound including
 the zero-Lipschitz case. The polynomial example applies the result on
 `[0,1]` to a time-dependent potential with mixed and spatial corrections.
+
+## Quantum Field Theory Prototype
+
+`QuantumFieldTheory/SmearedField` defines a Hermitian scalar smeared field on a common dense invariant domain, proves closability of its operators, and proves positivity of finite sums of vacuum words. It is an initial part of Gate A of [issue #46](https://github.com/MGYamada/ProjectAInos/issues/46).
+
+`QuantumFieldTheory/LocalityExamples` adds causality-sensitive regressions for the locality predicate ([issue #72](https://github.com/MGYamada/ProjectAInos/issues/72)). Bump tests whose closed supports are closed coordinate balls give explicit witnesses in the time-first `(-+++)` convention: unit bumps displaced along a spatial axis are spacelike separated, and unit bumps displaced along the time axis have only timelike differences. `SpacelikeSeparated` is proved symmetric and invariant under conjugation of either test. The two-point field `φ(f) = f(p) A + f(q) B` with symmetric noncommuting `A` and `B` is local exactly when `p − q` is not spacelike, and the proof of locality uses the separation hypothesis. Its Pauli instance is local for timelike insertion points while having the explicit commutator `2 e₁` on timelike separated tests, and fails locality for spacelike insertion points. These are regression models for the locality predicate: no vacuum, covariance, spectrum condition or multipoint distribution is assumed, and they are not Wightman fields. [QFT prototype guide](quantum-field-theory-prototype.md)
