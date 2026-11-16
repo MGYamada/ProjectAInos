@@ -996,10 +996,9 @@ along the orbit and the cross-section as a measure are not defined.
 `Oscillations/PhaseVolume`: the flow matrix of the oscillator has determinant
 one, so it preserves the Lebesgue measure of the phase plane
 (`Oscillator.map_flowMatrix_volume`, `Oscillator.measurePreserving_flowMatrix`).
-This is Liouville's theorem (Landau–Lifshitz §46) for a linear flow. For a
-given flow of a field of divergence zero the theorem is proved in the
-[geometry guide](smooth-geometry.md); the flow of a general Hamiltonian is not
-constructed.
+This is Liouville's theorem (Landau–Lifshitz §46) for a linear flow in the
+plane. The theorem for the flow of every Hamiltonian of the free C∞-ring is in
+[Hamiltonian flows](#hamiltonian-flows-and-liouvilles-theorem).
 
 ## Canonical formalism
 
@@ -1184,13 +1183,50 @@ Hamiltonian vector field of the canonical bracket has zero divergence, the
 infinitesimal form of Liouville's theorem (Landau–Lifshitz §46).
 `divergence_dissipativeField`: with friction the divergence is
 `−Σᵢ ∂fᵢ/∂pᵢ`, and for the oscillator with the friction coefficients `aᵢ` it
-is the constant `−Σᵢ aᵢ/mᵢ` (`Oscillator.divergence_dissipativeField`). The
-invariance of the Lebesgue measure is proved for a given flow of a field of
-trace zero on a finite-dimensional space
-(`SmoothGeometry.NonlinearODE.IsLocalFlowOn.measure_image`, see the
-[geometry guide](smooth-geometry.md)). The flow of a Hamiltonian field is not
-constructed, and the divergence of this section is not yet identified with
-the trace of the derivative of a field on `ℝ²ⁿ`.
+is the constant `−Σᵢ aᵢ/mᵢ` (`Oscillator.divergence_dissipativeField`).
+
+### Hamiltonian flows and Liouville's theorem
+
+`Poisson/HamiltonianField` connects these algebraic statements with the flow
+of a vector field on `ℝ²ⁿ`, which the [geometry guide](smooth-geometry.md)
+constructs.
+
+- `realCurve c t` is the point `(cₐ(t))ₐ` of a family of smooth functions of
+  time. `isIntegralCurve_iff_hasDerivAt` and `isTrajectory_iff_hasDerivAt`: the
+  family is an integral curve of a derivation `D`, or a trajectory of a
+  Hamiltonian, if and only if the real curve solves `ż = X(z)` for the field
+  `X = FreeSmoothRing.realField D`.
+- `traceCLM_fderiv_realField`: the trace of `DX(z)` is the value at `z` of the
+  divergence `Σₐ ∂ₐ (D xₐ)`.
+- `hamiltonianField H` is the field `(∂H/∂p, −∂H/∂q)` of the canonical bracket
+  (`hamiltonianField_inl`, `hamiltonianField_inr`). It is smooth, and its
+  divergence is zero (`traceCLM_fderiv_hamiltonianField`).
+- `volume_image_hamiltonianFlow`: Liouville's theorem. For a measurable set
+  `A` of the phase space whose points have the time `t` in the domain of the
+  flow, the image of `A` under the flow of the time `t` has the Lebesgue
+  measure of `A`. `measurePreserving_hamiltonianFlow`: a flow defined for all
+  times and points is measure preserving.
+- `IsTrajectory.flow_eq`: a trajectory is a line of the flow, so the flow is
+  defined for all times at its points. `exists_isTrajectory`: if the flow is
+  defined for all times and points, there is a trajectory through every point.
+
+`Poisson/LiouvilleFlow` gives flows that are defined for all times.
+
+- `Oscillator.flowDomain_hamiltonianField`,
+  `Oscillator.measurePreserving_hamiltonianFlow`: the oscillator with any
+  number of co-ordinates.
+- `Pendulum.hamiltonian m k` is `Σ pᵢ²/2mᵢ − k Σ cos qᵢ`. Its field
+  `(pᵢ/mᵢ, −k sin qᵢ)` is not linear and has linear growth, so the flow is
+  defined for all times and points (`Pendulum.flowDomain_hamiltonianField`),
+  it preserves the measure (`Pendulum.measurePreserving_hamiltonianFlow`), and
+  there is a motion through every point (`Pendulum.exists_isTrajectory`).
+- `Oscillator.volume_image_dissipativeFlow`: with the friction coefficients
+  `aᵢ` the flow multiplies the Lebesgue measure of every measurable set by
+  `exp (−Σᵢ aᵢ/mᵢ · t)`.
+
+The Hamiltonian is an element of the free C∞-ring, smooth on all of `ℝ²ⁿ`,
+and does not depend on the time. The symplectic form is not shown to be
+preserved by the flow.
 
 ## Reduction and the Routhian
 
@@ -1488,6 +1524,8 @@ semi-major axis is not computed.
 | [Rutherford](../ProjectAInos/Mechanics/Rutherford.lean) | `eccentricity_sq_sub_one`, `cot_half_eq`, `hasDerivAt_impactParameter`, `rutherford` |
 | [Oscillations/PhaseVolume](../ProjectAInos/Mechanics/Oscillations/PhaseVolume.lean) | `Oscillator.map_flowMatrix_volume`, `Oscillator.measurePreserving_flowMatrix` |
 | [Poisson/Liouville](../ProjectAInos/Mechanics/Poisson/Liouville.lean) | `divergence`, `divergence_eq`, `divergence_hamiltonian`, `divergence_dissipativeField`, `Oscillator.divergence_dissipativeField` |
+| [Poisson/HamiltonianField](../ProjectAInos/Mechanics/Poisson/HamiltonianField.lean) | `realCurve`, `lift_apply_const`, `isIntegralCurve_iff_hasDerivAt`, `isTrajectory_iff_hasDerivAt`, `traceCLM_fderiv_realField`, `hamiltonianField`, `contDiff_hamiltonianField`, `isTrajectory_canonical_iff_hasDerivAt`, `traceCLM_fderiv_hamiltonianField`, `volume_image_hamiltonianFlow`, `measurePreserving_hamiltonianFlow`, `IsTrajectory.flow_eq`, `exists_isTrajectory` |
+| [Poisson/LiouvilleFlow](../ProjectAInos/Mechanics/Poisson/LiouvilleFlow.lean) | `Oscillator.flowDomain_hamiltonianField`, `Oscillator.measurePreserving_hamiltonianFlow`, `Pendulum.hamiltonian`, `Pendulum.flowDomain_hamiltonianField`, `Pendulum.measurePreserving_hamiltonianFlow`, `Pendulum.exists_isTrajectory`, `Oscillator.flowDomain_dissipativeField`, `Oscillator.volume_image_dissipativeFlow` |
 | [Poisson/CyclicReduction](../ProjectAInos/Mechanics/Poisson/CyclicReduction.lean) | `momentumEquation`, `momentumIdeal`, `inclusion`, `restriction`, `restriction_inclusion`, `bracket_momentumEquation`, `mem_normalizer_iff`, `isCoisotropic_momentumIdeal`, `inclusion_mem_normalizer`, `isPoissonHom_inclusion`, `sub_fixMomenta_mem`, `partialDerivation_fixMomenta`, `sub_inclusion_restriction_mem`, `reductionHom`, `reductionHom_bijective`, `isPoissonHom_reductionHom`, `reductionHom_restriction`, `mem_normalizer_of_cyclic`, `isIntegral_p_of_cyclic`, `p_eq_algebraMap_of_cyclic`, `isTrajectory_restriction`, `map_mem_normalizer`, `apply_mem_normalizer`, `canonicalReductionHom`, `canonicalReductionHom_bijective`, `isPoissonHom_canonicalReductionHom`, `canonicalReductionHom_restriction` |
 | [Poisson/ReducedMass](../ProjectAInos/Mechanics/Poisson/ReducedMass.lean) | `CentreSpace`, `centreCoordinates`, `particleCoordinates`, `centreCoordinates_particleCoordinates`, `particleCoordinates_centreCoordinates`, `isPoissonHom_centreCoordinates`, `totalMomentumIdeal`, `reducedMassHom`, `reducedMassHom_bijective`, `isPoissonHom_reducedMassHom`, `hamiltonian`, `relativeHamiltonian`, `particleCoordinates_hamiltonian`, `restriction_particleCoordinates_hamiltonian`, `hamiltonian_mem_normalizer`, `reducedMassHom_relativeHamiltonian`, `isIntegral_totalMomentum`, `isTrajectory_relative` |
 | [Routhian](../ProjectAInos/Mechanics/Routhian.lean) | `RouthSpace`, `Routhian.partialLegendre`, `partialEnergy`, `partialHessian`, `apply_partialLegendre`, `IsPartiallyHyperregular`, `routhian`, `IsPartiallyHyperregular.inversePartialHessian_mul_partialHessian`, `IsPartiallyHyperregular.partialLegendre_partialDerivation_p_routhian`, `IsPartiallyHyperregular.partialLegendre_partialDerivation_q_routhian`, `IsPartiallyHyperregular.partialLegendre_partialDerivation_v_routhian`, `IsPartiallyHyperregular.partialDerivation_q_routhian_eq_zero`, `routhCurve`, `lift_routhCurve`, `IsRouthTrajectory`, `IsPartiallyHyperregular.isRouthTrajectory_routhCurve_iff`, `IsPartiallyHyperregular.eq_routhCurve`, `restriction`, `reducedRouthian`, `IsRouthTrajectory.p_eq_algebraMap`, `IsRouthTrajectory.isSolution_reducedRouthian`, `naturalInverse`, `isPartiallyHyperregular_natural` |

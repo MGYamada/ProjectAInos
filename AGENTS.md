@@ -66,9 +66,12 @@
   hypotheses are identities in a free C∞-ring. Such a hypothesis holds for
   all real values of the generators, so it can be unsatisfiable while the
   statement type-checks.
-- State a dynamical theorem for a given curve or solution. The pinned Mathlib
-  has no flow of a vector field with smooth dependence on the initial
-  condition. Existence is an explicit solution, or data.
+- The flow of a vector field that is smooth on all of a Banach space is
+  `SmoothGeometry.NonlinearODE.flow`, with the open domain `flowDomain` and
+  smooth dependence on the time and the point; the pinned Mathlib has none.
+  A solution exists for all times only when `flowDomain X = univ` is proved.
+  For a field that is smooth only on an open set, state the theorem for a
+  given curve or solution: existence is then an explicit solution, or data.
 - A free C∞-ring is the ring of smooth functions on all of `ℝⁿ`. For another
   domain use a global chart of the positions, with which the conjugate
   momenta change; an adjoined inverse whose relation is kept as an element;
