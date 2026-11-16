@@ -239,11 +239,18 @@ field is proved in polar co-ordinates: the radial Hamiltonian with the
 centrifugal energy, and the time and the angle as integrals over the radius.
 The integrals up to simple turning points are proved as Lebesgue integrals:
 the time between two turning points, the motion between two apsides, and the
-period `2π a^{3/2} √(m/α)` of Kepler's problem. Symplectic forms and
+period `2π a^{3/2} √(m/α)` of Kepler's problem. A linear differential
+equation with a continuous coefficient has a propagator for all real times,
+with no bound on the coefficient, so the equation `ẍ + p(t) x = 0` has a
+unique solution for given initial data and every smooth `p`; for a periodic
+`p` all solutions are bounded exactly when the trace of the monodromy matrix
+has absolute value less than two or the matrix is `±1`. Symplectic forms and
 Dirac brackets are not implemented. Galilean symmetry as a group action and the topics of 2.1 and
 2.4 have no Lean counterpart yet. The
 [ledger](docs/cinfty-mechanics.md#ledger) gives the status of each section of
-Landau–Lifshitz, and [#78](https://github.com/MGYamada/ProjectAInos/issues/78) tracks completion. See the
+Landau–Lifshitz. [#78](https://github.com/MGYamada/ProjectAInos/issues/78) recorded the first
+delivery, and [#114](https://github.com/MGYamada/ProjectAInos/issues/114) tracks the proofs of the
+remaining rows. See the
 [mechanics guide](docs/mechanics.md) and the
 [C∞ mechanics research plan](docs/cinfty-mechanics.md).
 
