@@ -996,8 +996,10 @@ along the orbit and the cross-section as a measure are not defined.
 `Oscillations/PhaseVolume`: the flow matrix of the oscillator has determinant
 one, so it preserves the Lebesgue measure of the phase plane
 (`Oscillator.map_flowMatrix_volume`, `Oscillator.measurePreserving_flowMatrix`).
-This is Liouville's theorem (Landau–Lifshitz §46) for a linear flow; for a
-general Hamiltonian only the infinitesimal form is proved.
+This is Liouville's theorem (Landau–Lifshitz §46) for a linear flow. For a
+given flow of a field of divergence zero the theorem is proved in the
+[geometry guide](smooth-geometry.md); the flow of a general Hamiltonian is not
+constructed.
 
 ## Canonical formalism
 
@@ -1137,6 +1139,39 @@ equation and any curve `q(t)`,
 `IsHamiltonJacobi.timeDerivative_along` is `dS/dt = Σ pᵢ q̇ᵢ − H(q, p)` with
 `pᵢ = ∂S/∂qᵢ`.
 
+`EndpointAction` gives the same relation for the action integral of a given
+family of paths `q(s, t)` whose end times `a(s)`, `b(s)` move with the
+parameter. `pathEnergy L q t` is `p · q̇ − L` along a path.
+`hasDerivAt_action_movingEndpoints_on`: if the path of the parameter `s₀`
+solves the Euler–Lagrange equation between its end times, the derivative of
+`s ↦ ∫ L dt` at `s₀` is
+
+`[p · d/ds q(s, b(s)) − E · b′] − [p · d/ds q(s, a(s)) − E · a′]`.
+
+The family is smooth on an open set `U` that contains the reference segment
+`{s₀} × [a(s₀), b(s₀)]`, and the Lagrangian on an open set `W` of the jet
+space that contains the jet of the reference path. The other paths of the
+family need not solve the equation. `hasDerivAt_action_movingEndpoints` is the
+case `U = W = univ`, and `hasDerivAt_action_natural_movingEndpoints_on` the
+case of one co-ordinate with a potential, with Newton's equation as the
+hypothesis. The proof uses `Variational.hasDerivAt_intervalIntegral_moving_on`
+(Leibniz's rule with moving limits), the symmetry of the second derivative of
+the family, and an integration by parts along the reference path.
+
+- `hasDerivAt_action_free_endpoint`: the paths `t ↦ (x + sξ) t / (T + sτ)` of
+  a free particle from the origin to the point `x + sξ` at the time `T + sτ`,
+  for `T ≠ 0`. The derivative of the action is `(m x / T) ξ − (m x² / 2T²) τ`,
+  that is, `dS = p dx − E dT` for `S = m x² / 2T`.
+- `hasDerivAt_action_oscillator_endpoint`: the paths
+  `t ↦ (x + sξ) sin ωt / sin ω(T + sτ)` of the oscillator, for `sin ωT ≠ 0`.
+  The derivative is `m ω x cot ωT · ξ − m ω² x² / (2 sin² ωT) · τ`. At the
+  conjugate times `sin ωT = 0` the family does not exist.
+- `hasDerivAt_action_oscillator_family`: the motions
+  `(A + sα) cos ωt + (B + sβ) sin ωt` with the time of arrival `T + sτ`.
+
+The families are given. That every pair of nearby end points is joined by a
+solution, so that the action is a function of the end point, is not proved.
+
 The coefficient functions of `Poisson/Separation` are elements of the free
 C∞-ring, smooth on all of `ℝ³`. The coefficients `1/r²`, `1/sin²θ` and `1/(ξ + η)` of the classical
 co-ordinate systems are smooth only on open subsets, so those systems are not
@@ -1150,7 +1185,12 @@ infinitesimal form of Liouville's theorem (Landau–Lifshitz §46).
 `divergence_dissipativeField`: with friction the divergence is
 `−Σᵢ ∂fᵢ/∂pᵢ`, and for the oscillator with the friction coefficients `aᵢ` it
 is the constant `−Σᵢ aᵢ/mᵢ` (`Oscillator.divergence_dissipativeField`). The
-invariance of the Lebesgue measure under a flow is not proved.
+invariance of the Lebesgue measure is proved for a given flow of a field of
+trace zero on a finite-dimensional space
+(`SmoothGeometry.NonlinearODE.IsLocalFlowOn.measure_image`, see the
+[geometry guide](smooth-geometry.md)). The flow of a Hamiltonian field is not
+constructed, and the divergence of this section is not yet identified with
+the trace of the derivative of a field on `ℝ²ⁿ`.
 
 ## Reduction and the Routhian
 
@@ -1384,6 +1424,7 @@ semi-major axis is not computed.
 | [Basic](../ProjectAInos/Mechanics/Basic.lean) | `Lagrangian`, `action`, `force`, `momentum`, `eulerLagrange`, `FixedEndpointVariation`, `Stationary`, `toVariational`, `action_eq_variational` |
 | [FirstVariation](../ProjectAInos/Mechanics/FirstVariation.lean) | `hasDerivAt_action_firstVariation`, `firstVariation_eq_boundary_add_integral`, `firstVariation_fixedEndpoints`, `hasDerivAt_action_eulerLagrange` |
 | [EulerLagrange](../ProjectAInos/Mechanics/EulerLagrange.lean) | `stationary_iff_eulerLagrange`, `stationary_iff_momentum_equation` |
+| [EndpointAction](../ProjectAInos/Mechanics/EndpointAction.lean) | `pathEnergy`, `hasDerivAt_density_family`, `deriv_family_endpoint`, `contDiffAt_momentum`, `hasDerivAt_action_movingEndpoints_on`, `hasDerivAt_action_movingEndpoints`, `pathEnergy_natural`, `hasDerivAt_action_natural_movingEndpoints_on`, `hasDerivAt_action_free_endpoint`, `hasDerivAt_action_oscillator_endpoint`, `hasDerivAt_action_oscillator_family` |
 | [SmoothLagrangian](../ProjectAInos/Mechanics/SmoothLagrangian.lean) | `ofSmoothOperation`, `ofSmoothOperation_op`, `stationary_ofSmoothOperation_iff` |
 | [TotalTimeDerivative](../ProjectAInos/Mechanics/TotalTimeDerivative.lean) | `action_add_totalTimeDerivative`, `stationary_add_totalTimeDerivative_iff`, `eulerLagrange_totalTimeDerivative`, `eulerLagrange_add_totalTimeDerivative` |
 | [Jet/Basic](../ProjectAInos/Mechanics/Jet/Basic.lean) | `JetRing`, `OrderLE`, `totalDeriv`, `totalDeriv_q`, `dt_totalDeriv`, `d_zero_totalDeriv`, `d_succ_totalDeriv` |
