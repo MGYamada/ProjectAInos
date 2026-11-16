@@ -103,7 +103,7 @@ locally ringed space and scheme constructions prove `gluedIsColimit` for
 the actual gluing diagram. The cocycle data are inputs; existence of a
 glued scheme is a theorem of the construction.
 
-## Recovering a scheme from a gluing needs injectivity on points
+## G01. Recovering a scheme from a gluing needs injectivity on points
 
 **Observation.** The universal property of `GlueData.glued` gives the descent
 morphism to any scheme that receives the pieces compatibly, and joint
