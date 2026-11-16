@@ -17,7 +17,9 @@ manifolds used by the geometric layer. `PartialDerivative`, `DualNumber` and
 `Models` and `PartialDerivative` → `DualNumber` → `Derivation`.
 `ParametricIntegral` → `Hadamard` → `IdealQuotient` prove Hadamard's lemma and
 construct the quotient by an ordinary ideal, and `Poisson/Reduction` gives the
-quotients of Poisson structures. The library root imports all these modules. This layer has no dependency on `Variational`,
+quotients of Poisson structures. `FormalSeries` holds the formal power series
+in `q` and `p` with their Poisson bracket and the Birkhoff normal form, on top
+of Mathlib's `MvPowerSeries`; it uses no C∞-ring. The library root imports all these modules. This layer has no dependency on `Variational`,
 `Mechanics`, or a particular physical theory.
 
 ## Smooth operations and real-algebra compatibility
@@ -230,6 +232,12 @@ smoothness at the base point only, which for infinite order does not extend to
 a neighbourhood; the implicit function of the base point agrees near each
 point of its graph with the implicit function of that point.
 
+`ImplicitFunctionReal` is the case of one real equation `Φ(s, y) = Φ(u)` in
+one real unknown with one real parameter
+(`exists_contDiffOn_implicitFunction_real`): the hypothesis is that the
+derivative in `y`, given as a continuous function, does not vanish at `u`, and
+the implicit function is smooth on an open set of parameters.
+
 `DividedDifference` treats a smooth function `U` of one variable.
 `dividedDifference U (x, y)` is `∫₀¹ U′(y + t (x − y)) dt`, with
 `U(x) − U(y) = (x − y) U[x, y]` (`sub_eq_mul_dividedDifference`), and
@@ -367,6 +375,82 @@ momentum and the heavy top are in the
 [mechanics guide](mechanics.md#poisson-models). This stage is tracked in
 [issue #78](https://github.com/MGYamada/ProjectAInos/issues/78).
 
+## Formal power series in `q` and `p`
+
+`SmoothAlgebra/FormalSeries` treats the ring `ℝ[[q, p]]` as
+`PhaseSeries = MvPowerSeries (Fin 2) ℝ`, with `q = X 0` and `p = X 1`, and
+proves the Birkhoff normal form in one degree of freedom. No smooth function
+is involved: the series are not identified with the smooth functions modulo
+the functions flat at a point.
+
+`Filtration`, for any set of variables: `orderGE σ n` is the space of the
+series all of whose terms have degree at least `n`. A product adds the orders
+and a partial derivative lowers the order by one (`mul_mem_orderGE`,
+`pderiv_mem_orderGE`). `seqLimit s` is the limit of a sequence whose
+successive differences have increasing orders (`seqLimit_sub_mem`), and a
+series of every order is zero (`eq_zero_of_forall_mem_orderGE`).
+
+`LieExp`: `Raises D j` states that a linear map raises the order by `j`.
+
+- `lieExp D` is `Σ Dᵏ/k!`, the limit of the partial sums `expPartial D n`;
+  `lieExp_sub_expPartial_mem` bounds the remainder.
+- `lieExp_bilinear`: if `D` is a derivation of a bilinear map `B` that lowers
+  the order by at most `c`, then `lieExp D (B f g) = B (lieExp D f)
+  (lieExp D g)`. The proof is the Leibniz rule for the terms of the series
+  (`expTerm_bilinear`) and a triangular sum (`expPartial_bilinear`).
+- `bijective_of_raises_sub_id`: a linear map that differs from the identity by
+  a map raising the order is bijective; hence `bijective_lieExp`.
+- `lieExp_add_sub_mem`: adding to `D` a map `D'` that raises the order by `j'`
+  changes `lieExp D g` by `D' g` up to the order `m + j' + 1`, for `g` of
+  order `m`.
+
+`Bracket`: `bracket f g = ∂f/∂q ∂g/∂p − ∂f/∂p ∂g/∂q`. It is a derivation in
+each argument, satisfies the Jacobi identity (`bracket_bracket`) and lowers
+the order by at most two (`bracket_mem_orderGE`). `ad F` is the bracket with
+`F`; for `F` of order at least three, `lieExp (ad F)` preserves the product
+and the bracket (`lieExp_ad_mul`, `lieExp_ad_bracket`), and `lieAlgEquiv F` is
+this Lie transform as an automorphism of the algebra.
+
+`Homological`: `action = (q² + p²)/2`, and `homogeneous k` is the space of the
+series all of whose terms have degree `k`, a space of finite dimension
+(`finiteDimensional_homogeneous`).
+
+- `bracket_action`: the bracket with the action is `q ∂/∂p − p ∂/∂q`.
+- `fischer k f g = Σ a! b! f_{ab} g_{ab}` over the monomials `qᵃ pᵇ` of degree
+  `k`. Multiplication by a variable is adjoint to the derivative in it
+  (`fischer_X_zero_mul`, `fischer_X_one_mul`), so the bracket with the action
+  is skew (`fischer_bracket_action`).
+- `resonant k` is `action ^ (k/2)` for even `k` and zero for odd `k`.
+  `eq_smul_resonant`: a homogeneous series of degree `k` whose bracket with
+  the action vanishes is a multiple of `resonant k`.
+- `exists_homological`: every homogeneous `G` of degree `k` is
+  `bracket action F + c • resonant k` with `F` homogeneous of degree `k`.
+
+`NormalForm`: let `H − ω • action` have order at least three, `ω ≠ 0`.
+
+- `normalize_step`: adding `ω⁻¹` times a solution of the homological equation
+  of degree `k` to a generator `W` makes the component of degree `k` of
+  `lieExp (ad W) H` resonant and changes this series only from the degree `k`
+  on.
+- `generator ω H N` is the limit of the partial generators `generatorSeq`,
+  which start at the degree `N`; `exists_component_generator` states that the
+  transformed series has a resonant component in every degree from `N` on.
+- `exists_eq_subst_action`: a series all of whose components are resonant is
+  `PowerSeries.subst action h` for a power series `h` in one variable, and
+  `coeff_eq_of_homogeneousComponent` reads off a coefficient of `h`.
+- `exists_birkhoff_normal_form`: there are an automorphism `Ψ` of the algebra
+  with `Ψ (bracket f g) = bracket (Ψ f) (Ψ g)` and a power series `h` with
+  `Ψ H = h(action)`, `h = ω x + ⋯`. `exists_normal_form_of_resonant` is the
+  version that starts at a degree `N` below which `H` is already normal, with
+  `Ψ H − H` of order at least `N`.
+
+`Scaling`: `scale λ` is the substitution `q ↦ λ q`, `p ↦ λ⁻¹ p` for `λ ≠ 0`, an
+automorphism that preserves the bracket (`scale_bracket`), by Mathlib's
+`MvPowerSeries.rescale`.
+
+The application to the anharmonic oscillator is in the
+[mechanics guide](mechanics.md#anharmonic-oscillations).
+
 ## Proof map and verification
 
 | Module | Main checked results |
@@ -383,6 +467,13 @@ momentum and the heavy top are in the
 | [FreeCalculus](../ProjectAInos/SmoothAlgebra/FreeCalculus.lean) | `FreeSmoothRing.contDiff_val`, `fderiv_val_apply`, `realField`, `contDiff_realField`, `fderiv_realField_apply`: the elements of a free ring on finitely many generators as differentiable functions, and derivations as vector fields |
 | [DividedDifference](../ProjectAInos/SmoothAlgebra/DividedDifference.lean) | `dividedDifference`, `sub_eq_mul_dividedDifference`, `dividedDifference₂`, `dividedDifference_sub`, `sub_eq_mul_mul_dividedDifference₂`: Hadamard's lemma in one variable, applied twice |
 | [ImplicitFunction](../ProjectAInos/SmoothAlgebra/ImplicitFunction.lean) | `exists_contDiffOn_implicitFunction`: a smooth implicit function on an open neighbourhood |
+| [ImplicitFunctionReal](../ProjectAInos/SmoothAlgebra/ImplicitFunctionReal.lean) | `exists_contDiffOn_implicitFunction_real`: one real equation in one real unknown |
+| [FormalSeries/Filtration](../ProjectAInos/SmoothAlgebra/FormalSeries/Filtration.lean) | `orderGE`, `mem_orderGE_iff_le_order`, `mul_mem_orderGE`, `pderiv_mem_orderGE`, `eq_zero_of_forall_mem_orderGE`, `seqLimit`, `seqLimit_sub_mem` |
+| [FormalSeries/LieExp](../ProjectAInos/SmoothAlgebra/FormalSeries/LieExp.lean) | `Raises`, `expPartial`, `lieExp`, `lieExp_sub_expPartial_mem`, `lieExp_sub_self_mem`, `lieExp_add_sub_mem`, `pow_apply_bilinear`, `expPartial_bilinear`, `lieExp_bilinear`, `bijective_of_raises_sub_id`, `bijective_lieExp` |
+| [FormalSeries/Bracket](../ProjectAInos/SmoothAlgebra/FormalSeries/Bracket.lean) | `PhaseSeries`, `bracket`, `bracket_mul_right`, `bracket_bracket`, `bracket_mem_orderGE`, `ad`, `raises_ad`, `lieExp_ad_mul`, `lieExp_ad_bracket`, `lieAlgEquiv` |
+| [FormalSeries/Homological](../ProjectAInos/SmoothAlgebra/FormalSeries/Homological.lean) | `homogeneous`, `action`, `bracket_action`, `resonant`, `eq_zero_of_bracket_action_eq_zero`, `eq_smul_resonant`, `fischer`, `fischer_bracket_action`, `eq_zero_of_fischer_self`, `finiteDimensional_homogeneous`, `exists_homological` |
+| [FormalSeries/NormalForm](../ProjectAInos/SmoothAlgebra/FormalSeries/NormalForm.lean) | `homologicalSolution`, `normalize_step`, `generatorSeq`, `generator`, `exists_component_generator`, `homogeneousComponent_subst_action`, `exists_eq_subst_action`, `exists_normal_form_of_resonant`, `exists_birkhoff_normal_form` |
+| [FormalSeries/Scaling](../ProjectAInos/SmoothAlgebra/FormalSeries/Scaling.lean) | `pderiv_rescale`, `bracket_rescale`, `scale`, `scale_bracket`, `scale_X_zero`, `scale_X_one` |
 | [LineDerivative](../ProjectAInos/SmoothAlgebra/LineDerivative.lean) | `hasFDerivAt_of_hasDerivAt_line`: derivatives along all lines, with a continuous field of linear forms, give the Fréchet derivative |
 | [Point](../ProjectAInos/SmoothAlgebra/Point.lean) | `Point`, `TangentPoint`, `TangentPoint.congr`, `FreeSmoothRing.pointEquiv`, `FreeSmoothRing.lift_real`, `FreeSmoothRing.ext_lift`, `FreeSmoothRing.tangentPointEquiv`, `FreeSmoothRing.fst_tangentPoint`, `FreeSmoothRing.snd_tangentPoint`, `FreeSmoothRing.tangentPoint_map_lift`, `SmoothRingCon.generateHomEquiv`, `FreeSmoothRing.Presented`, `FreeSmoothRing.presentedPointEquiv`, `FreeSmoothRing.presentedTangentPointEquiv`, `FreeSmoothRing.circleTangentPointEquiv` |
 | [ParametricIntegral](../ProjectAInos/SmoothAlgebra/ParametricIntegral.lean) | `fderivLeft`, `hasFDerivAt_parametric_intervalIntegral`, `contDiff_parametric_intervalIntegral`, `contDiff_infty_parametric_intervalIntegral`, `contDiff_infty_parametric_intervalIntegral_limits`: a parametric integral of a smooth function is smooth |
@@ -419,6 +510,7 @@ lake exe mk_all --check --lib ProjectAInos
 lake env lean -DwarningAsError=true checks/AxiomAudit.lean
 lake env lean -DwarningAsError=true checks/SmoothAlgebraAPI.lean
 lake env lean -DwarningAsError=true checks/ReductionAPI.lean
+lake env lean -DwarningAsError=true checks/FormalSeriesAPI.lean
 lake env lean -DwarningAsError=true checks/SmoothGeometryAPI.lean
 git diff --check
 ```
@@ -428,8 +520,9 @@ declaration in the `ProjectAInos` namespace. Its allowlist is `propext`,
 `Classical.choice`, and `Quot.sound`, matching the existing required Lean CI job.
 The required Lean CI job also checks the external smooth-geometry API,
 including open immersions and categorical gluing, and pins the differential
-part of this layer with typed examples in `checks/SmoothAlgebraAPI.lean` and
-the quotients in `checks/ReductionAPI.lean`. No dependency change is needed.
+part of this layer with typed examples in `checks/SmoothAlgebraAPI.lean`,
+the quotients in `checks/ReductionAPI.lean` and the formal power series in
+`checks/FormalSeriesAPI.lean`. No dependency change is needed.
 
 ## Ordinary differentials and further algebraic stages
 
