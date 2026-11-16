@@ -1131,6 +1131,67 @@ For `γ = 2ω₀ + ε` the variable is `ω₀² − γ²/4 = −ε (ω₀ + ε/4
 order the zone is `|ε| < |h| ω₀/2`, which is (27.11). The zones near
 `γ = 2ω₀/n` for `n ≥ 2` and the rate of growth (27.12) are not treated.
 
+## Motion in a rapidly oscillating field
+
+`Oscillations/RapidForce` treats Landau–Lifshitz §30 for one degree of
+freedom: `m ẍ = −U′(x) + ω g(x) cos ωt`. The amplitude of the force is
+proportional to the frequency, so that its effect has a limit for large `ω`.
+`RapidBounds U g A B` states that `U` and `g` are smooth with
+`|U′|, |U″| ≤ A` and `|g|, |g′|, |g″| ≤ B`.
+
+- `slowVelocity`: the smooth part `w = v − (g(x)/m) sin ωt` of the velocity.
+  `IsRapidMotion.hasDerivAt_pair`: `(x, w)` follows the field `slowField` of
+  the motion in the effective potential `U + g²/4m` (`effectivePotential`,
+  `hasDerivAt_effectivePotential`) up to the terms `oscillation₁`,
+  `oscillation₂`, which oscillate with the frequencies `ω` and `2ω`.
+- `exists_forall_abs_sub_le`: there is a constant `C`, depending on `m`, `A`,
+  `B`, a bound `V` of the velocity and `L`, such that for every `ω > 0` a
+  motion and the motion in the effective potential from the same position
+  with the same velocity satisfy `|x(t) − X(t)| ≤ C/ω` on `[0, L]`.
+- `IsRapidMotion.abs_velocity_le`: the velocity is bounded on `[0, L]`
+  independently of `ω`; `exists_forall_abs_sub_le_of_initial` is the theorem
+  with a bound of the initial velocity only.
+- `RapidForceExistence`: both motions exist for all times
+  (`exists_isRapidMotion`, `exists_isSlowMotion`), as flows of fields of linear
+  growth, and `exists_forall_exists_abs_sub_le` combines the statements.
+- `Pendulum`: for `U = −a cos x` and `g = b sin x`, a pendulum whose point of
+  support oscillates vertically, the bounds hold, the upper position is an
+  equilibrium of the effective potential, and the derivative of its force
+  there is `−a + b²/2m`, which is positive exactly when `b² > 2 m a`.
+
+Several degrees of freedom, potentials with unbounded derivatives and the
+corrections of higher order are not treated.
+
+## Resonance in non-linear oscillations
+
+`Oscillations/NonlinearResonance` treats Landau–Lifshitz §29 for a cubic term:
+`ẍ + 2λ ẋ + ω₀² x = F cos γt − β x³` (`IsMotionOn`, on a set of times).
+`amplitude γ x v` is the pair `(a, b)` with `x = a cos γt + b sin γt` and
+`ẋ = γ (−a sin γt + b cos γt)`. The slow parameters are
+`detuning = (γ² − ω₀²)/2γ`, `nonlinearity = 3β/8γ` and `forcing = F/2γ`.
+
+- `IsMotionOn.hasDerivAt_amplitude`: the amplitudes follow
+  `averagedField λ ε κ f`, the field
+  `(−λ a − (ε − κ r²) b, −λ b + (ε − κ r²) a + f)`, up to four terms in
+  `cos 2γt`, `sin 2γt`, `cos 4γt`, `sin 4γt` with polynomial amplitudes
+  (`cosAmplitude`, `sinAmplitude`). This is an identity, with no
+  approximation.
+- `amplitude_equation`: at an equilibrium of the averaged field,
+  `r² ((ε − κ r²)² + λ²) = f²`, the equation (29.4).
+  `exists_averagedField_eq_zero`: conversely every solution `r²` of it is the
+  squared amplitude of an equilibrium.
+- `exists_forall_norm_amplitude_sub_le`: for fixed `λ`, `ε`, `κ`, `f`, `ρ`,
+  `L` there is `C` such that for every `γ > 0` the amplitudes of a motion and
+  the solution of the averaged equations with the same initial value differ
+  by at most `C/γ` on `[0, L]`, as long as both stay in the disc of the
+  radius `ρ`.
+- `exists_forall_abs_sub_steady_le`: a motion that starts with the amplitudes
+  of an equilibrium stays within `2C/γ` of `a₀ cos γt + b₀ sin γt`.
+
+The quadratic term of the text, the existence of an exactly periodic motion,
+the stability of the branches of the amplitude equation and the resonances at
+other frequencies are not treated.
+
 ## The action variable of an oscillator with a variable frequency
 
 `Oscillations/Adiabatic` gives the exact part of Landau–Lifshitz §49. For
@@ -1842,6 +1903,9 @@ semi-major axis is not computed.
 | [Oscillations/ParametricExistence](../ProjectAInos/Mechanics/Oscillations/ParametricExistence.lean) | `hillCoefficient`, `hillState`, `hasDerivAt_hillState`, `hillSolution`, `isHill_hillSolution`, `IsHill.eq_of_initial`, `exists_isHill`, `existsUnique_isHill`, `FundamentalSystem.ofCoefficient`, `FundamentalSystem.nonempty`, `FundamentalSystem.ofCoefficient_harmonic`, `monodromy`, `det_monodromy`, `trace_monodromy_harmonic` |
 | [Oscillations/ParametricTrace](../ProjectAInos/Mechanics/Oscillations/ParametricTrace.lean) | `IsHill.const_mul`, `IsHill.add`, `IsHill.state_period`, `IsHill.shift_eq_of_mulVec_eq`, `exists_abs_apply_le_of_shift_eq`, `not_exists_abs_apply_le_of_shift_eq`, `exists_mulVec_eq_smul_of_two_lt_abs_trace`, `exists_isHill_not_bounded_of_two_lt_abs_trace`, `IsHill.exists_abs_apply_le_iff_of_two_lt_abs_trace`, `mulVec_mulVec_sub_of_trace_eq`, `IsHill.exists_abs_apply_le_iff_of_trace_eq`, `exists_isHill_not_bounded_of_trace_eq`, `forall_isHill_bounded_iff` |
 | [Oscillations/ParametricZone](../ProjectAInos/Mechanics/Oscillations/ParametricZone.lean) | `planeTrace`, `trace_monodromy_eq`, `rotatingCoefficient`, `rotation`, `propagator_hillCoefficient_rotation`, `trace_monodromy_eq_neg`, `modulated`, `shift_modulated`, `zoneBound`, `norm_rotatingCoefficient_modulated_le`, `integralCoefficient_rotating_left`, `integralCoefficient_rotating_right`, `abs_trace_monodromy_modulated_sub_le`, `exists_isHill_not_bounded_modulated`, `exists_abs_apply_le_modulated`, `exists_isHill_not_bounded_modulated_resonance`, `exists_abs_apply_le_modulated_of_le` |
+| [Oscillations/RapidForce](../ProjectAInos/Mechanics/Oscillations/RapidForce.lean) | `effectivePotential`, `RapidBounds`, `IsRapidMotion`, `IsSlowMotion`, `slowVelocity`, `IsRapidMotion.hasDerivAt_pair`, `IsRapidMotion.abs_integral_oscillation₁_le`, `IsRapidMotion.abs_integral_oscillation₂_le`, `exists_forall_abs_sub_le`, `IsRapidMotion.abs_velocity_le`, `exists_forall_abs_sub_le_of_initial`, `Pendulum.rapidBounds`, `Pendulum.pos_iff` |
+| [Oscillations/RapidForceExistence](../ProjectAInos/Mechanics/Oscillations/RapidForceExistence.lean) | `extendedField`, `exists_isRapidMotion`, `exists_isSlowMotion`, `exists_forall_exists_abs_sub_le` |
+| [Oscillations/NonlinearResonance](../ProjectAInos/Mechanics/Oscillations/NonlinearResonance.lean) | `IsMotionOn`, `amplitude`, `detuning`, `nonlinearity`, `forcing`, `averagedField`, `IsMotionOn.hasDerivAt_amplitude`, `amplitude_equation`, `exists_averagedField_eq_zero`, `exists_forall_norm_amplitude_sub_le`, `exists_forall_abs_sub_steady_le` |
 | [Oscillations/ParametricExamples](../ProjectAInos/Mechanics/Oscillations/ParametricExamples.lean) | `shift_algebraMap`, `exists_abs_apply_le_harmonic`, `FundamentalSystem.free`, `monodromy_free`, `IsHill.exists_abs_apply_le_free_iff`, `exists_isHill_free_not_bounded`, `FundamentalSystem.hyperbolic`, `trace_monodromy_hyperbolic`, `exists_isHill_hyperbolic_not_bounded`, `IsHill.exists_abs_apply_le_hyperbolic_iff` |
 | [Oscillations/Adiabatic](../ProjectAInos/Mechanics/Oscillations/Adiabatic.lean) | `Parametric.action`, `Parametric.timeDerivative_inv`, `Parametric.timeDerivative_action`, `Parametric.timeDerivative_action_of_const` |
 | [Legendre](../ProjectAInos/Mechanics/Legendre.lean) | `positionsToJet`, `positionsToPhase`, `d_zero_positionsToJet`, `orderLE_positionsToJet`, `legendre`, `legendre_p_eq_momentum`, `legendre_hamiltonian`, `isTrajectory_natural_iff`, `isSolution_natural_iff`, `isTrajectory_natural_iff_isSolution` |
