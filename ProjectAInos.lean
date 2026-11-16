@@ -103,6 +103,7 @@ public import ProjectAInos.Mechanics.KnifeEdge
 public import ProjectAInos.Mechanics.Legendre
 public import ProjectAInos.Mechanics.OneDimension.Abel
 public import ProjectAInos.Mechanics.OneDimension.ActionAngle
+public import ProjectAInos.Mechanics.OneDimension.Anharmonic
 public import ProjectAInos.Mechanics.OneDimension.Area
 public import ProjectAInos.Mechanics.OneDimension.Motion
 public import ProjectAInos.Mechanics.OneDimension.Orbit
@@ -110,6 +111,7 @@ public import ProjectAInos.Mechanics.OneDimension.Oscillator
 public import ProjectAInos.Mechanics.OneDimension.Well
 public import ProjectAInos.Mechanics.OpenDomain
 public import ProjectAInos.Mechanics.Oscillations.Adiabatic
+public import ProjectAInos.Mechanics.Oscillations.AnharmonicNormalForm
 public import ProjectAInos.Mechanics.Oscillations.Damped
 public import ProjectAInos.Mechanics.Oscillations.Dissipation
 public import ProjectAInos.Mechanics.Oscillations.Duhamel
@@ -197,6 +199,12 @@ public import ProjectAInos.SmoothAlgebra.Derivation
 public import ProjectAInos.SmoothAlgebra.Differential
 public import ProjectAInos.SmoothAlgebra.DividedDifference
 public import ProjectAInos.SmoothAlgebra.DualNumber
+public import ProjectAInos.SmoothAlgebra.FormalSeries.Bracket
+public import ProjectAInos.SmoothAlgebra.FormalSeries.Filtration
+public import ProjectAInos.SmoothAlgebra.FormalSeries.Homological
+public import ProjectAInos.SmoothAlgebra.FormalSeries.LieExp
+public import ProjectAInos.SmoothAlgebra.FormalSeries.NormalForm
+public import ProjectAInos.SmoothAlgebra.FormalSeries.Scaling
 public import ProjectAInos.SmoothAlgebra.Free
 public import ProjectAInos.SmoothAlgebra.FreeCalculus
 public import ProjectAInos.SmoothAlgebra.FreeChainRule
@@ -206,6 +214,7 @@ public import ProjectAInos.SmoothAlgebra.Hadamard
 public import ProjectAInos.SmoothAlgebra.Hom
 public import ProjectAInos.SmoothAlgebra.IdealQuotient
 public import ProjectAInos.SmoothAlgebra.ImplicitFunction
+public import ProjectAInos.SmoothAlgebra.ImplicitFunctionReal
 public import ProjectAInos.SmoothAlgebra.Limits
 public import ProjectAInos.SmoothAlgebra.LineDerivative
 public import ProjectAInos.SmoothAlgebra.LocalInverse

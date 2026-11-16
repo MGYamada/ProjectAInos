@@ -1192,6 +1192,66 @@ The quadratic term of the text, the existence of an exactly periodic motion,
 the stability of the branches of the amplitude equation and the resonances at
 other frequencies are not treated.
 
+## Anharmonic oscillations
+
+Landau–Lifshitz §28 is treated in two independent parts: the normal form of
+the formal Hamiltonian, and the frequency of the solutions.
+
+The formal part is in `SmoothAlgebra/FormalSeries`, described in the
+[C∞-ring guide](smooth-algebra.md#formal-power-series-in-q-and-p):
+`exists_birkhoff_normal_form` is the Birkhoff normal form in one degree of
+freedom. `Oscillations/AnharmonicNormalForm` applies it to the oscillator.
+
+- `hamiltonian ν a b` is `ν I + a q³ + b q⁴` with `I = (q² + p²)/2`.
+  `generator₃` and `generator₄` are explicit polynomials of degree three and
+  four: `lieExp_generator₃` and `lieExp_generator₄` state that their Lie
+  transforms carry the Hamiltonian to `ν I + c₂ I²` up to terms of the order
+  five, with `c₂ = secondCoefficient ν a b = 3b/2 − 15a²/(4ν)`.
+- `exists_normal_form`: a Poisson automorphism carries `hamiltonian ν a b` to
+  `h(I)` with `h = ν x + c₂ x² + ⋯`. The degrees from five on are normalized
+  by `FormalSeries.exists_normal_form_of_resonant`, which does not change the
+  lower degrees.
+- `physicalHamiltonian ν α β` is `p²/2 + ν² q²/2 + α q³/3 + β q⁴/4`, the
+  Hamiltonian of `ẍ + ν² x = −α x² − β x³`. `scale_physicalHamiltonian`: the
+  canonical scaling `q ↦ q/√ν`, `p ↦ √ν p` carries it to
+  `hamiltonian ν (α/3ν^{3/2}) (β/4ν²)`. `exists_normal_form_physical`: its
+  normal form is `h = ν x + (3β/8ν² − 5α²/12ν⁴) x² + ⋯`.
+- `two_mul_coefficient_mul_action`: at the action `I = ν ρ²/2` of an
+  oscillation of amplitude `ρ`, the correction `2 c₂ I` of the formal
+  frequency `h′(I)` is `(3β/8ν − 5α²/12ν³) ρ²`.
+
+The part on solutions is `OneDimension/Anharmonic`, for the potential
+`potential ν α β x = ν² x²/2 + α x³/3 + β x⁴/4` with `ν > 0`. It uses the
+wells of [Motion in one dimension](#motion-in-one-dimension-wells) and not the
+normal form.
+
+- `wellFactor_potential`: the second divided difference of the potential is
+  the polynomial `factor ν α β a b x`.
+- `exists_slope`, `potential_centre`: by the implicit function theorem there
+  is a smooth function `e` of `s = ρ²` near zero, with `e(0) = −α/3ν²`, such
+  that the potential takes the same value at `ρ² e(ρ²) ± ρ`. `exists_isWell`:
+  for small `ρ > 0` these two points are the turning points of a well.
+- `periodFunction ν α β e s` is half the integral over the angle of
+  `kernel`, the sum of the rates of the level curve at the angles `θ` and
+  `θ + π`, written with `symRoot P R = √(2P + 2√(P² − R))/√(P² − R)`, which is
+  `1/√(P − r) + 1/√(P + r)` for `R = r²` (`inv_sqrt_add_inv_sqrt`). The
+  kernel is a function of `s = ρ²` that is continuously differentiable at
+  `s = 0`. `orbitPeriod_eq_periodFunction`: the period of the well of the
+  half-width `ρ` is `periodFunction (ρ²)`.
+- `periodFunction_zero`, `hasDerivAt_periodFunction`: the period function is
+  `2π/ν` at zero, with the derivative `5πα²/6ν⁵ − 3πβ/4ν³` there.
+  `hasDerivAt_frequency`: the derivative of `2π/T` in `ρ²` at zero is
+  `3β/8ν − 5α²/12ν³`.
+- `exists_tendsto_frequency`: there are a centre `c(ρ)` and `ρ₀ > 0` such that
+  `c(ρ) ± ρ` are the turning points of a well for `0 < ρ < ρ₀`,
+  `c(ρ)/ρ² → −α/3ν²`, and
+  `(2π/T(ρ) − ν)/ρ² → 3β/8ν − 5α²/12ν³` as `ρ → 0`, where `T(ρ)` is
+  `orbitPeriod` of that well. By `IsWell.position_add_period` every motion
+  with that energy between the turning points repeats after `T(ρ)`.
+
+The expansion of the solution in harmonics, the uniqueness of the normal form
+and a comparison of the truncated normal form with solutions are not treated.
+
 ## The action variable of an oscillator with a variable frequency
 
 `Oscillations/Adiabatic` gives the exact part of Landau–Lifshitz §49. For
@@ -1906,6 +1966,7 @@ semi-major axis is not computed.
 | [Oscillations/RapidForce](../ProjectAInos/Mechanics/Oscillations/RapidForce.lean) | `effectivePotential`, `RapidBounds`, `IsRapidMotion`, `IsSlowMotion`, `slowVelocity`, `IsRapidMotion.hasDerivAt_pair`, `IsRapidMotion.abs_integral_oscillation₁_le`, `IsRapidMotion.abs_integral_oscillation₂_le`, `exists_forall_abs_sub_le`, `IsRapidMotion.abs_velocity_le`, `exists_forall_abs_sub_le_of_initial`, `Pendulum.rapidBounds`, `Pendulum.pos_iff` |
 | [Oscillations/RapidForceExistence](../ProjectAInos/Mechanics/Oscillations/RapidForceExistence.lean) | `extendedField`, `exists_isRapidMotion`, `exists_isSlowMotion`, `exists_forall_exists_abs_sub_le` |
 | [Oscillations/NonlinearResonance](../ProjectAInos/Mechanics/Oscillations/NonlinearResonance.lean) | `IsMotionOn`, `amplitude`, `detuning`, `nonlinearity`, `forcing`, `averagedField`, `IsMotionOn.hasDerivAt_amplitude`, `amplitude_equation`, `exists_averagedField_eq_zero`, `exists_forall_norm_amplitude_sub_le`, `exists_forall_abs_sub_steady_le` |
+| [Oscillations/AnharmonicNormalForm](../ProjectAInos/Mechanics/Oscillations/AnharmonicNormalForm.lean) | `hamiltonian`, `generator₃`, `generator₄`, `secondCoefficient`, `bracket_action_cubic`, `quarticPart_eq`, `lieExp_generator₃`, `lieExp_generator₄`, `exists_normal_form`, `physicalHamiltonian`, `scale_physicalHamiltonian`, `exists_normal_form_physical`, `two_mul_coefficient_mul_action` |
 | [Oscillations/ParametricExamples](../ProjectAInos/Mechanics/Oscillations/ParametricExamples.lean) | `shift_algebraMap`, `exists_abs_apply_le_harmonic`, `FundamentalSystem.free`, `monodromy_free`, `IsHill.exists_abs_apply_le_free_iff`, `exists_isHill_free_not_bounded`, `FundamentalSystem.hyperbolic`, `trace_monodromy_hyperbolic`, `exists_isHill_hyperbolic_not_bounded`, `IsHill.exists_abs_apply_le_hyperbolic_iff` |
 | [Oscillations/Adiabatic](../ProjectAInos/Mechanics/Oscillations/Adiabatic.lean) | `Parametric.action`, `Parametric.timeDerivative_inv`, `Parametric.timeDerivative_action`, `Parametric.timeDerivative_action_of_const` |
 | [Legendre](../ProjectAInos/Mechanics/Legendre.lean) | `positionsToJet`, `positionsToPhase`, `d_zero_positionsToJet`, `orderLE_positionsToJet`, `legendre`, `legendre_p_eq_momentum`, `legendre_hamiltonian`, `isTrajectory_natural_iff`, `isSolution_natural_iff`, `isTrajectory_natural_iff_isSolution` |
@@ -1935,6 +1996,7 @@ semi-major axis is not computed.
 | [OneDimension/Abel](../ProjectAInos/Mechanics/OneDimension/Abel.lean) | `lintegral_inv_sqrt_mul_inv_sqrt`, `lintegral_levelTime_mul`, `IsWell.lintegral_inv_sqrt_eq`, `abel_inversion` |
 | [OneDimension/ActionAngle](../ProjectAInos/Mechanics/OneDimension/ActionAngle.lean) | `orbitAction`, `orbitPhase`, `hasDerivAt_orbitAction`, `strictMonoOn_orbitAction`, `IsWell.orbitPhase_add_two_pi`, `IsWell.orbitPhase_orbitAngle`, `orbit_area_form` |
 | [OneDimension/Oscillator](../ProjectAInos/Mechanics/OneDimension/Oscillator.lean) | `wellFactor_oscillator`, `orbitPeriod_oscillator`, `orbitAction_oscillator`, `abel_inversion_oscillator` |
+| [OneDimension/Anharmonic](../ProjectAInos/Mechanics/OneDimension/Anharmonic.lean) | `potential`, `factor`, `wellFactor_potential`, `slopeEquation`, `potential_centre`, `exists_slope`, `exists_isWell`, `symRoot`, `inv_sqrt_add_inv_sqrt`, `kernel`, `periodFunction`, `orbitPeriod_eq_periodFunction`, `periodFunction_zero`, `hasDerivAt_kernel`, `hasDerivAt_periodFunction`, `hasDerivAt_frequency`, `exists_tendsto_frequency` |
 | [Quadrature](../ProjectAInos/Mechanics/Quadrature.lean) | `integral_comp_eq_integral_div_sqrt`, `sub_eq_integral_one_div_sqrt`, `sub_eq_sqrt_mul_integral_of_energy` |
 | [Poisson/OrbitIntegral](../ProjectAInos/Mechanics/Poisson/OrbitIntegral.lean) | `canonical_radius_radialHamiltonian`, `radiusAt`, `radialVelocityAt`, `radialSpeedSq`, `lift_radialHamiltonian_apply`, `hasDerivAt_radiusAt`, `continuous_radialVelocityAt`, `radialVelocityAt_sq`, `continuousOn_radialSpeedSq`, `sub_eq_integral_radius`, `angle_sub_eq_integral_radius`, `timeDerivative_angle_apply` |
 | [TurningPoint](../ProjectAInos/Mechanics/TurningPoint.lean) | `turningParam`, `turningParam_image`, `turningParam_sub_mul_sub`, `integral_turningParam`, `integral_div_sqrt_turning`, `integrableOn_div_sqrt_turning`, `integral_comp_eq_integral_div_sqrt_turning`, `integral_comp_eq_integral_div_sqrt_turning_of_neg`, `sub_eq_integral_turningParam`, `sub_eq_sqrt_mul_integral_of_energy_turning`, `sqrt_mul_integral_oscillator`, `sub_eq_sqrt_mul_integral_oscillator` |

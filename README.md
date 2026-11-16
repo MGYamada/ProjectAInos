@@ -283,6 +283,12 @@ the effective potential `U + g²/4m`, and the amplitudes of the forced
 oscillator with a cubic term stay within `C/γ` of the solution of the averaged
 equations, whose equilibria satisfy the equation of the amplitude at
 resonance.
+The Birkhoff normal form is proved in one degree of freedom: a formal
+Hamiltonian `ω (q² + p²)/2 + ⋯` in `ℝ[[q, p]]` is carried to a power series in
+the action by an automorphism that preserves the Poisson bracket. For the
+anharmonic oscillator `ẍ + ν² x = −α x² − β x³` the coefficient of the square
+of the action is `3β/8ν² − 5α²/12ν⁴`, and the frequency of the oscillation of
+half-width `ρ` is `ν + (3β/8ν − 5α²/12ν³) ρ² + o(ρ²)`, proved from the period.
 Symplectic forms on manifolds and
 Dirac brackets are not implemented. Galilean symmetry as a group action and the topics of 2.1 and
 2.4 have no Lean counterpart yet. The
