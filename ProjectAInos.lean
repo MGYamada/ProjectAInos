@@ -129,12 +129,14 @@ public import ProjectAInos.Mechanics.Poisson.CyclicReduction
 public import ProjectAInos.Mechanics.Poisson.Epsilon
 public import ProjectAInos.Mechanics.Poisson.Galilei
 public import ProjectAInos.Mechanics.Poisson.GeneratingFunction
+public import ProjectAInos.Mechanics.Poisson.HamiltonianField
 public import ProjectAInos.Mechanics.Poisson.HeavyTop
 public import ProjectAInos.Mechanics.Poisson.Kepler
 public import ProjectAInos.Mechanics.Poisson.KeplerModel
 public import ProjectAInos.Mechanics.Poisson.KeplerMotion
 public import ProjectAInos.Mechanics.Poisson.KeplerOrbit
 public import ProjectAInos.Mechanics.Poisson.Liouville
+public import ProjectAInos.Mechanics.Poisson.LiouvilleFlow
 public import ProjectAInos.Mechanics.Poisson.OrbitIntegral
 public import ProjectAInos.Mechanics.Poisson.Quadratic
 public import ProjectAInos.Mechanics.Poisson.ReducedMass
@@ -172,12 +174,14 @@ public import ProjectAInos.SmoothAlgebra.Derivation
 public import ProjectAInos.SmoothAlgebra.Differential
 public import ProjectAInos.SmoothAlgebra.DualNumber
 public import ProjectAInos.SmoothAlgebra.Free
+public import ProjectAInos.SmoothAlgebra.FreeCalculus
 public import ProjectAInos.SmoothAlgebra.FreeChainRule
 public import ProjectAInos.SmoothAlgebra.FreeDerivation
 public import ProjectAInos.SmoothAlgebra.GeneralLocalization
 public import ProjectAInos.SmoothAlgebra.Hadamard
 public import ProjectAInos.SmoothAlgebra.Hom
 public import ProjectAInos.SmoothAlgebra.IdealQuotient
+public import ProjectAInos.SmoothAlgebra.ImplicitFunction
 public import ProjectAInos.SmoothAlgebra.Limits
 public import ProjectAInos.SmoothAlgebra.LocalInverse
 public import ProjectAInos.SmoothAlgebra.Localization
@@ -340,6 +344,9 @@ public import ProjectAInos.SmoothGeometry.Minkowski.TwoForm
 public import ProjectAInos.SmoothGeometry.ODE.ContinuousFamily
 public import ProjectAInos.SmoothGeometry.ODE.CoordinateCurvature
 public import ProjectAInos.SmoothGeometry.ODE.FlatFrame
+public import ProjectAInos.SmoothGeometry.ODE.Flow
+public import ProjectAInos.SmoothGeometry.ODE.FlowComplete
+public import ProjectAInos.SmoothGeometry.ODE.FlowEquation
 public import ProjectAInos.SmoothGeometry.ODE.FlowVariation
 public import ProjectAInos.SmoothGeometry.ODE.LocalFlow
 public import ProjectAInos.SmoothGeometry.ODE.Propagator
@@ -348,6 +355,7 @@ public import ProjectAInos.SmoothGeometry.ODE.PropagatorExpansion
 public import ProjectAInos.SmoothGeometry.ODE.Radial
 public import ProjectAInos.SmoothGeometry.ODE.RadialExamples
 public import ProjectAInos.SmoothGeometry.ODE.RadialReparam
+public import ProjectAInos.SmoothGeometry.ODE.Superposition
 public import ProjectAInos.SmoothGeometry.ODE.Volterra
 public import ProjectAInos.SmoothGeometry.ODE.VolterraExamples
 public import ProjectAInos.SmoothGeometry.ODE.VolterraInverse

@@ -255,6 +255,27 @@ theorem measure_image (h : IsLocalFlowOn X Φ Ω) (hX : ContDiff ℝ 1 X)
     simp
   rw [setLIntegral_congr_fun hA hone, setLIntegral_one]
 
+/-- A flow of a field of constant divergence `d` multiplies the measure of every
+measurable set in its domain by `exp (d t)`. -/
+theorem measure_image_of_trace_eq (h : IsLocalFlowOn X Φ Ω) (hX : ContDiff ℝ 1 X) {d : ℝ}
+    (hdiv : ∀ x, traceCLM (fderiv ℝ X x) = d) {t : ℝ} {A : Set E} (hA : MeasurableSet A)
+    (hAΩ : ∀ x ∈ A, (t, x) ∈ Ω) :
+    μ ((fun x => Φ (t, x)) '' A) = ENNReal.ofReal (Real.exp (d * t)) * μ A := by
+  have h1 := lintegral_abs_det_fderiv_eq_addHaar_image μ hA (f := fun x => Φ (t, x))
+    (f' := fun x => fderiv ℝ (fun y => Φ (t, y)) x)
+    (fun x hx => (h.hasFDerivAt (hAΩ x hx)).hasFDerivWithinAt) (h.injOn hX hAΩ)
+  rw [← h1]
+  have hconst : ∀ x ∈ A, ENNReal.ofReal |(fderiv ℝ (fun y => Φ (t, y)) x).det| =
+      ENNReal.ofReal (Real.exp (d * t)) := by
+    intro x hx
+    have hd : (fderiv ℝ (fun y => Φ (t, y)) x).det = Real.exp (d * t) := by
+      have hdet := h.det_fderiv hX (hAΩ x hx)
+      simp only [hdiv, intervalIntegral.integral_const, sub_zero, smul_eq_mul] at hdet
+      rw [mul_comm d t]
+      exact hdet
+    rw [hd, abs_of_pos (Real.exp_pos _)]
+  rw [setLIntegral_congr_fun hA hconst, setLIntegral_const]
+
 /-- Liouville's theorem: a flow of a field of divergence zero, defined for all
 times and points, preserves the measure. -/
 theorem measurePreserving (h : IsLocalFlowOn X Φ Ω) (hX : ContDiff ℝ 1 X)

@@ -81,8 +81,10 @@ volume are the following.
 **What mechanics found out of reach.**
 
 - *Flows.* The pinned Mathlib has no flow of a vector field with smooth
-  dependence on the initial condition, and mechanics did not prove it. Every
-  dynamical theorem there is about a given curve (`IsTrajectory`,
+  dependence on the initial condition. Mechanics did not prove it in its first
+  delivery; it is now `SmoothGeometry.NonlinearODE.flow`, for a field that is
+  smooth on all of a Banach space. Every
+  dynamical theorem of the first delivery is about a given curve (`IsTrajectory`,
   `StandardJet.IsSolution`); existence appears as an explicit solution or as
   data. The interface ODE of this plan asks for existence, uniqueness and
   parameter dependence together. Only the statements "for every solution"

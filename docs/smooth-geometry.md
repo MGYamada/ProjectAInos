@@ -995,8 +995,66 @@ an autonomous equation `ẋ = X(x)`. Nothing is constructed.
   `measurePreserving_propagator_const` is the case of a linear field of trace
   zero.
 
+- `IsLocalFlowOn.measure_image_of_trace_eq`: a flow of a field of constant
+  divergence `d` multiplies the measure of every measurable set in its domain
+  by `exp (d t)`.
+
+`ODE.Superposition` treats the operator `γ ↦ X ∘ γ` on `C(K, E)` for a compact
+`K`. `Superposition.hasFDerivAt_comp`: for a continuously differentiable `X`
+its derivative at `γ` is `η ↦ (t ↦ DX(γ(t)) η(t))`, by the mean value
+inequality on the segments from `γ(t)` to `η(t)`.
+`Superposition.comp_contDiff`: for a smooth `X` the operator is smooth.
+`ContinuousFamily.slices_contDiff` does not apply, since there the inner
+function is fixed.
+
+`ODE.FlowEquation` writes the solution of `ẋ = X(x)` through `x`, traversed
+up to the time `τ`, as a curve on the unit interval:
+`IsFlowCurve X τ x γ` is `γ(σ) = x + τ ∫₀^σ X(γ)`. The time is a factor in the
+equation, so one space of curves serves for all times of both signs.
+
+- `IsFlowCurve.eq`: a flow curve is unique, for a continuously differentiable
+  field. `IsFlowCurve.rescale`: `σ ↦ γ(cσ)` is the flow curve of the time `cτ`.
+  `exists_isFlowCurve_of_hasDerivWithinAt`: a solution between the times `0`
+  and `t` gives a flow curve of the time `t`.
+- `equation X` is the map `((τ, x), γ) ↦ γ − x − τ ∫ X(γ)`. It is smooth
+  (`equation_contDiff`), and its derivative in `γ` is the equation operator of
+  the linear equation with the coefficient `τ DX(γ)` (`equation_fderiv_inr`),
+  which is invertible for every coefficient.
+- `exists_local_family`: every flow curve belongs to a smooth family of flow
+  curves on an open set of times and points.
+
+`ODE.Flow` defines the flow of a vector field on a Banach space.
+`flowDomain X` is the set of `(t, x)` that have a flow curve, and
+`flow X (t, x)` is the value of that curve at the end of the unit interval.
+
+- `mem_flowDomain_iff`: `(t, x)` is in the domain if and only if a solution
+  through `x` exists between the times `0` and `t`. The section of the domain
+  at a point is an interval that contains zero
+  (`mem_flowDomain_of_mem_uIcc`); it is the maximal interval of existence.
+- `isOpen_flowDomain`, `contDiffOn_flow`: for a smooth field the domain is
+  open and the flow is smooth in the time and the point together.
+- `hasDerivAt_flow`, `flow_integral_eq`: the flow solves the equation.
+  `flow_eq_of_hasDerivWithinAt`: a solution between `0` and `t` is the flow.
+- `isLocalFlowOn_flow`: the flow is a local flow, so the variational equation,
+  the determinant formula and the statements about volume above apply to it.
+
+`ODE.FlowComplete`:
+
+- `neg_mem_flowDomain`, `flow_add`: `Φ(−t, Φ(t, x)) = x`, and
+  `Φ(s + t, x) = Φ(t, Φ(s, x))` whenever the right-hand side is defined, for
+  times of any signs.
+- `mem_flowDomain_of_isCompact`: a solution that stays in a compact set, as
+  long as it exists, exists for the whole time.
+- `flowDomain_eq_univ_of_norm_le`: on a finite-dimensional space a field with
+  `‖X(x)‖ ≤ a + b ‖x‖` has a flow defined for all times and points, by
+  Gronwall's inequality (`norm_flow_le_gronwallBound`).
+- `flowDomain_linear`, `flow_linear`: the flow of a linear field is the
+  propagator of the constant coefficient.
+
+The field is smooth on the whole space. A field that is smooth only on an
+open set, and a field that depends on the time, are not treated.
+
 `Volterra` and `ContinuousFamily` are stated for types in arbitrary universes.
-The flow of a nonlinear field is not constructed here.
 
 ### Smooth radial families and local coordinate coefficients
 

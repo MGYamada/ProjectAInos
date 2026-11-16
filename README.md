@@ -248,13 +248,16 @@ has absolute value less than two or the matrix is `±1`. For
 `ẍ + ω₀² (1 + h cos γt) x = 0` the trace is known to second order with an
 explicit remainder, which gives the instability zone
 `|ω₀² − γ²/4| < ω₀² |h|/2` to first order and parametric resonance at
-`γ = 2ω₀`. For a given flow of a vector field on a finite-dimensional space
-the determinant of the derivative in the initial point is
-`exp ∫ tr DX`, and a flow of a field of trace zero preserves the volume
-(Liouville's theorem for a given flow). For a given family of paths with
-moving end times whose reference path solves the equations of motion, the
-derivative of the action is `p dq − E dt` at the two ends. The flow of a
-general Hamiltonian is not constructed. Symplectic forms and
+`γ = 2ω₀`. A smooth vector field on a Banach space has a flow with an open
+domain and smooth dependence on the time and the point; the determinant of
+its derivative in the initial point is `exp ∫ tr DX`. Hence the flow of every
+Hamiltonian of the free C∞-ring on finitely many canonical co-ordinates
+preserves the Lebesgue measure of the phase space (Liouville's theorem), the
+flows of the oscillator and of the pendulum are defined for all times, and
+with friction the phase volume of the oscillator contracts as
+`exp (−Σ aᵢ/mᵢ · t)`. For a given family of paths with moving end times whose
+reference path solves the equations of motion, the derivative of the action
+is `p dq − E dt` at the two ends. Symplectic forms and
 Dirac brackets are not implemented. Galilean symmetry as a group action and the topics of 2.1 and
 2.4 have no Lean counterpart yet. The
 [ledger](docs/cinfty-mechanics.md#ledger) gives the status of each section of
