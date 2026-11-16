@@ -116,6 +116,7 @@ public import ProjectAInos.Mechanics.Oscillations.Duhamel
 public import ProjectAInos.Mechanics.Oscillations.Forced
 public import ProjectAInos.Mechanics.Oscillations.Harmonic
 public import ProjectAInos.Mechanics.Oscillations.Linearization
+public import ProjectAInos.Mechanics.Oscillations.Molecule
 public import ProjectAInos.Mechanics.Oscillations.NormalForm
 public import ProjectAInos.Mechanics.Oscillations.NormalModes
 public import ProjectAInos.Mechanics.Oscillations.Oscillator
@@ -126,7 +127,10 @@ public import ProjectAInos.Mechanics.Oscillations.ParametricTrace
 public import ProjectAInos.Mechanics.Oscillations.ParametricZone
 public import ProjectAInos.Mechanics.Oscillations.PhaseVolume
 public import ProjectAInos.Mechanics.Oscillations.QuadraticLagrangian
+public import ProjectAInos.Mechanics.Oscillations.SpringMolecule
 public import ProjectAInos.Mechanics.Oscillations.Symmetry
+public import ProjectAInos.Mechanics.Oscillations.SymmetryTypes
+public import ProjectAInos.Mechanics.Oscillations.Triatomic
 public import ProjectAInos.Mechanics.Poisson.ActionFunction
 public import ProjectAInos.Mechanics.Poisson.AngularMomentum
 public import ProjectAInos.Mechanics.Poisson.Apsides
