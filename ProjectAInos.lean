@@ -101,6 +101,13 @@ public import ProjectAInos.Mechanics.Jet.Prolongation
 public import ProjectAInos.Mechanics.Jet.Standard
 public import ProjectAInos.Mechanics.KnifeEdge
 public import ProjectAInos.Mechanics.Legendre
+public import ProjectAInos.Mechanics.OneDimension.Abel
+public import ProjectAInos.Mechanics.OneDimension.ActionAngle
+public import ProjectAInos.Mechanics.OneDimension.Area
+public import ProjectAInos.Mechanics.OneDimension.Motion
+public import ProjectAInos.Mechanics.OneDimension.Orbit
+public import ProjectAInos.Mechanics.OneDimension.Oscillator
+public import ProjectAInos.Mechanics.OneDimension.Well
 public import ProjectAInos.Mechanics.OpenDomain
 public import ProjectAInos.Mechanics.Oscillations.Adiabatic
 public import ProjectAInos.Mechanics.Oscillations.Damped
@@ -175,6 +182,7 @@ public import ProjectAInos.SmoothAlgebra.Category
 public import ProjectAInos.SmoothAlgebra.Congruence
 public import ProjectAInos.SmoothAlgebra.Derivation
 public import ProjectAInos.SmoothAlgebra.Differential
+public import ProjectAInos.SmoothAlgebra.DividedDifference
 public import ProjectAInos.SmoothAlgebra.DualNumber
 public import ProjectAInos.SmoothAlgebra.Free
 public import ProjectAInos.SmoothAlgebra.FreeCalculus

@@ -1467,6 +1467,80 @@ apsides. The integrals to infinity of the scattering problem, the condition
 for a closed orbit and the periodicity of the motion as a whole are not
 proved.
 
+## Motion in one dimension: wells
+
+`Mechanics/OneDimension` treats `H = p²/2m + U(x)` with `U` smooth on `ℝ` and
+`m > 0` in the plane `ℝ × ℝ` of `(x, p)` (Landau–Lifshitz §§11, 12, 50).
+
+`OneDimension/Well`: `IsWell U E a b` states that `a < b` are simple turning
+points of the energy `E`: `U(a) = U(b) = E`, `U′(a) < 0 < U′(b)` and `U < E`
+between them.
+
+- `IsWell.sub_eq`: `E − U(x) = (x − a)(b − x) W(x)` with
+  `W = wellFactor U a b`, the second divided difference of `U`
+  (`SmoothAlgebra.dividedDifference₂`). It is smooth in `(a, b, x)` together
+  (`contDiff_wellFactor`) and positive on `[a, b]` (`IsWell.wellFactor_pos`).
+- `IsWell.exists_family`: the turning points are smooth functions `α(E)`,
+  `β(E)` on an open set of energies, and the energies of that set have wells
+  between them. `isWell_oscillator` is the oscillator.
+
+`OneDimension/Orbit`: the level curve is the image of
+`x(θ) = (a + b)/2 − (b − a)/2 · cos θ`,
+`p(θ) = √(2m) · (b − a)/2 · sin θ · √W(x(θ))` (`orbitPosition`,
+`orbitMomentum`). Both are smooth and `2π`-periodic,
+`p²/2m + U(x) = E` on the curve (`IsWell.orbit_energy`), and the curve is
+tangent to the Hamiltonian field: `x′(θ) = λ p/m` and `p′(θ) = −λ U′(x)` with
+`λ = orbitRate = √(m/2)/√W > 0` (`hasDerivAt_orbitPosition`,
+`IsWell.orbitRate_mul_orbitMomentum`, `IsWell.hasDerivAt_orbitMomentum`). No
+point of the curve is singular. `orbitPeriod` is `∫₀^{2π} λ dθ`, and
+`IsWell.orbitPeriod_eq` is `T = √(2m) ∫ₐᵇ dx/√(E − U(x))`.
+
+`OneDimension/Motion`: `field m U` is the field `(p/m, −U′(x))`.
+`wellMotion m U a b` is the level curve run with the angle that solves
+`dθ/dt = 1/λ(θ)`, which exists for all times.
+
+- `IsWell.hasDerivAt_wellMotion`, `wellMotion_zero`: it solves Hamilton's
+  equations at every time and starts at `(a, 0)`; it is the line of the flow
+  through that point (`IsWell.flow_field_eq`).
+- `IsWell.wellMotion_add_period`: it has the period `orbitPeriod`.
+- `IsWell.exists_wellMotion_eq`: every point with the energy `E` and the
+  position in `[a, b]` is reached by it.
+- `IsWell.add_period_of_hasDerivAt`, `IsWell.position_add_period`: every
+  solution with the energy `E` that starts between the turning points has the
+  period `orbitPeriod`.
+
+`OneDimension/Area`: `orbitArea` is `∮ p dx` as an integral over the angle,
+equal to `2 ∫ₐᵇ √(2m (E − U)) dx` (`IsWell.orbitArea_eq`).
+`hasDerivAt_orbitArea` is Proposition 68: along a smooth family of wells
+`d/dE ∮ p dx = T(E)`. The derivative of `p x_θ` in the energy is `λ` plus the
+derivative in `θ` of `p ∂x/∂E`, by the derivative in the energy of
+`p²/2m + U(x) = E` (`orbitMomentum_mul_deriv_energy`); the second term
+integrates to zero over the closed curve.
+
+`OneDimension/Abel`: `lintegral_levelTime_mul` is the exchange of integrals
+`∫ (∫_Ω dx/√(E − U(x))) dE/√(V − E) = π · |{x ∈ Ω : U(x) < V}|`, for every
+measurable `U` and every set `Ω`, by Tonelli's theorem; the integrands are
+non-negative and vanish where the square root has a negative argument.
+`abel_inversion` is (12.1) for wells nested from the bottom `E₀` to `V`:
+`x₂(V) − x₁(V) = (1/π√(2m)) ∫ T(E) dE/√(V − E)`.
+
+`OneDimension/ActionAngle`: `orbitAction` is `I = (1/2π) ∮ p dx`, with
+`dI/dE = T/2π` (`hasDerivAt_orbitAction`) and strict monotonicity on an
+interval of the family (`strictMonoOn_orbitAction`). `orbitPhase` is the angle
+variable `φ = 2π t/T` of a point of the level curve; it increases by `2π`
+around the curve, and along the motion `φ = (2π/T) t`
+(`IsWell.orbitPhase_add_two_pi`, `IsWell.orbitPhase_orbitAngle`).
+`orbit_area_form`: in the chart `(E, θ)` the area form `dx ∧ dp` is `dφ ∧ dI`.
+
+`OneDimension/Oscillator`: for `U = k x²/2` the factor is the constant `k/2`,
+the period is `2π√(m/k)`, the action variable is `E √(m/k)`, and the wells
+satisfy the hypotheses of Abel's formula (`orbitPeriod_oscillator`,
+`orbitAction_oscillator`, `abel_inversion_oscillator`).
+
+The turning points are simple. An unbounded motion, a turning point with
+`U′ = 0`, the generating function of the action–angle variables and the map
+`(φ, I) ↦ (x, p)` are not treated.
+
 ## Mechanical similarity
 
 `Mechanics/Similarity` covers Landau–Lifshitz §10. `TimeFunction.scale β` is
@@ -1590,6 +1664,13 @@ semi-major axis is not computed.
 | [Routhian](../ProjectAInos/Mechanics/Routhian.lean) | `RouthSpace`, `Routhian.partialLegendre`, `partialEnergy`, `partialHessian`, `apply_partialLegendre`, `IsPartiallyHyperregular`, `routhian`, `IsPartiallyHyperregular.inversePartialHessian_mul_partialHessian`, `IsPartiallyHyperregular.partialLegendre_partialDerivation_p_routhian`, `IsPartiallyHyperregular.partialLegendre_partialDerivation_q_routhian`, `IsPartiallyHyperregular.partialLegendre_partialDerivation_v_routhian`, `IsPartiallyHyperregular.partialDerivation_q_routhian_eq_zero`, `routhCurve`, `lift_routhCurve`, `IsRouthTrajectory`, `IsPartiallyHyperregular.isRouthTrajectory_routhCurve_iff`, `IsPartiallyHyperregular.eq_routhCurve`, `restriction`, `reducedRouthian`, `IsRouthTrajectory.p_eq_algebraMap`, `IsRouthTrajectory.isSolution_reducedRouthian`, `naturalInverse`, `isPartiallyHyperregular_natural` |
 | [Elementary](../ProjectAInos/Mechanics/Elementary.lean) | `ringCos`, `ringSin`, `ringCos_mul_ringCos_add_ringSin_mul_ringSin`, `apply_ringCos`, `apply_ringSin`, `map_ringCos`, `map_ringSin`, `exp_zero`, `exp_mul_exp_neg`, `apply_exp` |
 | [Poisson/CentralField](../ProjectAInos/Mechanics/Poisson/CentralField.lean) | `Plane`, `Polar`, `Radial`, `r`, `rInv`, `cosφ`, `sinφ`, `bracket_eq`, `polarCoordinates`, `isPoissonHom_polarCoordinates`, `polarCoordinates_q_sq`, `polarCoordinates_p_sq`, `angularMomentum`, `polarCoordinates_angularMomentum`, `hamiltonian`, `polarHamiltonian`, `logPotential`, `polarCoordinates_hamiltonian`, `partialDerivation_polarHamiltonian`, `radialHamiltonian`, `restriction_polarHamiltonian`, `radius`, `radialMomentum`, `radialHamiltonian_eq`, `canonical_radius_radialMomentum`, `polarHamiltonian_mem_normalizer`, `reductionHom_radialHamiltonian`, `isTrajectory_plane`, `lift_angularMomentum`, `pφ_eq_algebraMap`, `isTrajectory_radial`, `timeDerivative_angle`, `q_dotProduct_M`, `sum_q_mul_M_eq_zero` |
+| [OneDimension/Well](../ProjectAInos/Mechanics/OneDimension/Well.lean) | `IsWell`, `wellFactor`, `IsWell.sub_eq`, `IsWell.wellFactor_pos`, `isWell_of_wellFactor_pos`, `exists_level_point`, `IsWell.exists_family`, `isWell_oscillator` |
+| [OneDimension/Orbit](../ProjectAInos/Mechanics/OneDimension/Orbit.lean) | `orbitPosition`, `orbitMomentum`, `orbitRate`, `orbitPeriod`, `IsWell.orbit_energy`, `IsWell.orbitRate_mul_orbitMomentum`, `IsWell.hasDerivAt_orbitMomentum`, `IsWell.orbitPeriod_eq`, `IsWell.orbitPeriod_pos` |
+| [OneDimension/Motion](../ProjectAInos/Mechanics/OneDimension/Motion.lean) | `field`, `energy`, `orbitTime`, `orbitAngle`, `wellMotion`, `IsWell.hasDerivAt_wellMotion`, `IsWell.wellMotion_add_period`, `IsWell.flow_field_eq`, `IsWell.exists_wellMotion_eq`, `IsWell.add_period_of_hasDerivAt`, `IsWell.position_add_period` |
+| [OneDimension/Area](../ProjectAInos/Mechanics/OneDimension/Area.lean) | `orbitArea`, `IsWell.orbitArea_eq`, `contDiffOn_orbitMomentum_family`, `orbitMomentum_mul_deriv_energy`, `hasDerivAt_orbitArea`, `IsWell.exists_hasDerivAt_orbitArea` |
+| [OneDimension/Abel](../ProjectAInos/Mechanics/OneDimension/Abel.lean) | `lintegral_inv_sqrt_mul_inv_sqrt`, `lintegral_levelTime_mul`, `IsWell.lintegral_inv_sqrt_eq`, `abel_inversion` |
+| [OneDimension/ActionAngle](../ProjectAInos/Mechanics/OneDimension/ActionAngle.lean) | `orbitAction`, `orbitPhase`, `hasDerivAt_orbitAction`, `strictMonoOn_orbitAction`, `IsWell.orbitPhase_add_two_pi`, `IsWell.orbitPhase_orbitAngle`, `orbit_area_form` |
+| [OneDimension/Oscillator](../ProjectAInos/Mechanics/OneDimension/Oscillator.lean) | `wellFactor_oscillator`, `orbitPeriod_oscillator`, `orbitAction_oscillator`, `abel_inversion_oscillator` |
 | [Quadrature](../ProjectAInos/Mechanics/Quadrature.lean) | `integral_comp_eq_integral_div_sqrt`, `sub_eq_integral_one_div_sqrt`, `sub_eq_sqrt_mul_integral_of_energy` |
 | [Poisson/OrbitIntegral](../ProjectAInos/Mechanics/Poisson/OrbitIntegral.lean) | `canonical_radius_radialHamiltonian`, `radiusAt`, `radialVelocityAt`, `radialSpeedSq`, `lift_radialHamiltonian_apply`, `hasDerivAt_radiusAt`, `continuous_radialVelocityAt`, `radialVelocityAt_sq`, `continuousOn_radialSpeedSq`, `sub_eq_integral_radius`, `angle_sub_eq_integral_radius`, `timeDerivative_angle_apply` |
 | [TurningPoint](../ProjectAInos/Mechanics/TurningPoint.lean) | `turningParam`, `turningParam_image`, `turningParam_sub_mul_sub`, `integral_turningParam`, `integral_div_sqrt_turning`, `integrableOn_div_sqrt_turning`, `integral_comp_eq_integral_div_sqrt_turning`, `integral_comp_eq_integral_div_sqrt_turning_of_neg`, `sub_eq_integral_turningParam`, `sub_eq_sqrt_mul_integral_of_energy_turning`, `sqrt_mul_integral_oscillator`, `sub_eq_sqrt_mul_integral_oscillator` |

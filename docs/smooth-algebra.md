@@ -230,6 +230,15 @@ smoothness at the base point only, which for infinite order does not extend to
 a neighbourhood; the implicit function of the base point agrees near each
 point of its graph with the implicit function of that point.
 
+`DividedDifference` treats a smooth function `U` of one variable.
+`dividedDifference U (x, y)` is `∫₀¹ U′(y + t (x − y)) dt`, with
+`U(x) − U(y) = (x − y) U[x, y]` (`sub_eq_mul_dividedDifference`), and
+`dividedDifference₂ U (a, b, x)` is the second divided difference, with
+`U[b, x] − U[b, a] = (x − a) U[a, b, x]` (`dividedDifference_sub`). Both are
+smooth in all their arguments, also where the arguments coincide. Hence, for
+`a ≠ b` with `U(a) = U(b) = E`,
+`E − U(x) = (x − a)(b − x) U[a, b, x]` (`sub_eq_mul_mul_dividedDifference₂`).
+
 `LineDerivative` proves `hasFDerivAt_of_hasDerivAt_line`: if a real function
 has, at every point `y` near `x` and in every direction `v`, the derivative
 `ℓ(y) v` along the line `s ↦ y + s v`, and the field of linear forms `ℓ` is
@@ -372,6 +381,7 @@ momentum and the heavy top are in the
 | [FreeDerivation](../ProjectAInos/SmoothAlgebra/FreeDerivation.lean) | `FreeSmoothRing.derivation`, `derivation_generator`, `derivation_ext`, `map_derivation_eq`, `derivationEquiv`, `partialDerivation_comm`, `exists_finset_partialDerivation_eq_zero` |
 | [FreeChainRule](../ProjectAInos/SmoothAlgebra/FreeChainRule.lean) | `FreeSmoothRing.derivation_lift`, `FreeSmoothRing.derivation_lift_mul`: the chain rule `E (s(y)) = Σₐ (∂ₐ s)(y) • E (yₐ)` for a substitution out of a free ring on finitely many generators. `FreeSmoothRing.apply_eq_sum_partialDerivation`, `FreeSmoothRing.apply_eq_zero_of_partialDerivation_eq_zero`: on any free ring a vector field is `Σₐ (∂ₐ s) E(xₐ)`, summed over the generators of a presentation of `s` |
 | [FreeCalculus](../ProjectAInos/SmoothAlgebra/FreeCalculus.lean) | `FreeSmoothRing.contDiff_val`, `fderiv_val_apply`, `realField`, `contDiff_realField`, `fderiv_realField_apply`: the elements of a free ring on finitely many generators as differentiable functions, and derivations as vector fields |
+| [DividedDifference](../ProjectAInos/SmoothAlgebra/DividedDifference.lean) | `dividedDifference`, `sub_eq_mul_dividedDifference`, `dividedDifference₂`, `dividedDifference_sub`, `sub_eq_mul_mul_dividedDifference₂`: Hadamard's lemma in one variable, applied twice |
 | [ImplicitFunction](../ProjectAInos/SmoothAlgebra/ImplicitFunction.lean) | `exists_contDiffOn_implicitFunction`: a smooth implicit function on an open neighbourhood |
 | [LineDerivative](../ProjectAInos/SmoothAlgebra/LineDerivative.lean) | `hasFDerivAt_of_hasDerivAt_line`: derivatives along all lines, with a continuous field of linear forms, give the Fréchet derivative |
 | [Point](../ProjectAInos/SmoothAlgebra/Point.lean) | `Point`, `TangentPoint`, `TangentPoint.congr`, `FreeSmoothRing.pointEquiv`, `FreeSmoothRing.lift_real`, `FreeSmoothRing.ext_lift`, `FreeSmoothRing.tangentPointEquiv`, `FreeSmoothRing.fst_tangentPoint`, `FreeSmoothRing.snd_tangentPoint`, `FreeSmoothRing.tangentPoint_map_lift`, `SmoothRingCon.generateHomEquiv`, `FreeSmoothRing.Presented`, `FreeSmoothRing.presentedPointEquiv`, `FreeSmoothRing.presentedTangentPointEquiv`, `FreeSmoothRing.circleTangentPointEquiv` |
