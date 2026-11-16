@@ -255,9 +255,13 @@ Hamiltonian of the free C∞-ring on finitely many canonical co-ordinates
 preserves the Lebesgue measure of the phase space (Liouville's theorem), the
 flows of the oscillator and of the pendulum are defined for all times, and
 with friction the phase volume of the oscillator contracts as
-`exp (−Σ aᵢ/mᵢ · t)`. For a given family of paths with moving end times whose
+`exp (−Σ aᵢ/mᵢ · t)`. For a family of paths with moving end times whose
 reference path solves the equations of motion, the derivative of the action
-is `p dq − E dt` at the two ends. Symplectic forms and
+is `p dq − E dt` at the two ends; for the solutions of the flow of a
+Hamiltonian this is `dS = p dq − H dt`, the flow preserves the symplectic
+form, and away from conjugate points the action is a differentiable function
+of the time and the end point that satisfies the Hamilton–Jacobi equation.
+Symplectic forms on manifolds and
 Dirac brackets are not implemented. Galilean symmetry as a group action and the topics of 2.1 and
 2.4 have no Lean counterpart yet. The
 [ledger](docs/cinfty-mechanics.md#ledger) gives the status of each section of

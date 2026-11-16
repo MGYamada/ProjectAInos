@@ -230,6 +230,11 @@ smoothness at the base point only, which for infinite order does not extend to
 a neighbourhood; the implicit function of the base point agrees near each
 point of its graph with the implicit function of that point.
 
+`LineDerivative` proves `hasFDerivAt_of_hasDerivAt_line`: if a real function
+has, at every point `y` near `x` and in every direction `v`, the derivative
+`ℓ(y) v` along the line `s ↦ y + s v`, and the field of linear forms `ℓ` is
+continuous at `x`, then the function has the Fréchet derivative `ℓ(x)` at `x`.
+
 ## Hadamard's lemma and quotients by ideals
 
 `ParametricIntegral` proves the interface statement (I) of the
@@ -368,6 +373,7 @@ momentum and the heavy top are in the
 | [FreeChainRule](../ProjectAInos/SmoothAlgebra/FreeChainRule.lean) | `FreeSmoothRing.derivation_lift`, `FreeSmoothRing.derivation_lift_mul`: the chain rule `E (s(y)) = Σₐ (∂ₐ s)(y) • E (yₐ)` for a substitution out of a free ring on finitely many generators. `FreeSmoothRing.apply_eq_sum_partialDerivation`, `FreeSmoothRing.apply_eq_zero_of_partialDerivation_eq_zero`: on any free ring a vector field is `Σₐ (∂ₐ s) E(xₐ)`, summed over the generators of a presentation of `s` |
 | [FreeCalculus](../ProjectAInos/SmoothAlgebra/FreeCalculus.lean) | `FreeSmoothRing.contDiff_val`, `fderiv_val_apply`, `realField`, `contDiff_realField`, `fderiv_realField_apply`: the elements of a free ring on finitely many generators as differentiable functions, and derivations as vector fields |
 | [ImplicitFunction](../ProjectAInos/SmoothAlgebra/ImplicitFunction.lean) | `exists_contDiffOn_implicitFunction`: a smooth implicit function on an open neighbourhood |
+| [LineDerivative](../ProjectAInos/SmoothAlgebra/LineDerivative.lean) | `hasFDerivAt_of_hasDerivAt_line`: derivatives along all lines, with a continuous field of linear forms, give the Fréchet derivative |
 | [Point](../ProjectAInos/SmoothAlgebra/Point.lean) | `Point`, `TangentPoint`, `TangentPoint.congr`, `FreeSmoothRing.pointEquiv`, `FreeSmoothRing.lift_real`, `FreeSmoothRing.ext_lift`, `FreeSmoothRing.tangentPointEquiv`, `FreeSmoothRing.fst_tangentPoint`, `FreeSmoothRing.snd_tangentPoint`, `FreeSmoothRing.tangentPoint_map_lift`, `SmoothRingCon.generateHomEquiv`, `FreeSmoothRing.Presented`, `FreeSmoothRing.presentedPointEquiv`, `FreeSmoothRing.presentedTangentPointEquiv`, `FreeSmoothRing.circleTangentPointEquiv` |
 | [ParametricIntegral](../ProjectAInos/SmoothAlgebra/ParametricIntegral.lean) | `fderivLeft`, `hasFDerivAt_parametric_intervalIntegral`, `contDiff_parametric_intervalIntegral`, `contDiff_infty_parametric_intervalIntegral`, `contDiff_infty_parametric_intervalIntegral_limits`: a parametric integral of a smooth function is smooth |
 | [Hadamard](../ProjectAInos/SmoothAlgebra/Hadamard.lean) | `SmoothOperation.segment`, `SmoothOperation.hadamard`, `apply_sub_apply_eq_sum_hadamard`, `comp_castAdd_sub_comp_natAdd`, `SmoothRing.op_sub_op`: Hadamard's lemma for operations and in a C∞-ring |
