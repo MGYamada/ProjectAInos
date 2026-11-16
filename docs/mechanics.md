@@ -940,8 +940,86 @@ algebra. `modeSpace M K c` is the space of the vectors with `K v = c M v`.
   kernel of `K`; for a molecule they contain the translations and the
   rotations.
 
-The decomposition of the space of the modes into irreducible representations
-and the number of modes of each symmetry type are not proved.
+`Oscillations/SymmetryTypes` is the decomposition and the counting. With
+`Sᵀ M S = 1` and `Sᵀ K S = diag λ`, `modeSpace M K c` is the eigenspace of
+`S Sᵀ K = M⁻¹ K` for the value `c` (`modeSpace_eq_eigenspace`).
+
+- `isInternal_modeSpace`: the space of the co-ordinates is the direct sum of
+  the spaces `modeSpace M K c` over the values `c` of `λ`.
+  `finrank_modeSpace`: the dimension of the space of the value `c` is the
+  number of the indices with `λ = c`.
+- `IsSymmetryRep ρ M K`: a representation `ρ` of a group on the co-ordinates
+  by maps that commute with `M` and `K`. `modeSubrep` and `modeRep` are the
+  subrepresentation and the representation on the modes of one value.
+- `character_eq_sum_modeRep`: the character of `ρ` is the sum of the
+  characters on the spaces of the modes.
+- `sum_finrank_intertwiningMap_modeRep`: for a representation `σ` of the same
+  finite group, the dimensions of the spaces of the equivariant maps from `σ`
+  to the modes of each value add up to `(1/|G|) Σ_g χ_ρ(g) χ_σ(g⁻¹)`.
+
+A symmetry type is a real representation `σ`. The dimension of the space of
+the equivariant maps from `σ` is the number of times `σ` occurs when the
+equivariant endomorphisms of `σ` are the scalars.
+
+`Oscillations/Molecule`: the atoms are indexed by `ι` and a displacement is a
+function on `ι × Fin 3`; `atom u a` is the displacement of the atom `a`. A
+group acts on space by the matrices `O g` and permutes the atoms by `π g`.
+
+- `displacementRep O π`: `(g u)ₐ = O_g u_{π_g⁻¹ a}` (`atom_displacementRep`).
+  Its matrix is the Kronecker product of a permutation matrix and `O g`.
+- `character_displacementRep`: the character is `N_g · tr O_g`, with `N_g`
+  the number of the atoms that `g` leaves in place.
+- `rigidMap r`: the displacement `uₐ = t + ω × rₐ`. For orthogonal `O g` and a
+  symmetric configuration, `O_g rₐ = r_{π_g a}`, it is equivariant from
+  `rigidRep O`, the vectors and the axial vectors
+  (`displacementRep_rigidMap`), whose character is `(1 + det O_g) tr O_g`
+  (`character_rigidRep`).
+- `sum_finrank_vibration`: if `rigidMap r` is injective and its range is the
+  space of the modes of frequency zero, the modes of non-zero frequency
+  contain the type `σ` as many times as
+  `(1/|G|) Σ_g (N_g − 1 − det O_g) tr O_g χ_σ(g⁻¹)`.
+- `card_vibration_add_six`: there are then `3N − 6` modes of non-zero
+  frequency; `card_vibration_add_finrank_range` is the count without the
+  injectivity, as for a molecule on a line.
+
+`Oscillations/SpringMolecule` is a model of the potential energy: a spring of
+the stiffness `κ a b` along each bond, so that
+`u · K u = Σ κ_ab ((uₐ − u_b) · (rₐ − r_b))²` (`springMatrix`,
+`dotProduct_springMatrix_mulVec`), with the mass matrix `massMatrix m`.
+
+- `springMatrix_mulVec_eq_zero_iff`: for positive stiffnesses the modes of
+  frequency zero are the displacements that stretch no bond; the rigid
+  displacements are among them (`rigidMap_mem_modeSpace_zero`).
+- `isSymmetryRep_spring`: a group of orthogonal symmetries of the
+  configuration that preserves the masses and the stiffnesses is a
+  representation by symmetries.
+
+`Oscillations/Triatomic`: three atoms that are not on a line.
+
+- `rigidMap_injective`, `exists_rigidMap_eq`,
+  `range_rigidMap_eq_modeSpace_zero`: the six rigid displacements are
+  independent, and with a spring on each bond they are the modes of frequency
+  zero. `card_vibration_triatomic`: there are three vibrations.
+- `sum_finrank_vibration_triatomic`: the number of the vibrations of each
+  symmetry type, for every group of symmetries of the molecule.
+- `Equilateral`: three equal atoms and the six permutations of the corners,
+  acting by permutation matrices. The trivial type occurs once
+  (`sum_finrank_trivial`), the sign type never (`sum_finrank_sign`) and the
+  permutation representation twice (`sum_finrank_permutation`); the
+  permutation representation is the sum of the trivial type and of the
+  two-dimensional type, so the vibrations are one totally symmetric vibration
+  and one pair of the two-dimensional type.
+- `Isosceles`: an isosceles molecule and its four symmetries, the reflection
+  that exchanges the atoms of the base and the reflection in the plane of the
+  molecule. Two vibrations are symmetric under both
+  (`sum_finrank_symmetric`), one is antisymmetric under the first
+  (`sum_finrank_antisymmetric`), and none is antisymmetric under the second
+  (`sum_finrank_plane`).
+
+The representations are real. Complex characters, the list of the irreducible
+representations of the point groups, the symmetry types of a molecule on a
+line, and the statement that the modes of one frequency form one irreducible
+representation in the absence of accidental degeneracy are not treated.
 
 ## Parametric resonance
 
@@ -1756,6 +1834,10 @@ semi-major axis is not computed.
 | [Oscillations/NormalForm](../ProjectAInos/Mechanics/Oscillations/NormalForm.lean) | `linearQ`, `linearP`, `canonical_linearQ_linearP`, `linearTransformation`, `linearTransformation_comp`, `isPoissonHom_linearTransformation`, `quadraticHamiltonian`, `quadraticHamiltonian_eq`, `quadraticHamiltonian_eq_normalForm`, `linearTransformation_normalForm`, `isPoissonHom_normalTransformation`, `linearTransformation_comp_inverse`, `linearTransformation_inverse_comp`, `isTrajectory_quadraticForm_iff`, `isTrajectory_quadraticHamiltonian_iff`, `isTrajectory_quadraticHamiltonian_iff_isSmallOscillation` |
 | [Oscillations/QuadraticLagrangian](../ProjectAInos/Mechanics/Oscillations/QuadraticLagrangian.lean) | `JetRing.quadraticLagrangian`, `JetRing.momentum_quadraticLagrangian`, `JetRing.euler_quadraticLagrangian`, `StandardJet.isSolution_quadraticLagrangian_iff`, `NormalModes.isSymm_of_mul_eq_one`, `NormalModes.isTrajectory_quadraticHamiltonian_iff_isSolution` |
 | [Oscillations/Symmetry](../ProjectAInos/Mechanics/Oscillations/Symmetry.lean) | `modeSpace`, `mem_modeSpace`, `mulVec_mem_modeSpace`, `isSmallOscillation_symmetry`, `card_ne_zero_eq_rank` |
+| [Oscillations/SymmetryTypes](../ProjectAInos/Mechanics/Oscillations/SymmetryTypes.lean) | `modeSpace_eq_eigenspace`, `isInternal_modeSpace`, `finrank_modeSpace`, `IsSymmetryRep`, `modeSubrep`, `modeRep`, `character_eq_sum_modeRep`, `sum_finrank_intertwiningMap_modeRep`, `finrank_intertwiningMap_eq_sum` |
+| [Oscillations/Molecule](../ProjectAInos/Mechanics/Oscillations/Molecule.lean) | `atom`, `displacementRep`, `atom_displacementRep`, `character_displacementRep`, `rigidMap`, `rigidRep`, `character_rigidRep`, `displacementRep_rigidMap`, `rigidEquiv`, `card_vibration_add_six`, `sum_finrank_vibration` |
+| [Oscillations/SpringMolecule](../ProjectAInos/Mechanics/Oscillations/SpringMolecule.lean) | `massMatrix`, `bondVector`, `springMatrix`, `dotProduct_springMatrix_mulVec`, `springMatrix_mulVec_eq_zero_iff`, `rigidMap_mem_modeSpace_zero`, `isSymmetryRep_spring` |
+| [Oscillations/Triatomic](../ProjectAInos/Mechanics/Oscillations/Triatomic.lean) | `rigidMap_injective`, `exists_rigidMap_eq`, `range_rigidMap_eq_modeSpace_zero`, `card_vibration_triatomic`, `sum_finrank_vibration_triatomic`, `scalarRep`, `Equilateral.sum_finrank_trivial`, `Equilateral.sum_finrank_sign`, `Equilateral.sum_finrank_permutation`, `Isosceles.sum_finrank_symmetric`, `Isosceles.sum_finrank_antisymmetric`, `Isosceles.sum_finrank_plane` |
 | [Oscillations/Parametric](../ProjectAInos/Mechanics/Oscillations/Parametric.lean) | `mul_self_eq`, `sin_smul_pow_succ`, `exists_abs_pow_apply_le`, `IsHill`, `wronskian`, `IsHill.wronskian_eq`, `TimeFunction.shift`, `IsHill.shift`, `state`, `FundamentalSystem`, `FundamentalSystem.eq_combination`, `FundamentalSystem.matrix`, `FundamentalSystem.det_matrix`, `FundamentalSystem.state_eq`, `FundamentalSystem.matrix_add_nat_mul_period`, `FundamentalSystem.exists_abs_apply_le`, `FundamentalSystem.exists_abs_apply_le_of_abs_trace_lt`, `FundamentalSystem.harmonic` |
 | [Oscillations/ParametricExistence](../ProjectAInos/Mechanics/Oscillations/ParametricExistence.lean) | `hillCoefficient`, `hillState`, `hasDerivAt_hillState`, `hillSolution`, `isHill_hillSolution`, `IsHill.eq_of_initial`, `exists_isHill`, `existsUnique_isHill`, `FundamentalSystem.ofCoefficient`, `FundamentalSystem.nonempty`, `FundamentalSystem.ofCoefficient_harmonic`, `monodromy`, `det_monodromy`, `trace_monodromy_harmonic` |
 | [Oscillations/ParametricTrace](../ProjectAInos/Mechanics/Oscillations/ParametricTrace.lean) | `IsHill.const_mul`, `IsHill.add`, `IsHill.state_period`, `IsHill.shift_eq_of_mulVec_eq`, `exists_abs_apply_le_of_shift_eq`, `not_exists_abs_apply_le_of_shift_eq`, `exists_mulVec_eq_smul_of_two_lt_abs_trace`, `exists_isHill_not_bounded_of_two_lt_abs_trace`, `IsHill.exists_abs_apply_le_iff_of_two_lt_abs_trace`, `mulVec_mulVec_sub_of_trace_eq`, `IsHill.exists_abs_apply_le_iff_of_trace_eq`, `exists_isHill_not_bounded_of_trace_eq`, `forall_isHill_bounded_iff` |
