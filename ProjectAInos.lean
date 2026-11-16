@@ -137,13 +137,16 @@ public import ProjectAInos.Mechanics.Poisson.KeplerMotion
 public import ProjectAInos.Mechanics.Poisson.KeplerOrbit
 public import ProjectAInos.Mechanics.Poisson.Liouville
 public import ProjectAInos.Mechanics.Poisson.LiouvilleFlow
+public import ProjectAInos.Mechanics.Poisson.LocalAction
 public import ProjectAInos.Mechanics.Poisson.OrbitIntegral
+public import ProjectAInos.Mechanics.Poisson.PhaseAction
 public import ProjectAInos.Mechanics.Poisson.Quadratic
 public import ProjectAInos.Mechanics.Poisson.ReducedMass
 public import ProjectAInos.Mechanics.Poisson.RigidBody
 public import ProjectAInos.Mechanics.Poisson.RigidBodyMotion
 public import ProjectAInos.Mechanics.Poisson.RotatingFrame
 public import ProjectAInos.Mechanics.Poisson.Separation
+public import ProjectAInos.Mechanics.Poisson.SymplecticFlow
 public import ProjectAInos.Mechanics.Poisson.Trajectory
 public import ProjectAInos.Mechanics.Poisson.TwoBody
 public import ProjectAInos.Mechanics.Poisson.Virial
@@ -183,6 +186,7 @@ public import ProjectAInos.SmoothAlgebra.Hom
 public import ProjectAInos.SmoothAlgebra.IdealQuotient
 public import ProjectAInos.SmoothAlgebra.ImplicitFunction
 public import ProjectAInos.SmoothAlgebra.Limits
+public import ProjectAInos.SmoothAlgebra.LineDerivative
 public import ProjectAInos.SmoothAlgebra.LocalInverse
 public import ProjectAInos.SmoothAlgebra.Localization
 public import ProjectAInos.SmoothAlgebra.LocalizationComparison
@@ -347,6 +351,7 @@ public import ProjectAInos.SmoothGeometry.ODE.FlatFrame
 public import ProjectAInos.SmoothGeometry.ODE.Flow
 public import ProjectAInos.SmoothGeometry.ODE.FlowComplete
 public import ProjectAInos.SmoothGeometry.ODE.FlowEquation
+public import ProjectAInos.SmoothGeometry.ODE.FlowInvariant
 public import ProjectAInos.SmoothGeometry.ODE.FlowVariation
 public import ProjectAInos.SmoothGeometry.ODE.LocalFlow
 public import ProjectAInos.SmoothGeometry.ODE.Propagator

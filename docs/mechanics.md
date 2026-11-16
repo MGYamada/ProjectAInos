@@ -1168,8 +1168,9 @@ the family, and an integration by parts along the reference path.
 - `hasDerivAt_action_oscillator_family`: the motions
   `(A + sα) cos ωt + (B + sβ) sin ωt` with the time of arrival `T + sτ`.
 
-The families are given. That every pair of nearby end points is joined by a
-solution, so that the action is a function of the end point, is not proved.
+The families are given. For the flow of a Hamiltonian the families exist, and
+the action is a function of the end point away from conjugate points; see
+[the action along the flow](#the-action-along-the-flow-of-a-hamiltonian).
 
 The coefficient functions of `Poisson/Separation` are elements of the free
 C∞-ring, smooth on all of `ℝ³`. The coefficients `1/r²`, `1/sin²θ` and `1/(ξ + η)` of the classical
@@ -1225,8 +1226,63 @@ constructs.
   `exp (−Σᵢ aᵢ/mᵢ · t)`.
 
 The Hamiltonian is an element of the free C∞-ring, smooth on all of `ℝ²ⁿ`,
-and does not depend on the time. The symplectic form is not shown to be
-preserved by the flow.
+and does not depend on the time.
+
+### The action along the flow of a Hamiltonian
+
+`Poisson/PhaseAction` treats the action `∫ (Σᵢ pᵢ q̇ᵢ − H) dt` of a curve in
+the phase space. `liouvilleForm ι` is the form `θ = Σᵢ pᵢ dqᵢ`, as a bilinear
+form of the point and the vector, and `phaseLagrangian H` is the Lagrangian
+`θ_z(ż) − H(z)` on the phase space. Its momentum is `θ`
+(`momentum_phaseLagrangian`), its energy is `H` (`pathEnergy_phaseLagrangian`),
+and its Euler–Lagrange equations hold along a solution of Hamilton's
+equations (`eulerLagrange_phaseLagrangian`).
+
+- `hamiltonian_flow_eq`: the Hamiltonian is constant along its flow, also
+  when the flow is not defined for all times. It is an instance of
+  `SmoothGeometry.NonlinearODE.flow_invariant`.
+- `hasDerivAt_action_hamiltonianFlow`: Proposition 49. For a curve of initial
+  points `z₀(s)` and moving times `a(s)`, `b(s)`, the derivative of the action
+  of the solutions `t ↦ Φ(t, z₀(s))` is
+  `[θ(d/ds Φ(b, z₀)) − H b′] − [θ(d/ds Φ(a, z₀)) − H a′]`. The solutions are
+  those of the flow, and the only hypothesis is that the times between `a(s₀)`
+  and `b(s₀)` are in its domain at the point `z₀(s₀)`.
+
+`Poisson/SymplecticFlow`: `symplecticForm ι` is `ω = Σᵢ dqᵢ ∧ dpᵢ`. The
+derivative of a Hamiltonian field paired with `ω` is the Hessian of the
+Hamiltonian (`symplecticForm_fderiv_hamiltonianField`), which is symmetric, so
+`ω(DX u, v) + ω(u, DX v) = 0`. By the variational equation,
+`symplecticForm_fderiv_flow`: `ω(D_zΦ u, D_zΦ v) = ω(u, v)` at every time and
+point of the domain. The map of the flow at every time is a canonical
+transformation.
+
+`Poisson/LocalAction` constructs the action as a function of the co-ordinates
+and the time (Landau–Lifshitz §43). Fix an initial position `q₀`.
+`endPosition H q₀ (T, p)` and `endMomentum H q₀ (T, p)` are the position and
+the momentum at the time `T` of the solution that starts at `q₀` with the
+momentum `p`.
+
+- `exists_initialMomentum`: if the derivative of `p ↦ endPosition H q₀ (T₀, p)`
+  at `p₀` is invertible, there are an open set `W` of times and end points
+  around `(T₀, q₁)`, with `q₁` the position reached, and a smooth function
+  `P₀` on `W` such that the solution from `q₀` with the momentum `P₀(T, q)`
+  reaches `q` at the time `T`.
+- `exists_localAction`: the action `localAction H q₀ P₀` of that solution is
+  differentiable on `W`, and its derivative at `(T, q)` is
+  `(τ, ξ) ↦ Σᵢ pᵢ ξᵢ − H(q, p) τ` with `p` the momentum at the end point
+  (`actionDifferential`).
+- `localAction_hamiltonJacobi`: for a function with this derivative,
+  `∂S/∂T + H(q, ∂S/∂q) = 0`.
+- `exists_localAction_kineticEnergy`: for a free particle with non-zero masses
+  the hypothesis holds at every time `T ≠ 0`
+  (`isInvertible_fderiv_endPosition_kineticEnergy`); the flow is the uniform
+  motion (`flow_kineticEnergy`).
+
+The hypothesis says that the end point is not conjugate to `q₀` along the
+solution. The action function is defined on an open set and is not an element
+of a free C∞-ring, so it is not an instance of
+`CompleteIntegral.IsHamiltonJacobi`. A Lagrangian that is not given through a
+Hamiltonian is treated in `EndpointAction`, for given families.
 
 ## Reduction and the Routhian
 
@@ -1526,6 +1582,9 @@ semi-major axis is not computed.
 | [Poisson/Liouville](../ProjectAInos/Mechanics/Poisson/Liouville.lean) | `divergence`, `divergence_eq`, `divergence_hamiltonian`, `divergence_dissipativeField`, `Oscillator.divergence_dissipativeField` |
 | [Poisson/HamiltonianField](../ProjectAInos/Mechanics/Poisson/HamiltonianField.lean) | `realCurve`, `lift_apply_const`, `isIntegralCurve_iff_hasDerivAt`, `isTrajectory_iff_hasDerivAt`, `traceCLM_fderiv_realField`, `hamiltonianField`, `contDiff_hamiltonianField`, `isTrajectory_canonical_iff_hasDerivAt`, `traceCLM_fderiv_hamiltonianField`, `volume_image_hamiltonianFlow`, `measurePreserving_hamiltonianFlow`, `IsTrajectory.flow_eq`, `exists_isTrajectory` |
 | [Poisson/LiouvilleFlow](../ProjectAInos/Mechanics/Poisson/LiouvilleFlow.lean) | `Oscillator.flowDomain_hamiltonianField`, `Oscillator.measurePreserving_hamiltonianFlow`, `Pendulum.hamiltonian`, `Pendulum.flowDomain_hamiltonianField`, `Pendulum.measurePreserving_hamiltonianFlow`, `Pendulum.exists_isTrajectory`, `Oscillator.flowDomain_dissipativeField`, `Oscillator.volume_image_dissipativeFlow` |
+| [Poisson/PhaseAction](../ProjectAInos/Mechanics/Poisson/PhaseAction.lean) | `liouvilleForm`, `phaseLagrangian`, `momentum_phaseLagrangian`, `pathEnergy_phaseLagrangian`, `eulerLagrange_phaseLagrangian`, `hamiltonian_flow_eq`, `hasDerivAt_action_hamiltonianFlow` |
+| [Poisson/SymplecticFlow](../ProjectAInos/Mechanics/Poisson/SymplecticFlow.lean) | `symplecticForm`, `hessianForm`, `symplecticForm_fderiv_hamiltonianField`, `symplecticForm_fderiv_hamiltonianField_add`, `symplecticForm_fderiv_flow` |
+| [Poisson/LocalAction](../ProjectAInos/Mechanics/Poisson/LocalAction.lean) | `startDomain`, `endPosition`, `endMomentum`, `exists_initialMomentum`, `localAction`, `actionDifferential`, `hasDerivAt_localAction_line`, `exists_localAction`, `localAction_hamiltonJacobi`, `flow_kineticEnergy`, `isInvertible_fderiv_endPosition_kineticEnergy`, `exists_localAction_kineticEnergy` |
 | [Poisson/CyclicReduction](../ProjectAInos/Mechanics/Poisson/CyclicReduction.lean) | `momentumEquation`, `momentumIdeal`, `inclusion`, `restriction`, `restriction_inclusion`, `bracket_momentumEquation`, `mem_normalizer_iff`, `isCoisotropic_momentumIdeal`, `inclusion_mem_normalizer`, `isPoissonHom_inclusion`, `sub_fixMomenta_mem`, `partialDerivation_fixMomenta`, `sub_inclusion_restriction_mem`, `reductionHom`, `reductionHom_bijective`, `isPoissonHom_reductionHom`, `reductionHom_restriction`, `mem_normalizer_of_cyclic`, `isIntegral_p_of_cyclic`, `p_eq_algebraMap_of_cyclic`, `isTrajectory_restriction`, `map_mem_normalizer`, `apply_mem_normalizer`, `canonicalReductionHom`, `canonicalReductionHom_bijective`, `isPoissonHom_canonicalReductionHom`, `canonicalReductionHom_restriction` |
 | [Poisson/ReducedMass](../ProjectAInos/Mechanics/Poisson/ReducedMass.lean) | `CentreSpace`, `centreCoordinates`, `particleCoordinates`, `centreCoordinates_particleCoordinates`, `particleCoordinates_centreCoordinates`, `isPoissonHom_centreCoordinates`, `totalMomentumIdeal`, `reducedMassHom`, `reducedMassHom_bijective`, `isPoissonHom_reducedMassHom`, `hamiltonian`, `relativeHamiltonian`, `particleCoordinates_hamiltonian`, `restriction_particleCoordinates_hamiltonian`, `hamiltonian_mem_normalizer`, `reducedMassHom_relativeHamiltonian`, `isIntegral_totalMomentum`, `isTrajectory_relative` |
 | [Routhian](../ProjectAInos/Mechanics/Routhian.lean) | `RouthSpace`, `Routhian.partialLegendre`, `partialEnergy`, `partialHessian`, `apply_partialLegendre`, `IsPartiallyHyperregular`, `routhian`, `IsPartiallyHyperregular.inversePartialHessian_mul_partialHessian`, `IsPartiallyHyperregular.partialLegendre_partialDerivation_p_routhian`, `IsPartiallyHyperregular.partialLegendre_partialDerivation_q_routhian`, `IsPartiallyHyperregular.partialLegendre_partialDerivation_v_routhian`, `IsPartiallyHyperregular.partialDerivation_q_routhian_eq_zero`, `routhCurve`, `lift_routhCurve`, `IsRouthTrajectory`, `IsPartiallyHyperregular.isRouthTrajectory_routhCurve_iff`, `IsPartiallyHyperregular.eq_routhCurve`, `restriction`, `reducedRouthian`, `IsRouthTrajectory.p_eq_algebraMap`, `IsRouthTrajectory.isSolution_reducedRouthian`, `naturalInverse`, `isPartiallyHyperregular_natural` |

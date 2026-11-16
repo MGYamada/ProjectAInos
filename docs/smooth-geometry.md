@@ -1051,6 +1051,11 @@ equation, so one space of curves serves for all times of both signs.
 - `flowDomain_linear`, `flow_linear`: the flow of a linear field is the
   propagator of the constant coefficient.
 
+`ODE.FlowInvariant`: a function whose derivative vanishes between two times
+takes the same value at them (`eq_of_hasDerivAt_zero`), so a quantity whose
+derivative vanishes along every solution is constant along the flow
+(`flow_invariant`), also when the flow is not defined for all times.
+
 The field is smooth on the whole space. A field that is smooth only on an
 open set, and a field that depends on the time, are not treated.
 
