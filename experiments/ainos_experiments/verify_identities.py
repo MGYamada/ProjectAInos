@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Symbolic and numerical evidence for the mechanics research plan.
 
-Run all 47 checks with ``python -m ainos_experiments.verify_identities``;
+Run all 49 checks with ``python -m ainos_experiments.verify_identities``;
 append group names such as ``E9 E11`` to run only those groups. Importing this
 module performs no experiments. Each ``run_eN()`` returns independent results
 without printing; no group's symbolic state is reused by another group.
@@ -560,9 +560,71 @@ def run_e11() -> list[CheckResult]:
                         tuple(details))]
 
 
+def monodromy_trace(omega0: float, h: float, gamma: float, steps: int = 20000) -> float:
+    """Trace of the monodromy matrix of x'' + omega0^2 (1 + h cos(gamma t)) x = 0 by RK4."""
+    if steps <= 0 or gamma <= 0:
+        raise ValueError("steps and gamma must be positive")
+    period_ = 2 * math.pi / gamma
+    dt = period_ / steps
+
+    def field(t, x, v):
+        return v, -omega0**2 * (1 + h * math.cos(gamma * t)) * x
+
+    def evolve(x, v):
+        t = 0.0
+        for _ in range(steps):
+            k1x, k1v = field(t, x, v)
+            k2x, k2v = field(t + dt / 2, x + dt / 2 * k1x, v + dt / 2 * k1v)
+            k3x, k3v = field(t + dt / 2, x + dt / 2 * k2x, v + dt / 2 * k2v)
+            k4x, k4v = field(t + dt, x + dt * k3x, v + dt * k3v)
+            x += dt / 6 * (k1x + 2 * k2x + 2 * k3x + k4x)
+            v += dt / 6 * (k1v + 2 * k2v + 2 * k3v + k4v)
+            t += dt
+        return x, v
+
+    return evolve(1.0, 0.0)[0] + evolve(0.0, 1.0)[1]
+
+
+def run_e12() -> list[CheckResult]:
+    """Parametric resonance: averaged coefficient and the trace of the monodromy matrix."""
+    results, check = _collector()
+    w0, h, g, t = symbols('omega_0 h gamma t', positive=True)
+    delta = w0**2 - g**2 / 4
+    kappa = 2 / g * (delta + w0**2 * h * sp.cos(g * t))
+    c, s = sp.cos(g * t / 2), sp.sin(g * t / 2)
+    period_ = 2 * sp.pi / g
+    j1 = sp.integrate(sp.expand(kappa * c * s), (t, 0, period_))
+    j2 = sp.integrate(sp.expand(kappa * s**2), (t, 0, period_))
+    j3 = sp.integrate(sp.expand(kappa * c**2), (t, 0, period_))
+    # P = [[J1, J2], [-J3, -J1]]; half of the trace of P^2 is J1^2 - J2 J3.
+    check('E12a', "rotating frame: half tr (int G)^2 = -(4 pi^2/gamma^4)(Delta^2 - omega_0^4 h^2/4), "
+                  "Delta = omega_0^2 - gamma^2/4",
+          Matrix([j1, j1**2 - j2 * j3 + 4 * sp.pi**2 / g**4 * (delta**2 - w0**4 * h**2 / 4)]))
+    ok_all = True
+    details = []
+    for omega0, h_, gamma, unstable in [(1.0, 0.002, 2.0, True), (1.0, 0.002, 2.004, False),
+                                        (1.3, -0.0015, 2.6, True), (0.8, 0.001, 1.6004, False)]:
+        trace = monodromy_trace(omega0, h_, gamma)
+        delta_ = omega0**2 - gamma**2 / 4
+        main = 4 * math.pi**2 / gamma**4 * (delta_**2 - omega0**4 * h_**2 / 4)
+        r = 4 / gamma * (abs(delta_) + omega0**2 * abs(h_)) * (2 * math.pi / gamma)
+        bound = math.exp(r) * r**3 / 3
+        ok = abs(trace + 2 - main) <= bound and (abs(trace) > 2) == unstable
+        ok_all = ok_all and ok
+        details.append(
+            f"      omega_0={omega0}, h={h_}, gamma={gamma}: tr M + 2 = {trace + 2:+.3e}, "
+            f"main term {main:+.3e}, bound {bound:.3e}, {'unstable' if abs(trace) > 2 else 'stable'}")
+    results.append(CheckResult(
+        'E12b', ok_all,
+        "tr M = -2 + (4 pi^2/gamma^4)(Delta^2 - omega_0^4 h^2/4) within exp(r) r^3/3 (numerical)",
+        tuple(details)))
+    return results
+
+
 GROUPS: dict[str, Callable[[], list[CheckResult]]] = {
     'E1': run_e1, 'E2': run_e2, 'E3': run_e3, 'E4': run_e4, 'E5': run_e5,
     'E6': run_e6, 'E7': run_e7, 'E8': run_e8, 'E9': run_e9, 'E10': run_e10, 'E11': run_e11,
+    'E12': run_e12,
 }
 
 

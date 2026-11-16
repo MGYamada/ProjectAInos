@@ -933,6 +933,25 @@ pair of real times; no interval is subdivided.
 - `propagator_const`: for a constant coefficient the propagator is
   `exp ((t − s) A₀)`.
 
+`ODE.PropagatorExpansion` treats a coefficient that is small between two
+times `s ≤ t`, `‖A(r)‖ ≤ g`.
+
+- `norm_propagator_apply_le`: `‖Φ(t, s) y‖ ≤ e^{g (t − s)} ‖y‖`, by Gronwall's
+  inequality.
+- `firstOrder A s y` and `secondOrder A s y` are the terms `∫ A(r) y dr` and
+  `∫ A(r) (∫ A(x) y dx) dr` of the series of the propagator in the
+  coefficient. `norm_propagator_apply_sub_secondOrder_le`:
+  `‖Φ(t, s) y − y − firstOrder − secondOrder‖ ≤ e^{g (t − s)} (g (t − s))³/6 · ‖y‖`.
+  `norm_propagator_apply_sub_le` and `norm_propagator_apply_sub_firstOrder_le`
+  are the bounds of first and second order.
+- `integralCoefficient A s t` is `∫ A` as an operator and
+  `secondOrderOperator A s t` the term of second order as an operator
+  (`firstOrder_eq`, `secondOrder_eq`). In finite dimension
+  `traceCLM_secondOrderOperator` states that the trace of the term of second
+  order is half the trace of the square of `integralCoefficient A s t`. The
+  proof differentiates both sides in `t` and uses `tr (XY) = tr (YX)`; no
+  double integral is exchanged.
+
 `Volterra` and `ContinuousFamily` are stated for types in arbitrary universes.
 The determinant of the propagator is not proved here.
 

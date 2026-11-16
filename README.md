@@ -244,7 +244,11 @@ equation with a continuous coefficient has a propagator for all real times,
 with no bound on the coefficient, so the equation `ẍ + p(t) x = 0` has a
 unique solution for given initial data and every smooth `p`; for a periodic
 `p` all solutions are bounded exactly when the trace of the monodromy matrix
-has absolute value less than two or the matrix is `±1`. Symplectic forms and
+has absolute value less than two or the matrix is `±1`. For
+`ẍ + ω₀² (1 + h cos γt) x = 0` the trace is known to second order with an
+explicit remainder, which gives the instability zone
+`|ω₀² − γ²/4| < ω₀² |h|/2` to first order and parametric resonance at
+`γ = 2ω₀`. Symplectic forms and
 Dirac brackets are not implemented. Galilean symmetry as a group action and the topics of 2.1 and
 2.4 have no Lean counterpart yet. The
 [ledger](docs/cinfty-mechanics.md#ledger) gives the status of each section of

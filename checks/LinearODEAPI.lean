@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 module
 
-import ProjectAInos.SmoothGeometry.ODE.Propagator
+import ProjectAInos.SmoothGeometry.ODE.PropagatorExpansion
 
 /-! Typed contracts for linear differential equations: the Volterra operator
 without a bound on the coefficient, and the propagator on the real line. These
@@ -108,6 +108,20 @@ example (t s : ℝ) (y : E) : propagator A t s (propagator A s t y) = y :=
 
 example (t s : ℝ) : (propagator A t s).IsInvertible := propagator_isInvertible A t s
 
+example (f : Curve E) {t : ℝ} (ht : t ∈ Set.Icc (0 : ℝ) 1) : extend f t = f ⟨t, ht⟩ :=
+  extend_of_mem f ht
+
+example (s : ℝ) : segmentCoefficient A s s = 0 := segmentCoefficient_self A s
+
+example : Continuous fun q : ℝ × ℝ => segmentCoefficient A q.2 q.1 :=
+  continuous_segmentCoefficient A
+
+example (s : ℝ) : Continuous fun r : ℝ => propagator A r s := continuous_propagator_left A s
+
+example (t s r : ℝ) (y : E) :
+    propagator A t s (propagator A s r y) = propagator A t r y :=
+  propagator_comp_apply A t s r y
+
 /-- Constant coefficients: the exponential. -/
 example (A₀ : E →L[ℝ] E) (t s : ℝ) :
     propagator (ContinuousMap.const ℝ A₀) t s = NormedSpace.exp ((t - s) • A₀) :=
@@ -126,6 +140,9 @@ universe u
 variable {P V : Type u} [NormedAddCommGroup P] [NormedSpace ℝ P]
   [NormedAddCommGroup V] [NormedSpace ℝ V] [CompleteSpace V]
 
+example (A : P × ℝ → V →L[ℝ] V) (hA : Continuous A) (p : P) (t : ℝ) :
+    coefficientCurve A hA p t = A (p, t) := coefficientCurve_apply A hA p t
+
 /-- Smooth dependence on a parameter and the two times. -/
 example {A : P × ℝ → V →L[ℝ] V} (hA : ContDiff ℝ ∞ A) :
     ContDiff ℝ ∞ fun q : P × ℝ × ℝ =>
@@ -138,3 +155,89 @@ example {A : P × ℝ → V →L[ℝ] V} (hA : ContDiff ℝ ∞ A) :
   propagator_apply_contDiff hA
 
 end Parameter
+
+section Expansion
+
+variable {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E] [CompleteSpace E]
+  (A : C(ℝ, E →L[ℝ] E))
+
+/-- Growth of a solution under a bound on the coefficient. -/
+example {s t g : ℝ} (hst : s ≤ t) (hg : ∀ r ∈ Set.Icc s t, ‖A r‖ ≤ g) (y : E) :
+    ‖propagator A t s y‖ ≤ ‖y‖ * Real.exp (g * (t - s)) :=
+  norm_propagator_apply_le A hst hg y
+
+example {s t g c : ℝ} {k : ℕ} (hg : ∀ r ∈ Set.Icc s t, ‖A r‖ ≤ g) (hg0 : 0 ≤ g) {u : ℝ → E}
+    (hu : ∀ r ∈ Set.Icc s t, ‖u r‖ ≤ c * (r - s) ^ k) {τ : ℝ} (hτ : τ ∈ Set.Icc s t) :
+    ‖∫ r in s..τ, A r (u r)‖ ≤ g * c * (τ - s) ^ (k + 1) / (k + 1) :=
+  norm_integral_apply_le A hg hg0 hu hτ
+
+example (s : ℝ) (y : E) (r : ℝ) : firstOrder A s y r = ∫ x in s..r, A x y := rfl
+
+example (s : ℝ) (y : E) (r : ℝ) :
+    secondOrder A s y r = ∫ x in s..r, A x (firstOrder A s y x) := rfl
+
+example (y : E) : Continuous fun r : ℝ => A r y := continuous_apply_const A y
+
+example (s : ℝ) (y : E) (r : ℝ) : HasDerivAt (firstOrder A s y) (A r y) r :=
+  hasDerivAt_firstOrder A s y r
+
+example (s : ℝ) (y : E) : Continuous (firstOrder A s y) := continuous_firstOrder A s y
+
+example {s t g : ℝ} (hg : ∀ r ∈ Set.Icc s t, ‖A r‖ ≤ g) (hg0 : 0 ≤ g) (y : E) {τ : ℝ}
+    (hτ : τ ∈ Set.Icc s t) :
+    ‖propagator A τ s y - y‖ ≤ ‖y‖ * Real.exp (g * (t - s)) * g * (τ - s) :=
+  norm_propagator_apply_sub_le hg hg0 y hτ
+
+example {s t g : ℝ} (hg : ∀ r ∈ Set.Icc s t, ‖A r‖ ≤ g) (hg0 : 0 ≤ g) (y : E) {τ : ℝ}
+    (hτ : τ ∈ Set.Icc s t) :
+    ‖propagator A τ s y - y - firstOrder A s y τ‖ ≤
+      ‖y‖ * Real.exp (g * (t - s)) * g ^ 2 * (τ - s) ^ 2 / 2 :=
+  norm_propagator_apply_sub_firstOrder_le hg hg0 y hτ
+
+/-- The expansion to second order with a remainder of third order. -/
+example {s t g : ℝ} (hst : s ≤ t) (hg : ∀ r ∈ Set.Icc s t, ‖A r‖ ≤ g) (hg0 : 0 ≤ g)
+    (y : E) :
+    ‖propagator A t s y - y - firstOrder A s y t - secondOrder A s y t‖ ≤
+      ‖y‖ * Real.exp (g * (t - s)) * (g * (t - s)) ^ 3 / 6 :=
+  norm_propagator_apply_sub_secondOrder_le hst hg hg0 y
+
+example (s r : ℝ) : integralCoefficient A s r = ∫ x in s..r, A x := rfl
+
+example (s r : ℝ) : HasDerivAt (integralCoefficient A s) (A r) r :=
+  hasDerivAt_integralCoefficient A s r
+
+example (s : ℝ) : Continuous (integralCoefficient A s) := continuous_integralCoefficient A s
+
+example (s : ℝ) : integralCoefficient A s s = 0 := integralCoefficient_self A s
+
+example (s : ℝ) (y : E) (r : ℝ) : firstOrder A s y r = integralCoefficient A s r y :=
+  firstOrder_eq A s y r
+
+example (s r : ℝ) :
+    secondOrderOperator A s r = ∫ x in s..r, A x ∘L integralCoefficient A s x := rfl
+
+example (s : ℝ) : Continuous fun x : ℝ => A x ∘L integralCoefficient A s x :=
+  continuous_comp_integralCoefficient A s
+
+example (s r : ℝ) :
+    HasDerivAt (secondOrderOperator A s) (A r ∘L integralCoefficient A s r) r :=
+  hasDerivAt_secondOrderOperator A s r
+
+example (s : ℝ) : secondOrderOperator A s s = 0 := secondOrderOperator_self A s
+
+example (s : ℝ) (y : E) (r : ℝ) : secondOrder A s y r = secondOrderOperator A s r y :=
+  secondOrder_eq A s y r
+
+example [FiniteDimensional ℝ E] (L : E →L[ℝ] E) :
+    traceCLM L = LinearMap.trace ℝ E (L : E →ₗ[ℝ] E) := traceCLM_apply L
+
+example [FiniteDimensional ℝ E] (L L' : E →L[ℝ] E) :
+    traceCLM (L ∘L L') = traceCLM (L' ∘L L) := traceCLM_comp_comm L L'
+
+/-- The trace of the term of second order. -/
+example [FiniteDimensional ℝ E] (s t : ℝ) :
+    traceCLM (secondOrderOperator A s t) =
+      1 / 2 * traceCLM (integralCoefficient A s t ∘L integralCoefficient A s t) :=
+  traceCLM_secondOrderOperator A s t
+
+end Expansion

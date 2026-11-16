@@ -112,8 +112,10 @@ public import ProjectAInos.Mechanics.Oscillations.NormalForm
 public import ProjectAInos.Mechanics.Oscillations.NormalModes
 public import ProjectAInos.Mechanics.Oscillations.Oscillator
 public import ProjectAInos.Mechanics.Oscillations.Parametric
+public import ProjectAInos.Mechanics.Oscillations.ParametricExamples
 public import ProjectAInos.Mechanics.Oscillations.ParametricExistence
 public import ProjectAInos.Mechanics.Oscillations.ParametricTrace
+public import ProjectAInos.Mechanics.Oscillations.ParametricZone
 public import ProjectAInos.Mechanics.Oscillations.PhaseVolume
 public import ProjectAInos.Mechanics.Oscillations.QuadraticLagrangian
 public import ProjectAInos.Mechanics.Oscillations.Symmetry
@@ -338,6 +340,7 @@ public import ProjectAInos.SmoothGeometry.ODE.ContinuousFamily
 public import ProjectAInos.SmoothGeometry.ODE.CoordinateCurvature
 public import ProjectAInos.SmoothGeometry.ODE.FlatFrame
 public import ProjectAInos.SmoothGeometry.ODE.Propagator
+public import ProjectAInos.SmoothGeometry.ODE.PropagatorExpansion
 public import ProjectAInos.SmoothGeometry.ODE.Radial
 public import ProjectAInos.SmoothGeometry.ODE.RadialExamples
 public import ProjectAInos.SmoothGeometry.ODE.RadialReparam
