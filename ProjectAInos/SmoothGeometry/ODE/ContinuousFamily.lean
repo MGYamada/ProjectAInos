@@ -20,15 +20,14 @@ smooth coordinate coefficients to the coefficient curves of a linear ODE.
 @[expose] public section
 noncomputable section
 
-set_option backward.isDefEq.respectTransparency false
-set_option backward.defeqAttrib.useBackward true
-
 open Set Filter Metric ContinuousLinearMap Asymptotics
 open scoped Topology ContDiff
 
+universe u
+
 namespace ProjectAInos.SmoothGeometry.ContinuousFamily
 
-variable {K P F : Type} [TopologicalSpace K] [CompactSpace K]
+variable {K : Type*} {P F : Type u} [TopologicalSpace K] [CompactSpace K]
   [NormedAddCommGroup P] [NormedSpace ℝ P]
   [NormedAddCommGroup F] [NormedSpace ℝ F]
 
@@ -97,7 +96,7 @@ theorem hasStrictFDerivAt {f : P → C(K, F)} {A : P → C(K, P →L[ℝ] F)} {p
       _ < c := (hball hq).2
   exact ((A q - A p).norm_coe_le_norm t).trans hb.le
 
-variable {T : Type} [NormedAddCommGroup T] [NormedSpace ℝ T]
+variable {T : Type*} [NormedAddCommGroup T] [NormedSpace ℝ T]
 
 /-- Restrict the second variable of a jointly continuous function to a fixed
 continuous map from a compact index space. -/

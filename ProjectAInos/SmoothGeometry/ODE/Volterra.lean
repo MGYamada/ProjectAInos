@@ -22,18 +22,15 @@ smooth dependence on the whole coefficient curve and initial value.
 @[expose] public section
 noncomputable section
 
-set_option backward.isDefEq.respectTransparency false
-set_option backward.defeqAttrib.useBackward true
-
 open Set ContinuousLinearMap
 open scoped unitInterval ContDiff Topology
 
 namespace ProjectAInos.SmoothGeometry.LinearODE
 
-variable {E : Type} [NormedAddCommGroup E] [NormedSpace ℝ E] [CompleteSpace E]
+variable {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E] [CompleteSpace E]
 
 /-- Continuous vector curves on the fixed unit interval. -/
-abbrev Curve (E : Type) [TopologicalSpace E] := C(unitInterval, E)
+abbrev Curve (E : Type*) [TopologicalSpace E] := C(unitInterval, E)
 
 /-- Extend a continuous curve by its endpoint values outside the interval. -/
 def extend (f : Curve E) (t : ℝ) : E := f (projIcc 0 1 zero_le_one t)
@@ -251,7 +248,7 @@ theorem solution_eval_contDiffAt {A : Curve (E →L[ℝ] E)} (hA : ‖A‖ < 1)
 
 /-- Smooth parameter families of coefficient curves and initial values give
 smooth families of entire solutions, with the same fixed time interval. -/
-theorem solution_family_contDiffAt {P : Type} [NormedAddCommGroup P] [NormedSpace ℝ P]
+theorem solution_family_contDiffAt {P : Type*} [NormedAddCommGroup P] [NormedSpace ℝ P]
     {A : P → Curve (E →L[ℝ] E)} {y : P → E} {p : P}
     (hA : ContDiffAt ℝ ∞ A p) (hy : ContDiffAt ℝ ∞ y p) (hsmall : ‖A p‖ < 1) :
     ContDiffAt ℝ ∞ (fun q => solutionOperator (A q) (y q)) p := by

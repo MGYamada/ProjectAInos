@@ -105,7 +105,7 @@ The ledger gives one status to each section of Landau–Lifshitz, following the 
 | 24 | Vibrations of molecules | informal | Proved: a matrix that commutes with `M` and `K` takes small oscillations to small oscillations and preserves the space of the modes of each frequency (`NormalModes.isSmallOscillation_symmetry`, `NormalModes.mulVec_mem_modeSpace`), so each of these spaces carries a representation of the group of symmetries; the number of non-zero frequencies is the rank of `K` (`NormalModes.card_ne_zero_eq_rank`). Not proved: the decomposition of the space of the modes into irreducible representations and the number of modes of each symmetry type. Reason: these need the characters of the point group of each molecule, with the isotypic decomposition and the multiplicity formula; this is representation theory of finite groups, which is not set up here |
 | 25 | Damped oscillations | proved | `isDamped_iff_expMul_mul`, `IsDamped.apply_eq_underdamped`, `IsDamped.apply_eq_amplitude_mul_exp_mul_cos`, `IsDamped.apply_eq_critical`, `IsDamped.apply_eq_overdamped`, `IsDamped.eq_of_initial`, `isDamped_expMul`, `isDamped_time_mul_expMul`, `dissipativeField_self`, `lift_dissipativeFunction_nonneg`, `IsIntegralCurve.energy_antitone`, `Oscillator.isIntegralCurve_dissipativeField_iff_isDamped`. `Ḣ = −2F ≤ 0` is proved as the identity `X(H) = −2F` in the ring, with `F ≥ 0` at every point for a positive semidefinite `α`. The equations are in Hamiltonian form; the Lagrangian form (25.12) and the failure of `X` to preserve the bracket are not proved. The contraction of the phase volume is proved in infinitesimal form for the oscillator: `Oscillator.divergence_dissipativeField` |
 | 26 | Forced oscillations under friction | proved | `IsForced.add`, `IsForced.sub`, `IsForced.eq_of_initial`, `IsDamped.tendsto_zero`, `IsForced.tendsto_sub`, `isForced_steadyState`, `steadyState_const_mul`, `steadyState_apply`, `steadyAmplitude_mul_sin_steadyPhase`, `sin_steadyPhase_nonpos`, `IsForced.apply_eq_transient_add_steadyState`, `IsForced.tendsto_sub_steadyState`, `steadyAmplitude_le`, `steadyAmplitude_eq_max`, `mean_dissipation_steadyState`, `absorption_le`, `absorption_resonance`, `absorption_eq_half_max_iff`. The linear response is proved for the force `F cos Ωt`, with superposition for sums of forces; the resonance curve is the exact function `m γ F² Ω² / ((ω₀² − Ω²)² + 4γ² Ω²)`, with its maximum and its width `2γ`. The Lorentzian approximation (26.5), (26.9), the area (26.10), the complex response function, and a general force are not proved |
-| 27 | Parametric resonance | informal | With a fundamental system as data, the monodromy matrix is in `SL(2, ℝ)` and stability is proved: `Parametric.FundamentalSystem.det_matrix`, `Parametric.FundamentalSystem.matrix_add_nat_mul_period`, `Parametric.exists_abs_pow_apply_le`, `Parametric.FundamentalSystem.exists_abs_apply_le_of_abs_trace_lt`, `Parametric.FundamentalSystem.exists_abs_apply_le_of_eq`. Not proved: the existence of a fundamental system for a general coefficient, the unbounded cases `|tr M| > 2`, and the width of the instability zone. Reason: the first is the existence theorem for linear differential equations with smooth coefficients, which is not connected to the ring of smooth functions of time here; the last is an asymptotic statement in the amplitude of the modulation (tier P) |
+| 27 | Parametric resonance | proved | Every smooth coefficient has a fundamental system, and only one (`Parametric.FundamentalSystem.nonempty`, `Parametric.existsUnique_isHill`, `Parametric.IsHill.eq_of_initial`); it is built from the propagator of the first-order system (`SmoothGeometry.LinearODE.propagator`, `hasDerivAt_propagator_apply`, `eq_propagator_apply_of_hasDerivAt`), so the monodromy matrix `Parametric.monodromy` needs no further data and is in `SL(2, ℝ)` (`Parametric.det_monodromy`, `Parametric.FundamentalSystem.matrix_add_nat_mul_period`). The criterion `Parametric.forall_isHill_bounded_iff`: every solution is bounded for `t ≥ 0` if and only if `|tr M| < 2` or `M = ±1`. For `|tr M| > 2` there is an unbounded solution and the bounded ones are those whose state at time zero is on the stable eigenline (`Parametric.exists_isHill_not_bounded_of_two_lt_abs_trace`, `Parametric.IsHill.exists_abs_apply_le_iff_of_two_lt_abs_trace`); for `tr M = ±2` the bounded ones are those whose state is an eigenvector, and the others grow linearly (`Parametric.IsHill.exists_abs_apply_le_iff_of_trace_eq`). Constant coefficients are instances of the three cases (`Parametric.exists_abs_apply_le_harmonic`, `Parametric.IsHill.exists_abs_apply_le_free_iff`, `Parametric.exists_isHill_hyperbolic_not_bounded`). The width of the instability zone, for `p = ω₀² (1 + h cos γt)` and the period `2π/γ`: `|tr M + 2 − (4π²/γ⁴) ((ω₀² − γ²/4)² − ω₀⁴ h²/4)| ≤ eʳ r³/3` with `r = (8π/γ²) (|ω₀² − γ²/4| + ω₀² |h|)` (`Parametric.abs_trace_monodromy_modulated_sub_le`, E12). Hence there is an unbounded solution when `ω₀⁴ h²/4 − (ω₀² − γ²/4)²` exceeds the remainder (`Parametric.exists_isHill_not_bounded_modulated`), in particular at `γ = 2ω₀` for `0 < |h| ≤ 1/400` (`Parametric.exists_isHill_not_bounded_modulated_resonance`), and all solutions are bounded when `(ω₀² − γ²/4)² − ω₀⁴ h²/4` exceeds it and `r ≤ 1` (`Parametric.exists_abs_apply_le_modulated`), in particular for `ω₀² |h| ≤ |ω₀² − γ²/4| ≤ γ²/4000` with `γ² ≠ 4ω₀²` (`Parametric.exists_abs_apply_le_modulated_of_le`). Scope: the zone (27.11) is stated in the variable `ω₀² − γ²/4`, which is `−ε (ω₀ + ε/4)` for `γ = 2ω₀ + ε`, with an explicit remainder of third order in `|ω₀² − γ²/4| + ω₀² |h|`; to first order it is `|ε| < |h| ω₀/2`. The zones near `γ = 2ω₀/n` for `n ≥ 2` and the rate of growth (27.12) are not treated |
 | 28 | Anharmonic oscillations | evidence | E11 (numerical). Not proved: the Birkhoff normal form in `ℝ[[q, p]]` (Proposition 71) and the shift of the frequency. Reason: the normal form is a recursion over the degree in the Poisson ring of formal power series, which solves an equation `{½ω(p² + q²), F} = G` in each degree. That ring is the quotient of the smooth functions by the functions flat at a point; quotients by ideals are now formalized (row 38), but the bracket on this quotient, its grading by the degree and the recursion are not. The shift of the frequency as a statement about solutions is asymptotic (tier P) |
 | 29 | Resonance in non-linear oscillations | informal | Not proved. The statement is the amplitude equation `b² ((ε − κ b²)² + λ²) = f²/4m²ω₀²` (29.4) for the forced, damped, anharmonic oscillator near resonance. Reason: it is obtained by successive approximations with no error estimate (tier P); a theorem would compare a solution of the non-linear equation with this amplitude on a time interval |
 | 30 | Motion in a rapidly oscillating field | informal | Not proved. The statement is that the slow motion is governed by the effective potential `U + f̄²/2mω²` (30.8), where `f` is the amplitude of the oscillating force and the bar is the mean over a period. Reason: it is a statement of averaging, and a theorem needs an error bound over a time interval, which the text does not supply (tiers P and D) |
@@ -132,9 +132,9 @@ The ledger gives one status to each section of Landau–Lifshitz, following the 
 | 51 | Accuracy of conservation of the adiabatic invariant | informal | Not proved. The statement is that, when the parameter depends analytically on the time, the total change of the adiabatic invariant over all time is exponentially small in the rate of change. Reason: the derivation deforms a contour in complex time and is a physical argument (tier P); a proof needs the analytic continuation of the solution in the time (tier D) |
 | 52 | Conditionally periodic motion | informal | Proved: the additional integrals of the degenerate motion in Kepler's problem, the Runge–Lenz vector with its brackets (row 15). Not proved: Theorem 56 (Liouville–Arnold), that a compact connected common level set of `n` independent commuting integrals is a torus with action–angle variables. Reason: it needs manifolds, complete flows and their periods (tier D) |
 
-Count: 32 proved, 4 evidence, 16 informal.
+Count: 33 proved, 4 evidence, 15 informal.
 
-Closed with a stated remainder: §§11, 12, 18, 19, 20, 24, 27, 28, 29, 30, 34, 37, 43, 44, 46, 48, 49, 50, 51, 52. Every row is now *proved* or closed with a stated remainder.
+Closed with a stated remainder: §§11, 12, 18, 19, 20, 24, 28, 29, 30, 34, 37, 43, 44, 46, 48, 49, 50, 51, 52. Every row is now *proved* or closed with a stated remainder.
 
 <a id="remaining-proof-strategy"></a>
 
@@ -160,7 +160,7 @@ invertible endpoint map, away from conjugate points.
 | Tool checked in the pinned sources | Use and limit |
 |:---|:---|
 | Mathlib `Analysis/ODE/ExistUnique.lean`: `IsPicardLindelof.exists_forall_mem_closedBall_eq_hasDerivWithinAt_lipschitzOnWith`, `ODE_solution_unique_of_mem_Icc` | Local existence, Lipschitz dependence on the initial point, and uniqueness are available. These do not supply general differentiability in the initial point. |
-| `SmoothGeometry/ODE/Volterra.lean`: `LinearODE.solution_hasDerivWithinAt`, `solution_family_contDiffAt` | A constructed linear solution depends smoothly on its coefficient curve and initial value, on the unit interval with coefficient supremum norm less than one. Time rescaling and finite patching are further work; joint smoothness in time must also be justified. |
+| `SmoothGeometry/ODE/Volterra.lean`: `LinearODE.solution_hasDerivWithinAt`, `solution_family_contDiffAt` | A constructed linear solution depends smoothly on its coefficient curve and initial value, on the unit interval. `VolterraInverse.lean` removes the bound on the coefficient, and `Propagator.lean` gives `LinearODE.propagator` for all real times with `propagator_contDiff`, joint smoothness in a parameter and the two times; no patching is used ([M78](mechanics-notes.md)). |
 | `SmoothGeometry/ODE/ContinuousFamily.lean`: `ContinuousFamily.slices_contDiff` | Packages a smooth parameter family as a map into continuous functions on a compact set; useful for parameter-dependent integral equations. |
 | `Mechanics.firstVariation_eq_boundary_add_integral`, `contDiff_infty_parametric_intervalIntegral_limits` | The boundary term and smooth parameter integrals are available. Moving-endpoint families still need to be connected to these statements. |
 | Mathlib `Analysis/Calculus/ImplicitContDiff.lean` and `InverseFunctionTheorem/ContDiff.lean` | Local smooth implicit functions and inverses can construct turning-point branches, endpoint solutions and complete Hamilton–Jacobi integrals, once invertibility is proved. |
@@ -330,21 +330,24 @@ a linear one five; asserting exactly `3N − 6` or `3N − 5` nonzero frequencie
 also requires that there are no additional zero modes. Prove that condition
 for the example rather than taking a dimension count as a stability proof.
 
-For §27, use the Volterra construction on short intervals and uniqueness to
-build normalized fundamental matrices on one period; bootstrap time regularity
-for a smooth coefficient and extend by periodicity to fit `FundamentalSystem`.
-The current boundedness proofs already cover `|tr M| < 2` and `M = ±1`.
-Add the remaining matrix cases before estimating resonance zones: for
-`|tr M| > 2`, construct an expanding eigenvector and identify the stable line;
-at `tr M = 2σ`, prove `Mⁿ = σⁿ(1 + nσ(M − σ1))` and classify bounded data by
-`ker (M − σ1)`. Not every nonzero solution grows in the hyperbolic case.
+For §27 the fundamental system of an arbitrary smooth coefficient is now
+constructed from `LinearODE.propagator`, and the matrix cases are proved:
+`|tr M| < 2` and `M = ±1` are bounded; for `|tr M| > 2` there is an expanding
+eigenvector and the bounded solutions are those on the stable line; at
+`tr M = 2σ` the bounded data are `ker (M − σ1)` and the other solutions grow
+linearly (`Parametric.forall_isHill_bounded_iff` and the two statements with
+`iff` in `ParametricTrace`). Not every nonzero solution grows in the
+hyperbolic case.
 
-Then differentiate the monodromy with respect to forcing amplitude and
-detuning, using the parameter-dependent linear ODE. Estimate the first
-nonvanishing discriminant term and its remainder to locate the instability
-zone. A smooth dependence theorem without these estimates does not determine
-its width. Use the constant-frequency oscillator and explicit determinant-one
-matrices to test all trace regimes and boundary cases.
+The width of the zone is proved in `ParametricZone` by another route than a
+derivative of the monodromy in the parameters. In the co-ordinates
+`x = a cos (γt/2) + b sin (γt/2)`, `ẋ = (γ/2)(−a sin (γt/2) + b cos (γt/2))`
+the coefficient is small, of the order of `|ω₀² − γ²/4| + ω₀² |h|`, and the
+propagator is expanded to second order with a bound of third order for the
+remainder. The trace of the term of second order is half the trace of the
+square of the integral of the coefficient over a period, so only the mean of
+the coefficient enters. Row 27 is *proved* with the scope written in the row
+([M79](mechanics-notes.md)).
 
 <a id="strategy-r5"></a>
 

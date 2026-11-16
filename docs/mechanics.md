@@ -857,9 +857,89 @@ period `T` when `TimeFunction.shift T p = p`.
   `FundamentalSystem.exists_abs_apply_le_of_eq`: if `|tr Φ(T)| < 2`, or
   `Φ(T) = ±1`, every solution is bounded for `t ≥ 0`.
 
-The existence of a fundamental system for a general smooth coefficient is not
-proved; it is the data of the theorems. The cases in which solutions are
-unbounded and the width of the instability zone are not treated.
+`Oscillations/ParametricExistence` constructs the solutions. The first-order
+system `(x, v)' = (v, −p(t) x)` has the continuous coefficient
+`hillCoefficient p`, and `hillState p x₀ v₀ t` is its propagator from time
+zero applied to `(x₀, v₀)`. The propagator of a smooth coefficient is smooth
+in the time, so the two components are functions of time in `TimeFunction`.
+
+- `isHill_hillSolution`, `hillSolution_zero`,
+  `timeDerivative_hillSolution_zero`: `hillSolution p x₀ v₀` solves the
+  equation for all time with the initial data `(x₀, v₀)`.
+- `IsHill.eq_of_initial`, `existsUnique_isHill`: the solution with given
+  initial data is unique.
+- `FundamentalSystem.ofCoefficient p`, `FundamentalSystem.nonempty`: every
+  smooth coefficient has a fundamental system, and the type has at most one
+  element. For a constant frequency it is `FundamentalSystem.harmonic`
+  (`FundamentalSystem.ofCoefficient_harmonic`).
+- `monodromy p T` is the matrix of that system at the time `T`, with
+  `det_monodromy` and `FundamentalSystem.matrix_eq_monodromy`.
+
+`Oscillations/ParametricTrace` decides stability by the trace of the monodromy
+matrix `M` of a coefficient of period `T > 0`.
+
+- `IsHill.shift_eq_of_mulVec_eq`: if the state at time zero is an eigenvector
+  of `M` with eigenvalue `ν`, then `x(t + T) = ν x(t)`. Such a solution is
+  bounded for `t ≥ 0` when `|ν| ≤ 1` (`exists_abs_apply_le_of_shift_eq`) and
+  unbounded when `|ν| > 1` and `x ≠ 0` (`not_exists_abs_apply_le_of_shift_eq`).
+- `exists_mulVec_eq_smul_of_two_lt_abs_trace`: a real `2 × 2` matrix of
+  determinant one with `|tr A| > 2` has a real eigenvalue `μ` with `|μ| > 1`.
+- `exists_isHill_not_bounded_of_two_lt_abs_trace`: if `|tr M| > 2` there is an
+  unbounded solution. Not every solution is unbounded:
+  `IsHill.exists_abs_apply_le_iff_of_two_lt_abs_trace` states that a solution
+  is bounded exactly when its state at time zero is an eigenvector whose
+  eigenvalue has absolute value less than one.
+- `mulVec_mulVec_sub_of_trace_eq`,
+  `IsHill.exists_abs_apply_le_iff_of_trace_eq`: if `tr M = 2σ` with `σ = ±1`,
+  then `(M − σ)² = 0`; a solution is bounded exactly when its state at time
+  zero is an eigenvector, and the other solutions grow linearly,
+  `x(t + nT) = σⁿ (x(t) + n σ y(t))` with a solution `y ≠ 0`.
+- `forall_isHill_bounded_iff`: every solution is bounded for `t ≥ 0` if and
+  only if `|tr M| < 2` or `M = 1` or `M = −1`.
+
+`Oscillations/ParametricZone` gives the width of the instability zone for the
+coefficient `modulated ω₀ h γ`, that is `ω₀² (1 + h cos γt)`, with the period
+`T = 2π/γ` (`shift_modulated`).
+
+- `rotation γ t` is the change of co-ordinates
+  `(a, b) ↦ (a cos (γt/2) + b sin (γt/2), (γ/2)(−a sin (γt/2) + b cos (γt/2)))`,
+  and `rotatingCoefficient p γ` is the coefficient of the system for `(a, b)`,
+  `(2/γ)(p(t) − γ²/4)` times a matrix of products of `cos (γt/2)` and
+  `sin (γt/2)`. `propagator_hillCoefficient_rotation` states that the two
+  propagators are conjugate by `rotation`, for every coefficient `p`.
+- `trace_monodromy_eq_neg`: after the period `2π/γ` the rotation is `−1` times
+  the rotation at time zero, so `tr M` is minus the trace of the propagator in
+  the rotating co-ordinates.
+- `norm_rotatingCoefficient_modulated_le`: the coefficient in the rotating
+  co-ordinates has norm at most `zoneBound ω₀ h γ`, which is
+  `(4/γ)(|ω₀² − γ²/4| + ω₀² |h|)`.
+- `integralCoefficient_rotating_left`, `integralCoefficient_rotating_right`:
+  the integral of that coefficient over a period. Its diagonal vanishes and
+  its two other entries are `(2π (ω₀² − γ²/4) ∓ π ω₀² h)/γ²`.
+- `abs_trace_monodromy_modulated_sub_le`: with `r = zoneBound ω₀ h γ · 2π/γ`,
+  `|tr M + 2 − (4π²/γ⁴)((ω₀² − γ²/4)² − ω₀⁴ h²/4)| ≤ eʳ r³/3`.
+- `exists_isHill_not_bounded_modulated`: if `ω₀⁴ h²/4 − (ω₀² − γ²/4)²`, times
+  `4π²/γ⁴`, exceeds the remainder, there is an unbounded solution.
+  `exists_abs_apply_le_modulated`: if `(ω₀² − γ²/4)² − ω₀⁴ h²/4`, times
+  `4π²/γ⁴`, exceeds the remainder and `r ≤ 1`, every solution is bounded.
+- `exists_isHill_not_bounded_modulated_resonance`: at `γ = 2ω₀` and for
+  `0 < |h| ≤ 1/400` there is an unbounded solution.
+  `exists_abs_apply_le_modulated_of_le`: for
+  `ω₀² |h| ≤ |ω₀² − γ²/4| ≤ γ²/4000` and `γ² ≠ 4ω₀²` every solution is bounded.
+
+`Oscillations/ParametricExamples` proves the hypotheses of these theorems for
+constant coefficients, which have every period (`shift_algebraMap`). For
+`ẍ + ω² x = 0` the trace over the period `π/(2|ω|)` is zero, and the criterion
+gives the boundedness of all solutions (`exists_abs_apply_le_harmonic`). For
+`ẍ = 0` the monodromy matrix is `!![1, T; 0, 1]` (`monodromy_free`), the
+parabolic case: a solution is bounded exactly when its velocity at time zero
+vanishes (`IsHill.exists_abs_apply_le_free_iff`). For `ẍ = κ² x` the trace is
+`2 cosh κT` (`trace_monodromy_hyperbolic`), the hyperbolic case, with an
+unbounded solution (`exists_isHill_hyperbolic_not_bounded`).
+
+For `γ = 2ω₀ + ε` the variable is `ω₀² − γ²/4 = −ε (ω₀ + ε/4)`, so to first
+order the zone is `|ε| < |h| ω₀/2`, which is (27.11). The zones near
+`γ = 2ω₀/n` for `n ≥ 2` and the rate of growth (27.12) are not treated.
 
 ## The action variable of an oscillator with a variable frequency
 
@@ -1352,6 +1432,10 @@ semi-major axis is not computed.
 | [Oscillations/QuadraticLagrangian](../ProjectAInos/Mechanics/Oscillations/QuadraticLagrangian.lean) | `JetRing.quadraticLagrangian`, `JetRing.momentum_quadraticLagrangian`, `JetRing.euler_quadraticLagrangian`, `StandardJet.isSolution_quadraticLagrangian_iff`, `NormalModes.isSymm_of_mul_eq_one`, `NormalModes.isTrajectory_quadraticHamiltonian_iff_isSolution` |
 | [Oscillations/Symmetry](../ProjectAInos/Mechanics/Oscillations/Symmetry.lean) | `modeSpace`, `mem_modeSpace`, `mulVec_mem_modeSpace`, `isSmallOscillation_symmetry`, `card_ne_zero_eq_rank` |
 | [Oscillations/Parametric](../ProjectAInos/Mechanics/Oscillations/Parametric.lean) | `mul_self_eq`, `sin_smul_pow_succ`, `exists_abs_pow_apply_le`, `IsHill`, `wronskian`, `IsHill.wronskian_eq`, `TimeFunction.shift`, `IsHill.shift`, `state`, `FundamentalSystem`, `FundamentalSystem.eq_combination`, `FundamentalSystem.matrix`, `FundamentalSystem.det_matrix`, `FundamentalSystem.state_eq`, `FundamentalSystem.matrix_add_nat_mul_period`, `FundamentalSystem.exists_abs_apply_le`, `FundamentalSystem.exists_abs_apply_le_of_abs_trace_lt`, `FundamentalSystem.harmonic` |
+| [Oscillations/ParametricExistence](../ProjectAInos/Mechanics/Oscillations/ParametricExistence.lean) | `hillCoefficient`, `hillState`, `hasDerivAt_hillState`, `hillSolution`, `isHill_hillSolution`, `IsHill.eq_of_initial`, `exists_isHill`, `existsUnique_isHill`, `FundamentalSystem.ofCoefficient`, `FundamentalSystem.nonempty`, `FundamentalSystem.ofCoefficient_harmonic`, `monodromy`, `det_monodromy`, `trace_monodromy_harmonic` |
+| [Oscillations/ParametricTrace](../ProjectAInos/Mechanics/Oscillations/ParametricTrace.lean) | `IsHill.const_mul`, `IsHill.add`, `IsHill.state_period`, `IsHill.shift_eq_of_mulVec_eq`, `exists_abs_apply_le_of_shift_eq`, `not_exists_abs_apply_le_of_shift_eq`, `exists_mulVec_eq_smul_of_two_lt_abs_trace`, `exists_isHill_not_bounded_of_two_lt_abs_trace`, `IsHill.exists_abs_apply_le_iff_of_two_lt_abs_trace`, `mulVec_mulVec_sub_of_trace_eq`, `IsHill.exists_abs_apply_le_iff_of_trace_eq`, `exists_isHill_not_bounded_of_trace_eq`, `forall_isHill_bounded_iff` |
+| [Oscillations/ParametricZone](../ProjectAInos/Mechanics/Oscillations/ParametricZone.lean) | `planeTrace`, `trace_monodromy_eq`, `rotatingCoefficient`, `rotation`, `propagator_hillCoefficient_rotation`, `trace_monodromy_eq_neg`, `modulated`, `shift_modulated`, `zoneBound`, `norm_rotatingCoefficient_modulated_le`, `integralCoefficient_rotating_left`, `integralCoefficient_rotating_right`, `abs_trace_monodromy_modulated_sub_le`, `exists_isHill_not_bounded_modulated`, `exists_abs_apply_le_modulated`, `exists_isHill_not_bounded_modulated_resonance`, `exists_abs_apply_le_modulated_of_le` |
+| [Oscillations/ParametricExamples](../ProjectAInos/Mechanics/Oscillations/ParametricExamples.lean) | `shift_algebraMap`, `exists_abs_apply_le_harmonic`, `FundamentalSystem.free`, `monodromy_free`, `IsHill.exists_abs_apply_le_free_iff`, `exists_isHill_free_not_bounded`, `FundamentalSystem.hyperbolic`, `trace_monodromy_hyperbolic`, `exists_isHill_hyperbolic_not_bounded`, `IsHill.exists_abs_apply_le_hyperbolic_iff` |
 | [Oscillations/Adiabatic](../ProjectAInos/Mechanics/Oscillations/Adiabatic.lean) | `Parametric.action`, `Parametric.timeDerivative_inv`, `Parametric.timeDerivative_action`, `Parametric.timeDerivative_action_of_const` |
 | [Legendre](../ProjectAInos/Mechanics/Legendre.lean) | `positionsToJet`, `positionsToPhase`, `d_zero_positionsToJet`, `orderLE_positionsToJet`, `legendre`, `legendre_p_eq_momentum`, `legendre_hamiltonian`, `isTrajectory_natural_iff`, `isSolution_natural_iff`, `isTrajectory_natural_iff_isSolution` |
 | [Hyperregular](../ProjectAInos/Mechanics/Hyperregular.lean) | `JetRing.sum_mul_d_q_self`, `VelocitySpace`, `VelocitySpace.momentum`, `VelocitySpace.legendre`, `VelocitySpace.energy`, `VelocitySpace.hessian`, `VelocitySpace.apply_legendre`, `VelocitySpace.IsHyperregular`, `VelocitySpace.hamiltonian`, `VelocitySpace.inverseHessian`, `IsHyperregular.inverseHessian_mul_hessian`, `IsHyperregular.legendre_hamiltonian`, `IsHyperregular.legendre_partialDerivation_inr_hamiltonian`, `IsHyperregular.legendre_partialDerivation_inl_hamiltonian`, `VelocitySpace.velocityCurve`, `VelocitySpace.toJet`, `VelocitySpace.prolongation_toJet`, `VelocitySpace.isSolution_toJet_iff`, `IsHyperregular.isTrajectory_iff`, `IsHyperregular.isTrajectory_iff_isSolution`, `VelocitySpace.lagrangeBracket`, `IsHyperregular.legendre_bracket`, `IsHyperregular.lagrangeBracket_q_v`, `VelocitySpace.natural`, `VelocitySpace.isHyperregular_natural`, `VelocitySpace.hamiltonian_natural`, `VelocitySpace.toJet_natural` |

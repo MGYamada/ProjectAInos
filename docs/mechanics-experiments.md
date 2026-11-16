@@ -25,7 +25,7 @@ selected_results = run_groups(["E4", "E10"])
 assert all(result.ok for result in jet_results + selected_results)
 ```
 
-The CLI prints the familiar `[PASS]`/`[FAIL]` lines and summary and exits with status 0 exactly when every selected check passes. Group names are E1–E11; duplicate or unknown names are rejected. A full run contains 47 uniquely tagged checks. The former duplicate `E4e` labels are now `E4e-r^k` and `E4e-x^2y^(k-2)`.
+The CLI prints the familiar `[PASS]`/`[FAIL]` lines and summary and exits with status 0 exactly when every selected check passes. Group names are E1–E12; duplicate or unknown names are rejected. A full run contains 49 uniquely tagged checks. The former duplicate `E4e` labels are now `E4e-r^k` and `E4e-x^2y^(k-2)`.
 
 ## E1: Hamiltonian and Poisson conventions
 
@@ -180,3 +180,12 @@ E(x,v)=\frac{v^2+x^2}{2}+\frac{\alpha x^3}{3}+\frac{\beta x^4}{4}.
 The drift tolerance is `10⁻⁶`, normalized by `max(|E_initial|, A²/2)`. Invalid parameters raise `ValueError`; nonfinite evolution, excessive drift, unexpected crossings, and exhausted budgets raise `PeriodSearchError`. `estimate_period` returns the two turning points, step count, and maximum energy drift as well as the period. `period` returns just the validated period. E11 converts integration failures into a failed check with a diagnostic, rather than hanging or reporting a misleading coefficient discrepancy.
 
 For each amplitude the runner computes `κ(A)=(2π/T(A)−1)/A²`. It extrapolates `2κ(0.01)−κ(0.02)` to remove the leading amplitude error and compares that value with `3β/8−5α²/12` using absolute tolerance `2×10⁻⁴`. This is deterministic numerical evidence for the coefficient, with no random seed or stochastic step. It is not a bound on the asymptotic remainder for arbitrary parameters.
+
+## E12: Parametric resonance
+
+| Tag | Statement checked |
+| --- | --- |
+| `E12a` | In the co-ordinates `x = a cos(γt/2) + b sin(γt/2)`, `ẋ = (γ/2)(−a sin(γt/2) + b cos(γt/2))`, the coefficient `G` of the system for `(a, b)` has `½ tr (∫₀ᵀ G)² = −(4π²/γ⁴)(Δ² − ω₀⁴h²/4)` with `Δ = ω₀² − γ²/4` and `T = 2π/γ`, and the diagonal entry of `∫₀ᵀ G` vanishes (§27). |
+| `E12b` | The trace of the monodromy matrix of `x'' + ω₀²(1 + h cos γt) x = 0`, integrated numerically, is `−2 + (4π²/γ⁴)(Δ² − ω₀⁴h²/4)` within the bound `e^r r³/3`, `r = (8π/γ²)(|Δ| + ω₀²|h|)`; the sign of `|tr M| − 2` is that of the main term in the four cases. |
+
+Both are Lean theorems: E12a is `Parametric.integralCoefficient_rotating_left`, `Parametric.integralCoefficient_rotating_right` with `LinearODE.traceCLM_secondOrderOperator`, and E12b is `Parametric.abs_trace_monodromy_modulated_sub_le`. E12b uses RK4 with 20,000 steps over one period for `(ω₀, h, γ) = (1, 0.002, 2)`, `(1, 0.002, 2.004)`, `(1.3, −0.0015, 2.6)` and `(0.8, 0.001, 1.6004)`; the first and the third are at exact resonance and unstable, the other two are outside the zone and stable.

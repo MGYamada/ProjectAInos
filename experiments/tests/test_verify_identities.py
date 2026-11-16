@@ -36,23 +36,23 @@ class RunnerTests(unittest.TestCase):
         # Run every group without executing another group to set up symbols.
         # Reversed order also detects an accidental dependence on predecessor state.
         expected_counts = {'E1': 3, 'E2': 3, 'E3': 2, 'E4': 7, 'E5': 7, 'E6': 6,
-                           'E7': 5, 'E8': 2, 'E9': 5, 'E10': 6, 'E11': 1}
+                           'E7': 5, 'E8': 2, 'E9': 5, 'E10': 6, 'E11': 1, 'E12': 2}
         with contextlib.redirect_stdout(io.StringIO()) as stdout:
             results = experiments.run_groups(list(reversed(experiments.GROUPS)))
             repeated = experiments.run_e9()
         self.assertEqual(stdout.getvalue(), '')
-        self.assertEqual(len(results), 47)
+        self.assertEqual(len(results), 49)
         self.assertTrue(all(result.ok for result in results))
         for group, count in expected_counts.items():
             with self.subTest(group=group):
                 self.assertEqual(sum(re.match(r'E\d+', result.tag).group() == group for result in results), count)
         self.assertEqual(repeated, [result for result in results if result.tag.startswith('E9')])
-        self.assertEqual(len({result.tag for result in results}), 47)
+        self.assertEqual(len({result.tag for result in results}), 49)
         self.assertIn('E4e-r^k', {result.tag for result in results})
         self.assertIn('E4e-x^2y^(k-2)', {result.tag for result in results})
         guide = Path(__file__).resolve().parents[2] / 'docs' / 'mechanics-experiments.md'
         documented_tags = re.findall(r'^\| `(E[^`]+)` \|', guide.read_text(), re.M)
-        self.assertEqual(len(documented_tags), 47)
+        self.assertEqual(len(documented_tags), 49)
         self.assertEqual(set(documented_tags), {result.tag for result in results})
 
     def test_main_success_and_failure_exit_status(self):
@@ -65,7 +65,7 @@ class RunnerTests(unittest.TestCase):
                 self.assertIn(f'{int(ok)}/1 checks passed', stdout.getvalue())
 
     def test_unknown_or_duplicate_groups_rejected(self):
-        for groups in (['E12'], ['E1', 'E1']):
+        for groups in (['E13'], ['E1', 'E1']):
             with self.subTest(groups=groups), self.assertRaises(ValueError):
                 experiments.run_groups(groups)
 

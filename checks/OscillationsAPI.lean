@@ -1002,6 +1002,421 @@ example {ω : ℝ} (hω : ω ≠ 0) (T : ℝ) :
 
 end Parametric
 
+section ParametricExistence
+
+open Parametric
+
+example (z : ℝ × ℝ) : velocityMap z = (z.2, 0) := rfl
+
+example (z : ℝ × ℝ) : forceMap z = (0, -z.1) := rfl
+
+open scoped ContDiff in
+example (p : TimeFunction) :
+    ContDiff ℝ ∞ fun t : ℝ => velocityMap + (p fun _ => t) • forceMap :=
+  contDiff_hillCoefficient p
+
+open scoped ContDiff in
+example (p : TimeFunction) (x₀ v₀ : ℝ) : ContDiff ℝ ∞ (hillState p x₀ v₀) :=
+  contDiff_hillState p x₀ v₀
+
+example (p : TimeFunction) (x₀ v₀ : ℝ) : hillState p x₀ v₀ 0 = (x₀, v₀) :=
+  hillState_zero p x₀ v₀
+
+example (p : TimeFunction) (x₀ v₀ t : ℝ) :
+    hillVelocity p x₀ v₀ (fun _ => t) = (hillState p x₀ v₀ t).2 :=
+  hillVelocity_apply p x₀ v₀ t
+
+example (p : TimeFunction) (t : ℝ) (z : ℝ × ℝ) :
+    hillCoefficient p t z = (z.2, -((p fun _ => t) * z.1)) := hillCoefficient_apply p t z
+
+example (p : TimeFunction) (x₀ v₀ t : ℝ) :
+    HasDerivAt (hillState p x₀ v₀)
+      ((hillState p x₀ v₀ t).2, -((p fun _ => t) * (hillState p x₀ v₀ t).1)) t :=
+  hasDerivAt_hillState p x₀ v₀ t
+
+example (p : TimeFunction) (x₀ v₀ t : ℝ) :
+    hillSolution p x₀ v₀ (fun _ => t) = (hillState p x₀ v₀ t).1 := hillSolution_apply p x₀ v₀ t
+
+example (p : TimeFunction) (x₀ v₀ : ℝ) :
+    timeDerivative (hillSolution p x₀ v₀) = hillVelocity p x₀ v₀ :=
+  timeDerivative_hillSolution p x₀ v₀
+
+example (p : TimeFunction) (x₀ v₀ : ℝ) :
+    timeDerivative (hillVelocity p x₀ v₀) = -(p * hillSolution p x₀ v₀) :=
+  timeDerivative_hillVelocity p x₀ v₀
+
+/-- The equation has a solution for every smooth coefficient and all initial data. -/
+example (p : TimeFunction) (x₀ v₀ : ℝ) : IsHill p (hillSolution p x₀ v₀) :=
+  isHill_hillSolution p x₀ v₀
+
+example (p : TimeFunction) (x₀ v₀ : ℝ) : hillSolution p x₀ v₀ (fun _ => 0) = x₀ :=
+  hillSolution_zero p x₀ v₀
+
+example (p : TimeFunction) (x₀ v₀ : ℝ) :
+    timeDerivative (hillSolution p x₀ v₀) (fun _ => 0) = v₀ :=
+  timeDerivative_hillSolution_zero p x₀ v₀
+
+example (p : TimeFunction) : Nonempty (FundamentalSystem p) := FundamentalSystem.nonempty p
+
+example (p : TimeFunction) : Subsingleton (FundamentalSystem p) := inferInstance
+
+example {p x y : TimeFunction} (hx : IsHill p x) (hy : IsHill p y)
+    (h0 : x (fun _ => 0) = y fun _ => 0)
+    (h1 : timeDerivative x (fun _ => 0) = timeDerivative y fun _ => 0) : x = y :=
+  hx.eq_of_initial hy h0 h1
+
+example (p : TimeFunction) (x₀ v₀ : ℝ) :
+    ∃ x, IsHill p x ∧ x (fun _ => 0) = x₀ ∧ timeDerivative x (fun _ => 0) = v₀ :=
+  exists_isHill p x₀ v₀
+
+example (p : TimeFunction) (x₀ v₀ : ℝ) :
+    ∃! x, IsHill p x ∧ x (fun _ => 0) = x₀ ∧ timeDerivative x (fun _ => 0) = v₀ :=
+  existsUnique_isHill p x₀ v₀
+
+/-- The constructed fundamental system of the oscillator is `cos ωt`, `sin ωt / ω`. -/
+example {ω : ℝ} (hω : ω ≠ 0) :
+    FundamentalSystem.ofCoefficient (algebraMap ℝ TimeFunction (ω ^ 2)) =
+      FundamentalSystem.harmonic hω :=
+  FundamentalSystem.ofCoefficient_harmonic hω
+
+example {p : TimeFunction} (Φ : FundamentalSystem p) (T : ℝ) : Φ.matrix T = monodromy p T :=
+  Φ.matrix_eq_monodromy T
+
+example (p : TimeFunction) (T : ℝ) : (monodromy p T).det = 1 := det_monodromy p T
+
+example {ω : ℝ} (hω : ω ≠ 0) (T : ℝ) :
+    (monodromy (algebraMap ℝ TimeFunction (ω ^ 2)) T).trace = 2 * Real.cos (ω * T) :=
+  trace_monodromy_harmonic hω T
+
+end ParametricExistence
+
+section ParametricTrace
+
+open Parametric
+
+example {p x : TimeFunction} (hx : IsHill p x) (c : ℝ) :
+    IsHill p (algebraMap ℝ TimeFunction c * x) := hx.const_mul c
+
+example {p x y : TimeFunction} (hx : IsHill p x) (hy : IsHill p y) : IsHill p (x + y) :=
+  hx.add hy
+
+example (p : TimeFunction) : IsHill p 0 := isHill_zero p
+
+example (p : TimeFunction) (c : Fin 2 → ℝ) : state (hillSolution p (c 0) (c 1)) 0 = c :=
+  state_hillSolution_zero p c
+
+example {p x : TimeFunction} (hx : IsHill p x) (h : state x 0 = 0) : x = 0 :=
+  hx.eq_zero_of_state_eq_zero h
+
+example {p x : TimeFunction} (hx : IsHill p x) (T : ℝ) :
+    state x T = monodromy p T *ᵥ state x 0 := hx.state_period T
+
+/-- An eigenvector of the monodromy matrix gives a solution with a multiplier. -/
+example {p x : TimeFunction} {T ν : ℝ} (hp : TimeFunction.shift T p = p) (hx : IsHill p x)
+    (h : monodromy p T *ᵥ state x 0 = ν • state x 0) :
+    TimeFunction.shift T x = algebraMap ℝ TimeFunction ν * x :=
+  hx.shift_eq_of_mulVec_eq hp h
+
+example {x : TimeFunction} {T ν : ℝ}
+    (h : TimeFunction.shift T x = algebraMap ℝ TimeFunction ν * x) (n : ℕ) (t : ℝ) :
+    x (fun _ => t + n * T) = ν ^ n * x fun _ => t :=
+  apply_add_nat_mul_period_of_shift_eq h n t
+
+example {x : TimeFunction} {T ν : ℝ} (hT : 0 < T)
+    (h : TimeFunction.shift T x = algebraMap ℝ TimeFunction ν * x) (hν : |ν| ≤ 1) :
+    ∃ B : ℝ, ∀ t : ℝ, 0 ≤ t → |x fun _ => t| ≤ B :=
+  exists_abs_apply_le_of_shift_eq hT h hν
+
+example {x : TimeFunction} {T ν : ℝ} (hT : 0 < T)
+    (h : TimeFunction.shift T x = algebraMap ℝ TimeFunction ν * x) (hν : 1 < |ν|)
+    (hx : x ≠ 0) : ¬ ∃ B : ℝ, ∀ t : ℝ, 0 ≤ t → |x fun _ => t| ≤ B :=
+  not_exists_abs_apply_le_of_shift_eq hT h hν hx
+
+example {A : Matrix (Fin 2) (Fin 2) ℝ} (hdet : A.det = 1) (htr : 2 < |A.trace|) :
+    ∃ μ : ℝ, 1 < |μ| ∧ μ ^ 2 - A.trace * μ + 1 = 0 ∧
+      ∃ c : Fin 2 → ℝ, c ≠ 0 ∧ A *ᵥ c = μ • c :=
+  exists_mulVec_eq_smul_of_two_lt_abs_trace hdet htr
+
+/-- Instability when the trace of the monodromy matrix is greater than two. -/
+example {p : TimeFunction} {T : ℝ} (hp : TimeFunction.shift T p = p) (hT : 0 < T)
+    (htr : 2 < |(monodromy p T).trace|) :
+    ∃ x, IsHill p x ∧ ¬ ∃ B : ℝ, ∀ t : ℝ, 0 ≤ t → |x fun _ => t| ≤ B :=
+  exists_isHill_not_bounded_of_two_lt_abs_trace hp hT htr
+
+/-- The bounded solutions of the hyperbolic case are those on the stable line. -/
+example {p x : TimeFunction} {T : ℝ} (hp : TimeFunction.shift T p = p) (hT : 0 < T)
+    (htr : 2 < |(monodromy p T).trace|) (hx : IsHill p x) :
+    (∃ B : ℝ, ∀ t : ℝ, 0 ≤ t → |x fun _ => t| ≤ B) ↔
+      ∃ ν : ℝ, |ν| < 1 ∧ monodromy p T *ᵥ state x 0 = ν • state x 0 :=
+  hx.exists_abs_apply_le_iff_of_two_lt_abs_trace hp hT htr
+
+example {A : Matrix (Fin 2) (Fin 2) ℝ} (hdet : A.det = 1) {σ : ℝ} (hσ : σ * σ = 1)
+    (htr : A.trace = 2 * σ) (c : Fin 2 → ℝ) :
+    A *ᵥ (A *ᵥ c - σ • c) = σ • (A *ᵥ c - σ • c) :=
+  mulVec_mulVec_sub_of_trace_eq hdet hσ htr c
+
+/-- The bounded solutions of the parabolic case. -/
+example {p x : TimeFunction} {T σ : ℝ} (hp : TimeFunction.shift T p = p) (hT : 0 < T)
+    (hσ : σ * σ = 1) (htr : (monodromy p T).trace = 2 * σ) (hx : IsHill p x) :
+    (∃ B : ℝ, ∀ t : ℝ, 0 ≤ t → |x fun _ => t| ≤ B) ↔
+      monodromy p T *ᵥ state x 0 = σ • state x 0 :=
+  hx.exists_abs_apply_le_iff_of_trace_eq hp hT hσ htr
+
+example {A : Matrix (Fin 2) (Fin 2) ℝ} {σ : ℝ}
+    (hA : A ≠ σ • (1 : Matrix (Fin 2) (Fin 2) ℝ)) : ∃ c : Fin 2 → ℝ, A *ᵥ c ≠ σ • c :=
+  exists_mulVec_ne_smul hA
+
+example {p : TimeFunction} {T σ : ℝ} (hp : TimeFunction.shift T p = p) (hT : 0 < T)
+    (hσ : σ * σ = 1) (htr : (monodromy p T).trace = 2 * σ)
+    (hM : monodromy p T ≠ σ • (1 : Matrix (Fin 2) (Fin 2) ℝ)) :
+    ∃ x, IsHill p x ∧ ¬ ∃ B : ℝ, ∀ t : ℝ, 0 ≤ t → |x fun _ => t| ≤ B :=
+  exists_isHill_not_bounded_of_trace_eq hp hT hσ htr hM
+
+/-- The stability criterion of Landau–Lifshitz §27. -/
+example {p : TimeFunction} {T : ℝ} (hp : TimeFunction.shift T p = p) (hT : 0 < T) :
+    (∀ x, IsHill p x → ∃ B : ℝ, ∀ t : ℝ, 0 ≤ t → |x fun _ => t| ≤ B) ↔
+      |(monodromy p T).trace| < 2 ∨ monodromy p T = 1 ∨ monodromy p T = -1 :=
+  forall_isHill_bounded_iff hp hT
+
+example {ω : ℝ} (hω : ω ≠ 0) (T : ℝ) :
+    |(monodromy (algebraMap ℝ TimeFunction (ω ^ 2)) T).trace| ≤ 2 :=
+  abs_trace_monodromy_harmonic_le hω T
+
+end ParametricTrace
+
+section ParametricZone
+
+open Parametric ProjectAInos.SmoothGeometry.LinearODE
+
+example (L : (ℝ × ℝ) →L[ℝ] (ℝ × ℝ)) : planeTrace L = (L (1, 0)).1 + (L (0, 1)).2 := rfl
+
+example (z : ℝ × ℝ) : e₁₁ z = (z.1, 0) := rfl
+
+example (z : ℝ × ℝ) : e₁₂ z = (z.2, 0) := rfl
+
+example (z : ℝ × ℝ) : e₂₁ z = (0, z.1) := rfl
+
+example (z : ℝ × ℝ) : e₂₂ z = (0, z.2) := rfl
+
+example (p : TimeFunction) (T : ℝ) :
+    (monodromy p T).trace = planeTrace (propagator (hillCoefficient p) T 0) :=
+  trace_monodromy_eq p T
+
+example (p : TimeFunction) (γ t : ℝ) :
+    detuning p γ t = 2 / γ * ((p fun _ => t) - γ ^ 2 / 4) := rfl
+
+example (p : TimeFunction) (γ : ℝ) : Continuous (detuning p γ) := continuous_detuning p γ
+
+example (p : TimeFunction) (γ t : ℝ) (z : ℝ × ℝ) :
+    rotatingCoefficient p γ t z =
+      (detuning p γ t * (Real.cos (γ * t / 2) * z.1 + Real.sin (γ * t / 2) * z.2) *
+          Real.sin (γ * t / 2),
+        -(detuning p γ t * (Real.cos (γ * t / 2) * z.1 + Real.sin (γ * t / 2) * z.2) *
+          Real.cos (γ * t / 2))) :=
+  rotatingCoefficient_apply p γ t z
+
+example (γ t : ℝ) (z : ℝ × ℝ) :
+    rotation γ t z =
+      (Real.cos (γ * t / 2) * z.1 + Real.sin (γ * t / 2) * z.2,
+        γ / 2 * (-(Real.sin (γ * t / 2)) * z.1 + Real.cos (γ * t / 2) * z.2)) :=
+  rotation_apply γ t z
+
+/-- The equation in the rotating co-ordinates. -/
+example (p : TimeFunction) {γ : ℝ} (hγ : γ ≠ 0) (t : ℝ) (w : ℝ × ℝ) :
+    propagator (hillCoefficient p) t 0 (rotation γ 0 w) =
+      rotation γ t (propagator (rotatingCoefficient p γ) t 0 w) :=
+  propagator_hillCoefficient_rotation p hγ t w
+
+example (p : TimeFunction) {γ : ℝ} (hγ : γ ≠ 0) :
+    (monodromy p (2 * Real.pi / γ)).trace =
+      -planeTrace (propagator (rotatingCoefficient p γ) (2 * Real.pi / γ) 0) :=
+  trace_monodromy_eq_neg p hγ
+
+example (L : (ℝ × ℝ) →L[ℝ] (ℝ × ℝ)) : traceCLM L = planeTrace L := traceCLM_eq_planeTrace L
+
+example (L : (ℝ × ℝ) →L[ℝ] (ℝ × ℝ)) (z : ℝ × ℝ) :
+    L z = z.1 • L (1, 0) + z.2 • L (0, 1) := apply_eq_smul_add_smul L z
+
+example (L : (ℝ × ℝ) →L[ℝ] (ℝ × ℝ)) :
+    planeTrace (L ∘L L) =
+      (L (1, 0)).1 ^ 2 + 2 * (L (0, 1)).1 * (L (1, 0)).2 + (L (0, 1)).2 ^ 2 :=
+  planeTrace_comp_self L
+
+example (p : TimeFunction) (γ t : ℝ) :
+    ‖rotatingCoefficient p γ t‖ ≤ 2 * |detuning p γ t| := norm_rotatingCoefficient_le p γ t
+
+example (ω₀ h γ t : ℝ) :
+    modulated ω₀ h γ (fun _ => t) = ω₀ ^ 2 * (1 + h * Real.cos (γ * t)) :=
+  modulated_apply ω₀ h γ t
+
+example (ω₀ h : ℝ) {γ : ℝ} (hγ : γ ≠ 0) :
+    TimeFunction.shift (2 * Real.pi / γ) (modulated ω₀ h γ) = modulated ω₀ h γ :=
+  shift_modulated ω₀ h hγ
+
+example (ω₀ h γ t : ℝ) :
+    detuning (modulated ω₀ h γ) γ t =
+      2 / γ * (ω₀ ^ 2 - γ ^ 2 / 4 + ω₀ ^ 2 * h * Real.cos (γ * t)) :=
+  detuning_modulated ω₀ h γ t
+
+example (ω₀ h γ : ℝ) :
+    zoneBound ω₀ h γ = 4 / γ * (|ω₀ ^ 2 - γ ^ 2 / 4| + ω₀ ^ 2 * |h|) := rfl
+
+example (ω₀ h : ℝ) {γ : ℝ} (hγ : 0 < γ) : 0 ≤ zoneBound ω₀ h γ := zoneBound_nonneg ω₀ h hγ
+
+example (ω₀ h : ℝ) {γ : ℝ} (hγ : 0 < γ) (t : ℝ) :
+    ‖rotatingCoefficient (modulated ω₀ h γ) γ t‖ ≤ zoneBound ω₀ h γ :=
+  norm_rotatingCoefficient_modulated_le ω₀ h hγ t
+
+example (F : ℝ → ℝ) {γ : ℝ} (hγ : γ ≠ 0) :
+    ∫ t in (0 : ℝ)..2 * Real.pi / γ, F (γ * t) = γ⁻¹ * ∫ u in (0 : ℝ)..2 * Real.pi, F u :=
+  integral_comp_mul_period F hγ
+
+example (α β : ℝ) :
+    ∫ u in (0 : ℝ)..2 * Real.pi, (α * Real.sin u + β * (Real.sin u * Real.cos u)) = 0 :=
+  integral_sin_add_sin_mul_cos α β
+
+example (α β δ : ℝ) :
+    ∫ u in (0 : ℝ)..2 * Real.pi, (α + β * Real.cos u + δ * Real.cos u ^ 2) =
+      2 * Real.pi * α + Real.pi * δ :=
+  integral_const_add_cos_add_cos_sq α β δ
+
+example (ω₀ h : ℝ) {γ : ℝ} (hγ : γ ≠ 0) :
+    ∫ t in (0 : ℝ)..2 * Real.pi / γ, detuning (modulated ω₀ h γ) γ t *
+      (Real.cos (γ * t / 2) * Real.sin (γ * t / 2)) = 0 :=
+  integral_detuning_mul_cos_mul_sin ω₀ h hγ
+
+example (ω₀ h : ℝ) {γ : ℝ} (hγ : γ ≠ 0) :
+    ∫ t in (0 : ℝ)..2 * Real.pi / γ, detuning (modulated ω₀ h γ) γ t *
+      Real.sin (γ * t / 2) ^ 2 =
+      (2 * Real.pi * (ω₀ ^ 2 - γ ^ 2 / 4) - Real.pi * (ω₀ ^ 2 * h)) / γ ^ 2 :=
+  integral_detuning_mul_sin_sq ω₀ h hγ
+
+example (ω₀ h : ℝ) {γ : ℝ} (hγ : γ ≠ 0) :
+    ∫ t in (0 : ℝ)..2 * Real.pi / γ, detuning (modulated ω₀ h γ) γ t *
+      Real.cos (γ * t / 2) ^ 2 =
+      (2 * Real.pi * (ω₀ ^ 2 - γ ^ 2 / 4) + Real.pi * (ω₀ ^ 2 * h)) / γ ^ 2 :=
+  integral_detuning_mul_cos_sq ω₀ h hγ
+
+example (A : C(ℝ, (ℝ × ℝ) →L[ℝ] (ℝ × ℝ))) (s t : ℝ) (y : ℝ × ℝ) :
+    (integralCoefficient A s t y).1 = ∫ r in s..t, (A r y).1 :=
+  integralCoefficient_apply_fst A s t y
+
+example (A : C(ℝ, (ℝ × ℝ) →L[ℝ] (ℝ × ℝ))) (s t : ℝ) (y : ℝ × ℝ) :
+    (integralCoefficient A s t y).2 = ∫ r in s..t, (A r y).2 :=
+  integralCoefficient_apply_snd A s t y
+
+example (ω₀ h : ℝ) {γ : ℝ} (hγ : γ ≠ 0) :
+    integralCoefficient (rotatingCoefficient (modulated ω₀ h γ) γ) 0 (2 * Real.pi / γ) (1, 0) =
+      (0, -((2 * Real.pi * (ω₀ ^ 2 - γ ^ 2 / 4) + Real.pi * (ω₀ ^ 2 * h)) / γ ^ 2)) :=
+  integralCoefficient_rotating_left ω₀ h hγ
+
+example (ω₀ h : ℝ) {γ : ℝ} (hγ : γ ≠ 0) :
+    integralCoefficient (rotatingCoefficient (modulated ω₀ h γ) γ) 0 (2 * Real.pi / γ) (0, 1) =
+      ((2 * Real.pi * (ω₀ ^ 2 - γ ^ 2 / 4) - Real.pi * (ω₀ ^ 2 * h)) / γ ^ 2, 0) :=
+  integralCoefficient_rotating_right ω₀ h hγ
+
+/-- The trace of the monodromy matrix to second order, with its remainder. -/
+example (ω₀ h : ℝ) {γ : ℝ} (hγ : 0 < γ) :
+    |(monodromy (modulated ω₀ h γ) (2 * Real.pi / γ)).trace + 2 -
+        4 * Real.pi ^ 2 / γ ^ 4 * ((ω₀ ^ 2 - γ ^ 2 / 4) ^ 2 - ω₀ ^ 4 * h ^ 2 / 4)| ≤
+      Real.exp (zoneBound ω₀ h γ * (2 * Real.pi / γ)) *
+        (zoneBound ω₀ h γ * (2 * Real.pi / γ)) ^ 3 / 3 :=
+  abs_trace_monodromy_modulated_sub_le ω₀ h hγ
+
+/-- Instability inside the zone. -/
+example (ω₀ h : ℝ) {γ : ℝ} (hγ : 0 < γ)
+    (hzone : Real.exp (zoneBound ω₀ h γ * (2 * Real.pi / γ)) *
+        (zoneBound ω₀ h γ * (2 * Real.pi / γ)) ^ 3 / 3 <
+      4 * Real.pi ^ 2 / γ ^ 4 * (ω₀ ^ 4 * h ^ 2 / 4 - (ω₀ ^ 2 - γ ^ 2 / 4) ^ 2)) :
+    ∃ x, IsHill (modulated ω₀ h γ) x ∧ ¬ ∃ B : ℝ, ∀ t : ℝ, 0 ≤ t → |x fun _ => t| ≤ B :=
+  exists_isHill_not_bounded_modulated ω₀ h hγ hzone
+
+/-- Stability outside the zone. -/
+example (ω₀ h : ℝ) {γ : ℝ} (hγ : 0 < γ)
+    (hsmall : zoneBound ω₀ h γ * (2 * Real.pi / γ) ≤ 1)
+    (hzone : Real.exp (zoneBound ω₀ h γ * (2 * Real.pi / γ)) *
+        (zoneBound ω₀ h γ * (2 * Real.pi / γ)) ^ 3 / 3 <
+      4 * Real.pi ^ 2 / γ ^ 4 * ((ω₀ ^ 2 - γ ^ 2 / 4) ^ 2 - ω₀ ^ 4 * h ^ 2 / 4))
+    {x : TimeFunction} (hx : IsHill (modulated ω₀ h γ) x) :
+    ∃ B : ℝ, ∀ t : ℝ, 0 ≤ t → |x fun _ => t| ≤ B :=
+  exists_abs_apply_le_modulated ω₀ h hγ hsmall hzone hx
+
+/-- Parametric resonance at `γ = 2ω₀`. -/
+example {ω₀ : ℝ} (hω₀ : 0 < ω₀) {h : ℝ} (hh : h ≠ 0) (hsmall : |h| ≤ 1 / 400) :
+    ∃ x, IsHill (modulated ω₀ h (2 * ω₀)) x ∧
+      ¬ ∃ B : ℝ, ∀ t : ℝ, 0 ≤ t → |x fun _ => t| ≤ B :=
+  exists_isHill_not_bounded_modulated_resonance hω₀ hh hsmall
+
+/-- A family outside the zone. -/
+example (ω₀ h : ℝ) {γ : ℝ} (hγ : 0 < γ) (hΔ : ω₀ ^ 2 - γ ^ 2 / 4 ≠ 0)
+    (hΔs : |ω₀ ^ 2 - γ ^ 2 / 4| ≤ γ ^ 2 / 4000) (hh : ω₀ ^ 2 * |h| ≤ |ω₀ ^ 2 - γ ^ 2 / 4|)
+    {x : TimeFunction} (hx : IsHill (modulated ω₀ h γ) x) :
+    ∃ B : ℝ, ∀ t : ℝ, 0 ≤ t → |x fun _ => t| ≤ B :=
+  exists_abs_apply_le_modulated_of_le ω₀ h hγ hΔ hΔs hh hx
+
+end ParametricZone
+
+section ParametricExamples
+
+open Parametric
+
+/-- A constant coefficient has every period. -/
+example (T c : ℝ) :
+    TimeFunction.shift T (algebraMap ℝ TimeFunction c) = algebraMap ℝ TimeFunction c :=
+  shift_algebraMap T c
+
+/-- The criterion applied to the oscillator. -/
+example {ω : ℝ} (hω : ω ≠ 0) {x : TimeFunction}
+    (hx : IsHill (algebraMap ℝ TimeFunction (ω ^ 2)) x) :
+    ∃ B : ℝ, ∀ t : ℝ, 0 ≤ t → |x fun _ => t| ≤ B :=
+  exists_abs_apply_le_harmonic hω hx
+
+example : FundamentalSystem (algebraMap ℝ TimeFunction 0) := FundamentalSystem.free
+
+example (T : ℝ) : monodromy (algebraMap ℝ TimeFunction 0) T = !![1, T; 0, 1] :=
+  monodromy_free T
+
+example (T : ℝ) : (monodromy (algebraMap ℝ TimeFunction 0) T).trace = 2 * 1 :=
+  trace_monodromy_free T
+
+/-- The parabolic case for free motion. -/
+example {x : TimeFunction} (hx : IsHill (algebraMap ℝ TimeFunction 0) x) :
+    (∃ B : ℝ, ∀ t : ℝ, 0 ≤ t → |x fun _ => t| ≤ B) ↔ timeDerivative x (fun _ => 0) = 0 :=
+  hx.exists_abs_apply_le_free_iff
+
+example :
+    ∃ x, IsHill (algebraMap ℝ TimeFunction 0) x ∧
+      ¬ ∃ B : ℝ, ∀ t : ℝ, 0 ≤ t → |x fun _ => t| ≤ B :=
+  exists_isHill_free_not_bounded
+
+example (κ : ℝ) : IsHill (algebraMap ℝ TimeFunction (-(κ ^ 2))) (TimeFunction.expMul κ) :=
+  isHill_expMul κ
+
+example (κ : ℝ) : IsHill (algebraMap ℝ TimeFunction (-(κ ^ 2))) (TimeFunction.expMul (-κ)) :=
+  isHill_expMul_neg κ
+
+example {κ : ℝ} (hκ : κ ≠ 0) : FundamentalSystem (algebraMap ℝ TimeFunction (-(κ ^ 2))) :=
+  FundamentalSystem.hyperbolic hκ
+
+example {κ : ℝ} (hκ : κ ≠ 0) (T : ℝ) :
+    (monodromy (algebraMap ℝ TimeFunction (-(κ ^ 2))) T).trace = 2 * Real.cosh (κ * T) :=
+  trace_monodromy_hyperbolic hκ T
+
+/-- The hyperbolic case for a repulsive linear force. -/
+example {κ : ℝ} (hκ : κ ≠ 0) :
+    ∃ x, IsHill (algebraMap ℝ TimeFunction (-(κ ^ 2))) x ∧
+      ¬ ∃ B : ℝ, ∀ t : ℝ, 0 ≤ t → |x fun _ => t| ≤ B :=
+  exists_isHill_hyperbolic_not_bounded hκ
+
+example {κ : ℝ} (hκ : κ ≠ 0) {x : TimeFunction}
+    (hx : IsHill (algebraMap ℝ TimeFunction (-(κ ^ 2))) x) :
+    (∃ B : ℝ, ∀ t : ℝ, 0 ≤ t → |x fun _ => t| ≤ B) ↔
+      ∃ ν : ℝ, |ν| < 1 ∧
+        monodromy (algebraMap ℝ TimeFunction (-(κ ^ 2))) 1 *ᵥ state x 0 = ν • state x 0 :=
+  hx.exists_abs_apply_le_hyperbolic_iff hκ
+
+end ParametricExamples
+
 section Adiabatic
 
 open Parametric
