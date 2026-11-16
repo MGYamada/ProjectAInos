@@ -952,8 +952,51 @@ times `s ≤ t`, `‖A(r)‖ ≤ g`.
   proof differentiates both sides in `t` and uses `tr (XY) = tr (YX)`; no
   double integral is exchanged.
 
+`ODE.PropagatorDet` gives the determinant of the propagator on a
+finite-dimensional space.
+
+- `hasDerivAt_det_of_eq_one`: Jacobi's formula at the identity. If
+  `M(t₀) = 1`, the derivative of `det M(t)` at `t₀` is the trace of the
+  derivative of `M`. The proof uses `Matrix.det_one_add_smul`.
+- `hasDerivAt_det_propagator` and `det_propagator`: `δ′ = tr A · δ` for
+  `δ(t) = det Φ(t, s)`, and Liouville's formula
+  `det Φ(t, s) = exp (∫ₛᵗ tr A)`. A coefficient of trace zero has a
+  propagator of determinant one (`det_propagator_of_trace_eq_zero`).
+- `eq_propagator_comp_of_hasDerivAt`, `det_eq_det_mul_exp_integral_trace`: a
+  family of operators that solves `M′ = A(t) M` between two times is
+  `Φ(t, s) M(s)`, and its determinant is multiplied by the same factor.
+
+`ODE.FlowVariation` and `ODE.LocalFlow` treat a given family of solutions of
+an autonomous equation `ẋ = X(x)`. Nothing is constructed.
+
+- `hasDerivAt_fderiv_of_isLocalFlow`: if `Φ(t, x)` is twice continuously
+  differentiable at a point and solves the equation near it, the derivative
+  `M(t) = D_x Φ(t, x)` solves the variational equation `M′ = DX(Φ) M`. The
+  proof exchanges the derivatives in `t` and `x`.
+- `eq_of_hasDerivAt_of_eq`: two solutions of an equation with a continuously
+  differentiable field that agree at one time agree at every time between
+  which both are defined. The field is Lipschitz on the compact union of the
+  two curves, and Mathlib's uniqueness theorem applies.
+- `IsLocalFlowOn X Φ Ω`: `Ω` is an open set of times and points, `Φ` is twice
+  continuously differentiable on it and solves the equation, `Φ(0, x) = x`,
+  and the times of each point form an interval that contains zero.
+  `isLocalFlowOn_translation` and `isLocalFlowOn_linear` (the propagator of a
+  constant coefficient) are instances.
+- `IsLocalFlowOn.eq_of_hasDerivAt`, `injOn`, `apply_add`: a solution through a
+  point is the solution of the family, `Φ(t, ·)` is injective on its domain,
+  and a family defined for all times and points satisfies
+  `Φ(s + t, x) = Φ(s, Φ(t, x))`.
+- `IsLocalFlowOn.det_fderiv`: in finite dimension
+  `det D_x Φ(t, x) = exp (∫₀ᵗ tr DX(Φ(s, x)) ds)`.
+- `IsLocalFlowOn.measure_image` and `measurePreserving`: if `tr DX = 0`, the
+  map `Φ(t, ·)` preserves the Haar measure of every measurable set in its
+  domain, and a family defined for all times and points is measure
+  preserving. This is Liouville's theorem for a given flow.
+  `measurePreserving_propagator_const` is the case of a linear field of trace
+  zero.
+
 `Volterra` and `ContinuousFamily` are stated for types in arbitrary universes.
-The determinant of the propagator is not proved here.
+The flow of a nonlinear field is not constructed here.
 
 ### Smooth radial families and local coordinate coefficients
 

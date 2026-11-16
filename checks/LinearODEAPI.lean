@@ -4,11 +4,11 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 module
 
-import ProjectAInos.SmoothGeometry.ODE.PropagatorExpansion
+import ProjectAInos.SmoothGeometry.ODE.PropagatorDet
 
 /-! Typed contracts for linear differential equations: the Volterra operator
-without a bound on the coefficient, and the propagator on the real line. These
-examples use default elaborator options. -/
+without a bound on the coefficient, the propagator on the real line and its
+determinant. These examples use default elaborator options. -/
 
 open ProjectAInos.SmoothGeometry ProjectAInos.SmoothGeometry.LinearODE
 open scoped ContDiff Nat
@@ -241,3 +241,51 @@ example [FiniteDimensional ℝ E] (s t : ℝ) :
   traceCLM_secondOrderOperator A s t
 
 end Expansion
+
+section Determinant
+
+open Set
+
+example {n : Type*} [Fintype n] [DecidableEq n] :
+    Differentiable ℝ (fun M : n → n → ℝ => Matrix.det (Matrix.of M)) := differentiable_det
+
+/-- Jacobi's formula at the identity. -/
+example {n : Type*} [Fintype n] [DecidableEq n] {M : ℝ → n → n → ℝ} {B : n → n → ℝ}
+    {t₀ : ℝ} (h0 : Matrix.of (M t₀) = 1) (hM : HasDerivAt M B t₀) :
+    HasDerivAt (fun t => Matrix.det (Matrix.of (M t))) (Matrix.trace (Matrix.of B)) t₀ :=
+  hasDerivAt_det_of_eq_one h0 hM
+
+variable {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E] [CompleteSpace E]
+  (A : C(ℝ, E →L[ℝ] E))
+
+example [FiniteDimensional ℝ E] : Continuous fun r : ℝ => traceCLM (A r) :=
+  continuous_traceCLM_apply A
+
+example [FiniteDimensional ℝ E] (t s : ℝ) :
+    HasDerivAt (fun r => LinearMap.det (propagator A r s : E →ₗ[ℝ] E))
+      (traceCLM (A t) * LinearMap.det (propagator A t s : E →ₗ[ℝ] E)) t :=
+  hasDerivAt_det_propagator A t s
+
+/-- Liouville's formula. -/
+example [FiniteDimensional ℝ E] (t s : ℝ) :
+    LinearMap.det (propagator A t s : E →ₗ[ℝ] E) =
+      Real.exp (∫ r in s..t, traceCLM (A r)) :=
+  det_propagator A t s
+
+example [FiniteDimensional ℝ E] (hA : ∀ r, traceCLM (A r) = 0) (t s : ℝ) :
+    LinearMap.det (propagator A t s : E →ₗ[ℝ] E) = 1 :=
+  det_propagator_of_trace_eq_zero A hA t s
+
+example {M : ℝ → E →L[ℝ] E} {s t : ℝ} (hc : ContinuousOn M (uIcc s t))
+    (hM : ∀ r ∈ Ioo (min s t) (max s t), HasDerivAt M (A r ∘L M r) r) :
+    M t = propagator A t s ∘L M s :=
+  eq_propagator_comp_of_hasDerivAt A hc hM
+
+example [FiniteDimensional ℝ E] {M : ℝ → E →L[ℝ] E} {s t : ℝ}
+    (hc : ContinuousOn M (uIcc s t))
+    (hM : ∀ r ∈ Ioo (min s t) (max s t), HasDerivAt M (A r ∘L M r) r) :
+    LinearMap.det (M t : E →ₗ[ℝ] E) =
+      Real.exp (∫ r in s..t, traceCLM (A r)) * LinearMap.det (M s : E →ₗ[ℝ] E) :=
+  det_eq_det_mul_exp_integral_trace A hc hM
+
+end Determinant

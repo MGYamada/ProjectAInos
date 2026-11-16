@@ -83,6 +83,7 @@ public import ProjectAInos.Integrations.YangMillsCoordinates
 public import ProjectAInos.Mechanics.Basic
 public import ProjectAInos.Mechanics.Constants
 public import ProjectAInos.Mechanics.Elementary
+public import ProjectAInos.Mechanics.EndpointAction
 public import ProjectAInos.Mechanics.EulerLagrange
 public import ProjectAInos.Mechanics.Examples
 public import ProjectAInos.Mechanics.FirstVariation
@@ -339,7 +340,10 @@ public import ProjectAInos.SmoothGeometry.Minkowski.TwoForm
 public import ProjectAInos.SmoothGeometry.ODE.ContinuousFamily
 public import ProjectAInos.SmoothGeometry.ODE.CoordinateCurvature
 public import ProjectAInos.SmoothGeometry.ODE.FlatFrame
+public import ProjectAInos.SmoothGeometry.ODE.FlowVariation
+public import ProjectAInos.SmoothGeometry.ODE.LocalFlow
 public import ProjectAInos.SmoothGeometry.ODE.Propagator
+public import ProjectAInos.SmoothGeometry.ODE.PropagatorDet
 public import ProjectAInos.SmoothGeometry.ODE.PropagatorExpansion
 public import ProjectAInos.SmoothGeometry.ODE.Radial
 public import ProjectAInos.SmoothGeometry.ODE.RadialExamples
@@ -458,5 +462,6 @@ public import ProjectAInos.Variational.IntervalParameter
 public import ProjectAInos.Variational.Local
 public import ProjectAInos.Variational.LocalExtension
 public import ProjectAInos.Variational.ManifoldCurve
+public import ProjectAInos.Variational.MovingLimits
 public import ProjectAInos.Variational.Parameter
 public import ProjectAInos.Variational.Regularity

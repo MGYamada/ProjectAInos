@@ -58,6 +58,7 @@ open sets gives pointwise vanishing.
 | [EulerLagrange](../ProjectAInos/Variational/EulerLagrange.lean) | Covector decomposition, derivative as the residual pairing, and `stationary_iff_eulerLagrange` |
 | [Parameter](../ProjectAInos/Variational/Parameter.lean) | A positive derivative gives one open interval chart with a constructed C² inverse; endpoint neighborhoods extend closed-interval predicates |
 | [IntervalParameter](../ProjectAInos/Variational/IntervalParameter.lean) | Local joint C¹ regularity along a compact reference segment gives differentiation of the actual parameter integral, with domination derived; intrinsic boundary/residual splitting |
+| [MovingLimits](../ProjectAInos/Variational/MovingLimits.lean) | Leibniz's rule for an integral whose limits move with the parameter, `hasDerivAt_intervalIntegral_moving`, and its form for an integrand that is smooth on an open set containing the reference segment, `hasDerivAt_intervalIntegral_moving_on` |
 | [ManifoldCurve](../ProjectAInos/Variational/ManifoldCurve.lean) | Actual fixed-endpoint C² manifold families and construction of supported chart perturbations, with gluing and coordinate velocity |
 | [Examples](../ProjectAInos/Variational/Examples.lean) | Nonzero variations on time and four-dimensional bases, and a base-dependent momentum with a nonzero divergence residual |
 
@@ -80,6 +81,18 @@ bound follow from compactness, so its public integral derivative theorem asks
 only for local joint C¹ regularity and the specified pointwise derivative.
 This supports manifold curve families crossing chart boundaries without
 constructing a global coordinate curve.
+
+`MovingLimits` differentiates `s ↦ ∫_{a(s)}^{b(s)} F(s, t) dt` for a smooth
+integrand and differentiable limits:
+`∫ ∂F/∂s dt + F(s, b) b′ − F(s, a) a′`. The integral is a smooth function of
+the parameter and of the two limits together
+(`SmoothAlgebra.contDiff_infty_parametric_intervalIntegral_limits`), and its
+three partial derivatives are identified. For an integrand that is smooth on
+an open set `U` containing `{s₀} × [a(s₀), b(s₀)]`, the integrand is extended
+from a neighbourhood of that segment, and `eventually_uIcc_mem_open` keeps the
+segment between the moving limits inside the neighbourhood. The hypothesis is
+smoothness on an open set, since smoothness at a point does not hold in a
+neighbourhood of the point.
 
 The [Mechanics specialization](mechanics.md) now derives the fixed-endpoint
 Euler–Lagrange equations on a real time interval. It uses compactness of the
