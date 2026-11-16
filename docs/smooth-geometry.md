@@ -1081,6 +1081,27 @@ through `0` of `φ′ = √(1 − k² sin² φ)`, and `sn = sin ∘ am`, `cn = c
 The modulus is real with `k² < 1`. The addition theorems, the complex period
 and the case `k² = 1` are not treated.
 
+`ODE.Averaging` is the method of averaging to the first order.
+
+- `abs_integral_mul_sin_le`, `abs_integral_mul_cos_le`: for `|φ| ≤ M₀` and
+  `|φ′| ≤ M₁` on `[0, t]`, `|∫₀ᵗ φ(s) sin ωs ds| ≤ (2 M₀ + t M₁)/ω`;
+  `norm_integral_sin_smul_le` and `norm_integral_cos_smul_le` are the
+  statements for amplitudes with values in a Banach space.
+- `norm_sub_le_of_norm_integral_le`: if `ż = F(z) + r(t)` and `Ż = F(Z)` on
+  `[0, L]` with the same initial value, `F` is Lipschitz with the constant `K`
+  on a set that contains both curves, and `‖∫₀ᵗ r‖ ≤ δ`, then
+  `‖z(t) − Z(t)‖ ≤ δ e^{K t}`. The perturbation `r` need not be small.
+- `exists_forall_norm_sub_le`: for a field `F` and amplitudes `P_j`, `Q_j` of
+  class `C¹`, a perturbation
+  `Σ_j (cos (n_j γ t) P_j(z) + sin (n_j γ t) Q_j(z))` (`harmonics`) and a compact
+  convex set `K`, there is a constant `C` such that for every `γ > 0` the
+  two solutions differ by at most `C/γ` on `[0, L]` while they stay in `K`.
+- `gronwallBound_le_mul_exp`: `gronwallBound δ K ε t ≤ (δ + ε L) e^{K L}` for
+  `0 ≤ t ≤ L`.
+
+Only the first order of the method is treated: the constant is not explicit,
+and there is no statement on times of the order of the frequency.
+
 The field is smooth on the whole space. A field that is smooth only on an
 open set, and a field that depends on the time, are not treated.
 

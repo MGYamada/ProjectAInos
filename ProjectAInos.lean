@@ -117,6 +117,7 @@ public import ProjectAInos.Mechanics.Oscillations.Forced
 public import ProjectAInos.Mechanics.Oscillations.Harmonic
 public import ProjectAInos.Mechanics.Oscillations.Linearization
 public import ProjectAInos.Mechanics.Oscillations.Molecule
+public import ProjectAInos.Mechanics.Oscillations.NonlinearResonance
 public import ProjectAInos.Mechanics.Oscillations.NormalForm
 public import ProjectAInos.Mechanics.Oscillations.NormalModes
 public import ProjectAInos.Mechanics.Oscillations.Oscillator
@@ -127,6 +128,8 @@ public import ProjectAInos.Mechanics.Oscillations.ParametricTrace
 public import ProjectAInos.Mechanics.Oscillations.ParametricZone
 public import ProjectAInos.Mechanics.Oscillations.PhaseVolume
 public import ProjectAInos.Mechanics.Oscillations.QuadraticLagrangian
+public import ProjectAInos.Mechanics.Oscillations.RapidForce
+public import ProjectAInos.Mechanics.Oscillations.RapidForceExistence
 public import ProjectAInos.Mechanics.Oscillations.SpringMolecule
 public import ProjectAInos.Mechanics.Oscillations.Symmetry
 public import ProjectAInos.Mechanics.Oscillations.SymmetryTypes
@@ -363,6 +366,7 @@ public import ProjectAInos.SmoothGeometry.Minkowski.Observer
 public import ProjectAInos.SmoothGeometry.Minkowski.Reflection
 public import ProjectAInos.SmoothGeometry.Minkowski.ReflectionDeterminant
 public import ProjectAInos.SmoothGeometry.Minkowski.TwoForm
+public import ProjectAInos.SmoothGeometry.ODE.Averaging
 public import ProjectAInos.SmoothGeometry.ODE.ContinuousFamily
 public import ProjectAInos.SmoothGeometry.ODE.CoordinateCurvature
 public import ProjectAInos.SmoothGeometry.ODE.FlatFrame

@@ -277,6 +277,12 @@ each frequency, each a representation of the group of symmetries, and the
 number of the modes of a symmetry type is a scalar product of characters; for
 a molecule the character of the displacements is `N_g · tr O_g`, and the
 vibrations of two molecules of three atoms are decomposed.
+The method of averaging is proved to the first order with an error bound: a
+motion under a rapidly oscillating force stays within `C/ω` of the motion in
+the effective potential `U + g²/4m`, and the amplitudes of the forced
+oscillator with a cubic term stay within `C/γ` of the solution of the averaged
+equations, whose equilibria satisfy the equation of the amplitude at
+resonance.
 Symplectic forms on manifolds and
 Dirac brackets are not implemented. Galilean symmetry as a group action and the topics of 2.1 and
 2.4 have no Lean counterpart yet. The
