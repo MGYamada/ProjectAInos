@@ -261,6 +261,10 @@ is `p dq − E dt` at the two ends; for the solutions of the flow of a
 Hamiltonian this is `dS = p dq − H dt`, the flow preserves the symplectic
 form, and away from conjugate points the action is a differentiable function
 of the time and the end point that satisfies the Hamilton–Jacobi equation.
+For one degree of freedom, the motion in a well between two simple turning
+points is periodic, its period is the derivative of the area `∮ p dx` with
+respect to the energy, Abel's formula gives the width of the well from the
+period, and the action and the angle variable are canonical.
 Symplectic forms on manifolds and
 Dirac brackets are not implemented. Galilean symmetry as a group action and the topics of 2.1 and
 2.4 have no Lean counterpart yet. The
