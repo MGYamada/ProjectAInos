@@ -251,6 +251,30 @@ equations couple the components `0` and `2` with the coefficients
 `linearization_two_zero`), whose product is positive for the middle moment
 (`linearization_mul_pos_of_middle`) and negative for an extreme one.
 
+`Poisson/AsymmetricTop` solves Euler's equations by Jacobi's elliptic functions
+(Landau–Lifshitz §37). `eulerField I` is the vector field of the bracket on
+the space of `L`: `L̇₀ = a₀ L₁ L₂`, `L̇₁ = a₁ L₂ L₀`, `L̇₂ = a₂ L₀ L₁` with
+`a₀ = 1/I₂ − 1/I₁`, `a₁ = 1/I₀ − 1/I₂`, `a₂ = 1/I₁ − 1/I₀`. For `a₀ < 0 < a₁`
+and `a₂ ≤ 0`, that is `I₀ ≤ I₁ < I₂`, and for `a₂ A² > a₀ C²`, that is
+`M² > 2E I₁`, `ellipticMotion I A C` is the curve
+`(A cn, (a₁ A/q) sn, C dn)(C q t)` with `q = √(−a₀ a₁)` and the modulus
+`k² = a₂ A²/(a₀ C²)`.
+
+- `hasDerivAt_ellipticMotion`, `flow_eulerField_ellipticMotion`: it is the
+  solution through `(A, 0, C)`, for all times.
+- `ellipticMotion_add_period`: it has the period `2 · 2K/(C q)`.
+- `eq_ellipticMotion_of_hasDerivAt`: every solution with `a₂ L₀² > a₀ L₂²` is
+  such a motion up to a shift of the time; `exists_ellipticMotion_eq` states
+  that every point of the regime is on one.
+- `hasDerivAt_ellipticMotion'`, `eq_ellipticMotion'_of_hasDerivAt`: the
+  regime `M² < 2E I₁`, with the axes `0` and `2` exchanged.
+- `isTrajectory_ellipticTrajectory`: the motion is a trajectory of the
+  Lie–Poisson bracket.
+
+For `a₂ = 0`, the symmetric top, the modulus is zero and the functions are
+circular. The separatrix `M² = 2E I₁` and the Eulerian angles of the motion
+are not treated.
+
 `|L|²` is a Casimir (`poisson_casimir_left`): its bracket with every element
 vanishes, so it is an integral of every Hamiltonian. `L_ne_zero` evaluates at a
 point to show that the generators, and hence the bracket, are not zero. The
@@ -509,7 +533,95 @@ the angular momentum in the space frame. The fixed axis `Z` has the components
   momentum `(0, 0, M)` at every time.
 
 The statement that a free motion keeps its angular momentum in the space frame
-is the equation of motion `Ṁ = 0`; it is not derived here from a Lagrangian.
+is the equation of motion `Ṁ = 0`. It is derived from Newton's equations and
+from Hamilton's principle in the next section.
+
+## The equations of motion of a rigid body
+
+`Rigid/Dynamics` derives the equations of Landau–Lifshitz §34 from Newton's
+equations for finitely many point masses `mₐ` at the body positions `rₐ`.
+`IsRigidMotion c c' R R'` states that the origin of the body `c` has the
+velocity `c'`, that the matrix `R` has the entrywise derivative `R'`, and that
+`R(s)ᵀ R(s) = 1` and `det R(s) = 1` at every time. The particles are at
+`qₐ = c + R rₐ` (`IsRigidMotion.hasDerivAt_position`). The angular velocity in
+the body frame is `angularVelocityBody R R' = vee (Rᵀ R')`, and `Ṙ = R Ω̂`
+(`IsRigidMotion.rotation_deriv`). A rotation maps the cross product to the
+cross product (`mulVec_cross`); this is where `det R = 1` is used.
+
+Newton's equations are the hypothesis
+`HasDerivAt (fun u => mₐ • (c' u + R' u *ᵥ rₐ)) Fₐ t` for each particle, with
+`Fₐ` the total force on it.
+
+- `IsRigidMotion.hasDerivAt_momentum`: if `Σ mₐ rₐ = 0`, the momentum is
+  `μ ċ` and its derivative is `Σ Fₐ`.
+- `IsRigidMotion.sum_smul_cross_velocity`: the angular momentum about the
+  origin of the body is `R (I Ω)` with `I = inertia m r`.
+- `IsRigidMotion.hasDerivAt_angularMomentum`: its derivative is the moment
+  `Σ (R rₐ) × Fₐ` of the forces, when the origin is the centre of mass or is
+  at rest.
+- `IsRigidMotion.hasDerivAt_bodyAngularMomentum`: in the body frame,
+  `d(I Ω)/dt = (I Ω) × Ω + Rᵀ K`. `IsRigidMotion.hasDerivAt_bodyVector`:
+  `Γ = Rᵀ e` satisfies `Γ̇ = Γ × Ω`.
+- `sum_internal_force`, `sum_cross_internal_force`: forces `f_ab = −f_ba`
+  along the lines joining the particles cancel in the total force and in the
+  total moment.
+- `transpose_mulVec_sum_cross_weight`: the moment of the uniform field
+  `−g e` is `Γ × (g Σ mₐ rₐ)` in the body frame.
+- `IsRigidMotion.sum_mul_velocity_sq`: `Σ mₐ |vₐ|² = μ |ċ|² + Ω · I Ω`.
+
+`Rigid/Reconstruction`: for a continuous angular velocity `Ω(t)` in the body
+frame, `rotation Ω R₀` is the solution of `Ṙ = R Ω̂` with `R(0) = R₀`, for all
+times, by the propagator of the equation `u̇ = u × Ω` of its rows. It is the
+only solution (`eq_rotation_of_hasDerivAt`), it is a rotation if `R₀` is one
+(`rotation_transpose_mul`, `det_rotation`), so it is a rigid motion with the
+angular velocity `Ω` (`isRigidMotion_rotation`,
+`angularVelocityBody_rotation`), and `d(R L)/dt = R (L̇ − L × Ω)`
+(`hasDerivAt_rotation_mulVec`).
+
+`Rigid/Variation` and `Rigid/RotationAction` are the Lagrangian form.
+`IsRotationFamily R` is a smooth family `R(ε, t)` of orthogonal matrices. Its
+variation field is `η = vee (Rᵀ ∂R/∂ε)` (`familyVariation`), and
+`∂R/∂ε = R η̂` (`IsRotationFamily.familyDeriv_parameter`): every variation of
+a rotation is an infinitesimal rotation in the body frame.
+
+- `IsRotationFamily.hasDerivAt_curveVelocity_family`:
+  `∂Ω/∂ε = ∂η/∂t + Ω × η`, from the symmetry of the second derivatives.
+- `hasDerivAt_rotationAction`: for the action `rotationAction J V γ` of the
+  Lagrangian `Ω · J Ω / 2 − V(Rᵀ γ)`, with `J` symmetric and `V` smooth,
+  `dS/dε = [J Ω · η] − ∫ (d(J Ω)/dt − J Ω × Ω − Γ × ∇V(Γ)) · η dt`.
+- `cayley ξ` is the Cayley transform of `hat ξ / 2`, an orthogonal matrix
+  that is rational in `ξ`, with `cayley 0 = 1` and the derivative `hat ξ` at
+  `0`. The family `R₀(t) · cayley (ε η(t))` has the variation field `η`
+  (`isRotationFamily_mul_cayley`, `familyVariation_mul_cayley`).
+- `stationary_rotationAction_iff`: a smooth curve of rotations is stationary
+  among the families with fixed ends if and only if
+  `d(J Ω)/dt = J Ω × Ω + Γ × ∇V(Γ)` between the ends
+  (`eulerPoissonResidual_eq_zero_iff`).
+
+`Poisson/RigidBodyEquations` identifies these equations with the Lie–Poisson
+equations in principal axes, `inertia m r = diagonal I` with `Iᵢ ≠ 0`.
+`HeavyTop.field I k χ` is the vector field of the heavy top on the space of
+`(L, Γ)`, with the values `(L × Ω + Γ × kχ, Γ × Ω)` (`HeavyTop.field_inl`,
+`HeavyTop.field_inr`).
+
+- `IsRigidMotion.hasDerivAt_eulerField`: with no moment of the forces, the
+  angular momentum in the body frame is an integral curve of
+  `RigidBody.eulerField`.
+- `IsRigidMotion.hasDerivAt_heavyTopField`: for a body with a fixed point
+  under the field `−g e` and forces without moment about the fixed point,
+  `(I Ω, Rᵀ e)` is an integral curve of `HeavyTop.field I g (Σ mₐ rₐ)`.
+- `hasDerivAt_heavyTopField_of_stationary`: the same conclusion for a curve
+  of rotations that is stationary for the action with `V(Γ) = Γ · kχ`.
+- `rotation_mulVec_eulerSolution`: for a solution `L(t)` of Euler's equations
+  the rotation with `Ωᵢ = Lᵢ/Iᵢ` exists for all times and `R L` is constant.
+  `stationary_rotationAction_rotation`: this rotation is stationary for the
+  action of the free body when `Ω` is smooth.
+
+The motion is given as curves of vectors and matrices. The space
+`ℝ³ ⋊ SO(3)` as a manifold, the bracket of `T*SO(3)` and its reduction to the
+Lie–Poisson bracket, a potential that depends on the rotation otherwise than
+through one vector `Rᵀ γ`, and continuous distributions of mass are not
+treated.
 
 ## Small oscillations
 
@@ -1625,6 +1737,12 @@ semi-major axis is not computed.
 | [Rigid/RegularPrecession](../ProjectAInos/Mechanics/Rigid/RegularPrecession.lean) | `symmetricTopMomentum`, `verticalAxis`, `eulerMatrix_mulVec_verticalAxis`, `transpose_eulerMatrix_mulVec`, `eulerMatrix_mulVec_symmetricTopMomentum`, `eulerMatrix_mulVec_symmetricTopMomentum_iff`, `regularPrecession_psi_rate`, `eulerRotation_mulVec_symmetricTopMomentum` |
 | [Poisson/RigidBodyMotion](../ProjectAInos/Mechanics/Poisson/RigidBodyMotion.lean) | `isTrajectory_kineticEnergy_iff`, `isTrajectory_principalRotation`, `isTrajectory_symmetricTop`, `stabilityForm`, `isIntegral_stabilityForm`, `sum_mul_sq_eq`, `mul_sq_le_of_greatest`, `mul_sq_le_of_least`, `linearization_zero_two`, `linearization_two_zero`, `linearization_mul_pos_of_middle`, `linearization_mul_neg_of_greatest`, `linearization_mul_neg_of_least` |
 | [Rigid/InertiaTensor](../ProjectAInos/Mechanics/Rigid/InertiaTensor.lean) | `inertia`, `transpose_inertia`, `inertia_mulVec`, `dotProduct_inertia_mulVec`, `dotProduct_inertia_mulVec_nonneg`, `trace_inertia`, `two_mul_dotProduct_inertia_mulVec_le_trace`, `inertia_add_apply`, `principalMoments`, `principalAxes`, `inertia_mulVec_principalAxes`, `principalMoments_nonneg`, `principalMoments_two_le` |
+| [Rigid/Dynamics](../ProjectAInos/Mechanics/Rigid/Dynamics.lean) | `mulVec_cross`, `angularVelocityBody`, `deriv_eq_mul_hat`, `IsRigidMotion`, `IsRigidMotion.hasDerivAt_momentum`, `IsRigidMotion.sum_smul_cross_velocity`, `IsRigidMotion.hasDerivAt_angularMomentum`, `IsRigidMotion.hasDerivAt_bodyAngularMomentum`, `IsRigidMotion.hasDerivAt_bodyVector`, `sum_internal_force`, `sum_cross_internal_force`, `transpose_mulVec_sum_cross_weight`, `IsRigidMotion.sum_mul_velocity_sq` |
+| [Rigid/Reconstruction](../ProjectAInos/Mechanics/Rigid/Reconstruction.lean) | `rotation`, `hasDerivAt_rotation`, `rotation_transpose_mul`, `det_rotation`, `isRigidMotion_rotation`, `angularVelocityBody_rotation`, `eq_rotation_of_hasDerivAt`, `contDiff_rotation`, `hasDerivAt_rotation_mulVec`, `rotation_mulVec_eq` |
+| [Rigid/Variation](../ProjectAInos/Mechanics/Rigid/Variation.lean) | `curveVelocity`, `IsRotationFamily`, `familyVariation`, `IsRotationFamily.familyDeriv_parameter`, `IsRotationFamily.hasDerivAt_curveVelocity_family`, `IsRotationFamily.hasDerivAt_bodyVector_family` |
+| [Rigid/RotationAction](../ProjectAInos/Mechanics/Rigid/RotationAction.lean) | `bodyLagrangian`, `rotationAction`, `eulerPoissonResidual`, `hasDerivAt_rotationAction`, `cayley`, `cayley_transpose_mul`, `isRotationFamily_mul_cayley`, `familyVariation_mul_cayley`, `eulerPoissonResidual_eq_zero_iff`, `stationary_rotationAction_iff` |
+| [Poisson/RigidBodyEquations](../ProjectAInos/Mechanics/Poisson/RigidBodyEquations.lean) | `HeavyTop.field`, `HeavyTop.field_inl`, `HeavyTop.field_inr`, `IsRigidMotion.hasDerivAt_eulerField`, `IsRigidMotion.hasDerivAt_heavyTopField`, `hasDerivAt_heavyTopField_of_stationary`, `rotation_mulVec_eulerSolution`, `rotation_mulVec_ellipticMotion`, `stationary_rotationAction_rotation` |
+| [Poisson/AsymmetricTop](../ProjectAInos/Mechanics/Poisson/AsymmetricTop.lean) | `eulerField`, `jacobiCurve`, `hasDerivAt_jacobiCurve`, `ellipticMotion`, `hasDerivAt_ellipticMotion`, `flow_eulerField_ellipticMotion`, `ellipticMotion_add_period`, `exists_ellipticMotion_eq`, `eq_ellipticMotion_of_hasDerivAt`, `hasDerivAt_ellipticMotion'`, `eq_ellipticMotion'_of_hasDerivAt`, `isTrajectory_ellipticTrajectory` |
 | [Oscillations/Harmonic](../ProjectAInos/Mechanics/Oscillations/Harmonic.lean) | `TimeFunction.cosMul`, `TimeFunction.sinMul`, `TimeFunction.timeDerivative_cosMul`, `TimeFunction.timeDerivative_sinMul`, `amplitude`, `phase`, `amplitude_mul_cos_add`, `IsHarmonic`, `isHarmonic_cosMul`, `isHarmonic_sinMul`, `IsHarmonic.combination`, `IsHarmonic.eq_cos_add_sin`, `isHarmonic_iff`, `IsHarmonic.eq_of_initial`, `IsHarmonic.apply_eq_amplitude_mul_cos`, `IsHarmonic.apply_add_period`, `IsHarmonic.energy_eq`, `IsHarmonic.energy_eq_amplitude` |
 | [Oscillations/Oscillator](../ProjectAInos/Mechanics/Oscillations/Oscillator.lean) | `StandardJet.isSolution_oscillator_iff_isHarmonic`, `Oscillator.hamiltonian`, `Oscillator.isTrajectory_iff`, `Oscillator.isTrajectory_iff_isHarmonic`, `Oscillator.flowMatrix`, `Oscillator.flowMatrix_zero`, `Oscillator.flowMatrix_add`, `Oscillator.det_flowMatrix`, `Oscillator.flowMatrix_add_period`, `Oscillator.apply_eq_flowMatrix_mulVec`, `Oscillator.flowCurve`, `Oscillator.isTrajectory_flowCurve` |
 | [Oscillations/Linearization](../ProjectAInos/Mechanics/Oscillations/Linearization.lean) | `lift_curve_apply`, `lift_const_curve`, `isTrajectory_const_iff`, `isTrajectory_canonical_const_iff`, `displacement`, `hessian`, `hessian_symm`, `linearization`, `quadraticPart`, `partialDerivation_quadraticPart`, `canonical_bracket_quadraticPart`, `linearization_quadraticPart`, `isTrajectory_quadraticPart_iff`, `naturalHamiltonian`, `restPoint`, `isTrajectory_restPoint_iff`, `isHarmonic_of_isTrajectory_quadraticPart`, `isHarmonic_sqrt_of_isTrajectory_quadraticPart`, `pendulumHamiltonian`, `isHarmonic_pendulum` |

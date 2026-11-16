@@ -265,6 +265,13 @@ For one degree of freedom, the motion in a well between two simple turning
 points is periodic, its period is the derivative of the area `∮ p dx` with
 respect to the energy, Abel's formula gives the width of the well from the
 period, and the action and the angle variable are canonical.
+For a rigid motion of point masses, Newton's equations give `Ṗ = F` and
+`Ṁ = K`, and in the body frame Euler's equations with the moment of the
+forces; these are the Lie–Poisson equations of the free body and of the heavy
+top, and Hamilton's principle on the curves of rotations is equivalent to
+them. The rotation is recovered from the angular velocity for all times.
+Jacobi's elliptic functions are constructed from the amplitude, and every
+motion of the asymmetrical top off the separatrix is given by them.
 Symplectic forms on manifolds and
 Dirac brackets are not implemented. Galilean symmetry as a group action and the topics of 2.1 and
 2.4 have no Lean counterpart yet. The

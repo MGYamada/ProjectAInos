@@ -1056,6 +1056,31 @@ takes the same value at them (`eq_of_hasDerivAt_zero`), so a quantity whose
 derivative vanishes along every solution is constant along the flow
 (`flow_invariant`), also when the flow is not defined for all times.
 
+`ODE.ScalarFlow`: a smooth field `g` on the line with `0 < g ≤ C` has a flow
+for all times (`flowDomain_eq_univ_of_abs_le`). The time
+`scalarTime g φ = ∫₀^φ ds/g(s)` and the solution through `0` are inverse to
+each other (`scalarTime_flow`, `flow_scalarTime`), so the solution is a
+strictly increasing bijection of the line. If `g` has the period `P`, the
+solution advances by `P` in the time `scalarTime g P`
+(`flow_add_scalarTime_of_periodic`).
+
+`ODE.JacobiElliptic`: for `k² < 1` the amplitude `am k` is the solution
+through `0` of `φ′ = √(1 − k² sin² φ)`, and `sn = sin ∘ am`, `cn = cos ∘ am`,
+`dn = √(1 − k² sn²)`. Mathlib has Weierstrass's `℘` and no Jacobi functions.
+
+- `hasDerivAt_sn`, `hasDerivAt_cn`, `hasDerivAt_dn`: `sn′ = cn dn`,
+  `cn′ = −sn dn`, `dn′ = −k² sn cn`; the functions are smooth.
+- `sn_sq_add_cn_sq`, `dn_sq`, `dn_pos`: `sn² + cn² = 1`, `dn² + k² sn² = 1`
+  and `dn > 0`.
+- `am_surjective`, `strictMono_am`: the amplitude is an increasing bijection
+  of the line.
+- `am_add_halfPeriod`: `am (u + 2K) = am u + π` with
+  `halfPeriod k = ∫₀^π dφ/√(1 − k² sin² φ)`, so `sn` and `cn` change sign and
+  `dn` is unchanged after `2K`.
+
+The modulus is real with `k² < 1`. The addition theorems, the complex period
+and the case `k² = 1` are not treated.
+
 The field is smooth on the whole space. A field that is smooth only on an
 open set, and a field that depends on the time, are not treated.
 
