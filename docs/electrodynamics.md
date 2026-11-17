@@ -355,6 +355,55 @@ maps (`fieldOf_pullback`), and on flat space-time it is the field tensor
 (`fieldOf_ofFlat`). The [notes](electrodynamics-notes.md) ED03–ED08 record the
 decisions.
 
+## The field with a current (§§26–30)
+
+**The action with a current (E14, E15, §27).** For a current three-form `J`,
+`SourcedAction.lagrangian J` is the vacuum Lagrangian minus the coefficient of
+`A ∧ J`. For a `C²` potential, a `C²` current and an integrable density on an
+open set, the action is stationary if and only if `d⋆F + J = 0`, that is
+`dH = J` with `H = −⋆F` (`stationary_iff`, `stationary_iff_excitation`);
+without a current this is the vacuum equation (`lagrangian_zero`,
+`stationary_zero_iff`). Under a gauge change with compact support the action
+changes by `∫ χ dJ` (`action_gaugeShift`), so it is invariant under all of them
+if and only if `dJ = 0` (`action_gaugeShift_eq_iff`).
+
+**The current of the matter (§28).** A matter current `k = (ρ, 𝐤)` has the
+current form `matterCurrentForm k = −ι_k vol`. Since `a ∧ ι_v vol = a(v) vol`
+(`coefficient_wedge_interior_volume`), the source term of the Lagrangian is
+`+A(k) = −φρ + a · 𝐤`, the sign of the coupling `e A(γ̇)` of a charge
+(`lagrangian_matterCurrentForm`). The current form of `Curved.Maxwell` is
+`ι_j vol`, so `k = −j` (`matterCurrentForm_eq_currentForm`).
+
+**The equations for `E` and `B` (E16, §§26, 30).** In the frame of the
+co-ordinates `electricField G i` and `magneticField G i` are the functions
+`x ↦ Eᵢ(x)`, `x ↦ Bᵢ(x)`, with the derivative `partialAt f μ x`, the
+divergence `divergence3` and the curl `curl`.
+
+| Statement | Declaration |
+| --- | --- |
+| The components of `dG` are `div B` and `∂_t B + curl E` | `exteriorDerivative_spatial`, `exteriorDerivative_temporal` |
+| `dF = 0` gives `div B = 0` and `∂_t B + curl E = 0`; this holds for the field of a `C²` potential | `homogeneous_of_closed`, `homogeneous_fieldTensor` |
+| The excitation `H = −⋆F` has the electric part `B` and the magnetic part `−E` | `electricVector_excitation`, `magneticVector_excitation` |
+| `dH = −ι_k vol` gives `div E = ρ` and `curl B − ∂_t E = 𝐤` | `inhomogeneous_of_excitation` |
+| Where the action with the current of the matter is stationary, the four equations hold | `maxwell_of_stationary` |
+
+**The conservation of the charge (§29).** `d(−ι_k vol) = −(div k) vol`
+(`coefficient_exteriorDerivative_matterCurrentForm`), so the current form is
+closed if and only if `div k = 0`; where the action is stationary for a `C³`
+potential, `div k = 0` (`divergence4_eq_zero_of_stationary`). For a `C¹`
+current with `div k = 0` on a box `[a, b]` of the co-ordinates, the charge in
+the spatial box at the time `b⁰` minus that at `a⁰` is minus the flux through
+the six faces during `[a⁰, b⁰]` (`charge_balance`), by the divergence theorem
+of Mathlib on a box.
+
+**The example.** The potential `(t²/2) dx` has the field `t dt ∧ dx` and the
+excitation `t dy ∧ dz`, and `dH = dt ∧ dy ∧ dz = −ι_{∂x} vol`. On every bounded
+open set the action with the current `∂x` is stationary at it
+(`Examples.stationary_example`), and in the unit ball `div E = 0` and
+`curl B − ∂_t E = (1, 0, 0)` (`Examples.maxwell_example`). This fixes the sign
+against `Curved.Examples.electric_source`, whose vector current is `−∂x`. The
+[notes](electrodynamics-notes.md) ED09–ED11 record the decisions.
+
 ## Proof and API map
 
 All names below are under `ProjectAinos`, except imported `YM` names.
@@ -379,6 +428,11 @@ All names below are under `ProjectAinos`, except imported `YM` names.
 | Transformation of `E` and `B` | `electricVector_boost`, `magneticVector_boost`, `electricVector_moving`, `magneticVector_moving`, `electric_observer_apply`, `magnetic_observer_apply` | [FieldTransformation](../ProjectAinos/Electrodynamics/FieldTransformation.lean) |
 | Invariants and the kinds of a field | `ConstantField.generator_quartic`, `velocity_of_scalarInvariant_neg`, `velocity_of_scalarInvariant_pos`, `velocity_of_invariants_zero`, `velocity_of_quartic` | [FieldClassification](../ProjectAinos/Electrodynamics/FieldClassification.lean) |
 | Potentials on a manifold | `Curved.fieldOf_closed`, `fieldOf_gaugeShift`, `fieldOf_pullback`, `fieldOf_ofFlat` | [CurvedPotential](../ProjectAinos/Electrodynamics/CurvedPotential.lean) |
+| Action with a current, gauge change | `SourcedAction.stationary_iff`, `stationary_iff_excitation`, `action_gaugeShift`, `action_gaugeShift_eq_iff` | [SourcedAction](../ProjectAinos/Electrodynamics/SourcedAction.lean) |
+| Current of the matter | `SourcedAction.lagrangian_matterCurrentForm`, `matterCurrentForm_eq_currentForm`, `stationary_iff_matterCurrent` | [MatterCurrent](../ProjectAinos/Electrodynamics/MatterCurrent.lean) |
+| Equations for `E` and `B` | `homogeneous_of_closed`, `inhomogeneous_of_excitation`, `maxwell_of_stationary` | [ThreePlusOne](../ProjectAinos/Electrodynamics/ThreePlusOne.lean) |
+| Conservation of the charge | `coefficient_exteriorDerivative_matterCurrentForm`, `divergence4_eq_zero_of_stationary`, `charge_balance` | [ChargeBalance](../ProjectAinos/Electrodynamics/ChargeBalance.lean) |
+| Field with a nonzero current | `SourcedAction.Examples.stationary_example`, `maxwell_example` | [SourcedActionExamples](../ProjectAinos/Electrodynamics/SourcedActionExamples.lean) |
 | Nonzero regression examples | `Examples.hyperbola_stationary`; `Polynomial.constantJet_reconstruction`, `linearJet_reconstruction` | [Examples](../ProjectAinos/Electrodynamics/Examples.lean), [PolynomialExamples](../ProjectAinos/Electrodynamics/PolynomialExamples.lean) |
 
 ## Verification and review
@@ -390,6 +444,7 @@ lake env lean -DwarningAsError=true checks/ElectrodynamicsAPI.lean
 lake env lean -DwarningAsError=true checks/ElectrodynamicsCoreAPI.lean
 lake env lean -DwarningAsError=true checks/ChargedParticleAPI.lean
 lake env lean -DwarningAsError=true checks/FieldClassificationAPI.lean
+lake env lean -DwarningAsError=true checks/SourcedFieldAPI.lean
 lake env lean -DwarningAsError=true checks/AxiomAudit.lean
 experiments/.venv/bin/python -m ainos_experiments.verify_electrodynamics
 ```

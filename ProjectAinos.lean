@@ -1,5 +1,6 @@
 module  -- shake: keep-all --deprecated_module: ignore
 
+public import ProjectAinos.Electrodynamics.ChargeBalance
 public import ProjectAinos.Electrodynamics.Components
 public import ProjectAinos.Electrodynamics.ConstantField
 public import ProjectAinos.Electrodynamics.ConstantFieldExamples
@@ -23,11 +24,15 @@ public import ProjectAinos.Electrodynamics.Homogeneous
 public import ProjectAinos.Electrodynamics.HomogeneousExamples
 public import ProjectAinos.Electrodynamics.Invariants
 public import ProjectAinos.Electrodynamics.LorentzForce
+public import ProjectAinos.Electrodynamics.MatterCurrent
 public import ProjectAinos.Electrodynamics.ParticleAction
 public import ProjectAinos.Electrodynamics.PolynomialBridge
 public import ProjectAinos.Electrodynamics.PolynomialExamples
 public import ProjectAinos.Electrodynamics.PolynomialRadial
+public import ProjectAinos.Electrodynamics.SourcedAction
+public import ProjectAinos.Electrodynamics.SourcedActionExamples
 public import ProjectAinos.Electrodynamics.StaticField
+public import ProjectAinos.Electrodynamics.ThreePlusOne
 public import ProjectAinos.Electrodynamics.VacuumAction
 public import ProjectAinos.Electrodynamics.VacuumActionExamples
 public import ProjectAinos.External.YM.Analysis.Homogeneous

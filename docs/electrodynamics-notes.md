@@ -65,3 +65,27 @@ These notes record mathematical distinctions and interface decisions in `Project
 **Interface decision.** `Curved.fieldOf A` is `smoothExteriorDerivative A` for `A : Curved.Potential`, and a gauge function is a smooth form of degree zero. `fieldOf_ofFlat` compares it with `fieldTensor` for a smooth potential on flat space-time. The ledger rows of §16 and §18 are *proved* with the scope of potentials on an open set of flat space-time or on a whole manifold, and they name E8 as not treated.
 
 **Proof status.** `Curved.fieldOf_closed`, `fieldOf_gaugeShift`, `source_gaugeShift`, `maxwell_gaugeShift_iff`, `fieldOf_pullback` and `fieldOf_ofFlat` are proved. [Potentials on a manifold](../ProjectAinos/Electrodynamics/CurvedPotential.lean)
+
+## ED09. The source enters the Lagrangian as minus the coefficient of `A ∧ J`, and the matter current is `k = −j`
+
+**Observation.** The flat vacuum action of ED02 has the first variation `−∫ dη ∧ ⋆F = −∫ η ∧ d⋆F`. With the term `−coefficient (A ∧ J)` the stationarity is `d⋆F + J = 0`, which is `dH = J` with the excitation `H = −⋆F` of `Curved.Maxwell`; the sign is not a choice once the vacuum action and the excitation are fixed. For a matter current `k` the current form `J = −ι_k vol` makes the source term `+A(k)`, because `a ∧ ι_v vol = a(v) vol`. This is the sign of the coupling `e A(γ̇)` of a charge, so a point charge has the current `k = e δ γ̇` with a positive weight. Since `Curved.currentForm j = ι_j vol`, the vector `j` of the Maxwell system is `−k`, as the plan required.
+
+**Interface decision.** `SourcedAction.lagrangian J` takes any current three-form, and `matterCurrentForm k` is the current form of a vector field. The statements that need the vacuum computation are stated for `C²` currents; the gauge statements need only `C¹`. The change under a gauge change uses Stokes's theorem for the compactly supported form `χ J`, with the Leibniz rule `d(χ J) = dχ ∧ J + χ dJ` from the wedge algebra. A gauge function without compact support, and the current of a point charge, are not treated.
+
+**Proof status.** `SourcedAction.stationary_iff`, `stationary_iff_excitation`, `action_gaugeShift`, `action_gaugeShift_eq_iff`, `coefficient_wedge_interior_volume`, `lagrangian_matterCurrentForm` and `matterCurrentForm_eq_currentForm` are proved. [Sourced action](../ProjectAinos/Electrodynamics/SourcedAction.lean) · [Matter current](../ProjectAinos/Electrodynamics/MatterCurrent.lean)
+
+## ED10. The vector equations come from four components of a three-form
+
+**Observation.** A three-form on space-time has four components, `(1, 2, 3)` and `(0, j, k)` for the three cyclic pairs. For a field `G` with the components `E` and `B` of F5, `dG(e₁, e₂, e₃) = div B` and `dG(e₀, e_j, e_k) = ∂_t Bᵢ + (curl E)ᵢ`. The same lemmas apply to the excitation, whose electric part is `B` and whose magnetic part is `−E`; with `−ι_k vol(e₁, e₂, e₃) = −ρ` and `−ι_k vol(e₀, e_j, e_k) = 𝐤ᵢ` they give `div E = ρ` and `curl B − ∂_t E = 𝐤`. No observer field is needed: the frame is that of the co-ordinates.
+
+**Interface decision.** The fields are functions `electricField G i`, `magneticField G i`, and their derivatives are `partialAt f μ x = Df(x)(e_μ)`. The theorems derive the vector equations from the forms; the converse would need the extensionality of three-forms by their four components and is not stated. The example `t dt ∧ dx` with the current `∂x` is proved through the comparison with `Curved.Examples.magneticExcitation_derivative`, so the flat and the native exterior derivative agree on it.
+
+**Proof status.** `exteriorDerivative_spatial`, `exteriorDerivative_temporal`, `homogeneous_of_closed`, `inhomogeneous_of_excitation`, `maxwell_of_stationary`, `SourcedAction.Examples.stationary_example` and `maxwell_example` are proved. [3+1 equations](../ProjectAinos/Electrodynamics/ThreePlusOne.lean) · [Example](../ProjectAinos/Electrodynamics/SourcedActionExamples.lean)
+
+## ED11. The balance of the charge is stated on a box of the co-ordinates
+
+**Observation.** Mathlib has the divergence theorem on a box `[a, b]` of `ℝⁿ⁺¹` for a field that is differentiable in its interior. For a current with `div k = 0`, the face `x⁰ = const` gives the charge in the spatial box at the two times, and the other six faces the flux. A general region of integration needs a divergence theorem on manifolds with boundary, which the pinned Mathlib does not have. The equation of continuity itself follows from the field equation: `d(−ι_k vol) = −(div k) vol`, and `dJ = d(dH) = 0` where `dH = J` on an open set, for a `C³` potential.
+
+**Interface decision.** `charge k a b t` and `faceFlux k a b i` are the integrals over the faces of the box, and `charge_balance` is the statement with the time faces separated. `divergence4 k = Σ_μ ∂_μ k^μ` is the divergence in the co-ordinates.
+
+**Proof status.** `coefficient_exteriorDerivative_matterCurrentForm`, `exteriorDerivative_matterCurrentForm_eq_zero_iff`, `divergence4_eq_zero_of_stationary` and `charge_balance` are proved. [Charge balance](../ProjectAinos/Electrodynamics/ChargeBalance.lean)
