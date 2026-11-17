@@ -78,7 +78,7 @@ completion.
 | 29 | The equation of continuity | informal | Proved: `Curved.exteriorDerivative_currentForm`, `Curved.current_closed_iff_divergence`, `Curved.divergence_zero_of_source`. Missing: the balance of the charge in a region (F7) |
 | 30 | The second pair of Maxwell equations | informal | Proved: `VacuumAction.stationary_iff_vacuum`, `Curved.sourced_iff_divergence`, `Curved.maxwell_iff_components`. Missing: the action with a source (E15) and the equations for `E` and `B` (E16); F7 |
 | 31 | Energy density and energy flux | informal | Target (E18–E21, F8) |
-| 32 | The energy-momentum tensor | informal | Target: the identities of the jet ring of fields (E3a, F6); the variation with respect to the metric (E19, F12) |
+| 32 | The energy-momentum tensor | informal | Proved: in every jet ring of fields, for a Lagrangian of the first order, `FieldJetRing.divergence_stress` and `FieldJetRing.conserved_stress` for the canonical tensor of the translations, and `FieldJetRing.conserved_noetherCurrent`. Missing: the symmetric tensor from the variation with respect to the metric and its comparison with the canonical one (E19, F12) |
 | 33 | Energy-momentum tensor of the electromagnetic field | informal | Target (E18–E20, F8) |
 | 34 | The virial theorem | informal | Target (E21, F8) |
 | 35 | The energy-momentum tensor for macroscopic bodies | informal | Target: charged dust (F8) |
@@ -398,6 +398,14 @@ statements in this way (`JetRing.euler_totalDeriv`,
 `JetRing.conserved_noetherCharge`, `JetRing.totalDeriv_energy`), without
 integration. The jet ring gives local identities only; the integral balances
 still need INT and STOKES.
+
+*Status.* The ring, its total derivatives with their commutation, the Euler
+operators with `Eₐ(D_μ F) = 0`, Noether's first identity and the canonical
+stress tensor for a Lagrangian of the first order, the standard model and the
+prolongation of a field are proved in
+[`Variational/FieldJet`](../ProjectAinos/Variational/FieldJet/Basic.lean)
+([guide](variational.md#jet-rings-of-fields)). The second identity and the
+identities of the Lagrangian of Maxwell are the next step.
 
 **Target E4 (descent of first variation, C, B:INT).** Given a density and
 compatible local variations supported in a compact subset of a manifold,

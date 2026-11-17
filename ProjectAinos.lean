@@ -252,6 +252,7 @@ public import ProjectAinos.SmoothAlgebra.Hom
 public import ProjectAinos.SmoothAlgebra.IdealQuotient
 public import ProjectAinos.SmoothAlgebra.ImplicitFunction
 public import ProjectAinos.SmoothAlgebra.ImplicitFunctionReal
+public import ProjectAinos.SmoothAlgebra.IterPartialDeriv
 public import ProjectAinos.SmoothAlgebra.Limits
 public import ProjectAinos.SmoothAlgebra.LineDerivative
 public import ProjectAinos.SmoothAlgebra.LocalInverse
@@ -578,6 +579,10 @@ public import ProjectAinos.Thermodynamics.UniversalThermalClass
 public import ProjectAinos.Variational.Action
 public import ProjectAinos.Variational.EulerLagrange
 public import ProjectAinos.Variational.Examples
+public import ProjectAinos.Variational.FieldJet.Basic
+public import ProjectAinos.Variational.FieldJet.Euler
+public import ProjectAinos.Variational.FieldJet.Noether
+public import ProjectAinos.Variational.FieldJet.Standard
 public import ProjectAinos.Variational.IntegrationByParts
 public import ProjectAinos.Variational.IntervalParameter
 public import ProjectAinos.Variational.LineDerivative
