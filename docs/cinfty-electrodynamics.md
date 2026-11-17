@@ -77,11 +77,11 @@ completion.
 | 28 | The four-dimensional current vector | proved | `Curved.currentEquiv`, `Curved.currentForm_volume`, `SourcedAction.matterCurrentForm`, `SourcedAction.coefficient_wedge_interior_volume`, `SourcedAction.lagrangian_matterCurrentForm`, `SourcedAction.currentForm_minkowski`, `SourcedAction.matterCurrentForm_eq_currentForm`, `SourcedAction.stationary_iff_matterCurrent`. Scope: a smooth matter current `k = (ρ, 𝐤)` on flat spacetime has the current form `J = −ι_k vol`; the source term of the Lagrangian is then `+A(k) = −φρ + a · 𝐤`, with the sign of the coupling `e A(γ̇)` of a charge, and `k = −j` for the vector `j` of `Curved.Maxwell`. The current of point charges, a distribution, is not constructed |
 | 29 | The equation of continuity | proved | `Curved.exteriorDerivative_currentForm`, `Curved.current_closed_iff_divergence`, `Curved.divergence_zero_of_source`, `divergence4`, `coefficient_exteriorDerivative_matterCurrentForm`, `exteriorDerivative_matterCurrentForm_eq_zero_iff`, `divergence4_eq_zero_of_stationary`, `charge_balance`. Scope: `d(−ι_k vol) = −(div k) vol` for a differentiable current; where the action is stationary for a `C³` potential, `div k = 0`; for a `C¹` current with `div k = 0` on a box of the co-ordinates, the change of the charge in the spatial box is minus the flux through its faces. Regions other than boxes are not treated |
 | 30 | The second pair of Maxwell equations | proved | `VacuumAction.stationary_iff_vacuum`, `Curved.sourced_iff_divergence`, `Curved.maxwell_iff_components`, `SourcedAction.stationary_iff_excitation`, `electricVector_excitation`, `magneticVector_excitation`, `inhomogeneous_of_excitation`, `maxwell_of_stationary`, `SourcedAction.Examples.maxwell_example`. Scope: on flat spacetime, in the frame of the co-ordinates, the equation `dH = −ι_k vol` of the excitation `H = −⋆F` gives `div E = ρ` and `curl B − ∂_t E = 𝐤`, and the four equations hold where the action with the current of the matter is stationary; the field `t dt ∧ dx` with the current `∂x` is an instance. The integral forms are not stated |
-| 31 | Energy density and energy flux | informal | Target (E18–E21, F8) |
+| 31 | Energy density and energy flux | proved | `energyDensity`, `poyntingVector`, `poynting_local`, `energyCurrent`, `box_divergence`, `energy_balance`, `stressForm_observer`. Scope: on flat spacetime, in the frame of the co-ordinates, `∂_t u + div S = −E · 𝐤` at every point where the field is differentiable and the equations of Maxwell hold; for a `C²` field, on a box of the co-ordinates the energy in the spatial box changes by minus the flux of `S` through its faces and minus the work `∫∫ E · 𝐤`; for every observer the energy density is `½ (|E_u|² + |B_u|²)`. Regions other than boxes are not treated |
 | 32 | The energy-momentum tensor | informal | Proved: in every jet ring of fields, for a Lagrangian of the first order, `FieldJetRing.divergence_stress` and `FieldJetRing.conserved_stress` for the canonical tensor of the translations, and `FieldJetRing.conserved_noetherCurrent`. Missing: the symmetric tensor from the variation with respect to the metric and its comparison with the canonical one (E19, F12) |
-| 33 | Energy-momentum tensor of the electromagnetic field | informal | Target (E18–E20, F8) |
-| 34 | The virial theorem | informal | Target (E21, F8) |
-| 35 | The energy-momentum tensor for macroscopic bodies | informal | Target: charged dust (F8) |
+| 33 | Energy-momentum tensor of the electromagnetic field | proved | `stressForm`, `stressForm_symm`, `stressForm_trace`, `stressForm_observer`, `stressForm_zero_zero`, `stressForm_zero_succ`, `stressForm_succ_succ`, `raisedStress`, `divergence_raisedStress_zero`, `divergence_raisedStress_succ`, `maxwellStress`, `forceDensity`, `momentum_local`, `momentum_balance`. Scope: on flat spacetime, `T(v, w) = g⁻¹(ι_v F, ι_w F) − ¼ g(v, w) F²` is symmetric and trace-free, `T(u, u)` is the energy density of every observer, its components in the frame of the co-ordinates are the energy density, the vector of Poynting and the stress of Maxwell, and with the equations of Maxwell `∂_μ T^{μν} = −F^ν{}_λ k^λ`, with the balance of the momentum on a box. The tensor on a Lorentzian manifold and its characterization by the variation of the metric belong to E19 (F12) |
+| 34 | The virial theorem | informal | Proved: `stressForm_trace`, the trace of the stress tensor of the field is zero. Missing: the time average of the trace for a system of charges in finite motion; it needs the stress of point particles, a distribution, and the control of the moments at the ends of the time interval (E21) |
+| 35 | The energy-momentum tensor for macroscopic bodies | proved | `ChargedDust`, `ChargedDust.current`, `ChargedDust.matterStress`, `ChargedDust.divergence_matterStress`, `lorentzForce_zero_eq`, `lorentzForce_succ_eq`, `total_stress_conserved`. Scope: charged dust on flat spacetime, with the stress `μ U^μ U^ν`: if the mass is conserved, the dust moves by the Lorentz force of `LorentzForce` and the field satisfies the equations of Maxwell with the current `ρₑ U`, then `∂_μ (T_EM^{μν} + T_m^{μν}) = 0`. A body with a pressure, `(p + ε) u^μ u^ν + p g^{μν}`, is not treated |
 | 36 | Coulomb's law | informal | Target: the potential of a smooth compactly supported charge and its uniqueness (E22, F16) |
 | 37 | Electrostatic energy of charges | informal | Target (E22, F16). The energy of a point charge is excluded |
 | 38 | The field of a uniformly moving charge | informal | Proved: `fieldTensor_lorentz`, `fieldTensor_poincare`. Missing: a static solution with a source to which they apply (E22, F16) |
@@ -128,7 +128,7 @@ completion.
 | 79 | Scattering of low-frequency waves | informal | Conditional target (E32, F23) |
 | 80 | Scattering of high-frequency waves | informal | Conditional target (E32, F23) |
 
-Count: 15 proved, 51 informal.
+Count: 18 proved, 48 informal.
 
 Closed with a stated remainder: none.
 
@@ -849,6 +849,18 @@ Virial identities require moments and time-boundary control. Continuum
 stress models require explicit material variables and constitutive
 assumptions. A coordinate-dependent splitting of field and material
 momentum must not be presented as a unique intrinsic decomposition.
+
+*Status.* On flat spacetime E18 is proved as the bilinear form `stressForm`
+in
+[`Electrodynamics/StressTensor.lean`](../ProjectAinos/Electrodynamics/StressTensor.lean),
+with its symmetry, its trace, the energy of an observer and its components,
+and E20 as `divergence_raisedStress_zero` and `divergence_raisedStress_succ`.
+The balances of the energy and the momentum on a box of E21 are in
+[`Electrodynamics/EnergyMomentum.lean`](../ProjectAinos/Electrodynamics/EnergyMomentum.lean),
+and the conservation of the total stress with charged dust is in
+[`Electrodynamics/ChargedDust.lean`](../ProjectAinos/Electrodynamics/ChargedDust.lean).
+The balance for a Killing field, the angular momentum and the virial are not
+proved.
 
 ## Static fields, waves and optics
 
