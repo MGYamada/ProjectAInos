@@ -3,7 +3,18 @@ Copyright (c) 2026 Masahiko G. Yamada. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 module
-import ProjectAinos
+import ProjectAinos.Mechanics.Oscillations.Adiabatic
+import ProjectAinos.Mechanics.Oscillations.AdiabaticAccuracyExample
+import ProjectAinos.Mechanics.Oscillations.AnharmonicNormalForm
+import ProjectAinos.Mechanics.Oscillations.Dissipation
+import ProjectAinos.Mechanics.Oscillations.Duhamel
+import ProjectAinos.Mechanics.Oscillations.NonlinearResonance
+import ProjectAinos.Mechanics.Oscillations.ParametricExamples
+import ProjectAinos.Mechanics.Oscillations.ParametricZone
+import ProjectAinos.Mechanics.Oscillations.PhaseVolume
+import ProjectAinos.Mechanics.Oscillations.QuadraticLagrangian
+import ProjectAinos.Mechanics.Oscillations.RapidForceExistence
+import ProjectAinos.Mechanics.Oscillations.Triatomic
 
 /-! Public consumers of the oscillation API: the general solution of
 `ẍ + ω² x = 0`, amplitude and phase, the energy and the period, the oscillator

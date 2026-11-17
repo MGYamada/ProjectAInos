@@ -3,7 +3,9 @@ Copyright (c) 2026 Masahiko G. Yamada. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 module
-import ProjectAinos
+import ProjectAinos.Mechanics.Poisson.KeplerOrbit
+import ProjectAinos.Mechanics.Poisson.RigidBodyMotion
+import ProjectAinos.Mechanics.Poisson.RotatingFrame
 
 /-! Public consumers of the Poisson C-infinity ring API. Default elaborator
 options are intentional: these checks must not rely on the implementation's

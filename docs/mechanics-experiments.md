@@ -169,7 +169,7 @@ E10f is now a Lean theorem in every Poisson C∞-ring, `PoissonStructure.bracket
 
 The initial state is `(x,v)=(A,0)`, with `A>0` accelerating toward zero. The fixed cases are `(α,β)=(1,1),(0.7,−0.4),(0,1)` and amplitudes `A=0.04,0.02,0.01`. RK4 uses `dt=2×10⁻⁴`. The maximum time is 20 and the independent step budget is 200,000; either limit terminates an unsuccessful search.
 
-The estimator resolves a negative-position minimum by a negative-to-positive velocity crossing, followed by a positive-position maximum with the opposite direction. It requires distinct, increasing crossing times. Times and positions are interpolated linearly using the bracketing velocity values; a zero at the right endpoint is counted once. The second turning point gives a full period from the initial maximum.
+Before integration, the estimator uses exact rational coefficients for the input floats to check that the energy level encloses zero between two simple turning points. RK4 then resolves a negative-position minimum by a negative-to-positive velocity crossing, followed by a positive-position maximum with the opposite direction. It requires distinct, increasing crossing times. Times and positions are interpolated linearly using the bracketing velocity values. A zero at the right endpoint is counted once. The second turning point gives a full period from the initial maximum.
 
 At every integration step it checks finiteness and the relative drift of
 
@@ -177,7 +177,7 @@ At every integration step it checks finiteness and the relative drift of
 E(x,v)=\frac{v^2+x^2}{2}+\frac{\alpha x^3}{3}+\frac{\beta x^4}{4}.
 \]
 
-The drift tolerance is `10⁻⁶`, normalized by `max(|E_initial|, A²/2)`. Invalid parameters raise `ValueError`; nonfinite evolution, excessive drift, unexpected crossings, and exhausted budgets raise `PeriodSearchError`. `estimate_period` returns the two turning points, step count, and maximum energy drift as well as the period. `period` returns just the validated period. E11 converts integration failures into a failed check with a diagnostic, rather than hanging or reporting a misleading coefficient discrepancy.
+The drift tolerance is `10⁻⁶`, normalized by `max(|E_initial|, A²/2)`. Invalid parameters raise `ValueError`. A nonperiodic energy level, nonfinite evolution, excessive drift, unexpected crossings, or exhausted budgets raise `PeriodSearchError`. `estimate_period` returns the two turning points, step count, and maximum energy drift as well as the period. `period` returns just the validated period. E11 converts integration failures into a failed check with a diagnostic.
 
 For each amplitude the runner computes `κ(A)=(2π/T(A)−1)/A²`. It extrapolates `2κ(0.01)−κ(0.02)` to remove the leading amplitude error and compares that value with `3β/8−5α²/12` using absolute tolerance `2×10⁻⁴`. This is deterministic numerical evidence for the coefficient, with no random seed or stochastic step. It is not a bound on the asymptotic remainder for arbitrary parameters.
 

@@ -3,7 +3,10 @@ Copyright (c) 2026 Masahiko G. Yamada. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 module
-import ProjectAinos
+import ProjectAinos.Mechanics.Jet.Analytic
+import ProjectAinos.Mechanics.Jet.Galilei
+import ProjectAinos.Mechanics.Jet.Polar
+import ProjectAinos.Mechanics.KnifeEdge
 
 /-! Public consumers of the jet-ring API of mechanics. Default elaborator options
 are intentional: these checks must not rely on the implementation's

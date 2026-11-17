@@ -3,7 +3,8 @@ Copyright (c) 2026 Masahiko G. Yamada. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 module
-import ProjectAinos
+import ProjectAinos.SmoothAlgebra.Differential
+import ProjectAinos.SmoothAlgebra.Point
 
 /-! Public consumers of the differential part of the smooth-algebra API. Default
 elaborator options are intentional: these checks must not rely on the

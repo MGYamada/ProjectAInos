@@ -421,9 +421,12 @@ example (U : ℝ → ℝ) (m ρ vinf r : ℝ) :
     potentialSpeedSq U m ρ vinf r =
       vinf ^ 2 - 2 * U r / m - (ρ * vinf) ^ 2 / r ^ 2 := rfl
 
+example (w : ℝ → ℝ) (n : ℕ) (ε r : ℝ) :
+    relativePotentialEnergy w n ε r = ε * ((1 / r) ^ n * w (1 / r) - 0 ^ n * w 0) := rfl
+
 example (w : ℝ → ℝ) (n : ℕ) (q : (ℝ × ℝ) × ℝ) :
     scaledPotential w n q =
-      2 * q.1.2 * (q.2 ^ n * w (q.1.1 * q.2)) := rfl
+      2 * q.1.2 * (q.2 ^ n * w (q.1.1 * q.2) - 0 ^ n * w 0) := rfl
 
 example {w : ℝ → ℝ} (hw : ContDiff ℝ ∞ w) (n : ℕ) :
     ContDiff ℝ ∞ (scaledPotential w n) :=
@@ -441,17 +444,27 @@ example (w : ℝ → ℝ) (n : ℕ) {m ρ vinf : ℝ} (hm : m ≠ 0) (hρ : ρ �
     (hvinf : vinf ≠ 0) (ε : ℝ) :
     speedSq (fun u => scaledPotential w n ((1 / ρ, 1 / (m * vinf ^ 2)), u)) ρ vinf
         (ε / ρ ^ n) =
-      potentialSpeedSq (fun r => ε * ((1 / r) ^ n * w (1 / r))) m ρ vinf :=
+      potentialSpeedSq (relativePotentialEnergy w n ε) m ρ vinf :=
   speedSq_scaledPotential w n hm hρ hvinf ε
+
+example {w : ℝ → ℝ} (hw : ContDiff ℝ ∞ w) (n : ℕ)
+    {m ρ vinf : ℝ} (hm : m ≠ 0) (hρ : ρ ≠ 0) (hv : vinf ≠ 0) (ε : ℝ) :
+    Tendsto (potentialSpeedSq (relativePotentialEnergy w n ε) m ρ vinf) atTop (𝓝 (vinf ^ 2)) :=
+  tendsto_potentialSpeedSq_atTop hw n hm hρ hv ε
+
+example (m ρ vinf ε r : ℝ) :
+    potentialSpeedSq (relativePotentialEnergy (fun _ => 1) 0 ε) m ρ vinf r =
+      vinf ^ 2 - (ρ * vinf) ^ 2 / r ^ 2 := by
+  simp [potentialSpeedSq, relativePotentialEnergy]
 
 example {w : ℝ → ℝ} (hw : ContDiff ℝ ∞ w) (n : ℕ)
     {m ρ₁ v₁ : ℝ} (hm : 0 < m) (hρ₁ : 0 < ρ₁) (hv₁ : 0 < v₁) :
     ∃ δ : ℝ, 0 < δ ∧ ∃ M : ℝ, ∀ ρ vinf ε : ℝ, ρ₁ ≤ ρ → v₁ ≤ vinf → |ε / ρ ^ n| ≤ δ →
       ∃ (r₀ C : ℝ) (W : ℝ → ℝ), 0 < r₀ ∧ IsFactor W r₀ C ∧
-        (∀ r, r₀ ≤ r → potentialSpeedSq (fun r => ε * ((1 / r) ^ n * w (1 / r))) m ρ vinf r =
+        (∀ r, r₀ ≤ r → potentialSpeedSq (relativePotentialEnergy w n ε) m ρ vinf r =
           (r - r₀) * W r) ∧
         |deflectionAngle (ρ * vinf)
-            (potentialSpeedSq (fun r => ε * ((1 / r) ^ n * w (1 / r))) m ρ vinf) r₀ -
+            (potentialSpeedSq (relativePotentialEnergy w n ε) m ρ vinf) r₀ -
           -(2 * ρ / (m * vinf ^ 2)) * ∫ r in Ioi ρ,
             deriv (fun r => ε * ((1 / r) ^ n * w (1 / r))) r / √(r ^ 2 - ρ ^ 2)| ≤
               M * (ε / ρ ^ n) ^ 2 :=

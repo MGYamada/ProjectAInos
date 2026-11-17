@@ -41,3 +41,20 @@ These notes record mathematical distinctions and interface decisions in `Project
 **Interface decision.** `SmoothRing A` is additional structure on `[CommRing A] [Algebra ℝ A]`; it does not install a second ring structure. `SmoothRingHom` preserves all smooth operations and derives its real-algebra homomorphism. On the concrete free smooth-function rings, `directionalEvaluation_op` proves the chain rule for arbitrary smooth substitution. Mechanics uses smooth-ring evaluation to turn such an observable into a real Lagrangian. C∞ regularity is carried by the bundled observables, while C² suffices for the current analytic first-variation theorem.
 
 **Proof status.** The compatibility, free-ring universal property, evaluation and pullback morphisms, nonpolynomial exponential identity, and concrete directional chain rule are proved. No universal smooth cotangent module, quotient C∞-ring construction, or coefficient-valued fundamental lemma is inferred from these results. [Smooth-ring interface](../ProjectAinos/SmoothAlgebra/Basic.lean) · [Free models](../ProjectAinos/SmoothAlgebra/Models.lean) · [Directional chain rule](../ProjectAinos/SmoothAlgebra/Differential.lean) · [Mechanical model](../ProjectAinos/Mechanics/SmoothLagrangian.lean)
+
+## V06. Relativistic fibre derivatives use the physical velocity
+
+**Observation.** The massive spatial Lagrangian is smooth for `‖v‖ < 1`.
+The proper velocity `w = γv` gives a global chart of this ball. In one
+spatial dimension the pulled-back Lagrangian has derivative
+`m w/(1 + w²)^(3/2)` in `w`. The physical momentum is the derivative in
+`v` evaluated at that velocity and equals `m w`.
+
+**Interface decision.** Start SR-D4 with the open velocity ball and take
+the fibre derivative in `v`. Use the proper-velocity formula for the inverse
+momentum map. A later formulation in the chart must transport the vertical
+derivatives and keep `q̇ = v(w)` as the trajectory relation.
+
+**Proof status.** The open-domain action and stationarity/EL equivalence
+are proved for the timelike spacetime model. The spatial Legendre comparison
+and its charged-particle specialization are targets. [SR particle action](../ProjectAinos/SpecialRelativity/ParticleAction.lean) · [SR-D4](cinfty-special-relativity.md#energy-and-the-coordinate-time-hamiltonian) · [Charged Hamiltonian](cinfty-electrodynamics.md#actual-worldline-variation)

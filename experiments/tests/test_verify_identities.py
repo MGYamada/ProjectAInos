@@ -126,6 +126,18 @@ class PeriodTests(unittest.TestCase):
             with self.subTest(limits=limits), self.assertRaisesRegex(experiments.PeriodSearchError, 'exhausted'):
                 experiments.period(0, 0, 0.1, **limits)
 
+    def test_separatrix_and_escaping_orbit_have_no_period(self):
+        # V(-1) = 1/6 = V(1/2). Just above this energy, RK4 can lose
+        # enough energy to give two spurious turns within its drift tolerance.
+        for amp in (0.5, 0.500000001):
+            with self.subTest(amp=amp), self.assertRaisesRegex(
+                    experiments.PeriodSearchError, 'bounded periodic orbit'):
+                experiments.estimate_period(1, 0, amp, dt=0.05, max_time=30)
+
+        estimate = experiments.estimate_period(1, 0, 0.49, dt=0.01, max_time=30)
+        self.assertGreater(estimate.period, 2 * math.pi)
+        self.assertGreater(estimate.crossings[0].position, -1)
+
     def test_nonfinite_evolution_and_large_energy_drift_are_rejected(self):
         with self.assertRaisesRegex(experiments.PeriodSearchError, 'nonfinite'):
             experiments.period(0, 1, 1, dt=1e308, max_time=1e308)

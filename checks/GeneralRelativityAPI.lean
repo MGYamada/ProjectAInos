@@ -3,7 +3,9 @@ Copyright (c) 2026 Masahiko G. Yamada. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 module
-import ProjectAinos
+import ProjectAinos.GeneralRelativity.NewtonianLimitExamples
+import ProjectAinos.GeneralRelativity.SpecialRelativity
+import ProjectAinos.GeneralRelativity.VariationExamples
 
 /-! Typed contracts for the public GR physics layer. These examples intentionally
 use default elaborator options. Native manifold clocks and model-coordinate

@@ -2,7 +2,7 @@ import ProjectAinos
 import Lean.Util.CollectAxioms
 
 /-!
-Local counterpart of the CI transitive axiom audit. Run after building the root:
+Transitive axiom audit for the assembled project. Run after building the root:
 `lake env lean -DwarningAsError=true checks/AxiomAudit.lean`.
 -/
 
@@ -10,6 +10,7 @@ open Lean Elab Command
 
 run_cmd do
   let env ← getEnv
+  let modules := env.allImportedModuleNames
   let allowed : Array Name := #[``propext, ``Classical.choice, ``Quot.sound]
   let mut count : Nat := 0
   let mut smoothCount : Nat := 0
@@ -20,23 +21,23 @@ run_cmd do
   let mut electrodynamicsCount : Nat := 0
   let mut yangMillsCount : Nat := 0
   for (name, _) in env.constants do
-    let userName := privateToUserName name
-    let isYangMills := (`YM).isPrefixOf userName || (`YangMills).isPrefixOf userName
-    if (`ProjectAinos).isPrefixOf userName || isYangMills then
+    let some idx := env.getModuleIdxFor? name | continue
+    let modName := modules[idx.toNat]!
+    if (`ProjectAinos).isPrefixOf modName then
       count := count + 1
-      if isYangMills then
+      if (`ProjectAinos.External.YM).isPrefixOf modName then
         yangMillsCount := yangMillsCount + 1
-      if (`ProjectAinos.SmoothAlgebra).isPrefixOf userName then
+      if (`ProjectAinos.SmoothAlgebra).isPrefixOf modName then
         smoothCount := smoothCount + 1
-      if (`ProjectAinos.SmoothGeometry).isPrefixOf userName then
+      if (`ProjectAinos.SmoothGeometry).isPrefixOf modName then
         geometryCount := geometryCount + 1
-      if (`ProjectAinos.Mechanics).isPrefixOf userName then
+      if (`ProjectAinos.Mechanics).isPrefixOf modName then
         mechanicsCount := mechanicsCount + 1
-      if (`ProjectAinos.SpecialRelativity).isPrefixOf userName then
+      if (`ProjectAinos.SpecialRelativity).isPrefixOf modName then
         relativityCount := relativityCount + 1
-      if (`ProjectAinos.GeneralRelativity).isPrefixOf userName then
+      if (`ProjectAinos.GeneralRelativity).isPrefixOf modName then
         generalRelativityCount := generalRelativityCount + 1
-      if (`ProjectAinos.Electrodynamics).isPrefixOf userName then
+      if (`ProjectAinos.Electrodynamics).isPrefixOf modName then
         electrodynamicsCount := electrodynamicsCount + 1
       let axioms ← collectAxioms name
       for axiomName in axioms do

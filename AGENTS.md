@@ -27,12 +27,16 @@
   transitive axiom dependencies. The axiom allowlist is `propext`,
   `Classical.choice`, and `Quot.sound`. Express physical premises as explicit
   hypotheses or predicates.
-- The Lean build job runs every file in `checks/` in parallel through
-  `checks/run.sh`. Add a check as a new `checks/*.lean` file; the workflow
-  needs no new step. For a
-  pull request that changes no Lean source, check, toolchain, manifest, or the
-  CI workflow, the job skips its Lean steps and reports success. The push run
-  on `main` always executes them.
+- Lean builds run concurrently for Thermodynamics, Mechanics, and Classical
+  field theory. `checks/ci.py` assigns source modules to a subject and routes
+  `checks/*.lean` by their imports. Use the narrowest project imports a check
+  needs. Checks that import `ProjectAinos` or span independent subjects run
+  at integration. Adding a check needs no new workflow step.
+- The required **Lean build** job joins the three results, checks the public
+  root and shared import boundary, and audits the assembled Lean environment.
+  Pull requests that change no Lean source, checks, Lake configuration,
+  toolchain, manifest, or Lean workflow skip the Lean steps. Pushes to `main`
+  always run them.
 - Run short, reproducible Python checks in the separate, non-required
   **Experiments** workflow for changes to the experiment package. Run long calculations
   on demand and record the parameters, tolerances, and random seeds when
@@ -123,7 +127,11 @@ checks/run.sh
 ```
 
 `checks/run.sh` compiles every check file with warnings as errors and prints
-one verdict per file. Set `JOBS` to change its parallelism.
+one verdict per file. Pass specific check files to run a subset, and set
+`JOBS` to change parallelism. `checks/ci.py` also supports local subject
+builds and artifact integration with Python 3.12 or newer. Give each subject
+run an output archive named `<subject>.tar` in the same directory, then
+pass that directory to `python3 checks/ci.py integration`.
 
 ## Run the documentation tests locally
 

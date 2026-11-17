@@ -13,9 +13,10 @@ public import ProjectAinos.Variational.SecondOrderBound
 /-!
 # The expansion of the angle of deflection in the strength of the field
 
-Landau–Lifshitz §20 with an estimate of the remainder. The potential depends
-on a parameter `l` in a space of finite dimension: `ε g(l, ρ/r) = 2U(r)/m v∞²`
-with `g` smooth in `l` and `u = ρ/r` together.
+Landau–Lifshitz §20 with an estimate of the remainder. The potential profile
+`g(l, u)` is smooth in the finite-dimensional parameter `l` and in `u = ρ/r`.
+For physical asymptotic data, the profile represents the potential relative
+to its value at infinity: `ε g(l, ρ/r) = 2(U(r) − U(∞))/m v∞²`.
 
 * `IsTurning`: a positive zero `c(ε, l)` of the radicand that is a smooth
   function of the parameters on an open set; `exists_isTurning`: one exists
@@ -390,12 +391,11 @@ theorem exists_abs_angle_sub_le (hg : ContDiff ℝ ∞ g) {K : Set Q} (hK : IsCo
       mem_nhdsWithin_of_mem_nhds (Metric.closedBall_mem_nhds x (by positivity)),
       δ, hδ, M, fun l hl ε hε => ⟨c (ε, l), hM l hl ε hε⟩⟩
 
-/-- Small-angle scattering (Landau–Lifshitz (20.3)) with a remainder. With
-`ε g(l, ρ/r) = 2U(r)/m v∞²` the term of the first order is
-`−(2ρ/m v∞²) ∫_ρ^∞ U′(r) dr/√(r² − ρ²)`. For the parameter `l` in a compact
-set and `|ε| ≤ δ` the closest approach `ρ/c` exists, the motion exists for
-every impact parameter and speed, and the angle of deflection differs from the
-term of the first order by at most `M ε²`. -/
+/-- Small-angle scattering (Landau–Lifshitz (20.3)) with a remainder. For `l`
+in a compact set and `|ε| ≤ δ`, the radicand determines a closest approach
+and a motion for all positive scales `ρ` and `vinf`. Its deflection differs
+from the first-order term by at most `M ε²`. When `g(l, 0) = 0`, `vinf` is the
+speed at infinity and `ρ` is the impact parameter. -/
 theorem exists_abs_deflectionAngle_sub_le (hg : ContDiff ℝ ∞ g) {K : Set Q} (hK : IsCompact K) :
     ∃ δ : ℝ, 0 < δ ∧ ∃ M : ℝ, ∀ l ∈ K, ∀ ε : ℝ, |ε| ≤ δ → ∃ c : ℝ,
       IsClosest (fun u => g (l, u)) ε c ∧ ∀ ρ vinf : ℝ, 0 < ρ → 0 < vinf →
@@ -487,26 +487,29 @@ theorem exists_abs_coulomb_deflection_sub_le :
 
 /-! ### A potential energy that is a smooth function of `1/r` -/
 
-/-- The square of the radial velocity `v∞² − 2U(r)/m − ρ² v∞²/r²` of a particle
-of mass `m` with the potential energy `U`, the speed `v∞` at infinity and the
-impact parameter `ρ`. -/
+/-- The square of the radial velocity for potential energy `U` measured relative
+to its value at infinity, mass `m`, asymptotic speed `v∞`, and impact parameter `ρ`. -/
 def potentialSpeedSq (U : ℝ → ℝ) (m ρ vinf r : ℝ) : ℝ :=
   vinf ^ 2 - 2 * U r / m - (ρ * vinf) ^ 2 / r ^ 2
 
-/-- The potential `g((κ, ω), u) = 2 ω uⁿ w(κ u)` in the variable `u = ρ/r`,
-with the parameters `κ = 1/ρ` and `ω = 1/m v∞²`. With the strength `ε/ρⁿ` it is
-`2U/m v∞²` for the potential energy `U(r) = ε r⁻ⁿ w(1/r)`. -/
+/-- The potential `U(r) = ε r⁻ⁿ w(1/r)` relative to its value at infinity. -/
+def relativePotentialEnergy (w : ℝ → ℝ) (n : ℕ) (ε r : ℝ) : ℝ :=
+  ε * (((1 / r) ^ n * w (1 / r)) - 0 ^ n * w 0)
+
+/-- The normalized profile in `u = ρ/r` with parameters `κ = 1/ρ` and
+`ω = 1/m v∞²`. Multiplying by `ε/ρⁿ` gives `2(U(r) − U(∞))/m v∞²`. -/
 def scaledPotential (w : ℝ → ℝ) (n : ℕ) (q : (ℝ × ℝ) × ℝ) : ℝ :=
-  2 * q.1.2 * (q.2 ^ n * w (q.1.1 * q.2))
+  2 * q.1.2 * (q.2 ^ n * w (q.1.1 * q.2) - 0 ^ n * w 0)
 
 theorem contDiff_scaledPotential {w : ℝ → ℝ} (hw : ContDiff ℝ ∞ w) (n : ℕ) :
     ContDiff ℝ ∞ (scaledPotential w n) := by
   have e : scaledPotential w n =
-      fun q : (ℝ × ℝ) × ℝ => 2 * q.1.2 * (q.2 ^ n * w (q.1.1 * q.2)) := rfl
+      fun q : (ℝ × ℝ) × ℝ => 2 * q.1.2 * (q.2 ^ n * w (q.1.1 * q.2) - 0 ^ n * w 0) := rfl
   rw [e]
   exact (by fun_prop : ContDiff ℝ ∞ fun q : (ℝ × ℝ) × ℝ => 2 * q.1.2).mul
-    ((contDiff_snd.pow n).mul
-      (hw.comp (by fun_prop : ContDiff ℝ ∞ fun q : (ℝ × ℝ) × ℝ => q.1.1 * q.2)))
+    (((contDiff_snd.pow n).mul
+      (hw.comp (by fun_prop : ContDiff ℝ ∞ fun q : (ℝ × ℝ) × ℝ => q.1.1 * q.2))).sub
+      contDiff_const)
 
 theorem one_div_mul_div {ρ : ℝ} (hρ : ρ ≠ 0) (r : ℝ) : 1 / ρ * (ρ / r) = 1 / r := by
   rcases eq_or_ne r 0 with rfl | hr
@@ -522,21 +525,34 @@ theorem speedSq_scaledPotential (w : ℝ → ℝ) (n : ℕ) {m ρ vinf : ℝ} (h
     (hvinf : vinf ≠ 0) (ε : ℝ) :
     speedSq (fun u => scaledPotential w n ((1 / ρ, 1 / (m * vinf ^ 2)), u)) ρ vinf
         (ε / ρ ^ n) =
-      potentialSpeedSq (fun r => ε * ((1 / r) ^ n * w (1 / r))) m ρ vinf := by
+      potentialSpeedSq (relativePotentialEnergy w n ε) m ρ vinf := by
   funext r
   have h1 : vinf ^ 2 * (ρ / r) ^ 2 = (ρ * vinf) ^ 2 / r ^ 2 := by ring
   have hρn : ρ ^ n ≠ 0 := pow_ne_zero n hρ
-  have h2 : vinf ^ 2 * (ε / ρ ^ n * (2 * (1 / (m * vinf ^ 2)) * ((ρ / r) ^ n * w (1 / r)))) =
-      2 * (ε * ((1 / r) ^ n * w (1 / r))) / m := by
-    rw [div_pow_mul_eq w n ρ r]
-    generalize (1 / r) ^ n * w (1 / r) = X
+  have hzero : ρ ^ n * (0 : ℝ) ^ n = 0 ^ n := by rw [← mul_pow, mul_zero]
+  have hprofile : (ρ / r) ^ n * w (1 / r) - 0 ^ n * w 0 =
+      ρ ^ n * (((1 / r) ^ n * w (1 / r)) - 0 ^ n * w 0) := by
+    rw [div_pow_mul_eq, mul_sub, ← mul_assoc (ρ ^ n) ((0 : ℝ) ^ n) (w 0), hzero]
+  have h2 : vinf ^ 2 * (ε / ρ ^ n * (2 * (1 / (m * vinf ^ 2)) *
+        ((ρ / r) ^ n * w (1 / r) - 0 ^ n * w 0))) =
+      2 * relativePotentialEnergy w n ε r / m := by
+    rw [hprofile, relativePotentialEnergy]
     field_simp
   simp only [speedSq, radicand, scaledPotential, potentialSpeedSq, one_div_mul_div hρ r]
   linear_combination (-1 : ℝ) * h1 - h2
 
+/-- Subtracting the limiting potential makes `vinf` the asymptotic speed. -/
+theorem tendsto_potentialSpeedSq_atTop {w : ℝ → ℝ} (hw : ContDiff ℝ ∞ w) (n : ℕ)
+    {m ρ vinf : ℝ} (hm : m ≠ 0) (hρ : ρ ≠ 0) (hv : vinf ≠ 0) (ε : ℝ) :
+    Tendsto (potentialSpeedSq (relativePotentialEnergy w n ε) m ρ vinf) atTop (𝓝 (vinf ^ 2)) := by
+  rw [← speedSq_scaledPotential w n hm hρ hv ε]
+  exact tendsto_speedSq_atTop (contDiff_slice (contDiff_scaledPotential hw n) _)
+    (by simp [scaledPotential]) ρ vinf (ε / ρ ^ n)
+
 /-- Small-angle scattering (Landau–Lifshitz (20.3)) for the potential energy
 `U(r) = ε r⁻ⁿ w(1/r)` with `w` smooth, uniformly for the impact parameters
-`ρ ≥ ρ₁` and the speeds `v∞ ≥ v₁`: if `|ε/ρⁿ| ≤ δ` the motion exists, with the
+`ρ ≥ ρ₁` and the asymptotic speeds `v∞ ≥ v₁`. With the potential measured
+relative to its value at infinity, if `|ε/ρⁿ| ≤ δ` the motion exists, with the
 closest approach `r₀`, and its angle of deflection differs from
 `−(2ρ/m v∞²) ∫_ρ^∞ U′(r) dr/√(r² − ρ²)` by at most `M (ε/ρⁿ)²`. For `n = 0`
 this is the expansion in a small coupling; for `n ≥ 1` and a fixed `ε` it is
@@ -545,10 +561,10 @@ theorem exists_abs_deflectionAngle_potential_sub_le {w : ℝ → ℝ} (hw : Cont
     {m ρ₁ v₁ : ℝ} (hm : 0 < m) (hρ₁ : 0 < ρ₁) (hv₁ : 0 < v₁) :
     ∃ δ : ℝ, 0 < δ ∧ ∃ M : ℝ, ∀ ρ vinf ε : ℝ, ρ₁ ≤ ρ → v₁ ≤ vinf → |ε / ρ ^ n| ≤ δ →
       ∃ (r₀ C : ℝ) (W : ℝ → ℝ), 0 < r₀ ∧ IsFactor W r₀ C ∧
-        (∀ r, r₀ ≤ r → potentialSpeedSq (fun r => ε * ((1 / r) ^ n * w (1 / r))) m ρ vinf r =
+        (∀ r, r₀ ≤ r → potentialSpeedSq (relativePotentialEnergy w n ε) m ρ vinf r =
           (r - r₀) * W r) ∧
         |deflectionAngle (ρ * vinf)
-            (potentialSpeedSq (fun r => ε * ((1 / r) ^ n * w (1 / r))) m ρ vinf) r₀ -
+            (potentialSpeedSq (relativePotentialEnergy w n ε) m ρ vinf) r₀ -
           -(2 * ρ / (m * vinf ^ 2)) * ∫ r in Ioi ρ,
             deriv (fun r => ε * ((1 / r) ^ n * w (1 / r))) r / √(r ^ 2 - ρ ^ 2)| ≤
               M * (ε / ρ ^ n) ^ 2 := by
@@ -579,13 +595,14 @@ theorem exists_abs_deflectionAngle_potential_sub_le {w : ℝ → ℝ} (hw : Cont
         -(2 * ρ / (m * vinf ^ 2)) * ∫ r in Ioi ρ,
           deriv (fun r => ε * ((1 / r) ^ n * w (1 / r))) r / √(r ^ 2 - ρ ^ 2) := by
       have e1 : (fun r : ℝ => scaledPotential w n ((1 / ρ, 1 / (m * vinf ^ 2)), ρ / r)) =
-          fun r => 2 * (1 / (m * vinf ^ 2)) * ρ ^ n * ((1 / r) ^ n * w (1 / r)) := by
+          fun r => 2 * (1 / (m * vinf ^ 2)) * ρ ^ n * ((1 / r) ^ n * w (1 / r)) -
+            2 * (1 / (m * vinf ^ 2)) * (0 ^ n * w 0) := by
         funext r
         simp only [scaledPotential, one_div_mul_div hρ0.ne' r]
         rw [div_pow_mul_eq w n ρ r]
         ring
       rw [e1]
-      simp only [deriv_const_mul_field, mul_div_assoc]
+      simp only [deriv_sub_const, deriv_const_mul_field, mul_div_assoc]
       rw [integral_const_mul, integral_const_mul]
       field_simp
     rw [hF, hterm] at hb

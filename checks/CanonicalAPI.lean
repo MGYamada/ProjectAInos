@@ -3,7 +3,11 @@ Copyright (c) 2026 Masahiko G. Yamada. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 module
-import ProjectAinos
+import ProjectAinos.Mechanics.Hyperregular
+import ProjectAinos.Mechanics.Poisson.ActionFunction
+import ProjectAinos.Mechanics.Poisson.GeneratingFunction
+import ProjectAinos.Mechanics.Poisson.Liouville
+import ProjectAinos.Mechanics.Poisson.Separation
 
 /-! Public consumers of the canonical-formalism API: the chain rule for a
 substitution, the Legendre transformation of a natural Lagrangian and of a

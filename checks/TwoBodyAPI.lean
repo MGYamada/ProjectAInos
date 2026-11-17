@@ -3,7 +3,9 @@ Copyright (c) 2026 Masahiko G. Yamada. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 module
-import ProjectAinos
+import ProjectAinos.Mechanics.Poisson.ReducedMass
+import ProjectAinos.Mechanics.Rutherford
+import ProjectAinos.Mechanics.TwoBody.Collisions
 
 /-! Public consumers of the two-body API: the reduced mass, disintegration,
 elastic collisions, the canonical variables of the centre of mass and the

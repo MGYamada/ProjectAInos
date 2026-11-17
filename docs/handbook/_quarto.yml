@@ -28,6 +28,7 @@ website:
           - thermodynamics-join-audit.qmd
       - section: Shared smooth geometry
         contents:
+          - shared-smooth-algebra-and-geometry.qmd
           - smooth-algebra.qmd
           - smooth-geometry.qmd
           - smooth-geometry-notes.qmd

@@ -3,7 +3,8 @@ Copyright (c) 2026 Masahiko G. Yamada. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 module
-import ProjectAinos
+import ProjectAinos.Mechanics.Poisson.ReducedMass
+import ProjectAinos.Mechanics.Routhian
 
 /-! Public consumers of the quotient and reduction API: smooth parametric
 integrals, Hadamard's lemma, the quotient of a C-infinity ring by an ideal, the

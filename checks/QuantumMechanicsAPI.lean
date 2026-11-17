@@ -1,9 +1,9 @@
 module
 
-import ProjectAinos
+import ProjectAinos.QuantumMechanics.Pauli
 import Lean.Util.CollectAxioms
 
-/-! Root visibility and transitive axiom audit for the qubit prototype. -/
+/-! Public API and transitive axiom audit for the qubit prototype. -/
 
 open ProjectAinos.QuantumMechanics.Qubit
 open Lean Elab Command

@@ -1,4 +1,4 @@
-import ProjectAinos
+import ProjectAinos.QuantumFieldTheory.LocalityExamples
 
 open ProjectAinos ProjectAinos.QuantumFieldTheory
 

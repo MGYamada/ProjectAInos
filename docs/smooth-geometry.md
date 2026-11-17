@@ -7,7 +7,7 @@ The shared smooth-algebra, geometry and variational layers may use one another
 through an acyclic module graph. They import neither project physics nor the
 vendored Yang–Mills theory; `checks/CoreImports.lean` enforces this boundary.
 The implementation sequence and subsequent research stages are in the
-[research plan](../README.md#shared-smooth-algebra-and-geometry).
+[shared foundations plan](shared-smooth-algebra-and-geometry.md#foundation-implementation-plan).
 
 ## Correspondence with mathlib
 

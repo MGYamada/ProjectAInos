@@ -1,9 +1,10 @@
 #!/usr/bin/env bash
-# Run every check file in this directory, in parallel, exactly as the required
-# Lean build job does. Build the library first: `lake build --wfail ProjectAinos`.
+# Run check files in parallel. Without arguments, run every check after
+# building the library with `lake build --wfail ProjectAinos`.
 #
 #   checks/run.sh          # up to four processes
 #   JOBS=2 checks/run.sh   # choose the parallelism
+#   checks/run.sh checks/FlowAPI.lean checks/SmallAngleAPI.lean
 #
 # Each `checks/*.lean` file is compiled with warnings as errors. `CoreImports`
 # is a script and is run with `--run`. A new check file is picked up
@@ -11,9 +12,11 @@
 set -u
 
 cd "$(dirname "$0")/.."
+if [ "$#" -eq 0 ]; then
+  set -- checks/*.lean
+fi
 
-# Every process loads the whole library, so memory, not the CPU count, bounds
-# the useful parallelism. Four fits the 16 GB of a standard CI runner.
+# Several checks import large module closures, so cap the default parallelism.
 cpus="$( (nproc 2>/dev/null || sysctl -n hw.ncpu 2>/dev/null || echo 2) | head -n 1)"
 jobs="${JOBS:-$(( cpus < 4 ? cpus : 4 ))}"
 logs="$(mktemp -d)"
@@ -21,23 +24,27 @@ trap 'rm -rf "$logs"' EXIT
 
 run_one() {
   local file="$1" name start status
+  local -a command=(lake env)
+  if [ -n "${CHECK_LEAN_PATH:-}" ]; then
+    command+=(env "LEAN_PATH=$CHECK_LEAN_PATH")
+  fi
+  command+=(lean -DwarningAsError=true)
   name="$(basename "$file" .lean)"
   start="$(date +%s)"
   if [ "$name" = CoreImports ]; then
-    lake env lean -DwarningAsError=true --run "$file" > "$logs/$name.log" 2>&1
-  else
-    lake env lean -DwarningAsError=true "$file" > "$logs/$name.log" 2>&1
+    command+=(--run)
   fi
+  "${command[@]}" "$file" > "$logs/$name.log" 2>&1
   status=$?
   echo "$status $(( $(date +%s) - start ))" > "$logs/$name.status"
 }
 export -f run_one
 export logs
 
-printf '%s\0' checks/*.lean | xargs -0 -n 1 -P "$jobs" bash -c 'run_one "$1"' _
+printf '%s\0' "$@" | xargs -0 -n 1 -P "$jobs" bash -c 'run_one "$1"' _
 
 failed=()
-for file in checks/*.lean; do
+for file in "$@"; do
   name="$(basename "$file" .lean)"
   status=1
   seconds="?"
@@ -70,4 +77,4 @@ if [ "${#failed[@]}" -ne 0 ]; then
   echo "Failed checks: ${failed[*]}"
   exit 1
 fi
-echo "All $(ls checks/*.lean | wc -l | tr -d ' ') checks passed."
+echo "All $# checks passed."
