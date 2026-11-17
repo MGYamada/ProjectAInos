@@ -17,7 +17,6 @@ Picard–Lindelöf; Lipschitz assumptions are proved rather than postulated.
 
 @[expose] public section
 noncomputable section
-set_option backward.isDefEq.respectTransparency false
 
 open Bundle FiberBundle VectorField ContinuousLinearMap Set Metric
 open scoped Manifold ContDiff Topology

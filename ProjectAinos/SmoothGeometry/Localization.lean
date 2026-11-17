@@ -15,9 +15,6 @@ public import Mathlib.Geometry.RingedSpace.OpenImmersion
 
 noncomputable section
 
-set_option backward.isDefEq.respectTransparency false
-set_option backward.defeqAttrib.useBackward true
-
 namespace ProjectAinos.SmoothGeometry
 
 open SmoothAlgebra TopologicalSpace CategoryTheory Topology
@@ -118,10 +115,9 @@ instance stalkMap_isIso (S : Set A) (y : RealSpectrum (SmoothLocalization S)) :
   have heq : (Spec.locallyRingedSpaceMap (A := SmoothRingCat.of A)
       (B := SmoothRingCat.of (SmoothLocalization S)) (SmoothLocalization.of S)).toLRSHom.stalkMap y =
       d.hom ≫ q.hom ≫ e.inv := by
-    apply (cancel_mono e.hom).mp
-    simpa only [Category.assoc, Iso.inv_hom_id, Category.comp_id] using h
+    exact ((Iso.eq_comp_inv e).mpr h).trans (Category.assoc _ _ _)
   rw [heq]
-  infer_instance
+  exact (d ≪≫ q ≪≫ e.symm).isIso_hom
 
 /-- Principal localizations give actual open immersions of locally ringed spaces. -/
 instance away_isOpenImmersion (a : A) :
@@ -129,8 +125,8 @@ instance away_isOpenImmersion (a : A) :
       (Spec.locallyRingedSpaceMap (A := SmoothRingCat.of A)
         (B := SmoothRingCat.of (SmoothLocalization ({a} : Set A)))
         (SmoothLocalization.of ({a} : Set A))).toLRSHom := by
-  apply AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion.of_stalk_iso
-  exact away_isOpenEmbedding a
+  exact AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion.of_stalk_iso _
+    (away_isOpenEmbedding a) (stalk_iso := fun y => stalkMap_isIso {a} y)
 
 end Localization
 end ProjectAinos.SmoothGeometry

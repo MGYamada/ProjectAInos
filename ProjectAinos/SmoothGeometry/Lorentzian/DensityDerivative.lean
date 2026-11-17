@@ -16,7 +16,6 @@ All formulas hold in each smooth chart on its source, without an orientation.
 
 @[expose] public section
 noncomputable section
-set_option backward.isDefEq.respectTransparency false
 open Bundle FiberBundle
 open scoped Manifold ContDiff
 

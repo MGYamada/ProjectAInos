@@ -13,7 +13,6 @@ public import Mathlib.Analysis.Convex.Basic
 
 @[expose] public section
 noncomputable section
-set_option backward.isDefEq.respectTransparency false
 
 open TopologicalSpace Set Filter ContinuousLinearMap
 open scoped Manifold ContDiff Topology

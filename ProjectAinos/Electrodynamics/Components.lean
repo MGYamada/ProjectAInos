@@ -4,7 +4,6 @@ public import ProjectAinos.Electrodynamics.Field
 /-! # Potential components and the homogeneous Maxwell identity -/
 @[expose] public section
 noncomputable section
-set_option backward.isDefEq.respectTransparency false
 open scoped ContDiff
 namespace ProjectAinos.Electrodynamics
 open SmoothGeometry SmoothGeometry.Minkowski SmoothGeometry.DifferentialForm SpecialRelativity

@@ -5,7 +5,6 @@ public import ProjectAinos.SpecialRelativity.ParticleAction
 /-! # Charged worldline action on its timelike domain -/
 @[expose] public section
 noncomputable section
-set_option backward.isDefEq.respectTransparency false
 open Set Filter MeasureTheory
 open scoped Topology ContDiff
 namespace ProjectAinos.Electrodynamics

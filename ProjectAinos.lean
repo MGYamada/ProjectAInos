@@ -387,6 +387,7 @@ public import ProjectAinos.SmoothGeometry.Manifold.OrientedAtlas
 public import ProjectAinos.SmoothGeometry.Manifold.QuadraticChart
 public import ProjectAinos.SmoothGeometry.Manifold.Scheme
 public import ProjectAinos.SmoothGeometry.Manifold.SmoothExtension
+public import ProjectAinos.SmoothGeometry.Manifold.TangentSpace
 public import ProjectAinos.SmoothGeometry.MetricDensity
 public import ProjectAinos.SmoothGeometry.MetricDensityDerivative
 public import ProjectAinos.SmoothGeometry.Minkowski.Affine

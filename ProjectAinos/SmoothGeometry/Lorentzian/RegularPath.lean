@@ -15,7 +15,6 @@ not choose a frame. Its underlying path is an ordinary continuous `Path`.
 
 @[expose] public section
 noncomputable section
-set_option backward.isDefEq.respectTransparency false
 
 open Bundle Set
 open scoped Manifold ContDiff Topology
@@ -157,8 +156,8 @@ theorem transport_reverse : p.reverse.transport g = (p.transport g).symm := by
       tangentCongr ha (V a) = tangentCongr hb (V b) := by subst b; rfl
   have h' : p.reverse.transport g (tangentCongr p.target (V 1)) =
       tangentCongr p.source (V 0) := by
-    rw [hc (sub_zero 1) p.reverse.source p.target, hc (sub_self 1) p.reverse.target p.source] at h
-    exact h
+    exact (congrArg (p.reverse.transport g) (hc (sub_zero 1) p.reverse.source p.target)).symm.trans
+      (h.trans (hc (sub_self 1) p.reverse.target p.source))
   rw [hend, ContinuousLinearEquiv.apply_symm_apply, hstart] at h'
   exact h'
 

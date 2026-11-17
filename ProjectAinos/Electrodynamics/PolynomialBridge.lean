@@ -10,7 +10,6 @@ explicit continuous linear coordinate equivalence. Upstream time is at axis
 -/
 @[expose] public section
 noncomputable section
-set_option backward.isDefEq.respectTransparency false
 open scoped ContDiff
 namespace ProjectAinos.Electrodynamics.Polynomial
 open YM YM.Tensor YM.Analysis YM.Maxwell

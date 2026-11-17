@@ -11,7 +11,6 @@ public import ProjectAinos.SmoothGeometry.Lorentzian.PiecewisePath
 
 @[expose] public section
 noncomputable section
-set_option backward.isDefEq.respectTransparency false
 
 open Bundle Set
 open scoped Manifold ContDiff Topology

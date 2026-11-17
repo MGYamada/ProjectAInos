@@ -15,7 +15,6 @@ uses only linear algebra on the native fibres.
 
 @[expose] public section
 noncomputable section
-set_option backward.isDefEq.respectTransparency false
 open Module exteriorPower
 
 namespace ProjectAinos.SmoothGeometry.DifferentialForm

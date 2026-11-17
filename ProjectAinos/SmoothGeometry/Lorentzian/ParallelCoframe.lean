@@ -19,7 +19,6 @@ their source. Existence of such a coframe from zero curvature is separate.
 
 @[expose] public section
 noncomputable section
-set_option backward.isDefEq.respectTransparency false
 
 open Bundle ContinuousLinearMap Set Filter
 open scoped Manifold ContDiff Topology

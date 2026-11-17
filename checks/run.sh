@@ -7,8 +7,8 @@
 #   checks/run.sh checks/FlowAPI.lean checks/SmallAngleAPI.lean
 #
 # Each `checks/*.lean` file is compiled with warnings as errors. `CoreImports`
-# is a script and is run with `--run`. A new check file is picked up
-# automatically. The exit status is nonzero if any check fails.
+# and `ForbiddenOptions` are scripts and are run with `--run`. A new check file
+# is picked up automatically. The exit status is nonzero if any check fails.
 set -u
 
 cd "$(dirname "$0")/.."
@@ -31,7 +31,7 @@ run_one() {
   command+=(lean -DwarningAsError=true)
   name="$(basename "$file" .lean)"
   start="$(date +%s)"
-  if [ "$name" = CoreImports ]; then
+  if [ "$name" = CoreImports ] || [ "$name" = ForbiddenOptions ]; then
     command+=(--run)
   fi
   "${command[@]}" "$file" > "$logs/$name.log" 2>&1

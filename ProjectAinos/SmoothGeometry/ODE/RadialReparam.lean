@@ -17,9 +17,6 @@ transport differential equation.
 @[expose] public section
 noncomputable section
 
-set_option backward.isDefEq.respectTransparency false
-set_option backward.defeqAttrib.useBackward true
-
 open Set Filter Metric ContinuousLinearMap
 open scoped ContDiff Topology
 

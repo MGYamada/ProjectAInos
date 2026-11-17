@@ -13,8 +13,6 @@ public import Mathlib.Analysis.ODE.Gronwall
 noncomputable section
 
 open Set TopologicalSpace
-set_option backward.isDefEq.respectTransparency false
-set_option backward.defeqAttrib.useBackward true
 
 open scoped ContDiff
 

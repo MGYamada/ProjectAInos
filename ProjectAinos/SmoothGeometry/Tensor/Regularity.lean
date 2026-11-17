@@ -16,7 +16,6 @@ or norm on the actual fibres is needed.
 
 @[expose] public section
 noncomputable section
-set_option backward.isDefEq.respectTransparency false
 
 open Bundle FiberBundle ContinuousLinearMap
 open scoped Manifold ContDiff Topology

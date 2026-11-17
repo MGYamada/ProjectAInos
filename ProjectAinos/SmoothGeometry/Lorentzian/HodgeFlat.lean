@@ -12,7 +12,6 @@ public import ProjectAinos.SmoothGeometry.Minkowski.HodgeFour
 
 @[expose] public section
 noncomputable section
-set_option backward.isDefEq.respectTransparency false
 open Module exteriorPower
 open scoped Manifold ContDiff
 
@@ -79,11 +78,17 @@ theorem minkowskiMetric_coMetric (σ : LorentzConvention) (d : ℕ) (x : Minkows
   rfl
 
 theorem minkowski_hodgeVolume_normalized (σ : LorentzConvention) (d : ℕ) (x : MinkowskiModel d) :
-    Minkowski.volume .standard d (finiteToExterior
-      ((minkowskiMetric σ d).hodgeTopVolume (OrientedAtlas.standard (d + 1)) x)) = 1 := by
+    Minkowski.volume .standard d
+      (finiteToExterior (V := TangentSpace 𝓘(ℝ, MinkowskiModel d) x)
+        ((minkowskiMetric σ d).hodgeTopVolume (OrientedAtlas.standard (d + 1)) x)) = 1 := by
   unfold hodgeTopVolume
-  rw [LorentzianVolumeExamples.minkowski_volume, finiteToExterior_degreeCast,
-    Minkowski.volume_standard_cast, finiteToExterior_model, Minkowski.coordinateVolume_coordinateForm]
+  rw [LorentzianVolumeExamples.minkowski_volume]
+  have hdim : d + 1 = Module.finrank ℝ (Dual ℝ (MinkowskiModel d)) := by
+    rw [Subspace.dual_finrank_eq, Module.finrank_fin_fun]
+  change Minkowski.volume .standard d (finiteToExterior (V := MinkowskiModel d)
+    (finiteDegreeCast hdim (coordinateForm id))) = 1
+  rw [finiteToExterior_degreeCast, Minkowski.volume_standard_cast, finiteToExterior_model,
+    Minkowski.coordinateVolume_coordinateForm]
 
 theorem minkowski_finiteVolumeFunctional (σ : LorentzConvention) (d : ℕ) (x : MinkowskiModel d) :
     finiteVolumeFunctional ((minkowskiMetric σ d).hodgeTopVolume (OrientedAtlas.standard (d + 1)) x)
@@ -104,7 +109,7 @@ theorem minkowskiMetric_hodgeFiber (σ : LorentzConvention) (d : ℕ) (x : Minko
   change finiteToExterior (finiteHodge ((minkowskiMetric σ d).coMetric x)
     ((minkowskiMetric σ d).coMetric_bijective x)
     ((minkowskiMetric σ d).hodgeTopVolume (OrientedAtlas.standard (d + 1)) x) _ _ α) = _
-  rw [finiteToExterior_hodge]
+  refine (finiteToExterior_hodge ..).trans ?_
   have h := hodge_congr_data ((minkowskiMetric σ d).coMetric x) (Minkowski.coMetric σ d)
     ((minkowskiMetric σ d).coMetric_bijective x) (Minkowski.coMetric_bijective σ d)
     (minkowskiMetric_coMetric σ d x) _ _ (minkowski_finiteVolumeFunctional σ d x)

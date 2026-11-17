@@ -17,8 +17,6 @@ is chosen as part of the public metric-duality interface.
 @[expose] public section
 noncomputable section
 
-set_option backward.isDefEq.respectTransparency false
-
 open Bundle ContinuousLinearMap
 open scoped Manifold ContDiff Topology
 
@@ -229,5 +227,6 @@ end Naturality
 @[simp] theorem minkowskiMetric_sharp (σ : LorentzConvention) (d : ℕ)
     (x : MinkowskiModel d) : (minkowskiMetric σ d).sharp x = Minkowski.sharp σ := by
   simp only [sharp, minkowskiMetric_flat, Minkowski.sharp]
+  rfl
 
 end ProjectAinos.SmoothGeometry.LorentzMetric

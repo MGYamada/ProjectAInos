@@ -12,7 +12,6 @@ public import ProjectAinos.SmoothGeometry.Lorentzian.ConnectionExamples
 
 @[expose] public section
 noncomputable section
-set_option backward.isDefEq.respectTransparency false
 
 open Bundle VectorField ContinuousLinearMap
 open scoped Manifold ContDiff Topology

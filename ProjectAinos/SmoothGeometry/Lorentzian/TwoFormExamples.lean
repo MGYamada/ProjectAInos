@@ -12,8 +12,6 @@ public import ProjectAinos.SmoothGeometry.DifferentialForm.Coordinates
 
 @[expose] public section
 noncomputable section
-set_option backward.isDefEq.respectTransparency false
-set_option backward.defeqAttrib.useBackward true
 open scoped Manifold ContDiff
 
 namespace ProjectAinos.SmoothGeometry.LorentzianTwoFormExamples
@@ -37,7 +35,8 @@ theorem conformal_area_derivative (p : Plane) :
       ![(Pi.single 0 1 : Plane), Pi.single 1 1]) p (Pi.single 1 1) - _ - _ = _
   rw [mvfderiv_const]
   norm_num [Pi.single_apply]
-  change -(coordinateForm (n := 2) ![0, 1]) ![![2 * p 1, 0], Pi.single 1 1] -
+  change (0 : Plane →L[ℝ] ℝ) (Pi.single 1 1) -
+      (coordinateForm (n := 2) ![0, 1]) ![![2 * p 1, 0], Pi.single 1 1] -
     (coordinateForm (n := 2) ![0, 1]) ![Pi.single 0 1, ![0, 2 * p 1]] = -(4 * p 1)
   simp [coordinateForm_apply, Matrix.det_fin_two, Pi.single_apply]
   ring

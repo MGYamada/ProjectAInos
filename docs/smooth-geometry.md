@@ -848,6 +848,14 @@ and supplies restrictions with convex targets. `isLocallyMinkowski_of_charts`
 connects metric normalization on entire chart sources to the original
 open-submanifold definition.
 
+`Manifold.TangentSpace` states the instance `tangentSpace_isNormableSpace`: the topology of a
+tangent space is the topology of a norm, for the module structure of the tangent space. Mathlib
+derives this instance with the module structure of the model space, and instance search does not
+find it; without it `ContinuousLinearMap.flip` does not apply to a bilinear map of tangent spaces.
+No norm is chosen. The library sets no `backward` option and no heartbeat limit; the repairs that
+made this possible are described in
+[note G02](smooth-geometry-notes.md#g02-the-tangent-space-of-a-vector-space-is-the-space-and-lean-has-to-be-told).
+
 The converse separates construction and integration of a parallel
 coframe. Both steps are now proved; the integration API is:
 

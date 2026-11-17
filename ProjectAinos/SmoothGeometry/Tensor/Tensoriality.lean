@@ -20,7 +20,6 @@ a global frame. The locality and pointwise arguments follow mathlib's
 
 @[expose] public section
 noncomputable section
-set_option backward.isDefEq.respectTransparency false
 
 open Bundle FiberBundle Module
 open scoped Manifold ContDiff Topology

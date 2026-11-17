@@ -13,9 +13,6 @@ public import Mathlib.Geometry.RingedSpace.OpenImmersion
 
 noncomputable section
 
-set_option backward.isDefEq.respectTransparency false
-set_option backward.defeqAttrib.useBackward true
-
 namespace ProjectAinos.SmoothGeometry.LocallyRingedSpace
 
 open SmoothAlgebra CategoryTheory TopologicalSpace Opposite Topology
@@ -30,31 +27,19 @@ def inverse (f : X ⟶ Y) [IsIso (forgetToLocallyRingedSpace.map f)] : Y ⟶ X w
     let e : X.toPresheafedSpace ≅ Y.toPresheafedSpace :=
       (AlgebraicGeometry.LocallyRingedSpace.forgetToSheafedSpace ⋙
         AlgebraicGeometry.SheafedSpace.forgetToPresheafedSpace).mapIso
+          (X := forgetToLocallyRingedSpace.obj X) (Y := forgetToLocallyRingedSpace.obj Y)
           (asIso (forgetToLocallyRingedSpace.map f))
     have h := congrArg
       (fun k : X.toLocallyRingedSpace ⟶ X.toLocallyRingedSpace => k.toHom)
       (asIso (forgetToLocallyRingedSpace.map f)).hom_inv_id
-    have hc := AlgebraicGeometry.PresheafedSpace.congr_app h U
-    simp only [AlgebraicGeometry.LocallyRingedSpace.comp_toHom,
-      AlgebraicGeometry.LocallyRingedSpace.id_toHom,
-      AlgebraicGeometry.PresheafedSpace.comp_c_app,
-      AlgebraicGeometry.PresheafedSpace.id_c] at hc
+    have hc (s : X.presheaf.obj U) := ConcreteCategory.congr_hom
+      (AlgebraicGeometry.PresheafedSpace.congr_app h U) s
     apply (ConcreteCategory.bijective_of_isIso
       ((AlgebraicGeometry.PresheafedSpace.sheafIsoOfIso e).app
         (op ((Opens.map (inv (forgetToLocallyRingedSpace.map f)).base).obj U.unop))).hom).injective
-    change f.c.app _ ((inv (forgetToLocallyRingedSpace.map f)).c.app U
-      (SmoothRing.op (A := X.presheaf.obj U) g a)) =
-      f.c.app _ (SmoothRing.op (A := Y.presheaf.obj
-        (op ((Opens.map (inv (forgetToLocallyRingedSpace.map f)).base).obj U.unop))) g _)
-    rw [f.map_op]
-    change ((inv (forgetToLocallyRingedSpace.map f)).c.app U ≫ f.c.app _)
-        (SmoothRing.op (A := X.presheaf.obj U) g a) =
-      SmoothRing.op (A := X.presheaf.obj
-        (op ((Opens.map f.base).obj
-          ((Opens.map (inv (forgetToLocallyRingedSpace.map f)).base).obj U.unop))))
-        g (fun i => ((inv (forgetToLocallyRingedSpace.map f)).c.app U ≫ f.c.app _) (a i))
-    erw [hc]
-    exact SmoothStructure.map_op _ g a
+    exact ((hc _).trans ((SmoothStructure.map_op (X := X.toPresheafedSpace) _ g a).trans
+      (congrArg (SmoothRing.op g) (funext fun i => (hc (a i)).symm)))).trans
+        (f.map_op _ g _).symm
 
 /-- Lift an underlying isomorphism while retaining all C∞ operations. -/
 def isoOfUnderlying (f : X ⟶ Y) [IsIso (forgetToLocallyRingedSpace.map f)] : X ≅ Y where
@@ -99,8 +84,7 @@ def toRestrict : X ⟶ Y.restrict H.base_open where
   map_op := by
     intro U n g a
     change X.presheaf.map _ (f.c.app _ (SmoothRing.op g a)) = _
-    rw [f.map_op, SmoothStructure.map_op]
-    rfl
+    exact (congrArg (X.presheaf.map _) (f.map_op _ g a)).trans (SmoothStructure.map_op _ g _)
 
 /-- An open immersion identifies its source with the corresponding restriction. -/
 def isoRestrict : X ≅ Y.restrict H.base_open :=

@@ -16,7 +16,6 @@ local to its source; no global frame or global coordinate map is assumed.
 
 @[expose] public section
 noncomputable section
-set_option backward.isDefEq.respectTransparency false
 
 open Bundle FiberBundle VectorField ContinuousLinearMap
 open scoped Manifold ContDiff Topology

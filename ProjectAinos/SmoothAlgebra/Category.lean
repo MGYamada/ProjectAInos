@@ -12,9 +12,6 @@ public import Mathlib.CategoryTheory.ConcreteCategory.EpiMono
 
 @[expose] public section
 
-set_option backward.isDefEq.respectTransparency false
-set_option backward.defeqAttrib.useBackward true
-
 universe u
 
 namespace ProjectAinos.SmoothAlgebra

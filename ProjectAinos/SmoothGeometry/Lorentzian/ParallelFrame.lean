@@ -16,7 +16,6 @@ invertible. No frame on the whole manifold is assumed.
 
 @[expose] public section
 noncomputable section
-set_option backward.isDefEq.respectTransparency false
 
 open Bundle FiberBundle ContinuousLinearMap Set Metric
 open scoped Manifold ContDiff Topology

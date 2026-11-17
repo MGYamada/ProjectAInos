@@ -17,7 +17,6 @@ sign conventions using the constructed tangent-bundle objects.
 
 @[expose] public section
 noncomputable section
-set_option backward.isDefEq.respectTransparency false
 
 open Bundle ContinuousLinearMap
 open scoped Manifold ContDiff
@@ -61,17 +60,17 @@ theorem leviCivita_modelField (p v w : Plane) :
         2 * p 1 * (v 0 * w 0 + v 1 * w 1)] p := by
   apply (metric.flat p).injective
   ext z
-  change metric.form p (metric.leviCivita (modelField w) p (modelField v p)) z =
-    metric.form p ![2 * p 1 * (v 0 * w 1 + v 1 * w 0),
-      2 * p 1 * (v 0 * w 0 + v 1 * w 1)] z
-  have hz : modelField (NormedSpace.fromTangentSpace p z) p = z :=
-    (NormedSpace.fromTangentSpace p).symm_apply_apply z
-  have h := metric.modelField_leviCivita_pairing p v w (NormedSpace.fromTangentSpace p z)
-  rw [hz] at h
-  rw [h, (hasFDerivAt_metric_pair p w _).fderiv,
-    (hasFDerivAt_metric_pair p _ v).fderiv, (hasFDerivAt_metric_pair p v w).fderiv]
-  simp [metric_coordinates, NormedSpace.fromTangentSpace, tangentSpaceCastModel]
-  ring
+  have key (z : Plane) :
+      metric.form p (metric.leviCivita (modelField w) p (modelField v p)) z =
+        metric.form p ![2 * p 1 * (v 0 * w 1 + v 1 * w 0),
+          2 * p 1 * (v 0 * w 0 + v 1 * w 1)] z := by
+    refine (metric.modelField_leviCivita_pairing p v w z).trans ?_
+    rw [(hasFDerivAt_metric_pair p w _).fderiv,
+      (hasFDerivAt_metric_pair p _ v).fderiv, (hasFDerivAt_metric_pair p v w).fderiv]
+    refine Eq.trans ?_ (metric_coordinates p _ z).symm
+    simp
+    ring
+  exact key z
 
 /-- All eight Christoffel coefficients of the actual connection. -/
 theorem christoffel_eq (p : Plane) (k i j : Fin 2) :
@@ -124,8 +123,7 @@ theorem inverseComponent_eq (p : Plane) (i j : Fin 2) :
         else Real.exp (-(2 * (p 1)^2))) else 0 := by
   let α := Tensor.coordinateCovector p (NormedSpace.fromTangentSpace p) j
   have h := metric.form_sharp_left p α (modelField (Pi.single i 1) p)
-  change metric.form p (metric.sharp p α) (Pi.single i 1) = _ at h
-  rw [metric_coordinates] at h
+  replace h := (metric_coordinates p (metric.sharp p α) (Pi.single i 1)).symm.trans h
   change Real.exp (2 * (p 1)^2) *
     (-(metric.sharp p α 0 * (Pi.single i 1 : Plane) 0) +
       metric.sharp p α 1 * (Pi.single i 1 : Plane) 1) = (Pi.single i 1 : Plane) j at h

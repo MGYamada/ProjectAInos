@@ -12,7 +12,6 @@ public import ProjectAinos.SmoothGeometry.Lorentzian.MotionExamples
 
 @[expose] public section
 noncomputable section
-set_option backward.isDefEq.respectTransparency false
 
 open scoped Manifold ContDiff
 

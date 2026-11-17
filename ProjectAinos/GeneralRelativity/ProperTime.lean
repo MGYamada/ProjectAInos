@@ -17,7 +17,6 @@ timelike hypotheses are explicit wherever positivity or normalization is used.
 
 @[expose] public section
 noncomputable section
-set_option backward.isDefEq.respectTransparency false
 
 open Bundle MeasureTheory Set
 open scoped Manifold ContDiff Topology

@@ -15,7 +15,6 @@ into the actual tangent bundle. Only a local chart is used in the proof.
 
 @[expose] public section
 noncomputable section
-set_option backward.isDefEq.respectTransparency false
 
 open Bundle
 open scoped Manifold ContDiff Topology

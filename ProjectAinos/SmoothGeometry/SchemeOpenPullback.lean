@@ -13,9 +13,6 @@ public import ProjectAinos.SmoothGeometry.SmoothSheaf
 
 noncomputable section
 
-set_option backward.isDefEq.respectTransparency false
-set_option backward.defeqAttrib.useBackward true
-
 namespace ProjectAinos.SmoothGeometry.Scheme
 
 open CategoryTheory CategoryTheory.Limits

@@ -15,9 +15,6 @@ public import Mathlib.Geometry.Manifold.ContMDiff.Atlas
 
 noncomputable section
 
-set_option backward.isDefEq.respectTransparency false
-set_option backward.defeqAttrib.useBackward true
-
 open scoped Manifold ContDiff
 
 namespace ProjectAinos.SmoothGeometry.Manifold

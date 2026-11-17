@@ -16,8 +16,6 @@ metric contraction use the actual tangent spaces, without choosing a basis.
 
 @[expose] public section
 noncomputable section
-set_option backward.isDefEq.respectTransparency false
-set_option backward.defeqAttrib.useBackward true
 
 open Bundle FiberBundle
 open scoped Manifold ContDiff

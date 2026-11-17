@@ -18,8 +18,6 @@ proof obligations. No regularity in the parameter `c` is required.
 
 @[expose] public section
 noncomputable section
-set_option backward.isDefEq.respectTransparency false
-set_option backward.defeqAttrib.useBackward true
 open ContinuousLinearMap Set TopologicalSpace
 open scoped ContDiff Topology
 

@@ -10,8 +10,6 @@ public import ProjectAinos.SmoothGeometry.Lorentzian.AlongCurve
 
 @[expose] public section
 noncomputable section
-set_option backward.isDefEq.respectTransparency false
-set_option backward.defeqAttrib.useBackward true
 
 open Bundle FiberBundle VectorField ContinuousLinearMap
 open scoped Manifold ContDiff Topology

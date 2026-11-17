@@ -15,7 +15,6 @@ independence of the chart. No norm on native tangent fibres or global frame is u
 
 @[expose] public section
 noncomputable section
-set_option backward.isDefEq.respectTransparency false
 
 open Bundle Set
 open scoped Manifold ContDiff Topology
@@ -141,7 +140,7 @@ theorem smoothWedge_add_left (α α' : SmoothForm 𝓘(ℝ, Fin n → ℝ) M k)
     (chartCoefficients (chartAt (Fin n → ℝ) x) ((fun y => α y) + (fun y => α' y)) _)
     _ _ = _
   rw [chartCoefficients_add]
-  simp only [Pi.add_apply, map_add, LinearMap.add_apply, ContinuousAlternatingMap.add_apply]
+  simp only [Pi.add_apply, map_add, LinearMap.add_apply]
   rfl
 
 theorem smoothWedge_add_right (α : SmoothForm 𝓘(ℝ, Fin n → ℝ) M k)
@@ -151,7 +150,7 @@ theorem smoothWedge_add_right (α : SmoothForm 𝓘(ℝ, Fin n → ℝ) M k)
   change wedgeFiber _
     (chartCoefficients (chartAt (Fin n → ℝ) x) ((fun y => β y) + (fun y => β' y)) _) _ = _
   rw [chartCoefficients_add]
-  simp only [Pi.add_apply, map_add, ContinuousAlternatingMap.add_apply]
+  simp only [Pi.add_apply, map_add]
   rfl
 
 theorem smoothWedge_smul_left (r : ℝ) (α : SmoothForm 𝓘(ℝ, Fin n → ℝ) M k)
@@ -161,7 +160,7 @@ theorem smoothWedge_smul_left (r : ℝ) (α : SmoothForm 𝓘(ℝ, Fin n → ℝ
   change wedgeFiber
     (chartCoefficients (chartAt (Fin n → ℝ) x) (r • (fun y => α y)) _) _ _ = _
   rw [chartCoefficients_smul]
-  simp only [Pi.smul_apply, map_smul, LinearMap.smul_apply, ContinuousAlternatingMap.smul_apply]
+  simp only [Pi.smul_apply, map_smul, LinearMap.smul_apply]
   rfl
 
 theorem smoothWedge_smul_right (r : ℝ) (α : SmoothForm 𝓘(ℝ, Fin n → ℝ) M k)
@@ -171,7 +170,7 @@ theorem smoothWedge_smul_right (r : ℝ) (α : SmoothForm 𝓘(ℝ, Fin n → �
   change wedgeFiber _
     (chartCoefficients (chartAt (Fin n → ℝ) x) (r • (fun y => β y)) _) _ = _
   rw [chartCoefficients_smul]
-  simp only [Pi.smul_apply, map_smul, ContinuousAlternatingMap.smul_apply]
+  simp only [Pi.smul_apply, map_smul]
   rfl
 
 /-- The native product as a bilinear map of spaces of smooth forms. -/

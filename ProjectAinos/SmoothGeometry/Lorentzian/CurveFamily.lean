@@ -17,8 +17,6 @@ for curve variations, without an immersion or a global chart assumption.
 
 @[expose] public section
 noncomputable section
-set_option backward.isDefEq.respectTransparency false
-set_option backward.defeqAttrib.useBackward true
 
 open Bundle ContinuousLinearMap
 open scoped Manifold ContDiff Topology

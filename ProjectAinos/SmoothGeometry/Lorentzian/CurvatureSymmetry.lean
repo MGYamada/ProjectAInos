@@ -16,7 +16,6 @@ coordinates, positive definiteness or a globally chosen frame.
 
 @[expose] public section
 noncomputable section
-set_option backward.isDefEq.respectTransparency false
 
 open Bundle FiberBundle VectorField
 open scoped Manifold ContDiff Topology

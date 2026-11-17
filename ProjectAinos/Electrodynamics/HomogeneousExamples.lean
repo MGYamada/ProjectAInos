@@ -11,7 +11,6 @@ public import ProjectAinos.Electrodynamics.CurvedExamples
 
 @[expose] public section
 noncomputable section
-set_option backward.isDefEq.respectTransparency false
 open scoped Manifold ContDiff
 
 namespace ProjectAinos.Electrodynamics.Curved.Examples
@@ -33,9 +32,11 @@ theorem magneticExcitation_covariant_cyclic (x : E) :
       (g).twoFormDerivative magneticExcitation x (Pi.single 0 1) (Pi.single 2 1) (Pi.single 3 1) = 1 := by
   have h := (g).exteriorDerivative_eq_covariant magneticExcitation x
     (Pi.single 0 1) (Pi.single 2 1) (Pi.single 3 1)
-  rw [(g).twoFormDerivative_skew magneticExcitation x (Pi.single 0 1) (Pi.single 3 1),
-    sub_neg_eq_add, magneticExcitation_derivative] at h
-  rw [← h]
+  have key (a b c d s : ℝ) (h₁ : s = a - d + c) (h₂ : d = -b) : a + b + c = s := by
+    linear_combination h₂ - h₁
+  refine (key _ _ _ _ _ h ((g).twoFormDerivative_skew magneticExcitation x
+    (Pi.single 0 1) (Pi.single 3 1) (Pi.single 2 1))).trans ?_
+  rw [magneticExcitation_derivative]
   change coordinateForm ![0, 2, 3] ![(Pi.single 0 1 : E), Pi.single 2 1, Pi.single 3 1] = 1
   norm_num [coordinateForm_apply, Matrix.det_fin_three, Pi.single_apply]
 

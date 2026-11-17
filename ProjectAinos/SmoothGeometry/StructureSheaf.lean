@@ -23,8 +23,6 @@ mathlib's `AlgebraicGeometry.StructureSheaf` and reuses `LocalPredicate`.
 
 noncomputable section
 
-set_option backward.isDefEq.respectTransparency false
-
 universe u
 
 namespace ProjectAinos.SmoothGeometry
@@ -207,7 +205,8 @@ theorem stalkEvaluation_injective (x : RealSpectrum A) :
   intro s t h
   obtain ⟨U, hxU, s, rfl⟩ := (presheaf A).exists_germ_eq s
   obtain ⟨V, hxV, t, rfl⟩ := (presheaf A).exists_germ_eq t
-  rw [stalkEvaluation_germ, stalkEvaluation_germ] at h
+  replace h := (stalkEvaluation_germ A U x hxU s).symm.trans
+    (h.trans (stalkEvaluation_germ A V x hxV t))
   obtain ⟨U', hxU', iU, a, ha⟩ := s.property ⟨x, hxU⟩
   obtain ⟨V', hxV', iV, b, hb⟩ := t.property ⟨x, hxV⟩
   have hab : PointLocalization.of x.hom a = PointLocalization.of x.hom b :=

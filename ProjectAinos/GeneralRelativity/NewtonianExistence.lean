@@ -12,8 +12,6 @@ public import Mathlib.Topology.MetricSpace.Thickening
 
 @[expose] public section
 noncomputable section
-set_option backward.isDefEq.respectTransparency false
-set_option backward.defeqAttrib.useBackward true
 
 open Set Metric TopologicalSpace Filter
 open scoped Topology NNReal ContDiff

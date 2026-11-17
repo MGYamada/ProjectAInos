@@ -8,7 +8,6 @@ public import Mathlib.Analysis.Calculus.Deriv.Prod
 /-! # Nonzero fields, gauge pairs, and a uniformly accelerated charged particle -/
 @[expose] public section
 noncomputable section
-set_option backward.isDefEq.respectTransparency false
 open Set
 open scoped ContDiff
 namespace ProjectAinos.Electrodynamics.Examples

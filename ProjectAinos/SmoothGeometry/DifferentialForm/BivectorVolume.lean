@@ -16,7 +16,6 @@ two-form components in each oriented chart.
 
 @[expose] public section
 noncomputable section
-set_option backward.isDefEq.respectTransparency false
 open ContinuousLinearMap
 open scoped Topology
 
@@ -41,16 +40,68 @@ theorem bivectorVolume_apply (B : A) :
   ext v
   simp [bivectorVolume]
 
-set_option maxHeartbeats 1600000 in
+/-- Evaluate both sides of `alternatize_bivectorVolume` on one triple of basis vectors. The
+three indices are distinct, and the cases in which two of them coincide are excluded by the
+hypotheses before any computation. -/
+local macro "bivector_basis_cases" hD:ident hdiag:ident hj:ident hk:ident hjk:ident : tactic =>
+  `(tactic| first
+    | exact absurd rfl $hj
+    | exact absurd rfl $hk
+    | exact absurd rfl $hjk
+    | (norm_num [ContinuousAlternatingMap.alternatizeUncurryFin_apply, bivectorVolume_apply,
+        interior, coordinateForm_apply, Matrix.det_fin_two, Matrix.det_succ_row_zero,
+        Matrix.submatrix_apply, Fin.sum_univ_succ, Fin.removeNth, Fin.succAbove, Pi.single_apply,
+        $hdiag:ident, $hD:ident _ 1 0, $hD:ident _ 2 0, $hD:ident _ 2 1, $hD:ident _ 3 0,
+        $hD:ident _ 3 1, $hD:ident _ 3 2] <;> ring))
+
+private theorem alternatize_bivectorVolume_basis_zero (D : E →L[ℝ] A)
+    (hD : ∀ u i j, D u i j = -D u j i) (j k : Fin 4) (hj : (0 : Fin 4) ≠ j)
+    (hk : (0 : Fin 4) ≠ k) (hjk : j ≠ k) :
+    ContinuousAlternatingMap.alternatizeUncurryFin (bivectorVolume.comp D)
+        ![Pi.single 0 1, Pi.single j 1, Pi.single k 1] =
+      (interior (fun j => ∑ i : Fin 4, D (Pi.single i 1) i j) (coordinateForm id)).toAlternatingMap
+        ![Pi.single 0 1, Pi.single j 1, Pi.single k 1] := by
+  have hdiag (u : E) (i : Fin 4) : D u i i = 0 := by linarith [hD u i i]
+  fin_cases j <;> fin_cases k <;> bivector_basis_cases hD hdiag hj hk hjk
+
+private theorem alternatize_bivectorVolume_basis_one (D : E →L[ℝ] A)
+    (hD : ∀ u i j, D u i j = -D u j i) (j k : Fin 4) (hj : (1 : Fin 4) ≠ j)
+    (hk : (1 : Fin 4) ≠ k) (hjk : j ≠ k) :
+    ContinuousAlternatingMap.alternatizeUncurryFin (bivectorVolume.comp D)
+        ![Pi.single 1 1, Pi.single j 1, Pi.single k 1] =
+      (interior (fun j => ∑ i : Fin 4, D (Pi.single i 1) i j) (coordinateForm id)).toAlternatingMap
+        ![Pi.single 1 1, Pi.single j 1, Pi.single k 1] := by
+  have hdiag (u : E) (i : Fin 4) : D u i i = 0 := by linarith [hD u i i]
+  fin_cases j <;> fin_cases k <;> bivector_basis_cases hD hdiag hj hk hjk
+
+private theorem alternatize_bivectorVolume_basis_two (D : E →L[ℝ] A)
+    (hD : ∀ u i j, D u i j = -D u j i) (j k : Fin 4) (hj : (2 : Fin 4) ≠ j)
+    (hk : (2 : Fin 4) ≠ k) (hjk : j ≠ k) :
+    ContinuousAlternatingMap.alternatizeUncurryFin (bivectorVolume.comp D)
+        ![Pi.single 2 1, Pi.single j 1, Pi.single k 1] =
+      (interior (fun j => ∑ i : Fin 4, D (Pi.single i 1) i j) (coordinateForm id)).toAlternatingMap
+        ![Pi.single 2 1, Pi.single j 1, Pi.single k 1] := by
+  have hdiag (u : E) (i : Fin 4) : D u i i = 0 := by linarith [hD u i i]
+  fin_cases j <;> fin_cases k <;> bivector_basis_cases hD hdiag hj hk hjk
+
+private theorem alternatize_bivectorVolume_basis_three (D : E →L[ℝ] A)
+    (hD : ∀ u i j, D u i j = -D u j i) (j k : Fin 4) (hj : (3 : Fin 4) ≠ j)
+    (hk : (3 : Fin 4) ≠ k) (hjk : j ≠ k) :
+    ContinuousAlternatingMap.alternatizeUncurryFin (bivectorVolume.comp D)
+        ![Pi.single 3 1, Pi.single j 1, Pi.single k 1] =
+      (interior (fun j => ∑ i : Fin 4, D (Pi.single i 1) i j) (coordinateForm id)).toAlternatingMap
+        ![Pi.single 3 1, Pi.single j 1, Pi.single k 1] := by
+  have hdiag (u : E) (i : Fin 4) : D u i i = 0 := by linarith [hD u i i]
+  fin_cases j <;> fin_cases k <;> bivector_basis_cases hD hdiag hj hk hjk
+
 /-- The alternating derivative of volume duality is the contraction divergence. -/
 theorem alternatize_bivectorVolume (D : E →L[ℝ] A)
     (hD : ∀ u i j, D u i j = -D u j i) :
     ContinuousAlternatingMap.alternatizeUncurryFin (bivectorVolume.comp D) =
       interior (fun j => ∑ i : Fin 4, D (Pi.single i 1) i j) (coordinateForm id) := by
-  have hdiag (u : E) (i : Fin 4) : D u i i = 0 := by linarith [hD u i i]
   apply ContinuousAlternatingMap.toAlternatingMap_injective
   apply Module.Basis.ext_alternating (Pi.basisFun ℝ (Fin 4))
-  intro f _
+  intro f hf
   have ht : (fun i : Fin 3 => (Pi.basisFun ℝ (Fin 4)) (f i)) =
       ![Pi.single (f 0) 1, Pi.single (f 1) 1, Pi.single (f 2) 1] := by
     ext i j
@@ -58,14 +109,17 @@ theorem alternatize_bivectorVolume (D : E →L[ℝ] A)
   change ContinuousAlternatingMap.alternatizeUncurryFin (bivectorVolume.comp D)
     (fun i => (Pi.basisFun ℝ (Fin 4)) (f i)) = _
   rw [ht]
-  generalize f 0 = i
-  generalize f 1 = j
-  generalize f 2 = k
-  fin_cases i <;> fin_cases j <;> fin_cases k <;>
-    norm_num [ContinuousAlternatingMap.alternatizeUncurryFin_apply, bivectorVolume_apply,
-      interior, coordinateForm_apply, Matrix.det_fin_two, Matrix.det_succ_row_zero,
-      Matrix.submatrix_apply, Fin.sum_univ_succ, Fin.removeNth, Fin.succAbove, Pi.single_apply,
-      hdiag, hD _ 1 0, hD _ 2 0, hD _ 2 1, hD _ 3 0, hD _ 3 1, hD _ 3 2] <;> ring
+  have h01 : f 0 ≠ f 1 := fun h => absurd (hf h) (by decide)
+  have h02 : f 0 ≠ f 2 := fun h => absurd (hf h) (by decide)
+  have h12 : f 1 ≠ f 2 := fun h => absurd (hf h) (by decide)
+  generalize f 0 = i at h01 h02 ⊢
+  generalize f 1 = j at h01 h12 ⊢
+  generalize f 2 = k at h02 h12 ⊢
+  fin_cases i
+  · exact alternatize_bivectorVolume_basis_zero D hD j k h01 h02 h12
+  · exact alternatize_bivectorVolume_basis_one D hD j k h01 h02 h12
+  · exact alternatize_bivectorVolume_basis_two D hD j k h01 h02 h12
+  · exact alternatize_bivectorVolume_basis_three D hD j k h01 h02 h12
 
 theorem fderiv_matrix_apply {B : E → A} {x : E} (hB : DifferentiableAt ℝ B x)
     (i j : Fin 4) (u : E) :

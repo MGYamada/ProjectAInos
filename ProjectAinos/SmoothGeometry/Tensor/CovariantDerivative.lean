@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 module
 
+public import ProjectAinos.SmoothGeometry.Manifold.TangentSpace
 public import ProjectAinos.SmoothGeometry.Tensor.Bundle
 public import Mathlib.Geometry.Manifold.VectorBundle.CovariantDerivative.Basic
 public import Mathlib.Geometry.Manifold.VectorBundle.Tensoriality
@@ -17,7 +18,6 @@ independent of their local extensions. Native tangent fibres need no norm.
 
 @[expose] public section
 noncomputable section
-set_option backward.isDefEq.respectTransparency false
 open Bundle FiberBundle ContinuousLinearMap
 open scoped Manifold ContDiff Topology
 

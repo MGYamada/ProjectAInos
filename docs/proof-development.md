@@ -32,6 +32,18 @@ of [special relativity](special-relativity-notes.md),
 [electrodynamics](electrodynamics-notes.md) and
 [general relativity](general-relativity-notes.md). This step adds no Lean proofs.
 
+Before the first proofs of the field plans, the library was made to build with the default
+elaborator options. 195 files had set `backward.isDefEq.respectTransparency false`, and 52 of
+them also `backward.defeqAttrib.useBackward true`. 144 files compile with the lines deleted. In
+the other 51, about 120 proof steps passed a `rw` or a `simp` lemma through a term that uses a
+definitional identification silently, mostly the tangent space of a vector space with the space;
+they now apply the lemma in term mode or restate the goal. No declaration changed its type, with
+one helper as the exception, and `tangentSpace_isNormableSpace` restates an instance of Mathlib
+that instance search does not find. The one raised heartbeat limit is gone: the computation of
+`alternatize_bivectorVolume` is split by the first index. `checks/ForbiddenOptions.lean` keeps
+both options out of the library and the checks
+([G02](smooth-geometry-notes.md#g02-the-tangent-space-of-a-vector-space-is-the-space-and-lean-has-to-be-told)).
+
 ## Thermodynamics Proof Development
 
 Issue #27 replaces the physical atomic-only ECH specialization with composite

@@ -19,9 +19,6 @@ model is constructed from a C∞-ring; no existence of Spec is assumed.
 
 noncomputable section
 
-set_option backward.isDefEq.respectTransparency false
-set_option backward.defeqAttrib.useBackward true
-
 universe u
 
 namespace ProjectAinos.SmoothGeometry
@@ -66,8 +63,9 @@ def locallyRingedSpaceObj (A : SmoothRingCat.{u}) : LocallyRingedSpace.{u} where
       exact IsLocalHom.map_nonunit (f := (StructureSheaf.stalkIso A x).hom.hom) a hu
     · change PointLocalization.residue x.hom
         (StructureSheaf.stalkEvaluation A x ((StructureSheaf.presheaf A).germ U x hx _)) = r
-      rw [StructureSheaf.stalkEvaluation_germ]
-      exact (PointLocalization.residue x.hom).map_algebraMap r
+      exact (congrArg (PointLocalization.residue x.hom)
+        (StructureSheaf.stalkEvaluation_germ A U x hx _)).trans
+          ((PointLocalization.residue x.hom).map_algebraMap r)
 
 /-- Pullback of sections along a smooth-ring morphism. -/
 def comap {A B : SmoothRingCat.{u}} (f : A ⟶ B) (U : Opens (topObj A)) :
@@ -105,8 +103,10 @@ theorem stalkMap_evaluation {A B : SmoothRingCat.{u}} (f : A ⟶ B) (y : RealSpe
   change (sheafedSpaceMap f).hom.stalkMap y
       ((StructureSheaf.presheaf A).germ U (RealSpectrum.comap f y) hy s) =
     (StructureSheaf.presheaf B).germ ((Opens.map (topMap f)).obj U) y hy (comap f U s) at h
-  rw [h, StructureSheaf.stalkEvaluation_germ, StructureSheaf.stalkEvaluation_germ]
-  rfl
+  exact (congrArg (StructureSheaf.stalkEvaluation B y) h).trans
+    ((StructureSheaf.stalkEvaluation_germ B _ y hy (comap f U s)).trans
+      (congrArg (PointLocalization.map f y.hom)
+        (StructureSheaf.stalkEvaluation_germ A U (RealSpectrum.comap f y) hy s)).symm)
 
 /-- The induced morphism of local C∞-ringed spaces. -/
 def locallyRingedSpaceMap {A B : SmoothRingCat.{u}} (f : A ⟶ B) :
@@ -121,13 +121,13 @@ def locallyRingedSpaceMap {A B : SmoothRingCat.{u}} (f : A ⟶ B) :
         have hc : IsUnit (StructureSheaf.stalkEvaluation A (RealSpectrum.comap f y) a) := by
           apply (PointLocalization.isUnit_iff (RealSpectrum.comap f y).hom _).mpr
           have hd := (PointLocalization.isUnit_iff y.hom _).mp hb
-          simpa only [RealSpectrum.comap, RealSpectrum.hom, PointLocalization.residue_map] using hd
-        let := isLocalHom_of_iso (StructureSheaf.stalkIso A (RealSpectrum.comap f y))
-        exact IsLocalHom.map_nonunit
-          (f := (StructureSheaf.stalkIso A (RealSpectrum.comap f y)).hom.hom) a hc⟩ }
+          exact fun h0 => hd ((PointLocalization.residue_map _ y.hom _).trans h0)
+        exact (isLocalHom_of_iso
+          (StructureSheaf.stalkIso A (RealSpectrum.comap f y))).map_nonunit a hc⟩ }
   map_op := by
     intro U n g a
-    exact (comap f U.unop).map_op g a
+    let V : Opens (topObj A) := U.unop
+    exact (comap f V).map_op g a
 
 @[simp] theorem locallyRingedSpaceMap_id (A : SmoothRingCat.{u}) :
     locallyRingedSpaceMap (𝟙 A) = 𝟙 (locallyRingedSpaceObj A) := by

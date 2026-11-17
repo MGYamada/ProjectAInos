@@ -21,7 +21,6 @@ coordinate arrays. Connections and curvature are not assumed here.
 
 @[expose] public section
 noncomputable section
-set_option backward.isDefEq.respectTransparency false
 
 open Bundle ContinuousLinearMap
 open scoped Manifold ContDiff
@@ -124,7 +123,7 @@ def metric : LorentzMetric .timeNegative 1 Plane where
   form := coefficients
   smooth := by
     intro x
-    rw [contMDiffAt_section]
+    refine (contMDiffAt_section x).mpr ?_
     convert coefficients_contDiff.contMDiff.contMDiffAt (x := x) using 1
     funext y
     ext v w
@@ -143,8 +142,8 @@ theorem spacetime_toScheme :
 theorem metric_coordinates (p v w : Plane) :
     metric.form p v w = -(v 0 * w 0) +
       (v 1 + 2 * p 0 * v 0) * (w 1 + 2 * p 0 * w 0) := by
-  simp [metric, coefficients, BilinearTensor.pullback_apply, minkowskiForm_apply,
-    lorentzSign, Fin.sum_univ_succ, shearLinear]
+  change minkowskiForm .timeNegative 1 (shearLinear (2 * p 0) v) (shearLinear (2 * p 0) w) = _
+  simp [minkowskiForm_apply, lorentzSign, Fin.sum_univ_succ, shearLinear]
 
 theorem metric_time_time (p : Plane) :
     metric.form p (Pi.single 0 1) (Pi.single 0 1) = -1 + 4 * (p 0)^2 := by
@@ -208,7 +207,7 @@ def spatialTensor : CovariantTwoTensor 1 Plane :=
       BilinearTensor.contDiff_pullback contDiff_const
         (shearLinear_contDiff.comp (contDiff_const.mul (contDiff_apply ℝ _ 0)))
     intro x
-    rw [contMDiffAt_section]
+    refine (contMDiffAt_section x).mpr ?_
     convert h.contMDiff.contMDiffAt (x := x) using 1
     funext y
     ext v w
@@ -220,8 +219,9 @@ theorem spatialTensor_coordinates (p v w : Plane) :
 
 theorem spatialTensor_contract (p : Plane) : metric.contractField spatialTensor p = 1 := by
   change metric.contract p (spatialTensorCoefficients p) = 1
-  rw [spatialTensorCoefficients, contract_covariance, LorentzMetric.contract_smulRight,
-    LorentzMetric.minkowskiMetric_sharp]
+  rw [spatialTensorCoefficients, contract_covariance]
+  refine (LorentzMetric.contract_smulRight _ _ _ _).trans ?_
+  rw [LorentzMetric.minkowskiMetric_sharp]
   change Minkowski.sharp .timeNegative (proj 1 : Plane →L[ℝ] ℝ) 1 = 1
   simp [Minkowski.sharp_apply, lorentzSign]
 

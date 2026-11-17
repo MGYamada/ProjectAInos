@@ -19,7 +19,6 @@ it is not inferred from pointwise inertial normalization.
 
 @[expose] public section
 noncomputable section
-set_option backward.isDefEq.respectTransparency false
 
 open TopologicalSpace ContinuousLinearMap
 open scoped Manifold ContDiff
@@ -49,7 +48,9 @@ underlying tangent-coordinate values. -/
 theorem curvature_restrict_apply (g : LorentzMetric σ d M) (U : Opens M) (x : U)
     (u v w : TangentSpace I x) :
     (g.restrict U).curvature x u v w = g.curvature x.val u v w := by
-  simpa only [Manifold.mfderiv_subtype_val_apply] using g.curvature_restrict U x u v w
+  have h := g.curvature_restrict U x u v w
+  simp only [Manifold.mfderiv_subtype_val_apply] at h
+  exact h
 
 /-- Every open submanifold of Minkowski space has zero native curvature. -/
 theorem minkowski_restrict_curvature (σ : LorentzConvention) (d : ℕ)
@@ -95,8 +96,9 @@ theorem isLocallyMinkowski_of_charts (g : LorentzMetric σ d M)
   refine ⟨⟨e.source, e.open_source⟩, hp, ⟨e.target, e.open_target⟩,
     Manifold.diffeomorphOfMaximalAtlas he, ?_⟩
   intro x v w
-  rw [Manifold.mfderiv_diffeomorphOfMaximalAtlas_apply,
-    Manifold.mfderiv_diffeomorphOfMaximalAtlas_apply]
-  exact hm x.val x.property v w
+  have hv := Manifold.mfderiv_diffeomorphOfMaximalAtlas_apply he x v
+  have hw := Manifold.mfderiv_diffeomorphOfMaximalAtlas_apply he x w
+  exact (hm x.val x.property v w).trans
+    (congrArg₂ (fun a b : E => minkowskiForm σ d a b) hv hw).symm
 
 end ProjectAinos.SmoothGeometry.LorentzMetric

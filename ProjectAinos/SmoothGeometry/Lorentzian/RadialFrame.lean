@@ -20,8 +20,6 @@ coefficients that are smooth outside the chart target.
 @[expose] public section
 noncomputable section
 
-set_option backward.isDefEq.respectTransparency false
-
 open ContinuousLinearMap Set
 open scoped ContDiff Manifold Topology
 

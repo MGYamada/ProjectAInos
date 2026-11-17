@@ -12,7 +12,6 @@ public import ProjectAinos.SmoothGeometry.DifferentialForm.HodgeFormula
 
 @[expose] public section
 noncomputable section
-set_option backward.isDefEq.respectTransparency false
 open Module Bundle Set
 open scoped Manifold ContDiff Topology
 
@@ -84,8 +83,11 @@ theorem hodgeFiber_chartLift (g : LorentzMetric σ d M) (o : OrientedAtlas (d + 
     (o.sign p * g.chartDensity (o.chart p) x) hm hv hkl (β (o.chart p x))
   change g.hodgeFiber o x hkl _ = _ •
     (h.hodgeFiber o₀ 0 hkl _).compContinuousLinearMap _ at hh
-  rw [minkowskiMetric_hodgeFiber] at hh
-  exact hh
+  exact hh.trans (congrArg
+    (fun γ : MinkowskiModel d [⋀^Fin l]→L[ℝ] ℝ =>
+      (o.sign p * g.chartDensity (o.chart p) x) • γ.compContinuousLinearMap
+        (chartTangentEquiv (o.mem_atlas p) hx).toContinuousLinearMap)
+    (minkowskiMetric_hodgeFiber _ d 0 hkl _))
 
 /-- The full local Hodge expression, using the actual inverse-chart coefficients. -/
 def hodgeChart (g : LorentzMetric σ d M) (o : OrientedAtlas (d + 1) M) (p : M)

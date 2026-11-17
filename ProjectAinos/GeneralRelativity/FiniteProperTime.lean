@@ -16,7 +16,6 @@ covering the entire segment, including both endpoints.
 
 @[expose] public section
 noncomputable section
-set_option backward.isDefEq.respectTransparency false
 
 open Set
 open scoped Manifold ContDiff Topology

@@ -15,7 +15,6 @@ topologies. No norm is assigned to a native tangent fibre.
 
 @[expose] public section
 noncomputable section
-set_option backward.isDefEq.respectTransparency false
 open Bundle ContinuousLinearMap
 open scoped Manifold ContDiff Topology
 

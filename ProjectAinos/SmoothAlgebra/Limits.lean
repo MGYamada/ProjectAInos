@@ -17,9 +17,6 @@ The forgetful functor to commutative rings preserves these limits.
 
 noncomputable section
 
-set_option backward.isDefEq.respectTransparency false
-set_option backward.defeqAttrib.useBackward true
-
 universe u
 
 namespace ProjectAinos.SmoothAlgebra.SmoothRingCat

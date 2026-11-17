@@ -11,7 +11,6 @@ public import ProjectAinos.SmoothGeometry.Tensor.Regularity
 
 @[expose] public section
 noncomputable section
-set_option backward.isDefEq.respectTransparency false
 
 open Bundle FiberBundle VectorField ContinuousLinearMap
 open scoped Manifold ContDiff Topology
@@ -46,8 +45,9 @@ theorem contMDiffAt_directionalDerivative {n : ℕ∞} {f : M → ℝ}
     convert! hd using 1
   have ha := hc.clm_apply_of_inCoordinates hX (hf.of_le (self_le_add_right _ _))
   rw [contMDiffAt_totalSpace] at ha
-  simpa [mvfderiv, NormedSpace.fromTangentSpace, tangentSpaceCastModel,
-    TangentBundle.trivializationAt_apply] using ha.2
+  have h2 := ha.2
+  simp at h2
+  exact h2
 
 /-- Koszul loses at most one derivative on locally `C^(n+1)` fields. -/
 theorem contMDiffAt_koszul {n : ℕ∞}

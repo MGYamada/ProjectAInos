@@ -15,7 +15,6 @@ The manifold is boundaryless; its model space need not be finite dimensional.
 
 @[expose] public section
 noncomputable section
-set_option backward.isDefEq.respectTransparency false
 
 open Bundle Set
 open scoped Manifold ContDiff Topology
@@ -80,11 +79,12 @@ theorem chartCoefficients_chartLift {e : OpenPartialHomeomorph M E}
     chartCoefficients e (chartLift e β) y = β y := by
   have hf := (contMDiffAt_symm_of_mem_maximalAtlas he hy).mdifferentiableAt (by simp)
   have hg := (contMDiffAt_of_mem_maximalAtlas he (e.map_target hy)).mdifferentiableAt (by simp)
-  rw [chartCoefficients, chartLift, ← nativePullback_comp_at 𝓘(ℝ, E) 𝓘(ℝ, E) 𝓘(ℝ, E) hf hg]
   have h : (e ∘ e.symm) =ᶠ[𝓝 y] id := by
     filter_upwards [e.open_target.mem_nhds hy] with z hz
     exact e.right_inv hz
-  rw [nativePullback_congr_map 𝓘(ℝ, E) 𝓘(ℝ, E) h β, nativePullback_id]
+  exact ((nativePullback_comp_at 𝓘(ℝ, E) 𝓘(ℝ, E) 𝓘(ℝ, E) hf hg β).symm.trans
+    (nativePullback_congr_map 𝓘(ℝ, E) 𝓘(ℝ, E) h β)).trans
+      (congrFun (nativePullback_id 𝓘(ℝ, E) β) y)
 
 omit [IsManifold 𝓘(ℝ, E) ∞ M] in
 /-- Smoothness of the actual coordinate change on an overlap. -/
@@ -106,7 +106,9 @@ theorem chartCoefficients_transition {e e' : OpenPartialHomeomorph M E}
     chartCoefficients e' α y = pullback (e ∘ e'.symm) (chartCoefficients e α) y := by
   have hf := (contMDiffAt_symm_of_mem_maximalAtlas he' hy).mdifferentiableAt (by simp)
   have hg := (contMDiffAt_of_mem_maximalAtlas he hye).mdifferentiableAt (by simp)
-  rw [← nativePullback_flat, nativePullback_comp_at 𝓘(ℝ, E) 𝓘(ℝ, E) 𝓘(ℝ, E) hf hg]
+  refine Eq.trans ?_ ((nativePullback_comp_at 𝓘(ℝ, E) 𝓘(ℝ, E) 𝓘(ℝ, E) hf hg
+    (chartCoefficients e α)).symm.trans
+      (congrFun (nativePullback_flat (e ∘ e'.symm) (chartCoefficients e α)) y))
   ext v
   change α (e'.symm y) (fun i => mfderiv 𝓘(ℝ, E) 𝓘(ℝ, E) e'.symm y (v i)) =
     chartLift e (chartCoefficients e α) (e'.symm y)
@@ -124,11 +126,13 @@ theorem chartLift_transition {e e' : OpenPartialHomeomorph M E}
   have hxe : e'.symm (e' x) ∈ e.source := by simpa only [e'.left_inv hx'] using hx
   have hg := (formChartTransition_contDiffAt he he' (e'.map_source hx') hxe).contMDiffAt
     |>.mdifferentiableAt (by simp)
-  rw [chartLift, chartLift, ← nativePullback_flat,
-    ← nativePullback_comp_at 𝓘(ℝ, E) 𝓘(ℝ, E) 𝓘(ℝ, E) hf hg]
-  apply nativePullback_congr_map
-  filter_upwards [e'.open_source.mem_nhds hx'] with y hy
-  exact congrArg e (e'.left_inv hy)
+  have h : ((e ∘ e'.symm) ∘ e') =ᶠ[𝓝 x] e := by
+    filter_upwards [e'.open_source.mem_nhds hx'] with y hy
+    exact congrArg e (e'.left_inv hy)
+  exact ((congrArg (fun γ : Form E k => chartLift e' γ x)
+    (nativePullback_flat (e ∘ e'.symm) β).symm).trans
+      (nativePullback_comp_at 𝓘(ℝ, E) 𝓘(ℝ, E) 𝓘(ℝ, E) hf hg β).symm).trans
+        (nativePullback_congr_map 𝓘(ℝ, E) 𝓘(ℝ, E) h β)
 
 omit [IsManifold 𝓘(ℝ, E) ∞ M] in
 /-- Equality of chart coefficients at the image determines the native value. -/

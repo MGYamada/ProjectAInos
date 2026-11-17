@@ -5,7 +5,6 @@ import all Mathlib.LinearAlgebra.ExteriorPower.BilinForm
 /-! # Lorentz covariance and orientation of the electromagnetic invariants -/
 @[expose] public section
 noncomputable section
-set_option backward.isDefEq.respectTransparency false
 set_option maxRecDepth 2048
 open Module exteriorPower
 namespace ProjectAinos.Electrodynamics

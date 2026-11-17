@@ -16,7 +16,6 @@ the public constitutive sign `H = -⋆F`, rather than an assumed source equation
 
 @[expose] public section
 noncomputable section
-set_option backward.isDefEq.respectTransparency false
 open scoped Manifold ContDiff
 
 namespace ProjectAinos.Electrodynamics.Curved.Examples
@@ -37,14 +36,13 @@ def spatialCurrent : CurrentForm (M := E) :=
 
 theorem electric_excitation : excitation g o electric = magneticExcitation := by
   ext x : 1
-  unfold electric
-  rw [excitation_flat]
+  refine (excitation_flat _ _ x).trans ?_
   change -Minkowski.hodgeFiber _ _ _ (x 0 • coordinateForm ![0, 1]) = _
-  rw [map_smul, Minkowski.hodge_dt_dx]
-  simp [magneticExcitation, ofFlat]
+  rw [map_smul, Minkowski.hodge_dt_dx, smul_neg, neg_neg]
+  rfl
 
 theorem electric_closed : smoothExteriorDerivative electric = 0 := by
-  ext x v
+  ext x (v : Fin 3 → E)
   change nativeExteriorDerivative (fun y : E => y 0 • coordinateForm ![0, 1]) x v = 0
   rw [nativeExteriorDerivative_flat]
   have hd : fderiv ℝ (fun y : E => y 0 • coordinateForm (n := 4) ![0, 1]) x =
@@ -60,7 +58,7 @@ theorem electric_closed : smoothExteriorDerivative electric = 0 := by
 
 theorem magneticExcitation_derivative :
     smoothExteriorDerivative magneticExcitation = spatialCurrent := by
-  ext x v
+  ext x (v : Fin 3 → E)
   change nativeExteriorDerivative (fun y : E => y 0 • coordinateForm ![2, 3]) x v =
     coordinateForm ![0, 2, 3] v
   rw [nativeExteriorDerivative_flat]

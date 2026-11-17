@@ -14,9 +14,6 @@ public import Mathlib.Topology.Sheaves.Forget
 
 noncomputable section
 
-set_option backward.isDefEq.respectTransparency false
-set_option backward.defeqAttrib.useBackward true
-
 namespace ProjectAinos.SmoothGeometry
 
 open SmoothAlgebra CategoryTheory CategoryTheory.Limits
@@ -43,9 +40,7 @@ instance underlying_isOpenImmersion
     AlgebraicGeometry.PresheafedSpace.IsOpenImmersion
       (SmoothRingCat.forgetToCommRingCat.mapPresheaf.map f) where
   base_open := H.base_open
-  c_iso U :=
-    let : IsIso (f.c.app (.op (H.base_open.functor.obj U))) := H.c_iso U
-    SmoothRingCat.forgetToCommRingCat.map_isIso _
+  c_iso U := @Functor.map_isIso _ _ _ _ _ _ SmoothRingCat.forgetToCommRingCat _ (H.c_iso U)
 
 namespace LocallyRingedSpace
 

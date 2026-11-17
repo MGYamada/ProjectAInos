@@ -17,7 +17,6 @@ determinant and works for indefinite metrics as well.
 
 @[expose] public section
 noncomputable section
-set_option backward.isDefEq.respectTransparency false
 open scoped BigOperators
 
 namespace ProjectAinos.SmoothGeometry.MetricDensity
@@ -38,7 +37,7 @@ theorem fderiv_det_apply (G D : Fin n → Fin n → ℝ) :
 theorem fderiv_det_mul_left (G A : Fin n → Fin n → ℝ) :
     fderiv ℝ (fun B : Fin n → Fin n → ℝ => Matrix.det (Matrix.of B)) G
       (Matrix.of A * Matrix.of G) = Matrix.trace (Matrix.of A) * Matrix.det (Matrix.of G) := by
-  rw [fderiv_det_apply]
+  refine (fderiv_det_apply G _).trans ?_
   have h (i : Fin n) : (Matrix.of A * Matrix.of G) i = ∑ j, A i j • G j := by
     ext k
     simp [Matrix.mul_apply, Finset.sum_apply]
@@ -80,14 +79,15 @@ theorem fderiv_det_compatible (G A : Fin n → Fin n → ℝ) :
     fderiv ℝ (fun B : Fin n → Fin n → ℝ => Matrix.det (Matrix.of B)) G
       (Matrix.of A * Matrix.of G + Matrix.of G * (Matrix.of A).transpose) =
       2 * Matrix.trace (Matrix.of A) * Matrix.det (Matrix.of G) := by
-  rw [map_add, fderiv_det_mul_left]
+  have hl := fderiv_det_mul_left G A
   have hr := fderiv_det_mul_right G (Matrix.transpose (Matrix.of A))
   change fderiv ℝ (fun B : Fin n → Fin n → ℝ => Matrix.det (Matrix.of B)) G
     (Matrix.of G * (Matrix.of A).transpose) =
     (Matrix.of A).transpose.trace * (Matrix.of G).det at hr
-  rw [hr]
-  rw [Matrix.trace_transpose]
-  ring
+  rw [Matrix.trace_transpose] at hr
+  refine ((fderiv ℝ (fun B : Fin n → Fin n → ℝ => Matrix.det (Matrix.of B)) G).map_add
+    (Matrix.of A * Matrix.of G) (Matrix.of G * (Matrix.of A).transpose)).trans ?_
+  linear_combination hl + hr
 
 /-- The positive density differentiates to `trace A * density`, with no definiteness assumption. -/
 theorem fderiv_density_compatible (G A : Fin n → Fin n → ℝ)
@@ -97,15 +97,24 @@ theorem fderiv_density_compatible (G A : Fin n → Fin n → ℝ)
       Matrix.trace (Matrix.of A) * Real.sqrt |Matrix.det (Matrix.of G)| := by
   have hd := ((contDiff_matrix_det (n := n) (r := 1)).differentiable (by simp) G).hasFDerivAt
   have hs := (hd.abs hG).sqrt (abs_ne_zero.mpr hG)
-  rw [hs.fderiv]
-  simp only [smul_apply, smul_eq_mul, fderiv_det_compatible]
+  have key (D : Fin n → Fin n → ℝ) :
+      fderiv ℝ (fun B : Fin n → Fin n → ℝ => Real.sqrt |Matrix.det (Matrix.of B)|) G D =
+        1 / (2 * Real.sqrt |Matrix.det (Matrix.of G)|) *
+          ((SignType.sign (Matrix.det (Matrix.of G)) : ℝ) *
+            fderiv ℝ (fun B : Fin n → Fin n → ℝ => Matrix.det (Matrix.of B)) G D) := by
+    rw [hs.fderiv]
+    simp only [smul_apply, smul_eq_mul]
+  refine (key _).trans ?_
+  rw [fderiv_det_compatible]
   have hp : 0 < Real.sqrt |Matrix.det (Matrix.of G)| := Real.sqrt_pos.mpr (abs_pos.mpr hG)
   have hsq := Real.sq_sqrt (abs_nonneg (Matrix.det (Matrix.of G)))
   have hsign : (SignType.sign (Matrix.det (Matrix.of G)) : ℝ) * Matrix.det (Matrix.of G) =
       |Matrix.det (Matrix.of G)| := by
     rcases lt_or_gt_of_ne hG with h | h
-    · simp [SignType.sign, h, not_lt.mpr h.le, abs_of_neg h]
-    · simp [SignType.sign, h, abs_of_pos h]
+    · rw [sign_neg h, abs_of_neg h]
+      simp
+    · rw [sign_pos h, abs_of_pos h]
+      simp
   calc
     _ = Matrix.trace (Matrix.of A) *
         ((SignType.sign (Matrix.det (Matrix.of G)) : ℝ) * Matrix.det (Matrix.of G)) /

@@ -14,9 +14,6 @@ public import ProjectAinos.SmoothGeometry.Localization
 
 noncomputable section
 
-set_option backward.isDefEq.respectTransparency false
-set_option backward.defeqAttrib.useBackward true
-
 universe u
 
 namespace ProjectAinos.SmoothGeometry
@@ -34,8 +31,8 @@ def scheme (X : LocallyRingedSpace.{u})
     obtain ⟨A, f, hx, hf⟩ := h x
     let U : Opens X.carrier := ⟨Set.range f.base, hf.base_open.isOpen_range⟩
     let : IsOpenImmersion f := hf
-    exact ⟨⟨U, hx⟩, A, ⟨isoOfRangeEq (X.ofRestrict U.isOpenEmbedding) f
-      (Subtype.range_coe_subtype)⟩⟩
+    exact ⟨⟨U, hx⟩, A, ⟨isoOfRangeEq (Y := Spec.locallyRingedSpaceObj A)
+      (X.ofRestrict U.isOpenEmbedding) f (Subtype.range_coe_subtype)⟩⟩
 
 end LocallyRingedSpace.IsOpenImmersion
 
@@ -46,7 +43,9 @@ theorem exists_affine_open (X : Scheme.{u}) (x : X) :
     ∃ (A : SmoothRingCat.{u}) (f : Spec.locallyRingedSpaceObj A ⟶ X.toSmoothLocallyRingedSpace),
       x ∈ Set.range f.base ∧ LocallyRingedSpace.IsOpenImmersion f := by
   obtain ⟨U, A, ⟨e⟩⟩ := X.local_affine x
-  refine ⟨A, e.inv ≫ X.toSmoothLocallyRingedSpace.ofRestrict U.isOpenEmbedding, ?_, inferInstance⟩
+  refine ⟨A, e.inv ≫ X.toSmoothLocallyRingedSpace.ofRestrict U.isOpenEmbedding, ?_,
+    LocallyRingedSpace.IsOpenImmersion.comp e.inv
+      (X.toSmoothLocallyRingedSpace.ofRestrict U.isOpenEmbedding)⟩
   let y : U.val := ⟨x, U.property⟩
   refine ⟨e.hom.base y, ?_⟩
   have he := congrArg (fun f : X.toSmoothLocallyRingedSpace.restrict U.isOpenEmbedding ⟶

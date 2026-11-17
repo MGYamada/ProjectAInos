@@ -10,7 +10,6 @@ interior-product expression comes from raising the *first* index of F.
 -/
 @[expose] public section
 noncomputable section
-set_option backward.isDefEq.respectTransparency false
 open Set Filter
 open scoped Topology ContDiff
 namespace ProjectAinos.Electrodynamics

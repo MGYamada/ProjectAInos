@@ -19,8 +19,6 @@ This is Joyce's general localization, not an ordinary ring localization.
 
 noncomputable section
 
-set_option backward.isDefEq.respectTransparency false
-
 namespace ProjectAinos.SmoothAlgebra
 
 open SmoothRing

@@ -17,7 +17,6 @@ connection. Local existence and uniqueness are derived analytically.
 
 @[expose] public section
 noncomputable section
-set_option backward.isDefEq.respectTransparency false
 
 open Bundle FiberBundle ContinuousLinearMap Set Metric
 open scoped Manifold ContDiff Topology NNReal

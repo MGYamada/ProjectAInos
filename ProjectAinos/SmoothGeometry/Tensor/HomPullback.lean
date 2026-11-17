@@ -16,7 +16,6 @@ in the normed local models, without norms on tangent fibres.
 
 @[expose] public section
 noncomputable section
-set_option backward.isDefEq.respectTransparency false
 
 open Bundle ContinuousLinearMap
 open scoped Manifold Topology ContDiff

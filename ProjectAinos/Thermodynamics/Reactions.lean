@@ -20,8 +20,6 @@ composition, and invertible scaling as explicit premises.
 
 @[expose] public section
 
-set_option backward.isDefEq.respectTransparency false
-
 noncomputable section
 
 open scoped NNReal

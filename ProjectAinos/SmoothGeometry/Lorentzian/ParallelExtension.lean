@@ -15,7 +15,6 @@ finite segment, without a global manifold frame or a completeness premise.
 
 @[expose] public section
 noncomputable section
-set_option backward.isDefEq.respectTransparency false
 
 open Bundle FiberBundle ContinuousLinearMap Set Metric
 open scoped Manifold ContDiff Topology

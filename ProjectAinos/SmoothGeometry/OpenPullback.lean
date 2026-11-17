@@ -12,9 +12,6 @@ public import ProjectAinos.SmoothGeometry.SmoothPresheaf
 
 noncomputable section
 
-set_option backward.isDefEq.respectTransparency false
-set_option backward.defeqAttrib.useBackward true
-
 namespace ProjectAinos.SmoothGeometry
 
 open SmoothAlgebra CategoryTheory CategoryTheory.Limits TopologicalSpace

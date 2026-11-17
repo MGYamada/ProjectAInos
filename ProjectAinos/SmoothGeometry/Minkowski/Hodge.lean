@@ -10,7 +10,6 @@ public import ProjectAinos.SmoothGeometry.DifferentialForm.HodgeBasis
 /-! # Oriented Minkowski Hodge duality on continuous differential forms -/
 @[expose] public section
 noncomputable section
-set_option backward.isDefEq.respectTransparency false
 open Module exteriorPower
 namespace ProjectAinos.SmoothGeometry.Minkowski
 open DifferentialForm

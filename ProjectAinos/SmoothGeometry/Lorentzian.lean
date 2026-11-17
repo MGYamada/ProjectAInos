@@ -22,9 +22,6 @@ Both time-positive and time-negative conventions are explicit parameters.
 
 noncomputable section
 
-set_option backward.isDefEq.respectTransparency false
-set_option backward.defeqAttrib.useBackward true
-
 open scoped Manifold ContDiff BigOperators
 
 namespace ProjectAinos.SmoothGeometry
@@ -103,9 +100,12 @@ def opposite : LorentzMetric σ.opposite d M where
     g.opposite.IsLocallyMinkowski ↔ g.IsLocallyMinkowski := by
   constructor <;> intro h x <;> obtain ⟨U, hx, V, e, he⟩ := h x
   · refine ⟨U, hx, V, e, fun y v w => ?_⟩
-    simpa using he y v w
+    have h := he y v w
+    rw [minkowskiForm_opposite] at h
+    exact neg_injective h
   · refine ⟨U, hx, V, e, fun y v w => ?_⟩
-    simpa using congrArg Neg.neg (he y v w)
+    rw [minkowskiForm_opposite]
+    exact congrArg Neg.neg (he y v w)
 
 end LorentzMetric
 
@@ -142,7 +142,7 @@ def minkowskiMetric (σ : LorentzConvention) (d : ℕ) : LorentzMetric σ d (Min
   form _ := minkowskiForm σ d
   smooth := by
     intro x
-    rw [contMDiffAt_section]
+    refine (contMDiffAt_section x).mpr ?_
     convert contMDiffAt_const (c := minkowskiForm σ d) using 1
     funext y
     ext v w

@@ -16,7 +16,6 @@ actual tangent bundle; global bijectivity is not required.
 
 @[expose] public section
 noncomputable section
-set_option backward.isDefEq.respectTransparency false
 
 open Bundle ContinuousLinearMap
 open scoped Manifold ContDiff
@@ -88,7 +87,9 @@ def pullback (f : M → N) (hf : ContMDiff I I ∞ f)
       ⟨ContinuousLinearEquiv.refl ℝ (TangentSpace I x), by rw [mfderiv_id]; rfl⟩) = h := by
   apply LorentzMetric.ext
   intro x v w
-  simp [pullback_form, mfderiv_id]
+  refine (h.pullback_form id contMDiff_id _ x v w).trans ?_
+  rw [mfderiv_id]
+  rfl
 
 /-- Pullback of a metric commutes with reversal of its overall sign. -/
 @[simp] theorem pullback_opposite (f : M → N) (hf : ContMDiff I I ∞ f)

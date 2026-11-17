@@ -14,7 +14,6 @@ public import ProjectAinos.SmoothGeometry.Lorentzian.ParallelCoframe
 
 @[expose] public section
 noncomputable section
-set_option backward.isDefEq.respectTransparency false
 
 open ContinuousLinearMap
 open scoped Manifold ContDiff

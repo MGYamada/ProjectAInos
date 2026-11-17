@@ -12,7 +12,6 @@ public import ProjectAinos.SmoothGeometry.Lorentzian.PullbackExamples
 
 @[expose] public section
 noncomputable section
-set_option backward.isDefEq.respectTransparency false
 
 open scoped Manifold ContDiff
 
@@ -35,6 +34,7 @@ theorem spatial_shear (p v : Plane) :
   rw [smoothPullback_apply]
   change coordinateForm ![1] (fun i => mfderiv 𝓘(ℝ, Plane) 𝓘(ℝ, Plane) shear p (![v] i)) = _
   rw [mfderiv_shear]
+  change coordinateForm ![1] (fun i => shearLinear (2 * p 0) (![v] i)) = _
   simp only [coordinateForm_apply, Matrix.det_fin_one, Matrix.of_apply]
   rfl
 
@@ -46,6 +46,7 @@ theorem area_shear (p v w : Plane) :
   change coordinateForm ![0, 1]
     (fun i => mfderiv 𝓘(ℝ, Plane) 𝓘(ℝ, Plane) shear p (![v, w] i)) = _
   rw [mfderiv_shear]
+  change coordinateForm ![0, 1] (fun i => shearLinear (2 * p 0) (![v, w] i)) = _
   simp only [coordinateForm_apply, Matrix.det_fin_two, Matrix.of_apply,
     Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.cons_val_fin_one]
   change v 0 * (w 1 + 2 * p 0 * w 0) - (v 1 + 2 * p 0 * v 0) * w 0 = _
@@ -57,7 +58,6 @@ theorem spatial_shear_timeAxis (t v : ℝ) :
       (timeAxis : C^∞⟮𝓘(ℝ, ℝ), ℝ; 𝓘(ℝ, Plane), Plane⟯)
       (smoothPullback 𝓘(ℝ, Plane) 𝓘(ℝ, Plane) shearDiffeomorph.toContMDiffMap spatial) t ![v] =
       2 * t * v := by
-  rw [smoothPullback_apply]
   change smoothPullback 𝓘(ℝ, Plane) 𝓘(ℝ, Plane) shearDiffeomorph.toContMDiffMap spatial
     (timeAxis t) (fun i => mfderiv 𝓘(ℝ, ℝ) 𝓘(ℝ, Plane) timeAxis t (![v] i)) = _
   rw [mfderiv_timeAxis]
@@ -71,13 +71,13 @@ theorem spatial_shear_timeAxis (t v : ℝ) :
 theorem area_timeProjection (p v w : Plane) :
     smoothPullback 𝓘(ℝ, Plane) 𝓘(ℝ, Plane)
       (timeProjection : C^∞⟮𝓘(ℝ, Plane), Plane; 𝓘(ℝ, Plane), Plane⟯) area p ![v, w] = 0 := by
-  rw [smoothPullback_apply]
   change coordinateForm ![0, 1]
     (fun i => mfderiv 𝓘(ℝ, Plane) 𝓘(ℝ, Plane) timeProjection p (![v, w] i)) = _
   have hd : mfderiv 𝓘(ℝ, Plane) 𝓘(ℝ, Plane) timeProjection p = timeProjection := by
     rw [mfderiv_eq_fderiv, timeProjection.fderiv]
     rfl
   rw [hd]
+  change coordinateForm ![0, 1] (fun i => timeProjection (![v, w] i)) = _
   simp only [coordinateForm_apply, Matrix.det_fin_two, Matrix.of_apply,
     Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.cons_val_fin_one]
   change (v 0 * 1) * (w 0 * 0) - (v 0 * 0) * (w 0 * 1) = 0

@@ -14,7 +14,6 @@ law is an equality of alternating maps, not an assumed transformation rule.
 
 @[expose] public section
 noncomputable section
-set_option backward.isDefEq.respectTransparency false
 
 open Bundle Set
 open scoped Manifold ContDiff Topology

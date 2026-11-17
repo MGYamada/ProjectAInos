@@ -20,8 +20,6 @@ The universal property works in arbitrary target universes.
 
 noncomputable section
 
-set_option backward.isDefEq.respectTransparency false
-
 namespace ProjectAinos.SmoothAlgebra
 
 open SmoothRing

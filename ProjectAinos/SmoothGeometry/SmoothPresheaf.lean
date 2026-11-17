@@ -16,9 +16,6 @@ and gluing constructions available without discarding the smooth operations.
 
 noncomputable section
 
-set_option backward.isDefEq.respectTransparency false
-set_option backward.defeqAttrib.useBackward true
-
 namespace ProjectAinos.SmoothGeometry.LocallyRingedSpace
 
 open SmoothAlgebra CategoryTheory TopologicalSpace Opposite
@@ -55,7 +52,7 @@ instance smoothPresheafMap_isOpenImmersion {X Y : LocallyRingedSpace}
     have : IsIso (SmoothRingCat.forgetToCommRingCat.map
         ((forgetToSmoothPresheafedSpace.map f).c.app (op (H.base_open.functor.obj U)))) :=
       H.c_iso U
-    exact isIso_of_reflects_iso _ SmoothRingCat.forgetToCommRingCat
+    exact @isIso_of_reflects_iso _ _ _ _ _ _ _ SmoothRingCat.forgetToCommRingCat this _
 
 namespace IsOpenImmersion
 
@@ -67,7 +64,8 @@ def lift (h : Set.range g.base ⊆ Set.range f.base) : Y ⟶ X := by
     (forgetToSmoothPresheafedSpace.map f) (forgetToSmoothPresheafedSpace.map g) h
   let l := AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion.lift f.toLRSHom g.toLRSHom h
   have he : SmoothRingCat.forgetToCommRingCat.mapPresheaf.map k = l.toHom := by
-    apply (cancel_mono f.toHom).mp
+    have hm : Mono (X := X.toPresheafedSpace) (Y := Z.toPresheafedSpace) f.toHom := inferInstance
+    apply (@cancel_mono _ _ _ _ _ f.toHom hm _ _).mp
     exact (SmoothRingCat.forgetToCommRingCat.mapPresheaf.map_comp k
       (forgetToSmoothPresheafedSpace.map f)).symm.trans
       ((congrArg SmoothRingCat.forgetToCommRingCat.mapPresheaf.map

@@ -4,7 +4,6 @@ public import ProjectAinos.Electrodynamics.PolynomialBridge
 /-! # Nonzero degree-zero and degree-one Maxwell jets -/
 @[expose] public section
 noncomputable section
-set_option backward.isDefEq.respectTransparency false
 namespace ProjectAinos.Electrodynamics.Polynomial
 open YM YM.Tensor YM.Analysis YM.Maxwell
 open SmoothGeometry SmoothGeometry.Minkowski SpecialRelativity

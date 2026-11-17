@@ -18,9 +18,6 @@ affineness using the open immersions of the pieces.
 
 noncomputable section
 
-set_option backward.isDefEq.respectTransparency false
-set_option backward.defeqAttrib.useBackward true
-
 universe u
 
 namespace ProjectAinos.SmoothGeometry
@@ -42,7 +39,7 @@ variable (D : GlueData.{u})
 /-- Glue the full C∞-ring-valued sheaves using mathlib's construction. -/
 def toSmoothSheafGlueData : AlgebraicGeometry.SheafedSpace.GlueData SmoothRingCat.{u} where
   toGlueData := D.toGlueData.mapGlueData forgetToSmoothSheafedSpace
-  f_open i j := smoothSheafMap_isOpenImmersion (D.f i j)
+  f_open i j := @smoothSheafMap_isOpenImmersion _ _ (D.f i j) (D.f_open i j)
 
 /-- The underlying glued smooth sheaf. -/
 abbrev smoothGlued := D.toSmoothSheafGlueData.toGlueData.glued
@@ -56,6 +53,7 @@ def underlyingι (i : D.J) : (D.U i).toPresheafedSpace ⟶
 instance underlyingι_open (i : D.J) :
     AlgebraicGeometry.PresheafedSpace.IsOpenImmersion (D.underlyingι i) :=
   underlying_isOpenImmersion (D.toSmoothSheafGlueData.toGlueData.ι i).hom
+    (H := D.toSmoothSheafGlueData.ιIsOpenImmersion i)
 
 theorem underlyingι_jointly_surjective (x : D.smoothGlued.carrier) :
     ∃ (i : D.J) (y : D.U i), (D.underlyingι i).base y = x :=
@@ -77,11 +75,13 @@ def constructedGlued : LocallyRingedSpace where
     obtain ⟨i, y, rfl⟩ := D.underlyingι_jointly_surjective x
     obtain ⟨e, he, hc⟩ := (D.U i).realResidue y
     let : IsLocalHom e := he
-    refine ⟨e.comp ((D.underlyingι i).stalkMap y).hom, inferInstance, ?_⟩
+    have hloc : IsLocalHom (e.comp ((D.underlyingι i).stalkMap y).hom) := inferInstance
+    refine ⟨e.comp ((D.underlyingι i).stalkMap y).hom, hloc, ?_⟩
     intro U hy r
     change e ((D.underlyingι i).stalkMap y
       ((underlyingRingedSpace D.smoothGlued).presheaf.germ U _ hy _)) = r
-    rw [AlgebraicGeometry.PresheafedSpace.stalkMap_germ_apply]
+    refine (congrArg e (AlgebraicGeometry.PresheafedSpace.stalkMap_germ_apply
+      (D.underlyingι i) U y hy _)).trans ?_
     change e ((D.U i).presheaf.germ _ y hy
       ((D.toSmoothSheafGlueData.toGlueData.ι i).hom.c.app (.op U)
         (algebraMap ℝ (D.smoothGlued.presheaf.obj (.op U)) r))) = r
@@ -90,7 +90,9 @@ def constructedGlued : LocallyRingedSpace where
 
 /-- The canonical smooth open immersion of a piece into the glued space. -/
 def constructedι (i : D.J) : D.U i ⟶ D.constructedGlued where
-  toLRSHom := { toHom := D.underlyingι i, prop _ := inferInstance }
+  toLRSHom :=
+    { toHom := D.underlyingι i
+      prop x := (inferInstance : IsLocalHom ((D.underlyingι i).stalkMap x).hom) }
   map_op U := ((D.toSmoothSheafGlueData.toGlueData.ι i).hom.c.app U).map_op
 
 instance constructedι_isOpenImmersion (i : D.J) : IsOpenImmersion (D.constructedι i) :=
@@ -141,9 +143,10 @@ def constructedDesc : D.constructedGlued ⟶ X where
         have hl : IsLocalHom (((D.underlyingι i ≫ d).stalkMap y).hom) := by
           rw [he]
           exact (f i).toLRSHom.prop y
-        rw [AlgebraicGeometry.PresheafedSpace.stalkMap.comp] at hl
-        exact isLocalHom_of_comp (d.stalkMap ((D.underlyingι i).base y)).hom
-          ((D.underlyingι i).stalkMap y).hom }
+        have hl' := (congrArg (fun k => IsLocalHom k.hom)
+          (AlgebraicGeometry.PresheafedSpace.stalkMap.comp (D.underlyingι i) d y)).mp hl
+        exact @isLocalHom_of_comp _ _ _ _ _ _ (d.stalkMap ((D.underlyingι i).base y)).hom
+          ((D.underlyingι i).stalkMap y).hom hl' }
   map_op U := ((D.smoothDesc f hf).hom.c.app U).map_op
 
 @[simp] theorem constructedι_desc (i : D.J) :
@@ -269,7 +272,8 @@ Use `glued` for the categorical gluing. -/
 def constructedGlued : Scheme.{u} :=
   Scheme.ofOpenCover D.toLocallyRingedSpaceGlueData.glued fun x => by
     obtain ⟨i, y, rfl⟩ := D.toLocallyRingedSpaceGlueData.ι_jointly_surjective x
-    exact ⟨D.U i, D.toLocallyRingedSpaceGlueData.ι i, ⟨y, rfl⟩, inferInstance⟩
+    exact ⟨D.U i, D.toLocallyRingedSpaceGlueData.ι i, ⟨y, rfl⟩,
+      D.toLocallyRingedSpaceGlueData.ι_isOpenImmersion i⟩
 
 /-- The canonical inclusion of each scheme into its gluing. -/
 def constructedι (i : D.J) : D.U i ⟶ D.constructedGlued :=

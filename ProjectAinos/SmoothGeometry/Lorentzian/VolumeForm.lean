@@ -19,7 +19,6 @@ smooth, nowhere-zero top form.
 
 @[expose] public section
 noncomputable section
-set_option backward.isDefEq.respectTransparency false
 
 open Module Bundle Set
 open scoped Manifold ContDiff Topology
@@ -53,8 +52,8 @@ theorem localVolume_apply (g : LorentzMetric σ d M)
       Matrix.det (fun i j => chartTangentMap e x (v j) i) := by
   change s * g.chartDensity e x *
     coordinateForm id (fun i => mfderiv 𝓘(ℝ, MinkowskiModel d) 𝓘(ℝ, MinkowskiModel d) e x (v i)) = _
-  rw [coordinateForm_apply]
   congr 1
+  refine (coordinateForm_apply id _).trans ?_
   rw [← Matrix.det_transpose]
   rfl
 
@@ -193,7 +192,8 @@ theorem volumeForm_standard (g : LorentzMetric σ d (MinkowskiModel d)) (x : Min
   change chartCoefficients (OpenPartialHomeomorph.refl (MinkowskiModel d))
     (fun y => g.volumeForm (OrientedAtlas.standard (d + 1)) y) x =
     (1 * g.chartDensity (OpenPartialHomeomorph.refl (MinkowskiModel d)) x) • coordinateForm id at h
-  rw [chartCoefficients_refl, one_mul] at h
-  exact h
+  rw [one_mul] at h
+  exact (congrFun (chartCoefficients_refl
+    (fun y => g.volumeForm (OrientedAtlas.standard (d + 1)) y)) x).symm.trans h
 
 end ProjectAinos.SmoothGeometry.LorentzMetric

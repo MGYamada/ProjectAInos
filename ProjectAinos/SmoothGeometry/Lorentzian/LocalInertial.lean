@@ -16,7 +16,6 @@ normal coordinates; no local flatness or completeness is assumed.
 
 @[expose] public section
 noncomputable section
-set_option backward.isDefEq.respectTransparency false
 
 open Bundle VectorField ContinuousLinearMap
 open scoped Manifold ContDiff Topology

@@ -9,7 +9,6 @@ import all Mathlib.LinearAlgebra.ExteriorPower.BilinForm
 /-! # Four-dimensional basis signs and observer decomposition -/
 @[expose] public section
 noncomputable section
-set_option backward.isDefEq.respectTransparency false
 open Module exteriorPower
 namespace ProjectAinos.SmoothGeometry.Minkowski
 open DifferentialForm

@@ -15,7 +15,6 @@ coefficients and spatial correction; none is removed from the scaling class.
 
 @[expose] public section
 noncomputable section
-set_option backward.isDefEq.respectTransparency false
 open ContinuousLinearMap Set TopologicalSpace Metric
 open scoped ContDiff Topology
 

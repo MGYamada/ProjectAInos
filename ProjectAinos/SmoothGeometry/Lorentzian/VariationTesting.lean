@@ -16,7 +16,6 @@ Every test field used in the argument is realized by an actual C² family.
 
 @[expose] public section
 noncomputable section
-set_option backward.isDefEq.respectTransparency false
 
 open Bundle Set Filter MeasureTheory
 open scoped Manifold ContDiff Topology

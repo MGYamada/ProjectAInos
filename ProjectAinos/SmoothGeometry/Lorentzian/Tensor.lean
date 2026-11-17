@@ -17,7 +17,6 @@ metric contraction, with smoothness and coordinate invariance proved.
 
 @[expose] public section
 noncomputable section
-set_option backward.isDefEq.respectTransparency false
 
 open Bundle ContinuousLinearMap
 open scoped Manifold ContDiff BigOperators
@@ -148,7 +147,9 @@ def contractField (B : CovariantTwoTensor d M) : C^∞⟮𝓘(ℝ, MinkowskiMode
     ext v
     exact g.sharp_flat x v
   rw [contract, hid]
-  simp [LinearMap.trace_id, TangentSpace, MinkowskiModel]
+  have h : LinearMap.trace ℝ (Fin (d + 1) → ℝ) LinearMap.id = (d + 1 : ℝ) := by
+    rw [LinearMap.trace_id, Module.finrank_fin_fun, Nat.cast_add, Nat.cast_one]
+  exact h
 
 theorem contract_add (x : M)
     (B C : TangentSpace 𝓘(ℝ, MinkowskiModel d) x →L[ℝ]

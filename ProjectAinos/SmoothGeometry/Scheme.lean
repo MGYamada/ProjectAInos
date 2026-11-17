@@ -19,8 +19,6 @@ are real, and the affine model is Joyce's constructed real spectrum.
 
 noncomputable section
 
-set_option backward.isDefEq.respectTransparency false
-
 universe u
 
 namespace ProjectAinos.SmoothGeometry
