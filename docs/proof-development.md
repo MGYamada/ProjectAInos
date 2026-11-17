@@ -19,6 +19,19 @@ proofs are the SR free-particle comparison, the flat Maxwell action with a
 prescribed current, and the curvature derivative and compact metric variation
 needed for Einstein dynamics.
 
+The proofs of the three field plans are tracked in
+[issue #135](https://github.com/MGYamada/ProjectAinos/issues/135). Each plan now has a
+ledger with one status for each section, a count line and the list of rows closed
+with a remainder, in the vocabulary of the mechanics ledger:
+[special relativity](cinfty-special-relativity.md#ledger) (2 of 14 rows proved),
+[electrodynamics](cinfty-electrodynamics.md#ledger) (none of 66) and
+[general relativity](cinfty-general-relativity.md#ledger) (5 of 39). The baseline
+counts a row as proved only when its whole target is proved; a row with a proved
+core names the core and stays *informal*. Observations are recorded in the notes
+of [special relativity](special-relativity-notes.md),
+[electrodynamics](electrodynamics-notes.md) and
+[general relativity](general-relativity-notes.md). This step adds no Lean proofs.
+
 ## Thermodynamics Proof Development
 
 Issue #27 replaces the physical atomic-only ECH specialization with composite

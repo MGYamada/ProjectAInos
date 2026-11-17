@@ -89,9 +89,8 @@
 ## Ledgers and notes
 
 - Each plan `docs/cinfty-*.md` has one row for each textbook section. A row
-  has one status, and a status is only promoted. The mechanics ledger uses
-  *proved*, *proved modulo interface*, *hypothesis*, *evidence* and
-  *informal*.
+  has one status, and a status is only promoted. The ledgers use *proved*,
+  *proved modulo interface*, *hypothesis*, *evidence* and *informal*.
 - Close a row when it is *proved*, or when its remark names the proved part
   and gives the reason why the rest is not proved.
 - Promote a row to *proved* when its whole target in the dictionary is

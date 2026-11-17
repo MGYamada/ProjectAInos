@@ -52,6 +52,67 @@ Lean definitions and proofs. A future theorem statement, a symbolic calculation,
 or a reference to a classical result does not change that status.
 The detailed evidence table near the end identifies the actual source modules.
 
+### Ledger
+
+The ledger gives one status to each of §§81–119, with the vocabulary of the
+[mechanics ledger](cinfty-mechanics.md#ledger): *proved* (Lean, no `sorry`,
+axioms audited), *proved modulo interface*, *hypothesis*, *evidence* (computer
+algebra only), or *informal*. The status refers to the target of the row in the
+[dictionary](#landau-lifshitz-correspondence), whose last column records the
+baseline. A status is only promoted, and a row whose target is proved only in
+part stays at the lower status, with the proved part named. A row is closed
+when it is *proved*, or when its remark names the proved part and gives the
+reason why the rest is not proved; the rows closed in the second way are
+listed after the count. The wave names F1–F26 are those of
+[issue #135](https://github.com/MGYamada/ProjectAinos/issues/135), which tracks
+completion.
+
+| § | Topic | Status | Lean declarations, or what is missing |
+|---:|:---|:---|:---|
+| 81 | Gravitational fields in nonrelativistic mechanics | proved | `NewtonianMetricFamily`, `native_acceleration_error`, `exists_uniform_newtonian_limit`, `exists_newtonian_limit_with_rate`. Scope: the motion of a particle in a given family of metrics with uniform bounds through two derivatives; the family is not required to solve the field equations (§99) |
+| 82 | The gravitational field in relativistic mechanics | informal | Proved: `LorentzMetric`, `LorentzManifold`, `LorentzMetric.opposite`. Missing: the measurements of an observer (F9) |
+| 83 | Curvilinear co-ordinates | proved | `chartField_transition`, `leviCivita_chart_transition`, `chartChristoffel_transformation`, `chartCurvature_transformation`. Scope: the overlap of two smooth charts of the manifold |
+| 84 | Distances and time intervals | informal | Proved: `properTime`, `properTime_integrable`, `properTime_add`, `properTime_reparametrize`, `properTime_chart`, `exists_finite_properTime_parameter`. Missing: the distances measured by an observer (F9) |
+| 85 | Covariant differentiation | informal | Proved: `leviCivita` on vector fields, `Tensor.bilinearCovariantDerivative`, `twoFormDerivative`. Missing: the derivative of the tensors of the other types, in the first place of the curvature (F8, F10) |
+| 86 | The relation of the Christoffel symbols to the metric tensor | proved | `leviCivita`, `isLeviCivita_leviCivita`, `IsLeviCivita.eq_leviCivita`, `christoffel_eq`, `chartChristoffel_eq`, `chartChristoffel_symmetric` |
+| 87 | Motion of a particle in a gravitational field | proved | `quadraticStationary_iff_geodesic`, `freeStationary_iff_acceleration`, `freeStationary_iff_tangential`, `freeStationary_iff_localGeodesic`, `exists_geodesic`, `geodesic_unique`. Scope: variations with fixed end points; the action of a massive particle along a timelike curve, the quadratic action without a causal restriction |
+| 88 | The constant gravitational field | informal | Planned: Killing fields, the conserved energy, the red shift between stationary observers (F9) |
+| 89 | Rotation | informal | Planned: rotating co-ordinates in Minkowski space (F9) |
+| 90 | The equations of electrodynamics in the presence of a gravitational field | informal | Proved: `Curved.Maxwell`, `Curved.maxwell_iff_components`, `Curved.sourced_iff_divergence`, `Curved.current_closed_iff_divergence`. Missing: the action of the field and of a charge on a curved background (F12) |
+| 91 | The curvature tensor | proved | `curvature`, `curvature_apply`, `curvatureTensor`, `chartCurvature_eq`, `curvature_naturality`, `isLocallyMinkowski_iff_curvature_eq_zero` |
+| 92 | Properties of the curvature tensor | informal | Proved: `curvature_swap`, `curvature_first_bianchi`, `curvature_skewAdjoint`, `curvature_pair_interchange`, `ricci_symmetric`. Missing: the differential identity of Bianchi and its contraction (F10) |
+| 93 | The action function for the gravitational field | informal | Planned (F11) |
+| 94 | The energy-momentum tensor | informal | Planned (F12) |
+| 95 | The Einstein equations | informal | Planned (F12) |
+| 96 | The energy-momentum pseudotensor of the gravitational field | informal | Planned: the identities in given co-ordinates (F13); the charges at infinity need decay hypotheses |
+| 97 | The synchronous reference system | informal | Planned (F13) |
+| 98 | The tetrad representation of the Einstein equations | informal | Planned (F13) |
+| 99 | Newton's law | informal | Planned (F18). It is not §81: here the metric solves the field equations |
+| 100 | The centrally symmetric gravitational field | informal | Planned (F14) |
+| 101 | Motion in a centrally symmetric gravitational field | informal | Planned (F14). The reduction with respect to cyclic co-ordinates and the quadrature exist in `Mechanics` |
+| 102 | Gravitational collapse of a spherical body | informal | Planned (F25) |
+| 103 | Gravitational collapse of a dustlike sphere | informal | Planned (F25) |
+| 104 | Gravitational collapse of nonspherical and rotating bodies | informal | Planned: the verification of the rotating solution (F14) |
+| 105 | Gravitational fields at large distances from bodies | informal | Planned (F24) |
+| 106 | The equations of motion of a system of bodies in the second approximation | informal | Planned (F24) |
+| 107 | Weak gravitational waves | informal | Planned (F18) |
+| 108 | Gravitational waves in curved space-time | informal | Planned (F24) |
+| 109 | Strong gravitational waves | informal | Planned (F18) |
+| 110 | Radiation of gravitational waves | informal | Planned: needs the retarded Green operator (F24) |
+| 111 | Isotropic space | informal | Planned (F15) |
+| 112 | The closed isotropic model | informal | Planned (F15). The quadrature on an interval of monotone expansion exists in `Mechanics` |
+| 113 | The open isotropic model | informal | Planned (F15) |
+| 114 | The red shift | informal | Planned (F15) |
+| 115 | Gravitational stability of an isotropic universe | informal | Planned (F24) |
+| 116 | Homogeneous spaces | informal | Planned (F15) |
+| 117 | The flat anisotropic model | informal | Planned (F15) |
+| 118 | Oscillating regime of approach to a singular point | informal | Open research target (F25) |
+| 119 | The time singularity in the general cosmological solution of the Einstein equations | informal | Open research target; the focusing of a congruence of geodesics is the planned proved part (F25) |
+
+Count: 5 proved, 34 informal.
+
+Closed with a stated remainder: none.
+
 ### After the mechanics programme
 
 The [mechanics ledger](cinfty-mechanics.md#ledger) records all 52 sections as

@@ -138,6 +138,8 @@ Lean architecture, and the distinction between proved results and future work:
 The plans carry forward [issue #8](https://github.com/MGYamada/ProjectAinos/issues/8)
 and identify the next proofs for free relativistic particles, the Maxwell
 action with a prescribed current, and the differential Bianchi identity.
+Each plan has a ledger with one status for each section;
+[issue #135](https://github.com/MGYamada/ProjectAinos/issues/135) tracks the proofs.
 
 Topic 6 follows the provisional Boltzmannian typicality plan in
 [issue #55](https://github.com/MGYamada/ProjectAinos/issues/55). Its guiding references are
