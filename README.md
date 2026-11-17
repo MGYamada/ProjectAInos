@@ -317,8 +317,13 @@ co-ordinates are instances.
 For integrals in involution on the canonical phase space, a compact connected
 level set with independent differentials is a torus: the joint flow of the
 Hamiltonian fields is transitive on it, its periods form a lattice, and the
-motion is conditionally periodic. The action–angle variables near the torus
-are not yet proved.
+motion is conditionally periodic. Near the torus there are action–angle
+variables: a continuously differentiable chart `Ψ(J, φ)` with the period `2π`
+in the angles, injective up to these periods, in which the symplectic form is
+`Σₖ dφₖ ∧ dJₖ`, the integrals are functions of the actions, the flow of each
+integral moves the angles with the velocities `∂Hᵢ/∂Jₖ`, and
+`Jₖ = (1/2π) ∮ p dq` over the cycles of the tori (the theorem of Liouville and
+Arnold); a system of oscillators is the instance.
 Symplectic forms on manifolds and
 Dirac brackets are not implemented. Galilean symmetry as a group action and the topics of 2.1 and
 2.4 have no Lean counterpart yet. The

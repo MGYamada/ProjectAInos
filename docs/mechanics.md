@@ -1656,7 +1656,92 @@ elements `Fᵢ` of the phase space ring with `{Fᵢ, Fⱼ} = 0`. The fields are
 the hypotheses of the theorem on a level set with positive energies, and
 `exists_torus_chart_oscillators` is its conclusion.
 
-The action–angle variables in a neighbourhood of a torus are not treated.
+## Action–angle variables near an invariant torus
+
+The second half of the theorem, for the same integrals and a point `x₀` of the
+level set. `g^t` is the joint flow of the fields `hamFields F`.
+
+`Poisson/JointFlowSymplectic`: `symplecticForm_hamiltonianField`,
+`ω(X_H(z), w) = dH(z) w`. `jointField_hamiltonianField`: `Σᵢ tᵢ X_{Fᵢ}` is the
+Hamiltonian field of `Σᵢ tᵢ Fᵢ`, so the joint flow preserves the symplectic form
+(`symplecticForm_fderiv_jointFlow`) and carries each field into itself
+(`fderiv_jointFlow_hamiltonianField`). `symplecticForm_jointFlow`: for the
+derivatives of `(t, y) ↦ g^t y`,
+`ω(Σ τᵢ Xᵢ + Dg v, Σ τ′ᵢ Xᵢ + Dg v′) = ω(v, v′) + Σᵢ (τᵢ dFᵢ(y) v′ − τ′ᵢ dFᵢ(y) v)`.
+
+`Poisson/LagrangianSection`: `gradientMap F x a = Σₖ aₖ ∇Fₖ(x)`. The symplectic
+form vanishes on its image (`symplecticForm_gradientMap`) and `DF(x)` is
+invertible on it where the differentials are independent (`exists_gram_equiv`).
+
+`Poisson/PeriodChart`: `sectionPoint F x₀ s = x₀ + gradientMap F x₀ s`,
+`torusMap F x₀ (s, t) = g^t (sectionPoint s)`, and the integrals on the
+transversal `sectionIntegral` with the derivative `sectionDeriv`.
+
+- `IsPeriodChart F x₀ M S e`: `M` is open and invariant with complete flows, `S`
+  is an open set of parameters that contains zero, the transversal over `S`
+  is in `M`, and `e k s` are periods of `sectionPoint s`, twice continuously
+  differentiable in `s`.
+- `exists_isPeriodChart`: such a chart exists near a point of a compact
+  connected level set with independent differentials, with `e k 0` a basis of
+  the periods of the torus.
+- `IsPeriodChart.symplecticForm_torusMap`: in the co-ordinates `(s, t)` the
+  symplectic form is `Σᵢ dtᵢ ∧ d(sectionIntegral)ᵢ`.
+- `IsPeriodChart.sum_fderiv_period_symm`:
+  `Σᵢ ((Deₖ a)ᵢ DGᵢ a′ − (Deₖ a′)ᵢ DGᵢ a) = 0`, from the derivative of
+  `torusMap (s, eₖ(s)) = sectionPoint s`.
+
+`Poisson/AngleMap`: `angleTime e s φ = Σₖ (φₖ/2π) eₖ(s)` and
+`angleMap F x₀ e (s, φ) = torusMap F x₀ (s, angleTime e s φ)`.
+`IsPeriodChart.angleMap_add_period`: the period `2π` in each angle.
+`IsPeriodChart.flow_angleMap`: the flow of `Σᵢ cᵢ X_{Fᵢ}` adds `r ν` to the
+angles if `angleTime e s ν = c`. `actionForm F x₀ e s a k` is
+`(1/2π) Σᵢ eₖ(s)ᵢ DGᵢ(s) a`, and `IsPeriodChart.symplecticForm_angleMap` is
+`ω = Σₖ dφₖ ∧ (actionForm)ₖ` in the co-ordinates `(s, φ)`.
+
+`LineIntegral`: `hasDerivAt_lineIntegral`. For a continuous bilinear form `θ`
+on a normed space and a family of curves `γ(ε, r)` that is twice continuously
+differentiable at the points of the reference curve,
+`d/dε ∫ θ(γ)(∂ᵣγ) dr = [θ(γ)(∂_εγ)] + ∫ (θ(∂_εγ)(∂ᵣγ) − θ(∂ᵣγ)(∂_εγ)) dr`.
+
+`Poisson/LoopAction`: `loopAction F x₀ e k (s, φ)` is `(1/2π) ∮ p dq` over the
+cycle `r ↦ angleMap (s, φ + 2π r 1ₖ)`. `IsPeriodChart.hasDerivAt_loopAction`:
+its derivative in a direction `(a, α)` is `actionForm s a k`.
+`IsPeriodChart.loopAction_eq`: it does not depend on `φ`.
+`IsPeriodChart.hasFDerivAt_actionMap`: `actionMap F x₀ e s`, the integrals over
+the cycles through the transversal, has the derivative `actionForm F x₀ e s`.
+
+`Poisson/ActionAngle`: the structure `IsActionAngle F c B J₀ Ψ H ν` states that
+`B` is open and contains `J₀`; `Ψ` is continuously differentiable on
+`B × ℝ^ι` and `ω(DΨ(a, α), DΨ(a′, α′)) = Σₖ (αₖ a′ₖ − α′ₖ aₖ)`; `Ψ` has the period
+`2π` in each angle; `integralMap F (Ψ (J, φ)) = H J`; `H` is differentiable
+with `∂Hᵢ/∂Jₖ = ν J i k`; the flow of `F i` at the time `r` maps `Ψ (J, φ)` to
+`Ψ (J, φ + r • ν J i)`; `Jₖ` is `(1/2π) ∮ p dq` over the cycle
+`r ↦ Ψ (J, cycleAngle k φ r)`; and `φ ↦ Ψ (J₀, φ)` maps onto the level set
+`F = c`, with two angles giving the same point exactly when they differ by
+multiples of `2π`.
+
+- `exists_actionForm_equiv`: at the torus `actionForm` is invertible.
+  `IsPeriodChart.exists_action_inverse`: the inverse of `actionMap` near the
+  torus, by the inverse function theorem.
+- `angleTime_frequency`: the times of the joint flow for the angular velocities
+  `∂Gᵢ/∂Jₖ` are the unit vector of `Fᵢ`.
+- `IsPeriodChart.exists_isActionAngle`, `exists_isActionAngle`: the action–angle
+  variables exist; the chart of `exists_isActionAngle` is injective up to the
+  periods of the angles.
+- `IsActionAngle.isOpen_image`, `IsActionAngle.levelSet_subset_image`: the image
+  of the chart is open and contains the level set.
+  `IsActionAngle.exists_injective`: on a smaller set of actions,
+  `Ψ (J, φ) = Ψ (J′, φ′)` only when `J = J′` and the angles differ by multiples
+  of `2π`.
+- `IsActionAngle.flow_of_field`: a Hamiltonian `K` with the field
+  `Σᵢ wᵢ(F) X_{Fᵢ}` moves the angles with the velocities `Σᵢ wᵢ(H J) ν J i`;
+  `IsActionAngle.flow_sum` is the case `K = Σᵢ aᵢ Fᵢ`.
+- `exists_isActionAngle_oscillators`: the instance of a system of oscillators
+  with positive energies.
+
+The chart is continuously differentiable; the periods are twice continuously
+differentiable on the transversal. A symplectic manifold other than the
+canonical phase space is not treated.
 
 ## The phase volume of the oscillator
 
@@ -2352,6 +2437,13 @@ semi-major axis is not computed.
 | [Separation/Coordinates](../ProjectAInos/Mechanics/Separation/Coordinates.lean) | `System.kinetic`, `System.potential`, `System.hamiltonian_eq_legendre`, `cylindrical_speed_sq`, `spherical_kinetic`, `parabolic_kinetic`, `elliptic_kinetic`, `spherical`, `hamiltonian_spherical`, `kinetic_spherical`, `det_spherical`, `parabolic`, `hamiltonian_parabolic`, `kinetic_parabolic`, `det_parabolic`, `elliptic`, `hamiltonian_elliptic`, `kinetic_elliptic`, `det_elliptic`, `det_ne_zero_spherical`, `det_ne_zero_parabolic`, `det_ne_zero_elliptic`, `radicand_pos_parabolic_free` |
 | [Poisson/InvariantTorus](../ProjectAInos/Mechanics/Poisson/InvariantTorus.lean) | `integralMap`, `fderiv_val_hamiltonianField`, `fderiv_integralMap_hamiltonianField`, `pairwiseCommute_hamiltonianField`, `linearIndependent_hamiltonianField`, `surjective_fderiv_integralMap`, `exists_torus_chart_of_involution` |
 | [Poisson/OscillatorTorus](../ProjectAInos/Mechanics/Poisson/OscillatorTorus.lean) | `oscillatorEnergy`, `oscillatorEnergy_val`, `bracket_oscillatorEnergy`, `linearIndependent_fderiv_oscillatorEnergy`, `isCompact_oscillator_levelSet`, `isPreconnected_oscillator_levelSet`, `exists_torus_chart_oscillators` |
+| [Poisson/JointFlowSymplectic](../ProjectAInos/Mechanics/Poisson/JointFlowSymplectic.lean) | `symplecticForm_hamiltonianField`, `jointField_hamiltonianField`, `symplecticForm_fderiv_jointFlow`, `fderiv_jointFlow_hamiltonianField`, `symplecticForm_jointFlow` |
+| [Poisson/LagrangianSection](../ProjectAInos/Mechanics/Poisson/LagrangianSection.lean) | `gradient`, `gradientMap`, `symplecticForm_gradientMap`, `exists_gram_equiv` |
+| [Poisson/PeriodChart](../ProjectAInos/Mechanics/Poisson/PeriodChart.lean) | `sectionPoint`, `torusMap`, `IsPeriodChart`, `exists_isPeriodChart`, `sectionIntegral`, `sectionDeriv`, `IsPeriodChart.fderiv_torusMap`, `IsPeriodChart.symplecticForm_torusMap`, `IsPeriodChart.sum_fderiv_period_symm` |
+| [Poisson/AngleMap](../ProjectAInos/Mechanics/Poisson/AngleMap.lean) | `angleTime`, `angleMap`, `actionForm`, `IsPeriodChart.angleMap_add_period`, `IsPeriodChart.flow_angleMap`, `IsPeriodChart.fderiv_angleMap`, `IsPeriodChart.symplecticForm_angleMap` |
+| [LineIntegral](../ProjectAInos/Mechanics/LineIntegral.lean) | `hasDerivAt_lineIntegral` |
+| [Poisson/LoopAction](../ProjectAInos/Mechanics/Poisson/LoopAction.lean) | `cycleAngle`, `loopAction`, `actionMap`, `cycleFamily`, `IsPeriodChart.hasDerivAt_loopAction`, `IsPeriodChart.loopAction_eq`, `IsPeriodChart.hasFDerivAt_actionMap` |
+| [Poisson/ActionAngle](../ProjectAInos/Mechanics/Poisson/ActionAngle.lean) | `IsActionAngle`, `angleTime_frequency`, `exists_actionForm_equiv`, `IsPeriodChart.exists_action_inverse`, `IsPeriodChart.exists_isActionAngle`, `IsActionAngle.isOpen_image`, `IsActionAngle.levelSet_subset_image`, `IsActionAngle.flow_of_field`, `IsActionAngle.flow_sum`, `IsActionAngle.exists_injective`, `exists_isActionAngle`, `exists_isActionAngle_oscillators` |
 | [Oscillations/PhaseVolume](../ProjectAInos/Mechanics/Oscillations/PhaseVolume.lean) | `Oscillator.map_flowMatrix_volume`, `Oscillator.measurePreserving_flowMatrix` |
 | [Poisson/Liouville](../ProjectAInos/Mechanics/Poisson/Liouville.lean) | `divergence`, `divergence_eq`, `divergence_hamiltonian`, `divergence_dissipativeField`, `Oscillator.divergence_dissipativeField` |
 | [Poisson/HamiltonianField](../ProjectAInos/Mechanics/Poisson/HamiltonianField.lean) | `realCurve`, `lift_apply_const`, `isIntegralCurve_iff_hasDerivAt`, `isTrajectory_iff_hasDerivAt`, `traceCLM_fderiv_realField`, `hamiltonianField`, `contDiff_hamiltonianField`, `isTrajectory_canonical_iff_hasDerivAt`, `traceCLM_fderiv_hamiltonianField`, `volume_image_hamiltonianFlow`, `measurePreserving_hamiltonianFlow`, `IsTrajectory.flow_eq`, `exists_isTrajectory` |

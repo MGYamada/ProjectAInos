@@ -65,25 +65,21 @@ theorem isInvariantSet_levelSet (hX : ∀ i, ContDiff ℝ ∞ (X i)) (hF : ContD
 
 variable [FiniteDimensional ℝ E]
 
-/-- A chart at a point of a regular level set: `(t, s) ↦ g^t (x + L s)` is a
-homeomorphism near zero, and its points with `s ≠ 0` are not on the level
-set. -/
-theorem exists_levelSet_chart (hX : ∀ i, ContDiff ℝ ∞ (X i)) (hF : ContDiff ℝ ∞ F)
-    (htan : ∀ i y, fderiv ℝ F y (X i y) = 0) {x : E} (hx : F x = c)
-    (hind : LinearIndependent ℝ fun i => X i x) (hsurj : Function.Surjective (fderiv ℝ F x))
-    (hdim : finrank ℝ E = Fintype.card ι + Fintype.card κ) :
-    ∃ (e : OpenPartialHomeomorph ((ι → ℝ) × (κ → ℝ)) E) (L : (κ → ℝ) →L[ℝ] E),
+/-- A chart at a point `x` for a transversal `L` to the level set: if
+`DF(x) ∘ L` is invertible, `(t, s) ↦ g^t (x + L s)` is a homeomorphism near zero
+with a smooth inverse at `x`, the function `F` on its image depends only on
+`s`, and `s ↦ F (x + L s)` is injective on the values of `s` of the chart. -/
+theorem exists_levelSet_chart_of_transversal (hX : ∀ i, ContDiff ℝ ∞ (X i))
+    (hF : ContDiff ℝ ∞ F) (htan : ∀ i y, fderiv ℝ F y (X i y) = 0) {x : E}
+    (hind : LinearIndependent ℝ fun i => X i x)
+    (hdim : finrank ℝ E = Fintype.card ι + Fintype.card κ) (L : (κ → ℝ) →L[ℝ] E)
+    (N : (κ → ℝ) ≃L[ℝ] (κ → ℝ)) (hFL : ∀ s, fderiv ℝ F x (L s) = N s) :
+    ∃ (e : OpenPartialHomeomorph ((ι → ℝ) × (κ → ℝ)) E) (S₀ : Set (κ → ℝ)),
       ((0 : ι → ℝ), (0 : κ → ℝ)) ∈ e.source ∧
-      (∀ p, e p = jointFlow X p.1 (x + L p.2)) ∧
-      ∀ p ∈ e.source, F (e p) = c → p.2 = 0 := by
-  -- a right inverse of the derivative of `F`
-  obtain ⟨L₀, hL₀⟩ := (fderiv ℝ F x : E →ₗ[ℝ] κ → ℝ).exists_rightInverse_of_surjective
-    (LinearMap.range_eq_top.mpr hsurj)
-  obtain ⟨L, hL⟩ : ∃ L : (κ → ℝ) →L[ℝ] E, ∀ s, L s = L₀ s :=
-    ⟨LinearMap.toContinuousLinearMap L₀, fun s => rfl⟩
-  have hFL : ∀ s, fderiv ℝ F x (L s) = s := fun s => by
-    rw [hL]
-    exact LinearMap.congr_fun hL₀ s
+      (∀ p, e p = jointFlow X p.1 (x + L p.2)) ∧ IsOpen S₀ ∧ (0 : κ → ℝ) ∈ S₀ ∧
+      InjOn (fun s => F (x + L s)) S₀ ∧
+      (∀ p ∈ e.source, p.2 ∈ S₀ ∧ F (e p) = F (x + L p.2)) ∧
+      ContDiffAt ℝ ∞ e.symm x := by
   -- the derivative of `(t, s) ↦ g^t (x + L s)` at zero
   obtain ⟨D, hD, hDstrict⟩ := hasFDerivAt_jointFlow_zero hX x
   obtain ⟨A, hA⟩ : ∃ A : (ι → ℝ) × (κ → ℝ) →L[ℝ] (ι → ℝ) × E, ∀ p, A p = (p.1, L p.2) :=
@@ -113,9 +109,10 @@ theorem exists_levelSet_chart (hX : ∀ i, ContDiff ℝ ∞ (X i)) (hF : ContDif
     rw [hDA] at hp
     have h1 := congrArg (fderiv ℝ F x) hp
     rw [map_add, hFL, map_zero, fderiv_apply_jointField htan, zero_add] at h1
-    rw [h1, map_zero, add_zero] at hp
+    have h2 : p.2 = 0 := N.map_eq_zero_iff.mp h1
+    rw [h2, map_zero, add_zero] at hp
     have h3 : p.1 = 0 := funext fun i => Fintype.linearIndependent_iff.mp hind p.1 hp i
-    exact Prod.ext h3 h1
+    exact Prod.ext h3 h2
   have hfin : finrank ℝ ((ι → ℝ) × (κ → ℝ)) = finrank ℝ E := by
     rw [finrank_prod, finrank_fintype_fun_eq_card, finrank_fintype_fun_eq_card, hdim]
   obtain ⟨eq, heq⟩ : ∃ eq : ((ι → ℝ) × (κ → ℝ)) ≃L[ℝ] E,
@@ -133,17 +130,15 @@ theorem exists_levelSet_chart (hX : ∀ i, ContDiff ℝ ∞ (X i)) (hF : ContDif
     rfl
   -- `s ↦ F (x + L s)` is injective near zero
   have hG : HasStrictFDerivAt (fun s : κ → ℝ => F (x + L s))
-      ((ContinuousLinearEquiv.refl ℝ (κ → ℝ) : (κ → ℝ) ≃L[ℝ] κ → ℝ) :
-        (κ → ℝ) →L[ℝ] κ → ℝ) 0 := by
+      (N : (κ → ℝ) →L[ℝ] κ → ℝ) 0 := by
     have hFs : HasStrictFDerivAt F (fderiv ℝ F x) (x + L 0) := by
       rw [map_zero, add_zero]
       exact hF.contDiffAt.hasStrictFDerivAt (by simp)
     have hLs : HasStrictFDerivAt (fun s : κ → ℝ => x + L s) L 0 :=
       L.hasStrictFDerivAt.const_add x
     have h1 := hFs.comp 0 hLs
-    have e : (fderiv ℝ F x).comp L =
-        ((ContinuousLinearEquiv.refl ℝ (κ → ℝ) : (κ → ℝ) ≃L[ℝ] κ → ℝ) :
-          (κ → ℝ) →L[ℝ] κ → ℝ) := ContinuousLinearMap.ext fun s => hFL s
+    have e : (fderiv ℝ F x).comp L = (N : (κ → ℝ) →L[ℝ] κ → ℝ) :=
+      ContinuousLinearMap.ext fun s => hFL s
     rw [e] at h1
     exact h1
   obtain ⟨eG, heG⟩ : ∃ eG : OpenPartialHomeomorph (κ → ℝ) (κ → ℝ),
@@ -173,18 +168,75 @@ theorem exists_levelSet_chart (hX : ∀ i, ContDiff ℝ ∞ (X i)) (hF : ContDif
     change ((1 : ℝ), ((0 : ι → ℝ), x + L 0)) ∈ flowDomain (extendedJointField X)
     rw [map_zero, add_zero]
     exact (flow_extendedJointField hX (one_mem_flowDomain_jointField_zero X x).1).1
-  refine ⟨e₀.restrOpen V hVopen, L, ⟨h0src, h0V⟩, he₀coe, fun p hp hFp => ?_⟩
+  have hinjG : InjOn (fun s => F (x + L s)) eG.source := fun s hs s' hs' h => by
+    refine eG.injOn hs hs' ?_
+    rw [heGcoe, heGcoe]
+    exact h
+  have hx0 : e₀ (0, 0) = x := by
+    rw [he₀coe]
+    simp only [map_zero, add_zero]
+    exact jointFlow_zero_apply X x
+  have hsymm : ContDiffAt ℝ ∞ (e₀.restrOpen V hVopen).symm x := by
+    have hmem0 : ((0 : ι → ℝ), (0 : κ → ℝ)) ∈ (e₀.restrOpen V hVopen).source := ⟨h0src, h0V⟩
+    have hxt : x ∈ (e₀.restrOpen V hVopen).target := by
+      have h := (e₀.restrOpen V hVopen).map_source hmem0
+      have hc : (e₀.restrOpen V hVopen) (0, 0) = x := hx0
+      rwa [hc] at h
+    have hs0 : (e₀.restrOpen V hVopen).symm x = (0, 0) := by
+      have h := (e₀.restrOpen V hVopen).left_inv hmem0
+      have hc : (e₀.restrOpen V hVopen) (0, 0) = x := hx0
+      rwa [hc] at h
+    have hfun : ((e₀.restrOpen V hVopen : OpenPartialHomeomorph ((ι → ℝ) × (κ → ℝ)) E) :
+        (ι → ℝ) × (κ → ℝ) → E) = fun p => jointFlow X p.1 (x + L p.2) := funext he₀coe
+    refine OpenPartialHomeomorph.contDiffAt_symm _ (f₀' := eq) hxt ?_ ?_
+    · rw [hs0, hfun]
+      exact hΘ.hasFDerivAt
+    · rw [hs0, hfun]
+      have hsm : ContDiffAt ℝ ∞ (fun q : (ι → ℝ) × E => jointFlow X q.1 q.2)
+          ((fun p : (ι → ℝ) × (κ → ℝ) => ((p.1, x + L p.2) : (ι → ℝ) × E)) (0, 0)) := by
+        simp only [map_zero, add_zero]
+        exact contDiffAt_jointFlow hX (one_mem_flowDomain_jointField_zero X x).1
+      exact ContDiffAt.comp (0, 0) (g := fun q : (ι → ℝ) × E => jointFlow X q.1 q.2)
+        (f := fun p : (ι → ℝ) × (κ → ℝ) => ((p.1, x + L p.2) : (ι → ℝ) × E)) hsm
+        (contDiffAt_fst.prodMk (contDiffAt_const.add (L.contDiff.contDiffAt.comp _ contDiffAt_snd)))
+  refine ⟨e₀.restrOpen V hVopen, eG.source, ⟨h0src, h0V⟩, he₀coe, eG.open_source, h0G, hinjG,
+    fun p hp => ?_, hsymm⟩
   have hpV : p ∈ V := hp.2
   rw [hV] at hpV
   have hdom : ((1 : ℝ), x + L p.2) ∈ flowDomain (jointField X p.1) :=
     mem_flowDomain_jointField_of_extended hX hpV.1
-  have h1 : F (jointFlow X p.1 (x + L p.2)) = F (x + L p.2) :=
-    flow_jointField_levelSet hX hF htan p.1 hdom
-  have h2 : F (e₀ p) = c := hFp
-  rw [he₀coe, h1, ← heGcoe] at h2
-  have h3 : eG 0 = c := by
-    rw [heGcoe, map_zero, add_zero, hx]
-  exact eG.injOn hpV.2 h0G (h2.trans h3.symm)
+  refine ⟨hpV.2, ?_⟩
+  have h2 : (e₀.restrOpen V hVopen) p = jointFlow X p.1 (x + L p.2) := he₀coe p
+  rw [h2]
+  exact flow_jointField_levelSet hX hF htan p.1 hdom
+
+/-- A chart at a point of a regular level set: `(t, s) ↦ g^t (x + L s)` is a
+homeomorphism near zero, and its points with `s ≠ 0` are not on the level
+set. -/
+theorem exists_levelSet_chart (hX : ∀ i, ContDiff ℝ ∞ (X i)) (hF : ContDiff ℝ ∞ F)
+    (htan : ∀ i y, fderiv ℝ F y (X i y) = 0) {x : E} (hx : F x = c)
+    (hind : LinearIndependent ℝ fun i => X i x) (hsurj : Function.Surjective (fderiv ℝ F x))
+    (hdim : finrank ℝ E = Fintype.card ι + Fintype.card κ) :
+    ∃ (e : OpenPartialHomeomorph ((ι → ℝ) × (κ → ℝ)) E) (L : (κ → ℝ) →L[ℝ] E),
+      ((0 : ι → ℝ), (0 : κ → ℝ)) ∈ e.source ∧
+      (∀ p, e p = jointFlow X p.1 (x + L p.2)) ∧
+      ∀ p ∈ e.source, F (e p) = c → p.2 = 0 := by
+  -- a right inverse of the derivative of `F`
+  obtain ⟨L₀, hL₀⟩ := (fderiv ℝ F x : E →ₗ[ℝ] κ → ℝ).exists_rightInverse_of_surjective
+    (LinearMap.range_eq_top.mpr hsurj)
+  obtain ⟨L, hL⟩ : ∃ L : (κ → ℝ) →L[ℝ] E, ∀ s, L s = L₀ s :=
+    ⟨LinearMap.toContinuousLinearMap L₀, fun s => rfl⟩
+  have hFL : ∀ s, fderiv ℝ F x (L s) = ContinuousLinearEquiv.refl ℝ (κ → ℝ) s := fun s => by
+    rw [hL]
+    exact LinearMap.congr_fun hL₀ s
+  obtain ⟨e, S₀, h0, he, -, h0S, hinj, hsrc, -⟩ :=
+    exists_levelSet_chart_of_transversal hX hF htan hind hdim L _ hFL
+  refine ⟨e, L, h0, he, fun p hp hFp => ?_⟩
+  have h1 := (hsrc p hp).2
+  rw [hFp] at h1
+  refine hinj (hsrc p hp).1 h0S ?_
+  change F (x + L p.2) = F (x + L 0)
+  rw [← h1, map_zero, add_zero, hx]
 
 /-- On a regular level set the joint flow is locally free. -/
 theorem isLocallyFree_levelSet (hX : ∀ i, ContDiff ℝ ∞ (X i)) (hF : ContDiff ℝ ∞ F)

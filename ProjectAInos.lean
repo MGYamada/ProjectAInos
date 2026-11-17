@@ -102,6 +102,7 @@ public import ProjectAInos.Mechanics.Jet.Prolongation
 public import ProjectAInos.Mechanics.Jet.Standard
 public import ProjectAInos.Mechanics.KnifeEdge
 public import ProjectAInos.Mechanics.Legendre
+public import ProjectAInos.Mechanics.LineIntegral
 public import ProjectAInos.Mechanics.Maupertuis
 public import ProjectAInos.Mechanics.OneDimension.Abel
 public import ProjectAInos.Mechanics.OneDimension.ActionAngle
@@ -141,7 +142,9 @@ public import ProjectAInos.Mechanics.Oscillations.SpringMolecule
 public import ProjectAInos.Mechanics.Oscillations.Symmetry
 public import ProjectAInos.Mechanics.Oscillations.SymmetryTypes
 public import ProjectAInos.Mechanics.Oscillations.Triatomic
+public import ProjectAInos.Mechanics.Poisson.ActionAngle
 public import ProjectAInos.Mechanics.Poisson.ActionFunction
+public import ProjectAInos.Mechanics.Poisson.AngleMap
 public import ProjectAInos.Mechanics.Poisson.AngularMomentum
 public import ProjectAInos.Mechanics.Poisson.Apsides
 public import ProjectAInos.Mechanics.Poisson.AsymmetricTop
@@ -154,15 +157,19 @@ public import ProjectAInos.Mechanics.Poisson.GeneratingFunction
 public import ProjectAInos.Mechanics.Poisson.HamiltonianField
 public import ProjectAInos.Mechanics.Poisson.HeavyTop
 public import ProjectAInos.Mechanics.Poisson.InvariantTorus
+public import ProjectAInos.Mechanics.Poisson.JointFlowSymplectic
 public import ProjectAInos.Mechanics.Poisson.Kepler
 public import ProjectAInos.Mechanics.Poisson.KeplerModel
 public import ProjectAInos.Mechanics.Poisson.KeplerMotion
 public import ProjectAInos.Mechanics.Poisson.KeplerOrbit
+public import ProjectAInos.Mechanics.Poisson.LagrangianSection
 public import ProjectAInos.Mechanics.Poisson.Liouville
 public import ProjectAInos.Mechanics.Poisson.LiouvilleFlow
 public import ProjectAInos.Mechanics.Poisson.LocalAction
+public import ProjectAInos.Mechanics.Poisson.LoopAction
 public import ProjectAInos.Mechanics.Poisson.OrbitIntegral
 public import ProjectAInos.Mechanics.Poisson.OscillatorTorus
+public import ProjectAInos.Mechanics.Poisson.PeriodChart
 public import ProjectAInos.Mechanics.Poisson.PhaseAction
 public import ProjectAInos.Mechanics.Poisson.Quadratic
 public import ProjectAInos.Mechanics.Poisson.ReducedMass
@@ -405,7 +412,9 @@ public import ProjectAInos.SmoothGeometry.ODE.JacobiElliptic
 public import ProjectAInos.SmoothGeometry.ODE.JointFlow
 public import ProjectAInos.SmoothGeometry.ODE.JointFlowSmooth
 public import ProjectAInos.SmoothGeometry.ODE.LevelSetFlow
+public import ProjectAInos.SmoothGeometry.ODE.LevelSetTube
 public import ProjectAInos.SmoothGeometry.ODE.LocalFlow
+public import ProjectAInos.SmoothGeometry.ODE.PeriodFamily
 public import ProjectAInos.SmoothGeometry.ODE.PeriodLattice
 public import ProjectAInos.SmoothGeometry.ODE.Propagator
 public import ProjectAInos.SmoothGeometry.ODE.PropagatorDet
@@ -422,6 +431,7 @@ public import ProjectAInos.SmoothGeometry.ODE.VolterraInverse
 public import ProjectAInos.SmoothGeometry.OpenCover
 public import ProjectAInos.SmoothGeometry.OpenImmersion
 public import ProjectAInos.SmoothGeometry.OpenPullback
+public import ProjectAInos.SmoothGeometry.PeriodicInjective
 public import ProjectAInos.SmoothGeometry.RealSpectrum
 public import ProjectAInos.SmoothGeometry.RealSpectrumTopology
 public import ProjectAInos.SmoothGeometry.Restrict
@@ -527,6 +537,7 @@ public import ProjectAInos.Variational.EulerLagrange
 public import ProjectAInos.Variational.Examples
 public import ProjectAInos.Variational.IntegrationByParts
 public import ProjectAInos.Variational.IntervalParameter
+public import ProjectAInos.Variational.LineDerivative
 public import ProjectAInos.Variational.Local
 public import ProjectAInos.Variational.LocalExtension
 public import ProjectAInos.Variational.ManifoldCurve
