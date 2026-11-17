@@ -64,7 +64,10 @@ jobs:
   lean-subject:
     name: Lean (${{ matrix.name }})
     needs: lean-scope
-    if: needs.lean-scope.outputs.required == 'true'
+    # The three subject jobs are required status checks. A matrix job that is
+    # skipped as a whole reports one check under its unexpanded name, and the
+    # required names never report. So each job always runs, and its steps are
+    # skipped when the change cannot affect Lean.
     runs-on: ubuntu-24.04
     timeout-minutes: 45
     strategy:
@@ -78,23 +81,33 @@ jobs:
           - subject: classical-fields
             name: Classical field theory
     steps:
+      - name: Report whether the Lean steps run
+        env:
+          LEAN_REQUIRED: ${{ needs.lean-scope.outputs.required }}
+        run: |
+          echo "Lean steps required: $LEAN_REQUIRED"
       - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        if: needs.lean-scope.outputs.required == 'true'
         with:
           persist-credentials: false
       - uses: ./.github/actions/lean-setup
+        if: needs.lean-scope.outputs.required == 'true'
         with:
           save-dependencies: ${{ matrix.subject == 'classical-fields' && 'true' || 'false' }}
       - name: Restore subject build cache
+        if: needs.lean-scope.outputs.required == 'true'
         uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25 # v5
         with:
           path: .lake/build
           key: lean-build-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('lean-toolchain', 'lake-manifest.json', 'lakefile.toml') }}-${{ matrix.subject }}-${{ github.sha }}
           restore-keys: lean-build-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('lean-toolchain', 'lake-manifest.json', 'lakefile.toml') }}-${{ matrix.subject }}-
       - name: Build and check the subject
+        if: needs.lean-scope.outputs.required == 'true'
         env:
           LEAN_SUBJECT: ${{ matrix.subject }}
         run: python3 checks/ci.py "$LEAN_SUBJECT" "$RUNNER_TEMP/$LEAN_SUBJECT.tar"
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        if: needs.lean-scope.outputs.required == 'true'
         with:
           name: lean-objects-${{ matrix.subject }}
           path: ${{ runner.temp }}/${{ matrix.subject }}.tar
@@ -108,17 +121,16 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 20
     steps:
-      - name: Require the expected subject results
+      - name: Require the subject results
         env:
           SCOPE_RESULT: ${{ needs.lean-scope.result }}
-          LEAN_REQUIRED: ${{ needs.lean-scope.outputs.required }}
           SUBJECT_RESULT: ${{ needs.lean-subject.result }}
+        # The subject jobs succeed in both cases: after building their
+        # subject, or after skipping their steps.
         run: |
+          echo "Scope: $SCOPE_RESULT. Subjects: $SUBJECT_RESULT."
           test "$SCOPE_RESULT" = success
-          case "$LEAN_REQUIRED:$SUBJECT_RESULT" in
-            true:success|false:skipped) ;;
-            *) echo "Unexpected Lean result: $LEAN_REQUIRED:$SUBJECT_RESULT"; exit 1 ;;
-          esac
+          test "$SUBJECT_RESULT" = success
       - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
         if: needs.lean-scope.outputs.required == 'true'
         with:
