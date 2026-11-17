@@ -470,6 +470,7 @@ public import ProjectAinos.SmoothGeometry.Tensor.Regularity
 public import ProjectAinos.SmoothGeometry.Tensor.Tensoriality
 public import ProjectAinos.SpecialRelativity.Boost
 public import ProjectAinos.SpecialRelativity.Causality
+public import ProjectAinos.SpecialRelativity.CrossSection
 public import ProjectAinos.SpecialRelativity.Decay
 public import ProjectAinos.SpecialRelativity.Einbein
 public import ProjectAinos.SpecialRelativity.ElasticScattering
@@ -483,11 +484,14 @@ public import ProjectAinos.SpecialRelativity.InvariantMass
 public import ProjectAinos.SpecialRelativity.MassShellReduction
 public import ProjectAinos.SpecialRelativity.MaximalProperTime
 public import ProjectAinos.SpecialRelativity.NewtonianExpansion
+public import ProjectAinos.SpecialRelativity.NumberFlux
 public import ProjectAinos.SpecialRelativity.ObserverEnergy
+public import ProjectAinos.SpecialRelativity.OrbitalCharges
 public import ProjectAinos.SpecialRelativity.ParticleAction
 public import ProjectAinos.SpecialRelativity.PoincareAlgebra
 public import ProjectAinos.SpecialRelativity.ProperTime
 public import ProjectAinos.SpecialRelativity.Rapidity
+public import ProjectAinos.SpecialRelativity.ShellMeasure
 public import ProjectAinos.SpecialRelativity.Spacetime
 public import ProjectAinos.SpecialRelativity.SpatialLegendre
 public import ProjectAinos.SpecialRelativity.Velocity

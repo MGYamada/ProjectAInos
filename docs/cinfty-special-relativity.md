@@ -71,15 +71,15 @@ completion.
 | 7 | Four-dimensional velocity | proved | `fourVelocity_unit`, `fourVelocity_metric`, `properTime_null`, `pair_fourVelocity_deriv`, `FutureShell.chart`, `FutureShell.mem_shell_zero_iff`, `FutureShell.zero_notMem_shell`, `Einbein.stationary_iff`, `Einbein.lagrangian_eliminate`, `Einbein.fourVelocity_eq_of_stationary`, `Einbein.stationary_massless_iff`, `Einbein.deriv_eq_smul_of_stationary_massless`, `Einbein.action_reparametrize`. Scope: the orthogonality of the acceleration for a `C²` curve in three space dimensions; the shells and the action with an auxiliary field in `d` dimensions, for `C²` pairs `(x, e)` with `e > 0` on `[a, b]`; the comparison with the action `−m ∫ ds` in three dimensions |
 | 8 | The principle of least action | proved | `freeAction`, `freeLagrangian_contDiffOn`, `free_momentum`, `free_stationary_iff`, `free_stationary_iff_fourVelocity_const`, `free_stationary_iff_inertial`, `hasFDerivAt_kineticMomentum`, `ker_velocityHessian`, `finrank_range_velocityHessian`; for the mass shell `MassShell.isCoisotropic_shellIdeal`, `MassShell.normalizer_shellIdeal_le`, `MassShell.isPoissonHom_toShellCoordinates`, `MassShell.reductionHom_bijective`, `MassShell.isPoissonHom_reductionHom`, `MassShell.initialData_p_zero`. Scope: the action in three space dimensions, `C²` curves with a timelike velocity on `[a, b]`, and `m ≠ 0` for the inertial motion; the mass shell in `d` dimensions, its future sheet and the reduction for `(−+++)` |
 | 9 | Energy and momentum | proved | `kineticMomentum`, `kineticMomentum_eq`, `sharp_kineticMomentum`, `metric_smul_fourVelocity`; the Hamiltonian on all momenta (SR-D7: `FreeParticle.hamiltonian`, `FreeParticle.isTrajectory_iff`, `FreeParticle.sum_sq_hamiltonianField_lt_one`, `FreeParticle.isIntegral_angularMomentum`, `FreeParticle.realCurve_eq_motion`, `FreeParticle.flowDomain_hamiltonianField`); the energy and the momentum measured by an observer (SR-D3: `observerEnergy_pos`, `observerEnergy_sq`, `restForm_observerVelocity_lt_one`, `observerEnergy_transform`, `observerEnergy_change`); the Legendre transformation (SR-D4: `FreeParticle.velocityOfMomentum_legendre`, `FreeParticle.legendre_velocityOfMomentum`, `FreeParticle.energy_eq_relEnergy`, `FreeParticle.stationary_iff_deriv_const`, `FreeParticle.isTrajectory_iff_legendre`, `FreeParticle.free_stationary_graph_iff`); the shell (SR-D5: `FutureShell.chart`, `FutureShell.contDiffOn_point`, `FutureShell.lorentz_mem_shell`, `FutureShell.contDiffOn_action`, `FutureShell.action_mul`, `FutureShell.scheme`, `FutureShell.lift_futureShellFunction_eq_zero_iff`); the expansion in `1/c` (SR-K5: `Newtonian.abs_energy_sub_le`, `Newtonian.abs_lagrangian_sub_le`, `Newtonian.abs_momentum_sub_le`, `Newtonian.abs_clockRate_sub_le`). Scope: `d` space dimensions, and three for the comparison with the action of space-time. The shell is a graph with one chart, in which the Lorentz group acts smoothly; the automorphisms of its C∞ scheme are not constructed, and the comparison with the ideal of the future sheet is for real points and `m > 0`. The expansion is for functions of the velocity, not for trajectories |
-| 10 | Transformation of distribution functions | informal | Target: the invariant measure on the shell and the number flux (SR-M1, SR-M2, F4) |
+| 10 | Transformation of distribution functions | proved | `FutureShell.measure`, `FutureShell.map_action_measure`, `FutureShell.integral_comp_action`, `FutureShell.numberCurrent_transform`, `FutureShell.numberDensity_transform`, `FutureShell.time_numberCurrent`, `FutureShell.numberFlux_transform`, `FutureShell.numberFlux_hyperplane`. Scope: `d` space dimensions and every mass, the mass zero included; the measure `dᵈπ/E` in the chart of the shell; the number of particles through a hypersurface for a given surface measure on the events, which is constructed for the hyperplanes of the co-ordinates. The equality of the numbers through different hypersurfaces needs a transport equation and is not treated |
 | 11 | Decay of particles | proved | `invariantMass_add_le`, `intervalQuadratic_add_eq_zero_iff`, `centreOfMomentum`, `eq_centreOfMomentum`, `not_exists_observer_of_null`, `TwoBodyDecay.energy_first`, `TwoBodyDecay.energy_second`, `TwoBodyDecay.momentum_add`, `TwoBodyDecay.momentum_sq_first`, `TwoBodyDecay.mass_add_le`, `TwoBodyDecay.eq_smul_of_threshold`, `exists_twoBodyDecay`. Scope: the decay into two particles, in `d` space dimensions; the energies in another frame are given by `observerEnergy_change`. The distribution of the directions and the decay into more than two particles are not treated |
-| 12 | Invariant cross-section | informal | Conditional target: the phase space of two particles and the covariance of a cross-section for a given transition weight (SR-C4, F4). Special relativity does not supply the weight |
+| 12 | Invariant cross-section | proved modulo interface | Proved: `fluxFactor_lorentz`, `fluxFactor_sq`, `fluxFactor_target_at_rest`, `measurePreserving_action_prod`, `crossSection_covariant`. Interface: a measure on the final states that the Lorentz group preserves, and a transition weight that is a Lorentz scalar. Not proved: the construction of this measure on the set where the total momentum is conserved. It needs a coarea formula or a construction with distributions, and the pinned Mathlib has no coarea formula. Special relativity does not determine the weight |
 | 13 | Elastic collisions of particles | proved | `mandelstam_sum`, `ElasticCollision.energy_eq`, `ElasticCollision.momentum_sq_eq`, `ElasticCollision.mandelstamT_eq`, `ElasticCollision.mandelstamT_nonpos`, `exists_elasticCollision`, `mandelstamS_target_at_rest`, `mandelstamT_elastic_target_at_rest`. Scope: the invariants `s`, `t`, `u` and the frame of the centre of momentum, in `d` space dimensions; for a target at rest, `s` and `t` in terms of the energies. The angles in the frame of the target are not computed |
-| 14 | Angular momentum | informal | Proved: the Poincaré algebra of the orbital charges of one particle (SR-C6: `Poincare.canonical_lorentzCharge_p`, `Poincare.canonical_lorentzCharge_lorentzCharge`), its family in `1/c` with the relations of the Galilei algebra at `0` (`Poincare.canonical_boostCharge_p`, `Poincare.canonical_boostCharge_boostCharge`, `Poincare.inertia_zero`), and the classes of the charges in the reduced ring of the mass shell (`MassShell.initialData_lorentzCharge_zero_succ`, `MassShell.initialData_lorentzCharge_succ_succ`). Missing: the charges of a system of particles, their conservation and the centre of energy (SR-C5, F4); the comparison with the Noether boundary terms of the action (F4) |
+| 14 | Angular momentum | proved | `Poincare.canonical_lorentzCharge_p`, `Poincare.canonical_lorentzCharge_lorentzCharge`, `Poincare.canonical_boostCharge_p`, `Poincare.canonical_boostCharge_boostCharge`, `Poincare.inertia_zero`, `MassShell.initialData_lorentzCharge_zero_succ`, `MassShell.initialData_lorentzCharge_succ_succ`, `orbitalMoment_lorentz`, `flat_lorentzGenerator`, `kineticMomentum_lorentzGenerator`, `orbitalMoment_eq_of_stationary`, `totalMoment_freeMotion`, `sum_orbitalMoment_same_event`, `totalMoment_add_const`, `centreOfEnergy_sub`, `centreOfEnergy_freeMotion`. Scope: finitely many point particles in `d` space dimensions that move freely or collide in one event; the centre of energy for events that are simultaneous for an observer; the charges as Noether's charges for one free particle in three dimensions. The contribution of fields belongs to electrodynamics |
 
-Count: 10 proved, 4 informal.
+Count: 12 proved, 1 proved modulo interface, 1 informal.
 
-Closed with a stated remainder: none.
+Closed with a stated remainder: §12 (the measure of the final states on the set where the momentum is conserved, and the transition weight).
 
 ### After the mechanics programme
 
@@ -631,6 +631,11 @@ through a change-of-variables theorem, with spatial Jacobian
 Neither a symbolic Jacobian identity nor the shell equation alone supplies
 the measure-theoretic conclusion.
 
+*Status.* Proved in
+[`SpecialRelativity/ShellMeasure.lean`](../ProjectAinos/SpecialRelativity/ShellMeasure.lean)
+by the formula for the change of variables, for every mass and every
+orthochronous transformation.
+
 **Target SR-M2 [B,C,P].** A distribution is a nonnegative measurable scalar
 on the chosen shell bundle. Given a spacelike hypersurface with future unit
 normal `n`, define the number flux by
@@ -646,6 +651,11 @@ additionally needs a transport equation and boundary-flux conditions.
 Independent spatial and momentum volume factors must not each be declared
 Lorentz invariant. This is the entry point for later relativistic kinetic
 theory; no equilibrium distribution is selected by SR kinematics.
+
+*Status.* Proved in
+[`SpecialRelativity/NumberFlux.lean`](../ProjectAinos/SpecialRelativity/NumberFlux.lean)
+for a given surface measure on the events; the surface measure is constructed
+for the hyperplanes of the co-ordinates.
 
 ### Decays and two-body constraints
 
@@ -723,6 +733,12 @@ This is a conditional definition of a cross-section, not a derivation of
 with the speed of one observer measured by another; those concepts have
 different domains and bounds.
 
+*Status.* The flux factor, the invariance of the product of two shell
+measures and the covariance of the cross-section from its two hypotheses are
+proved in
+[`SpecialRelativity/CrossSection.lean`](../ProjectAinos/SpecialRelativity/CrossSection.lean).
+The measure on the constrained final states is not constructed.
+
 ### Angular momentum and the center of energy
 
 **Target SR-C5 [A*,B].** For a finite collection of free worldlines sampled
@@ -750,6 +766,11 @@ total four-momentum. This energy-weighted center replaces the nonrelativistic
 mass-weighted center; it is observer dependent. A universal rigid-body
 interpretation or Lorentz-covariant spatial center is not assumed.
 
+*Status.* Proved in
+[`SpecialRelativity/OrbitalCharges.lean`](../ProjectAinos/SpecialRelativity/OrbitalCharges.lean).
+The moment is a function of two covectors, and a shift of the events by `c`
+adds `c ∧ P`.
+
 **Target SR-C6 [A,A*].** With the canonical Poisson API of the shared
 algebra (`PhaseSpace.canonical`, `IsPoissonHom`), represent translations and
 Lorentz transformations by momentum functions and prove their brackets on
@@ -762,7 +783,10 @@ intrinsic spin and quantum representations are later extensions.
 for every symmetric matrix and in
 [`SpecialRelativity/PoincareAlgebra.lean`](../ProjectAinos/SpecialRelativity/PoincareAlgebra.lean)
 for the Minkowski metric. The comparison with the Noether boundary terms is
-not.
+`kineticMomentum_lorentzGenerator` in
+[`SpecialRelativity/OrbitalCharges.lean`](../ProjectAinos/SpecialRelativity/OrbitalCharges.lean):
+the momentum covector applied to an infinitesimal Lorentz transformation is
+the orbital moment.
 
 <a id="landau-lifshitz-correspondence"></a>
 

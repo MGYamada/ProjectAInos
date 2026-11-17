@@ -113,3 +113,27 @@ These notes record mathematical distinctions and interface decisions in `Project
 **Interface decision.** The domain of the Lagrangian is `e > 0`, and the theorem is for `C²` functions `x` and `e`. The comparison with the action `−m ∫ ds` has two directions with different hypotheses: a stationary pair gives a stationary curve, and a stationary curve gives a stationary pair if a `C²` function `e` with `e = √Q(ẋ)/m` on `[a, b]` is supplied. The change of the parameter is stated for the value of the Lagrangian and for the action, with `e` replaced by `(e ∘ f) f′`; the derivative of `f` is assumed not to vanish, and the pair stays in the domain when it is positive.
 
 **Proof status.** `Einbein.stationary_iff`, `lagrangian_eliminate`, `free_stationary_of_stationary`, `stationary_of_free_stationary`, `stationary_massless_iff`, `deriv_eq_smul_of_stationary_massless` and `action_reparametrize` are proved. [Auxiliary field](../ProjectAinos/SpecialRelativity/Einbein.lean)
+
+## SR15. The invariance of `dᵈπ/E` is proved for a boost and for a rotation
+
+**Observation.** In the chart of the shell a Lorentz transformation is the map `π ↦ spaceMomentum (L (point m π))`, and its Jacobian is `E′/E`. For a general `L` this determinant is not a short calculation. With the factorization of SR10 it is not needed: a rotation acts by a linear map that preserves `Σ πᵢ²`, so it preserves the volume, the domain and the energy; a boost has the derivative `1 + ℓ ⊗ β`, whose determinant `1 + ℓ(β)` is `E′/E` by the identity `γ² (1 − |β|²) = 1`. The two cases compose on the domain, which carries the measure. The proof uses no property of the mass, so it covers the mass zero, where the domain omits the origin.
+
+**Interface decision.** The measure is defined on the space momenta `Fin d → ℝ` as the Lebesgue measure restricted to the domain with the density `1/E`; the normalization `1/(2E)` differs by a constant. The invariance is the equality `Measure.map (action m L) (measure d m) = measure d m`. Two general statements carry the argument and are stated for any measure: a map that preserves a measure and a density, and a differentiable injective map whose Jacobian compensates the change of a density.
+
+**Proof status.** `FutureShell.map_action_measure_rotation`, `map_action_measure_boost`, `map_action_measure` and `integral_comp_action` are proved. [Shell measure](../ProjectAinos/SpecialRelativity/ShellMeasure.lean)
+
+## SR16. A hypersurface enters through its surface measure
+
+**Observation.** The number of particles through a hypersurface is `∫ ⟨n, N⟩ dΣ`, where `N` is the number current of the distribution at each event. Its invariance under a Lorentz transformation of all the data follows from the fact that `N` is a vector, if the surface measure of the transformed hypersurface is the image of the surface measure. For a hyperplane this is how its surface measure is obtained from that of the hyperplane `x⁰ = τ`. A surface measure for a general hypersurface is not available in the library.
+
+**Interface decision.** `numberFlux m σ n f` takes a measure `σ` on the events and a vector `n`, and `numberFlux_transform` is stated for every measure. `hyperplaneMeasure d τ` is the image of the Lebesgue measure of `ℝᵈ` on the hyperplane `x⁰ = τ`, for which the number is `∫∫ f dᵈπ dᵈx`. The integrability of `f p` on the shell is a hypothesis at every event. No statement compares the numbers through two different hypersurfaces: that needs an equation of transport for `f`.
+
+**Proof status.** `FutureShell.numberCurrent_transform`, `numberDensity_transform`, `time_numberCurrent`, `numberFlux_transform` and `numberFlux_hyperplane` are proved. [Number flux](../ProjectAinos/SpecialRelativity/NumberFlux.lean)
+
+## SR17. The orbital moment is a function of two covectors, and the cross-section has two hypotheses
+
+**Observation.** The moment `x ∧ p` is a tensor with two upper indices. As the function `(α, β) ↦ α(x) β(p) − α(p) β(x)` of two covectors its transformation law is the pullback of the covectors, and it holds by definition. For two covectors the field `x ↦ α(x) β♯ − β(x) α♯` is an infinitesimal Lorentz transformation, and the momentum covector applied to it is this function: the orbital moment is the charge of Noether's theorem, and the functions of SR-C6 on the phase space are its components. For the cross-section, the flux factor and the product of two shell measures are invariant; the measure of the final states with a conserved total momentum is supported on a set of lower dimension, and its construction needs a coarea formula, which the pinned Mathlib does not have.
+
+**Interface decision.** `orbitalMoment`, `totalMoment` and `centreOfEnergy` are stated for vectors in `d` space dimensions and a finite index type of particles. A collision is the hypothesis that the particles are at one event. `crossSection ν W F S` takes the measure of the final states and the weight as arguments, and `crossSection_covariant` assumes that the transformation preserves both. The ledger row of §12 is *proved modulo interface* with this interface, and it is closed with the construction of the measure as its remainder.
+
+**Proof status.** `flat_lorentzGenerator`, `orbitalMoment_eq_of_stationary`, `totalMoment_freeMotion`, `sum_orbitalMoment_same_event`, `centreOfEnergy_freeMotion`, `fluxFactor_sq`, `measurePreserving_action_prod` and `crossSection_covariant` are proved. [Orbital charges](../ProjectAinos/SpecialRelativity/OrbitalCharges.lean) · [Cross-section](../ProjectAinos/SpecialRelativity/CrossSection.lean)
