@@ -582,6 +582,7 @@ public import ProjectAinos.Variational.Examples
 public import ProjectAinos.Variational.FieldJet.Basic
 public import ProjectAinos.Variational.FieldJet.Euler
 public import ProjectAinos.Variational.FieldJet.Noether
+public import ProjectAinos.Variational.FieldJet.Quadratic
 public import ProjectAinos.Variational.FieldJet.Standard
 public import ProjectAinos.Variational.IntegrationByParts
 public import ProjectAinos.Variational.IntervalParameter

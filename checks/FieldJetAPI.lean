@@ -3,14 +3,14 @@ Copyright (c) 2026 Masahiko G. Yamada. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 module
-import ProjectAinos.Variational.FieldJet.Noether
+import ProjectAinos.Variational.FieldJet.Quadratic
 import ProjectAinos.Variational.FieldJet.Standard
 
 /-! Public consumers of the jet rings of fields: iterated partial derivatives of a smooth
 function, the total derivatives and their commutation, the Euler operators with the statement
 that a total derivative is a null Lagrangian, Noether's identities for a Lagrangian of the
-first order with the canonical stress tensor, and the standard jet ring with the prolongation
-of a field.
+first order with the canonical stress tensor, the standard jet ring with the prolongation of a
+field, and the quadratic Lagrangians with the gauge identity of a one-form.
 Default elaborator options are intentional: these checks must not rely on the implementation's
 transparency settings. Every statement is pinned with its type. -/
 noncomputable section
@@ -296,3 +296,96 @@ example (L F : StandardFieldJet (Fin n) κ) (μ : Fin n)
 end StandardFieldJet
 
 end ProjectAinos.Variational
+
+namespace ProjectAinos.Variational.FieldJetRing
+
+open SmoothAlgebra
+
+variable {ι κ J : Type*} [CommRing J] [Algebra ℝ J] [SmoothRing J] [Fintype κ] [Fintype ι]
+  [DecidableEq ι] [DecidableEq κ] (R : FieldJetRing ι κ J)
+
+variable {R}
+
+omit [Fintype κ] [Fintype ι] in
+example (c : κ) (K : Multiset ι) (b : κ) (ν : ι) :
+    R.d c K (R.u b {ν}) = if b = c ∧ {ν} = K then 1 else 0 :=
+  d_u_singleton c K b ν
+
+omit [Fintype κ] [Fintype ι] [DecidableEq ι] [DecidableEq κ] [SmoothRing J] in
+example : algebraMap ℝ J (1 / 2) * 2 = 1 :=
+  algebraMap_half_mul_two
+
+omit [Fintype κ] [Fintype ι] [DecidableEq ι] [DecidableEq κ] [SmoothRing J] in
+example {X : J} (h : X = -X) : X = 0 :=
+  eq_zero_of_eq_neg h
+
+example (C : κ → ι → κ → ι → ℝ) (e : κ) (K : Multiset ι) :
+    R.d e K (R.quadraticLagrangian C) = algebraMap ℝ J (1 / 2) *
+      ∑ a, ∑ μ, ∑ b, ∑ ν, algebraMap ℝ J (C a μ b ν) *
+        (R.u a {μ} * (if b = e ∧ ({ν} : Multiset ι) = K then 1 else 0) +
+          R.u b {ν} * (if a = e ∧ ({μ} : Multiset ι) = K then 1 else 0)) :=
+  d_quadraticLagrangian C e K
+
+example (C : κ → ι → κ → ι → ℝ) :
+    R.FirstOrder (R.quadraticLagrangian C) :=
+  firstOrder_quadraticLagrangian C
+
+example (C : κ → ι → κ → ι → ℝ) (e : κ) :
+    R.d e 0 (R.quadraticLagrangian C) = 0 :=
+  d_zero_quadraticLagrangian C e
+
+example {C : κ → ι → κ → ι → ℝ}
+    (hC : ∀ a μ b ν, C a μ b ν = C b ν a μ) (e : κ) (ρ : ι) :
+    R.momentum (R.quadraticLagrangian C) e ρ =
+      ∑ b, ∑ ν, algebraMap ℝ J (C e ρ b ν) * R.u b {ν} :=
+  momentum_quadraticLagrangian hC e ρ
+
+example {C : κ → ι → κ → ι → ℝ}
+    (hC : ∀ a μ b ν, C a μ b ν = C b ν a μ) (a : κ) :
+    R.euler a (R.quadraticLagrangian C) =
+      -∑ μ, ∑ b, ∑ ν, algebraMap ℝ J (C a μ b ν) * R.u b (μ ::ₘ {ν}) :=
+  euler_quadraticLagrangian hC a
+
+end ProjectAinos.Variational.FieldJetRing
+
+namespace ProjectAinos.Variational.FieldJetRing
+
+open SmoothAlgebra
+
+variable {ι J : Type*} [CommRing J] [Algebra ℝ J] [SmoothRing J] [Fintype ι] [DecidableEq ι]
+  {R : FieldJetRing ι ι J} {C : ι → ι → ι → ι → ℝ}
+
+example (hC : ∀ a μ b ν, C a μ b ν = C b ν a μ)
+    (hanti : ∀ a μ b ν, C a μ b ν = -C μ a b ν) :
+    ∑ a, R.totalDeriv a (R.euler a (R.quadraticLagrangian C)) = 0 :=
+  divergence_euler_quadraticLagrangian hC hanti
+
+example (hC : ∀ a μ b ν, C a μ b ν = C b ν a μ)
+    (hanti : ∀ a μ b ν, C a μ b ν = -C μ a b ν) (χ : J) :
+    R.prolong (fun a => R.totalDeriv a χ) (R.quadraticLagrangian C) = 0 :=
+  prolong_gauge_quadraticLagrangian hC hanti χ
+
+omit [Fintype ι] [DecidableEq ι] in
+example {η : ι → ι → ℝ} (hη : ∀ μ ν, η μ ν = η ν μ) (a μ b ν : ι) :
+    gaugeConstants η a μ b ν = gaugeConstants η b ν a μ :=
+  gaugeConstants_symm hη a μ b ν
+
+omit [Fintype ι] [DecidableEq ι] in
+example {η : ι → ι → ℝ} (hη : ∀ μ ν, η μ ν = η ν μ) (a μ b ν : ι) :
+    gaugeConstants η a μ b ν = -gaugeConstants η μ a b ν :=
+  gaugeConstants_antisymm hη a μ b ν
+
+example {η : ι → ι → ℝ} (hη : ∀ μ ν, η μ ν = η ν μ) (a μ : ι) :
+    R.momentum (R.quadraticLagrangian (gaugeConstants η)) a μ = -R.raisedFieldStrength η μ a :=
+  momentum_gauge hη a μ
+
+example {η : ι → ι → ℝ} (hη : ∀ μ ν, η μ ν = η ν μ) :
+    ∑ a, R.totalDeriv a (R.euler a (R.quadraticLagrangian (gaugeConstants η))) = 0 :=
+  divergence_euler_gauge hη
+
+example (η : ι → ι → ℝ) (ν : ι) :
+    R.Conserved (R.quadraticLagrangian (gaugeConstants η))
+      fun μ => R.stress (R.quadraticLagrangian (gaugeConstants η)) μ ν :=
+  conserved_stress_gauge η ν
+
+end ProjectAinos.Variational.FieldJetRing
