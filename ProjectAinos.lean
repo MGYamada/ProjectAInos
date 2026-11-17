@@ -469,10 +469,15 @@ public import ProjectAinos.SmoothGeometry.Tensor.Pullback
 public import ProjectAinos.SmoothGeometry.Tensor.Regularity
 public import ProjectAinos.SmoothGeometry.Tensor.Tensoriality
 public import ProjectAinos.SpecialRelativity.Boost
+public import ProjectAinos.SpecialRelativity.Causality
+public import ProjectAinos.SpecialRelativity.Decay
+public import ProjectAinos.SpecialRelativity.ElasticScattering
 public import ProjectAinos.SpecialRelativity.Examples
+public import ProjectAinos.SpecialRelativity.Factorization
 public import ProjectAinos.SpecialRelativity.FormExamples
 public import ProjectAinos.SpecialRelativity.FreeMotion
 public import ProjectAinos.SpecialRelativity.Hamiltonian
+public import ProjectAinos.SpecialRelativity.InvariantMass
 public import ProjectAinos.SpecialRelativity.MassShellReduction
 public import ProjectAinos.SpecialRelativity.MaximalProperTime
 public import ProjectAinos.SpecialRelativity.NewtonianExpansion

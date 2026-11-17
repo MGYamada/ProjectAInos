@@ -23,7 +23,7 @@ The proofs of the three field plans are tracked in
 [issue #135](https://github.com/MGYamada/ProjectAinos/issues/135). Each plan now has a
 ledger with one status for each section, a count line and the list of rows closed
 with a remainder, in the vocabulary of the mechanics ledger:
-[special relativity](cinfty-special-relativity.md#ledger) (4 of 14 rows proved),
+[special relativity](cinfty-special-relativity.md#ledger) (8 of 14 rows proved),
 [electrodynamics](cinfty-electrodynamics.md#ledger) (none of 66) and
 [general relativity](cinfty-general-relativity.md#ledger) (5 of 39). The baseline
 counts a row as proved only when its whole target is proved; a row with a proved
@@ -525,6 +525,27 @@ a clock differ from their Newtonian values by at most `|m| V⁴/(2c²)`,
 `|m| V³/c²` and `V⁴/(2c⁴)` for speeds at most `V` and `c ≥ 2V`. The ledger rows
 of §3 and §8 are *proved* in their stated scopes (4 of 14).
 [Guide](special-relativity.md#the-motion-of-a-free-particle)
+
+The third wave begins with signals, the Lorentz group and collisions. A
+relation between events that is contained in the causal order stays so in
+every inertial frame, joins no events with a spacelike separation, and has the
+same order in time and a speed at most one for every observer; the
+containment is the physical premise. Every orthochronous Lorentz
+transformation is a rotation after a boost in one way only: the boost is that
+of the observer which the transformation brings to rest. The product of two
+boosts is the boost of the composed velocity followed by a rotation, which is
+the identity when the velocities have one direction. For momenta of the future
+cone the invariant mass satisfies `M(p) + M(q) ≤ M(p + q)`, a null sum occurs
+only for parallel null momenta, and a timelike total momentum has exactly one
+frame of the centre of momentum. In the decay of a mass `M` into `m₁` and `m₂`
+the energies are `(M² + m₁² − m₂²)/2M` and `(M² + m₂² − m₁²)/2M`, the momenta
+are opposite with `|𝐩|² = λ(M², m₁², m₂²)/4M²`, and every direction occurs when
+`m₁ + m₂ ≤ M`. For a collision `s + t + u` is the sum of the squares of the
+masses; an elastic collision keeps the energy and the length of the momentum
+of each particle in the frame of the centre of momentum, and for a target at
+rest `s = m₁² + m₂² + 2 m₂ E₁` and `t = −2 m₂ (E₄ − m₂)`. The ledger rows of §1,
+§4, §11 and §13 are *proved* in their stated scopes (8 of 14).
+[Guide](special-relativity.md#signals-the-factorization-of-a-lorentz-transformation-and-collisions)
 
 ## Shared Variational Foundation
 

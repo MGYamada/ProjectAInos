@@ -73,3 +73,27 @@ These notes record mathematical distinctions and interface decisions in `Project
 **Interface decision.** `Newtonian` has its own definitions with the parameter `c`, and no definition of the files with `c = 1` is changed. The hypotheses are `Σ vᵢ² ≤ V²`, `2V ≤ c` and `0 < c`, and the constants are `|m| V⁴/(2c²)`, `|m| V³/c²` and `V⁴/(2c⁴)`. The estimates are for functions of the velocity; no statement is made on the limit of a trajectory.
 
 **Proof status.** `Newtonian.sqrt_one_sub_bounds`, `Newtonian.inv_sqrt_one_sub_bounds`, `Newtonian.abs_energy_sub_le`, `Newtonian.abs_lagrangian_sub_le`, `Newtonian.abs_momentum_sub_le` and `Newtonian.abs_clockRate_sub_le` are proved. [Expansion](../ProjectAinos/SpecialRelativity/NewtonianExpansion.lean)
+
+## SR10. The factorization is a rotation after a boost, in the frame of the co-ordinates
+
+**Observation.** `boost β` is a passive transformation: it brings the observer with the velocity `β` to rest (`boost_observer`). For an orthochronous `L` the vector `L⁻¹ e₀` is the velocity of the observer that `L` brings to rest, and `L · (boost β)⁻¹` then fixes the time axis `e₀`. This gives the factorization `L = R · boost β` and its uniqueness in one step each. With the other order of the factors the boost is determined by `L e₀` instead. The product of two boosts with velocities along one direction is a boost; for other velocities it is not, and the rotation that remains is the rotation part of the product.
+
+**Interface decision.** The rotations are the stabilizer of the time axis, `rotationGroup d`, and the factor order is rotation after boost. The statements are for the observer of the co-ordinate frame; for another observer one conjugates with a boost, and this is not stated. `wignerRotation β₁ β₂` is defined as the rotation part of `boost β₁ · boost β₂`; its angle is not computed. The transformation need not be proper: a reflection of space is a rotation in this sense.
+
+**Proof status.** `rotationPart_mul_boost`, `eq_of_mul_boost_eq`, `boostPart_eq_zero_iff`, `boostPart_boost_mul_boost`, `boost_collinear_mul` and `wignerRotation_collinear` are proved. [Factorization](../ProjectAinos/SpecialRelativity/Factorization.lean)
+
+## SR11. Collisions are stated for momentum vectors and the quadratic form `Q`
+
+**Observation.** The statements on the invariant mass, on decays and on collisions do not depend on the sign convention if they are written with the normalized pairing `pair` and `Q(p) = pair p p`: the mass shell is `Q(p) = m²`, and `s = Q(p₁ + p₂)`. The energy and the momentum measured by an observer are `observerEnergy` and `observerMomentum`, so the rest frame of a parent and the frame of the centre of momentum need no boost: they are the observer in the direction of the total momentum. A causal vector is in the future cone if and only if its pairing with one future timelike vector is not negative (`futureCausal_of_pair_nonneg`); this is how the constructed daughters are shown to be in the future cone.
+
+**Interface decision.** `TwoBodyDecay` and `ElasticCollision` are structures of hypotheses on momentum vectors in `d` space dimensions; an elastic collision is two decays of the same total momentum, which gives its statements in the frame of the centre of momentum. The hypothesis that the daughters are in the future cone is separate from the mass shells, and it is used only for `m₁ + m₂ ≤ M`. At the threshold the theorem gives `pᵢ = mᵢ u`; that a daughter of mass zero then has the momentum zero is read off from it.
+
+**Proof status.** `invariantMass_add_le`, `intervalQuadratic_add_eq_zero_iff`, `eq_centreOfMomentum`, `TwoBodyDecay.energy_first`, `TwoBodyDecay.momentum_sq_first`, `exists_twoBodyDecay`, `mandelstam_sum` and `exists_elasticCollision` are proved. The angles in the frame of a target at rest are not computed. [Invariant mass](../ProjectAinos/SpecialRelativity/InvariantMass.lean) · [Decay](../ProjectAinos/SpecialRelativity/Decay.lean) · [Collisions](../ProjectAinos/SpecialRelativity/ElasticScattering.lean)
+
+## SR12. The finite speed of signals is a hypothesis on a relation
+
+**Observation.** The geometry supplies the causal order and its invariance under the orthochronous Poincaré group. That a physical signal from `p` can reach `q` only if `q − p` is in the future cone is not a theorem of the geometry.
+
+**Interface decision.** A signal is a relation `R` between events, and the premise is the predicate `IsCausalRelation R`. The consequences are stated for every such relation: the invariance of the premise, the absence of signals between events with a spacelike separation, the order in time for every observer, and the bound on the speed measured by every observer. No relation of a physical theory is asserted to satisfy the premise.
+
+**Proof status.** `causallyPrecedes_poincare`, `IsCausalRelation.transform`, `IsCausalRelation.not_of_spacelike`, `IsCausalRelation.clock_pos` and `IsCausalRelation.restForm_le_clock_sq` are proved. [Causality](../ProjectAinos/SpecialRelativity/Causality.lean)

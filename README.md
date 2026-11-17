@@ -151,6 +151,12 @@ the stationary curves of the free action are the inertial motions, the energy
 and the momentum measured by an observer, the Legendre transformation on the
 ball of velocities, and the expansion in `1/c` with uniform remainders.
 [Guide](docs/special-relativity.md#the-motion-of-a-free-particle)
+For the Lorentz group and for collisions it proves that every orthochronous
+transformation is a rotation after a boost in one way only, the invariance of
+a relation of signals that is contained in the causal order, the energies and
+the momenta of a decay into two particles, and the invariants of an elastic
+collision.
+[Guide](docs/special-relativity.md#signals-the-factorization-of-a-lorentz-transformation-and-collisions)
 
 Topic 6 follows the provisional Boltzmannian typicality plan in
 [issue #55](https://github.com/MGYamada/ProjectAinos/issues/55). Its guiding references are

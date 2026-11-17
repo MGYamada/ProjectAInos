@@ -53,6 +53,7 @@ Paths in this table are relative to `ProjectAinos/`.
 | 6 | `SmoothGeometry/DifferentialForm/{Hodge,HodgeBasis}`, `SmoothGeometry/Minkowski/{Hodge,HodgeNaturality,HodgeFour,TwoForm}` | Wedge-normalized Hodge, mathlib comparison, square/sign/naturality, six coordinate signs, observer reconstruction |
 | 7 | `SmoothAlgebra/{RelEnergy,Poisson/LinearMomentum,Poisson/OrbitalCharge}`, `SpecialRelativity/{Hamiltonian,PoincareAlgebra,MassShellReduction}` | The energy `√(m² + Σ pᵢ²)` in a C∞-ring, the coordinate-time Hamiltonian of a free particle with its trajectories and its flow, the Poincaré algebra of the orbital charges and its family in `1/c`, the mass shell as a coisotropic ideal and the reduction of its future sheet |
 | 8 | `SmoothGeometry/Minkowski/ReverseCauchySchwarz`, `SpecialRelativity/{MaximalProperTime,FreeMotion,ObserverEnergy,SpatialLegendre,NewtonianExpansion}` | The reverse Cauchy–Schwarz inequality, the greatest proper time of the inertial clock, the stationary curves of the free action as inertial motions and the Hessian in the velocity, the energy measured by an observer, the Legendre transformation on the ball of velocities, the expansion in `1/c` |
+| 9 | `SpecialRelativity/{Causality,Factorization,InvariantMass,Decay,ElasticScattering}` | Signals with a finite speed, the factorization of a Lorentz transformation into a boost and a rotation, the invariant mass and the frame of the centre of momentum, the decay into two particles, the invariants of an elastic collision |
 | Examples | `SpecialRelativity/{Examples,FormExamples}` | Nonzero boost and inverse, subluminality, clock rate, nonzero exact field and gauge identity |
 
 All shared modules are independent of `SpecialRelativity`. Every library
@@ -340,6 +341,67 @@ estimates for functions of the velocity; the convergence of trajectories is
 not stated. The [notes](special-relativity-notes.md) SR07–SR09 record the
 decisions.
 
+## Signals, the factorization of a Lorentz transformation, and collisions
+
+**Signals with a finite speed (§1).** A relation `R p q` between events says
+that a signal sent at `p` can be received at `q`. `IsCausalRelation R` is the
+hypothesis that the relation is contained in the causal order; it is the
+physical premise. `causallyPrecedes_poincare` and
+`IsCausalRelation.transform` show that it does not depend on the inertial
+frame. Under it no signal joins events with a spacelike separation
+(`not_of_spacelike`), every observer finds the reception later than the
+emission (`clock_pos`), and for every observer the distance covered is at most
+the time taken (`restForm_le_clock_sq`).
+
+**A rotation after a boost (SR-K2, §4).** `rotationGroup d` is the group of
+the Lorentz transformations that fix the time axis; they preserve the time and
+the length of the space part of every vector (`time_rotation`,
+`norm_space_rotation`). `boost_observer` shows that the boost of a velocity
+brings the observer with that velocity to rest. For an orthochronous `L`,
+`boostPart L` is the velocity of the observer that `L` brings to rest and
+`rotationPart L = L · (boost (boostPart L))⁻¹`.
+
+| Statement | Declaration |
+| --- | --- |
+| `L = rotationPart L · boost (boostPart L)`, with a rotation | `rotationPart_mem`, `rotationPart_mul_boost` |
+| If `L = R · boost β` with a rotation `R`, then `β = boostPart L` and `R = rotationPart L` | `eq_of_mul_boost_eq` |
+| `L` is a rotation iff its boost part is zero | `boostPart_eq_zero_iff` |
+| The boost part of `boost β₁ · boost β₂` is the composed velocity | `boostPart_boost_mul_boost` |
+| `boost β₁ · boost β₂ = wignerRotation β₁ β₂ · boost β₃` | `wignerRotation_mul_boost` |
+| For velocities `a e` and `b e` along one direction the product is the boost of `((a + b)/(1 + ab)) e`, and no rotation remains | `boost_collinear_mul`, `wignerRotation_collinear` |
+
+**The invariant mass (SR-C1).** `invariantMass p = √Q(p)`. For momenta of the
+closed future cone, `invariantMass_add_le` is `M(p) + M(q) ≤ M(p + q)`, and
+`intervalQuadratic_add_eq_zero_iff` shows that the sum is null if and only if
+both momenta are null and parallel. For a future timelike total momentum `P`,
+`centreOfMomentum P hP` is the only observer for whom the momentum is zero
+(`observerMomentum_centreOfMomentum`, `eq_centreOfMomentum`), and the energy
+there is the invariant mass. A nonzero null total has no such observer
+(`not_exists_observer_of_null`).
+
+**The decay into two particles (SR-C2, §11).** `TwoBodyDecay P p₁ p₂ M m₁ m₂`
+holds `P = p₁ + p₂`, the three mass shells, `M > 0` and a future timelike `P`.
+In the rest frame of the parent:
+`E₁ = (M² + m₁² − m₂²)/2M` (`energy_first`), the momenta are opposite
+(`momentum_add`), and `|𝐩₁|² = λ(M², m₁², m₂²)/4M²` with Källén's function
+(`momentum_sq_first`). For daughters of the future cone `m₁ + m₂ ≤ M`
+(`mass_add_le`); at the threshold they are at rest, `pᵢ = mᵢ u`
+(`eq_smul_of_threshold`). `exists_twoBodyDecay` gives, for `m₁ + m₂ ≤ M` and
+every unit vector `n` of the rest space, a decay with `𝐩₁ = (√λ/2M) n` and
+both daughters in the future cone.
+
+**Elastic collisions (SR-C3, §13).** With `s = Q(p₁ + p₂)`, `t = Q(p₁ − p₃)`
+and `u = Q(p₁ − p₄)`, `mandelstam_sum` is
+`s + t + u = Q(p₁) + Q(p₂) + Q(p₃) + Q(p₄)` under the conservation of the
+momentum. For an elastic collision, in the frame of the centre of momentum the
+energy and the length of the momentum of each particle are unchanged
+(`ElasticCollision.energy_eq`, `momentum_sq_eq`), `t = −|𝐩₁ − 𝐩₃|² ≤ 0`
+(`mandelstamT_eq`), and every unit vector of the rest space is the direction
+of an outgoing momentum (`exists_elasticCollision`). For a target at rest,
+`s = m₁² + m₂² + 2 m₂ E₁` and `t = −2 m₂ (E₄ − m₂)`
+(`mandelstamS_target_at_rest`, `mandelstamT_elastic_target_at_rest`). The
+[notes](special-relativity-notes.md) SR10–SR12 record the decisions.
+
 ## Verification
 
 The required **Lean build** CI job builds with warnings as errors, checks root
@@ -354,6 +416,7 @@ lake env lean -DwarningAsError=true checks/SpecialRelativityAPI.lean
 lake env lean -DwarningAsError=true checks/RelativisticEnergyAPI.lean
 lake env lean -DwarningAsError=true checks/RelativisticHamiltonianAPI.lean
 lake env lean -DwarningAsError=true checks/RelativisticFreeMotionAPI.lean
+lake env lean -DwarningAsError=true checks/RelativisticCollisionsAPI.lean
 lake env lean -DwarningAsError=true checks/AxiomAudit.lean
 ```
 

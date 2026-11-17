@@ -62,22 +62,22 @@ completion.
 
 | § | Topic | Status | Lean declarations, or what is missing |
 |---:|:---|:---|:---|
-| 1 | Finite signal speed | informal | Proved: the closed future cone is convex and orders the events (`futureCausal_convex`, `causallyPrecedes_refl`, `causallyPrecedes_trans`, `causallyPrecedes_antisymm`), and `orthochronousLorentzGroup` preserves it. Missing: the covariance of a propagation relation that is contained in the cone (F3). That signals propagate inside the cone is a physical premise |
+| 1 | Finite signal speed | proved | `futureCausal_convex`, `causallyPrecedes_refl`, `causallyPrecedes_trans`, `causallyPrecedes_antisymm`, `causallyPrecedes_poincare`, `IsCausalRelation.transform`, `IsCausalRelation.not_of_spacelike`, `IsCausalRelation.clock_pos`, `IsCausalRelation.restForm_le_clock_sq`. Scope: a relation between the events of Minkowski space with `d` space dimensions. That the relation is contained in the causal order is the hypothesis `IsCausalRelation`; it is the physical premise that no signal is faster than light |
 | 2 | Intervals | proved | `intervalSq`, `Timelike`, `Spacelike`, `Lightlike`, `Causal`, `LorentzGroup.preserves_interval`, `LorentzGroup.timelike_iff`, `LorentzGroup.spacelike_iff`, `LorentzGroup.lightlike_iff`, `PoincareGroup.preserves_interval`, `timelike_convention`. Scope: real Minkowski space with `d` space dimensions, both sign conventions |
 | 3 | Proper time | proved | `properTime`, `properTime_integrable`, `properTime_poincare`, `properTime_reparametrize`, `properTime_inertial`, `properTime_timeDilation`, `TimelikeSegment.futureTimelike_displacement`, `TimelikeSegment.properTime_le_properSpeed`, `TimelikeSegment.properTime_eq_properSpeed_iff`, `sum_properTime_le_properSpeed`. Scope: `d` space dimensions; curves that are `C¹` near every point of a compact segment with a future timelike velocity, and finitely many such pieces with matching endpoints |
-| 4 | The Lorentz transformation | informal | Proved: `LorentzGroup`, `properLorentzGroup`, `orthochronousLorentzGroup`, `matrix_preserves_metric`, `matrix_det_eq_one_or_neg_one`, `boost`, `boost_time`, `boost_space`, `boost_future`, `boost_neg_inverse`, `boost_det`. Missing: the factorization into a boost and a rotation of the rest space (SR-K2, F3) |
+| 4 | The Lorentz transformation | proved | `LorentzGroup`, `properLorentzGroup`, `orthochronousLorentzGroup`, `matrix_preserves_metric`, `matrix_det_eq_one_or_neg_one`, `boost`, `boost_time`, `boost_space`, `boost_future`, `boost_neg_inverse`, `boost_det`, `rotationGroup`, `rotationPart_mem`, `rotationPart_mul_boost`, `eq_of_mul_boost_eq`, `boostPart_eq_zero_iff`, `boostPart_boost_mul_boost`, `wignerRotation_mul_boost`, `boost_collinear_mul`, `wignerRotation_collinear`. Scope: every orthochronous transformation is factored in the frame of the co-ordinates as a rotation after a boost, in one way only; the rotation that remains in a product of two boosts is defined by this factorization, and its angle is not computed |
 | 5 | Transformation of velocities | proved | `Velocity.observerEquiv`, `Velocity.transform`, `Velocity.norm_transform_lt_one`, `Velocity.transform_boost`, `transform_collinear`, `rapidity_add`, `composed_speed_lt_one`. Scope: the orthochronous group acts on the open ball of velocities; velocities that are not collinear are composed by this action, and collinear ones by the addition of rapidities |
 | 6 | Four-vectors | informal | Proved: `flat`, `sharp`, `flat_natural`, and the tensor operations of the [shared geometry](smooth-geometry.md). Missing: the universal C∞ cotangent module and its comparison with the cotangent bundle (SR-F2, F26) |
 | 7 | Four-dimensional velocity | informal | Proved: `fourVelocity_unit`, `fourVelocity_metric`, `properTime_null`, and the orthogonality of the acceleration to the velocity for a `C²` curve in three space dimensions (`pair_fourVelocity_deriv`). Missing: mass shells and the massless particle (SR-D5, SR-D6, F3) |
 | 8 | The principle of least action | proved | `freeAction`, `freeLagrangian_contDiffOn`, `free_momentum`, `free_stationary_iff`, `free_stationary_iff_fourVelocity_const`, `free_stationary_iff_inertial`, `hasFDerivAt_kineticMomentum`, `ker_velocityHessian`, `finrank_range_velocityHessian`; for the mass shell `MassShell.isCoisotropic_shellIdeal`, `MassShell.normalizer_shellIdeal_le`, `MassShell.isPoissonHom_toShellCoordinates`, `MassShell.reductionHom_bijective`, `MassShell.isPoissonHom_reductionHom`, `MassShell.initialData_p_zero`. Scope: the action in three space dimensions, `C²` curves with a timelike velocity on `[a, b]`, and `m ≠ 0` for the inertial motion; the mass shell in `d` dimensions, its future sheet and the reduction for `(−+++)` |
 | 9 | Energy and momentum | informal | Proved: `kineticMomentum`, `kineticMomentum_eq`, `sharp_kineticMomentum`, `metric_smul_fourVelocity`; the Hamiltonian on all momenta with its equations, its integrals, its trajectories and its flow (SR-D7: `FreeParticle.hamiltonian`, `FreeParticle.isTrajectory_iff`, `FreeParticle.sum_sq_hamiltonianField_lt_one`, `FreeParticle.isIntegral_angularMomentum`, `FreeParticle.realCurve_eq_motion`, `FreeParticle.flowDomain_hamiltonianField`); the energy and the momentum measured by an observer (SR-D3: `observerEnergy_pos`, `observerEnergy_sq`, `restForm_observerVelocity_lt_one`, `observerEnergy_transform`, `observerEnergy_change`); the Legendre transformation on the ball of velocities (SR-D4: `FreeParticle.velocityOfMomentum_legendre`, `FreeParticle.legendre_velocityOfMomentum`, `FreeParticle.energy_eq_relEnergy`, `FreeParticle.stationary_iff_deriv_const`, `FreeParticle.isTrajectory_iff_legendre`, `FreeParticle.free_stationary_graph_iff`); the expansion in `1/c` with uniform remainders (SR-K5: `Newtonian.abs_energy_sub_le`, `Newtonian.abs_lagrangian_sub_le`, `Newtonian.abs_momentum_sub_le`, `Newtonian.abs_clockRate_sub_le`). Missing: the shell as a manifold with the action of the Lorentz group (SR-D5, F3) |
 | 10 | Transformation of distribution functions | informal | Target: the invariant measure on the shell and the number flux (SR-M1, SR-M2, F4) |
-| 11 | Decay of particles | informal | Target: the invariant mass and the decay into two particles (SR-C1, SR-C2, F3) |
+| 11 | Decay of particles | proved | `invariantMass_add_le`, `intervalQuadratic_add_eq_zero_iff`, `centreOfMomentum`, `eq_centreOfMomentum`, `not_exists_observer_of_null`, `TwoBodyDecay.energy_first`, `TwoBodyDecay.energy_second`, `TwoBodyDecay.momentum_add`, `TwoBodyDecay.momentum_sq_first`, `TwoBodyDecay.mass_add_le`, `TwoBodyDecay.eq_smul_of_threshold`, `exists_twoBodyDecay`. Scope: the decay into two particles, in `d` space dimensions; the energies in another frame are given by `observerEnergy_change`. The distribution of the directions and the decay into more than two particles are not treated |
 | 12 | Invariant cross-section | informal | Conditional target: the phase space of two particles and the covariance of a cross-section for a given transition weight (SR-C4, F4). Special relativity does not supply the weight |
-| 13 | Elastic collisions of particles | informal | Target (SR-C3, F3) |
+| 13 | Elastic collisions of particles | proved | `mandelstam_sum`, `ElasticCollision.energy_eq`, `ElasticCollision.momentum_sq_eq`, `ElasticCollision.mandelstamT_eq`, `ElasticCollision.mandelstamT_nonpos`, `exists_elasticCollision`, `mandelstamS_target_at_rest`, `mandelstamT_elastic_target_at_rest`. Scope: the invariants `s`, `t`, `u` and the frame of the centre of momentum, in `d` space dimensions; for a target at rest, `s` and `t` in terms of the energies. The angles in the frame of the target are not computed |
 | 14 | Angular momentum | informal | Proved: the Poincaré algebra of the orbital charges of one particle (SR-C6: `Poincare.canonical_lorentzCharge_p`, `Poincare.canonical_lorentzCharge_lorentzCharge`), its family in `1/c` with the relations of the Galilei algebra at `0` (`Poincare.canonical_boostCharge_p`, `Poincare.canonical_boostCharge_boostCharge`, `Poincare.inertia_zero`), and the classes of the charges in the reduced ring of the mass shell (`MassShell.initialData_lorentzCharge_zero_succ`, `MassShell.initialData_lorentzCharge_succ_succ`). Missing: the charges of a system of particles, their conservation and the centre of energy (SR-C5, F4); the comparison with the Noether boundary terms of the action (F4) |
 
-Count: 4 proved, 10 informal.
+Count: 8 proved, 6 informal.
 
 Closed with a stated remainder: none.
 
@@ -379,6 +379,11 @@ factor order fixed, then derive its zero and collinear special cases. This
 supplies a controlled extension for Wigner rotations rather than an invalid
 commutative velocity-addition rule.
 
+*Status.* Proved in
+[`SpecialRelativity/Factorization.lean`](../ProjectAinos/SpecialRelativity/Factorization.lean)
+for every orthochronous transformation and the observer of the co-ordinate
+frame, with the factor order rotation after boost.
+
 ### Proper time and maximal inertial clocks
 
 For a future timelike curve on `[a,b]`, define
@@ -639,6 +644,11 @@ their sum. Identify the degenerate case in which parallel null momenta
 have a null sum. A center-of-momentum observer exists for a timelike total
 momentum `P`, with `u=P/sqrt(-g(P,P))`; it does not exist for a null total.
 
+*Status.* Proved in
+[`SmoothGeometry/Minkowski/ReverseCauchySchwarz.lean`](../ProjectAinos/SmoothGeometry/Minkowski/ReverseCauchySchwarz.lean)
+and
+[`SpecialRelativity/InvariantMass.lean`](../ProjectAinos/SpecialRelativity/InvariantMass.lean).
+
 **Target SR-C2 [A*].** A two-body decay has parent rest mass `M>0`, daughter
 masses `m₁,m₂≥0`, future shell conditions and `P=p₁+p₂`. In the parent rest
 frame, prove
@@ -657,6 +667,9 @@ is massless, the equality case would give that daughter zero energy and is
 excluded by the shell definition. This distinguishes necessary algebraic
 constraints from physical nonzero-particle existence.
 
+*Status.* Proved in
+[`SpecialRelativity/Decay.lean`](../ProjectAinos/SpecialRelativity/Decay.lean).
+
 **Target SR-C3 [A*].** For elastic two-body scattering, label incoming momenta
 `p₁,p₂` and outgoing momenta `p₃,p₄`, impose their future shells and
 `p₁+p₂=p₃+p₄`. Use the timelike total momentum to construct the
@@ -671,6 +684,11 @@ $$
 Prove `s+t+u=Σmᵢ²`. Lab-frame formulas follow by the
 already constructed boosts. The choice of outgoing angle or interaction law
 is not inferred from these conservation identities.
+
+*Status.* Proved in
+[`SpecialRelativity/ElasticScattering.lean`](../ProjectAinos/SpecialRelativity/ElasticScattering.lean).
+For a target at rest the invariants `s` and `t` are given in terms of the
+energies; the angles in that frame are not computed.
 
 ### Cross-sections and event rates
 
