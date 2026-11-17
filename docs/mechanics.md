@@ -1628,6 +1628,36 @@ The change of the branch at a turning point, the solution of the relations
 `∂S/∂αⱼ = βⱼ` for the co-ordinates, and the invariance of the equations of
 motion under the change of co-ordinates are not treated.
 
+## Invariant tori of commuting integrals
+
+`Poisson/InvariantTorus` treats the first half of the theorem of Liouville and
+Arnold (Landau–Lifshitz §52) on the canonical phase space `ι ⊕ ι → ℝ`, for
+elements `Fᵢ` of the phase space ring with `{Fᵢ, Fⱼ} = 0`. The fields are
+`hamiltonianField (F i)`, and `integralMap F z = (Fᵢ(z))ᵢ`.
+
+- `fderiv_val_hamiltonianField`: the derivative of `G` along the Hamiltonian
+  field of `H` is the value of `{G, H}`.
+- `pairwiseCommute_hamiltonianField`: the fields commute, by the Jacobi
+  identity. `fderiv_integralMap_hamiltonianField`: they are tangent to the
+  level sets of `F`.
+- `linearIndependent_hamiltonianField`, `surjective_fderiv_integralMap`: where
+  the differentials `dFᵢ` are linearly independent, the fields are linearly
+  independent and `DF` is onto.
+- `exists_torus_chart_of_involution`: for a compact connected level set on
+  which the differentials are linearly independent there is a basis `b` of
+  `ℝ^ι` such that, for every point `z` of the level set, `θ ↦ g^{Σ θᵢ bᵢ} z` is
+  onto the level set, two angles give the same point exactly when they differ
+  by integers, and the flow of `Σᵢ sᵢ X_{Fᵢ}` at the time `r` adds `r b⁻¹ s` to
+  the angles. Here `g^t` is `SmoothGeometry.NonlinearODE.jointFlow`.
+
+`Poisson/OscillatorTorus`: `oscillatorEnergy i = (qᵢ² + pᵢ²)/2`.
+`bracket_oscillatorEnergy`, `linearIndependent_fderiv_oscillatorEnergy`,
+`isCompact_oscillator_levelSet` and `isPreconnected_oscillator_levelSet` are
+the hypotheses of the theorem on a level set with positive energies, and
+`exists_torus_chart_oscillators` is its conclusion.
+
+The action–angle variables in a neighbourhood of a torus are not treated.
+
 ## The phase volume of the oscillator
 
 `Oscillations/PhaseVolume`: the flow matrix of the oscillator has determinant
@@ -2320,6 +2350,8 @@ semi-major axis is not computed.
 | [JacobiMetric](../ProjectAInos/Mechanics/JacobiMetric.lean) | `IsHomogeneousOne`, `IsHomogeneousOne.fderiv_smul`, `eulerLagrange_congr`, `eulerLagrange_comp`, `isHomogeneousOne_jacobiLength`, `fderiv_jacobiEnergy_eq`, `eulerLagrange_jacobiEnergy_eq`, `eventually_jacobiLength_eq_one`, `eulerLagrange_eq_smul_jacobiEnergy`, `differentiableAt_momentum_jacobiLength`, `exists_jacobi_parameter`, `exists_motion_of_jacobi_geodesic`, `kineticEnergy`, `eulerLagrange_line`, `stationary_jacobiLength_line` |
 | [Separation/Stackel](../ProjectAInos/Mechanics/Separation/Stackel.lean) | `System`, `System.domain`, `System.hamiltonian`, `System.radicand`, `System.momentum`, `System.partialAction`, `System.angleIntegral`, `System.action`, `System.restrict`, `System.separated_equation`, `System.hamiltonian_momentum`, `System.hasDerivAt_partialAction`, `System.hasDerivAt_angleIntegral`, `System.hasDerivAt_partialAction_param`, `System.hasDerivAt_action_position`, `System.hasDerivAt_action_time`, `System.hasDerivAt_action_param`, `System.det_mixed_ne_zero`, `System.hasDerivAt_hamiltonian_momentum`, `System.eq_of_jacobi`, `System.hasDerivAt_momentum_of_jacobi` |
 | [Separation/Coordinates](../ProjectAInos/Mechanics/Separation/Coordinates.lean) | `System.kinetic`, `System.potential`, `System.hamiltonian_eq_legendre`, `cylindrical_speed_sq`, `spherical_kinetic`, `parabolic_kinetic`, `elliptic_kinetic`, `spherical`, `hamiltonian_spherical`, `kinetic_spherical`, `det_spherical`, `parabolic`, `hamiltonian_parabolic`, `kinetic_parabolic`, `det_parabolic`, `elliptic`, `hamiltonian_elliptic`, `kinetic_elliptic`, `det_elliptic`, `det_ne_zero_spherical`, `det_ne_zero_parabolic`, `det_ne_zero_elliptic`, `radicand_pos_parabolic_free` |
+| [Poisson/InvariantTorus](../ProjectAInos/Mechanics/Poisson/InvariantTorus.lean) | `integralMap`, `fderiv_val_hamiltonianField`, `fderiv_integralMap_hamiltonianField`, `pairwiseCommute_hamiltonianField`, `linearIndependent_hamiltonianField`, `surjective_fderiv_integralMap`, `exists_torus_chart_of_involution` |
+| [Poisson/OscillatorTorus](../ProjectAInos/Mechanics/Poisson/OscillatorTorus.lean) | `oscillatorEnergy`, `oscillatorEnergy_val`, `bracket_oscillatorEnergy`, `linearIndependent_fderiv_oscillatorEnergy`, `isCompact_oscillator_levelSet`, `isPreconnected_oscillator_levelSet`, `exists_torus_chart_oscillators` |
 | [Oscillations/PhaseVolume](../ProjectAInos/Mechanics/Oscillations/PhaseVolume.lean) | `Oscillator.map_flowMatrix_volume`, `Oscillator.measurePreserving_flowMatrix` |
 | [Poisson/Liouville](../ProjectAInos/Mechanics/Poisson/Liouville.lean) | `divergence`, `divergence_eq`, `divergence_hamiltonian`, `divergence_dissipativeField`, `Oscillator.divergence_dissipativeField` |
 | [Poisson/HamiltonianField](../ProjectAInos/Mechanics/Poisson/HamiltonianField.lean) | `realCurve`, `lift_apply_const`, `isIntegralCurve_iff_hasDerivAt`, `isTrajectory_iff_hasDerivAt`, `traceCLM_fderiv_realField`, `hamiltonianField`, `contDiff_hamiltonianField`, `isTrajectory_canonical_iff_hasDerivAt`, `traceCLM_fderiv_hamiltonianField`, `volume_image_hamiltonianFlow`, `measurePreserving_hamiltonianFlow`, `IsTrajectory.flow_eq`, `exists_isTrajectory` |

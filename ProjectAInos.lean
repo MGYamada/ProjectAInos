@@ -153,6 +153,7 @@ public import ProjectAInos.Mechanics.Poisson.Galilei
 public import ProjectAInos.Mechanics.Poisson.GeneratingFunction
 public import ProjectAInos.Mechanics.Poisson.HamiltonianField
 public import ProjectAInos.Mechanics.Poisson.HeavyTop
+public import ProjectAInos.Mechanics.Poisson.InvariantTorus
 public import ProjectAInos.Mechanics.Poisson.Kepler
 public import ProjectAInos.Mechanics.Poisson.KeplerModel
 public import ProjectAInos.Mechanics.Poisson.KeplerMotion
@@ -161,6 +162,7 @@ public import ProjectAInos.Mechanics.Poisson.Liouville
 public import ProjectAInos.Mechanics.Poisson.LiouvilleFlow
 public import ProjectAInos.Mechanics.Poisson.LocalAction
 public import ProjectAInos.Mechanics.Poisson.OrbitIntegral
+public import ProjectAInos.Mechanics.Poisson.OscillatorTorus
 public import ProjectAInos.Mechanics.Poisson.PhaseAction
 public import ProjectAInos.Mechanics.Poisson.Quadratic
 public import ProjectAInos.Mechanics.Poisson.ReducedMass
@@ -390,6 +392,7 @@ public import ProjectAInos.SmoothGeometry.Minkowski.Reflection
 public import ProjectAInos.SmoothGeometry.Minkowski.ReflectionDeterminant
 public import ProjectAInos.SmoothGeometry.Minkowski.TwoForm
 public import ProjectAInos.SmoothGeometry.ODE.Averaging
+public import ProjectAInos.SmoothGeometry.ODE.CommutingFlows
 public import ProjectAInos.SmoothGeometry.ODE.ContinuousFamily
 public import ProjectAInos.SmoothGeometry.ODE.CoordinateCurvature
 public import ProjectAInos.SmoothGeometry.ODE.FlatFrame
@@ -399,7 +402,11 @@ public import ProjectAInos.SmoothGeometry.ODE.FlowEquation
 public import ProjectAInos.SmoothGeometry.ODE.FlowInvariant
 public import ProjectAInos.SmoothGeometry.ODE.FlowVariation
 public import ProjectAInos.SmoothGeometry.ODE.JacobiElliptic
+public import ProjectAInos.SmoothGeometry.ODE.JointFlow
+public import ProjectAInos.SmoothGeometry.ODE.JointFlowSmooth
+public import ProjectAInos.SmoothGeometry.ODE.LevelSetFlow
 public import ProjectAInos.SmoothGeometry.ODE.LocalFlow
+public import ProjectAInos.SmoothGeometry.ODE.PeriodLattice
 public import ProjectAInos.SmoothGeometry.ODE.Propagator
 public import ProjectAInos.SmoothGeometry.ODE.PropagatorDet
 public import ProjectAInos.SmoothGeometry.ODE.PropagatorExpansion
