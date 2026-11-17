@@ -301,7 +301,10 @@ product `v∞² cos (π − 2φ₀)` and make the angle `|π − 2φ₀|` when t
 most `π`, and the cross-section is the push-forward of the measure
 `2πρ dρ` of the impact parameter. For the Coulomb field `cot (χ/2) = m v∞² ρ/α`,
 and Rutherford's formula is the density `(α/2m v∞²)²/sin⁴ (χ/2)` of the
-cross-section with respect to the solid angle.
+cross-section with respect to the solid angle. For a potential energy
+`U = ε r⁻ⁿ w(1/r)` with `w` smooth the angle of deflection is
+`−(2ρ/m v∞²) ∫_ρ^∞ U′(r) dr/√(r² − ρ²)` up to a remainder of at most
+`M (ε/ρⁿ)²`, uniformly for impact parameters and speeds bounded below.
 Symplectic forms on manifolds and
 Dirac brackets are not implemented. Galilean symmetry as a group action and the topics of 2.1 and
 2.4 have no Lean counterpart yet. The

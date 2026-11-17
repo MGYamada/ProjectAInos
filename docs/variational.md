@@ -60,6 +60,7 @@ open sets gives pointwise vanishing.
 | [IntervalParameter](../ProjectAInos/Variational/IntervalParameter.lean) | Local joint C¹ regularity along a compact reference segment gives differentiation of the actual parameter integral, with domination derived; intrinsic boundary/residual splitting |
 | [MovingLimits](../ProjectAInos/Variational/MovingLimits.lean) | Leibniz's rule for an integral whose limits move with the parameter, `hasDerivAt_intervalIntegral_moving`, and its form for an integrand that is smooth on an open set containing the reference segment, `hasDerivAt_intervalIntegral_moving_on` |
 | [ParametricIntegralOn](../ProjectAInos/Variational/ParametricIntegralOn.lean) | `contDiffAt_parametric_intervalIntegral`, `contDiffOn_parametric_intervalIntegral`: a parametric integral of a function that is smooth on an open set containing the segment of integration over a point is smooth at that point, for a parameter in a space of finite dimension |
+| [SecondOrderBound](../ProjectAInos/Variational/SecondOrderBound.lean) | `abs_sub_sub_le_of_abs_le`: `|f(ε) − f(0) − ε f′(0)| ≤ M ε²` if `|f″| ≤ M` on `[−δ, δ]`; `exists_pos_forall_abs_le_mem`: an open set containing `{0} × K` for a compact `K` contains `[−δ, δ] × K`; `exists_second_order_bound`: the remainder of the expansion of the first order in `ε`, with one `δ` and one `M` for all parameters in a compact set |
 | [ManifoldCurve](../ProjectAInos/Variational/ManifoldCurve.lean) | Actual fixed-endpoint C² manifold families and construction of supported chart perturbations, with gluing and coordinate velocity |
 | [Examples](../ProjectAInos/Variational/Examples.lean) | Nonzero variations on time and four-dimensional bases, and a base-dependent momentum with a nonzero divergence residual |
 
@@ -90,6 +91,15 @@ a function that is smooth everywhere, by `LocalExtension`, and the theorem for
 such functions is `SmoothAlgebra.contDiff_infty_parametric_intervalIntegral`.
 The parameter lies in a space of finite dimension. `eventually_uIcc_mem_open`
 of `MovingLimits` is stated for a parameter in any topological space.
+
+`SecondOrderBound` bounds the remainder of an expansion of the first order.
+If `f(ε, l)` is twice continuously differentiable at the points `(0, l)` with
+`l` in a compact set `K` of a normed space, there are `δ > 0` and `M` with
+`|f(ε, l) − f(0, l) − ε ∂f/∂ε(0, l)| ≤ M ε²` for all `l ∈ K` and `|ε| ≤ δ`
+(`exists_second_order_bound`): the set of points at which `f` is twice
+continuously differentiable is open, so it contains `[−δ, δ] × K`
+(`exists_pos_forall_abs_le_mem`), and the second derivative in `ε` is bounded
+on this compact set.
 
 `MovingLimits` differentiates `s ↦ ∫_{a(s)}^{b(s)} F(s, t) dt` for a smooth
 integrand and differentiable limits:

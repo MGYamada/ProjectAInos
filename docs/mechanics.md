@@ -1381,7 +1381,7 @@ along the orbit and the cross-section as a measure are in the next section.
 
 ## Scattering
 
-`Mechanics/Scattering` treats Landau–Lifshitz §§18–19 for a motion in a
+`Mechanics/Scattering` treats Landau–Lifshitz §§18–20 for a motion in a
 central field, described in the plane of the orbit by the radius `r(t)` and
 the polar angle `φ(t)`, with `ṙ² = F(r)` and `φ̇ = ℓ/r²`. Here `ℓ = M/m` and
 `F(r) = (2/m)(E − U(r)) − ℓ²/r²`.
@@ -1460,8 +1460,62 @@ push-forward of `impactMeasure` by a deflection function `χ`.
   `Coulomb.crossSection_coulomb_abs` is the statement for either sign, in the
   magnitude of the angle.
 
+`Scattering/SmallAngle`: Landau–Lifshitz §20 for a potential that is a smooth
+function of `1/r`. In the variable `u = ρ/r` the square of the radial velocity
+is `speedSq f ρ v∞ ε r = v∞² radicand f (ε, ρ/r)` with
+`radicand f (ε, u) = 1 − u² − ε f(u)`, so that `ε f(ρ/r) = 2U(r)/m v∞²`.
+
+- `radicand_eq`: at a zero `c`, `radicand f (ε, u) = (c² − u²)(1 + ε Γ(c, u))`
+  with `Γ(c, u) = ratio f c u = f[c, u]/(c + u)`, smooth for `c + u ≠ 0`.
+- `IsClosest f ε c`: `c > 0` is a zero and `1 + ε Γ(c, u) > 0` for
+  `0 ≤ u ≤ c`. Then the radicand is positive for `0 ≤ u < c`
+  (`IsClosest.radicand_pos`), so `ρ/c` is the closest approach, and it is
+  unique (`IsClosest.unique`). `isClosest_zero` is the free motion.
+- `speedSq_eq`, `exists_isFactor`: `speedSq = (r − ρ/c) factor` with a factor of
+  the kind of `IsFactor`, so the motion exists for all times.
+  `hasDerivAt_velocity`: its acceleration is `−Φ′(r)` along the radius for
+  `Φ(r) = (v∞²/2) ε f(ρ/r)`. `tendsto_radialVelocity_atTop`: the speed at
+  infinity is `v∞` if `f(0) = 0`.
+- `integral_Ioi_eq_integral_sin`, `integrableOn_Ioi_iff_integrableOn_sin`: the
+  change of variables `r = b/sin ψ` between `r > b` and `0 < ψ < π/2`.
+- `integral_angleDensity`, `deflectionAngle_eq`, `tendsto_angle_atTop`: with
+  `ρ/r = c sin ψ` the angle (18.4) is `∫₀^{π/2} angleKernel f ε c ψ dψ`,
+  `angleKernel = 1/√(1 + ε Γ(c, c sin ψ))`, an integral of a continuous
+  function, and the angle of the motion tends to it.
+- `integral_ratio_eq`, `integral_sin_mul_deriv_eq`:
+  `∫₀^{π/2} Γ(1, sin ψ) dψ = ∫₀^{π/2} sin ψ f′(sin ψ) dψ
+  = −ρ ∫_ρ^∞ (d/dr) f(ρ/r) dr/√(r² − ρ²)`, the integral of (20.3).
+
+`Scattering/SmallAngleExpansion`: the potential `g(l, u)` depends smoothly on
+a parameter `l` of a space of finite dimension.
+
+- `IsTurning g J c`: `c(ε, l)` is a positive zero of the radicand and a smooth
+  function on the open set `J` of parameters; `IsTurning.eq_one`:
+  `c(0, l) = 1`. `exists_isTurning`: one exists near every `(0, l₀)`, by the
+  implicit function theorem.
+- `contDiffAt_halfAngle`: `halfAngle g c (ε, l)`, the integral over `ψ`, is
+  smooth at `(0, l)`. `hasDerivAt_halfAngle`: its derivative in `ε` at zero is
+  `−½ ∫₀^{π/2} sin ψ ∂g/∂u(l, sin ψ) dψ`.
+- `exists_abs_deflectionAngle_sub_le`: for a compact set `K` of parameters
+  there are `δ > 0` and `M` such that for `l ∈ K` and `|ε| ≤ δ` there is a
+  closest approach `ρ/c`, the motion exists for all `ρ, v∞ > 0`, and
+  `|χ + ρ ε ∫_ρ^∞ (d/dr) g(l, ρ/r) dr/√(r² − ρ²)| ≤ M ε²`.
+  `exists_abs_deflectionAngle_sub_le_of_contDiff` is the case without a
+  parameter.
+- `exists_abs_deflectionAngle_potential_sub_le`: for `U(r) = ε r⁻ⁿ w(1/r)` with
+  `w` smooth, `m > 0` and `ρ₁, v₁ > 0` there are `δ` and `M` such that for
+  `ρ ≥ ρ₁`, `v∞ ≥ v₁` and `|ε/ρⁿ| ≤ δ`,
+  `|χ + (2ρ/m v∞²) ∫_ρ^∞ U′(r) dr/√(r² − ρ²)| ≤ M (ε/ρⁿ)²`, which is (20.3)
+  with a remainder. Here `potentialSpeedSq U m ρ v∞ r` is
+  `v∞² − 2U(r)/m − ρ² v∞²/r²`. For `n = 0` this is a small coupling, uniformly
+  in `ρ ≥ ρ₁`; for `n ≥ 1` and a fixed `ε` it is a large impact parameter.
+- `exists_abs_coulomb_deflection_sub_le`: for the Coulomb field, where
+  `f(u) = u` and `ε = 2a/ρ` (`speedSq_id`), the angle of deflection of
+  `Scattering/Coulomb` satisfies `|χ − 2a/ρ| ≤ M (2a/ρ)²`.
+
 The deflection function of a general potential as a function of the impact
-parameter, several branches, the laboratory system and small-angle scattering
+parameter, several branches, the laboratory system, potentials that are not
+smooth functions of `1/r` at infinity and the cross-section for small angles
 are not treated.
 
 ## The phase volume of the oscillator
@@ -2145,6 +2199,8 @@ semi-major axis is not computed.
 | [Scattering/Asymptote](../ProjectAInos/Mechanics/Scattering/Asymptote.lean) | `IsFactor.tendsto_angle_atTop`, `IsFactor.tendsto_angle_atBot`, `IsFactor.tendsto_radialVelocity_atTop`, `position`, `velocity`, `position_cross_velocity`, `IsFactor.hasDerivAt_position`, `IsFactor.hasDerivAt_velocity`, `IsFactor.tendsto_velocity_atTop`, `IsFactor.tendsto_velocity_atBot`, `asymptote_inner`, `arccos_cos_deflection` |
 | [Scattering/Coulomb](../ProjectAInos/Mechanics/Scattering/Coulomb.lean) | `speedSq`, `closest`, `factor`, `speedSq_eq`, `isFactor`, `hasDerivAt_primitive`, `integral_angleDensity`, `tendsto_angle_atTop`, `tendsto_velocity_atTop`, `tendsto_velocity_atBot`, `hasDerivAt_velocity`, `deflection`, `sin_half_deflection`, `cot_half_deflection`, `deflection_mem_Ioo`, `deflection_neg`, `abs_deflection_le`, `arccos_cos_deflection` |
 | [Scattering/CrossSection](../ProjectAInos/Mechanics/Scattering/CrossSection.lean) | `impactMeasure`, `solidAngle`, `crossSection`, `crossSection_apply`, `Coulomb.impact`, `Coulomb.deflection_impact`, `Coulomb.impact_deflection`, `Coulomb.crossSection_coulomb`, `Coulomb.abs_deflection`, `Coulomb.crossSection_coulomb_abs` |
+| [Scattering/SmallAngle](../ProjectAInos/Mechanics/Scattering/SmallAngle.lean) | `radicand`, `ratio`, `radicand_eq`, `integral_ratio_eq`, `IsClosest`, `isClosest_zero`, `IsClosest.radicand_pos`, `IsClosest.unique`, `speedSq`, `factor`, `speedSq_eq`, `exists_isFactor`, `integral_Ioi_eq_integral_sin`, `integrableOn_Ioi_iff_integrableOn_sin`, `angleKernel`, `integral_angleDensity`, `deflectionAngle_eq`, `tendsto_angle_atTop`, `hasDerivAt_speedSq`, `tendsto_radialVelocity_atTop`, `hasDerivAt_velocity`, `integral_sin_mul_deriv_eq` |
+| [Scattering/SmallAngleExpansion](../ProjectAInos/Mechanics/Scattering/SmallAngleExpansion.lean) | `familyRadicand`, `IsTurning`, `IsTurning.eq_one`, `isTurning_zero`, `exists_isTurning`, `contDiffOn_ratio_family`, `kernel`, `halfAngle`, `kernelDomain`, `contDiffOn_kernel`, `contDiffAt_halfAngle`, `hasDerivAt_halfAngle`, `IsTurning.exists_abs_sub_le`, `exists_abs_angle_sub_le`, `exists_abs_deflectionAngle_sub_le`, `exists_abs_deflectionAngle_sub_le_of_contDiff`, `speedSq_id`, `exists_abs_coulomb_deflection_sub_le`, `potentialSpeedSq`, `scaledPotential`, `speedSq_scaledPotential`, `exists_abs_deflectionAngle_potential_sub_le` |
 | [Oscillations/PhaseVolume](../ProjectAInos/Mechanics/Oscillations/PhaseVolume.lean) | `Oscillator.map_flowMatrix_volume`, `Oscillator.measurePreserving_flowMatrix` |
 | [Poisson/Liouville](../ProjectAInos/Mechanics/Poisson/Liouville.lean) | `divergence`, `divergence_eq`, `divergence_hamiltonian`, `divergence_dissipativeField`, `Oscillator.divergence_dissipativeField` |
 | [Poisson/HamiltonianField](../ProjectAInos/Mechanics/Poisson/HamiltonianField.lean) | `realCurve`, `lift_apply_const`, `isIntegralCurve_iff_hasDerivAt`, `isTrajectory_iff_hasDerivAt`, `traceCLM_fderiv_realField`, `hamiltonianField`, `contDiff_hamiltonianField`, `isTrajectory_canonical_iff_hasDerivAt`, `traceCLM_fderiv_hamiltonianField`, `volume_image_hamiltonianFlow`, `measurePreserving_hamiltonianFlow`, `IsTrajectory.flow_eq`, `exists_isTrajectory` |
