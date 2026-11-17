@@ -72,11 +72,11 @@ completion.
 | 23 | The electromagnetic field tensor | proved | `fieldTensor_apply`, `fieldTensor_component`, `twoForm_swap`, `electric_apply`, `magnetic_apply`, `observer_reconstruction`, `lorentzForce_component`, `ChargedParticle.fieldTensor_staticPotential`, `ChargedParticle.lorentzForce_staticPotential_succ`, `Curved.Field`, `Curved.excitation_flat`. Scope: the field `F = dA` of a potential on an open set of flat spacetime, its components, its electric and magnetic parts for an observer, and the force in three dimensions for static potentials. On a Lorentzian manifold the field is a two-form, and `Curved.excitation_flat` compares it with the flat one |
 | 24 | Lorentz transformation of the field | proved | `fieldTensor_lorentz`, `observer_reconstruction`, `electricVector`, `magneticVector`, `twoForm_apply_vectors`, `electric_restObserver_single`, `magnetic_restObserver_single`, `boost_axisVelocity_apply`, `electricVector_boost`, `magneticVector_boost`, `electric_observer_apply`, `magnetic_observer_apply`, `electricVector_moving`, `magneticVector_moving`. Scope: the components of `E` and `B` for the observer with the velocity `V` along the first axis: `E₁`, `γ (E₂ − V B₃)`, `γ (E₃ + V B₂)` and `B₁`, `γ (B₂ + V E₃)`, `γ (B₃ − V E₂)`. They are the components of the pullback of the field by the inverse boost, and of the electric and the magnetic covector of that observer on its axes. The formula for a velocity in another direction, which follows by a rotation, is not stated |
 | 25 | Invariants of the field | proved | `scalarInvariant_observer`, `pseudoscalarInvariant_observer`, `scalarInvariant_lorentz`, `pseudoscalarInvariant_lorentz`, `scalarInvariant_vectors`, `pseudoscalarInvariant_vectors`, `ConstantField.generator_cube_eq`, `ConstantField.generator_dualGenerator`, `ConstantField.generator_quartic`, `ConstantField.generator_cube_of_pseudoscalarInvariant`, `ConstantField.pseudoscalarInvariant_of_isSimple`, `ConstantField.scalarInvariant_uniformField`, `ConstantField.pseudoscalarInvariant_uniformField`, `ConstantField.scalarInvariant_nullField`, `ConstantField.nullField_ne_zero`. Scope: the invariants `B² − E²` and `E · B`, and the four kinds of a field that they give, stated for the linear map `F♯`: `F♯³ = κ F♯` with `κ > 0`, `κ < 0` or `κ = 0` when `E · B = 0`, the last with a field that is not zero, and for `E · B ≠ 0` the sum of a part with `F♯² = a²` and a part with `F♯² = −b²`. A frame in which the electric and the magnetic field are parallel is not constructed |
-| 26 | The first pair of Maxwell's equations | informal | Proved: `bianchi_on`, `bianchi_components`, `Curved.Maxwell.homogeneous_covariant`. Missing: the equations for `E` and `B` in an inertial frame (E16, F7) |
-| 27 | The action function of the electromagnetic field | informal | Proved: `VacuumAction.hasDerivAt_action`, `VacuumAction.stationary_iff_vacuum`, on flat spacetime without a source. Missing: a prescribed source (E15, F7); a curved background (E13, F12) |
-| 28 | The four-dimensional current vector | informal | Proved: `Curved.currentEquiv`, `Curved.currentForm_volume`. Missing: the sign that relates the source to the current of the matter action (F7) |
-| 29 | The equation of continuity | informal | Proved: `Curved.exteriorDerivative_currentForm`, `Curved.current_closed_iff_divergence`, `Curved.divergence_zero_of_source`. Missing: the balance of the charge in a region (F7) |
-| 30 | The second pair of Maxwell equations | informal | Proved: `VacuumAction.stationary_iff_vacuum`, `Curved.sourced_iff_divergence`, `Curved.maxwell_iff_components`. Missing: the action with a source (E15) and the equations for `E` and `B` (E16); F7 |
+| 26 | The first pair of Maxwell's equations | proved | `bianchi_on`, `bianchi_components`, `exteriorDerivative_three`, `exteriorDerivative_spatial`, `exteriorDerivative_temporal`, `homogeneous_of_closed`, `homogeneous_fieldTensor`, `Curved.Maxwell.homogeneous_covariant`. Scope: on flat spacetime, in the frame of the co-ordinates, `dF = 0` gives `div B = 0` and `∂_t B + curl E = 0` at every point where the field is differentiable, and these hold for the field of a `C²` potential. The converse and the integral forms over surfaces and curves are not stated |
+| 27 | The action function of the electromagnetic field | proved | `VacuumAction.hasDerivAt_action`, `VacuumAction.stationary_iff_vacuum`, `SourcedAction.lagrangian`, `SourcedAction.lagrangian_zero`, `SourcedAction.hasDerivAt_action`, `SourcedAction.stationary_iff`, `SourcedAction.stationary_iff_excitation`, `SourcedAction.action_gaugeShift`, `SourcedAction.action_gaugeShift_eq_iff`, `SourcedAction.Examples.stationary_example`. Scope: flat spacetime, a `C²` potential and a prescribed `C²` current three-form, variations that are smooth with compact support in an open region, and an integrable density; the action is stationary if and only if `dH = J`, and it is invariant under the gauge changes with compact support if and only if `dJ = 0`. The action on a curved background belongs to E13 (F12) |
+| 28 | The four-dimensional current vector | proved | `Curved.currentEquiv`, `Curved.currentForm_volume`, `SourcedAction.matterCurrentForm`, `SourcedAction.coefficient_wedge_interior_volume`, `SourcedAction.lagrangian_matterCurrentForm`, `SourcedAction.currentForm_minkowski`, `SourcedAction.matterCurrentForm_eq_currentForm`, `SourcedAction.stationary_iff_matterCurrent`. Scope: a smooth matter current `k = (ρ, 𝐤)` on flat spacetime has the current form `J = −ι_k vol`; the source term of the Lagrangian is then `+A(k) = −φρ + a · 𝐤`, with the sign of the coupling `e A(γ̇)` of a charge, and `k = −j` for the vector `j` of `Curved.Maxwell`. The current of point charges, a distribution, is not constructed |
+| 29 | The equation of continuity | proved | `Curved.exteriorDerivative_currentForm`, `Curved.current_closed_iff_divergence`, `Curved.divergence_zero_of_source`, `divergence4`, `coefficient_exteriorDerivative_matterCurrentForm`, `exteriorDerivative_matterCurrentForm_eq_zero_iff`, `divergence4_eq_zero_of_stationary`, `charge_balance`. Scope: `d(−ι_k vol) = −(div k) vol` for a differentiable current; where the action is stationary for a `C³` potential, `div k = 0`; for a `C¹` current with `div k = 0` on a box of the co-ordinates, the change of the charge in the spatial box is minus the flux through its faces. Regions other than boxes are not treated |
+| 30 | The second pair of Maxwell equations | proved | `VacuumAction.stationary_iff_vacuum`, `Curved.sourced_iff_divergence`, `Curved.maxwell_iff_components`, `SourcedAction.stationary_iff_excitation`, `electricVector_excitation`, `magneticVector_excitation`, `inhomogeneous_of_excitation`, `maxwell_of_stationary`, `SourcedAction.Examples.maxwell_example`. Scope: on flat spacetime, in the frame of the co-ordinates, the equation `dH = −ι_k vol` of the excitation `H = −⋆F` gives `div E = ρ` and `curl B − ∂_t E = 𝐤`, and the four equations hold where the action with the current of the matter is stationary; the field `t dt ∧ dx` with the current `∂x` is an instance. The integral forms are not stated |
 | 31 | Energy density and energy flux | informal | Target (E18–E21, F8) |
 | 32 | The energy-momentum tensor | informal | Proved: in every jet ring of fields, for a Lagrangian of the first order, `FieldJetRing.divergence_stress` and `FieldJetRing.conserved_stress` for the canonical tensor of the translations, and `FieldJetRing.conserved_noetherCurrent`. Missing: the symmetric tensor from the variation with respect to the metric and its comparison with the canonical one (E19, F12) |
 | 33 | Energy-momentum tensor of the electromagnetic field | informal | Target (E18–E20, F8) |
@@ -128,7 +128,7 @@ completion.
 | 79 | Scattering of low-frequency waves | informal | Conditional target (E32, F23) |
 | 80 | Scattering of high-frequency waves | informal | Conditional target (E32, F23) |
 
-Count: 10 proved, 56 informal.
+Count: 15 proved, 51 informal.
 
 Closed with a stated remainder: none.
 
@@ -751,6 +751,15 @@ It is not a smooth source and is not part of E15. Smooth charged matter is
 the first coupling target. A future alternative public source convention
 would need an explicit migration; this plan does not change the existing one.
 
+*Status.* E14 and E15 on flat spacetime are proved in
+[`Electrodynamics/SourcedAction.lean`](../ProjectAinos/Electrodynamics/SourcedAction.lean),
+with the change of the action under a gauge change with compact support and
+the converse by the fundamental lemma. The current of smooth matter, with
+`J = −K` and `+A(k)` as the source term, is in
+[`Electrodynamics/MatterCurrent.lean`](../ProjectAinos/Electrodynamics/MatterCurrent.lean),
+and the regression on a bounded domain is
+[`Electrodynamics/SourcedActionExamples.lean`](../ProjectAinos/Electrodynamics/SourcedActionExamples.lean).
+
 ### Observer equations and constraint propagation
 
 **Target E16 (inertial 3+1 equivalence, C, A*).** Use the existing
@@ -772,6 +781,12 @@ inhomogeneous time-dependent equation with a nonzero source.
 For a varying observer field, acceleration, expansion and rotation enter
 the split. It is a separate theorem rather than substitution of a variable
 observer into constant-frame component formulas.
+
+*Status.* The derivation of the four equations in the frame of the
+co-ordinates, with these signs and the example, is proved in
+[`Electrodynamics/ThreePlusOne.lean`](../ProjectAinos/Electrodynamics/ThreePlusOne.lean).
+The converse, from the vector equations to the forms, and the moving frames
+are not stated.
 
 **Target E17 (propagation of constraints, B:PDE).** Given a sufficiently
 regular solution of the evolution equations and a conserved prescribed

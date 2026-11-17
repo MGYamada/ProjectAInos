@@ -24,7 +24,7 @@ The proofs of the three field plans are tracked in
 ledger with one status for each section, a count line and the list of rows closed
 with a remainder, in the vocabulary of the mechanics ledger:
 [special relativity](cinfty-special-relativity.md#ledger) (12 of 14 rows proved),
-[electrodynamics](cinfty-electrodynamics.md#ledger) (10 of 66) and
+[electrodynamics](cinfty-electrodynamics.md#ledger) (15 of 66) and
 [general relativity](cinfty-general-relativity.md#ledger) (5 of 39). The baseline
 counts a row as proved only when its whole target is proved; a row with a proved
 core names the core and stays *informal*. Observations are recorded in the notes
@@ -643,6 +643,23 @@ expressions satisfy `Σₐ Dₐ Eₐ(L) = 0`, Noether's second identity; the
 Lagrangian `−¼ F_{μν} F^{μν}` of a one-form is of this kind for every constant
 symmetric matrix. These are identities of the ring, without integrals; no
 ledger row is promoted. [Guide](variational.md#jet-rings-of-fields)
+
+## The field with a current
+
+The action of the field with a prescribed current three-form `J` is the vacuum
+action minus `∫ A ∧ J`. For a `C²` potential and current it is stationary on an
+open set if and only if `dH = J` with `H = −⋆F`, and under a gauge change with
+compact support it changes by `∫ χ dJ`, so it is gauge invariant if and only
+if `dJ = 0`. A matter current `k = (ρ, 𝐤)` has the current form `−ι_k vol`; the
+source term is then `+A(k)`, the sign of the coupling of a charge, and
+`k = −j` for the vector of the Maxwell system on a manifold. In the frame of
+the co-ordinates `dF = 0` gives `div B = 0` and `∂_t B + curl E = 0`, and
+`dH = −ι_k vol` gives `div E = ρ` and `curl B − ∂_t E = 𝐤`. The equation of
+continuity `div k = 0` follows from the field equation, and on a box of the
+co-ordinates the change of the charge is minus the flux through the faces. The
+field `t dt ∧ dx` with the current `∂x` is a stationary instance. The ledger
+rows of §§26–30 are *proved* in their stated scopes (15 of 66).
+[Guide](electrodynamics.md#the-field-with-a-current-2630)
 
 ## Shared Variational Foundation
 

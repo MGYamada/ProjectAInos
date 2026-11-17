@@ -182,6 +182,12 @@ derivatives. In it a divergence is a null Lagrangian, and Noether's identity
 and the conservation of the canonical stress tensor hold for a Lagrangian of
 the first order. [Guide](docs/variational.md#jet-rings-of-fields)
 
+With a prescribed current the field action gives `dH = J`, it is gauge
+invariant exactly when the current is closed, and the source term has the
+sign of the coupling of a charge. The four equations of Maxwell for `E` and
+`B` follow, and the charge in a box changes by the flux through its faces.
+[Guide](docs/electrodynamics.md#the-field-with-a-current-2630)
+
 Topic 6 follows the provisional Boltzmannian typicality plan in
 [issue #55](https://github.com/MGYamada/ProjectAinos/issues/55). Its guiding references are
 
