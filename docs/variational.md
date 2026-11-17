@@ -59,6 +59,7 @@ open sets gives pointwise vanishing.
 | [Parameter](../ProjectAInos/Variational/Parameter.lean) | A positive derivative gives one open interval chart with a constructed C² inverse; endpoint neighborhoods extend closed-interval predicates |
 | [IntervalParameter](../ProjectAInos/Variational/IntervalParameter.lean) | Local joint C¹ regularity along a compact reference segment gives differentiation of the actual parameter integral, with domination derived; intrinsic boundary/residual splitting |
 | [MovingLimits](../ProjectAInos/Variational/MovingLimits.lean) | Leibniz's rule for an integral whose limits move with the parameter, `hasDerivAt_intervalIntegral_moving`, and its form for an integrand that is smooth on an open set containing the reference segment, `hasDerivAt_intervalIntegral_moving_on` |
+| [ParametricIntegralOn](../ProjectAInos/Variational/ParametricIntegralOn.lean) | `contDiffAt_parametric_intervalIntegral`, `contDiffOn_parametric_intervalIntegral`: a parametric integral of a function that is smooth on an open set containing the segment of integration over a point is smooth at that point, for a parameter in a space of finite dimension |
 | [ManifoldCurve](../ProjectAInos/Variational/ManifoldCurve.lean) | Actual fixed-endpoint C² manifold families and construction of supported chart perturbations, with gluing and coordinate velocity |
 | [Examples](../ProjectAInos/Variational/Examples.lean) | Nonzero variations on time and four-dimensional bases, and a base-dependent momentum with a nonzero divergence residual |
 
@@ -81,6 +82,14 @@ bound follow from compactness, so its public integral derivative theorem asks
 only for local joint C¹ regularity and the specified pointwise derivative.
 This supports manifold curve families crossing chart boundaries without
 constructing a global coordinate curve.
+
+`ParametricIntegralOn` proves that `x ↦ ∫ₐᵇ f(x, t) dt` is smooth at `x₀` when
+`f` is smooth on an open set that contains `{x₀} × [a, b]`
+(`contDiffAt_parametric_intervalIntegral`): `f` is replaced near the segment by
+a function that is smooth everywhere, by `LocalExtension`, and the theorem for
+such functions is `SmoothAlgebra.contDiff_infty_parametric_intervalIntegral`.
+The parameter lies in a space of finite dimension. `eventually_uIcc_mem_open`
+of `MovingLimits` is stated for a parameter in any topological space.
 
 `MovingLimits` differentiates `s ↦ ∫_{a(s)}^{b(s)} F(s, t) dt` for a smooth
 integrand and differentiable limits:

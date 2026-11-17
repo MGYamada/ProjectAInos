@@ -79,8 +79,8 @@ theorem hasDerivAt_intervalIntegral_moving {F : ℝ × ℝ → ℝ} (hF : ContDi
 
 /-- Limits that move continuously keep the segment between them inside an open
 set that contains the reference segment. -/
-theorem eventually_uIcc_mem_open {a b : ℝ → ℝ} {s₀ : ℝ} (ha : ContinuousAt a s₀)
-    (hb : ContinuousAt b s₀) {V : Set (ℝ × ℝ)} (hV : IsOpen V)
+theorem eventually_uIcc_mem_open {X : Type*} [TopologicalSpace X] {a b : X → ℝ} {s₀ : X}
+    (ha : ContinuousAt a s₀) (hb : ContinuousAt b s₀) {V : Set (X × ℝ)} (hV : IsOpen V)
     (h : ∀ t ∈ uIcc (a s₀) (b s₀), (s₀, t) ∈ V) :
     ∀ᶠ s in 𝓝 s₀, ∀ t ∈ uIcc (a s) (b s), (s, t) ∈ V := by
   obtain ⟨S, W, hS, hW, hsS, hKW, hSW⟩ := generalized_tube_lemma

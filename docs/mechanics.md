@@ -1265,7 +1265,84 @@ is `I = (ẋ² + ω² x²)/2ω`.
 
 The derivative of `I` is proportional to `ω̇`, and its second factor
 oscillates about zero. The adiabatic theorem, that the change of `I` stays
-small over a long time when `ω` varies slowly, is not proved.
+small over a long time when `ω` varies slowly, is the subject of the next
+section.
+
+## Adiabatic invariance
+
+`Oscillations/AdiabaticOscillator` proves the adiabatic theorem of
+Landau–Lifshitz §49 for the oscillator `ẍ + Ω(εt)² x = 0`. A motion is a pair
+of functions `x`, `v` with `ẋ = v` and `v̇ = −Ω(εt)² x` on `[0, T/ε]`.
+
+- `action ω x v` is `I = (v² + ω² x²)/2ω`, with `|x v| ≤ I`
+  (`abs_mul_le_action`).
+- `hasDerivAt_action`: along a motion `İ = ε a(εt) (ω² x² − v²)` with
+  `a = Ω′/2Ω²` (`coefficient`). `hasDerivAt_correctedAction`: the corrected
+  action `I + ε a(εt) x v` has the derivative `ε² a′(εt) x v`.
+- `exists_forall_abs_action_sub_le`: if `Ω` is twice continuously
+  differentiable and positive on `[0, T]`, there is a constant `C` such that
+  for every `ε > 0` and every motion `|I(t) − I(0)| ≤ C ε I(0)` for
+  `0 ≤ t ≤ T/ε`. `exists_forall_abs_action_sub_le_exp` is the case
+  `Ω = exp`, and by `action_eq_of_const` the action is constant when the
+  frequency is.
+
+`OneDimension/WellFamily` treats a smooth family `V(s, x)` of potentials with a
+parameter `s` in a space of finite dimension and a smooth level `ℰ(s)`.
+
+- `contDiff_wellFactor_family`: the factor of the well is smooth in the
+  parameter, the two points and the position together.
+  `IsWell.exists_family_param`: the turning points of a well of one parameter
+  extend to smooth functions `α`, `β` of the parameter on an open set, with
+  wells between them.
+- `contDiffOn_orbitRate_family`, `contDiffOn_orbitMomentum_family_param`: the
+  rate and the momentum on the level curves are smooth in the parameter and
+  the angle. Hence the period, the area and the integral over a period of a
+  smooth function of the parameter and the position are smooth functions of
+  the parameter (`contDiffOn_orbitPeriod_family`, `contDiffOn_orbitArea_family`,
+  `contDiffOn_integral_orbitRate_mul`).
+- `hasDerivAt_orbitArea_family`: for a real parameter `r`,
+  `dA/dr = ∮ (ℰ′ − ∂V/∂r) dt`. `fderiv_orbitArea_family`: in general the
+  derivative of the area in a direction `u` of the parameter is
+  `∮ (dℰ(u) − ∂V/∂s (u)) dt`. For a potential that does not depend on the
+  parameter and `ℰ(E) = E` this is `dA/dE = T`.
+
+`OneDimension/AdiabaticInvariant` treats `H = p²/2m + V(λ, x)`; a point is
+`w = ((x, p), λ)`.
+
+- `IsWellFamily V J α β`: a smooth family of wells of the potentials
+  `V(λ, ·)` over an open set `J` of pairs `(E, λ)`. `exists_isWellFamily`: a
+  well of one potential extends to such a family.
+- `period`, `area`, `parameterForce`: the period `T`, the area `A` and
+  `∮ ∂V/∂λ dt` as smooth functions on `J`, with
+  `dA = T dE − (∮ ∂V/∂λ dt) dλ` (`fderiv_area`).
+- `invariant` is the action variable `I(w) = A(H(w), λ)/2π`.
+  `fderiv_invariant_frozenField`: its derivative along the field
+  `frozenField` of the motion with a fixed parameter is zero.
+  `fderiv_invariant_parameter`: its derivative in the parameter is
+  `invariantDeriv = (T ∂V/∂λ − ∮ ∂V/∂λ dt)/2π`.
+- `exists_orbit`: through each point of `wellRegion`, the set of the points on
+  the level curves of the family, there is a motion with the fixed parameter.
+  It stays on the level curve, has the period `T`, and the integral of
+  `∂V/∂λ` along a period is `parameterForce`.
+- `corrector` is `T ∫₀¹ σ ∂I/∂λ (Φ_{Tσ} w) dσ`, with `Φ` the flow of
+  `extendedField`, the field with the parameter held fixed. It is smooth at
+  the points of `wellRegion` (`contDiffAt_corrector`), and its derivative along
+  `frozenField` is `invariantDeriv` (`fderiv_corrector_frozenField`, from
+  `hasDerivAt_weighted_shift` and the vanishing mean of `∂I/∂λ` over a
+  period).
+- `exists_forall_abs_invariant_sub_le`: for a compact subset `K` of
+  `wellRegion` and `Λ` twice continuously differentiable there is `C` such
+  that for every `ε > 0` a motion `ż = frozenField (z, Λ(εt))` that stays in
+  `K` on `[0, T/ε]` has `|I(t) − I(0)| ≤ C ε` there.
+- `isWellFamily_oscillator`, `invariant_oscillator`: for `V(k, x) = k x²/2`
+  the oscillators of all positive stiffnesses and energies form a family, and
+  `I = E √(m/k)`.
+
+The estimate itself is `SlowParameter.abs_sub_le_of_corrector` of the
+[geometry guide](smooth-geometry.md). The hypothesis that the motion stays in
+`K` is not derived from the initial point. Several parameters, the
+neighbourhoods of an equilibrium and of a separatrix, and several degrees of
+freedom are not treated.
 
 ## A non-holonomic constraint
 
@@ -1969,6 +2046,7 @@ semi-major axis is not computed.
 | [Oscillations/AnharmonicNormalForm](../ProjectAInos/Mechanics/Oscillations/AnharmonicNormalForm.lean) | `hamiltonian`, `generator₃`, `generator₄`, `secondCoefficient`, `bracket_action_cubic`, `quarticPart_eq`, `lieExp_generator₃`, `lieExp_generator₄`, `exists_normal_form`, `physicalHamiltonian`, `scale_physicalHamiltonian`, `exists_normal_form_physical`, `two_mul_coefficient_mul_action` |
 | [Oscillations/ParametricExamples](../ProjectAInos/Mechanics/Oscillations/ParametricExamples.lean) | `shift_algebraMap`, `exists_abs_apply_le_harmonic`, `FundamentalSystem.free`, `monodromy_free`, `IsHill.exists_abs_apply_le_free_iff`, `exists_isHill_free_not_bounded`, `FundamentalSystem.hyperbolic`, `trace_monodromy_hyperbolic`, `exists_isHill_hyperbolic_not_bounded`, `IsHill.exists_abs_apply_le_hyperbolic_iff` |
 | [Oscillations/Adiabatic](../ProjectAInos/Mechanics/Oscillations/Adiabatic.lean) | `Parametric.action`, `Parametric.timeDerivative_inv`, `Parametric.timeDerivative_action`, `Parametric.timeDerivative_action_of_const` |
+| [Oscillations/AdiabaticOscillator](../ProjectAInos/Mechanics/Oscillations/AdiabaticOscillator.lean) | `action`, `abs_mul_le_action`, `coefficient`, `hasDerivAt_action`, `hasDerivAt_correctedAction`, `exists_forall_abs_action_sub_le`, `exists_forall_abs_action_sub_le_exp`, `action_eq_of_const` |
 | [Legendre](../ProjectAInos/Mechanics/Legendre.lean) | `positionsToJet`, `positionsToPhase`, `d_zero_positionsToJet`, `orderLE_positionsToJet`, `legendre`, `legendre_p_eq_momentum`, `legendre_hamiltonian`, `isTrajectory_natural_iff`, `isSolution_natural_iff`, `isTrajectory_natural_iff_isSolution` |
 | [Hyperregular](../ProjectAInos/Mechanics/Hyperregular.lean) | `JetRing.sum_mul_d_q_self`, `VelocitySpace`, `VelocitySpace.momentum`, `VelocitySpace.legendre`, `VelocitySpace.energy`, `VelocitySpace.hessian`, `VelocitySpace.apply_legendre`, `VelocitySpace.IsHyperregular`, `VelocitySpace.hamiltonian`, `VelocitySpace.inverseHessian`, `IsHyperregular.inverseHessian_mul_hessian`, `IsHyperregular.legendre_hamiltonian`, `IsHyperregular.legendre_partialDerivation_inr_hamiltonian`, `IsHyperregular.legendre_partialDerivation_inl_hamiltonian`, `VelocitySpace.velocityCurve`, `VelocitySpace.toJet`, `VelocitySpace.prolongation_toJet`, `VelocitySpace.isSolution_toJet_iff`, `IsHyperregular.isTrajectory_iff`, `IsHyperregular.isTrajectory_iff_isSolution`, `VelocitySpace.lagrangeBracket`, `IsHyperregular.legendre_bracket`, `IsHyperregular.lagrangeBracket_q_v`, `VelocitySpace.natural`, `VelocitySpace.isHyperregular_natural`, `VelocitySpace.hamiltonian_natural`, `VelocitySpace.toJet_natural` |
 | [Poisson/GeneratingFunction](../ProjectAInos/Mechanics/Poisson/GeneratingFunction.lean) | `PositionPair`, `oldPosition`, `newPosition`, `gradOld`, `gradNew`, `oldMap`, `newMap`, `mixedHessian`, `oldHessian`, `apply_oldMap`, `gradNew_oldMap`, `gradOld_oldMap`, `IsFree`, `transformation`, `momentumPart`, `positionPart`, `inverseMixed`, `IsFree.inverseMixed_mul_mixedHessian`, `IsFree.momentumPart_eq`, `IsFree.oldMap_bracket`, `IsFree.bracket_apply`, `IsFree.bracket_newPosition_gradNew`, `IsFree.bracket_gradNew_gradNew`, `IsFree.isPoissonHom_transformation`, `IsFree.transformation_comp_inverse`, `IsFree.inverse_comp_transformation`, `exchange`, `isFree_exchange`, `transformation_exchange_q`, `transformation_exchange_p` |
@@ -1997,6 +2075,8 @@ semi-major axis is not computed.
 | [OneDimension/ActionAngle](../ProjectAInos/Mechanics/OneDimension/ActionAngle.lean) | `orbitAction`, `orbitPhase`, `hasDerivAt_orbitAction`, `strictMonoOn_orbitAction`, `IsWell.orbitPhase_add_two_pi`, `IsWell.orbitPhase_orbitAngle`, `orbit_area_form` |
 | [OneDimension/Oscillator](../ProjectAInos/Mechanics/OneDimension/Oscillator.lean) | `wellFactor_oscillator`, `orbitPeriod_oscillator`, `orbitAction_oscillator`, `abel_inversion_oscillator` |
 | [OneDimension/Anharmonic](../ProjectAInos/Mechanics/OneDimension/Anharmonic.lean) | `potential`, `factor`, `wellFactor_potential`, `slopeEquation`, `potential_centre`, `exists_slope`, `exists_isWell`, `symRoot`, `inv_sqrt_add_inv_sqrt`, `kernel`, `periodFunction`, `orbitPeriod_eq_periodFunction`, `periodFunction_zero`, `hasDerivAt_kernel`, `hasDerivAt_periodFunction`, `hasDerivAt_frequency`, `exists_tendsto_frequency` |
+| [OneDimension/WellFamily](../ProjectAInos/Mechanics/OneDimension/WellFamily.lean) | `slopeOf`, `contDiff_wellFactor_family`, `exists_level_point_family`, `IsWell.exists_family_param`, `contDiffOn_orbitRate_family`, `contDiffOn_orbitPeriod_family`, `contDiffOn_orbitArea_family`, `contDiffOn_integral_orbitRate_mul`, `orbitMomentum_mul_deriv_param`, `hasDerivAt_orbitArea_family`, `hasDerivAt_orbitArea_line`, `fderiv_orbitArea_family` |
+| [OneDimension/AdiabaticInvariant](../ProjectAInos/Mechanics/OneDimension/AdiabaticInvariant.lean) | `IsWellFamily`, `exists_isWellFamily`, `period`, `area`, `parameterForce`, `fderiv_area`, `energyAt`, `frozenField`, `invariant`, `invariantDeriv`, `fderiv_invariant_frozenField`, `fderiv_invariant_parameter`, `wellRegion`, `exists_orbit`, `flow_extendedField`, `hasDerivAt_weighted_shift`, `corrector`, `contDiffAt_corrector`, `fderiv_corrector_frozenField`, `exists_forall_abs_invariant_sub_le`, `isWellFamily_oscillator`, `invariant_oscillator` |
 | [Quadrature](../ProjectAInos/Mechanics/Quadrature.lean) | `integral_comp_eq_integral_div_sqrt`, `sub_eq_integral_one_div_sqrt`, `sub_eq_sqrt_mul_integral_of_energy` |
 | [Poisson/OrbitIntegral](../ProjectAInos/Mechanics/Poisson/OrbitIntegral.lean) | `canonical_radius_radialHamiltonian`, `radiusAt`, `radialVelocityAt`, `radialSpeedSq`, `lift_radialHamiltonian_apply`, `hasDerivAt_radiusAt`, `continuous_radialVelocityAt`, `radialVelocityAt_sq`, `continuousOn_radialSpeedSq`, `sub_eq_integral_radius`, `angle_sub_eq_integral_radius`, `timeDerivative_angle_apply` |
 | [TurningPoint](../ProjectAInos/Mechanics/TurningPoint.lean) | `turningParam`, `turningParam_image`, `turningParam_sub_mul_sub`, `integral_turningParam`, `integral_div_sqrt_turning`, `integrableOn_div_sqrt_turning`, `integral_comp_eq_integral_div_sqrt_turning`, `integral_comp_eq_integral_div_sqrt_turning_of_neg`, `sub_eq_integral_turningParam`, `sub_eq_sqrt_mul_integral_of_energy_turning`, `sqrt_mul_integral_oscillator`, `sub_eq_sqrt_mul_integral_oscillator` |

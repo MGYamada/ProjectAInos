@@ -18,7 +18,8 @@ Landau–Lifshitz §49. For `ẍ + ω(t)² x = 0` the action variable is
 
 exactly. It is proportional to `ω̇`, and its second factor oscillates about
 zero; the adiabatic theorem is the statement that the integral of this
-expression stays small when `ω` varies slowly, and it is not proved here.
+expression stays small when `ω` varies slowly. It is proved in
+`Oscillations/AdiabaticOscillator` for functions of a real time.
 -/
 
 @[expose] public section
