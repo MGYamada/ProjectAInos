@@ -1166,6 +1166,29 @@ with `DF(y) Xᵢ(y) = 0` and `dim E = |ι| + |κ|`.
   the joint flow is locally free on such a level set.
 - `exists_torus_chart_levelSet`: the conclusion of `exists_torus_chart` for a
   compact connected regular level set of commuting fields.
+- `exists_levelSet_chart_of_transversal`: the chart `(t, s) ↦ g^t (x + L s)` for
+  any linear map `L` for which `DF(x) ∘ L` is invertible; its inverse is smooth
+  at `x`, and `s ↦ F(x + L s)` is injective on the parameters of the chart.
+
+`ODE.LevelSetTube`: `exists_isInvariantSet_tube`. If the level set `F = c` is
+compact, there are an open set `U` with compact closure that contains it and
+an open set `B` of values that contains `c` such that `F⁻¹(B) ∩ U` is invariant
+with complete flows. `U` is a bounded neighbourhood and `B` is the complement
+of the image of its frontier; a level set over `B` does not meet the frontier.
+
+`ODE.PeriodFamily`: `hasFDerivAt_jointFlow`, the derivative
+`(τ, v) ↦ Σᵢ τᵢ Xᵢ(g^t y) + D_y g^t(y) v` of the joint flow at a point of an
+invariant set; `exists_period_family`, for a point `x` of an open invariant
+set, a transversal `L` and a period `b` of `x` there is a function `e` of the
+parameter of the transversal, smooth at zero with `e(0) = b`, such that
+`g^{e(s)} (x + L s) = x + L s` for small `s`.
+
+`PeriodicInjective`: `exists_injOn_modPeriod`. Let `Ψ(J, φ)` have the period
+`T` in each angle for `J` in an open set, and let it be continuous and locally
+injective at the points `(J₀, φ)`. If two angles give the same point
+`Ψ(J₀, ·)` only when they differ by multiples of `T`, then on a neighbourhood
+of `J₀` the equality `Ψ(J, φ) = Ψ(J′, φ′)` holds only when `J = J′` and the
+angles differ by multiples of `T`.
 
 The field is smooth on the whole space. A field that is smooth only on an
 open set, and a field that depends on the time, are not treated.

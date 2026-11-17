@@ -61,6 +61,7 @@ open sets gives pointwise vanishing.
 | [MovingLimits](../ProjectAInos/Variational/MovingLimits.lean) | Leibniz's rule for an integral whose limits move with the parameter, `hasDerivAt_intervalIntegral_moving`, and its form for an integrand that is smooth on an open set containing the reference segment, `hasDerivAt_intervalIntegral_moving_on` |
 | [ParametricIntegralOn](../ProjectAInos/Variational/ParametricIntegralOn.lean) | `contDiffAt_parametric_intervalIntegral`, `contDiffOn_parametric_intervalIntegral`: a parametric integral of a function that is smooth on an open set containing the segment of integration over a point is smooth at that point, for a parameter in a space of finite dimension |
 | [SecondOrderBound](../ProjectAInos/Variational/SecondOrderBound.lean) | `abs_sub_sub_le_of_abs_le`: `|f(ε) − f(0) − ε f′(0)| ≤ M ε²` if `|f″| ≤ M` on `[−δ, δ]`; `exists_pos_forall_abs_le_mem`: an open set containing `{0} × K` for a compact `K` contains `[−δ, δ] × K`; `exists_second_order_bound`: the remainder of the expansion of the first order in `ε`, with one `δ` and one `M` for all parameters in a compact set |
+| [LineDerivative](../ProjectAInos/Variational/LineDerivative.lean) | `hasDerivAt_line`, `hasDerivAt_line_sub`: the derivative along a line through a point of differentiability. `hasFDerivAt_of_hasDerivAt_line`: derivatives along the lines that are given by continuous linear maps depending continuously on the point are a derivative |
 | [ManifoldCurve](../ProjectAInos/Variational/ManifoldCurve.lean) | Actual fixed-endpoint C² manifold families and construction of supported chart perturbations, with gluing and coordinate velocity |
 | [Examples](../ProjectAInos/Variational/Examples.lean) | Nonzero variations on time and four-dimensional bases, and a base-dependent momentum with a nonzero divergence residual |
 
@@ -100,6 +101,12 @@ If `f(ε, l)` is twice continuously differentiable at the points `(0, l)` with
 continuously differentiable is open, so it contains `[−δ, δ] × K`
 (`exists_pos_forall_abs_le_mem`), and the second derivative in `ε` is bounded
 on this compact set.
+
+`LineDerivative`: if `f` has at every point `s` of an open set, for every
+direction `a`, the derivative `A s a` along the line `ε ↦ s + ε a`, where `A s`
+is a continuous linear map that depends continuously on `s`, then `A s` is the
+derivative of `f` at `s` (`hasFDerivAt_of_hasDerivAt_line`). The proof is the
+mean value inequality for `t ↦ f(s + t h) − t A s h` on `[0, 1]`.
 
 `MovingLimits` differentiates `s ↦ ∫_{a(s)}^{b(s)} F(s, t) dt` for a smooth
 integrand and differentiable limits:
