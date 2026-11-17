@@ -1344,6 +1344,73 @@ The estimate itself is `SlowParameter.abs_sub_le_of_corrector` of the
 neighbourhoods of an equilibrium and of a separatrix, and several degrees of
 freedom are not treated.
 
+## The accuracy of the adiabatic invariant
+
+Landau–Lifshitz §51 for the oscillator `ẍ + ω² x = 0` whose frequency is a
+function of the slow phase. The namespace is `AdiabaticAmplitude`.
+
+`Oscillations/AmplitudeSystem`: `offDiag a b` is the map `(u, w) ↦ (a w, b u)`
+of `ℂ × ℂ`, a real Banach space, and `mulI` the multiplication by `i`.
+`coeff g ε z = offDiag (g(z) e^{2iz/ε}) (g(z) e^{−2iz/ε})` is the coefficient of
+the amplitude system at the complex phase `z`, with `norm_coeff_le` on a strip.
+`path σ (p, s) = s + i σ ρ(p)` with a smooth step `ρ`, and
+`family g ε σ = coeff g ε ∘ path σ`. For `g` holomorphic on an open set that
+contains the strip, `contDiff_family` and `fderiv_family_one_zero`,
+`∂A/∂p = σ ρ′(p) · i ∂A/∂s`.
+
+`Oscillations/AmplitudeDeformation`: `propagator_scaleFst`, the change of the
+first unknown by a constant factor; `norm_fst_propagator_top_le`, on the line
+`Im z = σ` the entry of the propagator from the second unknown to the first is
+at most `e^{G} e^{−2σ/ε}`; `exists_norm_fst_propagator_le`, on the real line
+`|β| ≤ e^{G} e^{−2σ/ε} + C e^{e^{2σ/ε} G} e^{2σ/ε} (m(s₁) + m(s₀))`, where
+`|g(s + iη)| ≤ m(s)` on the strip and `∫ m ≤ G`.
+
+`Oscillations/AmplitudeReal`: on the real line the entries of the coefficient
+are conjugate. `propagator_cmul`, `propagator_swapConj`: the propagator is
+complex linear and commutes with `(u, w) ↦ (w̄, ū)`.
+`normSq_sub_normSq_propagator`: `|u|² − |w|²` is constant.
+`abs_normSq_fst_propagator_sub_le`: for the solution with the initial value
+`(B₀, B̄₀)`, `| |u(s₁)|² − |B₀|² | ≤ |B₀|² |β| (4|β| + 2)`.
+
+`Oscillations/AdiabaticExponential`: the structure `IsStripProfile g σ m G U`
+states that `g` is holomorphic on the open set `U`, which contains the strip
+`0 ≤ Im z ≤ σ`; `g` is real on the real axis; `‖g z‖ ≤ m (Re z)` on the strip;
+`m` is continuous with `∫ m ≤ G` on every interval and tends to zero at both
+ends. `IsSlowOscillator g q ε ω θ x v` states that `ε > 0`, `q′ = 2 Re g` on the
+real axis, `ω = exp q(ε θ)`, `θ̇ = ω`, `ẋ = v` and `v̇ = −ω² x`.
+
+- `amplitude q ε ω θ x v` is `B = (ω x + i v) e^{iθ} e^{−q/2}`, with
+  `|B|² = 2 I` (`IsSlowOscillator.normSq_amplitude`).
+- `hasDerivAt_amplitudePair`: `(B, B̄)` solves the amplitude system in the slow
+  phase, `d/dt (B, B̄) = ε ω · coeff g ε (ε θ) (B, B̄)`.
+  `amplitudePair_eq_propagator`: it is the propagator between the slow phases
+  applied to its value at another time.
+- `abs_action_sub_le`: `|I(t₁) − I(t₀)| ≤ I(t₀) |β| (4|β| + 2)`.
+
+`Oscillations/AdiabaticAccuracy`:
+
+- `IsSlowOscillator.tendsto_phase_atTop`, `tendsto_phase_atBot`: the frequency
+  is bounded below, so the phase tends to `±∞`.
+- `IsSlowOscillator.exists_tendsto_action`: the action has limits at both ends.
+  `exists_tendsto_of_abs_deriv_le` is the statement on real functions: if
+  `|N′| ≤ 2 W′ N` with `W` bounded and `W′ ≥ 0`, then `N e^{2W}` is monotone and
+  bounded.
+- `abs_action_limit_sub_le`: for the limits `I₀` at `−∞` and `I₁` at `+∞`,
+  `|I₁ − I₀| ≤ e^{G} (4 e^{G} + 2) e^{−2σ/ε} I₀`.
+  `exists_tendsto_action_and_abs_sub_le` combines the two statements.
+
+`Oscillations/AdiabaticAccuracyExample`:
+`IsStripProfile.exists_isSlowOscillator`, for every profile, every `q`, every
+`ε > 0` and all initial values there is an oscillator; the phase is the flow
+of `θ̇ = exp q(ε θ)`. `lorentzProfile a z = a z/(1 + z²)²` with
+`lorentzLog a s = −a/(1 + s²)` is a profile on every strip with `σ < 1`
+(`isStripProfile_lorentz`), and `exists_lorentz_oscillator` is the estimate
+for it.
+
+The hypothesis is on the frequency as a function of the slow phase. A
+frequency that is given as a holomorphic function of the slow time, the
+constant in front of the exponential, and nonlinear systems are not treated.
+
 ## A non-holonomic constraint
 
 `KnifeEdge` treats the standard example of Landau–Lifshitz §38: a blade that
@@ -2416,6 +2483,12 @@ semi-major axis is not computed.
 | [Oscillations/ParametricExamples](../ProjectAInos/Mechanics/Oscillations/ParametricExamples.lean) | `shift_algebraMap`, `exists_abs_apply_le_harmonic`, `FundamentalSystem.free`, `monodromy_free`, `IsHill.exists_abs_apply_le_free_iff`, `exists_isHill_free_not_bounded`, `FundamentalSystem.hyperbolic`, `trace_monodromy_hyperbolic`, `exists_isHill_hyperbolic_not_bounded`, `IsHill.exists_abs_apply_le_hyperbolic_iff` |
 | [Oscillations/Adiabatic](../ProjectAInos/Mechanics/Oscillations/Adiabatic.lean) | `Parametric.action`, `Parametric.timeDerivative_inv`, `Parametric.timeDerivative_action`, `Parametric.timeDerivative_action_of_const` |
 | [Oscillations/AdiabaticOscillator](../ProjectAInos/Mechanics/Oscillations/AdiabaticOscillator.lean) | `action`, `abs_mul_le_action`, `coefficient`, `hasDerivAt_action`, `hasDerivAt_correctedAction`, `exists_forall_abs_action_sub_le`, `exists_forall_abs_action_sub_le_exp`, `action_eq_of_const` |
+| [Oscillations/AmplitudeSystem](../ProjectAInos/Mechanics/Oscillations/AmplitudeSystem.lean) | `AdiabaticAmplitude.offDiag`, `AdiabaticAmplitude.mulI`, `AdiabaticAmplitude.coeff`, `AdiabaticAmplitude.norm_coeff_le`, `AdiabaticAmplitude.path`, `AdiabaticAmplitude.family`, `AdiabaticAmplitude.contDiff_family`, `AdiabaticAmplitude.fderiv_family_one_zero` |
+| [Oscillations/AmplitudeDeformation](../ProjectAInos/Mechanics/Oscillations/AmplitudeDeformation.lean) | `AdiabaticAmplitude.offDiagCurve`, `AdiabaticAmplitude.scaleFst`, `AdiabaticAmplitude.propagator_scaleFst`, `AdiabaticAmplitude.norm_propagator_offDiagCurve_le`, `AdiabaticAmplitude.norm_fst_propagator_top_le`, `AdiabaticAmplitude.exists_norm_fst_propagator_le` |
+| [Oscillations/AmplitudeReal](../ProjectAInos/Mechanics/Oscillations/AmplitudeReal.lean) | `AdiabaticAmplitude.cmul`, `AdiabaticAmplitude.swapConj`, `AdiabaticAmplitude.propagator_cmul`, `AdiabaticAmplitude.propagator_swapConj`, `AdiabaticAmplitude.normSq_sub_normSq_propagator`, `AdiabaticAmplitude.abs_normSq_fst_propagator_sub_le` |
+| [Oscillations/AdiabaticExponential](../ProjectAInos/Mechanics/Oscillations/AdiabaticExponential.lean) | `AdiabaticAmplitude.IsStripProfile`, `AdiabaticAmplitude.IsStripProfile.realCurve`, `AdiabaticAmplitude.IsSlowOscillator`, `AdiabaticAmplitude.amplitude`, `AdiabaticAmplitude.IsSlowOscillator.normSq_amplitude`, `AdiabaticAmplitude.hasDerivAt_amplitudePair`, `AdiabaticAmplitude.amplitudePair_eq_propagator`, `AdiabaticAmplitude.abs_action_sub_le` |
+| [Oscillations/AdiabaticAccuracy](../ProjectAInos/Mechanics/Oscillations/AdiabaticAccuracy.lean) | `AdiabaticAmplitude.IsStripProfile.abs_log_sub_le`, `AdiabaticAmplitude.IsSlowOscillator.tendsto_phase_atTop`, `AdiabaticAmplitude.IsSlowOscillator.tendsto_phase_atBot`, `AdiabaticAmplitude.exists_tendsto_of_abs_deriv_le`, `AdiabaticAmplitude.IsSlowOscillator.exists_tendsto_action`, `AdiabaticAmplitude.abs_action_limit_sub_le`, `AdiabaticAmplitude.exists_tendsto_action_and_abs_sub_le` |
+| [Oscillations/AdiabaticAccuracyExample](../ProjectAInos/Mechanics/Oscillations/AdiabaticAccuracyExample.lean) | `AdiabaticAmplitude.IsStripProfile.exists_phase`, `AdiabaticAmplitude.IsStripProfile.exists_isSlowOscillator`, `AdiabaticAmplitude.lorentzProfile`, `AdiabaticAmplitude.lorentzLog`, `AdiabaticAmplitude.isStripProfile_lorentz`, `AdiabaticAmplitude.exists_lorentz_oscillator` |
 | [Legendre](../ProjectAInos/Mechanics/Legendre.lean) | `positionsToJet`, `positionsToPhase`, `d_zero_positionsToJet`, `orderLE_positionsToJet`, `legendre`, `legendre_p_eq_momentum`, `legendre_hamiltonian`, `isTrajectory_natural_iff`, `isSolution_natural_iff`, `isTrajectory_natural_iff_isSolution` |
 | [Hyperregular](../ProjectAInos/Mechanics/Hyperregular.lean) | `JetRing.sum_mul_d_q_self`, `VelocitySpace`, `VelocitySpace.momentum`, `VelocitySpace.legendre`, `VelocitySpace.energy`, `VelocitySpace.hessian`, `VelocitySpace.apply_legendre`, `VelocitySpace.IsHyperregular`, `VelocitySpace.hamiltonian`, `VelocitySpace.inverseHessian`, `IsHyperregular.inverseHessian_mul_hessian`, `IsHyperregular.legendre_hamiltonian`, `IsHyperregular.legendre_partialDerivation_inr_hamiltonian`, `IsHyperregular.legendre_partialDerivation_inl_hamiltonian`, `VelocitySpace.velocityCurve`, `VelocitySpace.toJet`, `VelocitySpace.prolongation_toJet`, `VelocitySpace.isSolution_toJet_iff`, `IsHyperregular.isTrajectory_iff`, `IsHyperregular.isTrajectory_iff_isSolution`, `VelocitySpace.lagrangeBracket`, `IsHyperregular.legendre_bracket`, `IsHyperregular.lagrangeBracket_q_v`, `VelocitySpace.natural`, `VelocitySpace.isHyperregular_natural`, `VelocitySpace.hamiltonian_natural`, `VelocitySpace.toJet_natural` |
 | [Poisson/GeneratingFunction](../ProjectAInos/Mechanics/Poisson/GeneratingFunction.lean) | `PositionPair`, `oldPosition`, `newPosition`, `gradOld`, `gradNew`, `oldMap`, `newMap`, `mixedHessian`, `oldHessian`, `apply_oldMap`, `gradNew_oldMap`, `gradOld_oldMap`, `IsFree`, `transformation`, `momentumPart`, `positionPart`, `inverseMixed`, `IsFree.inverseMixed_mul_mixedHessian`, `IsFree.momentumPart_eq`, `IsFree.oldMap_bracket`, `IsFree.bracket_apply`, `IsFree.bracket_newPosition_gradNew`, `IsFree.bracket_gradNew_gradNew`, `IsFree.isPoissonHom_transformation`, `IsFree.transformation_comp_inverse`, `IsFree.inverse_comp_transformation`, `exchange`, `isFree_exchange`, `transformation_exchange_q`, `transformation_exchange_p` |

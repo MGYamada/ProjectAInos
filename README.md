@@ -293,7 +293,11 @@ The adiabatic theorem is proved for one degree of freedom: for
 `H = p²/2m + V(λ, x)` with `λ = Λ(εt)` the action variable `(1/2π) ∮ p dx`
 changes by at most `C ε` up to the time `T/ε` along a motion that stays in a
 compact set of closed level curves, and for the oscillator with the frequency
-`Ω(εt)` by at most `C ε I(0)` for every motion.
+`Ω(εt)` by at most `C ε I(0)` for every motion. For an oscillator whose
+frequency is a function of the slow phase `ε ∫ ω dt` that is holomorphic on a
+strip of the width `σ`, the action has limits at `t → ∓∞`, and their
+difference is at most `e^{G}(4e^{G} + 2) e^{−2σ/ε}` times the initial action:
+the total change of the adiabatic invariant is exponentially small.
 Scattering in a central field is proved for motions in polar co-ordinates:
 the angle described from the closest approach to infinity is the integral
 (18.4), the velocities before and after the scattering have the scalar
