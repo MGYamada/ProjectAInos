@@ -36,7 +36,9 @@
   root and shared import boundary, and audits the assembled Lean environment.
   Pull requests that change no Lean source, checks, Lake configuration,
   toolchain, manifest, or Lean workflow skip the Lean steps. Pushes to `main`
-  always run them.
+  always run them. The ruleset of `main` also requires **Detect Lean changes**
+  and the three subject jobs, so these jobs run in every pull request and
+  skip their steps when the Lean steps are not needed.
 - Run short, reproducible Python checks in the separate, non-required
   **Experiments** workflow for changes to the experiment package. Run long calculations
   on demand and record the parameters, tolerances, and random seeds when
