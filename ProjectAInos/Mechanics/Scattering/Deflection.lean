@@ -41,7 +41,8 @@ def angleDensity (ℓ : ℝ) (F : ℝ → ℝ) (ρ : ℝ) : ℝ := ℓ / ρ ^ 2 
 
 /-- The angle of deflection `χ = π − 2φ₀` of Landau–Lifshitz (18.1), (18.4),
 with `φ₀` the integral of the density from the closest approach `r₀` to
-infinity. Its absolute value is the angle between the asymptotes. -/
+infinity. This is the unwrapped angle: the angle between the asymptotes is
+`arccos (cos χ)`, which is `|χ|` when `|χ| ≤ π`. -/
 def deflectionAngle (ℓ : ℝ) (F : ℝ → ℝ) (r₀ : ℝ) : ℝ :=
   π - 2 * ∫ ρ in Ioi r₀, angleDensity ℓ F ρ
 

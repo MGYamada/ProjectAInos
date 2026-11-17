@@ -287,6 +287,10 @@ example (vinf φinf : ℝ) :
       vinf ^ 2 * Real.cos (π - 2 * φinf) :=
   asymptote_inner vinf φinf
 
+example {φinf : ℝ} (h : |π - 2 * φinf| ≤ π) :
+    Real.arccos (Real.cos (π - 2 * φinf)) = |π - 2 * φinf| :=
+  Scattering.arccos_cos_deflection h
+
 end Asymptote
 
 section Coulomb
@@ -453,6 +457,13 @@ example (hρ : 0 < ρ) (ha : a ≠ 0) :
 example (hρ : 0 < ρ) (ha : 0 < a) :
     deflection a ρ ∈ Ioo 0 π :=
   deflection_mem_Ioo hρ ha
+
+example (a ρ : ℝ) : |deflection a ρ| ≤ π :=
+  abs_deflection_le a ρ
+
+example (a ρ : ℝ) :
+    Real.arccos (Real.cos (deflection a ρ)) = |deflection a ρ| :=
+  Coulomb.arccos_cos_deflection a ρ
 
 end Coulomb
 

@@ -296,8 +296,9 @@ compact set of closed level curves, and for the oscillator with the frequency
 `Ω(εt)` by at most `C ε I(0)` for every motion.
 Scattering in a central field is proved for motions in polar co-ordinates:
 the angle described from the closest approach to infinity is the integral
-(18.4), the velocities before and after the scattering make the angle
-`|π − 2φ₀|`, and the cross-section is the push-forward of the measure
+(18.4), the velocities before and after the scattering have the scalar
+product `v∞² cos (π − 2φ₀)` and make the angle `|π − 2φ₀|` when this is at
+most `π`, and the cross-section is the push-forward of the measure
 `2πρ dρ` of the impact parameter. For the Coulomb field `cot (χ/2) = m v∞² ρ/α`,
 and Rutherford's formula is the density `(α/2m v∞²)²/sin⁴ (χ/2)` of the
 cross-section with respect to the solid angle.

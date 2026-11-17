@@ -361,4 +361,16 @@ theorem deflection_mem_Ioo (hρ : 0 < ρ) (ha : 0 < a) : deflection a ρ ∈ Ioo
   rw [deflection]
   constructor <;> linarith
 
+/-- In the Coulomb field the angle of deflection is between `−π` and `π`. -/
+theorem abs_deflection_le (a ρ : ℝ) : |deflection a ρ| ≤ π := by
+  rw [deflection, abs_le]
+  constructor <;>
+    linarith [Real.arccos_nonneg (a / hyp a ρ), Real.arccos_le_pi (a / hyp a ρ)]
+
+/-- In the Coulomb field the angle between the velocities before and after
+the scattering is `|χ|`. -/
+theorem arccos_cos_deflection (a ρ : ℝ) :
+    Real.arccos (Real.cos (deflection a ρ)) = |deflection a ρ| :=
+  Scattering.arccos_cos_deflection (abs_deflection_le a ρ)
+
 end ProjectAInos.Mechanics.Scattering.Coulomb

@@ -1429,7 +1429,10 @@ approach, with `r(0) > 0`, `ṙ > 0` and `ṙ² = F(r)` for `t > 0`.
   `ṙ → v∞` and `φ → φ₀` as `t → ∞`, the velocity tends to
   `v∞ (cos φ₀, sin φ₀)` as `t → ∞` and to `v∞ (−cos φ₀, sin φ₀)` as
   `t → −∞`. `asymptote_inner`: the scalar product of these is
-  `v∞² cos (π − 2φ₀)`, so the angle of deflection is `|π − 2φ₀|`.
+  `v∞² cos (π − 2φ₀)`. `arccos_cos_deflection`: the angle between the two
+  velocities, `arccos (cos (π − 2φ₀))`, is `|π − 2φ₀|` when `|π − 2φ₀| ≤ π`.
+  For a motion that turns further round the centre `χ = π − 2φ₀` is the
+  unwrapped angle: with `φ₀ = 3π/2` the two velocities coincide.
 
 `Scattering/Coulomb`: `U = α/r`, with `a = α/m v∞²` of either sign.
 
@@ -2139,8 +2142,8 @@ semi-major axis is not computed.
 | [Rutherford](../ProjectAInos/Mechanics/Rutherford.lean) | `eccentricity_sq_sub_one`, `cot_half_eq`, `hasDerivAt_impactParameter`, `rutherford` |
 | [Scattering/RadialMotion](../ProjectAInos/Mechanics/Scattering/RadialMotion.lean) | `IsFactor`, `parameter`, `radius`, `radialVelocity`, `IsFactor.radialVelocity_sq`, `IsFactor.radialVelocity_pos`, `IsFactor.radius_neg`, `IsFactor.tendsto_radius_atTop`, `IsFactor.hasDerivAt_radialVelocity`, `exists_isFactor_dividedDifference`, `angle`, `IsFactor.angle_neg` |
 | [Scattering/Deflection](../ProjectAInos/Mechanics/Scattering/Deflection.lean) | `angleDensity`, `deflectionAngle`, `image_Ioc_radius`, `integral_angleDensity_eq`, `tendsto_angle_atTop`, `integrableOn_angleDensity_Ioi` |
-| [Scattering/Asymptote](../ProjectAInos/Mechanics/Scattering/Asymptote.lean) | `IsFactor.tendsto_angle_atTop`, `IsFactor.tendsto_angle_atBot`, `IsFactor.tendsto_radialVelocity_atTop`, `position`, `velocity`, `position_cross_velocity`, `IsFactor.hasDerivAt_position`, `IsFactor.hasDerivAt_velocity`, `IsFactor.tendsto_velocity_atTop`, `IsFactor.tendsto_velocity_atBot`, `asymptote_inner` |
-| [Scattering/Coulomb](../ProjectAInos/Mechanics/Scattering/Coulomb.lean) | `speedSq`, `closest`, `factor`, `speedSq_eq`, `isFactor`, `hasDerivAt_primitive`, `integral_angleDensity`, `tendsto_angle_atTop`, `tendsto_velocity_atTop`, `tendsto_velocity_atBot`, `hasDerivAt_velocity`, `deflection`, `sin_half_deflection`, `cot_half_deflection`, `deflection_mem_Ioo`, `deflection_neg` |
+| [Scattering/Asymptote](../ProjectAInos/Mechanics/Scattering/Asymptote.lean) | `IsFactor.tendsto_angle_atTop`, `IsFactor.tendsto_angle_atBot`, `IsFactor.tendsto_radialVelocity_atTop`, `position`, `velocity`, `position_cross_velocity`, `IsFactor.hasDerivAt_position`, `IsFactor.hasDerivAt_velocity`, `IsFactor.tendsto_velocity_atTop`, `IsFactor.tendsto_velocity_atBot`, `asymptote_inner`, `arccos_cos_deflection` |
+| [Scattering/Coulomb](../ProjectAInos/Mechanics/Scattering/Coulomb.lean) | `speedSq`, `closest`, `factor`, `speedSq_eq`, `isFactor`, `hasDerivAt_primitive`, `integral_angleDensity`, `tendsto_angle_atTop`, `tendsto_velocity_atTop`, `tendsto_velocity_atBot`, `hasDerivAt_velocity`, `deflection`, `sin_half_deflection`, `cot_half_deflection`, `deflection_mem_Ioo`, `deflection_neg`, `abs_deflection_le`, `arccos_cos_deflection` |
 | [Scattering/CrossSection](../ProjectAInos/Mechanics/Scattering/CrossSection.lean) | `impactMeasure`, `solidAngle`, `crossSection`, `crossSection_apply`, `Coulomb.impact`, `Coulomb.deflection_impact`, `Coulomb.impact_deflection`, `Coulomb.crossSection_coulomb`, `Coulomb.abs_deflection`, `Coulomb.crossSection_coulomb_abs` |
 | [Oscillations/PhaseVolume](../ProjectAInos/Mechanics/Oscillations/PhaseVolume.lean) | `Oscillator.map_flowMatrix_volume`, `Oscillator.measurePreserving_flowMatrix` |
 | [Poisson/Liouville](../ProjectAInos/Mechanics/Poisson/Liouville.lean) | `divergence`, `divergence_eq`, `divergence_hamiltonian`, `divergence_dissipativeField`, `Oscillator.divergence_dissipativeField` |

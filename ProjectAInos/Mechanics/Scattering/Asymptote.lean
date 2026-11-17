@@ -23,7 +23,10 @@ For the radial motion `radius W r₀` with the angle `angle W r₀ ℓ`:
 * `tendsto_velocity_atTop`, `tendsto_velocity_atBot`: the velocity tends to
   `v∞ (cos φ₀, sin φ₀)` and to `v∞ (−cos φ₀, sin φ₀)`.
 * `asymptote_inner`: the scalar product of the two limits is
-  `v∞² cos (π − 2φ₀)`, so the angle of deflection is `|π − 2φ₀|` (18.1).
+  `v∞² cos (π − 2φ₀)` (18.1). `arccos_cos_deflection`: the angle between the
+  two velocities, `arccos (cos (π − 2φ₀))`, is `|π − 2φ₀|` when
+  `|π − 2φ₀| ≤ π`. For a motion that turns further round the centre
+  `π − 2φ₀` is the unwrapped angle.
 -/
 
 @[expose] public section
@@ -207,8 +210,8 @@ theorem tendsto_velocity_atBot (h : IsFactor W r₀ C) (ℓ : ℝ) {vinf φinf :
 end IsFactor
 
 /-- The scalar product of the velocities before and after the scattering is
-`v∞² cos (π − 2φ₀)`: the angle of deflection is `|π − 2φ₀|`
-(Landau–Lifshitz (18.1)). -/
+`v∞² cos (π − 2φ₀)` (Landau–Lifshitz (18.1)). The angle between the two
+velocities is therefore `arccos (cos (π − 2φ₀))`; see `arccos_cos_deflection`. -/
 theorem asymptote_inner (vinf φinf : ℝ) :
     -(vinf * Real.cos φinf) * (vinf * Real.cos φinf) +
         vinf * Real.sin φinf * (vinf * Real.sin φinf) =
@@ -216,5 +219,13 @@ theorem asymptote_inner (vinf φinf : ℝ) :
   rw [Real.cos_pi_sub, Real.cos_two_mul]
   have h := Real.sin_sq_add_cos_sq φinf
   linear_combination (vinf ^ 2) * h
+
+/-- The angle between the velocities before and after the scattering is
+`|π − 2φ₀|` when this is at most `π`, that is, for `0 ≤ φ₀ ≤ π`. Without the
+restriction `π − 2φ₀` is the unwrapped angle: for `φ₀ = 3π/2` the two
+velocities coincide. -/
+theorem arccos_cos_deflection {φinf : ℝ} (h : |π - 2 * φinf| ≤ π) :
+    Real.arccos (Real.cos (π - 2 * φinf)) = |π - 2 * φinf| := by
+  rw [← Real.cos_abs, Real.arccos_cos (abs_nonneg _) h]
 
 end ProjectAInos.Mechanics.Scattering
