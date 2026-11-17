@@ -24,7 +24,7 @@ The proofs of the three field plans are tracked in
 ledger with one status for each section, a count line and the list of rows closed
 with a remainder, in the vocabulary of the mechanics ledger:
 [special relativity](cinfty-special-relativity.md#ledger) (12 of 14 rows proved),
-[electrodynamics](cinfty-electrodynamics.md#ledger) (6 of 66) and
+[electrodynamics](cinfty-electrodynamics.md#ledger) (10 of 66) and
 [general relativity](cinfty-general-relativity.md#ledger) (5 of 39). The baseline
 counts a row as proved only when its whole target is proved; a row with a proved
 core names the core and stays *informal*. Observations are recorded in the notes
@@ -604,7 +604,23 @@ a field of two covectors the generator satisfies `A³ = κ A`, which gives the
 hyperbolic motion in an electric field, the helix in a magnetic field and a
 polynomial motion in a null field, and for parallel fields the velocities add.
 The ledger rows of §§15 and 19–23 are *proved* in their stated scopes (6 of
-66). [Guide](electrodynamics.md#a-charge-in-a-given-field-1523)
+66).
+
+The second part treats the field itself. The components `E` and `B` of a
+field for the observer with the velocity `V` along the first axis are `E₁`,
+`γ (E₂ − V B₃)`, `γ (E₃ + V B₂)` and `B₁`, `γ (B₂ + V E₃)`, `γ (B₃ − V E₂)`;
+they are the components of the pullback of the field by the inverse boost. The
+generator `A = (e/m) F♯` of a constant field satisfies the equation of Cayley
+and Hamilton `A⁴ = −(e/m)² I₁ A² + (e/m)⁴ I₂²` with the invariants
+`I₁ = B² − E²` and `I₂ = E · B`, and `A³ = −(e/m)² I₁ A` when `I₂ = 0`. This
+gives four kinds of a field, with a closed form of the four-velocity for each:
+hyperbolic, circular, polynomial for a null field, and for `I₂ ≠ 0` the sum of
+a hyperbolic and a circular motion on the range and the kernel of a projection
+that commutes with `A`. No frame with parallel fields is constructed. On a
+manifold the field `dA` of a one-form is closed, unchanged by `A ↦ A + dχ` and
+natural for smooth maps. The ledger rows of §§16, 18, 24 and 25 are *proved*
+in their stated scopes (10 of 66).
+[Guide](electrodynamics.md#a-charge-in-a-given-field-1525)
 
 ## Shared Variational Foundation
 

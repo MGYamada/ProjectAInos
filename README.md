@@ -171,9 +171,11 @@ For electrodynamics, a charge in static potentials has the Hamiltonian
 `√(m² + Σ (pᵢ − e aᵢ)²) + e φ`; its equations are the equation of the Lorentz
 force, its flow exists for all times, and they are the stationary curves of
 the action of space-time. In a constant field the motion in the proper time
-is solved for every field, with closed forms in the electric, the magnetic,
-the null and the parallel case.
-[Guide](docs/electrodynamics.md#a-charge-in-a-given-field-1523)
+is solved for every field, with a closed form of the four-velocity in each
+of the four cases of the invariants `B² − E²` and `E · B`. The components of
+`E` and `B` for a moving observer are derived from the boost, and on a
+manifold the field of a potential is closed, gauge invariant and natural.
+[Guide](docs/electrodynamics.md#a-charge-in-a-given-field-1525)
 
 Topic 6 follows the provisional Boltzmannian typicality plan in
 [issue #55](https://github.com/MGYamada/ProjectAinos/issues/55). Its guiding references are

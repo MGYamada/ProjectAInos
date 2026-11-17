@@ -9,10 +9,13 @@ public import ProjectAinos.Electrodynamics.CurrentExamples
 public import ProjectAinos.Electrodynamics.Curved
 public import ProjectAinos.Electrodynamics.CurvedComponents
 public import ProjectAinos.Electrodynamics.CurvedExamples
+public import ProjectAinos.Electrodynamics.CurvedPotential
 public import ProjectAinos.Electrodynamics.DivergenceExamples
 public import ProjectAinos.Electrodynamics.Examples
 public import ProjectAinos.Electrodynamics.ExcitationChart
 public import ProjectAinos.Electrodynamics.Field
+public import ProjectAinos.Electrodynamics.FieldClassification
+public import ProjectAinos.Electrodynamics.FieldTransformation
 public import ProjectAinos.Electrodynamics.GaugeAction
 public import ProjectAinos.Electrodynamics.Hamiltonian
 public import ProjectAinos.Electrodynamics.HamiltonianExamples
