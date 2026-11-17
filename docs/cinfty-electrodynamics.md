@@ -44,6 +44,94 @@ underlying tensor and form operations. The geometric results delivered by
 [#52](https://github.com/MGYamada/ProjectAinos/issues/52) are already on `main`;
 they are not pending prerequisites for this document's fixed-background work.
 
+### Ledger
+
+The ledger gives one status to each of §§15–80, with the vocabulary of the
+[mechanics ledger](cinfty-mechanics.md#ledger): *proved* (Lean, no `sorry`,
+axioms audited), *proved modulo interface*, *hypothesis*, *evidence* (computer
+algebra only), or *informal*. The status refers to the target of the row in the
+[dictionary](#landau-lifshitz-correspondence), whose last column records the
+baseline. A status is only promoted, and a row whose target is proved only in
+part stays at the lower status, with the proved part named. A row is closed
+when it is *proved*, or when its remark names the proved part and gives the
+reason why the rest is not proved; the rows closed in the second way are
+listed after the count. The wave names F1–F26 are those of
+[issue #135](https://github.com/MGYamada/ProjectAinos/issues/135), which tracks
+completion.
+
+| § | Topic | Status | Lean declarations, or what is missing |
+|---:|:---|:---|:---|
+| 15 | Elementary particles and their charge | informal | Proved: `chargedLagrangian`, `chargedAction`, `charged_momentum`, `stationary_iff_lorentzForce`, on flat spacetime. That `e` is the measured charge is a premise. Typed examples are added in F5 |
+| 16 | Four-potential of a field | informal | Proved: `Potential`, `potentialOf`, `potentialComponent`, `fieldTensor_lorentz`, `fieldTensor_poincare`, for a potential on an open set of flat spacetime. Missing: potentials as one-forms on a manifold (F5) |
+| 17 | Equations of motion of a charge in a field | informal | Proved: `stationary_iff_lorentzForce`, `stationary_properTime`, `lorentzForce_orthogonal`, `mass_shell`. Missing: the equation on a curved background (E10, F12) |
+| 18 | Gauge invariance | informal | Proved: `fieldTensor_gauge_on`, `chargedAction_gauge_on`, `stationary_gauge_iff_on`, `VacuumAction.action_gauge`. Missing: the statement for one-forms on a manifold (F5); a principal bundle with its transition functions (E8) |
+| 19 | Constant electromagnetic field | informal | Target: the Hamiltonian of a charge in a static field and its first integrals (E9a, F5) |
+| 20 | Motion in a constant uniform electric field | informal | Proved: `hyperbola_stationary`, `hyperbola_lorentzForce`. Missing: the motion for arbitrary initial data (F5) |
+| 21 | Motion in a constant uniform magnetic field | informal | Target (F5) |
+| 22 | Motion in constant uniform electric and magnetic fields | informal | Target: the linear equation of the velocity in proper time, with the degenerate cases (F5) |
+| 23 | The electromagnetic field tensor | informal | Proved: `fieldTensor_apply`, `fieldTensor_component`, `Curved.Field`, `Curved.excitation_flat`. Typed examples are added in F5 |
+| 24 | Lorentz transformation of the field | informal | Proved: `fieldTensor_lorentz`, `observer_reconstruction`, `electric_apply`, `magnetic_apply`. Missing: the transformed components of `E` and `B` under a boost (F5) |
+| 25 | Invariants of the field | informal | Proved: `scalarInvariant_observer`, `pseudoscalarInvariant_observer`, `scalarInvariant_lorentz`, `pseudoscalarInvariant_lorentz`. Missing: the normal forms, with a null field that is not zero (F5) |
+| 26 | The first pair of Maxwell's equations | informal | Proved: `bianchi_on`, `bianchi_components`, `Curved.Maxwell.homogeneous_covariant`. Missing: the equations for `E` and `B` in an inertial frame (E16, F7) |
+| 27 | The action function of the electromagnetic field | informal | Proved: `VacuumAction.hasDerivAt_action`, `VacuumAction.stationary_iff_vacuum`, on flat spacetime without a source. Missing: a prescribed source (E15, F7); a curved background (E13, F12) |
+| 28 | The four-dimensional current vector | informal | Proved: `Curved.currentEquiv`, `Curved.currentForm_volume`. Missing: the sign that relates the source to the current of the matter action (F7) |
+| 29 | The equation of continuity | informal | Proved: `Curved.exteriorDerivative_currentForm`, `Curved.current_closed_iff_divergence`, `Curved.divergence_zero_of_source`. Missing: the balance of the charge in a region (F7) |
+| 30 | The second pair of Maxwell equations | informal | Proved: `VacuumAction.stationary_iff_vacuum`, `Curved.sourced_iff_divergence`, `Curved.maxwell_iff_components`. Missing: the action with a source (E15) and the equations for `E` and `B` (E16); F7 |
+| 31 | Energy density and energy flux | informal | Target (E18–E21, F8) |
+| 32 | The energy-momentum tensor | informal | Target: the identities of the jet ring of fields (E3a, F6); the variation with respect to the metric (E19, F12) |
+| 33 | Energy-momentum tensor of the electromagnetic field | informal | Target (E18–E20, F8) |
+| 34 | The virial theorem | informal | Target (E21, F8) |
+| 35 | The energy-momentum tensor for macroscopic bodies | informal | Target: charged dust (F8) |
+| 36 | Coulomb's law | informal | Target: the potential of a smooth compactly supported charge and its uniqueness (E22, F16) |
+| 37 | Electrostatic energy of charges | informal | Target (E22, F16). The energy of a point charge is excluded |
+| 38 | The field of a uniformly moving charge | informal | Proved: `fieldTensor_lorentz`, `fieldTensor_poincare`. Missing: a static solution with a source to which they apply (E22, F16) |
+| 39 | Motion in the Coulomb field | informal | Target (E9a, F16). Polar co-ordinates, the reduction with respect to the angle and the quadrature exist in `Mechanics` for the nonrelativistic kinetic energy |
+| 40 | The dipole moment | informal | Target (E23, F16) |
+| 41 | Multipole moments | informal | Target (E23, F16) |
+| 42 | System of charges in an external field | informal | Target (E23, F16) |
+| 43 | Constant magnetic field | informal | Target (E22, F16) |
+| 44 | Magnetic moments | informal | Target (E23, F16) |
+| 45 | Larmor's theorem | informal | Target: the exact Hamiltonian in the rotating frame; the bound of the neglected term is a conditional target (F16) |
+| 46 | The wave equation | informal | Target (E17, E24, F17) |
+| 47 | Plane waves | informal | Target (E24, F17) |
+| 48 | Monochromatic plane waves | informal | Target (E24, F17) |
+| 49 | Spectral resolution | informal | Conditional target (F17) |
+| 50 | Partially polarized light | informal | Target (F17) |
+| 51 | The Fourier resolution of the electrostatic field | informal | Conditional target (F17) |
+| 52 | Characteristic vibrations of the field | informal | Conditional target: needs a spectral theorem for the cavity (F17) |
+| 53 | Geometrical optics | informal | Target (E26, F19). The rays of a complete integral of the eikonal equation are trajectories by Jacobi's theorem of `Mechanics` |
+| 54 | Intensity | informal | Target (E26, F19) |
+| 55 | The angular eikonal | informal | Target (E26, F19). The canonical property of a free generating function is proved in `Mechanics` |
+| 56 | Narrow bundles of rays | informal | Target (E26, F19) |
+| 57 | Image formation with broad bundles of rays | informal | Target (E26, F19) |
+| 58 | The limits of geometrical optics | informal | Conditional target (E26, F19) |
+| 59 | Diffraction | informal | Conditional target (E27, F20) |
+| 60 | Fresnel diffraction | informal | Target (E27, F20) |
+| 61 | Fraunhofer diffraction | informal | Target (E27, F20) |
+| 62 | The retarded potentials | informal | Conditional target: needs the causal Green operator (E25, E29, F21) |
+| 63 | The Liénard–Wiechert potentials | informal | Target (E28, E29, F21) |
+| 64 | Spectral resolution of the retarded potentials | informal | Conditional target (E29, F21) |
+| 65 | The Lagrangian to terms of second order | informal | Conditional target (E29, F21) |
+| 66 | The field of a system of charges at large distances | informal | Conditional target (E30, F22) |
+| 67 | Dipole radiation | informal | Target (E30, F22) |
+| 68 | Dipole radiation during collisions | informal | Target (E30, F22) |
+| 69 | Radiation of low frequency in collisions | informal | Conditional target (E30, F22) |
+| 70 | Radiation in the case of Coulomb interaction | informal | Conditional target (E30, F22) |
+| 71 | Quadrupole and magnetic dipole radiation | informal | Target (E30, F22) |
+| 72 | The field of the radiation at near distances | informal | Target (E30, F22) |
+| 73 | Radiation from a rapidly moving charge | informal | Target (E29, E30, F23) |
+| 74 | Synchrotron radiation | informal | Target (E30, F23) |
+| 75 | Radiation damping | informal | Conditional target (E31, F23) |
+| 76 | Radiation damping in the relativistic case | informal | Conditional target (E31, F23) |
+| 77 | Spectral resolution of the radiation in the ultrarelativistic case | informal | Conditional target (E30, F23) |
+| 78 | Scattering by free charges | informal | Target (E32, F23) |
+| 79 | Scattering of low-frequency waves | informal | Conditional target (E32, F23) |
+| 80 | Scattering of high-frequency waves | informal | Conditional target (E32, F23) |
+
+Count: 66 informal.
+
+Closed with a stated remainder: none.
+
 ### After the mechanics programme
 
 The [mechanics ledger](cinfty-mechanics.md#ledger) records all 52 sections as

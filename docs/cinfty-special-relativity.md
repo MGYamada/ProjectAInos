@@ -45,6 +45,42 @@ The existing `Electrodynamics.mass_shell` is a downstream verification of the
 normalization of `m • fourVelocity v`. It is not evidence that a complete
 SR momentum, collision or mass-shell measure API already exists.
 
+### Ledger
+
+The ledger gives one status to each of §§1–14, with the vocabulary of the
+[mechanics ledger](cinfty-mechanics.md#ledger): *proved* (Lean, no `sorry`,
+axioms audited), *proved modulo interface*, *hypothesis*, *evidence* (computer
+algebra only), or *informal*. The status refers to the target of the row in the
+[dictionary](#landau-lifshitz-correspondence), whose last column records the
+baseline. A status is only promoted, and a row whose target is proved only in
+part stays at the lower status, with the proved part named. A row is closed
+when it is *proved*, or when its remark names the proved part and gives the
+reason why the rest is not proved; the rows closed in the second way are
+listed after the count. The wave names F1–F26 are those of
+[issue #135](https://github.com/MGYamada/ProjectAinos/issues/135), which tracks
+completion.
+
+| § | Topic | Status | Lean declarations, or what is missing |
+|---:|:---|:---|:---|
+| 1 | Finite signal speed | informal | Proved: the closed future cone is convex and orders the events (`futureCausal_convex`, `causallyPrecedes_refl`, `causallyPrecedes_trans`, `causallyPrecedes_antisymm`), and `orthochronousLorentzGroup` preserves it. Missing: the covariance of a propagation relation that is contained in the cone (F3). That signals propagate inside the cone is a physical premise |
+| 2 | Intervals | proved | `intervalSq`, `Timelike`, `Spacelike`, `Lightlike`, `Causal`, `LorentzGroup.preserves_interval`, `LorentzGroup.timelike_iff`, `LorentzGroup.spacelike_iff`, `LorentzGroup.lightlike_iff`, `PoincareGroup.preserves_interval`, `timelike_convention`. Scope: real Minkowski space with `d` space dimensions, both sign conventions |
+| 3 | Proper time | informal | Proved: `properTime`, `properTime_integrable`, `properTime_poincare`, `properTime_reparametrize`, `properTime_inertial`, `properTime_timeDilation`. Missing: the inertial clock has the greatest proper time, with the case of equality (SR-K4, F2) |
+| 4 | The Lorentz transformation | informal | Proved: `LorentzGroup`, `properLorentzGroup`, `orthochronousLorentzGroup`, `matrix_preserves_metric`, `matrix_det_eq_one_or_neg_one`, `boost`, `boost_time`, `boost_space`, `boost_future`, `boost_neg_inverse`, `boost_det`. Missing: the factorization into a boost and a rotation of the rest space (SR-K2, F3) |
+| 5 | Transformation of velocities | proved | `Velocity.observerEquiv`, `Velocity.transform`, `Velocity.norm_transform_lt_one`, `Velocity.transform_boost`, `transform_collinear`, `rapidity_add`, `composed_speed_lt_one`. Scope: the orthochronous group acts on the open ball of velocities; velocities that are not collinear are composed by this action, and collinear ones by the addition of rapidities |
+| 6 | Four-vectors | informal | Proved: `flat`, `sharp`, `flat_natural`, and the tensor operations of the [shared geometry](smooth-geometry.md). Missing: the universal C∞ cotangent module and its comparison with the cotangent bundle (SR-F2, F26) |
+| 7 | Four-dimensional velocity | informal | Proved: `fourVelocity_unit`, `fourVelocity_metric`, `properTime_null`. Missing: the acceleration is orthogonal to the velocity (F2); mass shells and the massless particle (SR-D5, SR-D6, F3) |
+| 8 | The principle of least action | informal | Proved: `freeAction`, `freeLagrangian_contDiffOn`, `free_momentum`, `free_stationary_iff`. Missing: the stationary curves are the inertial motions, and the Hessian in the velocity (SR-D2, F2); the mass shell as a coisotropic ideal and its reduction (SR-D8, F1) |
+| 9 | Energy and momentum | informal | Proved: `kineticMomentum`, `kineticMomentum_eq`. Missing: the energy measured by an observer (SR-D3, F2), the Legendre transformation on the ball of velocities (SR-D4, F2), the Hamiltonian on all momenta (SR-D7, F1), the shell (SR-D5, F3), the Newtonian expansion (SR-K5, F2) |
+| 10 | Transformation of distribution functions | informal | Target: the invariant measure on the shell and the number flux (SR-M1, SR-M2, F4) |
+| 11 | Decay of particles | informal | Target: the invariant mass and the decay into two particles (SR-C1, SR-C2, F3) |
+| 12 | Invariant cross-section | informal | Conditional target: the phase space of two particles and the covariance of a cross-section for a given transition weight (SR-C4, F4). Special relativity does not supply the weight |
+| 13 | Elastic collisions of particles | informal | Target (SR-C3, F3) |
+| 14 | Angular momentum | informal | Target: the orbital charges and the centre of energy (SR-C5, F4); the Poincaré algebra of their brackets (SR-C6, F1) |
+
+Count: 2 proved, 12 informal.
+
+Closed with a stated remainder: none.
+
 ### After the mechanics programme
 
 The [mechanics ledger](cinfty-mechanics.md#ledger) records all 52 sections

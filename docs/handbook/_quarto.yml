@@ -47,10 +47,13 @@ website:
         contents:
           - cinfty-special-relativity.qmd
           - special-relativity.qmd
+          - special-relativity-notes.qmd
           - cinfty-electrodynamics.qmd
           - electrodynamics.qmd
+          - electrodynamics-notes.qmd
           - cinfty-general-relativity.qmd
           - general-relativity.qmd
+          - general-relativity-notes.qmd
       - section: Quantum prototypes
         contents:
           - quantum-mechanics-prototype.qmd
