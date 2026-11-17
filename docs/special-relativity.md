@@ -54,6 +54,7 @@ Paths in this table are relative to `ProjectAinos/`.
 | 7 | `SmoothAlgebra/{RelEnergy,Poisson/LinearMomentum,Poisson/OrbitalCharge}`, `SpecialRelativity/{Hamiltonian,PoincareAlgebra,MassShellReduction}` | The energy `√(m² + Σ pᵢ²)` in a C∞-ring, the coordinate-time Hamiltonian of a free particle with its trajectories and its flow, the Poincaré algebra of the orbital charges and its family in `1/c`, the mass shell as a coisotropic ideal and the reduction of its future sheet |
 | 8 | `SmoothGeometry/Minkowski/ReverseCauchySchwarz`, `SpecialRelativity/{MaximalProperTime,FreeMotion,ObserverEnergy,SpatialLegendre,NewtonianExpansion}` | The reverse Cauchy–Schwarz inequality, the greatest proper time of the inertial clock, the stationary curves of the free action as inertial motions and the Hessian in the velocity, the energy measured by an observer, the Legendre transformation on the ball of velocities, the expansion in `1/c` |
 | 9 | `SpecialRelativity/{Causality,Factorization,InvariantMass,Decay,ElasticScattering}` | Signals with a finite speed, the factorization of a Lorentz transformation into a boost and a rotation, the invariant mass and the frame of the centre of momentum, the decay into two particles, the invariants of an elastic collision |
+| 10 | `SpecialRelativity/{FutureShell,Einbein}` | The future mass shell as a graph over the space momenta with the action of the Lorentz group, and the action with an auxiliary field for every mass, the mass zero included |
 | Examples | `SpecialRelativity/{Examples,FormExamples}` | Nonzero boost and inverse, subluminality, clock rate, nonzero exact field and gauge identity |
 
 All shared modules are independent of `SpecialRelativity`. Every library
@@ -402,6 +403,44 @@ of an outgoing momentum (`exists_elasticCollision`). For a target at rest,
 (`mandelstamS_target_at_rest`, `mandelstamT_elastic_target_at_rest`). The
 [notes](special-relativity-notes.md) SR10–SR12 record the decisions.
 
+## The mass shell and the massless particle
+
+**The shell as a graph (SR-D5).** `FutureShell.shell d m` is the set of the
+momentum vectors with `Q(p) = m²` and a positive time component. It is the
+graph of the energy `√(m² + Σ πᵢ²)` over the open set
+`FutureShell.domain d m = {π | 0 < m² + Σ πᵢ²}` of the space momenta, which is
+all of them for `m ≠ 0` and the nonzero ones for `m = 0`.
+
+| Statement | Declarations in `FutureShell` |
+| --- | --- |
+| `point m π` is on the shell, `spaceMomentum p` is in the domain, and they are inverse to each other | `point_mem`, `spaceMomentum_mem`, `chart` |
+| The graph is smooth on the domain | `contDiffOn_point` |
+| The massless shell is the future light cone without its vertex; the vertex is in no shell | `mem_shell_zero_iff`, `zero_notMem_shell` |
+| An orthochronous Lorentz transformation maps the shell to itself | `lorentz_mem_shell` |
+| In the chart it maps the domain to itself, is smooth, and satisfies the laws of an action | `action_mem`, `contDiffOn_action`, `action_one`, `action_mul` |
+| For `m > 0` a real point is a zero of `p₀ + E` iff its momentum vector is on the shell | `lift_futureShellFunction_eq_zero_iff` |
+
+`FutureShell.scheme d m` is the C∞ scheme of the open set of the chart. The
+automorphisms of this scheme that the Lorentz group induces are not
+constructed.
+
+**The action with an auxiliary field (SR-D6).** In `Einbein`,
+`lagrangian d m = ½ (−Q(ẋ)/e − e m²)` is a Lagrangian of the configurations
+`(x, e)`, smooth where `e > 0`. For `C²` functions `x` and `e` with `e > 0` on
+`[a, b]`:
+
+| Statement | Declarations in `Einbein` |
+| --- | --- |
+| The action is stationary iff `Q(ẋ) = e² m²` and `ẋ/e` has zero derivative on `(a, b)` | `stationary_iff` |
+| With `e = √Q(ẋ)/m` the Lagrangian is `−m √Q(ẋ)` | `lagrangian_eliminate` |
+| For `m > 0` a stationary curve is timelike with a constant unit four-velocity, and in three dimensions it is stationary for `−m ∫ ds`; conversely with `e = √Q(ẋ)/m` | `timelike_of_stationary`, `fourVelocity_eq_of_stationary`, `free_stationary_of_stationary`, `stationary_of_free_stationary` |
+| For `m = 0` the action is stationary iff the velocity is null and `ẋ/e` has zero derivative; then `ẋ = e k` with a constant null vector `k` | `stationary_massless_iff`, `deriv_eq_smul_of_stationary_massless` |
+| Under a change `f` of the parameter, with `e` replaced by `(e ∘ f) f′`, the action is unchanged | `lagrangian_reparametrize`, `action_reparametrize` |
+
+The massless particle is described without the proper length of a null
+vector: the unit four-velocity is not used for `m = 0`. The
+[notes](special-relativity-notes.md) SR13 and SR14 record the decisions.
+
 ## Verification
 
 The required **Lean build** CI job builds with warnings as errors, checks root
@@ -417,6 +456,7 @@ lake env lean -DwarningAsError=true checks/RelativisticEnergyAPI.lean
 lake env lean -DwarningAsError=true checks/RelativisticHamiltonianAPI.lean
 lake env lean -DwarningAsError=true checks/RelativisticFreeMotionAPI.lean
 lake env lean -DwarningAsError=true checks/RelativisticCollisionsAPI.lean
+lake env lean -DwarningAsError=true checks/RelativisticShellAPI.lean
 lake env lean -DwarningAsError=true checks/AxiomAudit.lean
 ```
 
