@@ -12,7 +12,7 @@ revision and build the library.
 
 ```sh
 lake exe cache get
-lake build ProjectAInos
+lake build ProjectAinos
 ```
 
 ## Set up doc-gen4
@@ -34,7 +34,7 @@ git = "https://github.com/leanprover/doc-gen4.git"
 rev = "v4.35.0"
 
 [[require]]
-name = "ProjectAInos"
+name = "ProjectAinos"
 path = "../"
 ```
 
@@ -42,17 +42,17 @@ From `docbuild/`, use the pinned documentation dependencies to build the
 reference. The source links in this local build open Lean files in VS Code.
 
 ```sh
-DOCGEN_SRC=vscode lake build ProjectAInos:docs
+DOCGEN_SRC=vscode lake build ProjectAinos:docs
 ```
 
 For a standalone API preview, run `python3 docs/brand_api.py` from the
-repository root to add the Project AInos heading and shortcuts. The combined
+repository root to add the Project Ainos heading and shortcuts. The combined
 handbook build applies the branding to its bundled copy.
 
 To update doc-gen4, run `MATHLIB_NO_CACHE_ON_UPDATE=1 lake update doc-gen4`
 from `docbuild/` and commit the updated manifest. When the root package's
 dependencies change, run
-`MATHLIB_NO_CACHE_ON_UPDATE=1 lake update ProjectAInos` from `docbuild/` before
+`MATHLIB_NO_CACHE_ON_UPDATE=1 lake update ProjectAinos` from `docbuild/` before
 rebuilding, and commit the updated documentation manifest. When upgrading Lean,
 update both tracked `lean-toolchain` files and the Mathlib/doc-gen4 versions to
 the matching release. [doc-gen4 setup for v4.35.0](https://github.com/leanprover/doc-gen4/blob/v4.35.0/README.md)

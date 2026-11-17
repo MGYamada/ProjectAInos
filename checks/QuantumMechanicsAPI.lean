@@ -1,11 +1,11 @@
 module
 
-import ProjectAInos
+import ProjectAinos
 import Lean.Util.CollectAxioms
 
 /-! Root visibility and transitive axiom audit for the qubit prototype. -/
 
-open ProjectAInos.QuantumMechanics.Qubit
+open ProjectAinos.QuantumMechanics.Qubit
 open Lean Elab Command
 
 #check pairing_eq_inner
@@ -31,7 +31,7 @@ run_cmd do
   let allowed : Array Name := #[``propext, ``Classical.choice, ``Quot.sound]
   let mut count : Nat := 0
   for (name, _) in env.constants do
-    if (`ProjectAInos.QuantumMechanics).isPrefixOf (privateToUserName name) then
+    if (`ProjectAinos.QuantumMechanics).isPrefixOf (privateToUserName name) then
       count := count + 1
       for axiomName in (← collectAxioms name) do
         unless allowed.contains axiomName do

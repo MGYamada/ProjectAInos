@@ -4,20 +4,20 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 module
 
-import ProjectAInos.SmoothGeometry.GluingExampleIso
-import ProjectAInos.SmoothGeometry.DifferentialForm.NativeCoordinates
-import ProjectAInos.SmoothGeometry.DifferentialForm.NativeGluing
-import ProjectAInos.SmoothGeometry.DifferentialForm.NativeExteriorExamples
-import ProjectAInos.SmoothGeometry.DifferentialForm.NativeWedgeExamples
-import ProjectAInos.SmoothGeometry.DifferentialForm.InteriorDerivative
-import ProjectAInos.SmoothGeometry.DifferentialForm.TwoForm
-import ProjectAInos.SmoothGeometry.Tensor.CovariantDerivative
+import ProjectAinos.SmoothGeometry.GluingExampleIso
+import ProjectAinos.SmoothGeometry.DifferentialForm.NativeCoordinates
+import ProjectAinos.SmoothGeometry.DifferentialForm.NativeGluing
+import ProjectAinos.SmoothGeometry.DifferentialForm.NativeExteriorExamples
+import ProjectAinos.SmoothGeometry.DifferentialForm.NativeWedgeExamples
+import ProjectAinos.SmoothGeometry.DifferentialForm.InteriorDerivative
+import ProjectAinos.SmoothGeometry.DifferentialForm.TwoForm
+import ProjectAinos.SmoothGeometry.Tensor.CovariantDerivative
 
 /-! External API regressions: use the public definitions with default elaborator
 options, without unfolding morphism wrappers or adding local instances. -/
 
 open CategoryTheory CategoryTheory.Limits TopologicalSpace
-open ProjectAInos.SmoothGeometry
+open ProjectAinos.SmoothGeometry
 
 noncomputable section
 
@@ -109,7 +109,7 @@ end ConcreteGluing
 
 section CoordinateSection
 
-open GluingExample ProjectAInos.SmoothAlgebra
+open GluingExample ProjectAinos.SmoothAlgebra
 
 example {X Y Z : Scheme.{u}} (f : X ⟶ Y) (g : Y ⟶ Z) (s : Z.sections ⊤) :
     Scheme.Γ.map (f ≫ g).op s = Scheme.Γ.map f.op (Scheme.Γ.map g.op s) :=

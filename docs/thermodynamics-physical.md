@@ -23,7 +23,7 @@ $x\prec\!\prec y$ for accessibility without the reverse process. Addition
 $x+y$ denotes a composite state; $r x$, for $r\geq0$, denotes an
 extensively scaled state. The empty system is denoted by $0$.
 
-[Physical.lean](../ProjectAInos/Thermodynamics/Physical.lean) starts with finite
+[Physical.lean](../ProjectAinos/Thermodynamics/Physical.lean) starts with finite
 syntax `Composite`: atoms, the empty expression, composition, and nonnegative
 scaling. `StructuralEquiv` identifies reassociation, permutation, empty units,
 and the scaling coherence laws
@@ -45,7 +45,7 @@ semimodule. Stability supplies cancellation, and the real completion and
 process cone can then be constructed. Structural equality, adiabatic
 equivalence, and thermal equilibrium remain three different notions.
 
-`AtomicDomains` in [AtomicSystems.lean](../ProjectAInos/Thermodynamics/AtomicSystems.lean)
+`AtomicDomains` in [AtomicSystems.lean](../ProjectAinos/Thermodynamics/AtomicSystems.lean)
 provides a canonical presentation. For primitive system names $g$, first
 choose a dimension $n_g$ and a coordinate domain
 $\Gamma_g\subseteq\mathbb R\times\mathbb R^{n_g}$. Its atoms are actual
@@ -67,7 +67,7 @@ presentation, not the physical axioms of its accessibility relation.
 
 ## Accessibility and simple-system assumptions
 
-`Accessibility` in [Physical.lean](../ProjectAInos/Thermodynamics/Physical.lean)
+`Accessibility` in [Physical.lean](../ProjectAinos/Thermodynamics/Physical.lean)
 contains the following premises on raw states.
 
 | Premise | Mathematical content |
@@ -131,7 +131,7 @@ mere connectedness, as in the earlier outline's abbreviated wording, is not
 the declared premise. [Lieb–Yngvason, Section III, S3](https://arxiv.org/html/cond-mat/9708200v2)
 
 These fields are defined in
-[SimpleSystem.lean](../ProjectAInos/Thermodynamics/SimpleSystem.lean).
+[SimpleSystem.lean](../ProjectAinos/Thermodynamics/SimpleSystem.lean).
 S1 is kept explicit for the geometric development, although T4 below supplies
 irreversible successors in the full thermal family.
 
@@ -157,8 +157,8 @@ $$
 
 The following premises are encoded by `ThermalJoin`, `SimpleThermalJoin`, and
 `ThermalFamily` in
-[PhysicalComparison.lean](../ProjectAInos/Thermodynamics/PhysicalComparison.lean)
-and [ThermalFamily.lean](../ProjectAInos/Thermodynamics/ThermalFamily.lean).
+[PhysicalComparison.lean](../ProjectAinos/Thermodynamics/PhysicalComparison.lean)
+and [ThermalFamily.lean](../ProjectAinos/Thermodynamics/ThermalFamily.lean).
 
 - **T1: contact.** The join is an admitted simple system, and
   $j_1(U_1,V_1)+j_2(U_2,V_2)\preceq j_{12}(U_1+U_2,V_1,V_2)$.
@@ -189,7 +189,7 @@ x\sim_T y\quad\Longleftrightarrow\quad rx\sim_T sy
 $$
 
 `ThermalFamily.common_energy_orientation` in
-[ThermalOrientation.lean](../ProjectAInos/Thermodynamics/ThermalOrientation.lean)
+[ThermalOrientation.lean](../ProjectAinos/Thermodynamics/ThermalOrientation.lean)
 proves that all admitted states have the same energy orientation. Opposite
 orientations would let an equilibrium contact move both ways in energy at
 fixed work coordinates, contradicting the simple join's geometric order.
@@ -201,7 +201,7 @@ fixed work coordinates, contradicting the simple join's geometric order.
 A7 makes forward sectors convex. A6, cancellation, and a collinear
 accessibility argument give relative closedness
 (`Accessibility.forwardSector_isClosed_relative` in
-[ForwardSector.lean](../ProjectAInos/Thermodynamics/ForwardSector.lean)). S1 and
+[ForwardSector.lean](../ProjectAinos/Thermodynamics/ForwardSector.lean)). S1 and
 unique finite-slope support imply that each sector has nonempty ambient
 interior (`SimpleSystem.forwardSector_interior_nonempty`).
 
@@ -214,17 +214,17 @@ $$
 Du_x(V)[h]=-\sum_iP_i(u_x(V),V)h_i.
 $$
 
-[BoundaryGraph.lean](../ProjectAInos/Thermodynamics/BoundaryGraph.lean) proves
+[BoundaryGraph.lean](../ProjectAinos/Thermodynamics/BoundaryGraph.lean) proves
 the graph and regularity statements;
 `boundaryEnergy_hasFDerivAt` and `boundaryDerivative_locallyLipschitzOn` in
-[BoundaryDifferentiability.lean](../ProjectAInos/Thermodynamics/BoundaryDifferentiability.lean)
+[BoundaryDifferentiability.lean](../ProjectAinos/Thermodynamics/BoundaryDifferentiability.lean)
 prove the differential equation and its regularity. Grönwall uniqueness in
-[AdiabatUniqueness.lean](../ProjectAInos/Thermodynamics/AdiabatUniqueness.lean)
+[AdiabatUniqueness.lean](../ProjectAinos/Thermodynamics/AdiabatUniqueness.lean)
 gives local coincidence of boundary graphs. S3 propagates this to boundary
 reversibility, and convex segment crossing gives comparison.
 
 The final results in
-[SimpleComparison.lean](../ProjectAInos/Thermodynamics/SimpleComparison.lean)
+[SimpleComparison.lean](../ProjectAinos/Thermodynamics/SimpleComparison.lean)
 include `comparison`, `mem_boundary_iff_equivalent`, `sectors_nested`, and
 `strict_strips_open`. Energy reflection preserves the premises, so these
 results do not assume a preferred orientation.
@@ -245,9 +245,9 @@ $$
 
 Here $\iota$ includes both the adiabatic quotient and its real completion.
 `exists_coordinate_of_local_intervals` in
-[ThermalStrips.lean](../ProjectAInos/Thermodynamics/ThermalStrips.lean) proves
+[ThermalStrips.lean](../ProjectAinos/Thermodynamics/ThermalStrips.lean) proves
 this representation. In
-[SimpleEntropy.lean](../ProjectAInos/Thermodynamics/SimpleEntropy.lean),
+[SimpleEntropy.lean](../ProjectAinos/Thermodynamics/SimpleEntropy.lean),
 `referenceEntropy_relation_iff` characterizes the simple-system order, while
 `referenceEntropy_concave` and `referenceEntropy_continuousOn` establish
 concavity and continuity. Additivity in the completion already compares
@@ -264,15 +264,15 @@ $$
 The two copies are in thermal equilibrium exactly when these intervals
 intersect. This requires neither differentiability of entropy nor a
 single-valued temperature. See `equilibrium_iff_referenceEntropy_maximum`,
-[SupportingSlopes.lean](../ProjectAInos/Thermodynamics/SupportingSlopes.lean),
+[SupportingSlopes.lean](../ProjectAinos/Thermodynamics/SupportingSlopes.lean),
 and `ThermalFamily.thermal_iff_entropySlopes_inter` in
-[ThermalSlopes.lean](../ProjectAInos/Thermodynamics/ThermalSlopes.lean).
+[ThermalSlopes.lean](../ProjectAinos/Thermodynamics/ThermalSlopes.lean).
 
 The zeroth law and T4 then yield `isotherm_dichotomy`: either the whole simple
 system is one thermal class, or one adiabat contains two states that are not
 thermally equivalent. The proof uses interval-class ordering and connectedness
-in [ThermalClassOrder.lean](../ProjectAInos/Thermodynamics/ThermalClassOrder.lean)
-and [ThermalClasses.lean](../ProjectAInos/Thermodynamics/ThermalClasses.lean).
+in [ThermalClassOrder.lean](../ProjectAinos/Thermodynamics/ThermalClassOrder.lean)
+and [ThermalClasses.lean](../ProjectAinos/Thermodynamics/ThermalClasses.lean).
 
 ### Calibrators between different systems
 
@@ -292,7 +292,7 @@ thermal-class dichotomy:
    one component using A7, and closes the accessibility cycle using positive
    thermal scaling. `join_thermal_left`, `join_thermal_right`, and
    `exists_coherent_split` in
-   [ThermalJoinCoherence.lean](../ProjectAInos/Thermodynamics/ThermalJoinCoherence.lean)
+   [ThermalJoinCoherence.lean](../ProjectAinos/Thermodynamics/ThermalJoinCoherence.lean)
    establish this without transporting thermal equilibrium across arbitrary
    adiabatic equivalences.
 2. Assuming no calibrator, equivalent joined states have adiabatically
@@ -300,30 +300,30 @@ thermal-class dichotomy:
    joined work domain make each joined adiabat a thermal class. The dichotomy
    therefore makes the whole join one thermal class. This is
    `joined_all_thermal_of_no_calibrator` in
-   [UniqueThermalSplit.lean](../ProjectAInos/Thermodynamics/UniqueThermalSplit.lean).
+   [UniqueThermalSplit.lean](../ProjectAinos/Thermodynamics/UniqueThermalSplit.lean).
 3. A universal joined class gives component classes meeting every nonempty
    work fiber. Such a class cannot be confined to one adiabat: T4 gives
    thermal states straddling it, and the supporting slopes on their two work
    fibers force those states into the same class, a contradiction. Both
    component classes therefore contain strict reference pairs; all their
    cross pairs are in equilibrium. See
-   [UniversalThermalClass.lean](../ProjectAInos/Thermodynamics/UniversalThermalClass.lean).
+   [UniversalThermalClass.lean](../ProjectAinos/Thermodynamics/UniversalThermalClass.lean).
 4. Three cross-equilibrium pairs put both component differences on the one
    joined entropy line. Positivity fixes the sign of their scalar ratio;
    continuity along actual coordinate segments realizes equal differences
    and hence a calibrator. This is proved in
-   [CalibratorDirections.lean](../ProjectAInos/Thermodynamics/CalibratorDirections.lean)
-   and [UniversalJoinCalibration.lean](../ProjectAInos/Thermodynamics/UniversalJoinCalibration.lean).
+   [CalibratorDirections.lean](../ProjectAinos/Thermodynamics/CalibratorDirections.lean)
+   and [UniversalJoinCalibration.lean](../ProjectAinos/Thermodynamics/UniversalJoinCalibration.lean).
 
 The endpoint is in
-[HasCalibratorsOfAxioms.lean](../ProjectAInos/Thermodynamics/HasCalibratorsOfAxioms.lean).
+[HasCalibratorsOfAxioms.lean](../ProjectAinos/Thermodynamics/HasCalibratorsOfAxioms.lean).
 Neither uniqueness nor continuity of a chosen thermal splitting is assumed.
 
 Calibrators align the entropy lines of different systems with one positive
 direction. Consequently `ThermalFamily.product_comparison` compares all
 states of any finite scaled product. Empty products and zero weights are
 included. The theorem in
-[PhysicalEntropyPrinciple.lean](../ProjectAInos/Thermodynamics/PhysicalEntropyPrinciple.lean)
+[PhysicalEntropyPrinciple.lean](../ProjectAinos/Thermodynamics/PhysicalEntropyPrinciple.lean)
 takes no CH, ECH, or calibrator-existence premise; those are conclusions of the
 physical assumptions above.
 
@@ -332,7 +332,7 @@ physical assumptions above.
 Product comparison alone does not make all raw states comparable. Primitive
 composition labels specify which products should be compared.
 `Nonreactive.compositionLabel` is additive and extensive. In
-[Nonreactive.lean](../ProjectAInos/Thermodynamics/Nonreactive.lean),
+[Nonreactive.lean](../ProjectAinos/Thermodynamics/Nonreactive.lean),
 `Generated` closes elementary transformations under A1–A6;
 `Generated.label_eq` proves that label conservation survives this closure,
 including its stability rule. For elementary changes within a primitive
@@ -351,7 +351,7 @@ Weights between distinct primitive types are zero. Splitting and recombination
 identify each original composite adiabatically with its refined product.
 Zero terms are removed or handled by the empty identity.
 `common_product_of_equal_label` in
-[CommonProducts.lean](../ProjectAInos/Thermodynamics/CommonProducts.lean)
+[CommonProducts.lean](../ProjectAinos/Thermodynamics/CommonProducts.lean)
 constructs these witnesses; common realization is not an additional physical
 assumption.
 
@@ -407,7 +407,7 @@ constants.
 
 Let $\Lambda$ be the additive monoid of composition labels, and let
 $\mathrm{State}(a)=\{x:\ell(x)=a\}$. The three costs in
-[Reactions.lean](../ProjectAInos/Thermodynamics/Reactions.lean) are
+[Reactions.lean](../ProjectAinos/Thermodynamics/Reactions.lean) are
 
 $$
 \begin{aligned}
@@ -452,7 +452,7 @@ force a nonnegative total entropy change. Approximation from above then
 passes this to chains of infimum costs.
 `ActualCostChain.aggregate`, `ActualCostChain.cycle_nonneg`, and
 `calibratedDirectCost_cycle_nonneg` in
-[ReactionCycles.lean](../ProjectAInos/Thermodynamics/ReactionCycles.lean)
+[ReactionCycles.lean](../ProjectAinos/Thermodynamics/ReactionCycles.lean)
 implement the argument. In particular, the physical costs satisfy
 $E(a,a)=F(a,a)=0$.
 
@@ -463,21 +463,21 @@ from $a+z$ to $b+z$ for some ancillary label $z$, there is a finite
 chain from $b+w$ to $a+w$ for some ancillary label $w$.
 
 `RawNoSinks` in
-[ReactionCalibration.lean](../ProjectAInos/Thermodynamics/ReactionCalibration.lean)
+[ReactionCalibration.lean](../ProjectAinos/Thermodynamics/ReactionCalibration.lean)
 states this solely through the raw accessibility relation and labels, before
 choosing costs or entropy constants. It does not demand a single-step reverse
 reaction, microscopic reversibility, or restoration of the same ancillary
 state. `calibrated_connected_iff_actual` in
-[PhysicalReactions.lean](../ProjectAInos/Thermodynamics/PhysicalReactions.lean)
+[PhysicalReactions.lean](../ProjectAinos/Thermodynamics/PhysicalReactions.lean)
 identifies this actual connectivity with $F(a,b)<+\infty$.
 
 Cycles and M exclude $-\infty$: an arbitrarily negative cost followed by
 a finite-above returning chain would contradict the zero self-cost. Costs
 between disconnected labels remain $+\infty$. The equality-only example
-in [ReactionModels.lean](../ProjectAInos/Thermodynamics/ReactionModels.lean)
+in [ReactionModels.lean](../ProjectAinos/Thermodynamics/ReactionModels.lean)
 checks that adjoining ancillary labels does not erase such unreachability.
 
-The [two-species reservoir](../ProjectAInos/Thermodynamics/ReactingReservoir.lean)
+The [two-species reservoir](../ProjectAinos/Thermodynamics/ReactingReservoir.lean)
 gives a finite direct cost between unequal composition labels. The model
 preserves total amount and orders processes by energy. It proves that labels
 with equal total amount can be converted in either direction at equal energy,
@@ -532,7 +532,7 @@ x\preceq y\Longrightarrow S(x)\leq S(y).
 $$
 
 `ThermalFamily.exists_weak_entropy_of_physical_axioms` in
-[PhysicalEntropyPrinciple.lean](../ProjectAInos/Thermodynamics/PhysicalEntropyPrinciple.lean)
+[PhysicalEntropyPrinciple.lean](../ProjectAinos/Thermodynamics/PhysicalEntropyPrinciple.lean)
 derives the calibrated $S_0$, all required physical cost laws, and the
 corrected $S$. The canonical atomic version is
 `AtomicDomains.exists_weak_entropy`. Both entropies are additive and
@@ -549,7 +549,7 @@ exactly when $q\circ N=0$; equivalently it factors uniquely through
 $\mathbb R^m/\operatorname{range}N$. For scalar observables this is the
 usual annihilator, represented in coordinates by $\ker N^{\mathsf T}$.
 `Stoichiometry.conserved_iff_factors` proves the universal factorization
-criterion in [Stoichiometry.lean](../ProjectAInos/Thermodynamics/Stoichiometry.lean).
+criterion in [Stoichiometry.lean](../ProjectAinos/Thermodynamics/Stoichiometry.lean).
 
 For species ordered as $(\mathrm H_2,\mathrm O_2,\mathrm H_2\mathrm O)$,
 the water reaction direction is $(-2,-1,2)$. The elemental-amount map is
@@ -569,7 +569,7 @@ assert physical realizability of negative species amounts.
 ## Scope and entry points
 
 The public entropy endpoints share the predicates in
-[EntropyPrinciples.lean](../ProjectAInos/Thermodynamics/EntropyPrinciples.lean).
+[EntropyPrinciples.lean](../ProjectAinos/Thermodynamics/EntropyPrinciples.lean).
 `CalibratedEntropyPrinciple` records `extensive` and the equal-label
 `criterion`. `WeakEntropyPrinciple` records the `decomposition`, the
 `calibrated` and `total` instances of that same predicate, and `monotone` for

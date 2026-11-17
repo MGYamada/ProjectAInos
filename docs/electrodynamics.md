@@ -1,11 +1,11 @@
 # Charged Particles and Electromagnetic Fields
 
 This guide records the implemented §4.1 local-field and charged-particle core,
-the flat vacuum field-action theorem in §4.2 / [#44](https://github.com/MGYamada/ProjectAInos/issues/44),
-and the fixed-background Maxwell form API from §5.1 / [#52](https://github.com/MGYamada/ProjectAInos/issues/52).
+the flat vacuum field-action theorem in §4.2 / [#44](https://github.com/MGYamada/ProjectAinos/issues/44),
+and the fixed-background Maxwell form API from §5.1 / [#52](https://github.com/MGYamada/ProjectAinos/issues/52).
 The free-particle action is shared with §3.2. The
 [C∞ electrodynamics research plan](cinfty-electrodynamics.md) carries forward
-the design from [issue #8](https://github.com/MGYamada/ProjectAInos/issues/8),
+the design from [issue #8](https://github.com/MGYamada/ProjectAinos/issues/8),
 including the remaining sourced-action, stress-energy, wave and radiation
 targets. The flat vacuum result does not complete that wider program.
 
@@ -161,7 +161,7 @@ be converted before identifying textbook formulas.
 
 ## Vacuum field action (§4.2)
 
-[`VacuumAction`](../ProjectAInos/Electrodynamics/VacuumAction.lean) uses the
+[`VacuumAction`](../ProjectAinos/Electrodynamics/VacuumAction.lean) uses the
 time-first orientation to integrate the coefficient of `−½ F ∧ ⋆F` against
 Lebesgue measure. The Lagrangian is defined on first jets. For a globally
 C² potential with integrable action density on an open region, stationarity
@@ -220,10 +220,10 @@ the transformed potential. Endpoints and the potential domain are explicit.
 
 The Maxwell dependency closure consists of 11 upstream modules at commit
 `3456e5e75cf8d4cd558955a5c7638fba2d68f464`. Five were already imported by
-[PR #41](https://github.com/MGYamada/ProjectAInos/pull/41);
-[PR #48](https://github.com/MGYamada/ProjectAInos/pull/48) supplied the remaining six.
+[PR #41](https://github.com/MGYamada/ProjectAinos/pull/41);
+[PR #48](https://github.com/MGYamada/ProjectAinos/pull/48) supplied the remaining six.
 Original `YM` namespaces and mathematical statements are preserved. See the
-[provenance and compatibility record](../ProjectAInos/External/YM/PROVENANCE.md)
+[provenance and compatibility record](../ProjectAinos/External/YM/PROVENANCE.md)
 and [NOTICE](../NOTICE).
 
 For a closed homogeneous curvature jet of degree `j`, the generic real normed
@@ -244,29 +244,29 @@ and reconstruction, not global potential existence or continuum dynamics.
 
 ## Proof and API map
 
-All names below are under `ProjectAInos`, except imported `YM` names.
+All names below are under `ProjectAinos`, except imported `YM` names.
 
 | Claim | Main declarations | Source |
 | --- | --- | --- |
-| Local gauge invariance, reconstruction | `Electrodynamics.fieldTensor_gauge_on`, `observer_reconstruction` | [Field](../ProjectAInos/Electrodynamics/Field.lean) |
-| Bianchi components, covariance | `bianchi_components`, `fieldTensor_component`, `fieldTensor_poincare` | [Components](../ProjectAInos/Electrodynamics/Components.lean) |
-| Observer invariants and rest norm | `scalarInvariant_observer`, `pseudoscalarInvariant_observer`, `covectorPairing_nonneg` | [Invariants](../ProjectAInos/Electrodynamics/Invariants.lean) |
-| Lorentz determinant and orientation | `scalarInvariant_lorentz`, `pseudoscalarInvariant_lorentz` | [Covariance](../ProjectAInos/Electrodynamics/Covariance.lean) |
-| Compact localization and admissibility | `Variational.exists_contDiff_extension_near_compact`, `eventually_mapsTo_open` | [LocalExtension](../ProjectAInos/Variational/LocalExtension.lean) |
-| Local action derivative and stationarity | `Mechanics.hasDerivAt_action_firstVariation_on`, `stationary_iff_eulerLagrange_on` | [OpenDomain](../ProjectAInos/Mechanics/OpenDomain.lean) |
-| Free action and kinetic momentum | `SpecialRelativity.freeAction_eq_action`, `kineticMomentum_eq` | [ParticleAction](../ProjectAInos/SpecialRelativity/ParticleAction.lean) |
-| Charged action and derivatives | `Electrodynamics.chargedAction_eq`, `charged_force`, `charged_momentum` | [ParticleAction](../ProjectAInos/Electrodynamics/ParticleAction.lean) |
-| Dynamics from the action | `stationary_iff_lorentzForce`, `stationary_properTime`, `lorentzForce_component` | [LorentzForce](../ProjectAInos/Electrodynamics/LorentzForce.lean) |
-| Gauge boundary and local stationarity | `chargedAction_gauge_on`, `stationary_gauge_iff_on` | [GaugeAction](../ProjectAInos/Electrodynamics/GaugeAction.lean) |
-| Scalar/color polynomial reconstruction | `Polynomial.radial_curl`, `radial_upstream`, `radial_map`, `mapCoefficients_closed` | [PolynomialRadial](../ProjectAInos/Electrodynamics/PolynomialRadial.lean) |
-| Coordinate and derivative compatibility | `Polynomial.fieldTensor_potential`, `radial_formula`, `grad_transport` | [PolynomialBridge](../ProjectAInos/Electrodynamics/PolynomialBridge.lean) |
-| Nonzero regression examples | `Examples.hyperbola_stationary`; `Polynomial.constantJet_reconstruction`, `linearJet_reconstruction` | [Examples](../ProjectAInos/Electrodynamics/Examples.lean), [PolynomialExamples](../ProjectAInos/Electrodynamics/PolynomialExamples.lean) |
+| Local gauge invariance, reconstruction | `Electrodynamics.fieldTensor_gauge_on`, `observer_reconstruction` | [Field](../ProjectAinos/Electrodynamics/Field.lean) |
+| Bianchi components, covariance | `bianchi_components`, `fieldTensor_component`, `fieldTensor_poincare` | [Components](../ProjectAinos/Electrodynamics/Components.lean) |
+| Observer invariants and rest norm | `scalarInvariant_observer`, `pseudoscalarInvariant_observer`, `covectorPairing_nonneg` | [Invariants](../ProjectAinos/Electrodynamics/Invariants.lean) |
+| Lorentz determinant and orientation | `scalarInvariant_lorentz`, `pseudoscalarInvariant_lorentz` | [Covariance](../ProjectAinos/Electrodynamics/Covariance.lean) |
+| Compact localization and admissibility | `Variational.exists_contDiff_extension_near_compact`, `eventually_mapsTo_open` | [LocalExtension](../ProjectAinos/Variational/LocalExtension.lean) |
+| Local action derivative and stationarity | `Mechanics.hasDerivAt_action_firstVariation_on`, `stationary_iff_eulerLagrange_on` | [OpenDomain](../ProjectAinos/Mechanics/OpenDomain.lean) |
+| Free action and kinetic momentum | `SpecialRelativity.freeAction_eq_action`, `kineticMomentum_eq` | [ParticleAction](../ProjectAinos/SpecialRelativity/ParticleAction.lean) |
+| Charged action and derivatives | `Electrodynamics.chargedAction_eq`, `charged_force`, `charged_momentum` | [ParticleAction](../ProjectAinos/Electrodynamics/ParticleAction.lean) |
+| Dynamics from the action | `stationary_iff_lorentzForce`, `stationary_properTime`, `lorentzForce_component` | [LorentzForce](../ProjectAinos/Electrodynamics/LorentzForce.lean) |
+| Gauge boundary and local stationarity | `chargedAction_gauge_on`, `stationary_gauge_iff_on` | [GaugeAction](../ProjectAinos/Electrodynamics/GaugeAction.lean) |
+| Scalar/color polynomial reconstruction | `Polynomial.radial_curl`, `radial_upstream`, `radial_map`, `mapCoefficients_closed` | [PolynomialRadial](../ProjectAinos/Electrodynamics/PolynomialRadial.lean) |
+| Coordinate and derivative compatibility | `Polynomial.fieldTensor_potential`, `radial_formula`, `grad_transport` | [PolynomialBridge](../ProjectAinos/Electrodynamics/PolynomialBridge.lean) |
+| Nonzero regression examples | `Examples.hyperbola_stationary`; `Polynomial.constantJet_reconstruction`, `linearJet_reconstruction` | [Examples](../ProjectAinos/Electrodynamics/Examples.lean), [PolynomialExamples](../ProjectAinos/Electrodynamics/PolynomialExamples.lean) |
 
 ## Verification and review
 
 ```sh
-lake build --wfail ProjectAInos
-lake exe mk_all --check --lib ProjectAInos
+lake build --wfail ProjectAinos
+lake exe mk_all --check --lib ProjectAinos
 lake env lean -DwarningAsError=true checks/ElectrodynamicsAPI.lean
 lake env lean -DwarningAsError=true checks/AxiomAudit.lean
 experiments/.venv/bin/python -m ainos_experiments.verify_electrodynamics

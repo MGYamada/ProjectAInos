@@ -1,7 +1,7 @@
-import ProjectAInos
+import ProjectAinos
 
-open ProjectAInos.Thermodynamics
-open ProjectAInos.Thermodynamics.Physical
+open ProjectAinos.Thermodynamics
+open ProjectAinos.Thermodynamics.Physical
 open scoped NNReal
 
 section LogarithmicThermal

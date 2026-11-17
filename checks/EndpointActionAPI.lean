@@ -4,13 +4,13 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 module
 
-import ProjectAInos.Mechanics.EndpointAction
+import ProjectAinos.Mechanics.EndpointAction
 
 /-! Typed contracts for the action as a function of its end points: Leibniz's
 rule with moving limits and the formula `dS = p dq − E dt`. These examples use
 default elaborator options. -/
 
-open ProjectAInos ProjectAInos.Mechanics
+open ProjectAinos ProjectAinos.Mechanics
 open Set Filter MeasureTheory
 open scoped Topology ContDiff
 

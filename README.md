@@ -1,10 +1,10 @@
-# P⊗AI (Project AInos)
+# P⊗AI (Project Ainos)
 
 *Final answer to Hilbert's sixth problem*
 
 P⊗AI is pronounced `poai`.
 
-**P⊗AI (Project AInos)** is a *proof of artificial intelligence* project that seeks to demonstrate AI's capacity for rigorous scientific reasoning through machine-checked proofs.
+**P⊗AI (Project Ainos)** is a *proof of artificial intelligence* project that seeks to demonstrate AI's capacity for rigorous scientific reasoning through machine-checked proofs.
 Taking Hilbert's sixth problem as its starting point, it aims to formalize the whole of theoretical physics in Lean 4.
 Its planned proof library will make each theory's assumptions explicit, derive its central results, and formalize how theories relate through special cases and limits.
 
@@ -106,13 +106,13 @@ Lean architecture, and the distinction between proved results and future work:
 [Electrodynamics, §§15–80](docs/cinfty-electrodynamics.md), and
 [General Relativity, §§81–119](docs/cinfty-general-relativity.md).
 These documents carry forward the design from
-[issue #8](https://github.com/MGYamada/ProjectAInos/issues/8); completing that
+[issue #8](https://github.com/MGYamada/ProjectAinos/issues/8); completing that
 documentation does not complete the remaining physics proofs.
 The order of topics after 6 is yet to be determined.
 
 ## Shared smooth algebra and geometry
 
-`ProjectAInos/SmoothAlgebra/` and `ProjectAInos/SmoothGeometry/` are independent
+`ProjectAinos/SmoothAlgebra/` and `ProjectAinos/SmoothGeometry/` are independent
 mathematical foundations shared by topics 2–5. The shared `Variational/`
 layer currently imports only Mathlib and its own modules. The Lorentzian
 variation lemmas use its generic manifold-variation machinery. These
@@ -120,10 +120,10 @@ shared modules may import one another and external mathematical libraries.
 Their import graph excludes project physics and the vendored Yang–Mills
 theory.
 
-`ProjectAInos/Integrations/` owns the project-authored Yang–Mills coordinate
+`ProjectAinos/Integrations/` owns the project-authored Yang–Mills coordinate
 and first-jet adapters. They depend on the shared cores and the pinned upstream
 modules. Their declaration names are preserved and their new module paths are
-imported by `ProjectAInos`. The `checks/CoreImports.lean` CI check enforces the
+imported by `ProjectAinos`. The `checks/CoreImports.lean` CI check enforces the
 project-local import boundary.
 
 The construction follows Joyce, *Algebraic Geometry over C∞-rings*, §§2 and 4,
@@ -164,7 +164,7 @@ proved isomorphic to the smooth affine line as a C∞ scheme.
 The algebra layer also has partial derivatives of smooth operations, the
 C∞-ring of dual numbers, and C∞-derivations with their commutator: the first
 algebraic stage of the [mechanics plan](docs/cinfty-mechanics.md), tracked in
-[#74](https://github.com/MGYamada/ProjectAInos/issues/74). The [smooth-algebra guide](docs/smooth-algebra.md) gives the
+[#74](https://github.com/MGYamada/ProjectAinos/issues/74). The [smooth-algebra guide](docs/smooth-algebra.md) gives the
 statements.
 
 The parallel architecture does not identify the two theories: Joyce's points
@@ -175,7 +175,7 @@ condition. Nilpotents must remain in the structure sheaf. Scheme definitions
 must not assume an unconstructed spectrum functor or an arbitrary family of
 affine models. See [Joyce, Definitions 2.10, 2.13, 4.13, 4.16, 4.23 and §4.6](https://arxiv.org/pdf/1001.0023).
 
-Each stage is checked by `lake build --wfail ProjectAInos`, the root-import
+Each stage is checked by `lake build --wfail ProjectAinos`, the root-import
 check, and the transitive axiom audit. Only `propext`, `Classical.choice`, and
 `Quot.sound` are allowed.
 
@@ -332,8 +332,8 @@ Symplectic forms on manifolds and
 Dirac brackets are not implemented. Galilean symmetry as a group action and the topics of 2.1 and
 2.4 have no Lean counterpart yet. The
 [ledger](docs/cinfty-mechanics.md#ledger) gives the status of each section of
-Landau–Lifshitz. [#78](https://github.com/MGYamada/ProjectAInos/issues/78) recorded the first
-delivery, and [#114](https://github.com/MGYamada/ProjectAInos/issues/114) tracks the proofs of the
+Landau–Lifshitz. [#78](https://github.com/MGYamada/ProjectAinos/issues/78) recorded the first
+delivery, and [#114](https://github.com/MGYamada/ProjectAinos/issues/114) tracks the proofs of the
 remaining rows. See the
 [mechanics guide](docs/mechanics.md) and the
 [C∞ mechanics research plan](docs/cinfty-mechanics.md).
@@ -341,7 +341,7 @@ remaining rows. See the
 Section 3.1 uses natural units `c = 1` and signature `(-+++)` in the physics
 layer. Shared geometry accepts both Lorentz conventions explicitly; causal
 classification, boosts, and proper time use the convention-independent quadratic
-form. [Issue #40](https://github.com/MGYamada/ProjectAInos/issues/40) tracks this
+form. [Issue #40](https://github.com/MGYamada/ProjectAinos/issues/40) tracks this
 foundation for the [classical-field research trilogy](docs/cinfty-special-relativity.md).
 The [Minkowski geometry and kinematics guide](docs/special-relativity.md) maps the
 formal APIs and exact examples.
@@ -438,7 +438,7 @@ proved inverse-Jacobian endpoint formula. Native curvature is now identified
 with the coordinate condition, and the constructed coframe integrates to a
 Minkowski chart wherever curvature vanishes on a neighborhood. This proves
 `IsLocallyMinkowski ↔ ∀ p, curvature p = 0` and completes stage D's principal
-proof endpoints, merged through [#52](https://github.com/MGYamada/ProjectAInos/issues/52).
+proof endpoints, merged through [#52](https://github.com/MGYamada/ProjectAinos/issues/52).
 Transport is proved independent
 of the piecewise path inside a flat neighborhood. The conclusion is local; it
 does not assert a global inertial chart or geodesic completeness.
@@ -531,10 +531,10 @@ trajectory theorem with mixed and spatial corrections.
 The [GR guide](docs/general-relativity.md)
 records the exact scope and typed contracts.
 The [shared geometry guide](docs/smooth-geometry.md)
-records the public API and exact checks. [Issue #52](https://github.com/MGYamada/ProjectAInos/issues/52)
+records the public API and exact checks. [Issue #52](https://github.com/MGYamada/ProjectAinos/issues/52)
 records the completed delivery of the geometry, particle variation, curved forms
 and time-dependent Newtonian limit.
-[#43](https://github.com/MGYamada/ProjectAInos/issues/43)
+[#43](https://github.com/MGYamada/ProjectAinos/issues/43)
 is the first chart-regression gate. Einstein dynamics belongs to 5.2.
 
 See the [proof development record](docs/proof-development.md) for the history of the Lean formalization.
@@ -542,14 +542,14 @@ See the [proof development record](docs/proof-development.md) for the history of
 The [scalar smeared-field prototype](docs/quantum-field-theory-prototype.md)
 formalizes a common dense domain, operator closability, and positivity of
 finite vacuum words for the prospective QFT program in
-[#46](https://github.com/MGYamada/ProjectAInos/issues/46). Its locality
+[#46](https://github.com/MGYamada/ProjectAinos/issues/46). Its locality
 predicate has causality-sensitive regressions: bump tests with explicit
 spacelike and timelike supports, and a two-point field with noncommuting
 insertions that is local exactly when its two points are not spacelike to
 each other. These are regression models, not Wightman fields.
 The [qubit comparison prototype](docs/quantum-mechanics-prototype.md) is a
 provisional finite-dimensional study for
-[#45](https://github.com/MGYamada/ProjectAInos/issues/45).
+[#45](https://github.com/MGYamada/ProjectAinos/issues/45).
 
 The documentation index links to the guides and the build instructions for the HTML handbook and Lean API reference. [Documentation index](docs/README.md)
 

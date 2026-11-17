@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 module
 
-import ProjectAInos.Mechanics.Oscillations.AdiabaticAccuracyExample
+import ProjectAinos.Mechanics.Oscillations.AdiabaticAccuracyExample
 
 /-! Typed contracts for the accuracy of the conservation of the adiabatic
 invariant: Gronwall's inequality with an integrable coefficient, the
@@ -16,9 +16,9 @@ depends on the slow phase, the limits of the action and their exponentially
 small difference, and the Lorentzian frequency as an instance. These examples
 use default elaborator options. -/
 
-open ProjectAInos ProjectAInos.Mechanics ProjectAInos.Mechanics.AdiabaticAmplitude
-open ProjectAInos.SmoothGeometry.LinearODE
-open ProjectAInos.Mechanics.AdiabaticOscillator (action)
+open ProjectAinos ProjectAinos.Mechanics ProjectAinos.Mechanics.AdiabaticAmplitude
+open ProjectAinos.SmoothGeometry.LinearODE
+open ProjectAinos.Mechanics.AdiabaticOscillator (action)
 open Complex (I)
 open Set Filter
 open scoped Topology ComplexConjugate Real

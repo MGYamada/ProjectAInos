@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 module
 
-import ProjectAInos.Mechanics.JacobiMetric
+import ProjectAinos.Mechanics.JacobiMetric
 
 /-! Typed contracts for Maupertuis' principle: the Jacobi length and its
 derivative on the energy surface, the stationarity of the abbreviated action,
@@ -13,7 +13,7 @@ in the velocity, the geodesics of the Jacobi metric, the existence of the
 parameters, and a free particle. These examples use default elaborator
 options. -/
 
-open ProjectAInos ProjectAInos.Mechanics ProjectAInos.Mechanics.Maupertuis
+open ProjectAinos ProjectAinos.Mechanics ProjectAinos.Mechanics.Maupertuis
 open Set Filter MeasureTheory
 open ContinuousLinearMap (inl inr fst snd)
 open scoped Topology ContDiff

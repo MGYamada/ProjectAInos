@@ -1,1 +1,1 @@
-"""Computational experiments for Project AInos."""
+"""Computational experiments for Project Ainos."""

@@ -3,7 +3,7 @@ Copyright (c) 2026 Masahiko G. Yamada. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 module
-import ProjectAInos
+import ProjectAinos
 
 /-! Public consumers of the two-body API: the reduced mass, disintegration,
 elastic collisions, the canonical variables of the centre of mass and the
@@ -12,7 +12,7 @@ elaborator options are intentional: these checks must not rely on the
 implementation's transparency settings. Every statement is pinned with its
 type. -/
 noncomputable section
-open ProjectAInos.SmoothAlgebra ProjectAInos.Mechanics ProjectAInos.Mechanics.TwoBody
+open ProjectAinos.SmoothAlgebra ProjectAinos.Mechanics ProjectAinos.Mechanics.TwoBody
 open Matrix
 
 section Kinematics

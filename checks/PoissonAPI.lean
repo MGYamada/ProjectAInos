@@ -3,13 +3,13 @@ Copyright (c) 2026 Masahiko G. Yamada. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 module
-import ProjectAInos
+import ProjectAinos
 
 /-! Public consumers of the Poisson C-infinity ring API. Default elaborator
 options are intentional: these checks must not rely on the implementation's
 transparency settings. Every statement is pinned with its type. -/
 noncomputable section
-open ProjectAInos.SmoothAlgebra ProjectAInos.SmoothAlgebra.SmoothRing ProjectAInos.Mechanics
+open ProjectAinos.SmoothAlgebra ProjectAinos.SmoothAlgebra.SmoothRing ProjectAinos.Mechanics
 open Matrix
 
 section Abstract

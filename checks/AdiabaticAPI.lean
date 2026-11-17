@@ -4,8 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 module
 
-import ProjectAInos.Mechanics.OneDimension.AdiabaticInvariant
-import ProjectAInos.Mechanics.Oscillations.AdiabaticOscillator
+import ProjectAinos.Mechanics.OneDimension.AdiabaticInvariant
+import ProjectAinos.Mechanics.Oscillations.AdiabaticOscillator
 
 /-! Typed contracts for adiabatic invariance: parametric integrals of functions
 that are smooth on an open set, the estimate from a corrector of the first
@@ -14,8 +14,8 @@ action variable of one degree of freedom with its corrector and the adiabatic
 theorem, and the theorem for the oscillator. These examples use default
 elaborator options. -/
 
-open ProjectAInos ProjectAInos.Mechanics ProjectAInos.Mechanics.OneDim
-open ProjectAInos.SmoothGeometry.NonlinearODE
+open ProjectAinos ProjectAinos.Mechanics ProjectAinos.Mechanics.OneDim
+open ProjectAinos.SmoothGeometry.NonlinearODE
 open Set Filter MeasureTheory
 open scoped Real Topology
 

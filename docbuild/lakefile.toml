@@ -9,5 +9,5 @@ git = "https://github.com/leanprover/doc-gen4.git"
 rev = "v4.35.0"
 
 [[require]]
-name = "ProjectAInos"
+name = "ProjectAinos"
 path = "../"

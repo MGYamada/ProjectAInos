@@ -10,7 +10,7 @@ The [research plan](cinfty-mechanics.md) preserves the long-term programme. The 
 
 **Interface decision.** `FixedEndpointVariation` requires smoothness and the two value equations, with no support condition. The previous common theorem for compactly supported interior variations alone would not cover this full class. The new common action-derivative theorem uses compactness of the base interval. Integration by parts retains the momentum pairing until the endpoint values cancel it.
 
-**Proof status.** `polynomial_fixedEndpointVariation` and `polynomial_variation_left_derivative` check this example. `firstVariation_fixedEndpoints` covers the full variation class. Compactly supported interior tests are used only to infer the differential equation in the forward implication; the converse covers every fixed-endpoint variation. [Examples](../ProjectAInos/Mechanics/Examples.lean) · [First variation](../ProjectAInos/Mechanics/FirstVariation.lean) · [Euler–Lagrange](../ProjectAInos/Mechanics/EulerLagrange.lean)
+**Proof status.** `polynomial_fixedEndpointVariation` and `polynomial_variation_left_derivative` check this example. `firstVariation_fixedEndpoints` covers the full variation class. Compactly supported interior tests are used only to infer the differential equation in the forward implication; the converse covers every fixed-endpoint variation. [Examples](../ProjectAinos/Mechanics/Examples.lean) · [First variation](../ProjectAinos/Mechanics/FirstVariation.lean) · [Euler–Lagrange](../ProjectAinos/Mechanics/EulerLagrange.lean)
 
 ## M02. The action derivative needs analytic justification
 
@@ -18,7 +18,7 @@ The [research plan](cinfty-mechanics.md) preserves the long-term programme. The 
 
 **Interface decision.** `hasDerivAt_action_restrict_compact` proves this analytic step in the common layer. The mechanics endpoint consequently has no assumed first-variation formula, no assumed fundamental lemma, and no independent domination or integrability premise. The theorem still explicitly assumes C² regularity of the ambient Lagrangian and path.
 
-**Proof status.** The common domination argument and the actual `HasDerivAt` statement are proved. Reducing the hypotheses to functions defined only on a closed interval, or to weaker Sobolev regularity, remains future work. [Common regularity](../ProjectAInos/Variational/Regularity.lean) · [Mechanical action derivative](../ProjectAInos/Mechanics/FirstVariation.lean)
+**Proof status.** The common domination argument and the actual `HasDerivAt` statement are proved. Reducing the hypotheses to functions defined only on a closed interval, or to weaker Sobolev regularity, remains future work. [Common regularity](../ProjectAinos/Variational/Regularity.lean) · [Mechanical action derivative](../ProjectAinos/Mechanics/FirstVariation.lean)
 
 ## M03. Momentum and the residual are covectors
 
@@ -26,7 +26,7 @@ The [research plan](cinfty-mechanics.md) preserves the long-term programme. The 
 
 **Interface decision.** `force`, `momentum`, and `eulerLagrange` take values in `Q →L[ℝ] ℝ`. `positionVelocity` is an explicit continuous linear map connecting the shared first jet to the mechanical pair. The proof works for any real normed `Q`, and thus for every finite number of generalized coordinates, without a metric on `Q`.
 
-**Proof status.** The jet identification, fibre derivative decomposition and covector-valued endpoint formula are proved. Coordinate transformations and cotangent bundles on a nonlinear configuration manifold are not yet implemented. [Basic interfaces](../ProjectAInos/Mechanics/Basic.lean) · [Covector integration by parts](../ProjectAInos/Variational/IntegrationByParts.lean)
+**Proof status.** The jet identification, fibre derivative decomposition and covector-valued endpoint formula are proved. Coordinate transformations and cotangent bundles on a nonlinear configuration manifold are not yet implemented. [Basic interfaces](../ProjectAinos/Mechanics/Basic.lean) · [Covector integration by parts](../ProjectAinos/Variational/IntegrationByParts.lean)
 
 ## M04. A nondegenerate interval is necessary to detect an equation
 
@@ -34,7 +34,7 @@ The [research plan](cinfty-mechanics.md) preserves the long-term programme. The 
 
 **Interface decision.** The equation-detecting equivalence requires `a < b` and states the equation on `(a,b)`. The first-variation identity itself retains oriented interval integrals. Changing between `[a,b]`, `(a,b]`, and `(a,b)` in scalar integrals uses the fact that endpoints have zero measure; it does not silently change the admissible endpoint values of a path.
 
-**Proof status.** `stationary_self` proves the zero-length case, while `stationary_iff_eulerLagrange` contains the fundamental-lemma and continuity steps. No theorem about natural boundary conditions or free endpoints is asserted. [Euler–Lagrange](../ProjectAInos/Mechanics/EulerLagrange.lean) · [Examples](../ProjectAInos/Mechanics/Examples.lean)
+**Proof status.** `stationary_self` proves the zero-length case, while `stationary_iff_eulerLagrange` contains the fundamental-lemma and continuity steps. No theorem about natural boundary conditions or free endpoints is asserted. [Euler–Lagrange](../ProjectAinos/Mechanics/EulerLagrange.lean) · [Examples](../ProjectAinos/Mechanics/Examples.lean)
 
 ## M05. Stationarity, regularity of the Lagrangian, and minimality differ
 
@@ -42,7 +42,7 @@ The [research plan](cinfty-mechanics.md) preserves the long-term programme. The 
 
 **Interface decision.** `Stationary` is defined by the actual parameter derivative, independently of the field equation. The equivalence assumes joint C² regularity but no Hessian condition. For the natural Lagrangian, Newton's equation is retained as `m q'' = −V'(q)`; this statement makes sense even at zero mass. Existence, uniqueness and minimality of trajectories are separate targets.
 
-**Proof status.** The first-order equivalence and `stationary_natural_iff` are proved. No second-variation test, Legendre theorem or existence theorem is claimed. [Definitions](../ProjectAInos/Mechanics/Basic.lean) · [Natural Lagrangian](../ProjectAInos/Mechanics/Examples.lean)
+**Proof status.** The first-order equivalence and `stationary_natural_iff` are proved. No second-variation test, Legendre theorem or existence theorem is claimed. [Definitions](../ProjectAinos/Mechanics/Basic.lean) · [Natural Lagrangian](../ProjectAinos/Mechanics/Examples.lean)
 
 ## M06. The concrete smooth model does not settle arbitrary coefficient rings
 
@@ -50,13 +50,13 @@ The [research plan](cinfty-mechanics.md) preserves the long-term programme. The 
 
 **Interface decision.** `ofSmoothOperation` uses the existing `SmoothRingHom` evaluation, derives joint C∞ regularity, and then invokes the real analytic theorem. The algebraic theory is not duplicated inside Mechanics. The analytic jet remains the pair of a field and its Fréchet derivative; it is not presented as a constructed abstract jet ring.
 
-**Proof status.** `ofSmoothOperation_op` and `stationary_ofSmoothOperation_iff` prove the concrete bridge. Abstract quotients, dual numbers, universal smooth differentials, jet rings, and the coefficient-valued fundamental lemma remain research targets. [Smooth Lagrangians](../ProjectAInos/Mechanics/SmoothLagrangian.lean) · [Original critical-subfunctor discussion](cinfty-mechanics.md#rem:fundamental)
+**Proof status.** `ofSmoothOperation_op` and `stationary_ofSmoothOperation_iff` prove the concrete bridge. Abstract quotients, dual numbers, universal smooth differentials, jet rings, and the coefficient-valued fundamental lemma remain research targets. [Smooth Lagrangians](../ProjectAinos/Mechanics/SmoothLagrangian.lean) · [Original critical-subfunctor discussion](cinfty-mechanics.md#rem:fundamental)
 
 ## M07. A boundary term shifts momentum and preserves the equations
 
 For $F(t,q)$, the action shift is $F(b,q(b))-F(a,q(a))$. Every path with the same endpoints receives the same shift, so the action differences between such paths are preserved. Along a fixed-endpoint variation, the shift is constant even when the endpoint velocities vary. The action identity and stationarity equivalence use C¹ regularity of $F$ and the path and continuity of $L$.
 
-The velocity derivative of the added density is $\partial_q F$, so the momentum covector shifts by that amount. Along the path, the derivative of this shift cancels the extra position derivative by symmetry of $d^2F$. This proves pointwise equality of the Euler–Lagrange residuals with C² $F$, $L$, and $q$. At that regularity, the added density is guaranteed to be C¹, which is why the proof computes the cancellation directly. The momentum shift also identifies the correction to track when a symmetry changes a Lagrangian by a total derivative in the planned Noether development. [Lean proofs](../ProjectAInos/Mechanics/TotalTimeDerivative.lean) · [Noether target](cinfty-mechanics.md#prop:noether-jet)
+The velocity derivative of the added density is $\partial_q F$, so the momentum covector shifts by that amount. Along the path, the derivative of this shift cancels the extra position derivative by symmetry of $d^2F$. This proves pointwise equality of the Euler–Lagrange residuals with C² $F$, $L$, and $q$. At that regularity, the added density is guaranteed to be C¹, which is why the proof computes the cancellation directly. The momentum shift also identifies the correction to track when a symmetry changes a Lagrangian by a total derivative in the planned Noether development. [Lean proofs](../ProjectAinos/Mechanics/TotalTimeDerivative.lean) · [Noether target](cinfty-mechanics.md#prop:noether-jet)
 
 ## M08. The chain rule is the only law of a C∞-derivation
 
@@ -64,7 +64,7 @@ The velocity derivative of the added density is $\partial_q F$, so the momentum 
 
 **Interface decision.** `SmoothDerivation A M` has the chain rule as its single field. `map_add`, `map_mul`, `map_algebraMap` and `map_smul` are theorems, so no redundant law has to be proved when a derivation is constructed. `toDerivation` produces Mathlib's `Derivation ℝ A M`. It needs `[Module ℝ M] [IsScalarTower ℝ A M]` because the definition assumes only an `A`-module; the constant-multiple law `map_algebraMap_mul` holds without a real action on `M`.
 
-**Proof status.** The derived laws, `map_exp` and `toDerivation` are proved. The manuscript's counterexample showing that the converse fails (Kähler differentials of `C∞(ℝ)`) is not formalized. [Derivations](../ProjectAInos/SmoothAlgebra/Derivation.lean)
+**Proof status.** The derived laws, `map_exp` and `toDerivation` are proved. The manuscript's counterexample showing that the converse fails (Kähler differentials of `C∞(ℝ)`) is not formalized. [Derivations](../ProjectAinos/SmoothAlgebra/Derivation.lean)
 
 ## M09. Dual numbers need partial derivatives as operations
 
@@ -72,7 +72,7 @@ The velocity derivative of the added density is $\partial_q F$, so the momentum 
 
 **Interface decision.** `SmoothOperation.partialDeriv` returns an operation, and `partialDeriv_comp` is the chain rule in that form. The instance is placed on Mathlib's `DualNumber A`, so the ring and real-algebra structures are Mathlib's and no second ring instance exists. The general square-zero extension `A ⊕ M` is deferred: Mathlib's `TrivSqZeroExt` commutative-ring instance needs `Module Aᵐᵒᵖ M` and `IsCentralScalar A M`, which a consumer holding only an `A`-module would have to supply. For `M = A` they are automatic.
 
-**Proof status.** The `SmoothRing (DualNumber A)` instance, the projection `fstHom`, the zero section `inlHom` and the nonpolynomial check `exp_inl_add_inr` are proved. [Partial derivatives](../ProjectAInos/SmoothAlgebra/PartialDerivative.lean) · [Dual numbers](../ProjectAInos/SmoothAlgebra/DualNumber.lean)
+**Proof status.** The `SmoothRing (DualNumber A)` instance, the projection `fstHom`, the zero section `inlHom` and the nonpolynomial check `exp_inl_add_inr` are proved. [Partial derivatives](../ProjectAinos/SmoothAlgebra/PartialDerivative.lean) · [Dual numbers](../ProjectAinos/SmoothAlgebra/DualNumber.lean)
 
 ## M10. Tier A statements still rest on calculus of the operations, including (S)
 
@@ -80,7 +80,7 @@ The velocity derivative of the added density is $\partial_q F$, so the momentum 
 
 **Interface decision.** The calculus facts are isolated in one module as identities between operations: `partialDeriv_comp` and `partialDeriv_comm`. Algebra over an abstract ring cites these identities and uses no analysis of its own. `commutator_chain` is the single place where (S) enters the theory of derivations.
 
-**Proof status.** Both identities and the Lie-ring instance on `SmoothDerivation A A` are proved. The tier labels in the manuscript are unchanged; the accurate reading is that M2 depends on (S) through M1 as well as on (H) for quotients. [Partial derivatives](../ProjectAInos/SmoothAlgebra/PartialDerivative.lean) · [Derivations](../ProjectAInos/SmoothAlgebra/Derivation.lean)
+**Proof status.** Both identities and the Lie-ring instance on `SmoothDerivation A A` are proved. The tier labels in the manuscript are unchanged; the accurate reading is that M2 depends on (S) through M1 as well as on (H) for quotients. [Partial derivatives](../ProjectAinos/SmoothAlgebra/PartialDerivative.lean) · [Derivations](../ProjectAinos/SmoothAlgebra/Derivation.lean)
 
 ## M11. Derivations of the free ring are free without constructing Ω
 
@@ -88,7 +88,7 @@ The velocity derivative of the added density is $\partial_q F$, so the momentum 
 
 **Interface decision.** `apply_eq_sum_partialDeriv` and `equivCoordinates` state this Hom form. The coordinate fields `partialDerivation i` give a nondegenerate instance of `SmoothDerivation`, and `lie_partialDerivation_proj_smul` (`[∂ᵢ, xⱼ ∂ₖ] = δᵢⱼ ∂ₖ`) shows that the bracket is not trivial. These statements use the default `SmoothRing` instance on `SmoothOperation n`, whose operation is substitution; the lower-priority manifold instance on the same type agrees with it only after unfolding.
 
-**Proof status.** The classification is proved as a bijection; its linearity is not packaged. The universal cotangent module `Ω_A`, its universal property, and Proposition 16(b) and (c) are not constructed. [Derivations](../ProjectAInos/SmoothAlgebra/Derivation.lean)
+**Proof status.** The classification is proved as a bijection; its linearity is not packaged. The universal cotangent module `Ω_A`, its universal property, and Proposition 16(b) and (c) are not constructed. [Derivations](../ProjectAinos/SmoothAlgebra/Derivation.lean)
 
 ## M12. Infinitesimal automorphisms are stated over the same ring
 
@@ -96,7 +96,7 @@ The velocity derivative of the added density is $\partial_q F$, so the momentum 
 
 **Interface decision.** `equivInfinitesimalAut` uses the subtype of morphisms `φ` with `(φ a).fst = a` for all `a`; `fstHom_comp_toInfinitesimalAut` gives the equivalent form `fstHom ∘ φ = id`. Derivations along a morphism are left to the stage that introduces the tangent functor, so that the module structure through `φ` is designed once.
 
-**Proof status.** Proposition 18 is proved. Propositions 12 and 13 and the tangent functor are not implemented. [Derivations](../ProjectAInos/SmoothAlgebra/Derivation.lean)
+**Proof status.** Proposition 18 is proved. Propositions 12 and 13 and the tangent functor are not implemented. [Derivations](../ProjectAinos/SmoothAlgebra/Derivation.lean)
 
 ## M13. A Poisson bracket cannot reuse the bracket notation of a ring
 
@@ -104,7 +104,7 @@ The velocity derivative of the added density is $\partial_q F$, so the momentum 
 
 **Interface decision.** `PoissonStructure P` is a structure with a field `bracket`, written `π.bracket f g`, and no notation. A structure also allows several Poisson structures on one ring, which a class would not: the canonical bracket and a Lie–Poisson bracket can live on the same free ring. The problem does not arise for vector fields: `SmoothDerivation A A` is not a ring, so its `Bracket` instance is the only one, and `hamiltonian_bracket` uses it on the right-hand side.
 
-**Proof status.** Implemented in the second half of milestone M2. [Poisson structures](../ProjectAInos/SmoothAlgebra/Poisson/Basic.lean)
+**Proof status.** Implemented in the second half of milestone M2. [Poisson structures](../ProjectAinos/SmoothAlgebra/Poisson/Basic.lean)
 
 ## M14. The standard jet ring is the free ring on time and the jet coordinates
 
@@ -112,7 +112,7 @@ The velocity derivative of the added density is $\partial_q F$, so the momentum 
 
 **Interface decision.** `StandardJet ι` is `FreeSmoothRing (Option (ι × ℕ))`, with `none` for time and `some (i, k)` for `qᵢ⁽ᵏ⁾`. The partial derivatives it needs were first expected to require calculus on the free ring; M15 records why they do not.
 
-**Proof status.** Implemented: `StandardJet.jetRing` is a `JetRing`, and it landed together with the abstract structure so that the structure has a nondegenerate instance. The universal property of the standard jet ring among jet rings is not stated. [Free rings](../ProjectAInos/SmoothAlgebra/Free.lean) · [Standard jet ring](../ProjectAInos/Mechanics/Jet/Standard.lean)
+**Proof status.** Implemented: `StandardJet.jetRing` is a `JetRing`, and it landed together with the abstract structure so that the structure has a nondegenerate instance. The universal property of the standard jet ring among jet rings is not stated. [Free rings](../ProjectAinos/SmoothAlgebra/Free.lean) · [Standard jet ring](../ProjectAinos/Mechanics/Jet/Standard.lean)
 
 ## M15. Vector fields on a free ring come from the dual numbers, without analysis
 
@@ -120,7 +120,7 @@ The velocity derivative of the added density is $\partial_q F$, so the momentum 
 
 **Interface decision.** `FreeSmoothRing.derivation`, `derivation_ext` and `partialDerivation_comm` are stated for the free ring on any set of generators. The standard jet ring takes its `∂ₜ` and `∂ᵢ⁽ᵏ⁾` from them. The manuscript lists symmetry of second derivatives as the analytic input of the standard model; in Lean that input is used once, in the Lie-ring structure of derivations (M10), and the model itself is algebra.
 
-**Proof status.** Proved. This construction gives vector fields with values in the ring itself. Derivations of a free ring into an arbitrary module would need the square-zero extension deferred in M09. [Derivations of free rings](../ProjectAInos/SmoothAlgebra/FreeDerivation.lean)
+**Proof status.** Proved. This construction gives vector fields with values in the ring itself. Derivations of a free ring into an arbitrary module would need the square-zero extension deferred in M09. [Derivations of free rings](../ProjectAinos/SmoothAlgebra/FreeDerivation.lean)
 
 ## M16. A jet ring has no time coordinate, and boosts need one
 
@@ -128,7 +128,7 @@ The velocity derivative of the added density is $\partial_q F$, so the momentum 
 
 **Interface decision.** `JetRing` follows Definition 32 and has no time field. `conserved_boost` takes an element `τ` with `∂ₜτ = 1` and `∂ᵢ⁽ᵏ⁾τ = 0` as explicit hypotheses and proves `Dτ = 1` from them. In the standard jet ring these hold for `StandardJet.time`.
 
-**Proof status.** Proved, with the hypotheses instantiated in the standard model (`conserved_boost_free`). [Conservation laws](../ProjectAInos/Mechanics/Jet/Conservation.lean)
+**Proof status.** Proved, with the hypotheses instantiated in the standard model (`conserved_boost_free`). [Conservation laws](../ProjectAinos/Mechanics/Jet/Conservation.lean)
 
 ## M17. The Noether identity holds for every variation
 
@@ -136,7 +136,7 @@ The velocity derivative of the added density is $\partial_q F$, so the momentum 
 
 **Interface decision.** `prolong` is defined for arbitrary `ξ` as `Σₖ Σᵢ (Dᵏ ξᵢ) ∂ᵢ⁽ᵏ⁾`, and `prolong_eq_euler_add_totalDeriv` has no hypothesis on `ξ`. The Euler operator and `euler_totalDeriv` are likewise stated for elements of every order, which covers the second-order Euler operator of experiment E9b.
 
-**Proof status.** Proved. That `pr ξ` commutes with `D` for evolutionary `ξ` is not stated. [Noether identity](../ProjectAInos/Mechanics/Jet/Noether.lean)
+**Proof status.** Proved. That `pr ξ` commutes with `D` for evolutionary `ξ` is not stated. [Noether identity](../ProjectAinos/Mechanics/Jet/Noether.lean)
 
 ## M18. Coordinates are indexed by a finite type, and the cross product comes from Mathlib
 
@@ -152,7 +152,7 @@ The velocity derivative of the added density is $\partial_q F$, so the momentum 
 
 **Interface decision.** `Conserved L F` is defined as `D F ∈ eulerLagrangeIdeal L`, and the ideal is proved stable under `D`. Nothing in `Mechanics/Jet` mentions a path. The real analytic statements (`Mechanics.stationary_iff_eulerLagrange` and its relatives) remain separate.
 
-**Proof status.** The algebraic laws are proved, and the ledger rows for §§6–9 are *proved* for their stated main target, the jet-ring identity. The bridge to smooth trajectories is M29. [Euler operators](../ProjectAInos/Mechanics/Jet/Euler.lean)
+**Proof status.** The algebraic laws are proved, and the ledger rows for §§6–9 are *proved* for their stated main target, the jet-ring identity. The bridge to smooth trajectories is M29. [Euler operators](../ProjectAinos/Mechanics/Jet/Euler.lean)
 
 ## M20. Bilinearity and the Leibniz rule of a Poisson bracket are theorems
 
@@ -160,7 +160,7 @@ The velocity derivative of the added density is $\partial_q F$, so the momentum 
 
 **Interface decision.** `AlmostPoissonStructure` has the fields `bracket`, `antisymm` and `chain`; `PoissonStructure` adds `jacobi`. The lemmas `bracket_add_left`, `bracket_mul_left`, `bracket_algebraMap_left`, `bracket_smul_left` and their right-hand versions are derived through `hamiltonian h : SmoothDerivation P P`.
 
-**Proof status.** Proved. `checks/PoissonAPI.lean` pins the derived laws. [Poisson structures](../ProjectAInos/SmoothAlgebra/Poisson/Basic.lean)
+**Proof status.** Proved. `checks/PoissonAPI.lean` pins the derived laws. [Poisson structures](../ProjectAinos/SmoothAlgebra/Poisson/Basic.lean)
 
 ## M21. On a free ring the Jacobi identity is a condition on generators
 
@@ -184,7 +184,7 @@ The velocity derivative of the added density is $\partial_q F$, so the momentum 
 
 **Interface decision.** `normalizer I` is a `Subalgebra ℝ P`, with `bracket_mem_normalizer`, `op_mem_normalizer` and `bracket_sub_bracket_mem` as separate theorems. `hamiltonJacobi` and `maupertuis` are stated as ideal memberships, and `maupertuis` has no unit hypothesis. `bracket_mul_sub_algebraMap` records the exact identity behind it.
 
-**Proof status.** Proved, except the quotient ring. Once quotients by ideals exist, `bracket_sub_bracket_mem` is the well-definedness statement they need. The row for §44 stays at *evidence* and the row for §47 at *informal*, because the Jacobi metric, the variational statement and Jacobi's theorem on complete integrals are not formalized. [Poisson ideals](../ProjectAInos/SmoothAlgebra/Poisson/Ideal.lean)
+**Proof status.** Proved, except the quotient ring. Once quotients by ideals exist, `bracket_sub_bracket_mem` is the well-definedness statement they need. The row for §44 stays at *evidence* and the row for §47 at *informal*, because the Jacobi metric, the variational statement and Jacobi's theorem on complete integrals are not formalized. [Poisson ideals](../ProjectAinos/SmoothAlgebra/Poisson/Ideal.lean)
 
 ## M24. The rigid body: sign, the gradient form, and total inverses
 
@@ -192,7 +192,7 @@ The velocity derivative of the added density is $\partial_q F$, so the momentum 
 
 **Interface decision.** `RigidBody.structureMatrix` is the explicit skew matrix, so that the generator brackets reduce by `rfl` and case analysis. The general statements `poisson_bracket` and `poisson_L_bracket` are in vector form with `⨯₃`, and Euler's equations are stated both in vector form and by components. No positivity or nonvanishing of `I` is assumed, since no proof uses it. `L_ne_zero` evaluates at the point `(1, 1, 1)` through `FreeSmoothRing.lift` to show that the bracket is not the zero bracket.
 
-**Proof status.** Proved: the row for §36 is *proved*. The heavy top is M27. The quotient by `|L|² − r²`, stability of the principal rotations (§37) and the link to the Lagrangian on `T(SO(3))` are not formalized. [Rigid body](../ProjectAInos/Mechanics/Poisson/RigidBody.lean)
+**Proof status.** Proved: the row for §36 is *proved*. The heavy top is M27. The quotient by `|L|² − r²`, stability of the principal rotations (§37) and the link to the Lagrangian on `T(SO(3))` are not formalized. [Rigid body](../ProjectAinos/Mechanics/Poisson/RigidBody.lean)
 
 ## M25. The canonical phase space is all of ℝ²ⁿ
 
@@ -200,7 +200,7 @@ The velocity derivative of the added density is $\partial_q F$, so the momentum 
 
 **Interface decision.** The Kepler stage took a third route, recorded in M37: `ρ` is a generator of a larger free ring, and the relation with `q` is an element, not a hypothesis. No Poisson structure on a localization was needed. Phase spaces over a general open set are still not available.
 
-**Proof status.** The constraint is resolved for Kepler's problem by M37. Extending a Poisson structure along `GeneralLocalization` is not implemented. [Canonical bracket](../ProjectAInos/SmoothAlgebra/Poisson/Canonical.lean)
+**Proof status.** The constraint is resolved for Kepler's problem by M37. Extending a Poisson structure along `GeneralLocalization` is not implemented. [Canonical bracket](../ProjectAinos/SmoothAlgebra/Poisson/Canonical.lean)
 
 ## M26. A momentum map is a Poisson morphism out of a free ring, checked on generators
 
@@ -208,7 +208,7 @@ The velocity derivative of the added density is $\partial_q F$, so the momentum 
 
 **Interface decision.** `IsPoissonHom π ρ φ` is a predicate on morphisms of C∞-rings between almost-Poisson structures, with `FreeSmoothRing.isPoissonHom_of_generators` as the criterion. `AngularMomentum.momentumMap` is `FreeSmoothRing.lift fun a => -M a`. No Lie algebra, group action or infinitesimal action is defined; the first condition of Definition 57 is not stated.
 
-**Proof status.** `isPoissonHom_momentumMap` is proved. Momentum maps of a general Lie algebra, and the identification of `X_{Mₐ}` with the infinitesimal rotation, are not formalized. `SmoothRingHom` gained `map_sum`, `map_neg` and `map_sub`; they were first stated next to their first use and now live in the morphism file. [Poisson morphisms](../ProjectAInos/SmoothAlgebra/Poisson/Hom.lean) · [Angular momentum](../ProjectAInos/Mechanics/Poisson/AngularMomentum.lean)
+**Proof status.** `isPoissonHom_momentumMap` is proved. Momentum maps of a general Lie algebra, and the identification of `X_{Mₐ}` with the infinitesimal rotation, are not formalized. `SmoothRingHom` gained `map_sum`, `map_neg` and `map_sub`; they were first stated next to their first use and now live in the morphism file. [Poisson morphisms](../ProjectAinos/SmoothAlgebra/Poisson/Hom.lean) · [Angular momentum](../ProjectAinos/Mechanics/Poisson/AngularMomentum.lean)
 
 ## M27. The heavy top: one matrix for the structure constants, vector form for the statements
 
@@ -216,7 +216,7 @@ The velocity derivative of the added density is $\partial_q F$, so the momentum 
 
 **Interface decision.** `Mechanics.epsilon` with `epsilon_skew` and `sum_epsilon_mul` is a small shared module. The statements are in vector form with `⨯₃` and `⬝ᵥ`: `poisson_L_bracket`, `poisson_Γ_bracket` and `poisson_bracket` for any Hamiltonian, then the specialization to `Σ Lᵢ² / 2Iᵢ + k Γ · χ`. The Casimirs `|Γ|²` and `L · Γ` are proved for every second argument, from the general equations of motion and the triple-product identities.
 
-**Proof status.** Proved, including the Jacobi identity for all elements; experiment E6f tested it on polynomials. The row for §34 stays *informal* because the equation for the momentum, general torques and the link to the Lagrangian on `T(SO(3))` are missing. [Heavy top](../ProjectAInos/Mechanics/Poisson/HeavyTop.lean)
+**Proof status.** Proved, including the Jacobi identity for all elements; experiment E6f tested it on polynomials. The row for §34 stays *informal* because the equation for the momentum, general torques and the link to the Lagrangian on `T(SO(3))` are missing. [Heavy top](../ProjectAinos/Mechanics/Poisson/HeavyTop.lean)
 
 ## M28. In a free ring `simp` does not normalize signs, and `ring` does
 
@@ -232,7 +232,7 @@ The velocity derivative of the added density is $\partial_q F$, so the momentum 
 
 **Interface decision.** `StandardJet.IsSolution L γ` is defined by the prolongation: it annihilates each `Eᵢ(L)`. With this definition the Euler–Lagrange ideal is annihilated by induction on the span, using `prolongation_totalDeriv` for the higher total derivatives, and `prolongation_eq_of_conserved` follows. For natural Lagrangians `isSolution_naturalLagrangian_iff` unfolds the definition to Newton's equations, so the hypothesis of `energy_eq_of_isSolution` is a differential equation and not a statement about ideals. Paths are smooth and defined on all of `ℝ`, which is what a morphism of C∞-rings out of the jet ring requires.
 
-**Proof status.** Proved, with uniform motion as a solution of the free equations. The relation to stationarity of the action in the real analytic model is M33. A smooth path on an open interval, or one that leaves a region where the Lagrangian is defined, is not covered. [Prolongation](../ProjectAInos/Mechanics/Jet/Prolongation.lean)
+**Proof status.** Proved, with uniform motion as a solution of the free equations. The relation to stationarity of the action in the real analytic model is M33. A smooth path on an open interval, or one that leaves a region where the Lagrangian is defined, is not covered. [Prolongation](../ProjectAinos/Mechanics/Jet/Prolongation.lean)
 
 ## M30. The mass is a central term, and the boost generator carries time as a parameter
 
@@ -240,7 +240,7 @@ The velocity derivative of the added density is $\partial_q F$, so the momentum 
 
 **Interface decision.** `Galilei.K m t` takes the time as an argument. The relations are stated for one particle in space, reusing `AngularMomentum.M` and `epsilon`. Definition 23's time-dependent systems, with `ḟ = ∂ₜf + {f, H}` on a phase space extended by time, are not introduced for this single use.
 
-**Proof status.** Proved for one particle. The Galilei algebra acting on the jet ring, several particles, and the invariance of the Euler–Lagrange ideal under finite boosts (the main target of the row for §3) are not formalized. [Galilei algebra](../ProjectAInos/Mechanics/Poisson/Galilei.lean)
+**Proof status.** Proved for one particle. The Galilei algebra acting on the jet ring, several particles, and the invariance of the Euler–Lagrange ideal under finite boosts (the main target of the row for §3) are not formalized. [Galilei algebra](../ProjectAinos/Mechanics/Poisson/Galilei.lean)
 
 ## M31. Homogeneity enters the virial identity as Euler's relation
 
@@ -248,7 +248,7 @@ The velocity derivative of the added density is $\partial_q F$, so the momentum 
 
 **Interface decision.** `PhaseSpace.virial` takes Euler's relation and independence of the momenta as hypotheses on `U`; the kinetic energy satisfies its own relation as a theorem. `virial_oscillator` shows that the hypotheses are satisfiable with `k = 2`.
 
-**Proof status.** Proved. The row for §10 stays *evidence*: scaling as a symmetry of the Euler–Lagrange ideal and the virial theorem for time averages are missing. [Virial identity](../ProjectAInos/Mechanics/Poisson/Virial.lean)
+**Proof status.** Proved. The row for §10 stays *evidence*: scaling as a symmetry of the Euler–Lagrange ideal and the virial theorem for time averages are missing. [Virial identity](../ProjectAinos/Mechanics/Poisson/Virial.lean)
 
 ## M32. A trajectory is a morphism that intertwines the Hamiltonian vector field with `d/dt`
 
@@ -256,7 +256,7 @@ The velocity derivative of the added density is $\partial_q F$, so the momentum 
 
 **Interface decision.** `FreeSmoothRing.map_derivation_eq` is stated for two vector fields and a morphism into any C∞-ring. `IsTrajectory π H c` is the condition on generators, so for the canonical bracket it unfolds to Hamilton's equations (`isTrajectory_canonical_iff`); the statement for all observables is the theorem `timeDerivative_lift`. `TimeFunction` moved to its own module, shared with the prolongation of M29, whose proof now uses the same lemma.
 
-**Proof status.** Proved. Existence and uniqueness of trajectories, the interface (F) of the manuscript, are not addressed: every statement is of the form "if `c` is a trajectory, then". Coefficient rings other than `ℝ`, and Poisson rings that are not free, are not covered. [Trajectories](../ProjectAInos/Mechanics/Poisson/Trajectory.lean)
+**Proof status.** Proved. Existence and uniqueness of trajectories, the interface (F) of the manuscript, are not addressed: every statement is of the form "if `c` is a trajectory, then". Coefficient rings other than `ℝ`, and Poisson rings that are not free, are not covered. [Trajectories](../ProjectAinos/Mechanics/Poisson/Trajectory.lean)
 
 ## M33. The two notions of solution agree because they share one smooth function
 
@@ -264,7 +264,7 @@ The velocity derivative of the added density is $\partial_q F$, so the momentum 
 
 **Interface decision.** The arguments of `f` are indexed by `Fin (n + n + 1)` with `Fin.cons` and `Fin.append`, as `ofSmoothOperation` already does. `positionIndex`, `velocityIndex` and the case principle `index_cases` hide that encoding; all later statements use them. The comparison is stated at each time, `prolongation_euler_firstOrder_apply`, and the equivalences `isSolution_firstOrder_iff` and `isSolution_firstOrder_iff_stationary` follow. `energy_eq_of_stationary` has no jet ring in its statement: its hypotheses are `∂f/∂t = 0` and stationarity, and its conclusion is an equality of real numbers.
 
-**Proof status.** Proved for smooth paths defined on all of `ℝ` and Lagrangians defined on all of `ℝ^{2n+1}`. The real analytic model itself covers `C²` paths on one interval; the jet-ring side cannot, because a morphism out of the jet ring needs all derivatives. Lagrangians on an open jet domain (`Mechanics.OpenDomain`) and higher-order Lagrangians are not compared. [Analytic comparison](../ProjectAInos/Mechanics/Jet/Analytic.lean)
+**Proof status.** Proved for smooth paths defined on all of `ℝ` and Lagrangians defined on all of `ℝ^{2n+1}`. The real analytic model itself covers `C²` paths on one interval; the jet-ring side cannot, because a morphism out of the jet ring needs all derivatives. Lagrangians on an open jet domain (`Mechanics.OpenDomain`) and higher-order Lagrangians are not compared. [Analytic comparison](../ProjectAinos/Mechanics/Jet/Analytic.lean)
 
 ## M34. The Coriolis and centrifugal terms need no hypothesis on the mass
 
@@ -272,7 +272,7 @@ The velocity derivative of the added density is $\partial_q F$, so the momentum 
 
 **Interface decision.** `RotatingFrame.velocity` is defined with `m⁻¹`, and `canonical_velocity_hamiltonian` has no hypothesis on `m`; `hamiltonian_eq_velocity` takes `m ≠ 0`. The angular velocity is a real vector, embedded as constants of the phase space. The potential is any element with vanishing derivatives in the momenta. The Hamiltonian `H₀ − Ω · M` is the definition, as in the row for §39; it is not derived from a change of frame.
 
-**Proof status.** Proved: the row for §39 is *proved*. One particle and a constant `Ω`; the terms of an accelerated translation and of a time-dependent `Ω`, and the passage from the Lagrangian in the inertial frame, are not formalized. [Rotating frame](../ProjectAInos/Mechanics/Poisson/RotatingFrame.lean)
+**Proof status.** Proved: the row for §39 is *proved*. One particle and a constant `Ω`; the terms of an accelerated translation and of a time-dependent `Ω`, and the passage from the Lagrangian in the inertial frame, are not formalized. [Rotating frame](../ProjectAinos/Mechanics/Poisson/RotatingFrame.lean)
 
 ## M35. The angular velocity is a theorem about rotations, proved entry by entry
 
@@ -280,7 +280,7 @@ The velocity derivative of the added density is $\partial_q F$, so the momentum 
 
 **Interface decision.** Differentiability is assumed entry by entry, `∀ a b, HasDerivAt (fun s => R s a b) (R' a b) t`, and orthogonality as `R s * (R s)ᵀ = 1` for all `s`; no topology on matrices appears. `hat`, `vee` and `hat_cross` are stated over any commutative ring, and `hat_vee`, `hatEquiv` over the reals, where a skew-symmetric matrix has zero diagonal. "Independent of the origin" is `velocityField_change_of_origin`, stated for two descriptions of one velocity field, with uniqueness `velocityField_injective` as the content.
 
-**Proof status.** Proved: the row for §31 is *proved*. Determinant one is not used, so the statements hold for all orthogonal matrices. [Angular velocity](../ProjectAInos/Mechanics/Rigid/AngularVelocity.lean)
+**Proof status.** Proved: the row for §31 is *proved*. Determinant one is not used, so the statements hold for all orthogonal matrices. [Angular velocity](../ProjectAinos/Mechanics/Rigid/AngularVelocity.lean)
 
 ## M36. The triangle inequality for the principal moments is a trace inequality
 
@@ -288,7 +288,7 @@ The velocity derivative of the added density is $\partial_q F$, so the momentum 
 
 **Interface decision.** `inertia` is defined by its entries for a finite family of point masses, with masses and positions as functions on an arbitrary finite type. `principalMoments` and `principalAxes` are Mathlib's eigenvalues and eigenvector basis of a Hermitian matrix; existence of principal axes is the spectral theorem and is not reproved. The parallel-axis theorem is stated entrywise, with the centre of mass at the origin as the hypothesis `Σ m • r = 0`. Masses are real numbers, and non-negativity is a hypothesis only where it is used.
 
-**Proof status.** Proved: the row for §32 is *proved* for point masses. Continuous mass distributions, the classification of tops, and the regular precession of §33 are not formalized; the row for §33 stays *informal* with `M = I Ω` and the kinetic energy proved. [Inertia tensor](../ProjectAInos/Mechanics/Rigid/InertiaTensor.lean)
+**Proof status.** Proved: the row for §32 is *proved* for point masses. Continuous mass distributions, the classification of tops, and the regular precession of §33 are not formalized; the row for §33 stays *informal* with `M = I Ω` and the kinetic energy proved. [Inertia tensor](../ProjectAinos/Mechanics/Rigid/InertiaTensor.lean)
 
 ## M37. Kepler's problem: adjoin `1/r` as a generator and keep the relation as an element
 
@@ -296,7 +296,7 @@ The velocity derivative of the added density is $\partial_q F$, so the momentum 
 
 **Interface decision.** The identities are proved for a *Kepler frame* in an arbitrary Poisson C∞-ring: a triple `q`, `p`, `ρ` with the five bracket relations and no relation between `ρ` and `q`. The free ring with `ρ` adjoined is a model (`KeplerModel.isFrame`), and the same theorems will apply to `C∞(T*(ℝ³ ∖ 0))` once it exists, with `constraint = 0`. Proving over a variable ring is also what makes the computations fast (M22, M28): the bracket `{Aₐ, A_b}` expands to a few hundred monomials and `linear_combination` closes it in seconds. The coefficients of `linear_combination` against `m · m⁻¹ = 1` and `2 · (m⁻¹/2) = m⁻¹` were found with SymPy and are checked by Lean. `IsKeplerMotion` has the constraint and Newton's equations as fields, and the conclusions are stated for the Runge–Lenz vector computed from the functions of time, through the naturality lemma `Kepler.map_rungeLenz`. `isKeplerMotion_circular` shows that the hypotheses are satisfiable.
 
-**Proof status.** Proposition 69 is proved in this form, and the Runge–Lenz vector, the angular momentum and the energy are constant along Kepler motions. Not formalized: Kepler's third law and the period, the polar form of the conic and the eccentricity, the identification of the quotient by the constraint with `C∞(T*(ℝ³ ∖ 0))`, and existence of solutions. The row for §15 stays *evidence* because its target lists Kepler's third law. [Kepler frame](../ProjectAInos/Mechanics/Poisson/Kepler.lean) · [Model](../ProjectAInos/Mechanics/Poisson/KeplerModel.lean) · [Motions](../ProjectAInos/Mechanics/Poisson/KeplerMotion.lean)
+**Proof status.** Proposition 69 is proved in this form, and the Runge–Lenz vector, the angular momentum and the energy are constant along Kepler motions. Not formalized: Kepler's third law and the period, the polar form of the conic and the eccentricity, the identification of the quotient by the constraint with `C∞(T*(ℝ³ ∖ 0))`, and existence of solutions. The row for §15 stays *evidence* because its target lists Kepler's third law. [Kepler frame](../ProjectAinos/Mechanics/Poisson/Kepler.lean) · [Model](../ProjectAinos/Mechanics/Poisson/KeplerModel.lean) · [Motions](../ProjectAinos/Mechanics/Poisson/KeplerMotion.lean)
 
 ## M38. Case analysis by generator type, not by index
 
@@ -312,7 +312,7 @@ The velocity derivative of the added density is $\partial_q F$, so the momentum 
 
 **Interface decision.** `IsElastic` is a structure with the two conservation laws as fields, and `isElastic_iff` is the characterization. `outgoingOne` and `outgoingTwo` are functions of the incoming velocities and of `w`, so the formulas for a target at rest are statements about `outgoingOne m₁ m₂ (v • n) 0 (v • n₀)`. Vectors are `Fin 3 → ℝ` with `⬝ᵥ`, as in the rest of the mechanics models, and unit vectors are given by `n ⬝ᵥ n = 1`. Hypotheses on the masses are exactly those used: `m₁ m₂ ≠ 0`, `m₁ + m₂ ≠ 0`, or positivity for the two inequalities. No angle and no trigonometric function appears.
 
-**Proof status.** Proved: the rows for §16 and §17 are *proved*. Not formalized: the laboratory angles `θ₁`, `θ₂` as angles, the distribution of fragments in direction and energy, disintegration into more than two fragments, and the cross-sections of §§18–20. [Collisions](../ProjectAInos/Mechanics/TwoBody/Collisions.lean)
+**Proof status.** Proved: the rows for §16 and §17 are *proved*. Not formalized: the laboratory angles `θ₁`, `θ₂` as angles, the distribution of fragments in direction and energy, disintegration into more than two fragments, and the cross-sections of §§18–20. [Collisions](../ProjectAinos/Mechanics/TwoBody/Collisions.lean)
 
 ## M40. The centre-of-mass variables are canonical, but the reduction is not constructed
 
@@ -320,7 +320,7 @@ The velocity derivative of the added density is $\partial_q F$, so the momentum 
 
 **Interface decision.** The new variables are elements of the phase space indexed by `Fin 2 × Fin 3`, and the statement is the list of their brackets. A Poisson isomorphism onto a second copy of the phase space is not constructed; it would follow from `FreeSmoothRing.isPoissonHom_of_generators` and an inverse.
 
-**Proof status.** The brackets and the form of the kinetic energy are proved. The row for §13 stays *evidence*. [Canonical variables](../ProjectAInos/Mechanics/Poisson/TwoBody.lean)
+**Proof status.** The brackets and the form of the kinetic energy are proved. The row for §13 stays *evidence*. [Canonical variables](../ProjectAinos/Mechanics/Poisson/TwoBody.lean)
 
 ## M41. The general natural Lagrangian: where symmetry and the inverse are used
 
@@ -328,7 +328,7 @@ The velocity derivative of the added density is $\partial_q F$, so the momentum 
 
 **Interface decision.** `kineticForm a` and `metricLagrangian a U` take the coefficients as a function `ι → ι → J`, with order zero, symmetry and the inverse as hypotheses where they are used. The constant `½` is `algebraMap ℝ J (1 / 2)`, and the only fact about it is `algebraMap_half_add_half`. `metricLagrangian_diagonal` shows that the constant-mass `naturalLagrangian` is a special case, so the earlier conservation laws are not restated. Plane polar co-ordinates are the model with a kinetic form that is not constant; there `r` is a generator and need not be invertible, since no identity divides by it. The lemmas for the entries of a matrix literal are not simp lemmas: marking them simp rewrites `metric 1 1` before the lemma for its derivative can fire.
 
-**Proof status.** Proved: the row for §5 is *proved*. The Legendre map as an isomorphism between velocity and momentum variables (Example 52, Theorem 51) is not formalized and is the target of the row for §40. Geodesics, the symmetrized Christoffel form of the equations, and constraints are not treated. [Kinetic form](../ProjectAInos/Mechanics/Jet/Metric.lean) · [Polar co-ordinates](../ProjectAInos/Mechanics/Jet/Polar.lean)
+**Proof status.** Proved: the row for §5 is *proved*. The Legendre map as an isomorphism between velocity and momentum variables (Example 52, Theorem 51) is not formalized and is the target of the row for §40. Geodesics, the symmetrized Christoffel form of the equations, and constraints are not treated. [Kinetic form](../ProjectAinos/Mechanics/Jet/Metric.lean) · [Polar co-ordinates](../ProjectAinos/Mechanics/Jet/Polar.lean)
 
 ## M42. Eulerian angles are polynomial identities modulo three relations
 
@@ -336,7 +336,7 @@ The velocity derivative of the added density is $\partial_q F$, so the momentum 
 
 **Interface decision.** `eulerMatrix`, `eulerMatrixDeriv`, `bodyAngularVelocity` and `spaceAngularVelocity` take the six elements `c1 s1 c2 s2 c3 s3` and the three rates as separate arguments, so that each matrix entry is a polynomial in named atoms. Each of the nine entries of `R Rᵀ = 1`, `Rᵀ Ṙ = hat Ω` and `Ṙ Rᵀ = hat ω` is closed by `linear_combination` against the three relations. The coefficients were computed by polynomial division with SymPy and are checked by Lean; they are not trusted. `eulerRotation` specializes to real angles and is a member of Mathlib's `specialOrthogonalGroup`. The product rule for matrices is proved entry by entry, as in M35.
 
-**Proof status.** Proved: the row for §35 is *proved*, with "a chart on `SO(3)`" read as membership in `SO(3)` together with the Jacobian of determinant `−sin θ`. Not formalized: surjectivity of the angles onto `SO(3)`, the local inverse, the general (asymmetric) kinetic energy beyond its definition `½ Σ Iₖ Ωₖ²`, and the Lagrangian of the heavy symmetric top in Eulerian angles. [Eulerian angles](../ProjectAInos/Mechanics/Rigid/EulerAngles.lean)
+**Proof status.** Proved: the row for §35 is *proved*, with "a chart on `SO(3)`" read as membership in `SO(3)` together with the Jacobian of determinant `−sin θ`. Not formalized: surjectivity of the angles onto `SO(3)`, the local inverse, the general (asymmetric) kinetic energy beyond its definition `½ Σ Iₖ Ωₖ²`, and the Lagrangian of the heavy symmetric top in Eulerian angles. [Eulerian angles](../ProjectAinos/Mechanics/Rigid/EulerAngles.lean)
 
 ## M43. Two first integrals give the general solution of the oscillator
 
@@ -344,7 +344,7 @@ The velocity derivative of the added density is $\partial_q F$, so the momentum 
 
 **Interface decision.** `IsHarmonic ω x` is the equation in `TimeFunction`, with the frequency as a real parameter and the constant `ω²` as `algebraMap ℝ TimeFunction (ω ^ 2)`. The Lagrangian and the Hamiltonian of the oscillator are the existing ones (`StandardJet.oscillatorPotential`, `PhaseSpace.kineticEnergy`, `PhaseSpace.oscillatorPotential`), with one stiffness `k` and masses `mᵢ`; the frequencies enter through the hypothesis `k = mᵢ ωᵢ²`, so no square root appears in the statements. The flow is the matrix `Oscillator.flowMatrix m ω t` on a pair `(q, p)`; its determinant one is the whole content of "canonical" in the phase plane. Identities between functions of time that contain real constants are proved pointwise after `TimeFunction.ext_apply_const`, where `field_simp` and `ring` apply. A practical point: `open scoped ContDiff` makes `ω` a reserved token, so a file that names a frequency `ω` must not open that scope.
 
-**Proof status.** Proved, including the equivalence with the solutions of the Euler–Lagrange equations and with the trajectories of the Hamiltonian. Not formalized: the complex representation `x = Re (A e^{iωt})` of (21.12), and the flow of a general quadratic Hamiltonian as a one-parameter group (its vector field is linear, M61). [Free oscillations](../ProjectAInos/Mechanics/Oscillations/Harmonic.lean) · [The oscillator](../ProjectAInos/Mechanics/Oscillations/Oscillator.lean)
+**Proof status.** Proved, including the equivalence with the solutions of the Euler–Lagrange equations and with the trajectories of the Hamiltonian. Not formalized: the complex representation `x = Re (A e^{iωt})` of (21.12), and the flow of a general quadratic Hamiltonian as a one-parameter group (its vector field is linear, M61). [Free oscillations](../ProjectAinos/Mechanics/Oscillations/Harmonic.lean) · [The oscillator](../ProjectAinos/Mechanics/Oscillations/Oscillator.lean)
 
 ## M44. Linearization at an equilibrium is the vector field of the quadratic part
 
@@ -352,7 +352,7 @@ The velocity derivative of the added density is $\partial_q F$, so the momentum 
 
 **Interface decision.** `hessian`, `quadraticPart` and `linearization` are defined for a free C∞-ring on a finite index type, with the point as a function `x₀ : κ → ℝ` and evaluation at the point as `FreeSmoothRing.lift x₀`; `linearization` takes any Poisson structure, and the theorems are for the canonical bracket. A bracket whose values on generators are not constant (the rigid body, §37) has a further term in its linearization, which is not treated. The one-dimensional Hamiltonian is `½ b(q) p² + U(q)` with the inverse mass `b` as a smooth function, so that no division by a function is needed; Landau–Lifshitz's coefficient is `a = 1/b`. The frequency enters as a hypothesis `ω² = b(q₀) U''(q₀)`, and the square root appears in one corollary, under the hypotheses of a non-degenerate minimum and a positive mass. The pendulum is the instance that shows the hypotheses can be met. In proofs about `restPoint q₀`, the lemmas on the Hessian must be applied before `restPoint` is unfolded, since they are stated for the folded point.
 
-**Proof status.** Proved for the canonical bracket, with the one-dimensional case and the pendulum. Not formalized: the comparison of non-linear and linearized solutions, the Legendre transformation from `½ a(q) q̇² − U(q)`, the linearization as a morphism out of the dual numbers (a curve with values in `TimeFunction[ε]`), and several degrees of freedom with the simultaneous diagonalization of §23. [Linearization](../ProjectAInos/Mechanics/Oscillations/Linearization.lean)
+**Proof status.** Proved for the canonical bracket, with the one-dimensional case and the pendulum. Not formalized: the comparison of non-linear and linearized solutions, the Legendre transformation from `½ a(q) q̇² − U(q)`, the linearization as a morphism out of the dual numbers (a curve with values in `TimeFunction[ε]`), and several degrees of freedom with the simultaneous diagonalization of §23. [Linearization](../ProjectAinos/Mechanics/Oscillations/Linearization.lean)
 
 ## M45. One substitution reduces the damped equation to three model equations
 
@@ -360,7 +360,7 @@ The velocity derivative of the added density is $\partial_q F$, so the momentum 
 
 **Interface decision.** `IsDamped γ ω₀ x` is the equation solved for `ẍ`, like `IsHarmonic`, and `isDamped_zero_iff` identifies the undamped case. The damping coefficient is `γ` because `λ` is a reserved word of Lean. The frequencies `ω` and `β` enter through hypotheses `ω² = ω₀² − γ²` and `β² = γ² − ω₀²`, so that the statements contain no square root; the square roots appear only inside the proof of `IsDamped.eq_of_initial`. The explicit solutions are stated pointwise in real functions (`Real.exp`, `Real.cos`), and existence is stated in the ring (`isDamped_expMul` for a root of the characteristic polynomial). The energy `ẋ² + ω₀² x²` is shown not to increase by a general lemma: a smooth function of time whose derivative is nowhere positive is antitone.
 
-**Proof status.** Proved. Not formalized: that the solution tends to zero for `γ > 0` in the critical and strong cases (the weak case has the bound `|x| ≤ a e^{−γt}`), and the complex form of the characteristic roots. [Damped oscillations](../ProjectAInos/Mechanics/Oscillations/Damped.lean)
+**Proof status.** Proved. Not formalized: that the solution tends to zero for `γ > 0` in the critical and strong cases (the weak case has the bound `|x| ≤ a e^{−γt}`), and the complex form of the characteristic roots. [Damped oscillations](../ProjectAinos/Mechanics/Oscillations/Damped.lean)
 
 ## M46. Friction is a vector field, not a Hamiltonian, and `≤ 0` is a statement at points
 
@@ -368,7 +368,7 @@ The velocity derivative of the added density is $\partial_q F$, so the momentum 
 
 **Interface decision.** `IsIntegralCurve X c` is defined for a vector field on a free C∞-ring, and `IsIntegralCurve.timeDerivative_lift` is the same proof as for trajectories. The friction matrix is a `Matrix ι ι ℝ` with real entries; positive semidefiniteness is the explicit hypothesis `∀ v, 0 ≤ v ⬝ᵥ α *ᵥ v`, since Mathlib's `Matrix.PosSemidef` is phrased with finitely supported functions and adds a symmetry condition that is not needed. The velocities are `∂H/∂pᵢ`, so the definitions apply to every Hamiltonian, and the oscillator with a diagonal `α` is the instance that connects to `IsDamped`. A lemma `SmoothDerivation.sum_apply` for finite sums of derivations was added in this file and not in the shared algebra layer, to avoid rebuilding the whole library for one line.
 
-**Proof status.** Proved in Hamiltonian form. Not formalized: the Lagrangian form `d/dt ∂L/∂ẋᵢ − ∂L/∂xᵢ = −∂F/∂ẋᵢ` of (25.12), that `X` does not preserve the bracket, the contraction of the phase volume, and the existence of integral curves for a general Hamiltonian. [The dissipative function](../ProjectAInos/Mechanics/Oscillations/Dissipation.lean)
+**Proof status.** Proved in Hamiltonian form. Not formalized: the Lagrangian form `d/dt ∂L/∂ẋᵢ − ∂L/∂xᵢ = −∂F/∂ẋᵢ` of (25.12), that `X` does not preserve the bracket, the contraction of the phase volume, and the existence of integral curves for a general Hamiltonian. [The dissipative function](../ProjectAinos/Mechanics/Oscillations/Dissipation.lean)
 
 ## M47. The steady state is a limit, and the resonance curve is exact
 
@@ -376,7 +376,7 @@ The velocity derivative of the added density is $\partial_q F$, so the momentum 
 
 **Interface decision.** `IsForced γ ω₀ g x` takes the force per unit mass as a smooth function of time. The frequency of the force is `Ω`, since `γ` is already the damping coefficient (M45). The steady state is defined by its two coefficients `steadyCos` and `steadySin`, which are the real and the imaginary part of the complex response; `steadyAmplitude` and `steadyPhase` are derived, and the phase is characterized by `b cos δ` and `b sin δ` and not by `tan δ`, which is undefined at `Ω = ω₀`. The hypothesis on the frequency is `responseDenominator γ ω₀ Ω ≠ 0`; for `γ ≠ 0` and `ω₀ ≠ 0` it holds for every `Ω`. The proof that the steady state is a solution uses the two linear equations satisfied by the coefficients and `linear_combination`; `field_simp` did not clear the denominator from the hypothesis that a sum of squares is non-zero. The absorption is defined as `m γ b² Ω²` and then proved to be the mean dissipated power, with Mathlib's interval integral.
 
-**Proof status.** Proved. Not formalized: the Lorentzian approximation (26.5), (26.9) and the area (26.10) under it, which are asymptotic; the complex response function as a function of `Ω`; a force `F cos (Ωt + β)` with a phase, which follows by superposition with the `sin` force but is not stated; and the response to a general force (§22). [Forced oscillations](../ProjectAInos/Mechanics/Oscillations/Forced.lean)
+**Proof status.** Proved. Not formalized: the Lorentzian approximation (26.5), (26.9) and the area (26.10) under it, which are asymptotic; the complex response function as a function of `Ω`; a force `F cos (Ωt + β)` with a phase, which follows by superposition with the `sin` force but is not stated; and the response to a general force (§22). [Forced oscillations](../ProjectAinos/Mechanics/Oscillations/Forced.lean)
 
 ## M48. Duhamel's formula is the fundamental theorem of calculus for two first integrals
 
@@ -384,7 +384,7 @@ The velocity derivative of the added density is $\partial_q F$, so the momentum 
 
 **Interface decision.** `Mechanics/TimePrimitive` holds the two facts of calculus that are used: the increment of a function of time is the integral of its derivative, and `TimeFunction.primitive`. It opens the scope `ContDiff`, so it must not name a frequency `ω` (M43); the oscillation files do not open that scope. Integrals are Mathlib's interval integrals of the real functions `s ↦ g (fun _ => s) * Real.cos (ω * s)`. The notation `∫ s in a..b, f s` extends over `+` and `−` to its right, so an integral that is not the last term of an expression must be put in parentheses; without them the statement is a different one and still type-checks. The equation is `IsForced 0 ω g x`, so that superposition, uniqueness and the steady state of M47 apply without change. At resonance, unboundedness is proved for every solution, by evaluating at the times where `sin ωt = 1`.
 
-**Proof status.** Proved. Not formalized: the energy transfer for a force acting during all time, beats near resonance, and the Lagrangian `½ m ẋ² − ½ k x² + x F(t)` with explicit dependence on time as an element of the jet ring. [Duhamel's formula](../ProjectAInos/Mechanics/Oscillations/Duhamel.lean) · [Primitives](../ProjectAInos/Mechanics/TimePrimitive.lean)
+**Proof status.** Proved. Not formalized: the energy transfer for a force acting during all time, beats near resonance, and the Lagrangian `½ m ẋ² − ½ k x² + x F(t)` with explicit dependence on time as an element of the jet ring. [Duhamel's formula](../ProjectAinos/Mechanics/Oscillations/Duhamel.lean) · [Primitives](../ProjectAinos/Mechanics/TimePrimitive.lean)
 
 ## M49. Normal modes: the diagonalizing matrix is a hypothesis, its existence a separate theorem
 
@@ -392,7 +392,7 @@ The velocity derivative of the added density is $\partial_q F$, so the momentum 
 
 **Interface decision.** Theorems of the second layer take `S`, `λ` and the two matrix identities as hypotheses, so they can be used with an explicitly known `S`; `exists_simultaneous_diagonalization` supplies them in general. The existence proof uses Mathlib's spectral theorem for Hermitian matrices over `ℝ` twice, through one lemma that restates it with transposes. The equations are stated for a family `x : n → TimeFunction` with matrices of constants `M.map (algebraMap ℝ TimeFunction)`, so that Mathlib's `mulVec` algebra applies. The hypothesis on `M` is Mathlib's `Matrix.PosDef`; `Mathlib.Algebra.Order.Star.Real` must be imported for its order lemmas on `ℝ`.
 
-**Proof status.** Proved as stated. Proposition 70 and the derivation of `M ẍ + K x = 0` from the Lagrangian in the jet ring are in M61. Not formalized: the symmetry classification of §24. [Normal modes](../ProjectAInos/Mechanics/Oscillations/NormalModes.lean)
+**Proof status.** Proved as stated. Proposition 70 and the derivation of `M ẍ + K x = 0` from the Lagrangian in the jet ring are in M61. Not formalized: the symmetry classification of §24. [Normal modes](../ProjectAinos/Mechanics/Oscillations/NormalModes.lean)
 
 ## M50. Parametric resonance: uniqueness comes from the Wronskian, existence is data
 
@@ -400,7 +400,7 @@ The velocity derivative of the added density is $\partial_q F$, so the momentum 
 
 **Interface decision.** `FundamentalSystem p` is a structure with the two solutions and their initial values; the oscillator supplies an instance, with trace `2 cos ωT`, so the structure is not empty and the criterion `|tr M| < 2` reads `sin ωT ≠ 0` there. Periodicity is `TimeFunction.shift T p = p`. The bound on the powers of a matrix is stated entrywise, to avoid a choice of matrix norm.
 
-**Proof status.** Proved with a fundamental system as data. Not formalized: the existence of a fundamental system for a general smooth coefficient, unboundedness for `|tr M| > 2` and for `tr M = ±2` with `M ≠ ±1`, and the width of the instability zone, which is an asymptotic statement. [Parametric resonance](../ProjectAInos/Mechanics/Oscillations/Parametric.lean)
+**Proof status.** Proved with a fundamental system as data. Not formalized: the existence of a fundamental system for a general smooth coefficient, unboundedness for `|tr M| > 2` and for `tr M = ±2` with `M ≠ ±1`, and the width of the instability zone, which is an asymptotic statement. [Parametric resonance](../ProjectAinos/Mechanics/Oscillations/Parametric.lean)
 
 ## M51. Regular precession is an identity between the body and the space frame
 
@@ -408,7 +408,7 @@ The velocity derivative of the added density is $\partial_q F$, so the momentum 
 
 **Interface decision.** The forward direction is stated over a commutative ring, with the two conditions on the rates as hypotheses `I₁ w₁ = M` and `I₃ (w₁ c₂ + w₃) = M c₂`, so that no division occurs. The equivalence is stated over the reals with `sin θ ≠ 0` and `I₁ ≠ 0`. The motion with uniform rates is given as an instance with real angles; its rates are those of the angle functions, and M42 identifies the vector of body angular velocity with the actual one.
 
-**Proof status.** Proved; row 33 is *proved* with this reading. Not formalized: the derivation of `Ṁ = 0` for a free body from a Lagrangian on the rotation group (row 34), and the heavy symmetric top. [Regular precession](../ProjectAInos/Mechanics/Rigid/RegularPrecession.lean)
+**Proof status.** Proved; row 33 is *proved* with this reading. Not formalized: the derivation of `Ṁ = 0` for a free body from a Lagrangian on the rotation group (row 34), and the heavy symmetric top. [Regular precession](../ProjectAinos/Mechanics/Rigid/RegularPrecession.lean)
 
 ## M52. Stability of the extreme axes is a conserved quadratic form, not a linearization
 
@@ -416,7 +416,7 @@ The velocity derivative of the added density is $\partial_q F$, so the momentum 
 
 **Interface decision.** The trajectory statements are for curves of the Lie–Poisson phase space with Euler's equations written out (`isTrajectory_kineticEnergy_iff`). The conserved sum is stated for a general axis `a`, and the bounds take the hypothesis that `Iₐ` is the greatest or the least moment as `∀ i, I i ≤ I a` or `∀ i, I a ≤ I i`. The linearized coefficients use `linearization` of M44 with the Lie–Poisson structure, computed directly from Euler's equations; they are stated at the axis `1`, the other axes being the same up to a cyclic renaming of the indices, which is not carried out.
 
-**Proof status.** Proved as stated; row 37 stays *evidence* because the solution by elliptic functions is missing. Not formalized: the non-linear instability of the middle axis, and the linearized coefficients at the axes `0` and `2`. [Motions of the free rigid body](../ProjectAInos/Mechanics/Poisson/RigidBodyMotion.lean)
+**Proof status.** Proved as stated; row 37 stays *evidence* because the solution by elliptic functions is missing. Not formalized: the non-linear instability of the middle axis, and the linearized coefficients at the axes `0` and `2`. [Motions of the free rigid body](../ProjectAinos/Mechanics/Poisson/RigidBodyMotion.lean)
 
 ## M53. A substitution has a chain rule, and it was the missing lemma
 
@@ -424,7 +424,7 @@ The velocity derivative of the added density is $\partial_q F$, so the momentum 
 
 **Interface decision.** `FreeSmoothRing.derivation_lift` is stated for a derivation with values in a module and `derivation_lift_mul` for a vector field. The index type is finite, so that the sum is over all generators; an element of a free ring on an infinite index type would need its support. The lemma is in a new file of the shared algebra layer, not in `FreeDerivation`, to avoid rebuilding the library.
 
-**Proof status.** Proved. Not formalized: the same statement for a morphism into the dual numbers, which would give the tangent functor on morphisms (row 1). [The chain rule for a substitution](../ProjectAInos/SmoothAlgebra/FreeChainRule.lean)
+**Proof status.** Proved. Not formalized: the same statement for a morphism into the dual numbers, which would give the tangent functor on morphisms (row 1). [The chain rule for a substitution](../ProjectAinos/SmoothAlgebra/FreeChainRule.lean)
 
 ## M54. The Legendre transformation goes from the phase space to the jet ring
 
@@ -432,7 +432,7 @@ The velocity derivative of the added density is $\partial_q F$, so the momentum 
 
 **Interface decision.** A potential is `u : FreeSmoothRing ι`, with `positionsToJet` and `positionsToPhase`. The masses are a family of non-zero reals, as in the existing `naturalLagrangian` and `PhaseSpace.kineticEnergy`; a kinetic form that depends on the position (M41) is not covered. The oscillator statements of M43 are instances with `u` quadratic, but they were proved before this stage and are not restated.
 
-**Proof status.** Proved for natural Lagrangians with constant masses; row 40 stays *informal*. Not formalized: Theorem 51 for a hyperregular Lagrangian, the inverse morphism and the correspondence of the symplectic structures, and the Legendre transformation for a position-dependent kinetic form. [The Legendre transformation](../ProjectAInos/Mechanics/Legendre.lean)
+**Proof status.** Proved for natural Lagrangians with constant masses; row 40 stays *informal*. Not formalized: Theorem 51 for a hyperregular Lagrangian, the inverse morphism and the correspondence of the symplectic structures, and the Legendre transformation for a position-dependent kinetic form. [The Legendre transformation](../ProjectAinos/Mechanics/Legendre.lean)
 
 ## M55. Jacobi's theorem without the implicit function theorem
 
@@ -440,7 +440,7 @@ The velocity derivative of the added density is $\partial_q F$, so the momentum 
 
 **Interface decision.** The functions of `(q, α, t)` are the free ring on `ι ⊕ ι ⊕ Unit`, and `IsHamiltonJacobi H S` is `∂S/∂t + substitution S H = 0` with `substitution S` the morphism `pᵢ ↦ ∂S/∂qᵢ`. The Hamiltonian is an element of the canonical phase space, without explicit dependence on time. A practical point: in this file the elaboration of each application of a morphism or a derivation to an element costs about a second of instance search, so a proof with twenty such terms exceeds the default limit; the proof is split into lemmas whose statements carry the terms, and the main proof only combines them by rewriting. No option that raises the limit is used.
 
-**Proof status.** Proved; row 47 is *proved* with this reading. Not formalized: the construction of the curve from the equations `∂S/∂αᵢ = βᵢ`, a Hamiltonian that depends on time, and the separation of the variables of §48. [Jacobi's theorem](../ProjectAInos/Mechanics/Poisson/CompleteIntegral.lean)
+**Proof status.** Proved; row 47 is *proved* with this reading. Not formalized: the construction of the curve from the equations `∂S/∂αᵢ = βᵢ`, a Hamiltonian that depends on time, and the separation of the variables of §48. [Jacobi's theorem](../ProjectAinos/Mechanics/Poisson/CompleteIntegral.lean)
 
 ## M56. Liouville's theorem: the divergence is algebra, the measure is not
 
@@ -448,7 +448,7 @@ The velocity derivative of the added density is $\partial_q F$, so the momentum 
 
 **Interface decision.** `divergence` is defined for every vector field of a free ring on a finite index type, with respect to its generators; it is not invariant under a change of generators, and no claim of invariance is made.
 
-**Proof status.** Proved in infinitesimal form; row 46 stays *informal*. Not formalized: the invariance of the measure under the flow of a Hamiltonian, and the two-form `ω` with `L_{X_H} ω = 0`. [Liouville's theorem](../ProjectAInos/Mechanics/Poisson/Liouville.lean)
+**Proof status.** Proved in infinitesimal form; row 46 stays *informal*. Not formalized: the invariance of the measure under the flow of a Hamiltonian, and the two-form `ω` with `L_{X_H} ω = 0`. [Liouville's theorem](../ProjectAinos/Mechanics/Poisson/Liouville.lean)
 
 ## M57. Mechanical similarity is two morphisms and one exponent
 
@@ -456,7 +456,7 @@ The velocity derivative of the added density is $\partial_q F$, so the momentum 
 
 **Interface decision.** `IsHomogeneous k u` quantifies over `α > 0`, with a real exponent, so that degrees such as `−1` and non-integer degrees are covered; a homogeneous smooth function on all of the positions has a restricted set of possible degrees, and potentials with a singularity at the origin are outside this file (Kepler's problem is treated through its own equations, M59). The theorem is about solutions: `α γ(βt)` is a solution when `γ` is. The automorphism of the jet ring that scales `qᵢ⁽ⁿ⁾` by `α βⁿ` and preserves the Euler–Lagrange ideal is the corresponding algebraic statement and is not constructed.
 
-**Proof status.** Proved on solutions; row 10 is *proved* with this reading. Not formalized: the scaling as an automorphism of the jet ring, the equivalence of the two notions of homogeneity, and the consequences for the times of motion in particular fields listed in §10. [Mechanical similarity](../ProjectAInos/Mechanics/Similarity.lean)
+**Proof status.** Proved on solutions; row 10 is *proved* with this reading. Not formalized: the scaling as an automorphism of the jet ring, the equivalence of the two notions of homogeneity, and the consequences for the times of motion in particular fields listed in §10. [Mechanical similarity](../ProjectAinos/Mechanics/Similarity.lean)
 
 ## M58. The virial theorem is the fundamental theorem of calculus divided by the time
 
@@ -464,7 +464,7 @@ The velocity derivative of the added density is $\partial_q F$, so the momentum 
 
 **Interface decision.** The limit is Mathlib's `Tendsto` along `atTop`, and the average is `(1/τ) ∫₀^τ` with the interval integral, as in M48. The general lemma about bounded functions of time is separate from the mechanical statement.
 
-**Proof status.** Proved. [The virial theorem](../ProjectAInos/Mechanics/Poisson/VirialAverage.lean)
+**Proof status.** Proved. [The virial theorem](../ProjectAinos/Mechanics/Poisson/VirialAverage.lean)
 
 ## M59. Kepler's third law: the similarity form is algebra, the period of an orbit is not
 
@@ -472,7 +472,7 @@ The velocity derivative of the added density is $\partial_q F$, so the momentum 
 
 **Interface decision.** `IsKeplerMotion.conic` is stated at each time with the values of `A` and `M` at time zero. `IsKeplerMotion.similar` takes `λ ≠ 0` and `β` with `β² λ³ = 1` as hypotheses; negative `λ` and `β` are allowed, since the equations permit them.
 
-**Proof status.** Proved as stated; row 15 stays *evidence*. Not formalized: the period of an elliptic orbit, the classification of the conic by the sign of the energy, and the eccentricity as a function of `H` and `|M|²` along a motion. [The orbit of a Kepler motion](../ProjectAInos/Mechanics/Poisson/KeplerOrbit.lean)
+**Proof status.** Proved as stated; row 15 stays *evidence*. Not formalized: the period of an elliptic orbit, the classification of the conic by the sign of the energy, and the eccentricity as a function of `H` and `|M|²` along a motion. [The orbit of a Kepler motion](../ProjectAinos/Mechanics/Poisson/KeplerOrbit.lean)
 
 ## M60. A state is a morphism to the dual numbers, and constraints cut out their own tangent vectors
 
@@ -480,7 +480,7 @@ The velocity derivative of the added density is $\partial_q F$, so the momentum 
 
 **Interface decision.** `Point` and `TangentPoint` are abbreviations for types of morphisms, so that the existing lemmas on morphisms apply. `FreeSmoothRing.Presented e` is the quotient by `SmoothRingCon.generate` of the relations `eₖ ~ 0`; the family of equations is indexed by an arbitrary type, and the formula for the `ε`-part needs a finite set of generators. The ring `ℝ[ε]` over the reals is used, not `A[ε]`: states are real points. An isomorphism is a pair of mutually inverse morphisms, since no bundled type of isomorphisms of C∞-rings exists yet.
 
-**Proof status.** Proved; row 1 is *proved* with the reading that a state is a morphism to `ℝ[ε]`. Not formalized: the tangent functor as a construction on C∞-rings (the ring whose points are the tangent vectors), open subsets as localizations compared with presented rings, and Hadamard's lemma. [Points and tangent vectors](../ProjectAInos/SmoothAlgebra/Point.lean)
+**Proof status.** Proved; row 1 is *proved* with the reading that a state is a morphism to `ℝ[ε]`. Not formalized: the tangent functor as a construction on C∞-rings (the ring whose points are the tangent vectors), open subsets as localizations compared with presented rings, and Hadamard's lemma. [Points and tangent vectors](../ProjectAinos/SmoothAlgebra/Point.lean)
 
 ## M61. Quadratic Hamiltonians: the degree is Euler's identity, and `sp(2n, ℝ)` is the map `S ↦ J S`
 
@@ -488,7 +488,7 @@ The velocity derivative of the added density is $\partial_q F$, so the momentum 
 
 **Interface decision.** `IsEulerHomogeneous` is a property of an element of a free ring, with closure lemmas for generators, constants, sums and products, so a homogeneous polynomial is covered by applying them. `quadraticForm S` is defined for every matrix; theorems assume `S.IsSymm` where it matters, and `quadraticForm_injective` says that the symmetric matrix is determined by the form. The correspondence with `sp(2n, ℝ)` is stated through `spHamiltonian A = Q_{−JA}` and three theorems (the bracket, the linear vector field, injectivity), with membership in Mathlib's `LieAlgebra.Symplectic.sp` as the hypothesis. It is not bundled as a `LieEquiv`: a commutative ring carries Mathlib's commutator as its `Bracket` instance, which is zero, so a Lie algebra built from the Poisson bracket needs a type synonym. `linearTransformation A B` is a morphism of phase space, and an isomorphism is a pair of mutually inverse morphisms, as in M60. `quadraticHamiltonian W K` takes the inverse `W` of the mass matrix as an argument and is by definition the quadratic form of the block matrix `(K, 0; 0, W)`, so the lemmas on quadratic forms apply to it. The Lagrangian depends only on the symmetric parts of `mᵢₖ` and `kᵢₖ`; the formulas for the momenta and the equations are stated for symmetric matrices.
 
-**Proof status.** Proved; row 23 is *proved*. Not formalized: the bundled isomorphism of Lie algebras, the expansion of a general Lagrangian to the second order at an equilibrium in several co-ordinates (the Hamiltonian side is M44), and the formal neighbourhood `ℝ[[q, p]]` of the manuscript's remark on perturbation theory. [Quadratic Hamiltonians](../ProjectAInos/Mechanics/Poisson/Quadratic.lean) · [The normal form](../ProjectAInos/Mechanics/Oscillations/NormalForm.lean) · [The Lagrangian of small oscillations](../ProjectAInos/Mechanics/Oscillations/QuadraticLagrangian.lean)
+**Proof status.** Proved; row 23 is *proved*. Not formalized: the bundled isomorphism of Lie algebras, the expansion of a general Lagrangian to the second order at an equilibrium in several co-ordinates (the Hamiltonian side is M44), and the formal neighbourhood `ℝ[[q, p]]` of the manuscript's remark on perturbation theory. [Quadratic Hamiltonians](../ProjectAinos/Mechanics/Poisson/Quadratic.lean) · [The normal form](../ProjectAinos/Mechanics/Oscillations/NormalForm.lean) · [The Lagrangian of small oscillations](../ProjectAinos/Mechanics/Oscillations/QuadraticLagrangian.lean)
 
 ## M62. The free particle: one constancy lemma carries the analysis, and isotropy needs three matrices
 
@@ -496,7 +496,7 @@ The velocity derivative of the added density is $\partial_q F$, so the momentum 
 
 **Interface decision.** The hypothesis `DependsOnVelocities L` replaces the first two steps of §4 (homogeneity of space and of time); it is stated with the partial derivatives of the jet ring, not with a morphism from a ring of functions of `v`. The boost is the prolongation `pr(t u)` that the jet ring already has, and `boost_eq` reduces it on functions of the velocities. Quasi-invariance asks for an `F_u` of order zero for each `u`, with no condition on how `F_u` depends on `u`. Isotropy is stated on the values `L(A w)` at the points of the jet space with velocities `w` and the other co-ordinates zero, for all matrices with `Aᵀ A = 1`; this avoids defining the action of the orthogonal group on the jet ring, and for a function of the velocities it is the same condition. The conclusion is written with the existing `naturalLagrangian (fun _ => μ) 0`. The mass `μ` is not asserted to be positive: positivity is a separate physical premise (§4 derives it from the minimum of the action).
 
-**Proof status.** Proved; row 4 is *proved*. Not formalized: the orthogonal group acting on the jet ring by morphisms, the converse that `½ μ |v|² + c` is isotropic, and the finite boost as a morphism of the jet ring (the identity (4.2) is proved for the explicit expressions). [The free particle](../ProjectAInos/Mechanics/Jet/FreeParticle.lean) · [Constants of a free ring](../ProjectAInos/Mechanics/Constants.lean)
+**Proof status.** Proved; row 4 is *proved*. Not formalized: the orthogonal group acting on the jet ring by morphisms, the converse that `½ μ |v|² + c` is isotropic, and the finite boost as a morphism of the jet ring (the identity (4.2) is proved for the explicit expressions). [The free particle](../ProjectAinos/Mechanics/Jet/FreeParticle.lean) · [Constants of a free ring](../ProjectAinos/Mechanics/Constants.lean)
 
 ## M63. Galileo's principle: on a free ring the commutators are checked on generators, and one relation moves the Euler operators
 
@@ -504,7 +504,7 @@ The velocity derivative of the added density is $\partial_q F$, so the momentum 
 
 **Interface decision.** The fields are parametrized by a matrix and two vectors, `galileiField A a u`, without the antisymmetry of `A` in the type; the general linear case costs nothing and the commutator formula is uniform. Antisymmetry enters as a hypothesis where it is used: `mᵢ Aᵢⱼ + mⱼ Aⱼᵢ = 0` for the quasi-invariance of a natural Lagrangian, and `Aᵀ = −A` in `IsInertial`. `JetRing.euler_apply` and `JetRing.apply_mem_eulerLagrangeIdeal` are stated for an abstract jet ring and an arbitrary vector field with the two commutation hypotheses, so they also cover `∂ₜ`. `IsInertial L` is a property of a Lagrangian, the invariance of its Euler–Lagrange ideal; the statement that such a frame exists is the premise of §3 and is not formalized as a theorem. The lemma that a finite sum of derivations is evaluated termwise moved from the dissipation file to the shared `Derivation` file, where the module structure is defined.
 
-**Proof status.** Proved; row 3 is *proved* with the Lie algebra action. Not formalized: the Galilei group acting by automorphisms of the jet ring (finite rotations, translations and boosts with the time translation), the statement that the invariance of the ideal under the group follows from that under the algebra, and Galilean invariance for interacting particles beyond the hypothesis `X U = 0` (a potential depending on the differences of the positions satisfies it, but this is not stated). [The Galilei algebra on the jet ring](../ProjectAInos/Mechanics/Jet/Galilei.lean)
+**Proof status.** Proved; row 3 is *proved* with the Lie algebra action. Not formalized: the Galilei group acting by automorphisms of the jet ring (finite rotations, translations and boosts with the time translation), the statement that the invariance of the ideal under the group follows from that under the algebra, and Galilean invariance for interacting particles beyond the hypothesis `X U = 0` (a potential depending on the differences of the positions satisfies it, but this is not stated). [The Galilei algebra on the jet ring](../ProjectAinos/Mechanics/Jet/Galilei.lean)
 
 ## M64. Hyperregular means that the Legendre transformation has an inverse morphism, and the rest is the chain rule
 
@@ -512,7 +512,7 @@ The velocity derivative of the added density is $\partial_q F$, so the momentum 
 
 **Interface decision.** `VelocitySpace ι` is the same free ring as `PhaseSpace ι` under another name, with generators called `q` and `v`; a Lagrangian is an element of it, and `toJet` reads it in the jet ring. `IsHyperregular L G` is a structure with the two compositions, and the inverse `G` is an argument, so the Hamiltonian is a definition and not a choice. Statements about matrices over the ring use Mathlib's matrices; the passage from a left inverse to a two-sided inverse is Mathlib's `mul_eq_one_comm` for matrices over a commutative ring. The natural Lagrangian with non-zero masses is the non-degenerate example, and `toJet_natural` ties it to the natural Lagrangian of the jet ring, so the earlier theorem for natural Lagrangians (M54) is an instance. Elaboration is slow in this file when a statement contains many applications of morphisms and derivations; the sums over the co-ordinates of the jet ring were moved to two lemmas about an abstract jet ring.
 
-**Proof status.** Proved; row 40 is *proved* with hyperregularity as a hypothesis. Not formalized: a criterion for hyperregularity, Lagrangians depending explicitly on time, a kinetic form depending on the position (Example 52), the Legendre–Fenchel transform, and differential forms. [Hyperregular Lagrangians](../ProjectAInos/Mechanics/Hyperregular.lean)
+**Proof status.** Proved; row 40 is *proved* with hyperregularity as a hypothesis. Not formalized: a criterion for hyperregularity, Lagrangians depending explicitly on time, a kinetic form depending on the position (Example 52), the Legendre–Fenchel transform, and differential forms. [Hyperregular Lagrangians](../ProjectAinos/Mechanics/Hyperregular.lean)
 
 ## M65. A generating function gives two morphisms, and canonicity is the symmetry of two Hessians
 
@@ -520,7 +520,7 @@ The velocity derivative of the added density is $\partial_q F$, so the momentum 
 
 **Interface decision.** `PositionPair ι` is the free ring on `ι ⊕ ι`, the same type as the phase space, with its own names for the generators. `IsFree F G` carries the inverse as an argument, as `IsHyperregular` does. Vectors and matrices over the ring are Mathlib's, so the symmetry argument is `dotProduct_mulVec` and `vecMul_transpose`. The final statement is `IsPoissonHom` for the canonical structure, proved on generators. `exchange = Σ qᵢ Qᵢ` is the non-degenerate example: for it `α` is the identity morphism, and the transformation is `Qᵢ = pᵢ`, `Pᵢ = −qᵢ`. The identity transformation has no generating function of this kind, which is why textbooks introduce the other kinds; they are not treated.
 
-**Proof status.** Proved; row 45 is *proved* for free generating functions that do not depend on time. Not formalized: generating functions of the kinds `F(q, P)`, `F(p, Q)`, `F(p, P)`, time-dependent generating functions with `H' = H + ∂F/∂t`, the converse that an invertible mixed matrix gives a free generating function locally, and the canonical property of the flow at a finite time. [Generating functions](../ProjectAInos/Mechanics/Poisson/GeneratingFunction.lean)
+**Proof status.** Proved; row 45 is *proved* for free generating functions that do not depend on time. Not formalized: generating functions of the kinds `F(q, P)`, `F(p, Q)`, `F(p, P)`, time-dependent generating functions with `H' = H + ∂F/∂t`, the converse that an invertible mixed matrix gives a free generating function locally, and the canonical property of the flow at a finite time. [Generating functions](../ProjectAinos/Mechanics/Poisson/GeneratingFunction.lean)
 
 ## M66. Separation of the variables is one identity, and the co-ordinate systems are outside the free ring
 
@@ -528,7 +528,7 @@ The velocity derivative of the added density is $\partial_q F$, so the momentum 
 
 **Interface decision.** The coefficient functions are elements of the free ring on the co-ordinates, read on the phase space by `positionsToPhase` and in the functions of `(q, α, t)` by `positionsToAction ι`. The general theorem takes the matrix `Φ`, the index `j₀` of the energy and the family `c` of separation constants as data; the two cases on `Fin 3` fix `Φ` and restate the hypotheses as three separated equations with `kinetic m S i` for `(∂S/∂qᵢ)²/2m` and constants `E`, `β`, `γ`. `linearAction E` and `quadraticEnergy w` give the instances. The action is a hypothesis: the theorem says that an action with these derivatives is a solution, and it does not construct one. Row 48 is closed with this remainder and keeps its status, because the main target names the co-ordinate systems.
 
-**Proof status.** Proved as stated. Not formalized: the Hamiltonians of the three co-ordinate systems as elements of rings of functions on open subsets, the quadratures, the completeness of the integrals, and the motion obtained from them by Jacobi's theorem (M55). [Separation of the variables](../ProjectAInos/Mechanics/Poisson/Separation.lean)
+**Proof status.** Proved as stated. Not formalized: the Hamiltonians of the three co-ordinate systems as elements of rings of functions on open subsets, the quadratures, the completeness of the integrals, and the motion obtained from them by Jacobi's theorem (M55). [Separation of the variables](../ProjectAinos/Mechanics/Poisson/Separation.lean)
 
 ## M67. Molecules and the rigid body: what the linear algebra gives, and what needs a group or a configuration space
 
@@ -536,7 +536,7 @@ The velocity derivative of the added density is $\partial_q F$, so the momentum 
 
 **Interface decision.** A symmetry is a single matrix with two commutation hypotheses; no group and no representation type is introduced, so the statements apply to every element of a symmetry group. `modeSpace M K c` is a `Submodule`, so that Mathlib's representation theory can be applied to it later. The count of the non-zero frequencies uses Mathlib's `Matrix.rank`. No new declaration was needed for §34; its row now states which existing theorems are the equations of motion and why the remainder is outside the model.
 
-**Proof status.** Rows 24 and 34 are closed with a stated remainder and keep their status. Not formalized: characters and the multiplicities of the irreducible representations in the space of the modes, selection of the modes by symmetry type, the kernel of `K` for a molecule, `Ṗ = F`, and the Lagrangian on `T(SO(3))`. [Symmetry of the normal modes](../ProjectAInos/Mechanics/Oscillations/Symmetry.lean)
+**Proof status.** Rows 24 and 34 are closed with a stated remainder and keep their status. Not formalized: characters and the multiplicities of the irreducible representations in the space of the modes, selection of the modes by symmetry type, the kernel of `K` for a molecule, `Ṗ = F`, and the Lagrangian on `T(SO(3))`. [Symmetry of the normal modes](../ProjectAinos/Mechanics/Oscillations/Symmetry.lean)
 
 ## M68. The asymptotic sections: one exact identity, and statements without an error estimate
 
@@ -544,7 +544,7 @@ The velocity derivative of the added density is $\partial_q F$, so the momentum 
 
 **Interface decision.** The inverse of the frequency is a second function of time with the hypothesis `ω ωinv = 1`, as for the inverse signed radius in Kepler's problem (M37); no division of functions of time is defined. The equation is Hill's equation `IsHill (ω * ω) x` of the parametric resonance file, so the same solutions are meant. In the ledger the rows of tier P and D state the result that would be the theorem and the reason why it is not proved, and they are listed as closed with a stated remainder.
 
-**Proof status.** The identity is proved. Rows 20, 27, 28, 29, 30, 37, 49, 51 and 52 keep their status. Not formalized: every estimate of an error in these sections, the action variable of a general system as an integral over a closed curve, and the theorems named in the rows. [The action variable](../ProjectAInos/Mechanics/Oscillations/Adiabatic.lean)
+**Proof status.** The identity is proved. Rows 20, 27, 28, 29, 30, 37, 49, 51 and 52 keep their status. Not formalized: every estimate of an error in these sections, the action variable of a general system as an integral over a closed curve, and the theorems named in the rows. [The action variable](../ProjectAinos/Mechanics/Oscillations/Adiabatic.lean)
 
 ## M69. The last rows: what is an identity, what is a limit, and what is a flow
 
@@ -552,7 +552,7 @@ The velocity derivative of the added density is $\partial_q F$, so the momentum 
 
 **Interface decision.** `KnifeEdge.Configuration` is a free ring on `Fin 3`, with `cosθ` and `sinθ` defined by `SmoothRing.op` from the functions of time `TimeFunction.cos` and `TimeFunction.sin`, which are smooth operations of one variable; the identity `cos² + sin² = 1` and the derivatives are transported by `op`. The identities of §19 are stated for real numbers with `cos/sin` in place of the cotangent. The measure statement for the oscillator is for the linear map of the flow matrix on `Fin 2 → ℝ`. In the ledger every row is now *proved*, or closed with the proved part and the reason for the remainder, except rows 13, 14 and 41.
 
-**Proof status.** Proved as stated. Not formalized: the remainders named in the rows. [The knife edge](../ProjectAInos/Mechanics/KnifeEdge.lean) · [Rutherford's formula](../ProjectAInos/Mechanics/Rutherford.lean) · [The phase volume of the oscillator](../ProjectAInos/Mechanics/Oscillations/PhaseVolume.lean) · [The action along a curve](../ProjectAInos/Mechanics/Poisson/ActionFunction.lean)
+**Proof status.** Proved as stated. Not formalized: the remainders named in the rows. [The knife edge](../ProjectAinos/Mechanics/KnifeEdge.lean) · [Rutherford's formula](../ProjectAinos/Mechanics/Rutherford.lean) · [The phase volume of the oscillator](../ProjectAinos/Mechanics/Oscillations/PhaseVolume.lean) · [The action along a curve](../ProjectAinos/Mechanics/Poisson/ActionFunction.lean)
 
 ## M70. Hadamard's lemma is an identity between operations, and the quotient by an ideal needs nothing else
 
@@ -560,7 +560,7 @@ The velocity derivative of the added density is $\partial_q F$, so the momentum 
 
 **Interface decision.** `SmoothRingCon.ofIdeal I` is a congruence, so the quotient is the existing quotient of a congruence with its projection, its factorization and its extensionality; no second quotient type is introduced. The congruence generated by equations is compared with the congruence of the ideal by an induction on the generated relation in one direction and on the span in the other. Later proofs use Hadamard's lemma through `FreeSmoothRing.hom_sub_hom_mem`: two morphisms out of a free ring that agree modulo `I` on the generators agree modulo `I`. Its proof composes both with the projection and uses that morphisms out of a free ring are determined on generators; the integral formula is not used again.
 
-**Proof status.** Proved: the interface statements (I) and (H) and Corollary 4. (I) is for a parameter in a proper normed space and values in a normed space of the same universe. Not stated as a theorem: the uniqueness of the C∞-ring structure on the quotient. Not formalized: the interface statement (F) on flows. [Parametric integrals](../ProjectAInos/SmoothAlgebra/ParametricIntegral.lean) · [Hadamard's lemma](../ProjectAInos/SmoothAlgebra/Hadamard.lean) · [The quotient by an ideal](../ProjectAInos/SmoothAlgebra/IdealQuotient.lean)
+**Proof status.** Proved: the interface statements (I) and (H) and Corollary 4. (I) is for a parameter in a proper normed space and values in a normed space of the same universe. Not stated as a theorem: the uniqueness of the C∞-ring structure on the quotient. Not formalized: the interface statement (F) on flows. [Parametric integrals](../ProjectAinos/SmoothAlgebra/ParametricIntegral.lean) · [Hadamard's lemma](../ProjectAinos/SmoothAlgebra/Hadamard.lean) · [The quotient by an ideal](../ProjectAinos/SmoothAlgebra/IdealQuotient.lean)
 
 ## M71. Reduction: the elements of `I` in `N(I)` form a Poisson ideal for every ideal `I`
 
@@ -568,7 +568,7 @@ The velocity derivative of the added density is $\partial_q F$, so the momentum 
 
 **Interface decision.** `PoissonStructure.Reduction I` is an abbreviation of the quotient of `N(I)` by the congruence of `normalizerIdeal I`, so the ring and C∞-ring instances are found. The descended bracket is defined with chosen preimages and used only through `ofSurjective_bracket`. A reduced ring is compared with a model `Q` by a criterion and not by an isomorphism type: a Poisson morphism `σ : Q → P` with values in `N(I)`, a morphism `r : P → Q` with `r ∘ σ = id` that vanishes on `I`, and `f − σ (r f) ∈ I` on `N(I)` give a bijective Poisson morphism `Q → N(I)/I`. Following M66, the criterion comes with instances: cyclic co-ordinates and two bodies.
 
-**Proof status.** Proved. Not formalized: the Dirac bracket (Proposition 29), the description of `N(I)/I` as the invariants of `P/I` under a group, and the Marsden–Weinstein theorem (tier D). [Quotients and reductions](../ProjectAInos/SmoothAlgebra/Poisson/Reduction.lean)
+**Proof status.** Proved. Not formalized: the Dirac bracket (Proposition 29), the description of `N(I)/I` as the invariants of `P/I` under a group, and the Marsden–Weinstein theorem (tier D). [Quotients and reductions](../ProjectAinos/SmoothAlgebra/Poisson/Reduction.lean)
 
 ## M72. Cyclic co-ordinates: Hadamard's lemma in the momenta, constancy in the positions; the reduced mass by a change of co-ordinates
 
@@ -576,7 +576,7 @@ The velocity derivative of the added density is $\partial_q F$, so the momentum 
 
 **Interface decision.** The index type is `ι ⊕ κ`, with `κ` for the cyclic co-ordinates. The statement in canonical co-ordinates takes the isomorphism `Φ`, its inverse `Ψ` and an equation `I = span {Φ (p_k − c_k)}` as hypotheses, so that the ideal is written in its own terms, as `span {P₁, P₂, P₃}` for two bodies. Trajectories are carried along a Poisson morphism of free rings by `IsTrajectory.of_isPoissonHom`. The morphisms have explicit index arguments (`inclusion ι κ`, `restriction ι c`, `reductionHom ι c`), for the reason of M66.
 
-**Proof status.** Proved; row 13 is *proved*. Not formalized: an interaction that is smooth only away from the origin, such as Coulomb's; the motion of the centre of mass for a non-zero total momentum, which is a Galilean boost of the case treated; the reduction by rotations of §14. [Cyclic co-ordinates](../ProjectAInos/Mechanics/Poisson/CyclicReduction.lean) · [The reduced mass](../ProjectAInos/Mechanics/Poisson/ReducedMass.lean) · [Constants](../ProjectAInos/Mechanics/Constants.lean)
+**Proof status.** Proved; row 13 is *proved*. Not formalized: an interaction that is smooth only away from the origin, such as Coulomb's; the motion of the centre of mass for a non-zero total momentum, which is a Galilean boost of the case treated; the reduction by rotations of §14. [Cyclic co-ordinates](../ProjectAinos/Mechanics/Poisson/CyclicReduction.lean) · [The reduced mass](../ProjectAinos/Mechanics/Poisson/ReducedMass.lean) · [Constants](../ProjectAinos/Mechanics/Constants.lean)
 
 ## M73. The Routhian is a partial Legendre transformation; a cost of generators written with `Sum.inr`
 
@@ -584,7 +584,7 @@ The velocity derivative of the added density is $\partial_q F$, so the momentum 
 
 **Interface decision.** `RouthSpace ι κ` is the free ring on `(ι ⊕ κ) ⊕ (ι ⊕ κ)`, the type of the velocity space, with its own names `q`, `v`, `p` for the generators. `IsPartiallyHyperregular L G` carries the inverse as an argument, as `IsHyperregular` does, and natural Lagrangians are instances. `IsRouthTrajectory R c` is a structure with four fields: `q̇_i = v_i`, Lagrange's equations, and the two Hamilton equations. The Hamiltonian form of the reduction (M72) and the Lagrangian form here are proved separately and are not compared. The elaboration cost is left as it is; a remedy is an index with a full type, as `qIndex` in the complete integral.
 
-**Proof status.** Proved; row 41 is *proved*, and row 38 is *proved* with the quotient of M70. Not formalized: a Lagrangian that depends on time, the explicit Routhian of a natural Lagrangian, and a criterion for the existence of the inverse. [The Routhian](../ProjectAInos/Mechanics/Routhian.lean)
+**Proof status.** Proved; row 41 is *proved*, and row 38 is *proved* with the quotient of M70. Not formalized: a Lagrangian that depends on time, the explicit Routhian of a natural Lagrangian, and a criterion for the existence of the inverse. [The Routhian](../ProjectAinos/Mechanics/Routhian.lean)
 
 ## M74. Polar co-ordinates on a free ring: the logarithm of the radius
 
@@ -592,7 +592,7 @@ The velocity derivative of the added density is $\partial_q F$, so the momentum 
 
 **Interface decision.** `Polar` is `PhaseSpace (Fin 1 ⊕ Fin 1)`, the index type of the reduction with respect to cyclic co-ordinates. The four co-ordinate vector fields are definitions with full types, the remedy named in M73, and a local macro evaluates them on products. `ringCos` and `ringSin` are defined for every C∞-ring, as `SmoothRing.exp` is. The morphism `polarCoordinates` is not an isomorphism, so trajectories are carried from polar co-ordinates to the plane by `IsTrajectory.of_isPoissonHom`, and not in the other direction. The orbit integrals are stated for the real functions `radiusAt` and `radialVelocityAt` of the time, and `radialSpeedSq` is a real function of the radius, with `Real.log` for the argument of the potential energy.
 
-**Proof status.** Proved; row 14 is *proved* in the scope written in the row, and row 11 has the quadrature on an interval without a turning point. Every row of the ledger is now *proved* or closed with a stated remainder. Not formalized: the reduced ring of `T*ℝ³` by the rotation group, the lift of a trajectory in the plane to polar co-ordinates, the integrals up to a turning point, the angle between the apsides and the closed orbits. [Polar co-ordinates and the radial Hamiltonian](../ProjectAInos/Mechanics/Poisson/CentralField.lean) · [Quadrature](../ProjectAInos/Mechanics/Quadrature.lean) · [The orbit integrals](../ProjectAInos/Mechanics/Poisson/OrbitIntegral.lean) · [Elementary functions](../ProjectAInos/Mechanics/Elementary.lean)
+**Proof status.** Proved; row 14 is *proved* in the scope written in the row, and row 11 has the quadrature on an interval without a turning point. Every row of the ledger is now *proved* or closed with a stated remainder. Not formalized: the reduced ring of `T*ℝ³` by the rotation group, the lift of a trajectory in the plane to polar co-ordinates, the integrals up to a turning point, the angle between the apsides and the closed orbits. [Polar co-ordinates and the radial Hamiltonian](../ProjectAinos/Mechanics/Poisson/CentralField.lean) · [Quadrature](../ProjectAinos/Mechanics/Quadrature.lean) · [The orbit integrals](../ProjectAinos/Mechanics/Poisson/OrbitIntegral.lean) · [Elementary functions](../ProjectAinos/Mechanics/Elementary.lean)
 
 ## M75. A turning point is an integrable singularity, and the eccentric anomaly removes it
 
@@ -600,7 +600,7 @@ The velocity derivative of the added density is $\partial_q F$, so the momentum 
 
 **Interface decision.** The simple turning points are a hypothesis in factored form, `F(u) = (u − u₁)(u₂ − u) G(u)` with `G` continuous and positive. For a smooth `F` with simple zeros the factor exists by Hadamard's lemma (M70); this is not used. `integral_div_sqrt_turning` has no hypothesis on `w` and `G`: it is an identity of Bochner integrals. The motion between the turning points is given, with the velocity positive in the open interval and free at the ends. For Kepler's problem the statement is about three consecutive apsides of a given radial trajectory, and it concludes both `r(t₃) = r(t₁)` and the period, so the periodicity of the motion is neither assumed nor claimed. The oscillator is the instance: the formula gives `π/ω`, and `−a cos ωt` satisfies the hypotheses.
 
-**Proof status.** Proved. Row 15 is *proved* in the scope written in the row, and rows 11, 12, 14 and 18 have corrected remainders. Not formalized: Proposition 68, the period as the derivative of the area; the periodicity of the motion, from the uniqueness of solutions; the existence of the factor `G`; integrals to infinity; and the comparison of the radial model of Kepler's problem with the motions in space. For the ledger: a reason of the form "the integral is improper" is checked against the Lebesgue integral before it is written. [Turning points](../ProjectAInos/Mechanics/TurningPoint.lean) · [Apsides and the period of Kepler's problem](../ProjectAInos/Mechanics/Poisson/Apsides.lean)
+**Proof status.** Proved. Row 15 is *proved* in the scope written in the row, and rows 11, 12, 14 and 18 have corrected remainders. Not formalized: Proposition 68, the period as the derivative of the area; the periodicity of the motion, from the uniqueness of solutions; the existence of the factor `G`; integrals to infinity; and the comparison of the radial model of Kepler's problem with the motions in space. For the ledger: a reason of the form "the integral is improper" is checked against the Lebesgue integral before it is written. [Turning points](../ProjectAinos/Mechanics/TurningPoint.lean) · [Apsides and the period of Kepler's problem](../ProjectAinos/Mechanics/Poisson/Apsides.lean)
 
 ## M76. Kepler distance is a signed radius
 
@@ -608,7 +608,7 @@ The velocity derivative of the added density is $\partial_q F$, so the momentum 
 
 **Interface decision.** Keep the definitions, theorem statements and proofs unchanged. Use “signed radius” for `Kepler.distance` on the real constraint locus and “inverse signed radius” for `R` along a motion. The unconstrained element `ρ` in a Kepler frame is a formal inverse radius. The orbit identity uses the signed radius; the textbook and experimental convention `r = |q|` corresponds to the positive branch. The polar model `r = exp s` already has positive radius.
 
-**Proof status.** The existing identities `R_mul_distance` and `distance_mul_distance` are unchanged. This is a documentation correction, with no new positivity theorem or comparison between the spatial and polar models. Ledger statuses, counts and remainders are unchanged. [Kepler motions](../ProjectAInos/Mechanics/Poisson/KeplerMotion.lean) · [Kepler orbit](../ProjectAInos/Mechanics/Poisson/KeplerOrbit.lean)
+**Proof status.** The existing identities `R_mul_distance` and `distance_mul_distance` are unchanged. This is a documentation correction, with no new positivity theorem or comparison between the spatial and polar models. Ledger statuses, counts and remainders are unchanged. [Kepler motions](../ProjectAinos/Mechanics/Poisson/KeplerMotion.lean) · [Kepler orbit](../ProjectAinos/Mechanics/Poisson/KeplerOrbit.lean)
 
 <a id="mechanics-proof-strategy-observation"></a>
 
@@ -649,7 +649,7 @@ counts and row scopes are unchanged. The pinned sources were checked on
 
 **Interface decision.** `SmoothGeometry.LinearODE.propagator A t s` is defined for a continuous `A : C(ℝ, E →L[ℝ] E)` on a Banach space and all real `t`, `s`. The statements of `Volterra` with the hypothesis `‖A‖ < 1` are kept, since `Radial` and the checks use them, and `VolterraInverse` repeats them without the hypothesis under new names. Smooth dependence on a parameter is stated for a coefficient `A : P × ℝ → V →L[ℝ] V` that is smooth in the parameter and the time, with `P` and `V` in the same universe, which `ContinuousFamily.slices_contDiff` requires. `Volterra` and `ContinuousFamily` are generalized from `Type` to arbitrary universes, and they no longer set `backward` options. For the equation `ẍ + p x = 0` a `FundamentalSystem` remains a structure, now with an instance for every coefficient and at most one element, and `Parametric.monodromy p T` is the matrix of that element. The existing theorems that take a fundamental system as an argument are unchanged.
 
-**Proof status.** Proved: the propagator with its differential equation, uniqueness, composition law, invertibility and smooth dependence, with constant coefficients as the instance (`propagator_const`, the exponential); the existence and uniqueness of the solution of `ẍ + p x = 0` with given initial data for every smooth `p`; and the criterion that all solutions are bounded for `t ≥ 0` exactly when `|tr M| < 2` or `M = ±1`, with the bounded solutions of the hyperbolic and the parabolic case. Row 27 stays *informal*: the width of the instability zone is not proved. The determinant of the propagator, `exp ∫ tr A`, is not proved here; for the equation `ẍ + p x = 0` the determinant is one by the Wronskian. [Quasi-nilpotency](../ProjectAInos/SmoothGeometry/ODE/VolterraInverse.lean) · [Propagator](../ProjectAInos/SmoothGeometry/ODE/Propagator.lean) · [Existence](../ProjectAInos/Mechanics/Oscillations/ParametricExistence.lean) · [Trace criterion](../ProjectAInos/Mechanics/Oscillations/ParametricTrace.lean)
+**Proof status.** Proved: the propagator with its differential equation, uniqueness, composition law, invertibility and smooth dependence, with constant coefficients as the instance (`propagator_const`, the exponential); the existence and uniqueness of the solution of `ẍ + p x = 0` with given initial data for every smooth `p`; and the criterion that all solutions are bounded for `t ≥ 0` exactly when `|tr M| < 2` or `M = ±1`, with the bounded solutions of the hyperbolic and the parabolic case. Row 27 stays *informal*: the width of the instability zone is not proved. The determinant of the propagator, `exp ∫ tr A`, is not proved here; for the equation `ẍ + p x = 0` the determinant is one by the Wronskian. [Quasi-nilpotency](../ProjectAinos/SmoothGeometry/ODE/VolterraInverse.lean) · [Propagator](../ProjectAinos/SmoothGeometry/ODE/Propagator.lean) · [Existence](../ProjectAinos/Mechanics/Oscillations/ParametricExistence.lean) · [Trace criterion](../ProjectAinos/Mechanics/Oscillations/ParametricTrace.lean)
 
 ## M79. The instability zone needs only the mean of the coefficient in rotating co-ordinates
 
@@ -657,7 +657,7 @@ counts and row scopes are unchanged. The pinned sources were checked on
 
 **Interface decision.** The theorem is an inequality with an explicit remainder, `|tr M + 2 − (4π²/γ⁴)((ω₀² − γ²/4)² − ω₀⁴ h²/4)| ≤ eʳ r³/3` with `r = (8π/γ²)(|ω₀² − γ²/4| + ω₀² |h|)`, for all `ω₀`, `h` and `γ > 0`, with no smallness assumed. The statements about the zone are its corollaries, with the remainder as a hypothesis, and two families in which the hypothesis is verified: `γ = 2ω₀` with `0 < |h| ≤ 1/400`, and `ω₀² |h| ≤ |ω₀² − γ²/4| ≤ γ²/4000`. A statement with unnamed constants, "there are `C` and `δ` such that …", is not given, since the explicit one implies it. The expansion of the propagator is stated on vectors, in any Banach space, and the identity for the trace in finite dimension with `LinearMap.trace`; the plane uses `planeTrace`, the sum of the two diagonal entries, which is equal to it.
 
-**Proof status.** Proved. Row 27 is *proved* with the scope written in the row. Not treated: the zones near `γ = 2ω₀/n` for `n ≥ 2`, which need the expansion to order `n` or more, and the rate of growth (27.12). E12 checks the integral of `G` symbolically and the trace numerically. [Expansion of the propagator](../ProjectAInos/SmoothGeometry/ODE/PropagatorExpansion.lean) · [Instability zone](../ProjectAInos/Mechanics/Oscillations/ParametricZone.lean)
+**Proof status.** Proved. Row 27 is *proved* with the scope written in the row. Not treated: the zones near `γ = 2ω₀/n` for `n ≥ 2`, which need the expansion to order `n` or more, and the rate of growth (27.12). E12 checks the integral of `G` symbolically and the trace numerically. [Expansion of the propagator](../ProjectAinos/SmoothGeometry/ODE/PropagatorExpansion.lean) · [Instability zone](../ProjectAinos/Mechanics/Oscillations/ParametricZone.lean)
 
 ## M80. Liouville's theorem and the end-point formula are theorems about a given family, local in the family
 
@@ -665,7 +665,7 @@ counts and row scopes are unchanged. The pinned sources were checked on
 
 **Interface decision.** `SmoothGeometry.NonlinearODE.IsLocalFlowOn X Φ Ω` is a structure of propositions with the five fields above; `Ω` is not required to be maximal, and the flow constructed later is to be an instance. The translations and the flow of a linear field are instances now. The regularity of the field is a hypothesis of each theorem (`ContDiff ℝ 1 X`), not a field of the structure. The divergence is `traceCLM (fderiv ℝ X x)`; it is not yet connected with `Mechanics.divergence` on a free C∞-ring. `Mechanics.hasDerivAt_action_movingEndpoints_on` takes a family that is smooth on an open set `U ⊆ ℝ × ℝ` containing the reference segment and a Lagrangian that is smooth on an open set `W` of the jet space containing the jet of the reference path, as `Mechanics/OpenDomain` does. The hypotheses are `ContDiffOn` on open sets and not `ContDiffAt` at the points of the segment, because smoothness of infinite order at a point does not hold in a neighbourhood of the point; the local form of Leibniz's rule extends the integrand from a neighbourhood of the compact segment by a cut-off (`Variational.exists_contDiff_extension_near_compact`). The energy along a path is `Mechanics.pathEnergy`, since `energy` is the energy function on the velocity ring. In the statements of the examples the frequency is written `Ω`, because `ω` is the notation of analyticity where the scope `ContDiff` is open.
 
-**Proof status.** Proved for given families: `LinearODE.det_propagator`, `NonlinearODE.hasDerivAt_fderiv_of_isLocalFlow`, `IsLocalFlowOn.det_fderiv`, `IsLocalFlowOn.measure_image`, `IsLocalFlowOn.measurePreserving`, `Variational.hasDerivAt_intervalIntegral_moving_on` and `Mechanics.hasDerivAt_action_movingEndpoints_on`, with the instances `measurePreserving_propagator_const`, `hasDerivAt_action_free_endpoint`, `hasDerivAt_action_oscillator_endpoint` and `hasDerivAt_action_oscillator_family`. Rows 43 and 46 stay *informal*: the flow of a nonlinear field, the identity `Mᵀ J M = J` for a Hamiltonian field, and the inverse of the end-point map are not proved. [Determinant](../ProjectAInos/SmoothGeometry/ODE/PropagatorDet.lean) · [Variational equation](../ProjectAInos/SmoothGeometry/ODE/FlowVariation.lean) · [Given flow](../ProjectAInos/SmoothGeometry/ODE/LocalFlow.lean) · [Moving limits](../ProjectAInos/Variational/MovingLimits.lean) · [End-point action](../ProjectAInos/Mechanics/EndpointAction.lean)
+**Proof status.** Proved for given families: `LinearODE.det_propagator`, `NonlinearODE.hasDerivAt_fderiv_of_isLocalFlow`, `IsLocalFlowOn.det_fderiv`, `IsLocalFlowOn.measure_image`, `IsLocalFlowOn.measurePreserving`, `Variational.hasDerivAt_intervalIntegral_moving_on` and `Mechanics.hasDerivAt_action_movingEndpoints_on`, with the instances `measurePreserving_propagator_const`, `hasDerivAt_action_free_endpoint`, `hasDerivAt_action_oscillator_endpoint` and `hasDerivAt_action_oscillator_family`. Rows 43 and 46 stay *informal*: the flow of a nonlinear field, the identity `Mᵀ J M = J` for a Hamiltonian field, and the inverse of the end-point map are not proved. [Determinant](../ProjectAinos/SmoothGeometry/ODE/PropagatorDet.lean) · [Variational equation](../ProjectAinos/SmoothGeometry/ODE/FlowVariation.lean) · [Given flow](../ProjectAinos/SmoothGeometry/ODE/LocalFlow.lean) · [Moving limits](../ProjectAinos/Variational/MovingLimits.lean) · [End-point action](../ProjectAinos/Mechanics/EndpointAction.lean)
 
 ## M81. The flow is an implicit function of the time and the point, and Liouville's theorem follows
 
@@ -673,7 +673,7 @@ counts and row scopes are unchanged. The pinned sources were checked on
 
 **Interface decision.** `SmoothGeometry.NonlinearODE.flowDomain X` is the set of `(t, x)` that have a flow curve; `mem_flowDomain_iff` states that this is the existence of a solution between `0` and `t`, with one-sided derivatives at the two ends. `flow X : ℝ × E → E` is total and equal to the point outside the domain, and it takes the pair as its argument, so that it is an instance of `IsLocalFlowOn` (M80) without a change of variables. The field is smooth on the whole Banach space; the regularity of each statement is the weakest that its proof uses (`ContDiff ℝ 1 X` for uniqueness, `ContDiff ℝ ∞ X` for the open domain). Completeness is the equation `flowDomain X = univ`, with the criteria `mem_flowDomain_of_isCompact` and, in finite dimension, `flowDomain_eq_univ_of_norm_le`. `FreeSmoothRing.realField` is in the shared algebra, and `Mechanics.hamiltonianField H` is its value on the Hamiltonian derivation of the canonical bracket. Liouville's theorem is stated for the measurable sets in the domain of the map of the time `t`, and as `MeasurePreserving` for a flow defined for all times. `AGENTS.md` no longer says that there is no flow.
 
-**Proof status.** Proved: `flow` with `isOpen_flowDomain`, `contDiffOn_flow`, `hasDerivAt_flow`, `flow_eq_of_hasDerivWithinAt`, `flow_add`, `isLocalFlowOn_flow` and the two criteria of completeness; `volume_image_hamiltonianFlow` and `measurePreserving_hamiltonianFlow`; the instances `flow_linear`, `Oscillator.measurePreserving_hamiltonianFlow`, `Pendulum.measurePreserving_hamiltonianFlow` and `Oscillator.volume_image_dissipativeFlow`. Row 46 is *proved* with the scope written in the row. Not treated: a field that is smooth only on an open set, a field that depends on the time, and the preservation of the symplectic form by the flow. Row 43 stays *informal* until the end-point identity is applied to the flow. [Superposition](../ProjectAInos/SmoothGeometry/ODE/Superposition.lean) · [Flow equation](../ProjectAInos/SmoothGeometry/ODE/FlowEquation.lean) · [Flow](../ProjectAInos/SmoothGeometry/ODE/Flow.lean) · [Completeness](../ProjectAInos/SmoothGeometry/ODE/FlowComplete.lean) · [Hamiltonian field](../ProjectAInos/Mechanics/Poisson/HamiltonianField.lean) · [Flows for all times](../ProjectAInos/Mechanics/Poisson/LiouvilleFlow.lean)
+**Proof status.** Proved: `flow` with `isOpen_flowDomain`, `contDiffOn_flow`, `hasDerivAt_flow`, `flow_eq_of_hasDerivWithinAt`, `flow_add`, `isLocalFlowOn_flow` and the two criteria of completeness; `volume_image_hamiltonianFlow` and `measurePreserving_hamiltonianFlow`; the instances `flow_linear`, `Oscillator.measurePreserving_hamiltonianFlow`, `Pendulum.measurePreserving_hamiltonianFlow` and `Oscillator.volume_image_dissipativeFlow`. Row 46 is *proved* with the scope written in the row. Not treated: a field that is smooth only on an open set, a field that depends on the time, and the preservation of the symplectic form by the flow. Row 43 stays *informal* until the end-point identity is applied to the flow. [Superposition](../ProjectAinos/SmoothGeometry/ODE/Superposition.lean) · [Flow equation](../ProjectAinos/SmoothGeometry/ODE/FlowEquation.lean) · [Flow](../ProjectAinos/SmoothGeometry/ODE/Flow.lean) · [Completeness](../ProjectAinos/SmoothGeometry/ODE/FlowComplete.lean) · [Hamiltonian field](../ProjectAinos/Mechanics/Poisson/HamiltonianField.lean) · [Flows for all times](../ProjectAinos/Mechanics/Poisson/LiouvilleFlow.lean)
 
 ## M82. The action function is the Hamiltonian end-point formula composed with an implicit function
 
@@ -681,7 +681,7 @@ counts and row scopes are unchanged. The pinned sources were checked on
 
 **Interface decision.** `Mechanics.liouvilleForm ι` and `Mechanics.symplecticForm ι` are bilinear forms on `ι ⊕ ι → ℝ` with real values; the project's `canonicalMatrix` has entries in the ring and is not used. `phaseLagrangian H` is a `Lagrangian (ι ⊕ ι → ℝ)` in the sense of `Mechanics/Basic`, so the theorems about actions apply to it without change. The non-conjugacy hypothesis is `(fderiv ℝ (fun p => endPosition H q₀ (T₀, p)) p₀).IsInvertible`. The conclusion of `exists_localAction` is an existence statement with an open set `W`, the function `P₀` and `HasFDerivAt (localAction H q₀ P₀) (actionDifferential p E)` on `W`; the Hamilton–Jacobi equation is a separate lemma about any function with such a derivative. The local action function is not an element of a free C∞-ring and is not an `IsHamiltonJacobi` instance. The bilinear Hessian is `hessianForm`, since `Mechanics.hessian` is the matrix of second derivatives at a point in `Oscillations/Linearization`.
 
-**Proof status.** Proved: `hasDerivAt_action_hamiltonianFlow`, `hamiltonian_flow_eq`, `symplecticForm_fderiv_flow`, `exists_initialMomentum`, `exists_localAction`, `localAction_hamiltonJacobi`, with the free particle as the instance in which the hypothesis is verified (`exists_localAction_kineticEnergy`). Row 43 is *proved* with the scope written in the row. Not treated: a Hamiltonian that depends on the time or is smooth only on an open set, the value of the action function in closed form for the examples, and the passage from a Lagrangian of the configuration space to the Hamiltonian for the constructed families. [Phase action](../ProjectAInos/Mechanics/Poisson/PhaseAction.lean) · [Symplectic flow](../ProjectAInos/Mechanics/Poisson/SymplecticFlow.lean) · [Local action](../ProjectAInos/Mechanics/Poisson/LocalAction.lean) · [Line derivative](../ProjectAInos/SmoothAlgebra/LineDerivative.lean)
+**Proof status.** Proved: `hasDerivAt_action_hamiltonianFlow`, `hamiltonian_flow_eq`, `symplecticForm_fderiv_flow`, `exists_initialMomentum`, `exists_localAction`, `localAction_hamiltonJacobi`, with the free particle as the instance in which the hypothesis is verified (`exists_localAction_kineticEnergy`). Row 43 is *proved* with the scope written in the row. Not treated: a Hamiltonian that depends on the time or is smooth only on an open set, the value of the action function in closed form for the examples, and the passage from a Lagrangian of the configuration space to the Hamiltonian for the constructed families. [Phase action](../ProjectAinos/Mechanics/Poisson/PhaseAction.lean) · [Symplectic flow](../ProjectAinos/Mechanics/Poisson/SymplecticFlow.lean) · [Local action](../ProjectAinos/Mechanics/Poisson/LocalAction.lean) · [Line derivative](../ProjectAinos/SmoothAlgebra/LineDerivative.lean)
 
 ## M83. A turning point is an ordinary point of the level curve in the angle of the substitution
 
@@ -689,7 +689,7 @@ counts and row scopes are unchanged. The pinned sources were checked on
 
 **Interface decision.** The one-dimensional theory is stated in the plane `ℝ × ℝ` with `OneDim.field m U = (p/m, −U′(x))`, not in the phase space `PhaseSpace (Fin 1)`, and for a potential `U : ℝ → ℝ` with `ContDiff ℝ ∞ U`. `OneDim.IsWell U E a b` is a structure of propositions with the oscillator as an instance. The level curve, its rate and its period are functions of `(m, U, a, b)`, so that a family of wells is a pair of functions `α`, `β` of the energy on an open set; `IsWell.exists_family` provides one. `hasDerivAt_orbitArea` takes such a family as given, with `ContDiffOn` on an open set. The hypothesis of `abel_inversion` is the nesting `x ∈ (x₁(E), x₂(E)) ⇔ x ∈ (x₁(V), x₂(V)) ∧ U(x) < E`, with no regularity of `x₁`, `x₂` in the energy. The angle variable `orbitPhase` is a real function of the angle `θ` of the curve that increases by `2π` in one turn, not a function with values in the circle; canonicity is `orbit_area_form`, the equality of `dx ∧ dp` and `dφ ∧ dI` on `(∂/∂E, ∂/∂θ)`, which does not need the derivative of the angle variable in the energy because `dI` has no component along `θ`.
 
-**Proof status.** Proved: `IsWell.exists_family`, `IsWell.wellMotion_add_period`, `IsWell.add_period_of_hasDerivAt`, `IsWell.orbitPeriod_eq`, `hasDerivAt_orbitArea`, `lintegral_levelTime_mul`, `abel_inversion`, `hasDerivAt_orbitAction`, `IsWell.orbitPhase_orbitAngle` and `orbit_area_form`, with the oscillator as the instance of each. Rows 11, 12 and 50 are *proved* with the scopes written in the rows. Not treated: turning points with `U′ = 0`, unbounded motions, the generating function `S₀(q, I)`, and the map from the action and the angle to the phase plane. [Divided differences](../ProjectAInos/SmoothAlgebra/DividedDifference.lean) · [Well](../ProjectAInos/Mechanics/OneDimension/Well.lean) · [Level curve](../ProjectAInos/Mechanics/OneDimension/Orbit.lean) · [Motion](../ProjectAInos/Mechanics/OneDimension/Motion.lean) · [Area](../ProjectAInos/Mechanics/OneDimension/Area.lean) · [Abel](../ProjectAInos/Mechanics/OneDimension/Abel.lean) · [Action and angle](../ProjectAInos/Mechanics/OneDimension/ActionAngle.lean)
+**Proof status.** Proved: `IsWell.exists_family`, `IsWell.wellMotion_add_period`, `IsWell.add_period_of_hasDerivAt`, `IsWell.orbitPeriod_eq`, `hasDerivAt_orbitArea`, `lintegral_levelTime_mul`, `abel_inversion`, `hasDerivAt_orbitAction`, `IsWell.orbitPhase_orbitAngle` and `orbit_area_form`, with the oscillator as the instance of each. Rows 11, 12 and 50 are *proved* with the scopes written in the rows. Not treated: turning points with `U′ = 0`, unbounded motions, the generating function `S₀(q, I)`, and the map from the action and the angle to the phase plane. [Divided differences](../ProjectAinos/SmoothAlgebra/DividedDifference.lean) · [Well](../ProjectAinos/Mechanics/OneDimension/Well.lean) · [Level curve](../ProjectAinos/Mechanics/OneDimension/Orbit.lean) · [Motion](../ProjectAinos/Mechanics/OneDimension/Motion.lean) · [Area](../ProjectAinos/Mechanics/OneDimension/Area.lean) · [Abel](../ProjectAinos/Mechanics/OneDimension/Abel.lean) · [Action and angle](../ProjectAinos/Mechanics/OneDimension/ActionAngle.lean)
 
 ## M84. A rigid body is a family of point masses on a curve of rotations, and the amplitude is a flow
 

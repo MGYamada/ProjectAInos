@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 module
 
-import ProjectAInos.Mechanics.Separation.Coordinates
+import ProjectAinos.Mechanics.Separation.Coordinates
 
 /-! Typed contracts for the separation of the variables: a Hamiltonian of
 Stäckel's form on a box, the separated action with its derivatives, the
@@ -12,7 +12,7 @@ Hamilton–Jacobi equation, the completeness of the integral, Jacobi's theorem,
 and spherical, parabolic and elliptic co-ordinates. These examples use default
 elaborator options. -/
 
-open ProjectAInos ProjectAInos.Mechanics ProjectAInos.Mechanics.Stackel
+open ProjectAinos ProjectAinos.Mechanics ProjectAinos.Mechanics.Stackel
 open Set Filter MeasureTheory
 open scoped Topology Real
 

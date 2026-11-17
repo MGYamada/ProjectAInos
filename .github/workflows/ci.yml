@@ -70,14 +70,14 @@ jobs:
           MATHLIB_CACHE_GET_URL: ""
         with:
           build: "true"
-          build-args: --wfail ProjectAInos
+          build-args: --wfail ProjectAinos
           use-mathlib-cache: "true"
           # Run inside the action, before it saves the build cache, so the
           # linked mk_all executable is cached and not rebuilt on every run.
           mk_all-check: "true"
-          mk_all-args: --lib ProjectAInos
+          mk_all-args: --lib ProjectAinos
           axiom-audit: "true"
-          axiom-audit-root: ProjectAInos
+          axiom-audit-root: ProjectAinos
           axiom-audit-allow: propext,Classical.choice,Quot.sound
       - name: Run the import-boundary, API and axiom checks
         if: steps.scope.outputs.lean == 'true'

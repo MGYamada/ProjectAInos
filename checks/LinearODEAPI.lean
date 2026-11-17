@@ -4,13 +4,13 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 module
 
-import ProjectAInos.SmoothGeometry.ODE.PropagatorDet
+import ProjectAinos.SmoothGeometry.ODE.PropagatorDet
 
 /-! Typed contracts for linear differential equations: the Volterra operator
 without a bound on the coefficient, the propagator on the real line and its
 determinant. These examples use default elaborator options. -/
 
-open ProjectAInos.SmoothGeometry ProjectAInos.SmoothGeometry.LinearODE
+open ProjectAinos.SmoothGeometry ProjectAinos.SmoothGeometry.LinearODE
 open scoped ContDiff Nat
 
 noncomputable section

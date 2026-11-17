@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 module
 
-import ProjectAInos.Mechanics.Poisson.ActionAngle
+import ProjectAinos.Mechanics.Poisson.ActionAngle
 
 /-! Typed contracts for the action–angle variables near an invariant torus:
 the neighbourhood of a compact level set on which the flows are complete, the
@@ -14,9 +14,9 @@ transversal, the chart of periods, the angle map, the action integrals over
 the cycles, and the theorem of Liouville and Arnold with a system of
 oscillators as its instance. These examples use default elaborator options. -/
 
-open ProjectAInos ProjectAInos.Mechanics ProjectAInos.SmoothGeometry
-open ProjectAInos.SmoothGeometry.NonlinearODE ProjectAInos.Variational
-open ProjectAInos.SmoothAlgebra ProjectAInos.SmoothAlgebra.FreeSmoothRing
+open ProjectAinos ProjectAinos.Mechanics ProjectAinos.SmoothGeometry
+open ProjectAinos.SmoothGeometry.NonlinearODE ProjectAinos.Variational
+open ProjectAinos.SmoothAlgebra ProjectAinos.SmoothAlgebra.FreeSmoothRing
 open Set Filter Module
 open scoped Topology ContDiff Real
 

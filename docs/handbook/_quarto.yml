@@ -5,7 +5,7 @@ project:
     - "*.qmd"
 
 website:
-  title: "P⊗AI (Project AInos)"
+  title: "P⊗AI (Project Ainos)"
   search: true
   navbar:
     right:

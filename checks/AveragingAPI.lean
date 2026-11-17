@@ -4,8 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 module
 
-import ProjectAInos.Mechanics.Oscillations.NonlinearResonance
-import ProjectAInos.Mechanics.Oscillations.RapidForceExistence
+import ProjectAinos.Mechanics.Oscillations.NonlinearResonance
+import ProjectAinos.Mechanics.Oscillations.RapidForceExistence
 
 /-! Typed contracts for the method of averaging: integrals of slowly varying
 amplitudes against fast oscillations, the comparison with the averaged
@@ -13,7 +13,7 @@ equation, the motion in a rapidly oscillating field with its effective
 potential, and the resonance of the forced oscillator with a cubic term. These
 examples use default elaborator options. -/
 
-open ProjectAInos ProjectAInos.Mechanics ProjectAInos.SmoothGeometry.Averaging
+open ProjectAinos ProjectAinos.Mechanics ProjectAinos.SmoothGeometry.Averaging
 open Set MeasureTheory
 open scoped NNReal
 

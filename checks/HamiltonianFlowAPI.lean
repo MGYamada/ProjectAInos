@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 module
 
-import ProjectAInos.Mechanics.Poisson.LiouvilleFlow
+import ProjectAinos.Mechanics.Poisson.LiouvilleFlow
 
 /-! Typed contracts for Hamiltonian vector fields in the analytic model: the
 elements of a free C∞-ring as differentiable functions, trajectories as
@@ -12,11 +12,11 @@ solutions of a differential equation, Liouville's theorem for the flow of a
 Hamiltonian, and the flows that are defined for all times. These examples use
 default elaborator options. -/
 
-open ProjectAInos ProjectAInos.Mechanics
-open ProjectAInos.SmoothAlgebra ProjectAInos.SmoothAlgebra.SmoothRing
-open ProjectAInos.SmoothAlgebra.FreeSmoothRing ProjectAInos.SmoothAlgebra.PhaseSpace
-open ProjectAInos.SmoothGeometry ProjectAInos.SmoothGeometry.LinearODE
-open ProjectAInos.SmoothGeometry.NonlinearODE
+open ProjectAinos ProjectAinos.Mechanics
+open ProjectAinos.SmoothAlgebra ProjectAinos.SmoothAlgebra.SmoothRing
+open ProjectAinos.SmoothAlgebra.FreeSmoothRing ProjectAinos.SmoothAlgebra.PhaseSpace
+open ProjectAinos.SmoothGeometry ProjectAinos.SmoothGeometry.LinearODE
+open ProjectAinos.SmoothGeometry.NonlinearODE
 open Set MeasureTheory
 open scoped ContDiff
 

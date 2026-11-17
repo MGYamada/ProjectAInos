@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 module
 
-import ProjectAInos.Mechanics.Poisson.RigidBodyEquations
+import ProjectAinos.Mechanics.Poisson.RigidBodyEquations
 
 /-! Typed contracts for the equations of motion of a rigid body: the balance of
 the momentum and of the angular momentum for a rigid motion of point masses,
@@ -12,11 +12,11 @@ the rotation with a given angular velocity, the variation of a rotation,
 Hamilton's principle on the rotations, and the Lie–Poisson equations. These
 examples use default elaborator options. -/
 
-open ProjectAInos ProjectAInos.Mechanics ProjectAInos.Mechanics.Rigid
-open ProjectAInos.Mechanics.RigidBody
-open ProjectAInos.SmoothAlgebra ProjectAInos.SmoothAlgebra.FreeSmoothRing
-open ProjectAInos.SmoothGeometry ProjectAInos.SmoothGeometry.LinearODE
-open ProjectAInos.SmoothGeometry.JacobiElliptic
+open ProjectAinos ProjectAinos.Mechanics ProjectAinos.Mechanics.Rigid
+open ProjectAinos.Mechanics.RigidBody
+open ProjectAinos.SmoothAlgebra ProjectAinos.SmoothAlgebra.FreeSmoothRing
+open ProjectAinos.SmoothGeometry ProjectAinos.SmoothGeometry.LinearODE
+open ProjectAinos.SmoothGeometry.JacobiElliptic
 open Set Matrix MeasureTheory
 open scoped ContDiff
 

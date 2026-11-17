@@ -3,7 +3,7 @@ Copyright (c) 2026 Masahiko G. Yamada. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 module
-import ProjectAInos
+import ProjectAinos
 
 /-! Typed contracts for the public GR physics layer. These examples intentionally
 use default elaborator options. Native manifold clocks and model-coordinate
@@ -12,8 +12,8 @@ variation are checked separately so their hypotheses cannot silently change. -/
 noncomputable section
 open MeasureTheory Set
 open scoped Manifold ContDiff Topology
-open ProjectAInos ProjectAInos.SmoothGeometry ProjectAInos.GeneralRelativity
-open ProjectAInos.SmoothGeometry.LorentzMetric
+open ProjectAinos ProjectAinos.SmoothGeometry ProjectAinos.GeneralRelativity
+open ProjectAinos.SmoothGeometry.LorentzMetric
 
 section ScalarIntegral
 

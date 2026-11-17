@@ -4,7 +4,7 @@ A Lean formalization programme for Landau and Lifshitz, *The Classical Theory
 of Fields*, fourth revised English edition, Chapters I–II, §§1–14.
 
 This is the first part of the relativity and fields trilogy requested in
-[issue #8](https://github.com/MGYamada/ProjectAInos/issues/8). Its companions are
+[issue #8](https://github.com/MGYamada/ProjectAinos/issues/8). Its companions are
 [C∞ electrodynamics](cinfty-electrodynamics.md) and
 [C∞ general relativity](cinfty-general-relativity.md). The design follows the
 mathematical statements, prerequisite tiers, section correspondence and evidence
@@ -15,7 +15,7 @@ The implementation baseline is `main` at commit `61d8fdf`, inspected on
 the manuscript does not complete those proofs.
 
 **Revision of 14 November 2026.** The mechanics programme is complete
-([issue #78](https://github.com/MGYamada/ProjectAInos/issues/78), `main` at
+([issue #78](https://github.com/MGYamada/ProjectAinos/issues/78), `main` at
 `fd0ccaa`). [After the mechanics programme](#after-the-mechanics-programme)
 records the prerequisites it supplies, what it found out of reach, and the
 resulting changes to this plan. The SR modules are those of the baseline, and
@@ -26,7 +26,7 @@ status labels elsewhere in this document still refer to `61d8fdf`.
 The [research plan](../README.md) assigns Minkowski geometry and kinematics to
 §3.1 and relativistic particle dynamics to §3.2. The
 [SR implementation guide](special-relativity.md) records the former, while
-[`ParticleAction.lean`](../ProjectAInos/SpecialRelativity/ParticleAction.lean)
+[`ParticleAction.lean`](../ProjectAinos/SpecialRelativity/ParticleAction.lean)
 already supplies part of the latter. Status below refers to actual definitions
 and theorem declarations at the baseline, not to every assertion in a textbook
 section. Proposed names later in this document are design names.
@@ -254,7 +254,7 @@ boundaryless finite dimensional manifold with its C∞ scheme. A smooth map
 induces `Manifold.schemeMap`, respecting identity and composition. The
 Minkowski comparison `minkowskiSchemeIso` identifies the resulting scheme
 with the constructed spectrum of the smooth algebra of its coordinate model.
-The source is the [shared Lorentz interface](../ProjectAInos/SmoothGeometry/Lorentzian.lean)
+The source is the [shared Lorentz interface](../ProjectAinos/SmoothGeometry/Lorentzian.lean)
 and the manifold modules documented in the geometry guide.
 
 The metric is additional smooth data on the tangent bundle; changing its
@@ -293,7 +293,7 @@ calculation, while `CausallyPrecedes` already works with affine displacement.
 linear maps preserving the normalized pairing. `matrix_preserves_metric`
 gives `Lᵀ g L = g`, and `matrix_det_eq_one_or_neg_one` gives the determinant
 alternatives. `PoincareGroup.ofLinearTranslation L a` acts by `x ↦ Lx+a`;
-[`PoincareGroup.toSchemeIso`](../ProjectAInos/SmoothGeometry/Minkowski/Affine.lean)
+[`PoincareGroup.toSchemeIso`](../ProjectAinos/SmoothGeometry/Minkowski/Affine.lean)
 constructs its actual smooth scheme isomorphism.
 
 For observables, the same transformation acts contravariantly by composition.
@@ -876,8 +876,8 @@ Future Lean changes require the warning-free library build, root-import
 check, relevant default-option consumer checks and transitive axiom audit:
 
 ```sh
-lake build --wfail ProjectAInos
-lake exe mk_all --check --lib ProjectAInos
+lake build --wfail ProjectAinos
+lake exe mk_all --check --lib ProjectAinos
 lake env lean -DwarningAsError=true --run checks/CoreImports.lean
 lake env lean -DwarningAsError=true checks/SpecialRelativityAPI.lean
 lake env lean -DwarningAsError=true checks/AxiomAudit.lean

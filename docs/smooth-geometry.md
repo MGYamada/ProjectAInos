@@ -1,6 +1,6 @@
 # Shared Smooth Geometry: Joyce C∞ Schemes
 
-`ProjectAInos/SmoothAlgebra/` and `ProjectAInos/SmoothGeometry/` are the
+`ProjectAinos/SmoothAlgebra/` and `ProjectAinos/SmoothGeometry/` are the
 mathematical foundation shared by Mechanics, Special Relativity,
 Electrodynamics, and General Relativity (research-plan topics 2–5).
 The shared smooth-algebra, geometry and variational layers may use one another
@@ -14,7 +14,7 @@ The implementation sequence and subsequent research stages are in the
 The source review and implementation target the pinned mathlib v4.35.0,
 commit `56a005855ea17e0b0958f73ec801ae140b0a1679`.
 
-| mathlib layer | Project AInos layer | Mathematical change |
+| mathlib layer | Project Ainos layer | Mathematical change |
 | --- | --- | --- |
 | `CommAlgCat ℝ` | `SmoothAlgebra.Category` | Morphisms preserve every smooth operation |
 | Ring limits and localization | `SmoothAlgebra.Limits`, `GeneralLocalization` | Compatible families and localization universal properties in C∞-rings |
@@ -231,10 +231,10 @@ operation `g` applied to it has the value `g (y 0)` on each piece
 
 | Claim | Main declarations | Source |
 | --- | --- | --- |
-| Open immersion and isomorphism on a cover | `LocallyRingedSpace.isOpenImmersion_of_cover`, `isIso_of_cover`, `Scheme.isIso_of_cover` | [OpenCover](../ProjectAInos/SmoothGeometry/OpenCover.lean) |
-| Descent of open immersions | `Scheme.GlueData.desc_isOpenImmersion`, `desc_isIso` | [OpenCover](../ProjectAInos/SmoothGeometry/OpenCover.lean) |
-| The gluing is the line | `toLine_bijective`, `toLine_isIso`, `gluedIsoLine`, `fromLine` | [GluingExampleIso](../ProjectAInos/SmoothGeometry/GluingExampleIso.lean) |
-| Coordinate section | `pieceCoordinate_overlap`, `ι_gluedCoordinate`, `gluedCoordinate_unique` | [GluingExampleIso](../ProjectAInos/SmoothGeometry/GluingExampleIso.lean) |
+| Open immersion and isomorphism on a cover | `LocallyRingedSpace.isOpenImmersion_of_cover`, `isIso_of_cover`, `Scheme.isIso_of_cover` | [OpenCover](../ProjectAinos/SmoothGeometry/OpenCover.lean) |
+| Descent of open immersions | `Scheme.GlueData.desc_isOpenImmersion`, `desc_isIso` | [OpenCover](../ProjectAinos/SmoothGeometry/OpenCover.lean) |
+| The gluing is the line | `toLine_bijective`, `toLine_isIso`, `gluedIsoLine`, `fromLine` | [GluingExampleIso](../ProjectAinos/SmoothGeometry/GluingExampleIso.lean) |
+| Coordinate section | `pieceCoordinate_overlap`, `ι_gluedCoordinate`, `gluedCoordinate_unique` | [GluingExampleIso](../ProjectAinos/SmoothGeometry/GluingExampleIso.lean) |
 
 The comparison is for this model. A Γ–Spec equivalence and the gluing of
 morphisms of arbitrary schemes along an open cover are not used and not proved.
@@ -358,7 +358,7 @@ tangent coordinate maps. Contracting the metric gives `d+1`; contracting
 an elementary covector tensor gives the inverse-metric pairing. Negating
 the metric negates contraction of a fixed covariant tensor.
 
-`Lorentzian/ChartExamples.lean` addresses [#43](https://github.com/MGYamada/ProjectAInos/issues/43)
+`Lorentzian/ChartExamples.lean` addresses [#43](https://github.com/MGYamada/ProjectAinos/issues/43)
 on the plane. The standard chart has coordinates `(t,x)`; `inertialChart`
 uses `(T,X) = (t,x+t²)`. They are actual open partial homeomorphisms in the
 smooth maximal atlas, their overlap is the whole plane, and their
@@ -1726,7 +1726,7 @@ construction are implemented. Subsequent stages include quotients by
 arbitrary ordinary ideals, the Γ–Spec adjunction, complete/fair rings,
 full faithfulness of the manifold construction, and universal cotangent
 modules. The Lorentz connection and curvature endpoints above are
-implemented and merged into `main` through [#52](https://github.com/MGYamada/ProjectAInos/issues/52).
+implemented and merged into `main` through [#52](https://github.com/MGYamada/ProjectAinos/issues/52).
 In particular,
 `A ≅ Γ(Spec A)` and full faithfulness of Spec on all C∞-rings are not asserted.
 The essential-image definition of affine schemes does not require either

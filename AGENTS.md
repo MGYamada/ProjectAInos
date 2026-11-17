@@ -1,12 +1,12 @@
-# Project AInos contributor instructions
+# Project Ainos contributor instructions
 
 ## Project layout
 
 - Use `README.md` as the research plan and subject outline.
 - Put definitions and machine-checked proofs in the Lean library. Keep
-  `ProjectAInos.lean` current with the library modules.
-- Put shared mathematics in `ProjectAInos/SmoothAlgebra/`,
-  `ProjectAInos/SmoothGeometry/` and `ProjectAInos/Variational/`. These
+  `ProjectAinos.lean` current with the library modules.
+- Put shared mathematics in `ProjectAinos/SmoothAlgebra/`,
+  `ProjectAinos/SmoothGeometry/` and `ProjectAinos/Variational/`. These
   directories import no physics module; `checks/CoreImports.lean` enforces it.
 - Use the plans `docs/cinfty-*.md` for the targets of each textbook section
   and their ledgers, the guides `docs/<subject>.md` for the implemented
@@ -51,7 +51,7 @@
 - Write every binder: `autoImplicit` is off. Do not use `sorry`, `axiom`,
   `set_option maxHeartbeats` or `set_option backward.*`. Keep lines within
   100 characters.
-- After adding a module, run `lake exe mk_all --lib ProjectAInos`.
+- After adding a module, run `lake exe mk_all --lib ProjectAinos`.
 - Pin each new public statement with a typed `example` in a `checks/*API.lean`
   file.
 - Make an index type an explicit argument of a definition when its other
@@ -117,8 +117,8 @@ From the repository root, after fetching the Mathlib cache with
 `lake exe cache get`:
 
 ```sh
-lake build --wfail ProjectAInos
-lake exe mk_all --check --lib ProjectAInos
+lake build --wfail ProjectAinos
+lake exe mk_all --check --lib ProjectAinos
 checks/run.sh
 ```
 

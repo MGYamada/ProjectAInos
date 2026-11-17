@@ -3,7 +3,7 @@ Copyright (c) 2026 Masahiko G. Yamada. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 module
-import ProjectAInos
+import ProjectAinos
 
 /-! Public consumers of the canonical-formalism API: the chain rule for a
 substitution, the Legendre transformation of a natural Lagrangian and of a
@@ -14,9 +14,9 @@ Default elaborator options are intentional: these checks must not rely on the
 implementation's transparency settings. Every statement is pinned with its
 type. -/
 noncomputable section
-open ProjectAInos.SmoothAlgebra ProjectAInos.SmoothAlgebra.SmoothRing
-open ProjectAInos.SmoothAlgebra.FreeSmoothRing ProjectAInos.SmoothAlgebra.PhaseSpace
-open ProjectAInos.Mechanics
+open ProjectAinos.SmoothAlgebra ProjectAinos.SmoothAlgebra.SmoothRing
+open ProjectAinos.SmoothAlgebra.FreeSmoothRing ProjectAinos.SmoothAlgebra.PhaseSpace
+open ProjectAinos.Mechanics
 
 section ChainRule
 

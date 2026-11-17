@@ -21,7 +21,7 @@ $$
 
 The unit process $e=1$ normalizes the supremum construction to $s_e(w)=w$. The normalized entropy extension is $S(x)=x$; changing the positive entropy unit gives $S(x)=ax$, $a>0$. There is no independent conserved coordinate to add.
 
-[Models.lean](../ProjectAInos/Thermodynamics/Models.lean) proves `nnreal_stability` and `nnreal_exchangeComparison`. [ModelConnections.lean](../ProjectAInos/Thermodynamics/ModelConnections.lean) supplies the explicit linear equivalence `nnrealCompletionEquiv`, the cone criterion `nnreal_mem_processCone_iff`, `nnreal_processSpan_eq_top`, `nnreal_entropyCoordinate_eq`, and the normalized extension. `nnreal_conservation_subsingleton` expresses the vanishing conservation quotient. SC also follows from the general stability-to-cone theorem.
+[Models.lean](../ProjectAinos/Thermodynamics/Models.lean) proves `nnreal_stability` and `nnreal_exchangeComparison`. [ModelConnections.lean](../ProjectAinos/Thermodynamics/ModelConnections.lean) supplies the explicit linear equivalence `nnrealCompletionEquiv`, the cone criterion `nnreal_mem_processCone_iff`, `nnreal_processSpan_eq_top`, `nnreal_entropyCoordinate_eq`, and the normalized extension. `nnreal_conservation_subsingleton` expresses the vanishing conservation quotient. SC also follows from the general stability-to-cone theorem.
 
 ## Two independent monotones: A6 does not imply ECH
 
@@ -47,7 +47,7 @@ $$
 
 These functionals are monotones; none supplies an order-reflecting scalar description of the coordinatewise order on all states.
 
-The dedicated Lean results in [Models.lean](../ProjectAInos/Thermodynamics/Models.lean) are `Stability.prod`, `nnreal_prod_stability`, and `nnreal_prod_not_exchangeComparison`. SC for its abstract process cone follows from the general theorem. The displayed coordinate identification and classification of the normalized positive functionals are explanatory calculations; this model does not currently have separate named Lean theorems for those identifications or the dual segment.
+The dedicated Lean results in [Models.lean](../ProjectAinos/Thermodynamics/Models.lean) are `Stability.prod`, `nnreal_prod_stability`, and `nnreal_prod_not_exchangeComparison`. SC for its abstract process cone follows from the general theorem. The displayed coordinate identification and classification of the normalized positive functionals are explanatory calculations; this model does not currently have separate named Lean theorems for those identifications or the dual segment.
 
 ## Lexicographic order: totality does not imply SC
 
@@ -69,7 +69,7 @@ $$
 
 The Lean counterexample uses the explicit sequence $\varepsilon_j=1/(j+1)$. Thus a salient total cone can still fail the stability requirement needed for the real entropy representation. The vector $(0,1)$ also exhibits the familiar non-Archimedean behavior: every positive integer multiple remains lexicographically below $(1,0)$.
 
-[ConeModels.lean](../ProjectAInos/Thermodynamics/ConeModels.lean) proves `lexicographicCone_total`, `lexicographicCone_salient`, and `lexicographicCone_not_sequentialOrderClosed`. The formal counterexample is stated at the cone level; it does not construct a physical thermal family with this order.
+[ConeModels.lean](../ProjectAinos/Thermodynamics/ConeModels.lean) proves `lexicographicCone_total`, `lexicographicCone_salient`, and `lexicographicCone_not_sequentialOrderClosed`. The formal counterexample is stated at the cone level; it does not construct a physical thermal family with this order.
 
 ## Equality-only accessibility: the degenerate branch
 
@@ -87,7 +87,7 @@ $$
 
 There is no nonzero process at which to normalize an entropy coordinate. This is a separate degenerate case, rather than a failure of stability or comparison.
 
-[DegenerateModel.lean](../ProjectAInos/Thermodynamics/DegenerateModel.lean) proves `EqualityState.stability`, `EqualityState.exchangeComparison`, `EqualityState.processCone_eq_bot`, and `EqualityState.processSpan_eq_bot`. [ConeModels.lean](../ProjectAInos/Thermodynamics/ConeModels.lean) also proves the general `zeroCone_span` lemma.
+[DegenerateModel.lean](../ProjectAinos/Thermodynamics/DegenerateModel.lean) proves `EqualityState.stability`, `EqualityState.exchangeComparison`, `EqualityState.processCone_eq_bot`, and `EqualityState.processSpan_eq_bot`. [ConeModels.lean](../ProjectAinos/Thermodynamics/ConeModels.lean) also proves the general `zeroCone_span` lemma.
 
 ## Entropy and one conserved amount
 
@@ -117,12 +117,12 @@ $$
 
 Adding $bn$ does not change entropy differences inside a fixed amount sector. It does not create accessibility between different sectors.
 
-[SectorModel.lean](../ProjectAInos/Thermodynamics/SectorModel.lean) proves stability, ECH, and `different_amounts_incomparable`. [ModelConnections.lean](../ProjectAInos/Thermodynamics/ModelConnections.lean) proves `sector_mem_processCone_iff`, `sector_processSpan_eq_ker`, the quotient equivalence `sectorConservationEquiv`, the process-space equivalence `sectorEntropyEquiv`, and `sector_entropyCoordinate_eq`. `sectorEntropyExtension_classification` establishes existence and uniqueness of the coefficient $b$, rather than merely constructing examples of extensions.
+[SectorModel.lean](../ProjectAinos/Thermodynamics/SectorModel.lean) proves stability, ECH, and `different_amounts_incomparable`. [ModelConnections.lean](../ProjectAinos/Thermodynamics/ModelConnections.lean) proves `sector_mem_processCone_iff`, `sector_processSpan_eq_ker`, the quotient equivalence `sectorConservationEquiv`, the process-space equivalence `sectorEntropyEquiv`, and `sector_entropyCoordinate_eq`. `sectorEntropyExtension_classification` establishes existence and uniqueness of the coefficient $b$, rather than merely constructing examples of extensions.
 
 ## A populated smooth thermal family
 
 The sector order also supports a concrete family satisfying the geometric and
-thermal interfaces. [ReservoirModel.lean](../ProjectAInos/Thermodynamics/ReservoirModel.lean)
+thermal interfaces. [ReservoirModel.lean](../ProjectAinos/Thermodynamics/ReservoirModel.lean)
 defines, for every finite work dimension $n$ and positive amount $r$,
 
 $$
@@ -156,7 +156,7 @@ geometric facts are inputs in a general family and proved here for reservoirs.
 
 ## A populated family with distinct temperatures
 
-[LogarithmicThermalModel.lean](../ProjectAInos/Thermodynamics/LogarithmicThermalModel.lean)
+[LogarithmicThermalModel.lean](../ProjectAinos/Thermodynamics/LogarithmicThermalModel.lean)
 uses entropy $r\log(U/r)+\sum_i V_i$ on positive-energy domains with amount
 $r>0$ and at least one work coordinate. Accessibility orders entropy at fixed
 amount, with stability inherited from the sector model. The adiabats are
@@ -226,13 +226,13 @@ $$
 
 Thus the reaction span has codimension two, and every real linear conserved observable factors uniquely through the elemental amounts. These are statements about formal real composition differences. They do not assert that arbitrary signed compositions are physical states, or determine which reactions are thermodynamically accessible.
 
-[Stoichiometry.lean](../ProjectAInos/Thermodynamics/Stoichiometry.lean) proves `conserved_iff_factors`, `waterReaction_conserved`, `waterReaction_range`, `elementAmounts_surjective`, and `waterConservationEquiv`. This verifies the conservation quotient, not the full entropy principle for a water-forming physical system. The general factorization statement is described in [the physical development](thermodynamics-physical.md#stoichiometric-conservation).
+[Stoichiometry.lean](../ProjectAinos/Thermodynamics/Stoichiometry.lean) proves `conserved_iff_factors`, `waterReaction_conserved`, `waterReaction_range`, `elementAmounts_surjective`, and `waterConservationEquiv`. This verifies the conservation quotient, not the full entropy principle for a water-forming physical system. The general factorization statement is described in [the physical development](thermodynamics-physical.md#stoichiometric-conservation).
 
-A second diagnostic model distinguishes forbidden transitions from finite reaction costs. Give each label one state of zero entropy and allow only transitions preserving the label. Its direct and chain costs are zero on the diagonal and $+\infty$ between distinct labels. If label addition is cancellative, adding the same catalyst preserves that obstruction, so the catalytic cost also remains $+\infty$. The model still satisfies absence of sinks: existing connections are reversible, while disconnected labels need not become connected. These claims are proved in [ReactionModels.lean](../ProjectAInos/Thermodynamics/ReactionModels.lean); see also [the note on infinite costs](thermodynamics-notes.md#t05-infinite-reaction-costs-distinguish-two-different-failures).
+A second diagnostic model distinguishes forbidden transitions from finite reaction costs. Give each label one state of zero entropy and allow only transitions preserving the label. Its direct and chain costs are zero on the diagonal and $+\infty$ between distinct labels. If label addition is cancellative, adding the same catalyst preserves that obstruction, so the catalytic cost also remains $+\infty$. The model still satisfies absence of sinks: existing connections are reversible, while disconnected labels need not become connected. These claims are proved in [ReactionModels.lean](../ProjectAinos/Thermodynamics/ReactionModels.lean); see also [the note on infinite costs](thermodynamics-notes.md#t05-infinite-reaction-costs-distinguish-two-different-failures).
 
 ## The monatomic ideal-gas entropy formula
 
-An equilibrium box in [IdealGas.lean](../ProjectAInos/Thermodynamics/IdealGas.lean) has strictly positive real energy $U$, volume $V$, and amount $N$. The model uses
+An equilibrium box in [IdealGas.lean](../ProjectAinos/Thermodynamics/IdealGas.lean) has strictly positive real energy $U$, volume $V$, and amount $N$. The model uses
 
 $$
 S_{k,c}(U,V,N)
@@ -286,11 +286,11 @@ N_Z=N_X,\qquad
 V_Z=\exp\!\left(A(X)-\frac32\log U_Y\right).
 $$
 
-Then $A(Z)=A(X)$, while the entropy inequality gives $V_Z\le V_Y$. Hence $X\to Z$ is an allowed reversible step and $Z\to Y$ is an allowed free-expansion step. This establishes reachability using at most two generating operations. `entropy_le_iff_adiabat_le`, `entropy_eq_iff_adiabat_eq`, `adiabat_eq_iff`, and `accessible_iff` are the corresponding public theorems in [IdealGas.lean](../ProjectAInos/Thermodynamics/IdealGas.lean).
+Then $A(Z)=A(X)$, while the entropy inequality gives $V_Z\le V_Y$. Hence $X\to Z$ is an allowed reversible step and $Z\to Y$ is an allowed free-expansion step. This establishes reachability using at most two generating operations. `entropy_le_iff_adiabat_le`, `entropy_eq_iff_adiabat_eq`, `adiabat_eq_iff`, and `accessible_iff` are the corresponding public theorems in [IdealGas.lean](../ProjectAinos/Thermodynamics/IdealGas.lean).
 
 ## The ideal-gas composite consistency model
 
-[IdealGasModel.lean](../ProjectAInos/Thermodynamics/IdealGasModel.lean) puts the operational result into an extensive algebraic model. Its states are
+[IdealGasModel.lean](../ProjectAinos/Thermodynamics/IdealGasModel.lean) puts the operational result into an extensive algebraic model. Its states are
 
 $$
 M_{\mathrm{gas}}=\{(0,0)\}\ \cup\ \{(s,n)\in\mathbb R^2:n>0\},

@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 module
 
-import ProjectAInos
+import ProjectAinos
 
 /-! A public API smoke test for the independently ported Yang--Mills modules.
     This file checks the names and types, not the physical validity of any
@@ -24,18 +24,18 @@ import ProjectAInos
 #check YangMills.WilsonFamily.finiteMoment_eq_core
 #check YangMills.WilsonFamily.Converges
 #check YangMills.JointExistence
-#check ProjectAInos.Variational.jet_derivative_eq_ym_directional
-#check ProjectAInos.SmoothGeometry.YangMillsCoordinates.pointLinear
-#check ProjectAInos.SmoothGeometry.YangMillsCoordinates.time_eq
-#check ProjectAInos.SmoothGeometry.YangMillsCoordinates.minkowskiSquare_eq
-#check ProjectAInos.SmoothGeometry.YangMillsCoordinates.configurations_injective
+#check ProjectAinos.Variational.jet_derivative_eq_ym_directional
+#check ProjectAinos.SmoothGeometry.YangMillsCoordinates.pointLinear
+#check ProjectAinos.SmoothGeometry.YangMillsCoordinates.time_eq
+#check ProjectAinos.SmoothGeometry.YangMillsCoordinates.minkowskiSquare_eq
+#check ProjectAinos.SmoothGeometry.YangMillsCoordinates.configurations_injective
 
 example : YangMills.JointExistence → YangMills.JointExistence := id
 
 namespace YangMillsImportChecks
-open YangMills ProjectAInos.SmoothGeometry
-open ProjectAInos.SmoothGeometry.YangMillsCoordinates
-open ProjectAInos.SpecialRelativity
+open YangMills ProjectAinos.SmoothGeometry
+open ProjectAinos.SmoothGeometry.YangMillsCoordinates
+open ProjectAinos.SpecialRelativity
 
 example {g : GaugeGroup} {C : WilsonFamily g} {T : Hierarchy C} {order : ℕ → ℕ}
     (h : T.IntegratedProperties order) :

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Run every check file in this directory, in parallel, exactly as the required
-# Lean build job does. Build the library first: `lake build --wfail ProjectAInos`.
+# Lean build job does. Build the library first: `lake build --wfail ProjectAinos`.
 #
 #   checks/run.sh          # up to four processes
 #   JOBS=2 checks/run.sh   # choose the parallelism
