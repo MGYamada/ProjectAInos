@@ -305,6 +305,15 @@ cross-section with respect to the solid angle. For a potential energy
 `U = ε r⁻ⁿ w(1/r)` with `w` smooth the angle of deflection is
 `−(2ρ/m v∞²) ∫_ρ^∞ U′(r) dr/√(r² − ρ²)` up to a remainder of at most
 `M (ε/ρⁿ)²`, uniformly for impact parameters and speeds bounded below.
+Maupertuis' principle is proved for a Lagrangian `T − U` at a fixed energy in
+the region `U < E`: a curve of that energy is a motion exactly when it makes
+`∫ 2 √((E − U) T) dt` stationary, and exactly when it is a geodesic of the
+Jacobi metric in the parameter with `dσ/dt = 2 (E − U)`.
+The separation of the variables is proved on a box of co-ordinates for
+Hamiltonians of Stäckel's form: the separated action is given by quadratures,
+it satisfies the Hamilton–Jacobi equation, it is complete, and Jacobi's
+theorem gives Hamilton's equations; spherical, parabolic and elliptic
+co-ordinates are instances.
 Symplectic forms on manifolds and
 Dirac brackets are not implemented. Galilean symmetry as a group action and the topics of 2.1 and
 2.4 have no Lean counterpart yet. The
