@@ -1,6 +1,8 @@
 module  -- shake: keep-all --deprecated_module: ignore
 
 public import ProjectAinos.Electrodynamics.Components
+public import ProjectAinos.Electrodynamics.ConstantField
+public import ProjectAinos.Electrodynamics.ConstantFieldExamples
 public import ProjectAinos.Electrodynamics.Covariance
 public import ProjectAinos.Electrodynamics.Current
 public import ProjectAinos.Electrodynamics.CurrentExamples
@@ -12,6 +14,8 @@ public import ProjectAinos.Electrodynamics.Examples
 public import ProjectAinos.Electrodynamics.ExcitationChart
 public import ProjectAinos.Electrodynamics.Field
 public import ProjectAinos.Electrodynamics.GaugeAction
+public import ProjectAinos.Electrodynamics.Hamiltonian
+public import ProjectAinos.Electrodynamics.HamiltonianExamples
 public import ProjectAinos.Electrodynamics.Homogeneous
 public import ProjectAinos.Electrodynamics.HomogeneousExamples
 public import ProjectAinos.Electrodynamics.Invariants
@@ -20,6 +24,7 @@ public import ProjectAinos.Electrodynamics.ParticleAction
 public import ProjectAinos.Electrodynamics.PolynomialBridge
 public import ProjectAinos.Electrodynamics.PolynomialExamples
 public import ProjectAinos.Electrodynamics.PolynomialRadial
+public import ProjectAinos.Electrodynamics.StaticField
 public import ProjectAinos.Electrodynamics.VacuumAction
 public import ProjectAinos.Electrodynamics.VacuumActionExamples
 public import ProjectAinos.External.YM.Analysis.Homogeneous
@@ -261,6 +266,7 @@ public import ProjectAinos.SmoothAlgebra.Poisson.Hom
 public import ProjectAinos.SmoothAlgebra.Poisson.Ideal
 public import ProjectAinos.SmoothAlgebra.Poisson.LinearMomentum
 public import ProjectAinos.SmoothAlgebra.Poisson.OrbitalCharge
+public import ProjectAinos.SmoothAlgebra.Poisson.Position
 public import ProjectAinos.SmoothAlgebra.Poisson.Reduction
 public import ProjectAinos.SmoothAlgebra.RelEnergy
 public import ProjectAinos.SmoothAlgebra.SmoothFunctions
@@ -415,6 +421,7 @@ public import ProjectAinos.SmoothGeometry.ODE.ContinuousFamily
 public import ProjectAinos.SmoothGeometry.ODE.CoordinateCurvature
 public import ProjectAinos.SmoothGeometry.ODE.FlatFrame
 public import ProjectAinos.SmoothGeometry.ODE.Flow
+public import ProjectAinos.SmoothGeometry.ODE.FlowBounded
 public import ProjectAinos.SmoothGeometry.ODE.FlowComplete
 public import ProjectAinos.SmoothGeometry.ODE.FlowEquation
 public import ProjectAinos.SmoothGeometry.ODE.FlowInvariant
@@ -424,6 +431,7 @@ public import ProjectAinos.SmoothGeometry.ODE.JointFlow
 public import ProjectAinos.SmoothGeometry.ODE.JointFlowSmooth
 public import ProjectAinos.SmoothGeometry.ODE.LevelSetFlow
 public import ProjectAinos.SmoothGeometry.ODE.LevelSetTube
+public import ProjectAinos.SmoothGeometry.ODE.LinearMotion
 public import ProjectAinos.SmoothGeometry.ODE.LocalFlow
 public import ProjectAinos.SmoothGeometry.ODE.PeriodFamily
 public import ProjectAinos.SmoothGeometry.ODE.PeriodLattice

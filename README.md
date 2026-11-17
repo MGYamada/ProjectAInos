@@ -167,6 +167,14 @@ particles the orbital moment is conserved and the centre of energy moves
 uniformly.
 [Guide](docs/special-relativity.md#measures-and-charges)
 
+For electrodynamics, a charge in static potentials has the Hamiltonian
+`√(m² + Σ (pᵢ − e aᵢ)²) + e φ`; its equations are the equation of the Lorentz
+force, its flow exists for all times, and they are the stationary curves of
+the action of space-time. In a constant field the motion in the proper time
+is solved for every field, with closed forms in the electric, the magnetic,
+the null and the parallel case.
+[Guide](docs/electrodynamics.md#a-charge-in-a-given-field-1523)
+
 Topic 6 follows the provisional Boltzmannian typicality plan in
 [issue #55](https://github.com/MGYamada/ProjectAinos/issues/55). Its guiding references are
 
