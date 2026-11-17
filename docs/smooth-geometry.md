@@ -1080,6 +1080,25 @@ equation, so one space of curves serves for all times of both signs.
 - `flowDomain_linear`, `flow_linear`: the flow of a linear field is the
   propagator of the constant coefficient.
 
+`ODE.FlowBounded`:
+
+- `flowDomain_eq_univ_of_bounded_inl`: a field on `ι ⊕ κ → ℝ` whose components
+  `Sum.inl i` are bounded, and whose components `Sum.inr k` are bounded where
+  the co-ordinates `Sum.inl i` are bounded, has a flow defined for all times
+  and points. The relativistic motion of a charge is of this kind.
+
+`ODE.LinearMotion`:
+
+- `linearVelocity A u₀` is the solution of `u′ = A u` with `u(0) = u₀` for a
+  bounded operator `A`, and `linearMotion A x₀ u₀` is the curve with this
+  velocity from `x₀`; both are smooth, and the solution is unique
+  (`eq_linearVelocity_of_hasDerivAt`).
+- `linearVelocity_eq_of_cube`, `linearMotion_eq_of_cube`: if `A³ = κ A` and
+  `s′ = 1 + κ c`, `c′ = s`, `C′ = c` with the value zero at `0`, then
+  `u = u₀ + s A u₀ + c A² u₀` and `x = x₀ + τ u₀ + c A u₀ + C A² u₀`.
+- `linearVelocity_add`: for `A₁ A₂ = A₂ A₁ = 0` the solution of the sum is the
+  sum of the solutions minus the initial value.
+
 `ODE.FlowInvariant`: a function whose derivative vanishes between two times
 takes the same value at them (`eq_of_hasDerivAt_zero`), so a quantity whose
 derivative vanishes along every solution is constant along the flow

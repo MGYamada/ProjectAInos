@@ -24,7 +24,7 @@ The proofs of the three field plans are tracked in
 ledger with one status for each section, a count line and the list of rows closed
 with a remainder, in the vocabulary of the mechanics ledger:
 [special relativity](cinfty-special-relativity.md#ledger) (12 of 14 rows proved),
-[electrodynamics](cinfty-electrodynamics.md#ledger) (none of 66) and
+[electrodynamics](cinfty-electrodynamics.md#ledger) (6 of 66) and
 [general relativity](cinfty-general-relativity.md#ledger) (5 of 39). The baseline
 counts a row as proved only when its whole target is proved; a row with a proved
 core names the core and stays *informal*. Observations are recorded in the notes
@@ -583,6 +583,28 @@ momentum is not constructed. The ledger rows of §10 and §14 are *proved*, and
 §12 is *proved modulo interface* and closed with this remainder (12 of 14
 proved); §6 remains for the comparison of cotangent modules.
 [Guide](special-relativity.md#measures-and-charges)
+
+## A charge in a given field
+
+The first wave of electrodynamics treats a charge in a given field. For static
+potentials `φ` and `a` on space, elements of the free ring of the positions,
+`H = √(m² + Σ (pᵢ − e aᵢ)²) + e φ` is an element of the canonical phase space.
+The kinetic momenta satisfy `{πᵢ, πⱼ} = e Fᵢⱼ`, the equation of motion is
+`{πᵢ, H} = e (Eᵢ + Σⱼ Fᵢⱼ vⱼ)`, the kinetic energy changes by the work of the
+electric field, the momentum of a cyclic co-ordinate is an integral, and the
+gauge change `a ↦ a + ∇χ` is the canonical transformation `p ↦ p + e ∇χ`. The
+flow exists for all times for all smooth static potentials, because the speed
+is less than one and the force is bounded where the position is bounded. In
+three dimensions the action of space-time is stationary on the graph of a
+curve if and only if the curve satisfies `d/dt (m γ ẋ) = e (E + ẋ × B)`, and
+if and only if `(x, m γ ẋ + e a(x))` solves Hamilton's equations. In a
+constant field the four-velocity satisfies a linear equation in the proper
+time; the motion exists for all proper times, is unique and is stationary. For
+a field of two covectors the generator satisfies `A³ = κ A`, which gives the
+hyperbolic motion in an electric field, the helix in a magnetic field and a
+polynomial motion in a null field, and for parallel fields the velocities add.
+The ledger rows of §§15 and 19–23 are *proved* in their stated scopes (6 of
+66). [Guide](electrodynamics.md#a-charge-in-a-given-field-1523)
 
 ## Shared Variational Foundation
 

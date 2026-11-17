@@ -242,6 +242,69 @@ commute with this map. No metric identification or Wick rotation is involved.
 The result is restricted to homogeneous polynomial exterior differentiation
 and reconstruction, not global potential existence or continuum dynamics.
 
+## A charge in a given field (§§15–23)
+
+**The Hamiltonian in a static field (E9a, §§16–19).** The scalar potential
+`φ` and the vector potential `a` are elements of the free ring of the
+positions, in `d` space dimensions. `PhaseSpace.ofPosition` maps them into
+the phase space. With the kinetic momentum `π = p − e a`,
+`ChargedParticle.hamiltonian m e φ a = √(m² + Σ πᵢ²) + e φ`.
+
+| Statement | Declaration |
+| --- | --- |
+| `{qᵢ, H} = πᵢ/√(m² + Σ πⱼ²)`, and the speed is less than one | `canonical_q_hamiltonian`, `sum_velocity_mul_self`, `sum_sq_hamiltonianField_lt_one` |
+| `{πᵢ, πⱼ} = e Fᵢⱼ` with `Fᵢⱼ = ∂ᵢaⱼ − ∂ⱼaᵢ` | `canonical_kineticMomentum_kineticMomentum` |
+| The equation of motion `{πᵢ, H} = e (Eᵢ + Σⱼ Fᵢⱼ vⱼ)` with `Eᵢ = −∂ᵢφ` | `canonical_kineticMomentum_hamiltonian` |
+| The work of the electric field, `{√(m² + Σ πⱼ²), H} = e Σᵢ Eᵢ vᵢ` | `canonical_kineticEnergy_hamiltonian` |
+| The momentum of a cyclic co-ordinate is an integral | `isIntegral_p_of_cyclic`; instances `isIntegral_p_uniformScalar`, `isIntegral_p_landauPotential` |
+| Hamilton's equations are the equation of the Lorentz force with `ẋ = v(π)` | `isTrajectory_iff_lorentzForce` |
+| The gauge change `a ↦ a + ∇χ` is the canonical transformation `p ↦ p + e ∇χ` | `momentumShift_hamiltonian`, `isTrajectory_gaugeShift`, `magneticTensor_gaugeShift` |
+| The flow exists for all times and points and preserves the volume | `flowDomain_hamiltonianField`, `measurePreserving_hamiltonianFlow`, `exists_isTrajectory` |
+
+The flow is complete for all smooth static potentials: the speed is less than
+one, so in a finite time the position stays in a bounded set, where the force
+is bounded (`NonlinearODE.flowDomain_eq_univ_of_bounded_inl`).
+
+**The action of space-time (§17, §23).** In three dimensions
+`ChargedParticle.staticPotential φ a` is the potential `−φ dt + a · dx`.
+`fieldTensor_staticPotential` gives its field, and on the velocity `(1, u)`
+the force has the space components `e (Eᵢ + Σⱼ Fᵢⱼ uⱼ)` and the time component
+`e Σᵢ Eᵢ uᵢ` (`lorentzForce_staticPotential_succ`,
+`lorentzForce_staticPotential_zero`). On the graph `t ↦ (t, x(t))` of a curve
+with a speed less than one the action is stationary if and only if
+`d/dt (m γ ẋᵢ) = e (Eᵢ + Σⱼ Fᵢⱼ ẋⱼ)` (`stationary_graph_iff_lorentzForce`): the
+time component of the equation of space-time follows from the space
+components, because the force and the acceleration are orthogonal to the
+velocity. For `m > 0` this holds if and only if the curve
+`(x, m γ ẋ + e a(x))` solves Hamilton's equations
+(`stationary_graph_iff_hamilton`), and the graph of the positions of a
+trajectory is stationary on every interval
+(`stationary_graph_of_isTrajectory`).
+
+**A constant field (§§20–22).** For a constant two-form `F`,
+`ConstantField.potential F` is `½ ι_x F`, and
+`ConstantField.generator m e F = (e/m) F♯` is the linear map of the equation
+`u′ = (e/m) F♯ u` in the proper time. `velocity m e F u₀` and
+`motion m e F x₀ u₀` are its solution for all proper times
+(`LinearODE.linearVelocity`, `LinearODE.linearMotion`).
+
+| Statement | Declaration |
+| --- | --- |
+| The interval of the four-velocity is constant, and it stays future timelike | `intervalQuadratic_velocity`, `futureTimelike_velocity` |
+| For a unit four-velocity the motion is stationary on every interval | `stationary_motion` |
+| Every stationary curve in the proper time has this four-velocity | `deriv_eq_velocity_of_stationary` |
+| For `F = α ∧ β` the generator `A` satisfies `A³ = κ A`, `κ = (e/m)² (⟨α, β⟩² − ⟨α, α⟩ ⟨β, β⟩)` | `generator_of_isSimple`, `generator_cube`, `lorentzGenerator_cube` |
+| `κ = Ω² > 0`: `u = u₀ + (sinh Ωτ/Ω) A u₀ + ((cosh Ωτ − 1)/Ω²) A² u₀` | `velocity_of_pos`, `motion_of_pos`; electric field `velocity_electric` |
+| `κ = −Ω² < 0`: the same with `sin` and `1 − cos` | `velocity_of_neg`, `motion_of_neg`; magnetic field `velocity_magnetic` |
+| `κ = 0`: `u = u₀ + τ A u₀ + (τ²/2) A² u₀` | `velocity_of_zero`, `motion_of_zero`; null field `velocity_nullField` |
+| Two fields whose generators have zero products: the sum of the velocities minus `u₀` | `velocity_add`; parallel fields `velocity_uniformField` |
+| The hyperbola of the earlier example is the motion with its initial data | `motion_eq_hyperbola` |
+
+The three closed forms are one statement about a bounded operator with
+`A³ = κ A` and functions with `s′ = 1 + κ c`, `c′ = s`
+(`LinearODE.linearVelocity_eq_of_cube`, `linearMotion_eq_of_cube`). The
+[notes](electrodynamics-notes.md) ED03–ED05 record the decisions.
+
 ## Proof and API map
 
 All names below are under `ProjectAinos`, except imported `YM` names.
@@ -260,6 +323,9 @@ All names below are under `ProjectAinos`, except imported `YM` names.
 | Gauge boundary and local stationarity | `chargedAction_gauge_on`, `stationary_gauge_iff_on` | [GaugeAction](../ProjectAinos/Electrodynamics/GaugeAction.lean) |
 | Scalar/color polynomial reconstruction | `Polynomial.radial_curl`, `radial_upstream`, `radial_map`, `mapCoefficients_closed` | [PolynomialRadial](../ProjectAinos/Electrodynamics/PolynomialRadial.lean) |
 | Coordinate and derivative compatibility | `Polynomial.fieldTensor_potential`, `radial_formula`, `grad_transport` | [PolynomialBridge](../ProjectAinos/Electrodynamics/PolynomialBridge.lean) |
+| Hamiltonian of a charge in a static field | `ChargedParticle.canonical_kineticMomentum_hamiltonian`, `isTrajectory_iff_lorentzForce`, `momentumShift_hamiltonian`, `flowDomain_hamiltonianField` | [Hamiltonian](../ProjectAinos/Electrodynamics/Hamiltonian.lean), [HamiltonianExamples](../ProjectAinos/Electrodynamics/HamiltonianExamples.lean) |
+| Action of space-time on a graph | `ChargedParticle.fieldTensor_staticPotential`, `stationary_graph_iff_lorentzForce`, `stationary_graph_iff_hamilton`, `stationary_graph_of_isTrajectory` | [StaticField](../ProjectAinos/Electrodynamics/StaticField.lean) |
+| Motion in a constant field | `ConstantField.stationary_motion`, `deriv_eq_velocity_of_stationary`, `generator_cube`, `velocity_of_pos`, `velocity_of_neg`, `velocity_of_zero`, `velocity_add` | [ConstantField](../ProjectAinos/Electrodynamics/ConstantField.lean), [ConstantFieldExamples](../ProjectAinos/Electrodynamics/ConstantFieldExamples.lean) |
 | Nonzero regression examples | `Examples.hyperbola_stationary`; `Polynomial.constantJet_reconstruction`, `linearJet_reconstruction` | [Examples](../ProjectAinos/Electrodynamics/Examples.lean), [PolynomialExamples](../ProjectAinos/Electrodynamics/PolynomialExamples.lean) |
 
 ## Verification and review
@@ -268,6 +334,8 @@ All names below are under `ProjectAinos`, except imported `YM` names.
 lake build --wfail ProjectAinos
 lake exe mk_all --check --lib ProjectAinos
 lake env lean -DwarningAsError=true checks/ElectrodynamicsAPI.lean
+lake env lean -DwarningAsError=true checks/ElectrodynamicsCoreAPI.lean
+lake env lean -DwarningAsError=true checks/ChargedParticleAPI.lean
 lake env lean -DwarningAsError=true checks/AxiomAudit.lean
 experiments/.venv/bin/python -m ainos_experiments.verify_electrodynamics
 ```

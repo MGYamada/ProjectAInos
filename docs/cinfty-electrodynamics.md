@@ -61,15 +61,15 @@ completion.
 
 | § | Topic | Status | Lean declarations, or what is missing |
 |---:|:---|:---|:---|
-| 15 | Elementary particles and their charge | informal | Proved: `chargedLagrangian`, `chargedAction`, `charged_momentum`, `stationary_iff_lorentzForce`, on flat spacetime. That `e` is the measured charge is a premise. Typed examples are added in F5 |
-| 16 | Four-potential of a field | informal | Proved: `Potential`, `potentialOf`, `potentialComponent`, `fieldTensor_lorentz`, `fieldTensor_poincare`, for a potential on an open set of flat spacetime. Missing: potentials as one-forms on a manifold (F5) |
-| 17 | Equations of motion of a charge in a field | informal | Proved: `stationary_iff_lorentzForce`, `stationary_properTime`, `lorentzForce_orthogonal`, `mass_shell`. Missing: the equation on a curved background (E10, F12) |
-| 18 | Gauge invariance | informal | Proved: `fieldTensor_gauge_on`, `chargedAction_gauge_on`, `stationary_gauge_iff_on`, `VacuumAction.action_gauge`. Missing: the statement for one-forms on a manifold (F5); a principal bundle with its transition functions (E8) |
-| 19 | Constant electromagnetic field | informal | Target: the Hamiltonian of a charge in a static field and its first integrals (E9a, F5) |
-| 20 | Motion in a constant uniform electric field | informal | Proved: `hyperbola_stationary`, `hyperbola_lorentzForce`. Missing: the motion for arbitrary initial data (F5) |
-| 21 | Motion in a constant uniform magnetic field | informal | Target (F5) |
-| 22 | Motion in constant uniform electric and magnetic fields | informal | Target: the linear equation of the velocity in proper time, with the degenerate cases (F5) |
-| 23 | The electromagnetic field tensor | informal | Proved: `fieldTensor_apply`, `fieldTensor_component`, `Curved.Field`, `Curved.excitation_flat`. Typed examples are added in F5 |
+| 15 | Elementary particles and their charge | proved | `chargedLagrangian`, `chargedAction`, `chargedAction_eq`, `charged_momentum`, `charged_force`, `stationary_iff_lorentzForce`, `lorentzForce_zero_charge`, `ChargedParticle.hamiltonian_zero_charge`. Scope: the charge is a real parameter of the action of a point particle on flat spacetime; without a charge the action and the Hamiltonian are those of the free particle. That `e` is the measured charge of a particle is a premise |
+| 16 | Four-potential of a field | informal | Proved: `Potential`, `potentialOf`, `potentialComponent`, `fieldTensor_lorentz`, `fieldTensor_poincare`, for a potential on an open set of flat spacetime; the canonical momentum `p = π + e a` and the Hamiltonian `ChargedParticle.hamiltonian`, `ChargedParticle.canonical_q_hamiltonian`, `ChargedParticle.staticPotential` for static potentials. Missing: potentials as one-forms on a manifold |
+| 17 | Equations of motion of a charge in a field | informal | Proved: `stationary_iff_lorentzForce`, `stationary_properTime`, `lorentzForce_orthogonal`, `mass_shell`; in the time of an observer `ChargedParticle.stationary_graph_iff_lorentzForce`, `ChargedParticle.canonical_kineticMomentum_hamiltonian`, `ChargedParticle.canonical_kineticEnergy_hamiltonian`, `ChargedParticle.lorentzForce_staticPotential_zero`. Missing: the equation on a curved background (E10, F12) |
+| 18 | Gauge invariance | informal | Proved: `fieldTensor_gauge_on`, `chargedAction_gauge_on`, `stationary_gauge_iff_on`, `VacuumAction.action_gauge`; for static potentials `ChargedParticle.momentumShift_hamiltonian`, `ChargedParticle.magneticTensor_gaugeShift`, `ChargedParticle.isTrajectory_gaugeShift`. Missing: the statement for one-forms on a manifold; a principal bundle with its transition functions (E8) |
+| 19 | Constant electromagnetic field | proved | `ChargedParticle.hamiltonian`, `ChargedParticle.isIntegral_hamiltonian`, `ChargedParticle.isIntegral_p_of_cyclic`, `ChargedParticle.isTrajectory_iff_lorentzForce`, `ChargedParticle.flowDomain_hamiltonianField`, `ChargedParticle.measurePreserving_hamiltonianFlow`, `ChargedParticle.stationary_graph_iff_hamilton`, `ChargedParticle.stationary_graph_of_isTrajectory`, `ChargedParticle.isIntegral_p_uniformScalar`, `ChargedParticle.isIntegral_p_landauPotential`. Scope: potentials that do not depend on the time and are smooth on all of space, a mass `m ≠ 0`, `d` space dimensions; the comparison with the action of space-time in three dimensions and for `m > 0`. The energy `√(m² + Σ πᵢ²) + e φ` is the Hamiltonian |
+| 20 | Motion in a constant uniform electric field | proved | `ConstantField.stationary_motion`, `ConstantField.deriv_eq_velocity_of_stationary`, `ConstantField.isSimple_electric`, `ConstantField.velocity_electric`, `ConstantField.motion_of_pos`, `ConstantField.motion_eq_hyperbola`, `ChargedParticle.canonical_kineticMomentum_uniformScalar`. Scope: the world line as a function of the proper time for every initial event and four-velocity, with `Ω = e E/m ≠ 0`. The curve `x(y)` in the time of an observer, a catenary, is not derived |
+| 21 | Motion in a constant uniform magnetic field | proved | `ConstantField.isSimple_magnetic`, `ConstantField.velocity_magnetic`, `ConstantField.motion_of_neg`, `ConstantField.intervalQuadratic_velocity`, `ChargedParticle.magneticTensor_landauPotential`, `ChargedParticle.isIntegral_p_landauPotential`, `ChargedParticle.canonical_kineticEnergy_hamiltonian`. Scope: the world line as a function of the proper time for every initial event and four-velocity, with `Ω = e B/m ≠ 0`: a helix. The kinetic energy is constant because the magnetic field does no work |
+| 22 | Motion in constant uniform electric and magnetic fields | proved | `ConstantField.velocity`, `ConstantField.motion`, `ConstantField.futureTimelike_velocity`, `ConstantField.stationary_motion`, `ConstantField.deriv_eq_velocity_of_stationary`, `ConstantField.generator_cube`, `ConstantField.velocity_of_pos`, `ConstantField.velocity_of_neg`, `ConstantField.velocity_of_zero`, `ConstantField.motion_of_zero`, `ConstantField.velocity_nullField`, `ConstantField.velocity_add`, `ConstantField.velocity_uniformField`. Scope: for every constant field the motion exists for all proper times, is unique and is stationary; closed forms for a field `α ∧ β` of two covectors, which is the case `E · B = 0`, in the hyperbolic, the circular and the null case, and for parallel fields. The reduction of a general field to parallel fields by a Lorentz transformation belongs to §25. The drift velocity in the time of an observer is not derived |
+| 23 | The electromagnetic field tensor | proved | `fieldTensor_apply`, `fieldTensor_component`, `twoForm_swap`, `electric_apply`, `magnetic_apply`, `observer_reconstruction`, `lorentzForce_component`, `ChargedParticle.fieldTensor_staticPotential`, `ChargedParticle.lorentzForce_staticPotential_succ`, `Curved.Field`, `Curved.excitation_flat`. Scope: the field `F = dA` of a potential on an open set of flat spacetime, its components, its electric and magnetic parts for an observer, and the force in three dimensions for static potentials. On a Lorentzian manifold the field is a two-form, and `Curved.excitation_flat` compares it with the flat one |
 | 24 | Lorentz transformation of the field | informal | Proved: `fieldTensor_lorentz`, `observer_reconstruction`, `electric_apply`, `magnetic_apply`. Missing: the transformed components of `E` and `B` under a boost (F5) |
 | 25 | Invariants of the field | informal | Proved: `scalarInvariant_observer`, `pseudoscalarInvariant_observer`, `scalarInvariant_lorentz`, `pseudoscalarInvariant_lorentz`. Missing: the normal forms, with a null field that is not zero (F5) |
 | 26 | The first pair of Maxwell's equations | informal | Proved: `bianchi_on`, `bianchi_components`, `Curved.Maxwell.homogeneous_covariant`. Missing: the equations for `E` and `B` in an inertial frame (E16, F7) |
@@ -128,7 +128,7 @@ completion.
 | 79 | Scattering of low-frequency waves | informal | Conditional target (E32, F23) |
 | 80 | Scattering of high-frequency waves | informal | Conditional target (E32, F23) |
 
-Count: 66 informal.
+Count: 6 proved, 60 informal.
 
 Closed with a stated remainder: none.
 
@@ -563,6 +563,16 @@ give it as it stands, for the reason stated in the
 relativistic Lagrangian is not an element of a free ring in the velocity. A
 field that depends on time is outside this target.
 
+*Status.* Proved in
+[`Electrodynamics/Hamiltonian.lean`](../ProjectAinos/Electrodynamics/Hamiltonian.lean)
+for `d` space dimensions, with the potentials as elements of the free ring of
+the positions. The comparison with `stationary_iff_lorentzForce` is
+`stationary_graph_iff_hamilton` in
+[`Electrodynamics/StaticField.lean`](../ProjectAinos/Electrodynamics/StaticField.lean);
+it goes through the equation of the Lorentz force in three dimensions. The
+flow exists for all times and points
+(`ChargedParticle.flowDomain_hamiltonianField`).
+
 For §22, specify constant `F` on all of Minkowski spacetime and `m > 0`.
 In proper time the velocity solves a constant-coefficient linear ODE with a
 Lorentz-skew generator. The shared `LinearODE.propagator` and
@@ -571,6 +581,12 @@ calculation. The target is to construct the position by integrating the
 velocity, prove preservation of future unit timelikeness, and compare the
 result with the existing electric hyperbola. This step can precede the
 spatial Legendre comparison.
+
+*Status.* Proved in
+[`Electrodynamics/ConstantField.lean`](../ProjectAinos/Electrodynamics/ConstantField.lean):
+the motion, its uniqueness, the closed forms for a field of two covectors and
+for parallel fields. `ConstantField.motion_eq_hyperbola` is the comparison
+with the hyperbola.
 
 **Target E10 (curved charged variation, C, B:INT).** Combine the existing
 intrinsic massive-particle variation with the first variation of the line
