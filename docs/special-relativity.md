@@ -52,6 +52,7 @@ Paths in this table are relative to `ProjectAinos/`.
 | 5 | `SmoothGeometry/DifferentialForm/{Flat,Exterior,Coordinates,Calculus,Naturality}` | Open-domain locality, d²=0, wedge normalization, graded Leibniz, pullback composition, d/pullback and wedge/pullback compatibility |
 | 6 | `SmoothGeometry/DifferentialForm/{Hodge,HodgeBasis}`, `SmoothGeometry/Minkowski/{Hodge,HodgeNaturality,HodgeFour,TwoForm}` | Wedge-normalized Hodge, mathlib comparison, square/sign/naturality, six coordinate signs, observer reconstruction |
 | 7 | `SmoothAlgebra/{RelEnergy,Poisson/LinearMomentum,Poisson/OrbitalCharge}`, `SpecialRelativity/{Hamiltonian,PoincareAlgebra,MassShellReduction}` | The energy `√(m² + Σ pᵢ²)` in a C∞-ring, the coordinate-time Hamiltonian of a free particle with its trajectories and its flow, the Poincaré algebra of the orbital charges and its family in `1/c`, the mass shell as a coisotropic ideal and the reduction of its future sheet |
+| 8 | `SmoothGeometry/Minkowski/ReverseCauchySchwarz`, `SpecialRelativity/{MaximalProperTime,FreeMotion,ObserverEnergy,SpatialLegendre,NewtonianExpansion}` | The reverse Cauchy–Schwarz inequality, the greatest proper time of the inertial clock, the stationary curves of the free action as inertial motions and the Hessian in the velocity, the energy measured by an observer, the Legendre transformation on the ball of velocities, the expansion in `1/c` |
 | Examples | `SpecialRelativity/{Examples,FormExamples}` | Nonzero boost and inverse, subluminality, clock rate, nonzero exact field and gauge identity |
 
 All shared modules are independent of `SpecialRelativity`. Every library
@@ -263,6 +264,82 @@ co-ordinates of [mechanics](mechanics.md) gives the reduced ring. The
 quotient ring is not compared with the shell as a manifold (SR-D5). The
 [notes](special-relativity-notes.md) SR03–SR06 record the decisions.
 
+## The motion of a free particle
+
+**The reverse Cauchy–Schwarz inequality.** For two vectors of the closed
+future cone, `sqrt_mul_sqrt_le_pair` is `√Q(v) √Q(w) ≤ pair v w` and
+`sqrt_add_sqrt_le` is the reverse triangle inequality
+`√Q(v) + √Q(w) ≤ √Q(v + w)`. For an observer `u`,
+`Observer.intervalQuadratic_eq` is `Q(w) = (u.clock w)² − restForm(w⊥, w⊥)`,
+`Observer.sqrt_le_clock` is `√Q(w) ≤ u.clock w`, and
+`Observer.eq_smul_of_clock_eq_sqrt` is the case of equality.
+
+**The inertial clock (SR-K4, §3).** Let `γ` be `C¹` near every point of
+`[a, b]` with a future timelike velocity there, and `a < b`.
+`TimelikeSegment.futureTimelike_displacement` shows that `γ b − γ a` is future
+timelike, and `TimelikeSegment.properTime_le_properSpeed` is
+`τ[γ] ≤ √Q(γ b − γ a)`; the right-hand side is the proper time of the inertial
+motion between the two events (`properTime_inertialSegment`).
+`TimelikeSegment.properTime_eq_properSpeed_iff` shows that equality holds if
+and only if the unit four-velocity is that of the displacement at every time
+of `[a, b]`. `sum_properTime_le_properSpeed` is the inequality for finitely
+many such pieces with matching endpoints. The proof integrates
+`√Q(γ̇) ≤ u.clock γ̇` for the observer `u` in the direction of the displacement.
+
+**The stationary curves (SR-D2, §8).** For a `C²` curve in three space
+dimensions with a timelike velocity on `[a, b]` and `a < b`:
+
+| Statement | Declaration |
+| --- | --- |
+| The action is stationary iff the momentum covector `m U♭` has zero derivative on `(a, b)` | `free_stationary_iff_deriv_kineticMomentum` |
+| For `m ≠ 0`, iff the unit four-velocity is constant on `[a, b]` | `free_stationary_iff_fourVelocity_const` |
+| For `m ≠ 0`, iff `γ t = γ a + τ(t) • U` on `[a, b]`, with `τ(t)` the proper time from `a` | `free_stationary_iff_inertial` |
+| The acceleration is orthogonal to the velocity | `pair_fourVelocity_deriv` |
+| The Hessian in the velocity is `w ↦ −(m/√Q(v)) (w♭ − (⟨v, w⟩/Q(v)) v♭)` | `hasFDerivAt_kineticMomentum`, `velocityHessian_apply` |
+| For `m ≠ 0` its kernel is the line of the velocity and its rank is three | `ker_velocityHessian`, `finrank_range_velocityHessian` |
+
+The parameter of a stationary curve is arbitrary: the curve is inertial in
+its proper time. The degenerate Hessian is the infinitesimal form of this
+freedom, and it is the reason why the Legendre transformation is taken in the
+time of an observer.
+
+**The energy measured by an observer (SR-D3).** For an observer `u` and a
+momentum vector `p`, in any number of space dimensions:
+`observerEnergy u p = pair u p`, `observerMomentum u p = p − E u` in the rest
+space of `u`, and `observerVelocity u p = p⊥/E`. `observerEnergy_pos` and
+`properSpeed_le_observerEnergy` show `E ≥ √Q(p) > 0` for a future timelike
+`p`; `observerEnergy_sq` is `E² = Q(p) + |p⊥|²`, with the length of the rest
+space; `restForm_observerVelocity_lt_one` is `|v| < 1`;
+`observerEnergy_transform` is the invariance under a transformation of both
+the observer and the particle; and `observerEnergy_change` is
+`E' = γ E − ⟨γ w, p⊥⟩` for a second observer.
+
+**The Legendre transformation (SR-D4).** In `FreeParticle`,
+`lagrangian d m = −m √(1 − Σ vᵢ²)` on the ball `Σ vᵢ² < 1`, for every `d`.
+
+| Statement | Declarations in `FreeParticle` |
+| --- | --- |
+| `legendre m v = m γ v` and `velocityOfMomentum m p = p/√(m² + Σ pᵢ²)` are inverse to each other, for `m > 0` | `velocityOfMomentum_legendre`, `legendre_velocityOfMomentum` |
+| The energy `Σ pᵢ vᵢ − L` is `√(m² + Σ pᵢ²)` | `energy_eq_relEnergy` |
+| The momentum covector of the Lagrangian is `Σ (m γ vᵢ) dvᵢ` | `hasFDerivAt_lagrangian`, `momentum_lagrangian` |
+| The action is stationary iff the velocity is constant on `[a, b]`, for `m > 0` | `stationary_iff_deriv_const` |
+| A curve of the phase space is a trajectory of `√(m² + Σ pᵢ²)` iff its speed is less than one, its momentum is the Legendre transform of its velocity, and the momentum has zero derivative | `isTrajectory_iff_legendre` |
+| In three dimensions the Lagrangian of space-time on a graph `t ↦ (t, x(t))` is this Lagrangian, and the two actions are stationary together | `freeLagrangian_graph`, `free_stationary_graph_iff` |
+
+**The expansion in `1/c` (SR-K5).** In `Newtonian` the speed of light is a
+parameter: `energy m c v = m c²/√(1 − v²/c²)`, `lagrangian`, `momentum` and
+`clockRate`. For `Σ vᵢ² ≤ V²`, `c ≥ 2V` and `c > 0`:
+
+`|E − m c² − ½ m v²| ≤ |m| V⁴/(2c²)`, `|L + m c² − ½ m v²| ≤ |m| V⁴/(2c²)`,
+`|pᵢ − m vᵢ| ≤ |m| V³/c²`, `|√(1 − v²/c²) − (1 − v²/(2c²))| ≤ V⁴/(2c⁴)`
+
+(`abs_energy_sub_le`, `abs_lagrangian_sub_le`, `abs_momentum_sub_le`,
+`abs_clockRate_sub_le`). They follow from the exact identities for
+`s = √(1 − x)`, `sqrt_one_sub_bounds` and `inv_sqrt_one_sub_bounds`. These are
+estimates for functions of the velocity; the convergence of trajectories is
+not stated. The [notes](special-relativity-notes.md) SR07–SR09 record the
+decisions.
+
 ## Verification
 
 The required **Lean build** CI job builds with warnings as errors, checks root
@@ -276,6 +353,7 @@ lake env lean -DwarningAsError=true checks/SmoothGeometryAPI.lean
 lake env lean -DwarningAsError=true checks/SpecialRelativityAPI.lean
 lake env lean -DwarningAsError=true checks/RelativisticEnergyAPI.lean
 lake env lean -DwarningAsError=true checks/RelativisticHamiltonianAPI.lean
+lake env lean -DwarningAsError=true checks/RelativisticFreeMotionAPI.lean
 lake env lean -DwarningAsError=true checks/AxiomAudit.lean
 ```
 

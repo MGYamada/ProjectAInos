@@ -23,7 +23,7 @@ The proofs of the three field plans are tracked in
 [issue #135](https://github.com/MGYamada/ProjectAinos/issues/135). Each plan now has a
 ledger with one status for each section, a count line and the list of rows closed
 with a remainder, in the vocabulary of the mechanics ledger:
-[special relativity](cinfty-special-relativity.md#ledger) (2 of 14 rows proved),
+[special relativity](cinfty-special-relativity.md#ledger) (4 of 14 rows proved),
 [electrodynamics](cinfty-electrodynamics.md#ledger) (none of 66) and
 [general relativity](cinfty-general-relativity.md#ledger) (5 of 39). The baseline
 counts a row as proved only when its whole target is proved; a row with a proved
@@ -501,6 +501,30 @@ action, the Legendre transformation and the charges of a system of particles
 are not proved. [Guide](special-relativity.md#relativistic-particle-mechanics-the-algebraic-layer) ·
 [Notes](special-relativity-notes.md) ·
 [Ledger](cinfty-special-relativity.md#ledger)
+
+The second wave proves the motion of a free particle. On the closed future
+cone the pairing satisfies the reverse Cauchy–Schwarz inequality, and
+integrating it against the observer in the direction of the displacement
+gives `τ[γ] ≤ √Q(γ b − γ a)` for a future timelike `C¹` curve, with equality
+exactly when the unit four-velocity is constant, and the same inequality for
+finitely many pieces. The free action is stationary on a `C²` timelike curve
+if and only if the momentum covector is constant; for `m ≠ 0` this is the
+constancy of the unit four-velocity, and the curve is `γ a + τ(t) • U` in its
+proper time. The Hessian of the Lagrangian in the velocity has the line of the
+velocity as its kernel and rank three. For an observer the energy of a future
+timelike momentum is positive, `E² = Q(p) + |p⊥|²`, the velocity `p⊥/E` is
+shorter than one, and a second observer measures `γ E − ⟨γ w, p⊥⟩`. In the
+time of an observer the Lagrangian `−m √(1 − Σ vᵢ²)` on the ball of velocities
+has the Legendre transformation `v ↦ m γ v` with the inverse
+`p ↦ p/√(m² + Σ pᵢ²)` and the energy `√(m² + Σ pᵢ²)`; its stationary curves
+have a constant velocity, they correspond to the trajectories of the
+Hamiltonian, and in three dimensions the action of space-time is stationary on
+a graph exactly when this action is stationary on the curve. With the speed of
+light as a parameter, the energy, the Lagrangian, the momentum and the rate of
+a clock differ from their Newtonian values by at most `|m| V⁴/(2c²)`,
+`|m| V³/c²` and `V⁴/(2c⁴)` for speeds at most `V` and `c ≥ 2V`. The ledger rows
+of §3 and §8 are *proved* in their stated scopes (4 of 14).
+[Guide](special-relativity.md#the-motion-of-a-free-particle)
 
 ## Shared Variational Foundation
 

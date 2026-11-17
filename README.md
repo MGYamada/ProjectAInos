@@ -146,6 +146,11 @@ algebra of the orbital charges with its contraction to the Galilei algebra,
 and the reduction of the future sheet of the mass shell to the phase space of
 the initial data.
 [Guide](docs/special-relativity.md#relativistic-particle-mechanics-the-algebraic-layer)
+It also proves that the inertial clock measures the greatest proper time, that
+the stationary curves of the free action are the inertial motions, the energy
+and the momentum measured by an observer, the Legendre transformation on the
+ball of velocities, and the expansion in `1/c` with uniform remainders.
+[Guide](docs/special-relativity.md#the-motion-of-a-free-particle)
 
 Topic 6 follows the provisional Boltzmannian typicality plan in
 [issue #55](https://github.com/MGYamada/ProjectAinos/issues/55). Its guiding references are
