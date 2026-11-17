@@ -183,6 +183,11 @@ public import ProjectAInos.Mechanics.Rigid.RotationAction
 public import ProjectAInos.Mechanics.Rigid.Variation
 public import ProjectAInos.Mechanics.Routhian
 public import ProjectAInos.Mechanics.Rutherford
+public import ProjectAInos.Mechanics.Scattering.Asymptote
+public import ProjectAInos.Mechanics.Scattering.Coulomb
+public import ProjectAInos.Mechanics.Scattering.CrossSection
+public import ProjectAInos.Mechanics.Scattering.Deflection
+public import ProjectAInos.Mechanics.Scattering.RadialMotion
 public import ProjectAInos.Mechanics.Similarity
 public import ProjectAInos.Mechanics.SmoothLagrangian
 public import ProjectAInos.Mechanics.TimeFunction
