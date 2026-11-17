@@ -4,9 +4,11 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 module
 
+public import Mathlib.Analysis.Calculus.ContDiff.Deriv
 public import Mathlib.Analysis.Calculus.Deriv.MeanValue
 public import Mathlib.Analysis.Calculus.InverseFunctionTheorem.Deriv
 public import Mathlib.Analysis.Calculus.InverseFunctionTheorem.ContDiff
+public import Mathlib.MeasureTheory.Integral.IntervalIntegral.FundThmCalculus
 public import Mathlib.Topology.Order.IntermediateValue
 
 /-! # Regular parameter changes on intervals
@@ -70,5 +72,21 @@ theorem exists_positive_parameter_chart (f : ℝ → ℝ) {a b : ℝ}
   have hde : HasDerivAt e (deriv f (e.symm τ)) (e.symm τ) := (hd _ ht).hasDerivAt
   exact ⟨e.contDiffAt_symm_deriv (hp _ ht).ne' hτ hde
     (hf.contDiffAt (isOpen_Ioo.mem_nhds ht)), e.hasDerivAt_symm hτ (hp _ ht).ne' hde⟩
+
+/-- A primitive of a continuously differentiable function is twice continuously
+differentiable, with the function as its derivative. -/
+theorem contDiff_primitive {f : ℝ → ℝ} (hf : ContDiff ℝ 1 f) (c : ℝ) :
+    ContDiff ℝ 2 (fun x => ∫ y in c..x, f y) ∧
+      ∀ x, HasDerivAt (fun x => ∫ y in c..x, f y) (f x) x := by
+  have hd : ∀ x, HasDerivAt (fun x => ∫ y in c..x, f y) (f x) x := fun x =>
+    intervalIntegral.integral_hasDerivAt_right (hf.continuous.intervalIntegrable _ _)
+      (hf.continuous.stronglyMeasurableAtFilter _ _) hf.continuous.continuousAt
+  refine ⟨?_, hd⟩
+  have hderiv : deriv (fun x => ∫ y in c..x, f y) = f := funext fun x => (hd x).deriv
+  have h2 : ContDiff ℝ (1 + 1) (fun x => ∫ y in c..x, f y) :=
+    contDiff_succ_iff_deriv.mpr ⟨fun x => (hd x).differentiableAt, by simp, by
+      rw [hderiv]
+      exact hf⟩
+  rwa [one_add_one_eq_two] at h2
 
 end ProjectAInos.Variational

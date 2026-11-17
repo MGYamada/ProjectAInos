@@ -1518,6 +1518,116 @@ parameter, several branches, the laboratory system, potentials that are not
 smooth functions of `1/r` at infinity and the cross-section for small angles
 are not treated.
 
+## Maupertuis' principle and the Jacobi metric
+
+`Mechanics/Maupertuis` treats Landau–Lifshitz §44 for a Lagrangian
+`naturalLagrangian T U = T(q, q̇) − U(q)` on a normed space, at an energy `E` in
+the region `U < E`.
+
+- `jacobiLength T U E` is the Lagrangian `2 √((E − U) T)`. For
+  `T = g(q̇, q̇)/2` it is `√(2 (E − U) g(q̇, q̇))`, the length in the Jacobi
+  metric `2 (E − U) g`; its action is the abbreviated action (44.10).
+- `fderiv_jacobiLength_eq`: at a point with `T + U = E` and `U < E` the
+  derivative of `jacobiLength` in the position and the velocity is that of
+  `T − U`. `eulerLagrange_jacobiLength_eq`: along a curve of the energy `E`
+  the two Lagrangians have the same Euler–Lagrange expression.
+- `stationary_jacobiLength_iff`: Maupertuis' principle. For a twice
+  continuously differentiable curve of the energy `E` in the region `U < E`,
+  `Stationary a b (jacobiLength T U E) q` holds if and only if the
+  Euler–Lagrange expression of `T − U` vanishes on `(a, b)`. The variations are
+  all variations with fixed ends; they need not preserve the energy.
+- `action_jacobiLength`, `action_jacobiLength_eq_integral_momentum`: along a
+  curve of the energy `E` the abbreviated action is `∫ 2T dt`, which is
+  `∫ p q̇ dt` if `T` is homogeneous of degree two in the velocity
+  (`IsHomogeneousTwo`, with Euler's relation `IsHomogeneousTwo.fderiv_velocity`).
+
+`Mechanics/JacobiMetric`: `jacobiEnergy T U E = 2 (E − U) T` is half of the
+square of the velocity in the Jacobi metric, and a geodesic with an affine
+parameter is a curve that satisfies its Euler–Lagrange equation.
+
+- `eulerLagrange_comp`: for a Lagrangian that is positively homogeneous of
+  degree one in the velocity (`IsHomogeneousOne`), the Euler–Lagrange
+  expression of `γ ∘ σ` at `t` is `σ′(t)` times that of `γ` at `σ(t)`.
+  `isHomogeneousOne_jacobiLength`: the Jacobi length is such a Lagrangian.
+- `eulerLagrange_jacobiEnergy_eq`: along a curve of constant length `ℓ₀` the
+  Euler–Lagrange expression of `jacobiEnergy` is `ℓ₀` times that of
+  `jacobiLength`.
+- `eventually_jacobiLength_eq_one`, `eulerLagrange_eq_smul_jacobiEnergy`: if
+  `q = γ ∘ σ` near `t`, `q` has the energy `E` and `dσ/dt = 2 (E − U(q))`, then
+  `γ` has the unit velocity in the Jacobi metric near `σ(t)`, and the
+  Euler–Lagrange expression of `T − U` along `q` at `t` is `2 (E − U)` times
+  that of `jacobiEnergy` along `γ` at `σ(t)`. So `q` is a motion exactly when
+  `γ` is a geodesic.
+- `exists_jacobi_parameter`: for a curve of the energy `E` on an interval, `σ`
+  and `γ` exist. `exists_motion_of_jacobi_geodesic`: for a curve `γ` of unit
+  velocity in the region `U < E` there are a time `τ` with
+  `dτ/dx = 1/(2 (E − U))` (Landau–Lifshitz (44.12)) and a curve `q` of the
+  energy `E` with `q ∘ τ = γ`, and the same relation between the two
+  Euler–Lagrange expressions.
+- `kineticEnergy m` is `m |q̇|²/2` on a Euclidean space;
+  `stationary_jacobiLength_line`: a straight line makes the length stationary.
+
+The boundary `U = E`, the invariance of the integral under a change of the
+parameter, and the relation of `jacobiEnergy` with a Levi-Civita connection
+are not treated.
+
+## Separation of the variables on a box
+
+`Mechanics/Separation/Stackel` treats Landau–Lifshitz §48 with real functions.
+`Stackel.System ι` consists of a matrix `φ i j` of functions of the co-ordinate
+`qᵢ`, functions `g i > 0` and `u i` of `qᵢ`, functions `Ψ i` of all
+co-ordinates, an index `j₀` and open intervals `I i`, with
+`Σᵢ Ψᵢ(q) φᵢⱼ(qᵢ) = δ_{j j₀}` on the box `domain`. Its `hamiltonian` is
+`Σᵢ Ψᵢ(q) (gᵢ(qᵢ) pᵢ²/2 + uᵢ(qᵢ))`.
+
+- `radicand i x α = 2 (Σⱼ φᵢⱼ(x) αⱼ − uᵢ(x))/gᵢ(x)`,
+  `momentum ε i x α = εᵢ √Rᵢ`, and
+  `action ε c q α t = −α_{j₀} t + Σᵢ εᵢ ∫_{cᵢ}^{qᵢ} √Rᵢ(x, α) dx`.
+- `hasDerivAt_action_position`, `hasDerivAt_action_time`,
+  `hamiltonian_momentum`: `∂S/∂qᵢ = pᵢ`, `∂S/∂t = −α_{j₀}` and
+  `H(q, ∂S/∂q) = α_{j₀}`: the Hamilton–Jacobi equation. The last needs only
+  `εᵢ² = 1` and `Rᵢ ≥ 0`.
+- `hasDerivAt_action_param`: where the radicands are positive on the box,
+  `∂S/∂αⱼ = −δ_{j j₀} t + Σᵢ εᵢ Θᵢⱼ(qᵢ, α)` with
+  `angleIntegral c i j x α = ∫_{cᵢ}^{x} φᵢⱼ/(gᵢ √Rᵢ) dy`.
+- `det_mixed_ne_zero`: the matrix `εᵢ φᵢⱼ/(gᵢ √Rᵢ)` of the mixed second
+  derivatives is non-degenerate where the matrix `φ` is.
+- `eq_of_jacobi`: along a differentiable curve `Q` in the box on which
+  `−δ_{j j₀} t + Σᵢ εᵢ Θᵢⱼ(Qᵢ(t), α)` is constant for every `j`, and at a point
+  where `det φ ≠ 0`, `Q̇ᵢ = Ψᵢ gᵢ pᵢ`, which is `∂H/∂pᵢ`
+  (`hasDerivAt_hamiltonian_momentum`). `hasDerivAt_momentum_of_jacobi`: then
+  `ṗᵢ = −D` for the derivative `D` of the Hamiltonian along the line of the
+  co-ordinate `qᵢ`.
+- `restrict J`: the system on a smaller box. The radicands are positive only
+  between turning points, so the theorems are applied on such a box.
+
+`Mechanics/Separation/Coordinates`: `System.kinetic q v = Σᵢ vᵢ²/(2 Ψᵢ gᵢ)` and
+`System.potential q = Σᵢ Ψᵢ uᵢ`; `System.hamiltonian_eq_legendre`: the
+Hamiltonian is the Legendre transform of `kinetic − potential`.
+
+- `cylindrical_speed_sq`: for `x = ρ cos φ`, `y = ρ sin φ`,
+  `ẋ² + ẏ² = ρ̇² + ρ² φ̇²`. `spherical_kinetic`, `parabolic_kinetic`,
+  `elliptic_kinetic`: `ρ̇² + ż²` for `ρ = r sin θ`, `z = r cos θ`; for
+  `ρ = √(ξ η)`, `z = (ξ − η)/2`; and for `ρ = σ √((ξ² − 1)(1 − η²))`,
+  `z = σ ξ η` (Landau–Lifshitz (48.13), (48.18)).
+- `spherical`, `parabolic`, `elliptic`: the three systems on the boxes `r > 0`,
+  `0 < θ < π`; `ξ, η > 0`; `ξ > 1`, `−1 < η < 1`. `kinetic_spherical`,
+  `kinetic_parabolic`, `kinetic_elliptic`: their kinetic energies are `m/2`
+  times the squares of the velocity above. `hamiltonian_spherical`,
+  `hamiltonian_parabolic`, `hamiltonian_elliptic`: their Hamiltonians are
+  (48.8), (48.15) and (48.20), for the fields
+  `a(r) + b(θ)/r² + c(φ)/(r² sin² θ)`, `(a(ξ) + b(η))/(ξ + η) + c(φ)/(ξ η)`
+  and `(a(ξ) + b(η))/(ξ² − η²) + c(φ)/(σ² (ξ² − 1)(1 − η²))`.
+- `det_ne_zero_spherical`, `det_ne_zero_parabolic`, `det_ne_zero_elliptic`: the
+  matrices of Stäckel have the determinants `1`, `−(ξ + η)` and `−(ξ² − η²)`.
+- `radicand_pos_parabolic_free`: for a free particle in parabolic co-ordinates
+  the radicands are positive on the box `ξ, η > 1` for the parameters
+  `(1, 0, 1)`.
+
+The change of the branch at a turning point, the solution of the relations
+`∂S/∂αⱼ = βⱼ` for the co-ordinates, and the invariance of the equations of
+motion under the change of co-ordinates are not treated.
+
 ## The phase volume of the oscillator
 
 `Oscillations/PhaseVolume`: the flow matrix of the oscillator has determinant
@@ -1658,6 +1768,11 @@ function of `(q, α, t)`, and `parameter i` is `αᵢ`.
   `E = Σ αᵢ²/2m`, `β = (α₁² + α₂²)/2m` and `γ = α₂²/2m`.
   `isHamiltonJacobi_liouville_freeAction` is an instance of the form of
   Liouville. So the hypotheses of both theorems can be satisfied.
+
+These theorems are for coefficient functions that are smooth on all of `ℝ³`.
+The co-ordinate systems themselves, the action by quadratures and its
+completeness are in
+[Separation of the variables on a box](#separation-of-the-variables-on-a-box).
 
 `Poisson/ActionFunction` gives the relation `dS = p dq − H dt` of
 Landau–Lifshitz §43 along curves: for a solution `S` of the Hamilton–Jacobi
@@ -2201,6 +2316,10 @@ semi-major axis is not computed.
 | [Scattering/CrossSection](../ProjectAInos/Mechanics/Scattering/CrossSection.lean) | `impactMeasure`, `solidAngle`, `crossSection`, `crossSection_apply`, `Coulomb.impact`, `Coulomb.deflection_impact`, `Coulomb.impact_deflection`, `Coulomb.crossSection_coulomb`, `Coulomb.abs_deflection`, `Coulomb.crossSection_coulomb_abs` |
 | [Scattering/SmallAngle](../ProjectAInos/Mechanics/Scattering/SmallAngle.lean) | `radicand`, `ratio`, `radicand_eq`, `integral_ratio_eq`, `IsClosest`, `isClosest_zero`, `IsClosest.radicand_pos`, `IsClosest.unique`, `speedSq`, `factor`, `speedSq_eq`, `exists_isFactor`, `integral_Ioi_eq_integral_sin`, `integrableOn_Ioi_iff_integrableOn_sin`, `angleKernel`, `integral_angleDensity`, `deflectionAngle_eq`, `tendsto_angle_atTop`, `hasDerivAt_speedSq`, `tendsto_radialVelocity_atTop`, `hasDerivAt_velocity`, `integral_sin_mul_deriv_eq` |
 | [Scattering/SmallAngleExpansion](../ProjectAInos/Mechanics/Scattering/SmallAngleExpansion.lean) | `familyRadicand`, `IsTurning`, `IsTurning.eq_one`, `isTurning_zero`, `exists_isTurning`, `contDiffOn_ratio_family`, `kernel`, `halfAngle`, `kernelDomain`, `contDiffOn_kernel`, `contDiffAt_halfAngle`, `hasDerivAt_halfAngle`, `IsTurning.exists_abs_sub_le`, `exists_abs_angle_sub_le`, `exists_abs_deflectionAngle_sub_le`, `exists_abs_deflectionAngle_sub_le_of_contDiff`, `speedSq_id`, `exists_abs_coulomb_deflection_sub_le`, `potentialSpeedSq`, `scaledPotential`, `speedSq_scaledPotential`, `exists_abs_deflectionAngle_potential_sub_le` |
+| [Maupertuis](../ProjectAInos/Mechanics/Maupertuis.lean) | `naturalLagrangian`, `jacobiLength`, `jacobiEnergy`, `hasFDerivAt_jacobiLength`, `fderiv_jacobiLength_eq`, `jacobiLength_eq_two_mul`, `eulerLagrange_jacobiLength_eq`, `action_jacobiLength`, `stationary_jacobiLength_iff`, `IsHomogeneousTwo`, `IsHomogeneousTwo.fderiv_velocity`, `action_jacobiLength_eq_integral_momentum` |
+| [JacobiMetric](../ProjectAInos/Mechanics/JacobiMetric.lean) | `IsHomogeneousOne`, `IsHomogeneousOne.fderiv_smul`, `eulerLagrange_congr`, `eulerLagrange_comp`, `isHomogeneousOne_jacobiLength`, `fderiv_jacobiEnergy_eq`, `eulerLagrange_jacobiEnergy_eq`, `eventually_jacobiLength_eq_one`, `eulerLagrange_eq_smul_jacobiEnergy`, `differentiableAt_momentum_jacobiLength`, `exists_jacobi_parameter`, `exists_motion_of_jacobi_geodesic`, `kineticEnergy`, `eulerLagrange_line`, `stationary_jacobiLength_line` |
+| [Separation/Stackel](../ProjectAInos/Mechanics/Separation/Stackel.lean) | `System`, `System.domain`, `System.hamiltonian`, `System.radicand`, `System.momentum`, `System.partialAction`, `System.angleIntegral`, `System.action`, `System.restrict`, `System.separated_equation`, `System.hamiltonian_momentum`, `System.hasDerivAt_partialAction`, `System.hasDerivAt_angleIntegral`, `System.hasDerivAt_partialAction_param`, `System.hasDerivAt_action_position`, `System.hasDerivAt_action_time`, `System.hasDerivAt_action_param`, `System.det_mixed_ne_zero`, `System.hasDerivAt_hamiltonian_momentum`, `System.eq_of_jacobi`, `System.hasDerivAt_momentum_of_jacobi` |
+| [Separation/Coordinates](../ProjectAInos/Mechanics/Separation/Coordinates.lean) | `System.kinetic`, `System.potential`, `System.hamiltonian_eq_legendre`, `cylindrical_speed_sq`, `spherical_kinetic`, `parabolic_kinetic`, `elliptic_kinetic`, `spherical`, `hamiltonian_spherical`, `kinetic_spherical`, `det_spherical`, `parabolic`, `hamiltonian_parabolic`, `kinetic_parabolic`, `det_parabolic`, `elliptic`, `hamiltonian_elliptic`, `kinetic_elliptic`, `det_elliptic`, `det_ne_zero_spherical`, `det_ne_zero_parabolic`, `det_ne_zero_elliptic`, `radicand_pos_parabolic_free` |
 | [Oscillations/PhaseVolume](../ProjectAInos/Mechanics/Oscillations/PhaseVolume.lean) | `Oscillator.map_flowMatrix_volume`, `Oscillator.measurePreserving_flowMatrix` |
 | [Poisson/Liouville](../ProjectAInos/Mechanics/Poisson/Liouville.lean) | `divergence`, `divergence_eq`, `divergence_hamiltonian`, `divergence_dissipativeField`, `Oscillator.divergence_dissipativeField` |
 | [Poisson/HamiltonianField](../ProjectAInos/Mechanics/Poisson/HamiltonianField.lean) | `realCurve`, `lift_apply_const`, `isIntegralCurve_iff_hasDerivAt`, `isTrajectory_iff_hasDerivAt`, `traceCLM_fderiv_realField`, `hamiltonianField`, `contDiff_hamiltonianField`, `isTrajectory_canonical_iff_hasDerivAt`, `traceCLM_fderiv_hamiltonianField`, `volume_image_hamiltonianFlow`, `measurePreserving_hamiltonianFlow`, `IsTrajectory.flow_eq`, `exists_isTrajectory` |

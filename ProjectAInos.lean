@@ -88,6 +88,7 @@ public import ProjectAInos.Mechanics.EulerLagrange
 public import ProjectAInos.Mechanics.Examples
 public import ProjectAInos.Mechanics.FirstVariation
 public import ProjectAInos.Mechanics.Hyperregular
+public import ProjectAInos.Mechanics.JacobiMetric
 public import ProjectAInos.Mechanics.Jet.Analytic
 public import ProjectAInos.Mechanics.Jet.Basic
 public import ProjectAInos.Mechanics.Jet.Conservation
@@ -101,6 +102,7 @@ public import ProjectAInos.Mechanics.Jet.Prolongation
 public import ProjectAInos.Mechanics.Jet.Standard
 public import ProjectAInos.Mechanics.KnifeEdge
 public import ProjectAInos.Mechanics.Legendre
+public import ProjectAInos.Mechanics.Maupertuis
 public import ProjectAInos.Mechanics.OneDimension.Abel
 public import ProjectAInos.Mechanics.OneDimension.ActionAngle
 public import ProjectAInos.Mechanics.OneDimension.AdiabaticInvariant
@@ -190,6 +192,8 @@ public import ProjectAInos.Mechanics.Scattering.Deflection
 public import ProjectAInos.Mechanics.Scattering.RadialMotion
 public import ProjectAInos.Mechanics.Scattering.SmallAngle
 public import ProjectAInos.Mechanics.Scattering.SmallAngleExpansion
+public import ProjectAInos.Mechanics.Separation.Coordinates
+public import ProjectAInos.Mechanics.Separation.Stackel
 public import ProjectAInos.Mechanics.Similarity
 public import ProjectAInos.Mechanics.SmoothLagrangian
 public import ProjectAInos.Mechanics.TimeFunction
