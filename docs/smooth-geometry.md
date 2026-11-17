@@ -952,6 +952,27 @@ times `s ≤ t`, `‖A(r)‖ ≤ g`.
   proof differentiates both sides in `t` and uses `tr (XY) = tr (YX)`; no
   double integral is exchanged.
 
+`ODE.PropagatorBound`: `norm_le_mul_exp_integral_of_norm_deriv_le`, Gronwall's
+inequality with a continuous coefficient, `‖f(t)‖ ≤ ‖f(s)‖ exp ∫ₛᵗ a` if
+`‖f′‖ ≤ a ‖f‖`; `norm_propagator_apply_le_exp_integral`,
+`‖Φ(t, s) y‖ ≤ ‖y‖ exp ∫ₛᵗ ‖A‖`, a bound that does not depend on the length of
+the interval when `‖A‖` is integrable; `propagator_apply_comm`, a continuous
+linear map that commutes with the coefficient commutes with the propagator.
+
+`ODE.PropagatorDeformation` treats a coefficient `A(p, s)` that is smooth in a
+parameter `p` and the time `s`, with a continuous linear map `J` that commutes
+with it and `∂A/∂p = c(p) J ∂A/∂s`. This is the Cauchy–Riemann equation of
+`A(p, s) = a(s + i η(p))` for a holomorphic `a`, with `J` the multiplication by
+`i` and `c = η′`.
+
+- `hasDerivAt_propagator_apply_param`:
+  `∂/∂p Φ_p(s₁, s₀) y₀ = c(p) J (A(p, s₁) Φ_p(s₁, s₀) y₀ − Φ_p(s₁, s₀) A(p, s₀) y₀)`.
+  The difference of the two sides solves the equation in `s₁` and vanishes at
+  `s₁ = s₀`; the equation of `∂Φ/∂p` is the symmetry of the second derivative.
+- `norm_propagator_apply_sub_le_of_deformation`: the propagators for two
+  parameters differ by at most `C K (M₁ + M₀) ‖y₀‖ (p₁ − p₀)`, for bounds `C` of
+  `c`, `K` of the propagators and `M₀`, `M₁` of the coefficient at the two ends.
+
 `ODE.PropagatorDet` gives the determinant of the propagator on a
 finite-dimensional space.
 

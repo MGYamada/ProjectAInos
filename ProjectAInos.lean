@@ -116,7 +116,13 @@ public import ProjectAInos.Mechanics.OneDimension.Well
 public import ProjectAInos.Mechanics.OneDimension.WellFamily
 public import ProjectAInos.Mechanics.OpenDomain
 public import ProjectAInos.Mechanics.Oscillations.Adiabatic
+public import ProjectAInos.Mechanics.Oscillations.AdiabaticAccuracy
+public import ProjectAInos.Mechanics.Oscillations.AdiabaticAccuracyExample
+public import ProjectAInos.Mechanics.Oscillations.AdiabaticExponential
 public import ProjectAInos.Mechanics.Oscillations.AdiabaticOscillator
+public import ProjectAInos.Mechanics.Oscillations.AmplitudeDeformation
+public import ProjectAInos.Mechanics.Oscillations.AmplitudeReal
+public import ProjectAInos.Mechanics.Oscillations.AmplitudeSystem
 public import ProjectAInos.Mechanics.Oscillations.AnharmonicNormalForm
 public import ProjectAInos.Mechanics.Oscillations.Damped
 public import ProjectAInos.Mechanics.Oscillations.Dissipation
@@ -417,6 +423,8 @@ public import ProjectAInos.SmoothGeometry.ODE.LocalFlow
 public import ProjectAInos.SmoothGeometry.ODE.PeriodFamily
 public import ProjectAInos.SmoothGeometry.ODE.PeriodLattice
 public import ProjectAInos.SmoothGeometry.ODE.Propagator
+public import ProjectAInos.SmoothGeometry.ODE.PropagatorBound
+public import ProjectAInos.SmoothGeometry.ODE.PropagatorDeformation
 public import ProjectAInos.SmoothGeometry.ODE.PropagatorDet
 public import ProjectAInos.SmoothGeometry.ODE.PropagatorExpansion
 public import ProjectAInos.SmoothGeometry.ODE.Radial
