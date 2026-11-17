@@ -305,4 +305,14 @@ example {F : Field} {D : ChargedDust} {x : Spacetime}
       ∑ μ : Fin 4, partialAt (D.matterStress μ ν) μ x = 0 :=
   total_stress_conserved hF hμ hU hcont hmotion hgB hfar hgE hamp ν
 
+example (c : ℝ) (μ : Fin 4) (x : Spacetime) :
+    partialAt (fun _ => c) μ x = 0 :=
+  partialAt_const c μ x
+
+example (μ₀ : ℝ) (U₀ : Spacetime) (F₀ : TwoForm)
+    (x : Spacetime) (ν : Fin 4) :
+    ∑ μ : Fin 4, partialAt (raisedStress (fun _ => F₀) μ ν) μ x +
+      ∑ μ : Fin 4, partialAt ((ChargedDust.uniform μ₀ U₀).matterStress μ ν) μ x = 0 :=
+  total_stress_conserved_uniform μ₀ U₀ F₀ x ν
+
 end ProjectAinos.Electrodynamics

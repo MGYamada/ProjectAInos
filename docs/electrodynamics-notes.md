@@ -104,4 +104,4 @@ These notes record mathematical distinctions and interface decisions in `Project
 
 **Interface decision.** `ChargedDust` is a structure of three functions with no constraint; the normalization `g(U, U) = −1` is not needed for the identity and is not assumed. The equations of the dust and of the field are hypotheses at a point. A fluid with a pressure, and the virial of §34, are not treated; the row of §34 names the trace of the field as its proved part.
 
-**Proof status.** `ChargedDust.divergence_matterStress`, `lorentzForce_zero_eq`, `lorentzForce_succ_eq` and `total_stress_conserved` are proved. [Charged dust](../ProjectAinos/Electrodynamics/ChargedDust.lean)
+**Proof status.** `ChargedDust.divergence_matterStress`, `lorentzForce_zero_eq`, `lorentzForce_succ_eq` and `total_stress_conserved` are proved. `total_stress_conserved_uniform` is an instance: neutral dust that moves uniformly in any constant field satisfies all the hypotheses. [Charged dust](../ProjectAinos/Electrodynamics/ChargedDust.lean)

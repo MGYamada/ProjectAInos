@@ -434,7 +434,8 @@ stress `μ U^μ U^ν`. If the mass is conserved, the divergence of the stress is
 `μ U^λ ∂_λ U^ν` (`ChargedDust.divergence_matterStress`). If the dust moves by
 the force `ρₑ F♯ U` of `lorentzForce` and the field satisfies the equations of
 Maxwell with its current, the total stress is conserved
-(`total_stress_conserved`). The [notes](electrodynamics-notes.md) ED12–ED13
+(`total_stress_conserved`); neutral dust that moves uniformly in a constant
+field is an instance (`total_stress_conserved_uniform`). The [notes](electrodynamics-notes.md) ED12–ED13
 record the decisions.
 
 ## Proof and API map

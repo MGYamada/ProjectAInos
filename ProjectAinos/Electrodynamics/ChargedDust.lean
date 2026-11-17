@@ -23,6 +23,8 @@ four-velocity `U` (Landau–Lifshitz, *The Classical Theory of Fields*, §35). I
 * `total_stress_conserved`: if the dust moves by the Lorentz force,
   `μ U^λ ∂_λ U = ρₑ F♯ U`, and the field satisfies the equations of Maxwell with the current
   of the dust, then `∂_μ T_EM^{μν} + ∂_μ T_m^{μν} = 0` for every `ν`.
+* `total_stress_conserved_uniform`: neutral dust that moves uniformly in a constant field is
+  an instance.
 -/
 
 @[expose] public section
@@ -137,5 +139,41 @@ theorem total_stress_conserved {F : Field} {D : ChargedDust} {x : Spacetime}
       rw [h3]
       simp only [forceDensity, hk, electricField, magneticField, Matrix.cons_val]
       ring
+
+/-! ### An instance -/
+
+theorem partialAt_const (c : ℝ) (μ : Fin 4) (x : Spacetime) :
+    partialAt (fun _ => c) μ x = 0 := by
+  rw [partialAt, fderiv_const_apply]
+  rfl
+
+/-- Neutral dust of the constant density `μ₀` that moves with the constant four-velocity
+`U₀`. -/
+def ChargedDust.uniform (μ₀ : ℝ) (U₀ : Spacetime) : ChargedDust where
+  massDensity := fun _ => μ₀
+  chargeDensity := fun _ => 0
+  velocity := fun _ => U₀
+
+/-- An instance of the conservation of the total stress: neutral dust that moves uniformly in a
+constant field satisfies all the hypotheses of `total_stress_conserved`. -/
+theorem total_stress_conserved_uniform (μ₀ : ℝ) (U₀ : Spacetime) (F₀ : TwoForm)
+    (x : Spacetime) (ν : Fin 4) :
+    ∑ μ : Fin 4, partialAt (raisedStress (fun _ => F₀) μ ν) μ x +
+      ∑ μ : Fin 4, partialAt ((ChargedDust.uniform μ₀ U₀).matterStress μ ν) μ x = 0 := by
+  have hE : ∀ i, electricField (fun _ => F₀) i = fun _ => electricVector F₀ i :=
+    fun i => rfl
+  have hB : ∀ i, magneticField (fun _ => F₀) i = fun _ => magneticVector F₀ i :=
+    fun i => rfl
+  have hk : ∀ μ, (ChargedDust.uniform μ₀ U₀).current x μ = 0 := fun μ => by
+    simp [ChargedDust.current, ChargedDust.uniform]
+  refine total_stress_conserved (differentiableAt_const _)
+    (fun _ => differentiableAt_const (μ₀ * U₀ _)) (fun _ => differentiableAt_const (U₀ _)) ?_
+    (fun ν => ?_) ?_ (fun i => ?_) ?_ (fun i => ?_) ν
+  · simp [ChargedDust.uniform, partialAt_const]
+  · simp [ChargedDust.convective, ChargedDust.uniform, partialAt_const]
+  · simp [divergence3, hB, partialAt_const]
+  · fin_cases i <;> simp [curl, hE, hB, partialAt_const]
+  · simp [divergence3, hE, partialAt_const, hk]
+  · fin_cases i <;> simp [curl, hE, hB, partialAt_const, hk]
 
 end ProjectAinos.Electrodynamics
