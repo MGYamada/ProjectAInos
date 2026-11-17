@@ -161,6 +161,11 @@ The future mass shell is a graph over the space momenta on which the Lorentz
 group acts smoothly, and the action with an auxiliary field describes the
 massive and the massless particle together.
 [Guide](docs/special-relativity.md#the-mass-shell-and-the-massless-particle)
+The measure `dᵈπ/E` of the shell is invariant under the Lorentz group, the
+number of particles through a hypersurface is invariant, and for a system of
+particles the orbital moment is conserved and the centre of energy moves
+uniformly.
+[Guide](docs/special-relativity.md#measures-and-charges)
 
 Topic 6 follows the provisional Boltzmannian typicality plan in
 [issue #55](https://github.com/MGYamada/ProjectAinos/issues/55). Its guiding references are

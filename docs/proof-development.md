@@ -23,7 +23,7 @@ The proofs of the three field plans are tracked in
 [issue #135](https://github.com/MGYamada/ProjectAinos/issues/135). Each plan now has a
 ledger with one status for each section, a count line and the list of rows closed
 with a remainder, in the vocabulary of the mechanics ledger:
-[special relativity](cinfty-special-relativity.md#ledger) (10 of 14 rows proved),
+[special relativity](cinfty-special-relativity.md#ledger) (12 of 14 rows proved),
 [electrodynamics](cinfty-electrodynamics.md#ledger) (none of 66) and
 [general relativity](cinfty-general-relativity.md#ledger) (5 of 39). The baseline
 counts a row as proved only when its whole target is proved; a row with a proved
@@ -561,6 +561,28 @@ the action does not depend on the parameter. The ledger rows of §7 and §9 are
 *proved* in their stated scopes (10 of 14); §§10, 12 and 14 belong to the next
 wave and §6 to the comparison of cotangent modules.
 [Guide](special-relativity.md#the-mass-shell-and-the-massless-particle)
+
+The fourth wave proves the measures and the charges. In the chart of the shell
+the measure `dᵈπ/E` is invariant under the orthochronous Lorentz group for
+every mass: a rotation acts by a linear map of determinant `±1` that preserves
+the energy, a boost has the Jacobian `E′/E` as the determinant of the identity
+plus a map of rank one, and the formula for the change of variables applies.
+The number current `∫ f p dᵈπ/E` of a distribution is a vector, the number of
+particles through a hypersurface, given by a surface measure and a field of
+normals, does not change when the measure, the normals and the distribution are
+transformed together, and through a hyperplane of the co-ordinates it is
+`∫∫ f dᵈπ dᵈx`. The orbital
+moment `x ∧ p` is the charge that Noether's theorem assigns to the Lorentz
+transformations; for a system of particles the total moment is unchanged by
+free motion and by collisions in one event, a shift of the origin adds
+`c ∧ P`, and the centre of energy moves with the velocity `P/E`. The flux
+factor of two particles is a Lorentz scalar with `F² = λ(s, m₁², m₂²)/4`, and a
+cross-section `(1/4F) ∫ W dν` is covariant when the measure of the final
+states and the weight are; the measure on the final states with a conserved
+momentum is not constructed. The ledger rows of §10 and §14 are *proved*, and
+§12 is *proved modulo interface* and closed with this remainder (12 of 14
+proved); §6 remains for the comparison of cotangent modules.
+[Guide](special-relativity.md#measures-and-charges)
 
 ## Shared Variational Foundation
 

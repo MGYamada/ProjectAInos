@@ -55,6 +55,7 @@ Paths in this table are relative to `ProjectAinos/`.
 | 8 | `SmoothGeometry/Minkowski/ReverseCauchySchwarz`, `SpecialRelativity/{MaximalProperTime,FreeMotion,ObserverEnergy,SpatialLegendre,NewtonianExpansion}` | The reverse Cauchy–Schwarz inequality, the greatest proper time of the inertial clock, the stationary curves of the free action as inertial motions and the Hessian in the velocity, the energy measured by an observer, the Legendre transformation on the ball of velocities, the expansion in `1/c` |
 | 9 | `SpecialRelativity/{Causality,Factorization,InvariantMass,Decay,ElasticScattering}` | Signals with a finite speed, the factorization of a Lorentz transformation into a boost and a rotation, the invariant mass and the frame of the centre of momentum, the decay into two particles, the invariants of an elastic collision |
 | 10 | `SpecialRelativity/{FutureShell,Einbein}` | The future mass shell as a graph over the space momenta with the action of the Lorentz group, and the action with an auxiliary field for every mass, the mass zero included |
+| 11 | `SpecialRelativity/{ShellMeasure,NumberFlux,OrbitalCharges,CrossSection}` | The invariant measure of the mass shell, the number current and the number of particles through a hypersurface, the momentum, the orbital moment and the centre of energy of a system, the invariant flux factor and the covariance of a cross-section |
 | Examples | `SpecialRelativity/{Examples,FormExamples}` | Nonzero boost and inverse, subluminality, clock rate, nonzero exact field and gauge identity |
 
 All shared modules are independent of `SpecialRelativity`. Every library
@@ -441,6 +442,57 @@ The massless particle is described without the proper length of a null
 vector: the unit four-velocity is not used for `m = 0`. The
 [notes](special-relativity-notes.md) SR13 and SR14 record the decisions.
 
+## Measures and charges
+
+**The invariant measure of the shell (SR-M1, §10).** In the chart of the
+future shell, `FutureShell.measure d m` is the measure `dᵈπ/E` on the domain
+of the space momenta. `map_action_measure` shows that every orthochronous
+Lorentz transformation preserves it, for every mass; `integral_comp_action` is
+the statement for integrals. The proof factors the transformation into a
+rotation after a boost. A rotation acts by a linear map with the determinant
+`±1` that preserves the energy (`map_action_measure_rotation`). A boost acts
+by `π ↦ π + (γ²/(1 + γ) ⟨β, π⟩ − γ E) β`, whose derivative is the identity plus
+a map of rank one with the determinant `E′/E` (`det_boostDeriv`), and the
+formula for the change of variables gives the invariance
+(`map_action_measure_boost`).
+
+**The number of particles (SR-M2, §10).** For a distribution `f` of the space
+momenta, `numberCurrent m f = ∫ f p dᵈπ/E` is a vector
+(`numberCurrent_transform`), and `numberDensity m u f` is its component along
+the observer `u`: it is unchanged when the observer and the distribution are
+transformed together, and in the frame of the co-ordinates it is `∫ f dᵈπ`
+(`time_numberCurrent`). For a distribution that depends on the event,
+`numberFlux m σ n f = ∫ ⟨n(x), N(x)⟩ dσ(x)` is the number of particles through
+a hypersurface with the surface measure `σ` and the field `n` of its normals;
+it is unchanged when the three are transformed together
+(`numberFlux_transform`), and through the hyperplane `x⁰ = τ`, with the constant
+normal, it is `∫∫ f dᵈπ dᵈx` (`numberFlux_hyperplane`). The measure and the
+normals are given data: they are constructed for the hyperplanes of the
+co-ordinates only.
+
+**The charges of a system (SR-C5, §14).** `orbitalMoment x p α β` is
+`α(x) β(p) − α(p) β(x)`, the moment `x ∧ p` as a function of two covectors.
+
+| Statement | Declaration |
+| --- | --- |
+| The moment is unchanged along the line of the particle, and a shift of the event by `c` adds `c ∧ p` | `orbitalMoment_add_smul`, `orbitalMoment_add_left` |
+| The momentum covector applied to the infinitesimal Lorentz transformation of `α`, `β` is the moment | `flat_lorentzGenerator`, `kineticMomentum_lorentzGenerator` |
+| The moment is constant along a stationary curve of the free action | `orbitalMoment_eq_of_stationary` |
+| The total moment of a system is unchanged by free motion and is a tensor; a shift adds `c ∧ P` | `totalMoment_freeMotion`, `totalMoment_lorentz`, `totalMoment_add_const` |
+| For particles at one event the moment is that of the total momentum | `sum_orbitalMoment_same_event` |
+| The centre of energy moves by `(t′ − t) P/E` | `centreOfEnergy_sub`, `centreOfEnergy_freeMotion` |
+
+**The flux and the cross-section (SR-C4, §12).**
+`fluxFactor p₁ p₂ = √(⟨p₁, p₂⟩² − Q(p₁) Q(p₂))` is a Lorentz scalar, its square
+is `λ(s, m₁², m₂²)/4`, and it is `m₂ |𝐩₁|` when the second particle is at rest
+(`fluxFactor_lorentz`, `fluxFactor_sq`, `fluxFactor_target_at_rest`). The
+product of two shell measures is invariant (`measurePreserving_action_prod`).
+`crossSection ν W F S = (1/4F) ∫_S W dν` is unchanged by a transformation that
+preserves the measure `ν` of the final states and the weight `W`
+(`crossSection_covariant`). The measure on the final states with a conserved
+momentum is not constructed. The [notes](special-relativity-notes.md)
+SR15–SR17 record the decisions.
+
 ## Verification
 
 The required **Lean build** CI job builds with warnings as errors, checks root
@@ -457,6 +509,7 @@ lake env lean -DwarningAsError=true checks/RelativisticHamiltonianAPI.lean
 lake env lean -DwarningAsError=true checks/RelativisticFreeMotionAPI.lean
 lake env lean -DwarningAsError=true checks/RelativisticCollisionsAPI.lean
 lake env lean -DwarningAsError=true checks/RelativisticShellAPI.lean
+lake env lean -DwarningAsError=true checks/RelativisticMeasureAPI.lean
 lake env lean -DwarningAsError=true checks/AxiomAudit.lean
 ```
 
