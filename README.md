@@ -10,7 +10,7 @@ Its planned proof library will make each theory's assumptions explicit, derive i
 
 ## Table of Contents
 
-1. **Thermodynamics**
+1. **Thermodynamics (Lieb-Yngvason 2.0)**
    1. **Algebraic Foundations**
       1. Ordered semimodules and the stability axiom (A6)
       2. Cancellation of spectators
@@ -34,7 +34,7 @@ Its planned proof library will make each theory's assumptions explicit, derive i
       1. The monatomic ideal-gas entropy `S(U, V, N)` on equilibrium states
       2. Extensivity, concavity, and entropy additivity for separate subsystems
       3. Entropy level sets and comparison at fixed particle number
-2. **Mechanics**
+2. **Mechanics (Landau-Lifshitz 2.0)**
    1. **Configuration Spaces and Infinitesimal Geometry**
       1. Configuration spaces over the shared smooth-geometry foundation
       2. Tangent and cotangent geometry for mechanical systems
@@ -52,7 +52,7 @@ Its planned proof library will make each theory's assumptions explicit, derive i
       2. Oscillations, resonance, rigid bodies, and rotating frames
       3. Averaging and mechanical adiabatic invariants
       4. Dissipation and nonholonomic constraints
-3. **Special Relativity**
+3. **Special Relativity (Landau-Lifshitz 2.0)**
    1. **Minkowski Geometry and Relativistic Kinematics**
       1. Explicit Lorentz signatures, invariant quadratic form, and metric duality
       2. Affine spacetime, causal cones, and Lorentz and Poincaré groups
@@ -63,7 +63,7 @@ Its planned proof library will make each theory's assumptions explicit, derive i
    2. **Dynamics of Relativistic Particles**
       1. Free-particle action, energy, and momentum
       2. Conservation laws and relativistic collision kinematics
-4. **Electrodynamics**
+4. **Electrodynamics (Landau-Lifshitz 2.0)**
    1. **Charged Particles and Electromagnetic Fields**
       1. Electromagnetic potentials, gauge symmetry, and the field tensor
       2. Charged-particle action and Lorentz-force dynamics
@@ -76,7 +76,7 @@ Its planned proof library will make each theory's assumptions explicit, derive i
    4. **Moving Sources and Radiation**
       1. Retarded fields of moving charges
       2. Radiation flux, radiated power, and radiation-reaction models
-5. **General Relativity**
+5. **General Relativity (Landau-Lifshitz 2.0)**
    1. **Geometry and Motion in Gravitational Fields**
       1. Lorentzian metrics, covariant derivatives, and curvature
       2. Geodesic motion and the weak-field limit
@@ -87,19 +87,49 @@ Its planned proof library will make each theory's assumptions explicit, derive i
       1. Linearized gravity, wave propagation, and gravitational-wave emission
    4. **Relativistic Cosmology**
       1. Cosmological models, their evolution, and singularities
-6. **Classical Statistical Mechanics**
-   1. **Ensembles and Thermodynamic Limits**
-      1. Liouville measure, regular energy shells, and conditioning
-      2. Microcanonical and canonical ensembles, independent products, and thermal contact
-      3. Coarse-graining, thermodynamic limits, and ensemble equivalence
-   2. **The Bridge to Thermodynamics**
-      1. Derivation of the ideal-gas entropy from phase volume in the thermodynamic limit
-      2. Macroscopic adiabatic protocols, stability, and comparison within composition sectors
-      3. Identification of statistical entropy with the thermodynamic entropy on matched sectors
+6. **Classical Statistical Mechanics (Goldstein–Lebowitz 2.0)**
+   1. **Hamiltonian Phase Volume and Microcanonical Conditioning**
+      1. Hamiltonian phase spaces, Liouville volume, and measure-preserving flows
+      2. Normalized microcanonical measures on finite energy windows and their invariance
+      3. Conserved quantities, composition sectors, and extensions to regular exact-energy shells
+   2. **Macrostates, Coarse-Graining, and Boltzmann Entropy**
+      1. Measurable macroscopic observables and macroregions
+      2. Boltzmann entropy from macroregion volume, reference-volume normalization, and additivity for independent products
+      3. Gibbs entropy of phase-space distributions and comparison with Boltzmann entropy in and out of equilibrium
+   3. **Equilibrium Typicality and Concentration of Measure**
+      1. Phase-volume dominance of equilibrium macroregions and finite-volume concentration bounds
+      2. Particle occupancy in a divided box as a quantitative model
+      3. Additional conserved quantities, disconnected invariant components, and phase coexistence
+   4. **Dynamics, Typical Histories, and Conditional H-Theorems**
+      1. Finite-time equilibrium residence bounds for microcanonical initial states
+      2. Relaxation from low-entropy macroregions and entropy bounds under approximate macroscopic autonomy
+      3. Fine-grained Gibbs entropy invariance, time reversal, recurrence, and nonergodic counterexamples
+   5. **Ensembles, Thermal Contact, and Thermodynamic Limits**
+      1. Microcanonical and canonical ensembles, subsystem marginals, weak coupling, and thermal contact
+      2. Ensemble equivalence under explicit hypotheses, finite-size estimates, and thermodynamic limits
+      3. Interacting systems and phase transitions
+   6. **The Bridge to Axiomatic Thermodynamics**
+      1. Ideal-gas entropy from phase volume, including particle-number and normalization conventions
+      2. Extensivity, additivity, scaling, and stability in the thermodynamic limit
+      3. Macroscopic adiabatic protocols and order comparison on matched equilibrium composition sectors
+      4. Statistical and thermodynamic entropy correspondence, with a positive entropy scale and a linear calibration in the conserved quantities
+
+The “2.0” labels name Project Ainos's research programs. Topic 1 draws on
+E. H. Lieb and J. Yngvason, *The Physics and Mathematics of the Second Law of
+Thermodynamics*, *Physics Reports* 310(1) (1999), pp. 1–96.
+[Published article](https://doi.org/10.1016/S0370-1573(98)00082-9) ·
+[Open preprint](https://arxiv.org/abs/cond-mat/9708200)
+
+Topic 2 follows L. D. Landau and E. M. Lifshitz's *Mechanics*, Volume 1 of the
+*Course of Theoretical Physics*, 3rd English edition (1976).
+[Publisher's catalogue](https://shop.elsevier.com/books/mechanics/landau/978-0-08-050347-9)
 
 Topics 3, 4, and 5 follow Chapters I–II, III–IX, and X–XIV, respectively, of
-Landau–Lifshitz Volume 2, *The Classical Theory of Fields*. See the
-[chapter correspondence](docs/landau-lifshitz.md#special-relativity).
+Landau and Lifshitz's *The Classical Theory of Fields*, Volume 2 of the
+*Course of Theoretical Physics*, 4th revised English edition.
+[Publisher's catalogue](https://shop.elsevier.com/books/the-classical-theory-of-fields/landau/978-0-08-025072-4) ·
+[Chapter correspondence](docs/landau-lifshitz.md#special-relativity)
+
 The C∞ research trilogy gives section-level targets, mathematical assumptions,
 Lean architecture, and the distinction between proved results and future work:
 [Special Relativity, §§1–14](docs/cinfty-special-relativity.md),
@@ -108,6 +138,26 @@ Lean architecture, and the distinction between proved results and future work:
 The plans carry forward [issue #8](https://github.com/MGYamada/ProjectAinos/issues/8)
 and identify the next proofs for free relativistic particles, the Maxwell
 action with a prescribed current, and the differential Bianchi identity.
+
+Topic 6 follows the provisional Boltzmannian typicality plan in
+[issue #55](https://github.com/MGYamada/ProjectAinos/issues/55). Its guiding references are
+
+- S. Goldstein and J. L. Lebowitz, *On the (Boltzmann) entropy of non-equilibrium systems*,
+  *Physica D* 193(1–4) (2004), pp. 53–66.
+  [Published article](https://doi.org/10.1016/j.physd.2004.01.008) ·
+  [Open preprint (2003)](https://arxiv.org/abs/cond-mat/0304251)
+- S. Goldstein, J. L. Lebowitz, R. Tumulka, and N. Zanghì, *Gibbs and Boltzmann
+  Entropy in Classical and Quantum Mechanics*, in V. Allori (ed.), *Statistical
+  Mechanics and Scientific Explanation: Determinism, Indeterminism and Laws of
+  Nature*, World Scientific (2020), pp. 519–581.
+  [Published chapter](https://doi.org/10.1142/9789811211720_0014) ·
+  [Open preprint (2019)](https://arxiv.org/abs/1903.11870)
+
+For complementary background on equilibrium typicality, see
+[H. Tasaki's revised §4.1 of *Statistical Mechanics I*](https://haltasaki.github.io/books/SM/section41.html).
+For phase volume, ensembles, and the ideal gas, see
+[Landau and Lifshitz, *Statistical Physics*, Vol. 5, Part 1, Chs. I and III–IV](https://shop.elsevier.com/books/course-of-theoretical-physics/landau/978-0-08-023039-9).
+
 The order of topics after 6 is yet to be determined.
 
 ## Shared smooth algebra and geometry
