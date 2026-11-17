@@ -1,6 +1,7 @@
 module  -- shake: keep-all --deprecated_module: ignore
 
 public import ProjectAinos.Electrodynamics.ChargeBalance
+public import ProjectAinos.Electrodynamics.ChargedDust
 public import ProjectAinos.Electrodynamics.Components
 public import ProjectAinos.Electrodynamics.ConstantField
 public import ProjectAinos.Electrodynamics.ConstantFieldExamples
@@ -12,6 +13,7 @@ public import ProjectAinos.Electrodynamics.CurvedComponents
 public import ProjectAinos.Electrodynamics.CurvedExamples
 public import ProjectAinos.Electrodynamics.CurvedPotential
 public import ProjectAinos.Electrodynamics.DivergenceExamples
+public import ProjectAinos.Electrodynamics.EnergyMomentum
 public import ProjectAinos.Electrodynamics.Examples
 public import ProjectAinos.Electrodynamics.ExcitationChart
 public import ProjectAinos.Electrodynamics.Field
@@ -32,6 +34,7 @@ public import ProjectAinos.Electrodynamics.PolynomialRadial
 public import ProjectAinos.Electrodynamics.SourcedAction
 public import ProjectAinos.Electrodynamics.SourcedActionExamples
 public import ProjectAinos.Electrodynamics.StaticField
+public import ProjectAinos.Electrodynamics.StressTensor
 public import ProjectAinos.Electrodynamics.ThreePlusOne
 public import ProjectAinos.Electrodynamics.VacuumAction
 public import ProjectAinos.Electrodynamics.VacuumActionExamples

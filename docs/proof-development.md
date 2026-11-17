@@ -24,7 +24,7 @@ The proofs of the three field plans are tracked in
 ledger with one status for each section, a count line and the list of rows closed
 with a remainder, in the vocabulary of the mechanics ledger:
 [special relativity](cinfty-special-relativity.md#ledger) (12 of 14 rows proved),
-[electrodynamics](cinfty-electrodynamics.md#ledger) (15 of 66) and
+[electrodynamics](cinfty-electrodynamics.md#ledger) (18 of 66) and
 [general relativity](cinfty-general-relativity.md#ledger) (5 of 39). The baseline
 counts a row as proved only when its whole target is proved; a row with a proved
 core names the core and stays *informal*. Observations are recorded in the notes
@@ -660,6 +660,21 @@ co-ordinates the change of the charge is minus the flux through the faces. The
 field `t dt ∧ dx` with the current `∂x` is a stationary instance. The ledger
 rows of §§26–30 are *proved* in their stated scopes (15 of 66).
 [Guide](electrodynamics.md#the-field-with-a-current-2630)
+
+## Energy and momentum of the field
+
+In the frame of the co-ordinates the equations of Maxwell give the theorem of
+Poynting `∂_t u + div S = −E · 𝐤` and the balance of the momentum
+`∂_t Sᵢ + ∂ⱼ σᵢⱼ = −(ρ Eᵢ + (𝐤 × B)ᵢ)`, and on a box of the co-ordinates the
+energy and the momentum of the field change by minus the flux through the
+faces and minus the work and the impulse on the current. The stress tensor
+`T(v, w) = g⁻¹(ι_v F, ι_w F) − ¼ g(v, w) F²` is symmetric and trace-free, its
+value on every observer is `½ (|E_u|² + |B_u|²)`, its components are the energy
+density, the vector of Poynting and the stress of Maxwell, and its divergence
+is `−F^ν{}_λ k^λ`. Charged dust that conserves its mass and moves by the
+Lorentz force has the opposite divergence, so the total stress is conserved.
+The ledger rows of §§31, 33 and 35 are *proved* in their stated scopes (18 of
+66). [Guide](electrodynamics.md#energy-and-momentum-31-3335)
 
 ## Shared Variational Foundation
 

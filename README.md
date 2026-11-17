@@ -187,6 +187,11 @@ invariant exactly when the current is closed, and the source term has the
 sign of the coupling of a charge. The four equations of Maxwell for `E` and
 `B` follow, and the charge in a box changes by the flux through its faces.
 [Guide](docs/electrodynamics.md#the-field-with-a-current-2630)
+The theorem of Poynting and the balance of the momentum hold in an inertial
+frame and on a box, the stress tensor of the field is symmetric and
+trace-free with the energy density `½ (E² + B²)` for every observer, and with
+charged dust the total stress is conserved.
+[Guide](docs/electrodynamics.md#energy-and-momentum-31-3335)
 
 Topic 6 follows the provisional Boltzmannian typicality plan in
 [issue #55](https://github.com/MGYamada/ProjectAinos/issues/55). Its guiding references are

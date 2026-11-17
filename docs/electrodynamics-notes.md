@@ -89,3 +89,19 @@ These notes record mathematical distinctions and interface decisions in `Project
 **Interface decision.** `charge k a b t` and `faceFlux k a b i` are the integrals over the faces of the box, and `charge_balance` is the statement with the time faces separated. `divergence4 k = Σ_μ ∂_μ k^μ` is the divergence in the co-ordinates.
 
 **Proof status.** `coefficient_exteriorDerivative_matterCurrentForm`, `exteriorDerivative_matterCurrentForm_eq_zero_iff`, `divergence4_eq_zero_of_stationary` and `charge_balance` are proved. [Charge balance](../ProjectAinos/Electrodynamics/ChargeBalance.lean)
+
+## ED12. The stress tensor is a bilinear form, and its balance is proved in components
+
+**Observation.** The tensor `T_{μν} = F_{μα} F_ν{}^α − ¼ g_{μν} F²` is the bilinear form `T(v, w) = g⁻¹(ι_v F, ι_w F) − ¼ g(v, w) F²`. In this form its value on an observer needs no frame: `ι_u F = −E_u`, `g(u, u) = −1` and `F² = 2(|B_u|² − |E_u|²)` give `T(u, u) = ½(|E_u|² + |B_u|²)`. Its divergence is a statement about derivatives, and in the frame of the co-ordinates its components are the energy density, the vector of Poynting with a sign for the lower index `0`, and the stress of Maxwell. The two balances `∂_t u + div S = −E · 𝐤` and `∂_t Sᵢ + ∂ⱼ σᵢⱼ = −(ρ Eᵢ + (𝐤 × B)ᵢ)` are then polynomial identities in the six components and their twenty-four derivatives, linear in the four vector equations of ED10.
+
+**Interface decision.** `stressForm` takes a two-form and two vectors; `raisedStress F μ ν` is the component `T^{μν}` of a field as a function. The balances are proved with the product rule for `partialAt`; in the proofs the six components are replaced by free functions (`generalize`), because `fun_prop` uses hypotheses about free functions only and stops at a hypothesis about a field. The tensor of a Lorentzian manifold and the variation of the metric are not part of this wave.
+
+**Proof status.** `poynting_local`, `momentum_local`, `energy_balance`, `momentum_balance`, `stressForm_symm`, `stressForm_trace`, `stressForm_observer`, `divergence_raisedStress_zero` and `divergence_raisedStress_succ` are proved. [Energy and momentum](../ProjectAinos/Electrodynamics/EnergyMomentum.lean) · [Stress tensor](../ProjectAinos/Electrodynamics/StressTensor.lean)
+
+## ED13. Charged dust moves by the force of the particle, and the total stress is conserved
+
+**Observation.** For dust with the four-velocity `U`, the stress `μ U^μ U^ν` has the divergence `U^ν ∂_λ (μ U^λ) + μ U^λ ∂_λ U^ν`. If the mass is conserved and each element moves by the force `ρₑ F♯ U`, which is `lorentzForce ρₑ F U` of the charged particle, the divergence is `F^ν{}_λ k^λ` with `k = ρₑ U`. The field has the divergence `−F^ν{}_λ k^λ`, so the sum is zero. The components of `lorentzForce` are `e E · 𝐯` and `e (v⁰ E + 𝐯 × B)` (from `lorentzForce_vectors`), which match the right-hand sides of the balances of the field.
+
+**Interface decision.** `ChargedDust` is a structure of three functions with no constraint; the normalization `g(U, U) = −1` is not needed for the identity and is not assumed. The equations of the dust and of the field are hypotheses at a point. A fluid with a pressure, and the virial of §34, are not treated; the row of §34 names the trace of the field as its proved part.
+
+**Proof status.** `ChargedDust.divergence_matterStress`, `lorentzForce_zero_eq`, `lorentzForce_succ_eq` and `total_stress_conserved` are proved. [Charged dust](../ProjectAinos/Electrodynamics/ChargedDust.lean)

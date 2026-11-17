@@ -404,6 +404,39 @@ open set the action with the current `∂x` is stationary at it
 against `Curved.Examples.electric_source`, whose vector current is `−∂x`. The
 [notes](electrodynamics-notes.md) ED09–ED11 record the decisions.
 
+## Energy and momentum (§§31, 33–35)
+
+**The theorem of Poynting (§31).** In the frame of the co-ordinates
+`energyDensity F = ½ (E² + B²)` and `poyntingVector F = E × B`. With
+`∂_t B + curl E = 0` and `curl B − ∂_t E = 𝐤`, `∂_t u + div S = −E · 𝐤`
+(`poynting_local`). With `div E = ρ` and `div B = 0` in addition, the stress of
+Maxwell `σᵢⱼ = −(Eᵢ Eⱼ + Bᵢ Bⱼ) + δᵢⱼ u` gives
+`∂_t Sᵢ + Σⱼ ∂ⱼ σᵢⱼ = −(ρ Eᵢ + (𝐤 × B)ᵢ)` (`momentum_local`). On a box of the
+co-ordinates, `box_divergence` is the divergence theorem with the faces of the
+time separated, and for a `C²` field the energy and each component of the
+momentum in the spatial box change by minus the flux through its faces and
+minus the work or the impulse on the current (`energy_balance`,
+`momentum_balance`).
+
+**The stress tensor (§33).** `stressForm G v w = g⁻¹(ι_v G, ι_w G) − ¼ g(v, w) G²`
+is `T_{μν} = G_{μα} G_ν{}^α − ¼ g_{μν} G²`.
+
+| Statement | Declaration |
+| --- | --- |
+| `T` is symmetric and trace-free | `stressForm_symm`, `stressForm_trace` |
+| For every observer, `T(u, u) = ½ (\|E_u\|² + \|B_u\|²)` | `stressForm_observer` |
+| `T₀₀ = u`, `T₀ᵢ = −Sᵢ`, `Tᵢⱼ = σᵢⱼ` in the frame of the co-ordinates | `stressForm_zero_zero`, `stressForm_zero_succ`, `stressForm_succ_succ` |
+| `∂_μ T^{μ0} = −E · 𝐤` and `∂_μ T^{μ,i} = −(ρ Eᵢ + (𝐤 × B)ᵢ)` | `divergence_raisedStress_zero`, `divergence_raisedStress_succ` |
+
+**Charged dust (§35).** `ChargedDust` has the densities `μ` of the rest mass
+and `ρₑ` of the charge and the four-velocity `U`, with the current `ρₑ U` and the
+stress `μ U^μ U^ν`. If the mass is conserved, the divergence of the stress is
+`μ U^λ ∂_λ U^ν` (`ChargedDust.divergence_matterStress`). If the dust moves by
+the force `ρₑ F♯ U` of `lorentzForce` and the field satisfies the equations of
+Maxwell with its current, the total stress is conserved
+(`total_stress_conserved`). The [notes](electrodynamics-notes.md) ED12–ED13
+record the decisions.
+
 ## Proof and API map
 
 All names below are under `ProjectAinos`, except imported `YM` names.
@@ -433,6 +466,9 @@ All names below are under `ProjectAinos`, except imported `YM` names.
 | Equations for `E` and `B` | `homogeneous_of_closed`, `inhomogeneous_of_excitation`, `maxwell_of_stationary` | [ThreePlusOne](../ProjectAinos/Electrodynamics/ThreePlusOne.lean) |
 | Conservation of the charge | `coefficient_exteriorDerivative_matterCurrentForm`, `divergence4_eq_zero_of_stationary`, `charge_balance` | [ChargeBalance](../ProjectAinos/Electrodynamics/ChargeBalance.lean) |
 | Field with a nonzero current | `SourcedAction.Examples.stationary_example`, `maxwell_example` | [SourcedActionExamples](../ProjectAinos/Electrodynamics/SourcedActionExamples.lean) |
+| Energy and momentum in an inertial frame | `poynting_local`, `momentum_local`, `box_divergence`, `energy_balance`, `momentum_balance` | [EnergyMomentum](../ProjectAinos/Electrodynamics/EnergyMomentum.lean) |
+| Stress tensor | `stressForm_symm`, `stressForm_trace`, `stressForm_observer`, `divergence_raisedStress_zero`, `divergence_raisedStress_succ` | [StressTensor](../ProjectAinos/Electrodynamics/StressTensor.lean) |
+| Charged dust | `ChargedDust.divergence_matterStress`, `total_stress_conserved` | [ChargedDust](../ProjectAinos/Electrodynamics/ChargedDust.lean) |
 | Nonzero regression examples | `Examples.hyperbola_stationary`; `Polynomial.constantJet_reconstruction`, `linearJet_reconstruction` | [Examples](../ProjectAinos/Electrodynamics/Examples.lean), [PolynomialExamples](../ProjectAinos/Electrodynamics/PolynomialExamples.lean) |
 
 ## Verification and review
@@ -445,6 +481,7 @@ lake env lean -DwarningAsError=true checks/ElectrodynamicsCoreAPI.lean
 lake env lean -DwarningAsError=true checks/ChargedParticleAPI.lean
 lake env lean -DwarningAsError=true checks/FieldClassificationAPI.lean
 lake env lean -DwarningAsError=true checks/SourcedFieldAPI.lean
+lake env lean -DwarningAsError=true checks/FieldStressAPI.lean
 lake env lean -DwarningAsError=true checks/AxiomAudit.lean
 experiments/.venv/bin/python -m ainos_experiments.verify_electrodynamics
 ```
