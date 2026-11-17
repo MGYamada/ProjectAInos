@@ -242,7 +242,7 @@ commute with this map. No metric identification or Wick rotation is involved.
 The result is restricted to homogeneous polynomial exterior differentiation
 and reconstruction, not global potential existence or continuum dynamics.
 
-## A charge in a given field (§§15–23)
+## A charge in a given field (§§15–25)
 
 **The Hamiltonian in a static field (E9a, §§16–19).** The scalar potential
 `φ` and the vector potential `a` are elements of the free ring of the
@@ -302,8 +302,58 @@ trajectory is stationary on every interval
 
 The three closed forms are one statement about a bounded operator with
 `A³ = κ A` and functions with `s′ = 1 + κ c`, `c′ = s`
-(`LinearODE.linearVelocity_eq_of_cube`, `linearMotion_eq_of_cube`). The
-[notes](electrodynamics-notes.md) ED03–ED05 record the decisions.
+(`LinearODE.linearVelocity_eq_of_cube`, `linearMotion_eq_of_cube`).
+
+**The transformation of the field (§24).** In the frame of the co-ordinates
+`electricVector F` is `Eᵢ = F(eᵢ, e₀)` and `magneticVector F` is
+`(F₂₃, F₃₁, F₁₂)`; they are the components of the electric and the magnetic
+covector of the observer at rest (`electric_restObserver_single`,
+`magnetic_restObserver_single`), and `twoForm_apply_vectors` writes `F(v, w)`
+in them. The boost with the velocity `V` along the first axis is
+`t ↦ γ (t − V x)`, `x ↦ γ (x − V t)` (`boost_axisVelocity_apply`). It maps the
+four-velocity of the observer with the velocity `V` to the axis of the time,
+so the components of the field for this observer are those of the pullback by
+the inverse boost (`electric_observer_apply`, `magnetic_observer_apply`):
+
+| Component | Value for the observer with the velocity `V` | Declaration |
+| --- | --- | --- |
+| `E′` | `E₁`, `γ (E₂ − V B₃)`, `γ (E₃ + V B₂)` | `electricVector_moving` |
+| `B′` | `B₁`, `γ (B₂ + V E₃)`, `γ (B₃ − V E₂)` | `magneticVector_moving` |
+
+`electricVector_boost` and `magneticVector_boost` are the same formulas for
+the pullback by the boost itself, with the opposite sign of `V`.
+
+**The invariants and the kinds of a field (§§22, 25).** The invariants are
+`I₁ = B² − E²` and `I₂ = E · B` (`scalarInvariant_vectors`,
+`pseudoscalarInvariant_vectors`). The generator `A = (e/m) F♯` is the map
+`v ↦ (e/m) (E · v, v⁰ E + v × B)` (`lorentzForce_vectors`), and it satisfies
+
+- `A³ = −(e/m)² I₁ A − (e/m)³ I₂ D` and `A D = −(e/m) I₂`, where `D` is the
+  map of the triples `−B` and `E` (`generator_cube_eq`,
+  `generator_dualGenerator`);
+- `A⁴ = −(e/m)² I₁ A² + (e/m)⁴ I₂²`, the equation of Cayley and Hamilton
+  (`generator_quartic`).
+
+| Invariants | Generator | Four-velocity | Declaration |
+| --- | --- | --- | --- |
+| `I₂ = 0`, `I₁ < 0` | `A³ = Ω² A` | hyperbolic | `velocity_of_scalarInvariant_neg` |
+| `I₂ = 0`, `I₁ > 0` | `A³ = −Ω² A` | circular | `velocity_of_scalarInvariant_pos` |
+| `I₁ = I₂ = 0` | `A³ = 0` | a polynomial of degree two | `velocity_of_invariants_zero`; `nullField_ne_zero` |
+| `I₂ ≠ 0` | `(A² − a²)(A² + b²) = 0` | hyperbolic on the range of `(A² + b²)/(a² + b²)`, circular on its kernel | `velocity_of_quartic`, `exists_rates`; `velocity_uniformField_closed` |
+
+The last case is the shared statement `LinearODE.linearVelocity_eq_of_quartic`
+for a bounded operator, which uses a projection that commutes with the
+operator (`linearVelocity_eq_of_projection`). A field of two covectors has
+`I₂ = 0` (`pseudoscalarInvariant_of_isSimple`). The kinds are stated for the
+generator; a frame in which `E` and `B` are parallel is not constructed.
+
+**Potentials on a manifold (§§16, 18).** On a manifold modelled on space-time
+`Curved.fieldOf A = dA` is the field of a one-form `A`. It satisfies `dF = 0`
+(`fieldOf_closed`), it does not change under `A ↦ A + dχ`
+(`fieldOf_gaugeShift`, `maxwell_gaugeShift_iff`), it is natural for smooth
+maps (`fieldOf_pullback`), and on flat space-time it is the field tensor
+(`fieldOf_ofFlat`). The [notes](electrodynamics-notes.md) ED03–ED08 record the
+decisions.
 
 ## Proof and API map
 
@@ -326,6 +376,9 @@ All names below are under `ProjectAinos`, except imported `YM` names.
 | Hamiltonian of a charge in a static field | `ChargedParticle.canonical_kineticMomentum_hamiltonian`, `isTrajectory_iff_lorentzForce`, `momentumShift_hamiltonian`, `flowDomain_hamiltonianField` | [Hamiltonian](../ProjectAinos/Electrodynamics/Hamiltonian.lean), [HamiltonianExamples](../ProjectAinos/Electrodynamics/HamiltonianExamples.lean) |
 | Action of space-time on a graph | `ChargedParticle.fieldTensor_staticPotential`, `stationary_graph_iff_lorentzForce`, `stationary_graph_iff_hamilton`, `stationary_graph_of_isTrajectory` | [StaticField](../ProjectAinos/Electrodynamics/StaticField.lean) |
 | Motion in a constant field | `ConstantField.stationary_motion`, `deriv_eq_velocity_of_stationary`, `generator_cube`, `velocity_of_pos`, `velocity_of_neg`, `velocity_of_zero`, `velocity_add` | [ConstantField](../ProjectAinos/Electrodynamics/ConstantField.lean), [ConstantFieldExamples](../ProjectAinos/Electrodynamics/ConstantFieldExamples.lean) |
+| Transformation of `E` and `B` | `electricVector_boost`, `magneticVector_boost`, `electricVector_moving`, `magneticVector_moving`, `electric_observer_apply`, `magnetic_observer_apply` | [FieldTransformation](../ProjectAinos/Electrodynamics/FieldTransformation.lean) |
+| Invariants and the kinds of a field | `ConstantField.generator_quartic`, `velocity_of_scalarInvariant_neg`, `velocity_of_scalarInvariant_pos`, `velocity_of_invariants_zero`, `velocity_of_quartic` | [FieldClassification](../ProjectAinos/Electrodynamics/FieldClassification.lean) |
+| Potentials on a manifold | `Curved.fieldOf_closed`, `fieldOf_gaugeShift`, `fieldOf_pullback`, `fieldOf_ofFlat` | [CurvedPotential](../ProjectAinos/Electrodynamics/CurvedPotential.lean) |
 | Nonzero regression examples | `Examples.hyperbola_stationary`; `Polynomial.constantJet_reconstruction`, `linearJet_reconstruction` | [Examples](../ProjectAinos/Electrodynamics/Examples.lean), [PolynomialExamples](../ProjectAinos/Electrodynamics/PolynomialExamples.lean) |
 
 ## Verification and review
@@ -336,6 +389,7 @@ lake exe mk_all --check --lib ProjectAinos
 lake env lean -DwarningAsError=true checks/ElectrodynamicsAPI.lean
 lake env lean -DwarningAsError=true checks/ElectrodynamicsCoreAPI.lean
 lake env lean -DwarningAsError=true checks/ChargedParticleAPI.lean
+lake env lean -DwarningAsError=true checks/FieldClassificationAPI.lean
 lake env lean -DwarningAsError=true checks/AxiomAudit.lean
 experiments/.venv/bin/python -m ainos_experiments.verify_electrodynamics
 ```

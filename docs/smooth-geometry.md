@@ -1098,6 +1098,12 @@ equation, so one space of curves serves for all times of both signs.
   `u = u₀ + s A u₀ + c A² u₀` and `x = x₀ + τ u₀ + c A u₀ + C A² u₀`.
 - `linearVelocity_add`: for `A₁ A₂ = A₂ A₁ = 0` the solution of the sum is the
   sum of the solutions minus the initial value.
+- `linearVelocity_eq_of_projection`: for a projection `P` that commutes with
+  `A`, with `A² = κ₁` on its range and `A² = κ₂` on its kernel, the solution is
+  the sum of the two solutions of the kind `A³ = κ A`.
+- `linearVelocity_eq_of_quartic`: if `(A² − a²)(A² + b²) = 0` and
+  `a² + b² ≠ 0`, then `hyperbolicProjection A a b = (A² + b²)/(a² + b²)` is
+  such a projection, with `κ₁ = a²` and `κ₂ = −b²`.
 
 `ODE.FlowInvariant`: a function whose derivative vanishes between two times
 takes the same value at them (`eq_of_hasDerivAt_zero`), so a quantity whose

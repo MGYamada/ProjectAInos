@@ -401,7 +401,7 @@ zero, so `{f, H} = Σᵢ ∂ᵢf ∂H/∂pᵢ`, `{pᵢ, f} = −∂ᵢf`, and tw
 positions commute. `momentumShift c χ` is the substitution `q ↦ q`,
 `pᵢ ↦ pᵢ + c ∂ᵢχ`; it is a Poisson automorphism and fixes the functions of the
 positions. It is the gauge change of a
-[charge in a static field](electrodynamics.md#a-charge-in-a-given-field-1523).
+[charge in a static field](electrodynamics.md#a-charge-in-a-given-field-1525).
 
 ## Formal power series in `q` and `p`
 
