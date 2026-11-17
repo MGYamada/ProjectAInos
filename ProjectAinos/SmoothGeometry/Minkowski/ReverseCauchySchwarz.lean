@@ -20,6 +20,10 @@ pairing `pair v w = v⁰ w⁰ − ⟨𝐯, 𝐰⟩` and the quadratic form `Q`,
 * `sqrt_mul_sqrt_le_pair`: `√Q(v) √Q(w) ≤ pair v w`,
 * `sqrt_add_sqrt_le`: `√Q(v) + √Q(w) ≤ √Q(v + w)`, the reverse triangle inequality.
 
+`pair_pos_of_futureTimelike` is the strict positivity of the pairing of a future timelike vector
+with a nonzero vector of the cone, and `futureCausal_of_pair_nonneg` recognizes the future cone
+among the causal vectors by the sign of this pairing.
+
 For an observer `u`, `Observer.intervalQuadratic_eq` is the split
 `Q(w) = (u.clock w)² − restForm(w⊥, w⊥)`, and `Observer.eq_smul_of_clock_eq_sqrt` is the case
 of equality: if `u.clock w = √Q(w)` then `w = (u.clock w) • u`.
@@ -86,9 +90,52 @@ theorem sqrt_add_sqrt_le {v w : MinkowskiModel d} (hv : FutureCausal v) (hw : Fu
   have h := sqrt_mul_sqrt_le_pair hv hw
   nlinarith [Real.sq_sqrt hQv, Real.sq_sqrt hQw]
 
+/-- The pairing of a future timelike vector with a nonzero vector of the closed future cone is
+positive. -/
+theorem pair_pos_of_futureTimelike {u p : MinkowskiModel d} (hu : FutureTimelike u)
+    (hp : FutureCausal p) (hp0 : p ≠ 0) : 0 < pair u p := by
+  rw [pair_apply]
+  have htp : 0 < time p := time_pos_of_futureCausal_ne_zero hp hp0
+  have h1 := real_inner_le_norm (space u) (space p)
+  have h2 : ‖space u‖ * ‖space p‖ ≤ ‖space u‖ * time p :=
+    mul_le_mul_of_nonneg_left hp (norm_nonneg _)
+  have h3 : ‖space u‖ * time p < time u * time p := mul_lt_mul_of_pos_right hu htp
+  linarith
+
+/-- A causal vector whose pairing with a future timelike vector is not negative is in the
+closed future cone. -/
+theorem futureCausal_of_pair_nonneg {u p : MinkowskiModel d} (hu : FutureTimelike u)
+    (hp : Causal p) (h : 0 ≤ pair u p) : FutureCausal p := by
+  by_contra hnot
+  have htime : time p < 0 := by
+    by_contra hge
+    exact hnot ((futureCausal_iff p).mpr ⟨hp, not_lt.mp hge⟩)
+  have hneg : FutureCausal (-p) := by
+    refine (futureCausal_iff _).mpr ⟨?_, ?_⟩
+    · change 0 ≤ intervalQuadratic (-p)
+      rw [QuadraticMap.map_neg]
+      exact hp
+    · rw [map_neg]
+      linarith
+  have hne : -p ≠ 0 := by
+    intro h0
+    rw [neg_eq_zero] at h0
+    rw [h0, map_zero] at htime
+    exact lt_irrefl _ htime
+  have hpos := pair_pos_of_futureTimelike hu hneg hne
+  rw [map_neg] at hpos
+  linarith
+
 namespace Observer
 
 variable (u : Observer d)
+
+/-- The velocity of an observer is future timelike. -/
+theorem futureTimelike : FutureTimelike u.velocity := by
+  refine (futureTimelike_iff _).mpr ⟨?_, u.future⟩
+  change 0 < intervalQuadratic u.velocity
+  rw [u.unit]
+  exact one_pos
 
 /-- The split of the quadratic form by an observer: `Q(w) = (u.clock w)² − restForm(w⊥, w⊥)`. -/
 theorem intervalQuadratic_eq (w : MinkowskiModel d) :
@@ -108,12 +155,7 @@ theorem intervalQuadratic_eq (w : MinkowskiModel d) :
 future causal `w`. -/
 theorem sqrt_le_clock {w : MinkowskiModel d} (hw : FutureCausal w) :
     Real.sqrt (intervalQuadratic w) ≤ u.clock w := by
-  have hu : FutureCausal u.velocity := by
-    refine (futureCausal_iff _).mpr ⟨?_, u.future.le⟩
-    change 0 ≤ intervalQuadratic u.velocity
-    rw [u.unit]
-    exact zero_le_one
-  have h := sqrt_mul_sqrt_le_pair hu hw
+  have h := sqrt_mul_sqrt_le_pair u.futureTimelike.futureCausal hw
   rwa [u.unit, Real.sqrt_one, one_mul] at h
 
 /-- The case of equality: a vector whose proper length is the time measured by the observer is
