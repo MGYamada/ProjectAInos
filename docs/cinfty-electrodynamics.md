@@ -15,22 +15,11 @@ It does not inherit the mechanics manuscript's historical infrastructure gaps.
 
 ## Implementation plan and current progress
 
-The baseline is `main` at
-[`61d8fdf`](https://github.com/MGYamada/ProjectAinos/commit/61d8fdf),
-checked on 13 November 2026. A statement marked **proved** below means the
-indicated Lean statement with its actual hypotheses; it does not mean that
-every assertion in the corresponding textbook section has been formalized.
-**Target** means a proposed theorem or construction. **Conditional target**
-means that a named analytic result must first be proved or supplied as an
-explicit hypothesis. No new theorem is claimed by writing this manuscript.
-
-**Revision of 14 November 2026.** The mechanics programme is complete
-([issue #78](https://github.com/MGYamada/ProjectAinos/issues/78), `main` at
-`fd0ccaa`). [After the mechanics programme](#after-the-mechanics-programme)
-records the prerequisites it supplies, what it found out of reach, and the
-resulting changes to this plan. The electrodynamics modules are those of the
-baseline apart from the corrections of `b805b4a`, and status labels elsewhere
-in this document still refer to `61d8fdf`.
+The proof-status baseline is `main` at
+[`8bb80ce`](https://github.com/MGYamada/ProjectAinos/commit/8bb80ce), reviewed
+on 17 November 2026. **Proved** refers to the cited Lean statement with its
+actual hypotheses. **Target** marks a proposed theorem or construction.
+A **conditional target** carries a named mathematical or physical premise.
 
 | Component | Status at the baseline | Reuse and remaining obligation |
 | --- | --- | --- |
@@ -41,6 +30,7 @@ in this document still refer to `61d8fdf`.
 | Homogeneous polynomial radial reconstruction | Proved, including nonzero degrees zero and one | [PolynomialRadial](../ProjectAinos/Electrodynamics/PolynomialRadial.lean) and [PolynomialBridge](../ProjectAinos/Electrodynamics/PolynomialBridge.lean); no arbitrary global potential is inferred |
 | Maxwell forms on a fixed curved background, current conservation and component equivalence | Proved | [Curved](../ProjectAinos/Electrodynamics/Curved.lean), [Current](../ProjectAinos/Electrodynamics/Current.lean), [CurvedComponents](../ProjectAinos/Electrodynamics/CurvedComponents.lean) |
 | Flat vacuum field action and stationarity iff the vacuum equations | Proved; [#44](https://github.com/MGYamada/ProjectAinos/issues/44) is completed | [VacuumAction](../ProjectAinos/Electrodynamics/VacuumAction.lean), with integrability and compact-support hypotheses |
+| Compact-support Stokes in Euclidean coordinates | Proved | `integral_exteriorDerivative_basis_zero` in [CompactStokes](../ProjectAinos/SmoothGeometry/DifferentialForm/CompactStokes.lean); the curved integration and actual boundary terms have their own contracts |
 | Sourced and curved field-action derivations; electromagnetic stress tensor and matter exchange | Targets | Preserve the explicit source-sign bridge below; fixed-background equations alone do not supply these proofs |
 | Static boundary problems, wave evolution, optics, retarded fields and radiation | Targets or conditional targets | Need independently specified function spaces, domains, boundary conditions and error estimates |
 | Nontrivial gauge bundles, media, singular sources and self-force | Separate extensions | Do not silently strengthen the smooth-potential API |
@@ -56,13 +46,10 @@ they are not pending prerequisites for this document's fixed-background work.
 
 ### After the mechanics programme
 
-The [mechanics plan](cinfty-mechanics.md) was carried out between the baseline
-and `fd0ccaa`. Its [ledger](cinfty-mechanics.md#ledger) now has 32 of the 52
-sections *proved* and the other 20 closed with their proved part and the
-reason for the remainder. The
-[SR volume](cinfty-special-relativity.md#after-the-mechanics-programme)
-describes how the work was carried out. The results that matter for this
-volume are the following.
+The [mechanics ledger](cinfty-mechanics.md#ledger) records all 52 sections as
+*proved* in their stated scopes, with the final delivery in
+[#114](https://github.com/MGYamada/ProjectAinos/issues/114). The following
+prerequisites support the particle, ray and approximation targets in this volume.
 
 **Prerequisites that now exist.** They are in the shared algebra or in
 `Mechanics`. They are not electrodynamic results.
@@ -72,56 +59,50 @@ volume are the following.
 | HOM: a smooth parameter integral and its derivative (E7) | `hasFDerivAt_parametric_intervalIntegral`, `contDiff_parametric_intervalIntegral`, `contDiff_infty_parametric_intervalIntegral_limits` | The homotopy identity for forms of positive degree. In degree zero it is Hadamard's lemma, `SmoothOperation.apply_sub_apply_eq_sum_hadamard` |
 | Local Lagrangians in jets (E3, E5) | `JetRing`, `JetRing.totalDeriv`, `JetRing.euler`, `JetRing.euler_totalDeriv`, `JetRing.totalDeriv_energy`, `JetRing.conserved_noetherCharge`, `StandardJet.jetRing` | More than one independent variable; bundles |
 | Jets and actual solutions (E4) | `StandardJet.prolongation`, `StandardJet.IsSolution`, `StandardJet.isSolution_firstOrder_iff_stationary` | Fields; chart-independent integration |
-| Hamiltonian form of charged motion (E9a, §§19–22) | `PhaseSpace.canonical`, `isTrajectory_canonical_iff`, `IsTrajectory.lift_hamiltonian_eq`, `IsTrajectory.lift_eq_of_isIntegral`, `CyclicReduction.isIntegral_p_of_cyclic` | Existence of trajectories; Hamiltonians that depend on time |
-| A central electric field (§39) | `CentralField.isPoissonHom_polarCoordinates`, `CentralField.reductionHom_radialHamiltonian`, `integral_comp_eq_integral_div_sqrt`, `Kepler.IsFrame.rungeLenz_hamiltonian`, `KeplerModel.IsKeplerMotion.conic` | The relativistic kinetic energy; integrals up to a turning point; fall to the centre |
+| Hamiltonian form of charged motion (E9a, §§19–22) | `PhaseSpace.canonical`, `isTrajectory_canonical_iff`, `IsTrajectory.lift_eq_of_isIntegral`, `CyclicReduction.isIntegral_p_of_cyclic`; `LinearODE.propagator` for a constant-field momentum equation | The charged Hamiltonian, its comparison with the worldline equation, and continuation for the chosen model |
+| A central electric field (§39) | `CentralField.isPoissonHom_polarCoordinates`, `CentralField.reductionHom_radialHamiltonian`, `integral_comp_eq_integral_div_sqrt_turning`, `KeplerModel.IsKeplerMotion.conic` | The relativistic effective radial equation, its turning-point hypotheses, and fall to the centre |
 | The rotating frame (§45) | `RotatingFrame.hamiltonian`, `RotatingFrame.canonical_velocity_hamiltonian` | The magnetic term, and a bound for the term that is neglected |
-| Rays (§§53–55) | `CompleteIntegral.IsHamiltonJacobi`, `CompleteIntegral.isTrajectory_of_isHamiltonJacobi`, `GeneratingFunction.IsFree.isPoissonHom_transformation`, `PoissonStructure.maupertuis` | The high-frequency limit of Maxwell's equations; the variational form of Fermat's principle |
+| Rays (§§53–56) | `CompleteIntegral.isTrajectory_of_isHamiltonJacobi`, `GeneratingFunction.IsFree.isPoissonHom_transformation`, `Stackel.System.hasDerivAt_momentum_of_jacobi`, `NonlinearODE.contDiffOn_flow` | The Maxwell eikonal limit and the ray Hamiltonian on its regular domain |
+| Collision and scattering inputs (§§68–70, 78–80) | `Scattering.IsFactor.tendsto_velocity_atTop`, `Scattering.IsFactor.tendsto_velocity_atBot`, `Scattering.Coulomb.crossSection_coulomb_abs` | Electromagnetic emission, spectral integrability and backreaction |
 | Constraint ideals and quotients (E5) | `SmoothRingCon.ofIdeal`, `PoissonStructure.IsCoisotropic`, `PoissonStructure.Reduction` | Spaces of fields; the quotient by gauge transformations |
 
-**What mechanics found out of reach.**
+**Analytic prerequisites and limits.**
 
-- *Flows.* The pinned Mathlib has no flow of a vector field with smooth
-  dependence on the initial condition. Mechanics did not prove it in its first
-  delivery; it is now `SmoothGeometry.NonlinearODE.flow`, for a field that is
-  smooth on all of a Banach space. Every
-  dynamical theorem of the first delivery is about a given curve (`IsTrajectory`,
-  `StandardJet.IsSolution`); existence appears as an explicit solution or as
-  data. The interface ODE of this plan asks for existence, uniqueness and
-  parameter dependence together. Only the statements "for every solution"
-  are within reach now, and §§19–22, 39 and the ray targets are split in this
-  way.
-- *Hamiltonians that depend on time* are not formalized. A charge in a
-  static field is covered by the existing API; a time-dependent field needs
-  the extended phase space or a new definition.
-- *Measures and integrals to infinity.* Several mechanics rows are closed
-  with a remainder because they need a measure, an integral over a closed
-  curve, or an integral to infinity. The energy radiated over all time, the
-  cross-sections of §§68–70 and 78–80 and the Fourier integrals are of the
-  same kind. Integrals up to a simple turning point are not: they are
-  Lebesgue integrals with an integrable singularity and are proved in
-  mechanics (`integral_comp_eq_integral_div_sqrt_turning`), with the period
-  of Kepler's problem as an application (`CentralField.kepler_period`).
-- *Asymptotic statements.* Six mechanics rows state an approximation
-  without an error estimate, and what could be proved was an exact identity
-  next to each. For the rows that use ASYM, OSC or RAD, the theorem with its
-  estimate is chosen first, and the exact identity is proved separately.
-- *Coefficients with singularities.* A theorem for coefficient functions in
-  a free C∞-ring does not apply to `1/r`; the mechanics row on the separation
-  of variables is closed with this remainder. For a Coulomb potential the
-  chart `s = log r` (`CentralField.polarHamiltonian`) or an adjoined inverse
-  (Kepler's problem) is used.
+- *Flows.* `SmoothGeometry.NonlinearODE.flow` is jointly smooth on its open
+  `flowDomain` for a globally smooth field on a Banach space. Use that
+  domain for the particle and ray equations. For a field given only on a
+  regular open set, start with a supplied solution or construct a local
+  extension and prove agreement while its flow stays in the domain.
+  Completeness needs a separate proof. Constant-field momentum evolution
+  can start with `SmoothGeometry.LinearODE.propagator`.
+- *Hamiltonians that depend on time.* E9a starts with an autonomous
+  Hamiltonian for a static field. Time-dependent fields need an extended
+  phase space or a nonautonomous Hamiltonian API.
+- *Measures and singular integrals.* Mechanics supplies exact turning-point
+  and scattering-tail integrals, and `Scattering.crossSection_apply` computes
+  the pushforward density on an inverse branch. For §§68–70 and 78–80, the
+  measures of the electromagnetic observables and the required time/angle
+  integrability must be established in the specified radiation model.
+- *Asymptotic statements.* Use `Variational.exists_second_order_bound` for
+  smooth finite-parameter Taylor estimates and mechanics' small-angle result
+  as a model for handling parameter-dependent singularities. ASYM, OSC and
+  RAD still need the bounds and limit-interchange hypotheses of each field model.
+- *Coefficients with singularities.* The free C∞-ring has globally smooth
+  coefficients. For a Coulomb branch use a position chart such as `s = log r`,
+  an adjoined inverse, or an open-domain formulation. The proved Stäckel
+  separation applies on an open box satisfying its radicand hypotheses.
 
-**Changes to this plan.**
+**Proof design.**
 
 1. *HOM is half discharged.* The smoothness of the radial homotopy operator
    and differentiation under its integral follow from the shared parametric
    integral. E7 keeps one obligation, the identity `dK + Kd = id` in the
    native exterior calculus.
-2. *New target E3a,* the field jet ring, under
+2. *E3a,* the field jet ring, under
    [Sections, jets and local Lagrangians](#sections-jets-and-local-lagrangians).
    It gives the local identities of §§29, 32 and 33 as algebra, before any
    integral.
-3. *New target E9a,* the Hamiltonian form of charged motion, under
+3. *E9a,* the Hamiltonian form of charged motion, under
    [Actual worldline variation](#actual-worldline-variation). The first
    integrals of §19 along a given trajectory become algebra.
 4. *§§39, 45 and 53–55* have their prerequisites, and their rows say which
@@ -494,6 +475,15 @@ give it as it stands, for the reason stated in the
 relativistic Lagrangian is not an element of a free ring in the velocity. A
 field that depends on time is outside this target.
 
+For §22, specify constant `F` on all of Minkowski spacetime and `m > 0`.
+In proper time the velocity solves a constant-coefficient linear ODE with a
+Lorentz-skew generator. The shared `LinearODE.propagator` and
+`lorentzForce_orthogonal` supply the solution method and the mass-shell
+calculation. The target is to construct the position by integrating the
+velocity, prove preservation of future unit timelikeness, and compare the
+result with the existing electric hyperbola. This step can precede the
+spatial Legendre comparison.
+
 **Target E10 (curved charged variation, C, B:INT).** Combine the existing
 intrinsic massive-particle variation with the first variation of the line
 integral of a one-form. Derive the native equation
@@ -612,6 +602,12 @@ $$
 regularity and test-form conditions as E13, stationarity is equivalent to
 $d\star F+J=0$, hence $dH=J$. This sign follows from the implemented vacuum
 action and the chosen excitation; it is not a choice left to the adapter.
+
+The first delivery is the flat prescribed-source theorem. Reuse
+`VacuumAction.hasDerivAt_action` and differentiate the linear term in `A`
+under the reference integrability assumption. The existing nonzero electric
+source example determines the sign for a regression on a bounded domain.
+The zero-source case should recover `VacuumAction.stationary_iff_vacuum`.
 
 For compactly supported $\chi$, the source action changes by
 $-\int d\chi\wedge J=\int\chi\,dJ$. Therefore $dJ=0$ suffices for gauge
@@ -1100,9 +1096,9 @@ the result labelled conditional, and later replace that premise by a proof.
 | --- | --- | --- |
 | INT | Differentiation of a finite action under compactly supported smooth variations, with domination and endpoint terms | E4, E9, E12–E15 |
 | HOM | Smooth parameter integral for the radial homotopy operator, differentiation and the homotopy identity | E7; the parameter integral and its differentiation are proved in the shared algebra |
-| STOKES | Integration of exact forms on a specified domain, oriented boundary and integrable traces or decay | E21 |
+| STOKES | Integration of exact forms on a specified domain, oriented boundary and integrable traces or decay | Euclidean compact support is proved by `integral_exteriorDerivative_basis_zero`. E13 and E21 need the chart or boundary version appropriate to their domains |
 | MET | Differentiation of inverse metrics, volume and Hodge through a compactly supported nondegenerate family | E19 |
-| ODE | Local existence, uniqueness, parameter dependence and continuation conditions for particle/ray equations | E9, E26; smooth dependence on the initial condition is not in the pinned Mathlib, so the statements for a given solution come first |
+| ODE | Local existence, uniqueness, parameter dependence and continuation conditions for particle/ray equations | E9 and E26 can reuse `NonlinearODE.contDiffOn_flow` on the constructed flow domain. Fields smooth only on a regular open set need a supplied solution or a proved local construction |
 | ELL | Elliptic Green solution, boundary/decay uniqueness and regularity in the stated source class | E22 |
 | PDE | Cauchy well-posedness in a stated topology, including source compatibility and propagated constraints | E17, E24 |
 | FOURIER | Transform/inversion and distributional differentiation with normalization and function-space bounds | Wave and spectral stages |
@@ -1138,9 +1134,9 @@ rather than being relegated to prose after an overstrong API is defined.
 | --- | --- | --- |
 | ED0 | Consolidated current proof map | Verify declarations, flat/curved distinctions and exact existing regressions |
 | ED-A | Algebraic layer on the shared Poisson and jet APIs | E9a with nonzero uniform-field instances; E3a with the Maxwell identities; no analytic hypothesis |
-| ED1 | Sourced flat action and source/matter sign bridge | Derive E15 from the actual functional; nonzero source and gauge tests; recover #44 at zero source |
+| ED1 | Sourced flat action with a prescribed smooth current | Derive E15 from the actual functional; nonzero source and compact gauge tests; recover #44 at zero source |
 | ED2 | Curved charged and field variation | Intrinsic manifold test families, compact-support integration, exact flat specialization |
-| ED3 | Native Hilbert stress and local exchange | Symmetry, trace, observer positivity, metric variation and E20 with the same current sign |
+| ED3 | Native Hilbert stress and local exchange | Symmetry, trace, observer positivity and metric variation; derive `J = -K` for an actual smooth matter model before the coupled balance |
 | ED4 | Integral balances and inertial observer PDE | Poynting/momentum identities with boundaries; both directions of E16; propagated constraints |
 | ED5 | Static smooth-source solutions and multipoles | Proved Green formula, uniqueness class, finite-energy identities and remainder bounds |
 | ED6 | Wave evolution and gauge fixing | Explicit Cauchy/Green theorem, causal support, constraints and finite-energy examples |
@@ -1152,8 +1148,15 @@ independently once their dependencies are supplied. The abstract C∞ module
 comparison can likewise proceed alongside the real-manifold physics; no
 downstream theorem may claim it before the bridge is proved.
 
-ED-A uses only the shared algebra and `Mechanics`, and can precede ED1. A
-stage is delivered as in the mechanics programme: a small number of pull
+ED1 can start from the existing flat variational API. The autonomous
+Hamiltonian work of ED-A can proceed in parallel, with the worldline
+comparison consuming SR-D4. The many-variable field jets of E3a have their
+own acceptance check for commuting total derivatives. The inverse metric and
+volume variation lemmas in GR stage G2 supply ED3's metric input. G3 can then
+consume the electromagnetic stress and balance laws.
+[Metric variations](cinfty-general-relativity.md#metric-variations-and-preservation-of-signature)
+
+Follow the mechanics delivery process with a small number of pull
 requests that each close several rows, typed examples in a check file run by
 `checks/run.sh`, and a note for each observation that changes an interface.
 The [completion criterion](#after-the-mechanics-programme) decides when the
@@ -1176,7 +1179,7 @@ treated as a stable public API.
 | Exact flat electromagnetic calculations | [SymPy runner](../experiments/ainos_experiments/verify_electrodynamics.py) | Independent sign, invariant, gauge, radial and worldline checks |
 | Exact nonlinear and curved coordinate calculations | [Lorentz SymPy runner](../experiments/ainos_experiments/verify_lorentz_geometry.py) | Hodge/current/density/component comparisons in nonconstant examples |
 | Public typed contracts | [Electrodynamics API checks](../checks/ElectrodynamicsAPI.lean) | Existing declarations remain usable under default elaboration settings |
-| Shared prerequisites from the mechanics programme, at `fd0ccaa` | [Reduction](../checks/ReductionAPI.lean), [central field](../checks/CentralFieldAPI.lean), [canonical formalism](../checks/CanonicalAPI.lean) and [jet](../checks/MechanicsJetAPI.lean) API checks | The declarations cited in [After the mechanics programme](#after-the-mechanics-programme) exist with their stated types; they are not electrodynamic results |
+| Shared prerequisites from the mechanics programme | [Flow](../checks/FlowAPI.lean), [linear propagator](../checks/LinearODEAPI.lean), [scattering](../checks/ScatteringAPI.lean), [reduction](../checks/ReductionAPI.lean), and [curve jets](../checks/MechanicsJetAPI.lean) | Typed contracts for the reusable prerequisites in [After the mechanics programme](#after-the-mechanics-programme) |
 
 The existing symbolic runners use exact expressions, no random seed and
 no floating-point tolerance. This manuscript does not add or report a new

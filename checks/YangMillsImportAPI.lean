@@ -4,7 +4,15 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 module
 
-import ProjectAinos
+import ProjectAinos.External.YM.Analytic.Implicit
+import ProjectAinos.External.YM.Analysis.Homogeneous
+import ProjectAinos.External.YM.Hilbert.Kolmogorov
+import ProjectAinos.External.YM.SemanticContracts
+import ProjectAinos.External.YM.Wilson.Symmetry
+import ProjectAinos.External.YM.WilsonLawBridge
+import ProjectAinos.Integrations.YangMillsBridge
+import ProjectAinos.Integrations.YangMillsCoordinates
+import ProjectAinos.SpecialRelativity.Boost
 
 /-! A public API smoke test for the independently ported Yang--Mills modules.
     This file checks the names and types, not the physical validity of any

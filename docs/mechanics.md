@@ -1530,7 +1530,8 @@ push-forward of `impactMeasure` by a deflection function `χ`.
 `Scattering/SmallAngle`: Landau–Lifshitz §20 for a potential that is a smooth
 function of `1/r`. In the variable `u = ρ/r` the square of the radial velocity
 is `speedSq f ρ v∞ ε r = v∞² radicand f (ε, ρ/r)` with
-`radicand f (ε, u) = 1 − u² − ε f(u)`, so that `ε f(ρ/r) = 2U(r)/m v∞²`.
+`radicand f (ε, u) = 1 − u² − ε f(u)`. For physical asymptotic data,
+`ε f(ρ/r) = 2(U(r) − U(∞))/m v∞²`.
 
 - `radicand_eq`: at a zero `c`, `radicand f (ε, u) = (c² − u²)(1 + ε Γ(c, u))`
   with `Γ(c, u) = ratio f c u = f[c, u]/(c + u)`, smooth for `c + u ≠ 0`.
@@ -1567,15 +1568,19 @@ a parameter `l` of a space of finite dimension.
   there are `δ > 0` and `M` such that for `l ∈ K` and `|ε| ≤ δ` there is a
   closest approach `ρ/c`, the motion exists for all `ρ, v∞ > 0`, and
   `|χ + ρ ε ∫_ρ^∞ (d/dr) g(l, ρ/r) dr/√(r² − ρ²)| ≤ M ε²`.
-  `exists_abs_deflectionAngle_sub_le_of_contDiff` is the case without a
-  parameter.
+  The scales are the physical impact parameter and asymptotic speed when
+  `g(l, 0) = 0`. `exists_abs_deflectionAngle_sub_le_of_contDiff` is the case
+  without a parameter.
 - `exists_abs_deflectionAngle_potential_sub_le`: for `U(r) = ε r⁻ⁿ w(1/r)` with
   `w` smooth, `m > 0` and `ρ₁, v₁ > 0` there are `δ` and `M` such that for
   `ρ ≥ ρ₁`, `v∞ ≥ v₁` and `|ε/ρⁿ| ≤ δ`,
   `|χ + (2ρ/m v∞²) ∫_ρ^∞ U′(r) dr/√(r² − ρ²)| ≤ M (ε/ρⁿ)²`, which is (20.3)
-  with a remainder. Here `potentialSpeedSq U m ρ v∞ r` is
-  `v∞² − 2U(r)/m − ρ² v∞²/r²`. For `n = 0` this is a small coupling, uniformly
-  in `ρ ≥ ρ₁`; for `n ≥ 1` and a fixed `ε` it is a large impact parameter.
+  with a remainder. `relativePotentialEnergy` gives `U(r) − U(∞)` with
+  `U(∞) = ε · 0ⁿ w(0)`. The radial speed squared is
+  `v∞² − 2(U(r) − U(∞))/m − ρ² v∞²/r²`, and
+  `tendsto_potentialSpeedSq_atTop` proves its limit is `v∞²`. For `n = 0`
+  this is a small coupling, uniformly in `ρ ≥ ρ₁`. For `n ≥ 1` and fixed `ε`
+  it is a large impact parameter.
 - `exists_abs_coulomb_deflection_sub_le`: for the Coulomb field, where
   `f(u) = u` and `ε = 2a/ρ` (`speedSq_id`), the angle of deflection of
   `Scattering/Coulomb` satisfies `|χ − 2a/ρ| ≤ M (2a/ρ)²`.
@@ -2503,7 +2508,7 @@ semi-major axis is not computed.
 | [Scattering/Coulomb](../ProjectAinos/Mechanics/Scattering/Coulomb.lean) | `speedSq`, `closest`, `factor`, `speedSq_eq`, `isFactor`, `hasDerivAt_primitive`, `integral_angleDensity`, `tendsto_angle_atTop`, `tendsto_velocity_atTop`, `tendsto_velocity_atBot`, `hasDerivAt_velocity`, `deflection`, `sin_half_deflection`, `cot_half_deflection`, `deflection_mem_Ioo`, `deflection_neg`, `abs_deflection_le`, `arccos_cos_deflection` |
 | [Scattering/CrossSection](../ProjectAinos/Mechanics/Scattering/CrossSection.lean) | `impactMeasure`, `solidAngle`, `crossSection`, `crossSection_apply`, `Coulomb.impact`, `Coulomb.deflection_impact`, `Coulomb.impact_deflection`, `Coulomb.crossSection_coulomb`, `Coulomb.abs_deflection`, `Coulomb.crossSection_coulomb_abs` |
 | [Scattering/SmallAngle](../ProjectAinos/Mechanics/Scattering/SmallAngle.lean) | `radicand`, `ratio`, `radicand_eq`, `integral_ratio_eq`, `IsClosest`, `isClosest_zero`, `IsClosest.radicand_pos`, `IsClosest.unique`, `speedSq`, `factor`, `speedSq_eq`, `exists_isFactor`, `integral_Ioi_eq_integral_sin`, `integrableOn_Ioi_iff_integrableOn_sin`, `angleKernel`, `integral_angleDensity`, `deflectionAngle_eq`, `tendsto_angle_atTop`, `hasDerivAt_speedSq`, `tendsto_radialVelocity_atTop`, `hasDerivAt_velocity`, `integral_sin_mul_deriv_eq` |
-| [Scattering/SmallAngleExpansion](../ProjectAinos/Mechanics/Scattering/SmallAngleExpansion.lean) | `familyRadicand`, `IsTurning`, `IsTurning.eq_one`, `isTurning_zero`, `exists_isTurning`, `contDiffOn_ratio_family`, `kernel`, `halfAngle`, `kernelDomain`, `contDiffOn_kernel`, `contDiffAt_halfAngle`, `hasDerivAt_halfAngle`, `IsTurning.exists_abs_sub_le`, `exists_abs_angle_sub_le`, `exists_abs_deflectionAngle_sub_le`, `exists_abs_deflectionAngle_sub_le_of_contDiff`, `speedSq_id`, `exists_abs_coulomb_deflection_sub_le`, `potentialSpeedSq`, `scaledPotential`, `speedSq_scaledPotential`, `exists_abs_deflectionAngle_potential_sub_le` |
+| [Scattering/SmallAngleExpansion](../ProjectAinos/Mechanics/Scattering/SmallAngleExpansion.lean) | `familyRadicand`, `IsTurning`, `IsTurning.eq_one`, `isTurning_zero`, `exists_isTurning`, `contDiffOn_ratio_family`, `kernel`, `halfAngle`, `kernelDomain`, `contDiffOn_kernel`, `contDiffAt_halfAngle`, `hasDerivAt_halfAngle`, `IsTurning.exists_abs_sub_le`, `exists_abs_angle_sub_le`, `exists_abs_deflectionAngle_sub_le`, `exists_abs_deflectionAngle_sub_le_of_contDiff`, `speedSq_id`, `exists_abs_coulomb_deflection_sub_le`, `potentialSpeedSq`, `relativePotentialEnergy`, `scaledPotential`, `speedSq_scaledPotential`, `tendsto_potentialSpeedSq_atTop`, `exists_abs_deflectionAngle_potential_sub_le` |
 | [Maupertuis](../ProjectAinos/Mechanics/Maupertuis.lean) | `naturalLagrangian`, `jacobiLength`, `jacobiEnergy`, `hasFDerivAt_jacobiLength`, `fderiv_jacobiLength_eq`, `jacobiLength_eq_two_mul`, `eulerLagrange_jacobiLength_eq`, `action_jacobiLength`, `stationary_jacobiLength_iff`, `IsHomogeneousTwo`, `IsHomogeneousTwo.fderiv_velocity`, `action_jacobiLength_eq_integral_momentum` |
 | [JacobiMetric](../ProjectAinos/Mechanics/JacobiMetric.lean) | `IsHomogeneousOne`, `IsHomogeneousOne.fderiv_smul`, `eulerLagrange_congr`, `eulerLagrange_comp`, `isHomogeneousOne_jacobiLength`, `fderiv_jacobiEnergy_eq`, `eulerLagrange_jacobiEnergy_eq`, `eventually_jacobiLength_eq_one`, `eulerLagrange_eq_smul_jacobiEnergy`, `differentiableAt_momentum_jacobiLength`, `exists_jacobi_parameter`, `exists_motion_of_jacobi_geodesic`, `kineticEnergy`, `eulerLagrange_line`, `stationary_jacobiLength_line` |
 | [Separation/Stackel](../ProjectAinos/Mechanics/Separation/Stackel.lean) | `System`, `System.domain`, `System.hamiltonian`, `System.radicand`, `System.momentum`, `System.partialAction`, `System.angleIntegral`, `System.action`, `System.restrict`, `System.separated_equation`, `System.hamiltonian_momentum`, `System.hasDerivAt_partialAction`, `System.hasDerivAt_angleIntegral`, `System.hasDerivAt_partialAction_param`, `System.hasDerivAt_action_position`, `System.hasDerivAt_action_time`, `System.hasDerivAt_action_param`, `System.det_mixed_ne_zero`, `System.hasDerivAt_hamiltonian_momentum`, `System.eq_of_jacobi`, `System.hasDerivAt_momentum_of_jacobi` |

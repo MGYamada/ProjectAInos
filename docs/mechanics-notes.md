@@ -786,3 +786,21 @@ counts and row scopes are unchanged. The pinned sources were checked on
 **Interface decision.** Shared, with no physics import: `SmoothGeometry/ODE/PropagatorBound` (Gronwall's inequality with the integral of a continuous coefficient; maps that commute with the coefficient) and `SmoothGeometry/ODE/PropagatorDeformation`, stated for a coefficient `A(p, s)` on a real Banach space with a map `J` and `∂A/∂p = c(p) J ∂A/∂s`, so that the complex structure is a hypothesis. The path is `s + i σ ρ(p)` with Mathlib's smooth step `ρ`, because the propagator is smooth in a parameter that ranges over the line, and the path must stay in the strip. `IsStripProfile g σ m G U` has the bound `∫ m ≤ G` on every interval as a field, instead of integrability on the line. `IsSlowOscillator g q ε ω θ x v` has the phase `θ` and the relation `ω = exp q(ε θ)` as data and fields; the frequency as a function of the time is not given in advance, and `IsStripProfile.exists_isSlowOscillator` constructs it from the flow of `θ̇ = exp q(ε θ)`. The estimate is stated for given limits of the action (`abs_action_limit_sub_le`), and the existence of the limits separately. The system is on `ℂ × ℂ` as a real Banach space, with the operators built from `ContinuousLinearMap.mul ℝ ℂ`.
 
 **Proof status.** Proved: `SmoothGeometry.LinearODE.norm_le_mul_exp_integral_of_norm_deriv_le`, `SmoothGeometry.LinearODE.norm_propagator_apply_le_exp_integral`, `SmoothGeometry.LinearODE.propagator_apply_comm`, `SmoothGeometry.LinearODE.hasDerivAt_propagator_apply_param`, `SmoothGeometry.LinearODE.norm_propagator_apply_sub_le_of_deformation`, `AdiabaticAmplitude.fderiv_family_one_zero`, `AdiabaticAmplitude.propagator_scaleFst`, `AdiabaticAmplitude.exists_norm_fst_propagator_le`, `AdiabaticAmplitude.normSq_sub_normSq_propagator`, `AdiabaticAmplitude.abs_normSq_fst_propagator_sub_le`, `AdiabaticAmplitude.hasDerivAt_amplitudePair`, `AdiabaticAmplitude.amplitudePair_eq_propagator`, `AdiabaticAmplitude.IsSlowOscillator.exists_tendsto_action`, `AdiabaticAmplitude.abs_action_limit_sub_le`, `AdiabaticAmplitude.exists_tendsto_action_and_abs_sub_le`, and the instances `AdiabaticAmplitude.IsStripProfile.exists_isSlowOscillator`, `AdiabaticAmplitude.isStripProfile_lorentz`, `AdiabaticAmplitude.exists_lorentz_oscillator`. Row 51 is *proved* with the scope of the linear oscillator and a frequency that is a function of the slow phase; the ledger reads 52 proved. Not proved: the statement for a frequency that is a holomorphic function of the slow time, the constant in front of the exponential, and nonlinear systems.
+
+## M96. Small-angle scattering uses the potential relative to infinity
+
+**Observation.** For `n = 0` and `w(0) ≠ 0`, the raw potential has the limit
+`U(∞) = ε w(0)`. Using `U(r)` directly in the radial equation changes the
+limiting squared speed to `v∞² − 2U(∞)/m`. The impact parameter is the angular
+momentum per unit mass divided by the actual asymptotic speed.
+
+**Interface decision.** `relativePotentialEnergy` subtracts `U(∞)`, and
+`scaledPotential` subtracts the corresponding constant from the profile in
+`u = ρ/r`. The first-order term still uses `U′(r)` since differentiation
+annihilates the constant. The general radicand estimate applies to smooth
+profiles, and its scales are physical asymptotic data when the profile
+vanishes at `u = 0`.
+
+**Proof status.** The normalized potential has a proved squared-speed limit
+`v∞²` and satisfies the same order-two bound in row 20. A typed example checks
+that a constant potential gives the free radial equation.

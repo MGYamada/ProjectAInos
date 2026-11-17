@@ -14,6 +14,7 @@
 - [C∞ mechanics: full research plan and Landau–Lifshitz targets](cinfty-mechanics.md)
 - [Fixed-endpoint mechanics: mathematical guide and proof map](mechanics.md)
 - [Mechanics formalization notes](mechanics-notes.md)
+- [Shared smooth algebra and geometry: implementation plan and proof status](shared-smooth-algebra-and-geometry.md)
 - [Shared geometry: C∞ schemes, Lorentz geometry, tensors, and curved forms](smooth-geometry.md)
 - [Smooth geometry formalization notes](smooth-geometry-notes.md)
 - [C∞ special relativity: research plan and L&L §§1–14](cinfty-special-relativity.md)

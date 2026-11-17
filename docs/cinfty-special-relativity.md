@@ -10,16 +10,10 @@ This is the first part of the relativity and fields trilogy requested in
 mathematical statements, prerequisite tiers, section correspondence and evidence
 ledger of [C∞ mechanics](cinfty-mechanics.md), using the constructed shared
 geometry rather than the mechanics manuscript's earlier proposed architecture.
-The implementation baseline is `main` at commit `61d8fdf`, inspected on
-13 November 2026. This manuscript specifies future formalization; completing
-the manuscript does not complete those proofs.
-
-**Revision of 14 November 2026.** The mechanics programme is complete
-([issue #78](https://github.com/MGYamada/ProjectAinos/issues/78), `main` at
-`fd0ccaa`). [After the mechanics programme](#after-the-mechanics-programme)
-records the prerequisites it supplies, what it found out of reach, and the
-resulting changes to this plan. The SR modules are those of the baseline, and
-status labels elsewhere in this document still refer to `61d8fdf`.
+The proof-status baseline is `main` at
+[`8bb80ce`](https://github.com/MGYamada/ProjectAinos/commit/8bb80ce), reviewed
+on 17 November 2026. [After the mechanics programme](#after-the-mechanics-programme)
+records the completed mechanics prerequisites used by the proposed SR proofs.
 
 ## Implementation plan and current progress
 
@@ -27,9 +21,9 @@ The [research plan](../README.md) assigns Minkowski geometry and kinematics to
 §3.1 and relativistic particle dynamics to §3.2. The
 [SR implementation guide](special-relativity.md) records the former, while
 [`ParticleAction.lean`](../ProjectAinos/SpecialRelativity/ParticleAction.lean)
-already supplies part of the latter. Status below refers to actual definitions
-and theorem declarations at the baseline, not to every assertion in a textbook
-section. Proposed names later in this document are design names.
+already supplies part of the latter. Each implemented entry refers to the
+cited Lean definitions and theorems in their stated scope. Proposed names later
+in this document identify design targets.
 
 | Programme component | Baseline status | Public implementation or remaining task |
 | --- | --- | --- |
@@ -53,16 +47,11 @@ SR momentum, collision or mass-shell measure API already exists.
 
 ### After the mechanics programme
 
-The [mechanics plan](cinfty-mechanics.md) was carried out between the baseline
-and `fd0ccaa`. Its [ledger](cinfty-mechanics.md#ledger) now has 32 of the 52
-sections *proved* and the other 20 closed with their proved part and the
-reason for the remainder. The work went in this order: the algebraic core and
-its models; the rows that are algebra over a free C∞-ring; the analytic
-interface lemmas and the quotients that depend on them; the integrals within
-reach. It was delivered as pull requests that each closed several rows, with
-typed examples in a file under `checks/` and observations in
-[the formalization notes](mechanics-notes.md). Three kinds of result matter
-for this volume.
+The [mechanics ledger](cinfty-mechanics.md#ledger) records all 52 sections
+as *proved* in their stated scopes. The final delivery is recorded in
+[#114](https://github.com/MGYamada/ProjectAinos/issues/114). Broader geometric
+and constrained mechanics is tracked in
+[#132](https://github.com/MGYamada/ProjectAinos/issues/132).
 
 **Prerequisites that now exist.** They are in the shared algebra or in
 `Mechanics`, and none imports a relativity module.
@@ -74,30 +63,25 @@ for this volume.
 | Quotients by ordinary ideals (SR-F2) | `SmoothRingCon.ofIdeal`, `SmoothRingCon.ofIdealHomEquiv`, from Hadamard's lemma `SmoothRing.op_sub_op` | Completeness and fairness of the quotient |
 | Canonical Poisson API (SR-C6) | `PhaseSpace.canonical`, `IsPoissonHom`, `PhaseSpace.isPoissonHom_of_canonical`, `PoissonStructure.isIntegral_iff_hamiltonian_eq_zero` | Momentum maps of a general group action |
 | Constraints and reduction (SR-D8) | `PoissonStructure.isCoisotropic_span`, `PoissonStructure.Reduction`, `PoissonStructure.toReduction_bijective`, `CyclicReduction.canonicalReductionHom_bijective` | The Dirac bracket; reduction by a non-abelian group |
-| Hamilton's equations along a curve (SR-D4, SR-D7) | `IsTrajectory`, `isTrajectory_canonical_iff`, `IsTrajectory.lift_eq_of_isIntegral` | Existence of trajectories; Hamiltonians that depend on time |
+| Hamilton's equations and flow (SR-D4, SR-D7) | `IsTrajectory`, `isTrajectory_canonical_iff`, `NonlinearODE.contDiffOn_flow`, `Mechanics.exists_isTrajectory` under a completeness hypothesis | The relativistic Hamiltonian, its completeness proof, and the time-dependent Hamiltonian formalism |
 | Legendre correspondence (SR-D4) | `VelocitySpace.IsHyperregular.isTrajectory_iff_isSolution` | Lagrangians that are smooth only on an open set of velocities; a velocity chart other than the velocity itself, because the momentum is the derivative in the velocity generator |
 | Model proofs of a symmetry algebra (SR-C6) | `AngularMomentum.canonical_M_M`, `AngularMomentum.isPoissonHom_momentumMap`, `Galilei.canonical_K_p` | The Poincaré algebra |
 | Finite reactions without relativity (SR-C1–C3) | `TwoBody.disintegration_momentum_sq`, `TwoBody.isElastic_iff` | Relativistic shells and thresholds |
 
-**What mechanics found out of reach.** These findings set expectations for
-the rows of this volume.
+**Analytic prerequisites and limits.**
 
-- *Measures and integrals to infinity.* Several mechanics rows are closed
-  with a remainder because they need the push-forward of a measure, an
-  integral over a closed curve, or an integral to infinity (cross-sections,
-  the angle of scattering). §§10 and 12 of this volume are of the same kind.
-  SR-I4 stays an interface of its own, and these rows are expected to close
-  with a stated remainder unless shell measures are built first. Integrals up
-  to a simple turning point were first recorded as out of reach. They are
-  Lebesgue integrals with an integrable singularity, and they were proved
-  afterwards (`integral_comp_eq_integral_div_sqrt_turning`): an obstacle of
-  this kind is to be checked against the integral that Mathlib has before it
-  is written into a row.
-- *Asymptotic statements.* Six mechanics rows state an approximation for
-  which the text gives no error estimate. What could be proved was an exact
-  identity next to each. For SR-K5 and the expansion of §9, the theorem with
-  its estimate has to be chosen before the work starts. The uniform particle
-  limit of the GR volume is the existing model of such a statement.
+- *Measures.* `Scattering.crossSection_apply` supplies a worked
+  change-of-variables proof for a measurable deflection branch, and
+  `Mechanics.volume_image_hamiltonianFlow` supplies a phase-volume result on
+  the flow domain. For §§10 and 12, SR-I4 still requires the measure on the
+  massive and punctured massless shells, its Lorentz pushforward law, and
+  the measure and flux factors on the collision constraint locus.
+- *Asymptotic statements.* `Variational.exists_second_order_bound` gives a
+  uniform second-order remainder for a smooth scalar family on a compact
+  parameter set. For SR-K5 and §9, state the compact velocity range and the
+  allowed values of `c`. A second-order bound for `γ` in the parameter
+  `c⁻²` gives a first-order bound for the rest-energy subtraction after
+  multiplying by `mc²`.
 - *Domains that are not all of `ℝⁿ`.* A free C∞-ring is the ring of smooth
   functions on all of `ℝⁿ`. Mechanics used three devices for other domains: a
   global chart (`s = log r` for the radius), an adjoined inverse whose
@@ -110,39 +94,25 @@ the rows of this volume.
   is different: the momentum is a derivative in the velocity, and the chart
   changes that derivative (item 4 below).
 
-**Changes to this plan.**
+**Proof design.**
 
-1. *SR-C6 is not conditional any more.* It is a finite list of bracket
-   identities on generators, as `AngularMomentum.canonical_M_M` is, and
-   belongs to SR5 without a prerequisite. The Galilei algebra with the mass
-   as its central term is `Galilei.canonical_K_p`; the passage from one
-   algebra to the other is a statement about a family in `c` and is a
-   separate target.
-2. *New target SR-D7:* the coordinate-time Hamiltonian as an element of a
+1. *SR-C6 in SR5* uses the canonical Poisson API for a finite list of bracket
+   identities on generators, following `AngularMomentum.canonical_M_M`.
+   The contraction to the Galilei algebra with mass as its central term
+   (`Galilei.canonical_K_p`) is a separate statement about a family in `c`.
+2. *SR-D7* treats the coordinate-time Hamiltonian as an element of a
    free ring. It is the Hamiltonian half of SR-D4 and needs no velocity ball.
-3. *New target SR-D8:* the mass shell as a coisotropic ideal, with its
+3. *SR-D8* treats the mass shell as a coisotropic ideal, with its
    reduced ring. It gives the algebraic meaning of the parameter degeneracy
    of SR-D2 and uses the reduction theorem that gave the reduced mass in
    mechanics.
-4. *SR-D4 cannot reuse the Legendre API of mechanics as it stands.* That
-   API is for a Lagrangian in a free ring whose generators are the positions
-   and the velocities: `VelocitySpace.momentum` differentiates with respect
-   to the velocity generator, and
-   `VelocitySpace.IsHyperregular.isTrajectory_iff_isSolution` identifies that
-   generator with the time derivative of the position. In the velocity,
-   `−m√(1 − ‖v‖²)` is not an element of a free ring. The proper velocity
-   `w = γv` is a global chart of the ball, and `v = w/√(1 + ‖w‖²)`, the
-   Lagrangian `−m/√(1 + ‖w‖²)` and the momentum `m w` are smooth functions
-   of `w`. But `m w` is the derivative of the Lagrangian with respect to
-   `v`, not with respect to `w`: for `d = 1`,
-   `∂L/∂w = m w/(1 + w²)^{3/2}`, which is not invertible. A statement in
-   this chart therefore needs two things that the API does not have: the
-   vertical derivatives transported to the chart,
-   `∂/∂vᵢ = Σⱼ (∂wⱼ/∂vᵢ) ∂/∂wⱼ`, and the relation `q̇ = v(w)` along a curve
-   in place of `q̇ = w`. The alternative is the open-domain analytic model
-   that SR-D1 already uses. The choice between the two is recorded before
-   implementation; smoothness in the chart alone does not justify the cited
-   API.
+4. *SR-D4 starts on the open velocity ball.* Use the same open-domain
+   analytic model as SR-D1 and take the fibre derivative in the physical
+   velocity `v`. The inverse momentum map can use the proper velocity
+   `w = γv`, with `v = w/√(1 + ‖w‖²)` and `p = m w`. A later free-ring
+   comparison in `w` would need the transported vertical derivatives
+   `∂/∂vᵢ = Σⱼ (∂wⱼ/∂vᵢ) ∂/∂wⱼ` and the trajectory relation `q̇ = v(w)`.
+   [Variational note V06](variational-notes.md#v06-relativistic-fibre-derivatives-use-the-physical-velocity)
 5. *SR3 takes the form of `TwoBody`.* Decay and elastic kinematics are real
    vector algebra, with statements of the form "the conservation laws hold
    exactly when the outgoing data are …". The nonrelativistic statements are
@@ -504,7 +474,10 @@ all momenta, so `H` is an element of the canonical phase space
 `isTrajectory_canonical_iff` that along a trajectory `p` is constant and
 `q̇ = p/H`, that `‖q̇‖ < 1`, and that the momentum, the energy and the orbital
 angular momentum are integrals of the motion. This uses the canonical bracket
-and no velocity chart. The comparison with SR-D1 goes through SR-D4.
+and no velocity chart. The explicit trajectory
+`(q₀ + t · p₀ / H(p₀), p₀)` gives the all-time model for arbitrary initial
+data. Prove completeness for this Hamiltonian before invoking the all-time
+flow interface. The comparison with SR-D1 goes through SR-D4.
 
 ### Massive and massless shells
 
@@ -538,7 +511,7 @@ invariance theorem. These are new targets, not properties of the existing
 total definition `fourVelocity` at a null vector.
 
 **Target SR-D8 [A].** On the canonical phase space of an event `x` and its
-momentum covector `p`, the ideal `I = (g(p,p) + m²)` is coisotropic. The
+momentum covector `p`, the ideal `I = (g⁻¹(p,p) + m²)` is coisotropic. The
 momenta `p_μ` and the orbital charges `x_μ p_ν − x_ν p_μ` have zero bracket
 with its generator, so they lie in the normalizer `N(I)`, and their classes
 in the reduced ring `N(I)/I` satisfy the relations of SR-C6. For `m > 0` and
@@ -785,8 +758,8 @@ by [`checks/CoreImports.lean`](../checks/CoreImports.lean).
 | SR-I1: compact curve calculus | Local C¹/C² regularity, chain rule, interval substitution and integration by parts | Used by existing proper-time and free-action theorems; reuse their actual hypotheses |
 | SR-I2: localized variations | Small fixed-endpoint perturbations remain in an open timelike jet domain; actual action differentiation and fundamental lemma | Supplied by `Mechanics.OpenDomain` for the present flat model |
 | SR-I3: convexity and clock comparison | Reverse Cauchy–Schwarz, integral inequality and continuous equality case | New proof targets for inertial maximality |
-| SR-I4: shell change of variables | Jacobians, integration on smooth level sets and pushforward equality | Needed for distributions and phase-space rates; no placeholder axiom. Mechanics built no push-forward measure, so there is no shared precursor |
-| SR-I5: asymptotic estimates | Uniform Taylor remainders on a compact velocity range, with explicit `c` domain | New target; does not substitute for ODE stability. The theorem with its estimate is chosen first |
+| SR-I4: shell change of variables | Jacobians, integration on smooth level sets and pushforward equality | `Scattering.crossSection_apply` is a proof model. Shell measures and collision-locus change of variables remain SR targets |
+| SR-I5: asymptotic estimates | Uniform Taylor remainders on a compact velocity range, with explicit `c` domain | Instantiate `Variational.exists_second_order_bound` for the energy expansion. Trajectory estimates require a separate stability argument |
 | SR-I6: generalized coefficients | Cotangent comparison and extension of smooth families to nilpotent coefficient algebras | Research stage; no real-coefficient theorem is promoted without this bridge |
 
 Standard mathlib results should discharge these interfaces where available
@@ -804,10 +777,12 @@ whose only role is to assert the desired conclusion.
    Review and ratify the proposed shared interfaces with the ED and GR
    consumers before committing to new public APIs. This manuscript records
    the proposal; completing its Markdown does not complete that review gate.
-2. **SR1 — free massive dynamics.** Prove SR-D2–D4 and SR-D7, acceleration
-   orthogonality and observer energy positivity. Acceptance: a nonzero boosted particle,
-   a nonlinear regular reparametrization and the spatial Legendre inverse
-   all exercise the actual action and momentum definitions.
+2. **SR1 — free massive dynamics.** First derive constant normalized momentum
+   from SR-D1 and prove the observer-energy identities. Complete SR-D2 with
+   acceleration orthogonality and the velocity Hessian's radial kernel.
+   Develop SR-D7 on all momenta, then connect it to the open velocity ball in
+   SR-D4. Use a nonzero boosted particle, a nonlinear regular
+   reparametrization, and the spatial Legendre inverse as checks.
 3. **SR2 — shells and massless motion.** Construct smooth positive shells and
    the auxiliary-field variational model. Acceptance: massive rest momentum,
    a nonzero null momentum and exclusion of the null cone vertex; massive
@@ -842,9 +817,8 @@ when the volume is done.
 
 ## Evidence and proof ledger
 
-“Implemented” means the cited declarations exist with proofs at `61d8fdf`,
-and for SR-E11 at `fd0ccaa`; it does not report a new build performed by this
-manuscript. “Target” is an
+“Implemented” means the cited declarations exist with proofs at the
+proof-status baseline. “Target” is an
 unimplemented theorem in the specified real model. “Conditional target”
 includes a named mathematical or physical premise. “Research target” needs
 a new framework or comparison. SymPy checks remain evidence rather than
@@ -862,7 +836,7 @@ Lean proof, even when they simplify exactly to zero.
 | SR-E8 | Decay and elastic kinematics | Target; no newly executed experiment claimed | Exact Lean examples for masses, threshold and boosted data |
 | SR-E9 | Rest-energy subtraction and `c→∞` remainder | Target | Quantified uniform estimate, not a formal series alone |
 | SR-E10 | Universal C∞/native tangent comparison | Research target | Prove restriction and pullback compatibility before reuse |
-| SR-E11 | Shared prerequisites supplied by the mechanics programme | The declarations of [After the mechanics programme](#after-the-mechanics-programme), pinned by `checks/PoissonAPI.lean`, `checks/CanonicalAPI.lean` and `checks/ReductionAPI.lean` | SR-owned consumer examples for SR-D7, SR-D8 and SR-C6 |
+| SR-E11 | Shared prerequisites supplied by the mechanics programme | [Canonical algebra](../checks/CanonicalAPI.lean), [reduction](../checks/ReductionAPI.lean), [Hamiltonian flow](../checks/HamiltonianFlowAPI.lean) and [scattering measures](../checks/ScatteringAPI.lean) | SR-owned consumer examples for SR-D7, SR-D8 and SR-C6; an invariant shell measure |
 
 The existing experiment package contains
 [`verify_electrodynamics.py`](../experiments/ainos_experiments/verify_electrodynamics.py)

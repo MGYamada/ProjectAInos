@@ -1,4 +1,7 @@
-import ProjectAinos
+import ProjectAinos.Thermodynamics.AtomicObstruction
+import ProjectAinos.Thermodynamics.AtomicReservoir
+import ProjectAinos.Thermodynamics.LogarithmicThermalModel
+import ProjectAinos.Thermodynamics.ReactingReservoir
 
 open ProjectAinos.Thermodynamics
 open ProjectAinos.Thermodynamics.Physical

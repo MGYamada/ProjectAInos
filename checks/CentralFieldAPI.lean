@@ -3,7 +3,8 @@ Copyright (c) 2026 Masahiko G. Yamada. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 module
-import ProjectAinos
+import ProjectAinos.Mechanics.Poisson.Apsides
+import ProjectAinos.Mechanics.Poisson.KeplerOrbit
 
 /-! Public consumers of the central-field API: the exponential, the cosine and
 the sine of an element of a C-infinity ring, polar co-ordinates as a canonical

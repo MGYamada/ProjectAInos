@@ -441,21 +441,42 @@ class PeriodEstimate:
     max_relative_energy_drift: float
 
 
+def _check_periodic_energy_level(a: float, b: float, amp: float) -> None:
+    # Keep the input floats exact so that rounding cannot move the initial
+    # energy to the other side of a barrier before we even start RK4.
+    alpha, beta, amplitude = map(sp.Rational, (a, b, amp))
+    x = sp.Symbol('x')
+    potential = sp.Poly(x**2 / 2 + alpha * x**3 / 3 + beta * x**4 / 4, x)
+    energy_gap = potential.eval(amplitude) - potential
+    if energy_gap.eval(0) <= 0 or energy_gap.diff().eval(amplitude) >= 0:
+        raise PeriodSearchError("initial energy does not give a simple turning point toward zero")
+
+    # The component through zero must reach the amplitude and have a simple negative
+    # endpoint. An intervening root is either a turn or an equilibrium.
+    other_roots = energy_gap.exquo(sp.Poly(x - amplitude, x)).real_roots(
+        multiple=False, radicals=False)
+    left_multiplicity = next((multiplicity for root, multiplicity in reversed(other_roots)
+                              if root < 0), None)
+    if left_multiplicity != 1 or any(0 < root < amplitude for root, _ in other_roots):
+        raise PeriodSearchError("initial energy does not give a bounded periodic orbit about zero")
+
+
 def estimate_period(a_: float, b_: float, amp: float, dt: float = 2.0e-4, *,
                     max_time: float = 20.0, max_steps: int = 200_000,
                     energy_tolerance: float = 1.0e-6) -> PeriodEstimate:
     """Integrate x'' = -x-a*x^2-b*x^3 from the positive turning point (amp, 0).
 
-    Fixed-step RK4 must find a negative-position minimum (+ velocity crossing)
-    followed by a positive-position maximum (- crossing). The second crossing
+    The exact energy level through the input must bound an interval containing
+    zero between simple turning points. Fixed-step RK4 must then find a
+    negative-position minimum (+ velocity crossing) followed by a
+    positive-position maximum (- crossing). The second crossing
     measures one period from the initial maximum. Crossing times and positions
     use linear interpolation in velocity across their bracketing step, including
     an exact zero at the right endpoint once. Both time and step budgets apply.
 
-    Invalid inputs raise ValueError. Nonfinite evolution, excessive relative
-    drift in E=v^2/2+x^2/2+a*x^3/3+b*x^4/4, unexpected turning points, or budget
-    exhaustion raise PeriodSearchError. This estimates oscillations about zero;
-    it does not assign a period to stationary or escaping trajectories.
+    Invalid inputs raise ValueError. A nonperiodic energy level, nonfinite
+    evolution, excessive relative drift in E=v^2/2+x^2/2+a*x^3/3+b*x^4/4,
+    unexpected turning points, or budget exhaustion raise PeriodSearchError.
     """
     values = (a_, b_, amp, dt, max_time, energy_tolerance)
     if not all(math.isfinite(value) for value in values):
@@ -483,6 +504,7 @@ def estimate_period(a_: float, b_: float, amp: float, dt: float = 2.0e-4, *,
     energy_scale = max(abs(initial_energy), amp * amp / 2)
     if energy_scale == 0:
         raise ValueError("amplitude is too small to resolve its energy")
+    _check_periodic_energy_level(a_, b_, amp)
 
     x, v = amp, 0.0
     crossings = []

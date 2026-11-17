@@ -3,7 +3,9 @@ Copyright (c) 2026 Masahiko G. Yamada. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 module
-import ProjectAinos
+import ProjectAinos.SmoothGeometry.Minkowski.HodgeCurrent
+import ProjectAinos.SpecialRelativity.Examples
+import ProjectAinos.SpecialRelativity.ParticleAction
 
 /-! Public consumers of the §3.1 API. Default elaborator options are intentional:
 these checks must not rely on the implementation's transparency settings. -/

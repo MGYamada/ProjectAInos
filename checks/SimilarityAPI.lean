@@ -3,7 +3,8 @@ Copyright (c) 2026 Masahiko G. Yamada. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 module
-import ProjectAinos
+import ProjectAinos.Mechanics.Poisson.KeplerOrbit
+import ProjectAinos.Mechanics.Poisson.VirialAverage
 
 /-! Public consumers of the similarity API: the change of the unit of time,
 homogeneous potentials, similar solutions, the virial theorem for time

@@ -27,11 +27,12 @@ jobs:
           python-version: "3.12"
       - name: Test Markdown staging and HTML links
         run: PYTHONPATH=docs python -m unittest discover -s docs/tests -v
-  lean:
-    name: Lean build
+  lean-scope:
+    name: Detect Lean changes
     runs-on: ubuntu-24.04
-    # A cold build and the full check suite can exceed 30 minutes.
-    timeout-minutes: 45
+    timeout-minutes: 5
+    outputs:
+      required: ${{ steps.scope.outputs.required }}
     steps:
       - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
         with:
@@ -46,41 +47,90 @@ jobs:
         # Pushes to main always run the Lean steps: they verify main and warm
         # the build cache that pull requests restore. A pull request skips them
         # only when it changes no Lean source, check, toolchain, manifest or
-        # this workflow. If the changed files cannot be listed, the steps run.
-        # Rename detection is off, so a renamed file is listed under both its
-        # old and its new path and moving a Lean file away still counts.
+        # this workflow. If Git cannot compare the revisions, the steps run.
+        # Rename detection is off, so Git also checks the source path of a move.
         run: |
           lean=true
           if [ "$EVENT_NAME" = pull_request ]; then
-            if changed=$(git diff --name-only --no-renames HEAD^1 HEAD); then
-              pattern='\.lean$|^lakefile\.toml$|^lake-manifest\.json$|^lean-toolchain$|^checks/|^\.github/workflows/ci\.yml$'
-              if ! printf '%s\n' "$changed" | grep -qE "$pattern"; then
-                lean=false
-              fi
+            if git diff --quiet --no-renames HEAD^1 HEAD -- ':(glob)**/*.lean' \
+                lakefile.toml lake-manifest.json lean-toolchain checks/ \
+                .github/workflows/ci.yml .github/actions/lean-setup/; then
+              lean=false
             fi
           fi
-          echo "lean=$lean" >> "$GITHUB_OUTPUT"
+          echo "required=$lean" >> "$GITHUB_OUTPUT"
           echo "Lean steps required: $lean"
-      - name: Build and audit Lean
-        if: steps.scope.outputs.lean == 'true'
-        uses: leanprover/lean-action@ba3fdfe5c4476c925da13bf11a005ddb47e47aee # v1
-        env:
-          # This lean-action revision otherwise exports a fixed flat cache URL.
-          # Its get-cache step unsets an explicitly empty value, allowing the
-          # pinned Mathlib client to select its own default cache routing.
-          MATHLIB_CACHE_GET_URL: ""
+
+  lean-subject:
+    name: Lean (${{ matrix.name }})
+    needs: lean-scope
+    if: needs.lean-scope.outputs.required == 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - subject: thermodynamics
+            name: Thermodynamics
+          - subject: mechanics
+            name: Mechanics
+          - subject: classical-fields
+            name: Classical field theory
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
         with:
-          build: "true"
-          build-args: --wfail ProjectAinos
-          use-mathlib-cache: "true"
-          # Run inside the action, before it saves the build cache, so the
-          # linked mk_all executable is cached and not rebuilt on every run.
-          mk_all-check: "true"
-          mk_all-args: --lib ProjectAinos
-          axiom-audit: "true"
-          axiom-audit-root: ProjectAinos
-          axiom-audit-allow: propext,Classical.choice,Quot.sound
-      - name: Run the import-boundary, API and axiom checks
-        if: steps.scope.outputs.lean == 'true'
-        # Every file in checks/ runs in parallel; a new check needs no step here.
-        run: checks/run.sh
+          persist-credentials: false
+      - uses: ./.github/actions/lean-setup
+        with:
+          save-dependencies: ${{ matrix.subject == 'classical-fields' && 'true' || 'false' }}
+      - name: Restore subject build cache
+        uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25 # v5
+        with:
+          path: .lake/build
+          key: lean-build-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('lean-toolchain', 'lake-manifest.json', 'lakefile.toml') }}-${{ matrix.subject }}-${{ github.sha }}
+          restore-keys: lean-build-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('lean-toolchain', 'lake-manifest.json', 'lakefile.toml') }}-${{ matrix.subject }}-
+      - name: Build and check the subject
+        env:
+          LEAN_SUBJECT: ${{ matrix.subject }}
+        run: python3 checks/ci.py "$LEAN_SUBJECT" "$RUNNER_TEMP/$LEAN_SUBJECT.tar"
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: lean-objects-${{ matrix.subject }}
+          path: ${{ runner.temp }}/${{ matrix.subject }}.tar
+          if-no-files-found: error
+          overwrite: true
+
+  lean:
+    name: Lean build
+    needs: [lean-scope, lean-subject]
+    if: ${{ !cancelled() }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - name: Require the expected subject results
+        env:
+          SCOPE_RESULT: ${{ needs.lean-scope.result }}
+          LEAN_REQUIRED: ${{ needs.lean-scope.outputs.required }}
+          SUBJECT_RESULT: ${{ needs.lean-subject.result }}
+        run: |
+          test "$SCOPE_RESULT" = success
+          case "$LEAN_REQUIRED:$SUBJECT_RESULT" in
+            true:success|false:skipped) ;;
+            *) echo "Unexpected Lean result: $LEAN_REQUIRED:$SUBJECT_RESULT"; exit 1 ;;
+          esac
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        if: needs.lean-scope.outputs.required == 'true'
+        with:
+          persist-credentials: false
+      - uses: ./.github/actions/lean-setup
+        if: needs.lean-scope.outputs.required == 'true'
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        if: needs.lean-scope.outputs.required == 'true'
+        with:
+          pattern: lean-objects-*
+          path: ${{ runner.temp }}/lean-objects
+          merge-multiple: true
+      - name: Check root imports, shared boundaries and axioms
+        if: needs.lean-scope.outputs.required == 'true'
+        run: python3 checks/ci.py integration "$RUNNER_TEMP/lean-objects"

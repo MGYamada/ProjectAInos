@@ -3,7 +3,8 @@ Copyright (c) 2026 Masahiko G. Yamada. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 module
-import ProjectAinos
+import ProjectAinos.Mechanics.Rigid.InertiaTensor
+import ProjectAinos.Mechanics.Rigid.RegularPrecession
 
 /-! Public consumers of the rigid-body kinematics API. Default elaborator
 options are intentional: these checks must not rely on the implementation's
