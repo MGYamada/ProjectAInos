@@ -10,7 +10,6 @@ public import ProjectAinos.SmoothGeometry.Lorentzian.HodgeFlat
 
 @[expose] public section
 noncomputable section
-set_option backward.isDefEq.respectTransparency false
 open scoped Manifold ContDiff
 
 namespace ProjectAinos.SmoothGeometry.LorentzianHodgeExamples

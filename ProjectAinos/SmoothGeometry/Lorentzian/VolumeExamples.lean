@@ -18,7 +18,6 @@ the curved conformal plane fix the normalization without assuming flatness.
 
 @[expose] public section
 noncomputable section
-set_option backward.isDefEq.respectTransparency false
 open scoped Manifold ContDiff
 
 namespace ProjectAinos.SmoothGeometry.LorentzianVolumeExamples
@@ -53,6 +52,7 @@ theorem minkowski_reverse_volume (σ : LorentzConvention) (d : ℕ) (x : Minkows
   rw [volumeForm_reverse]
   change -((minkowskiMetric σ d).volumeForm (OrientedAtlas.standard (d + 1)) x) = _
   rw [minkowski_volume]
+  rfl
 
 open LorentzianCharts
 

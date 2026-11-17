@@ -17,7 +17,6 @@ or global Hausdorff assumption on the manifold.
 
 @[expose] public section
 noncomputable section
-set_option backward.isDefEq.respectTransparency false
 
 open Bundle FiberBundle ContinuousLinearMap Set
 open scoped Manifold ContDiff Topology

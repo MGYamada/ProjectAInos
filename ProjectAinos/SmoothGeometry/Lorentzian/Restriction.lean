@@ -11,7 +11,6 @@ public import ProjectAinos.SmoothGeometry.Lorentzian.Naturality
 
 @[expose] public section
 noncomputable section
-set_option backward.isDefEq.respectTransparency false
 
 open TopologicalSpace VectorField
 open scoped Manifold ContDiff

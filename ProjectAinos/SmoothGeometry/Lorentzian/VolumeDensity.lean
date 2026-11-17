@@ -16,7 +16,6 @@ No orientation or global frame is assumed.
 
 @[expose] public section
 noncomputable section
-set_option backward.isDefEq.respectTransparency false
 
 open Module Bundle
 open scoped Manifold ContDiff Topology BigOperators

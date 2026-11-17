@@ -18,7 +18,6 @@ sets, including finite closed intervals with regular extensions at endpoints.
 
 @[expose] public section
 noncomputable section
-set_option backward.isDefEq.respectTransparency false
 
 open Bundle FiberBundle VectorField ContinuousLinearMap
 open scoped Manifold ContDiff Topology

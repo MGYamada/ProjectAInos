@@ -16,7 +16,6 @@ derivative without choosing a chart in the theorem statement.
 
 @[expose] public section
 noncomputable section
-set_option backward.isDefEq.respectTransparency false
 
 open Bundle
 open scoped Manifold ContDiff Topology

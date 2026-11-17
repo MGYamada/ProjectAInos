@@ -11,7 +11,6 @@ public import ProjectAinos.SmoothGeometry.DifferentialForm.Flat
 
 @[expose] public section
 noncomputable section
-set_option backward.isDefEq.respectTransparency false
 
 open Bundle
 open scoped Manifold ContDiff Topology
@@ -34,7 +33,8 @@ theorem contMDiffAt_flat_iff (α : Form E k) {r : ℕ∞ω} {x : E} :
     ContMDiffAt 𝓘(ℝ, E) (𝓘(ℝ, E).prod 𝓘(ℝ, E [⋀^Fin k]→L[ℝ] ℝ)) r
       (fun y => (⟨y, α y⟩ : TotalSpace (E [⋀^Fin k]→L[ℝ] ℝ)
         (fun y : E => TangentSpace 𝓘(ℝ, E) y [⋀^Fin k]→L[ℝ] ℝ))) x ↔ ContDiffAt ℝ r α x := by
-  rw [contMDiffAt_form_iff, trivializationCoefficients_flat, contMDiffAt_iff_contDiffAt]
+  refine (contMDiffAt_form_iff 𝓘(ℝ, E)).trans ?_
+  rw [trivializationCoefficients_flat, contMDiffAt_iff_contDiffAt]
 
 /-- Flat smoothness gives exactly the native smooth-section regularity. -/
 theorem contMDiff_flat_iff (α : Form E k) {r : ℕ∞ω} :

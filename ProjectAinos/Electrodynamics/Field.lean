@@ -15,7 +15,6 @@ potential, field equation with sources, or nontrivial bundle is asserted.
 -/
 @[expose] public section
 noncomputable section
-set_option backward.isDefEq.respectTransparency false
 open scoped ContDiff
 namespace ProjectAinos.Electrodynamics
 open SmoothGeometry SmoothGeometry.Minkowski SmoothGeometry.DifferentialForm SpecialRelativity

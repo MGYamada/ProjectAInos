@@ -15,7 +15,6 @@ The recursive tensor maps preserve smoothness in native bundle coordinates.
 
 @[expose] public section
 noncomputable section
-set_option backward.isDefEq.respectTransparency false
 
 open Bundle ContinuousLinearMap
 open scoped Manifold Topology ContDiff
@@ -155,7 +154,8 @@ theorem tangentEquiv_trans [IsManifold I ∞ P]
 @[simp] theorem pullbackField_refl (s : Shape) (T : (s.bundle I (M := M)).Section I) :
     pullbackField I s (Diffeomorph.refl I M ∞) T = T := by
   ext x
-  simp [pullbackField_apply, pullback]
+  rw [pullbackField_apply, tangentEquiv_refl]
+  exact DFunLike.congr_fun (map_refl I s x) (T x)
 
 /-- Pullback reverses composition, as an equality of smooth tensor fields. -/
 theorem pullbackField_trans [IsManifold I ∞ P] (s : Shape)
@@ -163,8 +163,9 @@ theorem pullbackField_trans [IsManifold I ∞ P] (s : Shape)
     (T : (s.bundle I (M := P)).Section I) :
     pullbackField I s (f.trans g) T = pullbackField I s f (pullbackField I s g T) := by
   ext x
-  simp only [pullbackField_apply, tangentEquiv_trans, pullback_trans,
-    ContinuousLinearEquiv.trans_apply, Diffeomorph.coe_trans, Function.comp_apply]
+  simp only [pullbackField_apply, tangentEquiv_trans, pullback_trans, Diffeomorph.coe_trans,
+    Function.comp_apply]
+  rfl
 
 @[simp] theorem pullbackField_symm (s : Shape) (f : M ≃ₘ⟮I, I⟯ N)
     (T : (s.bundle I (M := M)).Section I) :

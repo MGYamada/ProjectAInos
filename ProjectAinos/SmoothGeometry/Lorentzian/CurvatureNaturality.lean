@@ -15,7 +15,6 @@ be globally bijective, and vector-field hypotheses are local at the target point
 
 @[expose] public section
 noncomputable section
-set_option backward.isDefEq.respectTransparency false
 
 open Bundle FiberBundle VectorField
 open scoped Manifold ContDiff Topology

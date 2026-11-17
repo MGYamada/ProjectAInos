@@ -16,7 +16,6 @@ The quadratic action admits null reference curves and unrestricted test families
 
 @[expose] public section
 noncomputable section
-set_option backward.isDefEq.respectTransparency false
 
 open Bundle Set Filter MeasureTheory
 open scoped Manifold ContDiff Topology

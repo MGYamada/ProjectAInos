@@ -11,7 +11,6 @@ to other velocities is not assumed to be differentiable. Units are c = 1.
 -/
 @[expose] public section
 noncomputable section
-set_option backward.isDefEq.respectTransparency false
 open Set MeasureTheory
 open scoped ContDiff
 namespace ProjectAinos.SpecialRelativity

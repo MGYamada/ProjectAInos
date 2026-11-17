@@ -13,8 +13,6 @@ public import ProjectAinos.SmoothAlgebra.Localization
 
 noncomputable section
 
-set_option backward.isDefEq.respectTransparency false
-
 namespace ProjectAinos.SmoothAlgebra.SmoothLocalization
 
 variable {A : Type*} [CommRing A] [Algebra ℝ A] [SmoothRing A]

@@ -11,7 +11,6 @@ public import ProjectAinos.SmoothGeometry.Lorentzian.CurveFamily
 
 @[expose] public section
 noncomputable section
-set_option backward.isDefEq.respectTransparency false
 
 open Set Filter
 open scoped Manifold ContDiff Topology

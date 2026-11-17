@@ -12,7 +12,6 @@ public import Mathlib.Analysis.Calculus.Deriv.Prod
 
 @[expose] public section
 noncomputable section
-set_option backward.isDefEq.respectTransparency false
 
 open ContinuousLinearMap Set Filter Metric
 open scoped Topology

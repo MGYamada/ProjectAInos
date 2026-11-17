@@ -16,7 +16,6 @@ derivative. Native geometric versions use the proved chart laws.
 
 @[expose] public section
 noncomputable section
-set_option backward.isDefEq.respectTransparency false
 open Module
 
 namespace ProjectAinos.SmoothGeometry.DifferentialForm

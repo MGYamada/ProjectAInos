@@ -14,9 +14,6 @@ public import ProjectAinos.SmoothGeometry.OpenImmersion
 
 noncomputable section
 
-set_option backward.isDefEq.respectTransparency false
-set_option backward.defeqAttrib.useBackward true
-
 open scoped Manifold ContDiff Topology
 
 namespace ProjectAinos.SmoothGeometry.Manifold
@@ -159,7 +156,8 @@ def euclideanPresheafMap (n : ℕ) :
       (Spec.locallyRingedSpaceObj (SmoothRingCat.of (SmoothOperation n))).toPresheafedSpace where
   base := euclideanToSpec n
   c :=
-    { app U := CommRingCat.ofHom (euclideanComap U.unop).toAlgHom.toRingHom
+    { app (U : (Opens (RealSpectrum (SmoothOperation n)))ᵒᵖ) :=
+        CommRingCat.ofHom (euclideanComap U.unop).toAlgHom.toRingHom
       naturality := by intros; ext f; rfl }
 
 instance euclideanPresheafMap_isIso (n : ℕ) : IsIso (euclideanPresheafMap n) := by
@@ -179,14 +177,16 @@ def euclideanUnderlyingIso (n : ℕ) :
       (Spec.locallyRingedSpaceObj (SmoothRingCat.of (SmoothOperation n))).toLocallyRingedSpace :=
   AlgebraicGeometry.LocallyRingedSpace.isoOfSheafedSpaceIso
     (AlgebraicGeometry.SheafedSpace.fullyFaithfulForgetToPresheafedSpace.preimageIso
-      (asIso (euclideanPresheafMap n)))
+      (@asIso _ _ _ _ (euclideanPresheafMap n) (euclideanPresheafMap_isIso n)))
 
 /-- The Euclidean comparison preserves every C∞ operation on sections. -/
 def euclideanMap (n : ℕ) :
     locallyRingedSpace 𝓘(ℝ, Fin n → ℝ) (Fin n → ℝ) ⟶
       Spec.locallyRingedSpaceObj (SmoothRingCat.of (SmoothOperation n)) where
   toLRSHom := (euclideanUnderlyingIso n).hom
-  map_op U := (euclideanComap U.unop).map_op
+  map_op U :=
+    let V : Opens (RealSpectrum (SmoothOperation n)) := U.unop
+    (euclideanComap V).map_op
 
 /-- Euclidean space with its smooth-function sheaf is the C∞ spectrum of its
 free C∞-ring, as a smooth locally ringed space. -/

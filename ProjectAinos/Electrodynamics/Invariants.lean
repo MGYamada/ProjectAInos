@@ -9,7 +9,6 @@ inverse Lorentz metric on the observer-annihilating covectors.
 -/
 @[expose] public section
 noncomputable section
-set_option backward.isDefEq.respectTransparency false
 namespace ProjectAinos.Electrodynamics
 open SmoothGeometry SmoothGeometry.Minkowski SmoothGeometry.DifferentialForm SpecialRelativity
 

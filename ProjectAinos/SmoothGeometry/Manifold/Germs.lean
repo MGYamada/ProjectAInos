@@ -15,8 +15,6 @@ public import Mathlib.Geometry.Manifold.BumpFunction
 
 noncomputable section
 
-set_option backward.isDefEq.respectTransparency false
-
 open scoped Manifold ContDiff Topology
 
 namespace ProjectAinos.SmoothGeometry.Manifold

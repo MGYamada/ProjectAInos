@@ -12,7 +12,6 @@ public import Mathlib.Topology.VectorBundle.FiniteDimensional
 
 @[expose] public section
 noncomputable section
-set_option backward.isDefEq.respectTransparency false
 open Bundle ContinuousLinearMap
 open scoped Manifold ContDiff Topology
 

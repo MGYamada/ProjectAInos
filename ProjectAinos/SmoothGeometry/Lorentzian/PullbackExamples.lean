@@ -17,8 +17,6 @@ a nondegenerate induced metric.
 
 @[expose] public section
 noncomputable section
-set_option backward.isDefEq.respectTransparency false
-set_option backward.defeqAttrib.useBackward true
 
 open ContinuousLinearMap
 open scoped Manifold ContDiff
@@ -44,10 +42,10 @@ theorem metric_timeAxis_pullback (t v w : ℝ) :
     covariantPullbackField 𝓘(ℝ, ℝ) 𝓘(ℝ, Plane) 2
       (timeAxis : C^∞⟮𝓘(ℝ, ℝ), ℝ; 𝓘(ℝ, Plane), Plane⟯) metric.toTensor t v w =
       (-1 + 4 * t ^ 2) * v * w := by
-  rw [covariantPullbackField_two_apply]
   change metric.form (timeAxis t) (mfderiv 𝓘(ℝ, ℝ) 𝓘(ℝ, Plane) timeAxis t v)
     (mfderiv 𝓘(ℝ, ℝ) 𝓘(ℝ, Plane) timeAxis t w) = _
-  rw [mfderiv_timeAxis, metric_coordinates]
+  rw [mfderiv_timeAxis]
+  refine (metric_coordinates _ _ _).trans ?_
   change -((v * 1) * (w * 1)) +
     (v * 0 + 2 * (t * 1) * (v * 1)) * (w * 0 + 2 * (t * 1) * (w * 1)) = _
   ring
@@ -57,11 +55,11 @@ theorem minkowski_timeAxis_pullback (t v w : ℝ) :
     covariantPullbackField 𝓘(ℝ, ℝ) 𝓘(ℝ, Plane) 2
       (timeAxis : C^∞⟮𝓘(ℝ, ℝ), ℝ; 𝓘(ℝ, Plane), Plane⟯)
       (minkowskiMetric .timeNegative 1).toTensor t v w = -(v * w) := by
-  rw [covariantPullbackField_two_apply]
   change minkowskiForm .timeNegative 1
     (mfderiv 𝓘(ℝ, ℝ) 𝓘(ℝ, Plane) timeAxis t v)
     (mfderiv 𝓘(ℝ, ℝ) 𝓘(ℝ, Plane) timeAxis t w) = _
   rw [mfderiv_timeAxis]
+  change minkowskiForm .timeNegative 1 (timeAxis v) (timeAxis w) = _
   simp [minkowskiForm_apply, lorentzSign, Fin.sum_univ_succ]
   change -((v * 1) * (w * 1)) + ((v * 0) * (w * 0)) = _
   ring
@@ -78,10 +76,10 @@ theorem metric_timeAxis_pullback_degenerate (v w : ℝ) :
 theorem metric_constant_pullback (p q v w : Plane) :
     covariantPullbackField 𝓘(ℝ, Plane) 𝓘(ℝ, Plane) 2
       (ContMDiffMap.const p) metric.toTensor q v w = 0 := by
-  rw [covariantPullbackField_two_apply]
   change metric.form p (mfderiv 𝓘(ℝ, Plane) 𝓘(ℝ, Plane) (fun _ : Plane => p) q v)
     (mfderiv 𝓘(ℝ, Plane) 𝓘(ℝ, Plane) (fun _ : Plane => p) q w) = 0
   rw [mfderiv_const]
+  change metric.form p 0 0 = 0
   simp
 
 /-- A nonconstant map with a singular derivative between equal-dimensional spaces. -/
@@ -92,14 +90,14 @@ theorem metric_timeProjection_pullback (p v w : Plane) :
     covariantPullbackField 𝓘(ℝ, Plane) 𝓘(ℝ, Plane) 2
       (timeProjection : C^∞⟮𝓘(ℝ, Plane), Plane; 𝓘(ℝ, Plane), Plane⟯)
       metric.toTensor p v w = (-1 + 4 * (p 0) ^ 2) * v 0 * w 0 := by
-  rw [covariantPullbackField_two_apply]
   change metric.form (timeProjection p)
     (mfderiv 𝓘(ℝ, Plane) 𝓘(ℝ, Plane) timeProjection p v)
     (mfderiv 𝓘(ℝ, Plane) 𝓘(ℝ, Plane) timeProjection p w) = _
   have hd : mfderiv 𝓘(ℝ, Plane) 𝓘(ℝ, Plane) timeProjection p = timeProjection := by
     rw [mfderiv_eq_fderiv, timeProjection.fderiv]
     rfl
-  rw [hd, metric_coordinates]
+  rw [hd]
+  refine (metric_coordinates _ _ _).trans ?_
   change -((v 0 * 1) * (w 0 * 1)) +
     (v 0 * 0 + 2 * (p 0 * 1) * (v 0 * 1)) *
       (w 0 * 0 + 2 * (p 0 * 1) * (w 0 * 1)) = _

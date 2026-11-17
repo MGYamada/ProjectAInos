@@ -14,7 +14,6 @@ Source and target model spaces may have different dimensions.
 
 @[expose] public section
 noncomputable section
-set_option backward.isDefEq.respectTransparency false
 
 open Bundle Set
 open scoped Manifold ContDiff Topology
@@ -39,10 +38,12 @@ theorem chartCoefficients_nativePullback {e : OpenPartialHomeomorph M E}
       pullback (e' ∘ (f ∘ e.symm)) (chartCoefficients e' α) y := by
   have hs := contMDiffAt_symm_of_mem_maximalAtlas he hy
   have ht := contMDiffAt_of_mem_maximalAtlas he' hfy
-  rw [chartCoefficients, ← nativePullback_comp_at 𝓘(ℝ, E) 𝓘(ℝ, E) 𝓘(ℝ, F)
-    (hs.mdifferentiableAt (by simp)) (hf.mdifferentiableAt (by simp))]
-  rw [← nativePullback_flat, nativePullback_comp_at 𝓘(ℝ, E) 𝓘(ℝ, F) 𝓘(ℝ, F)
-    ((hf.comp y hs).mdifferentiableAt (by simp)) (ht.mdifferentiableAt (by simp))]
+  refine ((nativePullback_comp_at 𝓘(ℝ, E) 𝓘(ℝ, E) 𝓘(ℝ, F)
+    (hs.mdifferentiableAt (by simp)) (hf.mdifferentiableAt (by simp)) α).symm.trans ?_).trans
+      ((nativePullback_comp_at 𝓘(ℝ, E) 𝓘(ℝ, F) 𝓘(ℝ, F)
+        ((hf.comp y hs).mdifferentiableAt (by simp)) (ht.mdifferentiableAt (by simp))
+        (chartCoefficients e' α)).symm.trans
+          (congrFun (nativePullback_flat (e' ∘ (f ∘ e.symm)) (chartCoefficients e' α)) y))
   ext v
   change α (f (e.symm y))
       (fun i => mfderiv 𝓘(ℝ, E) 𝓘(ℝ, F) (f ∘ e.symm) y (v i)) =

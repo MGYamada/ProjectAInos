@@ -11,8 +11,6 @@ public import Mathlib.Topology.Algebra.Order.Field
 
 @[expose] public section
 noncomputable section
-set_option backward.isDefEq.respectTransparency false
-set_option backward.defeqAttrib.useBackward true
 
 open Set Metric Filter TopologicalSpace
 open scoped Topology

@@ -10,7 +10,6 @@ for that identity; C³ regularity supplies a C² transformed Lagrangian.
 -/
 @[expose] public section
 noncomputable section
-set_option backward.isDefEq.respectTransparency false
 open Set
 open scoped ContDiff
 namespace ProjectAinos.Electrodynamics

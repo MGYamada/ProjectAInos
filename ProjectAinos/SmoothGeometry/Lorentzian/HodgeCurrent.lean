@@ -15,7 +15,6 @@ No global Lorentz frame or flatness assumption is used.
 
 @[expose] public section
 noncomputable section
-set_option backward.isDefEq.respectTransparency false
 open scoped Manifold ContDiff
 
 namespace ProjectAinos.SmoothGeometry.LorentzMetric

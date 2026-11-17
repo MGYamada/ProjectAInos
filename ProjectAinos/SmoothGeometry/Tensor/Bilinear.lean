@@ -15,7 +15,6 @@ Their smoothness allows them to be used in vector-bundle charts.
 
 @[expose] public section
 noncomputable section
-set_option backward.isDefEq.respectTransparency false
 
 namespace ProjectAinos.SmoothGeometry.BilinearTensor
 

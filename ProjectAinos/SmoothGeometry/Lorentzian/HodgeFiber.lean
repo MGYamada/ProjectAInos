@@ -16,7 +16,6 @@ uniqueness hold on every tangent fibre without a chosen frame or chart.
 
 @[expose] public section
 noncomputable section
-set_option backward.isDefEq.respectTransparency false
 open Module exteriorPower
 open scoped Manifold ContDiff
 
@@ -69,7 +68,9 @@ omit [IsManifold 𝓘(ℝ, MinkowskiModel d) ∞ M] in
 /-- The top cotangent degree agrees with the declared spacetime dimension. -/
 theorem cotangent_topDegree (x : M) :
     d + 1 = Module.finrank ℝ (Dual ℝ (TangentSpace 𝓘(ℝ, MinkowskiModel d) x)) := by
-  simp [TangentSpace, MinkowskiModel]
+  have h : Module.finrank ℝ (Dual ℝ (Fin (d + 1) → ℝ)) = d + 1 := by
+    rw [Subspace.dual_finrank_eq, Module.finrank_fin_fun]
+  exact h.symm
 
 /-- The oriented volume with its top degree made explicit for exterior duality. -/
 def hodgeTopVolume (g : LorentzMetric σ d M) (o : OrientedAtlas (d + 1) M) (x : M) :

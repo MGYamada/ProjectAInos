@@ -10,7 +10,6 @@ public import ProjectAinos.SmoothGeometry.DifferentialForm.Naturality
 /-! # Hodge duality commutes with proper Lorentz pullbacks -/
 @[expose] public section
 noncomputable section
-set_option backward.isDefEq.respectTransparency false
 open Module exteriorPower
 namespace ProjectAinos.SmoothGeometry.Minkowski
 open DifferentialForm

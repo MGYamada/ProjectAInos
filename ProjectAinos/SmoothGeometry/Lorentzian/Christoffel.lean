@@ -16,7 +16,6 @@ evaluations of the constructed native connection, not independent arrays.
 
 @[expose] public section
 noncomputable section
-set_option backward.isDefEq.respectTransparency false
 
 open Bundle FiberBundle VectorField ContinuousLinearMap
 open scoped Manifold ContDiff

@@ -15,7 +15,6 @@ choice of chart in the endpoint pairings or in the acceleration residual.
 
 @[expose] public section
 noncomputable section
-set_option backward.isDefEq.respectTransparency false
 
 open Bundle Set MeasureTheory
 open scoped Manifold ContDiff Topology

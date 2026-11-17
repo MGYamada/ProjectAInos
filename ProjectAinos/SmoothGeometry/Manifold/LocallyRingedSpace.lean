@@ -14,9 +14,6 @@ public import Mathlib.Geometry.Manifold.Sheaf.LocallyRingedSpace
 
 noncomputable section
 
-set_option backward.isDefEq.respectTransparency false
-set_option backward.defeqAttrib.useBackward true
-
 open scoped Manifold ContDiff
 
 namespace ProjectAinos.SmoothGeometry.Manifold

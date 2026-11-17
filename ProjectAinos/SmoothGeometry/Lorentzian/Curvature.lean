@@ -15,7 +15,6 @@ The field formulas make their local differentiability assumptions explicit.
 
 @[expose] public section
 noncomputable section
-set_option backward.isDefEq.respectTransparency false
 
 open Bundle FiberBundle VectorField
 open scoped Manifold ContDiff Topology

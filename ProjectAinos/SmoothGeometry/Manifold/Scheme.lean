@@ -20,9 +20,6 @@ in the local-affine proof.
 
 noncomputable section
 
-set_option backward.isDefEq.respectTransparency false
-set_option backward.defeqAttrib.useBackward true
-
 open scoped Manifold ContDiff
 
 namespace ProjectAinos.SmoothGeometry.Manifold
@@ -37,13 +34,16 @@ def chartScheme (x : M) : Scheme :=
   Scheme.ofOpenImmersion (euclideanScheme n)
     ((isoOfDiffeomorph (chartDiffeomorph (n := n) x)).hom ≫
       map (Subtype.val : chartTarget (n := n) x → (Fin n → ℝ)) contMDiff_subtype_val)
+    (H := @LocallyRingedSpace.IsOpenImmersion.comp _ _ _ _ _ inferInstance
+      (subtypeMap_isOpenImmersion (chartTarget (n := n) x)))
 
 /-- The common scheme construction for Euclidean space and curved manifolds. -/
 def scheme : Scheme :=
   Scheme.ofOpenCover (locallyRingedSpace 𝓘(ℝ, Fin n → ℝ) M) fun (x : M) =>
     ⟨chartScheme n M x,
       map (Subtype.val : chartSource (n := n) x → M) contMDiff_subtype_val,
-      ⟨⟨x, mem_chart_source (Fin n → ℝ) x⟩, rfl⟩, inferInstance⟩
+      ⟨⟨x, mem_chart_source (Fin n → ℝ) x⟩, rfl⟩,
+      subtypeMap_isOpenImmersion (chartSource (n := n) x)⟩
 
 variable {n M} {m : ℕ} {N : Type} [TopologicalSpace N] [ChartedSpace (Fin m → ℝ) N]
   [IsManifold 𝓘(ℝ, Fin m → ℝ) ∞ N]

@@ -15,8 +15,6 @@ public import Mathlib.LinearAlgebra.QuadraticForm.Real
 
 @[expose] public section
 noncomputable section
-set_option backward.isDefEq.respectTransparency false
-set_option backward.defeqAttrib.useBackward true
 
 open Bundle ContinuousLinearMap Set TopologicalSpace
 open scoped Manifold ContDiff Topology
@@ -217,7 +215,7 @@ def lorentzMetric {U : Opens E} (f : NewtonianMetricFamily U) (c : ℝ)
     have hs := (f.form_contDiffOn (show 0 < c by linarith)).contMDiffOn.comp_contMDiff
       (contMDiff_subtype_val (U := U)) (fun x : U => x.property)
     intro x
-    rw [contMDiffAt_section]
+    refine (contMDiffAt_section x).mpr ?_
     convert hs x using 1
     funext y
     ext v w
@@ -258,9 +256,9 @@ theorem lorentzMetric_component {U : Opens E} (f : NewtonianMetricFamily U) {c :
     (hc : 1 ≤ c) (hlarge : 9 * f.bound < c^2) (x y : U) (i j : Fin 4) :
     (f.lorentzMetric c hc hlarge).chartComponent (physicalChart x) y i j =
       f.coefficient c y i j := by
-  have h (v : E) : (chartField (physicalChart x) v y : E) = v := by
-    simpa only [physicalChart_tangentMap] using
-      chartTangentMap_field (physicalChart_mem x) (by simp : y ∈ (physicalChart x).source) v
+  have h (v : E) : (chartField (physicalChart x) v y : E) = v :=
+    (physicalChart_tangentMap x y _).symm.trans
+      (chartTangentMap_field (physicalChart_mem x) (by simp : y ∈ (physicalChart x).source) v)
   rw [chartComponent, lorentzMetric_form, h, h, form_apply]
   simp [Pi.single_apply, mul_ite]
 
@@ -276,7 +274,8 @@ private theorem coefficient_mul_nativeInverse {U : Opens E} (f : NewtonianMetric
   have h := congrArg (fun α : TangentSpace I y →L[ℝ] ℝ => α (Pi.single k 1))
     (g.flat_sharp y (Tensor.coordinateCovector y e l))
   change g.form y v (Pi.single k 1) = e (Pi.single k 1) l at h
-  rw [he, lorentzMetric_form, form_apply] at h
+  replace h := ((f.form_apply c y v (Pi.single k 1)).symm.trans h).trans
+    (congrFun (he (Pi.single k 1)) l)
   have hs : (∑ i, f.coefficient c y i k * v i) = (Pi.single k (1 : ℝ) : E) l := by
     simpa [Pi.single_apply, mul_ite] using h
   change (∑ i, f.coefficient c y k i * e v i) = _

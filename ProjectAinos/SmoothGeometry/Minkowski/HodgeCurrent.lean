@@ -12,7 +12,6 @@ import all Mathlib.LinearAlgebra.ExteriorPower.BilinForm
 
 @[expose] public section
 noncomputable section
-set_option backward.isDefEq.respectTransparency false
 open Module exteriorPower
 
 namespace ProjectAinos.SmoothGeometry.Minkowski

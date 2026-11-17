@@ -10,7 +10,6 @@ public import ProjectAinos.SmoothGeometry.Lorentzian.HodgeSquare
 
 @[expose] public section
 noncomputable section
-set_option backward.isDefEq.respectTransparency false
 open scoped Manifold ContDiff
 
 namespace ProjectAinos.SmoothGeometry.LorentzianHodgeCurvedExamples
@@ -58,7 +57,8 @@ theorem conformal_square_and_curvature (p : Plane) (α : Plane [⋀^Fin 1]→L[�
       (metric.hodgeFiber (OrientedAtlas.standard 2) p (by decide) α) = α ∧
     metric.scalarCurvature p = -4 * Real.exp (-(2 * (p 1)^2)) := by
   constructor
-  · rw [metric.hodgeFiber_square]
+  · refine (metric.hodgeFiber_square (OrientedAtlas.standard 2) p _ _ α).trans ?_
+    change (-1 : ℝ) ^ (1 * 1 + LorentzConvention.timeNegative.negativeIndex 1) • α = α
     norm_num [LorentzConvention.negativeIndex]
   · exact scalarCurvature_eq p
 

@@ -16,7 +16,6 @@ theorems, not assumptions in these definitions.
 
 @[expose] public section
 noncomputable section
-set_option backward.isDefEq.respectTransparency false
 
 open MeasureTheory Set
 open scoped Manifold ContDiff

@@ -18,8 +18,6 @@ are equivalent, with the sign of the public source convention
 
 @[expose] public section
 noncomputable section
-set_option backward.isDefEq.respectTransparency false
-set_option backward.defeqAttrib.useBackward true
 open Bundle ContinuousLinearMap
 open scoped Manifold ContDiff Topology
 

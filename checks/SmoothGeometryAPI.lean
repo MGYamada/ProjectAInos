@@ -12,6 +12,7 @@ import ProjectAinos.SmoothGeometry.DifferentialForm.NativeWedgeExamples
 import ProjectAinos.SmoothGeometry.DifferentialForm.InteriorDerivative
 import ProjectAinos.SmoothGeometry.DifferentialForm.TwoForm
 import ProjectAinos.SmoothGeometry.Tensor.CovariantDerivative
+import ProjectAinos.SmoothGeometry.Manifold.TangentSpace
 
 /-! External API regressions: use the public definitions with default elaborator
 options, without unfolding morphism wrappers or adding local instances. -/
@@ -525,3 +526,17 @@ example (F : DifferentialForm.SmoothForm I M 2) (x : M) (v w : TangentSpace I x)
   DifferentialForm.smoothTwoFormBilinear_apply F x v w
 
 end NativeBilinearDerivative
+
+section TangentSpaceInstances
+
+variable {𝕜 : Type*} [NontriviallyNormedField 𝕜] {E : Type*} [NormedAddCommGroup E]
+  [NormedSpace 𝕜 E] {H : Type*} [TopologicalSpace H] (I : ModelWithCorners 𝕜 E H)
+  {M : Type*} [TopologicalSpace M] [ChartedSpace H M] (x : M)
+
+example : IsNormableSpace 𝕜 (TangentSpace I x) := tangentSpace_isNormableSpace I x
+
+/-- Instance search finds it, so a bilinear map of tangent spaces can be flipped. -/
+example (B : TangentSpace I x →L[𝕜] TangentSpace I x →L[𝕜] 𝕜) (v : TangentSpace I x) :
+    TangentSpace I x →L[𝕜] 𝕜 := B.flip v
+
+end TangentSpaceInstances

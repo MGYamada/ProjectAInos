@@ -16,7 +16,6 @@ the construction does not equip the native fibre with a norm.
 
 @[expose] public section
 noncomputable section
-set_option backward.isDefEq.respectTransparency false
 open Module exteriorPower
 
 namespace ProjectAinos.SmoothGeometry.DifferentialForm

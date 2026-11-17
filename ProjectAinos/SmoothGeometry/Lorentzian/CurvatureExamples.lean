@@ -16,7 +16,6 @@ These are evaluations of the constructed tangent-bundle curvature tensor.
 
 @[expose] public section
 noncomputable section
-set_option backward.isDefEq.respectTransparency false
 
 open Bundle VectorField
 open scoped Manifold ContDiff

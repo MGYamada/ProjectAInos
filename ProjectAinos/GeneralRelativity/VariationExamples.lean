@@ -17,7 +17,6 @@ action derivatives are supplied by the native manifold-family theorems.
 
 @[expose] public section
 noncomputable section
-set_option backward.isDefEq.respectTransparency false
 
 open Set
 open scoped Manifold ContDiff Topology
@@ -67,7 +66,8 @@ theorem nonlinearFamily_free_stationary (m : ℝ) :
     (Filter.Eventually.of_forall nonlinearFamily_right)
   · intro t _
     refine ⟨0, ?_⟩
-    rw [nonlinearFamily_reference, (inertialTimePath_geodesic t (mem_univ _)).2, zero_smul]
+    rw [nonlinearFamily_reference, (inertialTimePath_geodesic t (mem_univ _)).2]
+    exact (zero_smul ℝ (curveVelocity inertialTimePath t)).symm
 
   · intro t _
     unfold Timelike

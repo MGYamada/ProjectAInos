@@ -10,7 +10,6 @@ public import ProjectAinos.SmoothGeometry.DifferentialForm.Calculus
 /-! # Two-form coordinates and reconstruction by an observer -/
 @[expose] public section
 noncomputable section
-set_option backward.isDefEq.respectTransparency false
 namespace ProjectAinos.SmoothGeometry.Minkowski
 open DifferentialForm
 abbrev TwoForm := MinkowskiModel 3 [⋀^Fin 2]→L[ℝ] ℝ

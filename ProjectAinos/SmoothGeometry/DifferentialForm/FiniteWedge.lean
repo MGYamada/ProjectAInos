@@ -11,7 +11,6 @@ public import ProjectAinos.SmoothGeometry.DifferentialForm.NativeWedge
 
 @[expose] public section
 noncomputable section
-set_option backward.isDefEq.respectTransparency false
 open Module exteriorPower
 open scoped Manifold ContDiff
 
@@ -59,8 +58,7 @@ theorem chartCoefficients_finiteWedge (e : OpenPartialHomeomorph M (Fin n → �
       wedgeFiber (chartCoefficients e α y) (chartCoefficients e β y) := by
   change (finiteWedge (α (e.symm y)) (β (e.symm y))).compContinuousLinearMap
     (mfderiv 𝓘(ℝ, Fin n → ℝ) 𝓘(ℝ, Fin n → ℝ) e.symm y) = _
-  rw [← finiteWedge_comp, finiteWedge_model]
-  rfl
+  exact (finiteWedge_comp _ _ _).symm
 
 /-- The chart construction is exactly the intrinsic wedge on each actual tangent fibre. -/
 theorem nativeWedge_eq_finiteWedge (α : NativeForm 𝓘(ℝ, Fin n → ℝ) M k)

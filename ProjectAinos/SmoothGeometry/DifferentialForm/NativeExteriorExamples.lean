@@ -15,7 +15,6 @@ coefficients `t dx + 2t² dt`, whose derivative has the same normalization.
 
 @[expose] public section
 noncomputable section
-set_option backward.isDefEq.respectTransparency false
 
 open scoped Manifold ContDiff
 
@@ -84,10 +83,14 @@ theorem inertial_chart_exteriorDerivative (p : Plane) :
 theorem timeAxis_potential_exteriorDerivative (t v w : ℝ) :
     smoothExteriorDerivative (smoothPullback 𝓘(ℝ, ℝ) 𝓘(ℝ, Plane)
       (timeAxis : C^∞⟮𝓘(ℝ, ℝ), ℝ; 𝓘(ℝ, Plane), Plane⟯) potential) t ![v, w] = 0 := by
-  rw [smoothExteriorDerivative_pullback, potential_exteriorDerivative, smoothPullback_apply]
+  have h := (smoothExteriorDerivative_pullback
+    (timeAxis : C^∞⟮𝓘(ℝ, ℝ), ℝ; 𝓘(ℝ, Plane), Plane⟯) potential).trans
+      (congrArg _ potential_exteriorDerivative)
+  refine (congrArg (fun α : SmoothForm 𝓘(ℝ, ℝ) ℝ 2 => α t ![v, w]) h).trans ?_
   change coordinateForm ![0, 1]
     (fun i => mfderiv 𝓘(ℝ, ℝ) 𝓘(ℝ, Plane) timeAxis t (![v, w] i)) = 0
   rw [mfderiv_timeAxis]
+  change coordinateForm ![0, 1] (fun i => timeAxis (![v, w] i)) = 0
   simp only [coordinateForm_apply, Matrix.det_fin_two, Matrix.of_apply,
     Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.cons_val_fin_one]
   change (v * 1) * (w * 0) - (v * 0) * (w * 1) = 0

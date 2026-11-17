@@ -16,7 +16,6 @@ when the curve crosses chart boundaries.
 
 @[expose] public section
 noncomputable section
-set_option backward.isDefEq.respectTransparency false
 
 open Bundle Set MeasureTheory
 open scoped Manifold ContDiff Topology

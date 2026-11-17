@@ -17,7 +17,6 @@ any finite-dimensional vector bundle, without a choice of global frame.
 
 @[expose] public section
 noncomputable section
-set_option backward.isDefEq.respectTransparency false
 
 open Bundle ContinuousLinearMap
 open scoped Manifold Topology ContDiff

@@ -19,9 +19,6 @@ the C∞ operations, in addition to the underlying local ringed-space map.
 
 noncomputable section
 
-set_option backward.isDefEq.respectTransparency false
-set_option backward.defeqAttrib.useBackward true
-
 universe u
 
 namespace ProjectAinos.SmoothGeometry
@@ -110,10 +107,8 @@ def restrict (X : LocallyRingedSpace.{u}) {U : TopCat.{u}}
     let : IsLocalHom e := he
     refine ⟨e.comp (X.toLocallyRingedSpace.restrictStalkIso h x).hom.hom,
       inferInstance, fun V hx r => ?_⟩
-    change e ((X.toLocallyRingedSpace.restrictStalkIso h x).hom
-      ((X.toLocallyRingedSpace.restrict h).presheaf.germ V x hx _)) = r
-    rw [AlgebraicGeometry.LocallyRingedSpace.restrictStalkIso_hom_eq_germ_apply]
-    exact hc _ _ r
+    exact (congrArg e (AlgebraicGeometry.LocallyRingedSpace.restrictStalkIso_hom_eq_germ_apply
+      X.toLocallyRingedSpace h V x hx _)).trans (hc _ _ r)
 
 /-- The inclusion of an open subspace is a smooth local-ringed-space morphism. -/
 def ofRestrict (X : LocallyRingedSpace.{u}) {U : TopCat.{u}}
@@ -138,7 +133,8 @@ def restrictTopIso (X : LocallyRingedSpace.{u}) :
             X.presheaf.map (eqToHom (congrArg op hU)) := by
           change (eqToHom (AlgebraicGeometry.PresheafedSpace.restrict_top_presheaf
             X.toPresheafedSpace)).app U = _
-          rw [CategoryTheory.eqToHom_app, CategoryTheory.eqToHom_map]
+          exact (CategoryTheory.eqToHom_app _ _).trans
+            (CategoryTheory.eqToHom_map X.presheaf (congrArg op hU)).symm
         rw [hmap]
         exact h }
   hom_inv_id := Hom.ext X.toLocallyRingedSpace.restrictTopIso.hom_inv_id

@@ -16,9 +16,6 @@ parallel-frame construction.
 @[expose] public section
 noncomputable section
 
-set_option backward.isDefEq.respectTransparency false
-set_option backward.defeqAttrib.useBackward true
-
 open ContinuousLinearMap Set Filter
 open scoped ContDiff Topology
 

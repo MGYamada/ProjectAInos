@@ -12,9 +12,6 @@ public import ProjectAinos.SmoothGeometry.Manifold.Euclidean
 @[expose] public section
 noncomputable section
 
-set_option backward.isDefEq.respectTransparency false
-set_option backward.defeqAttrib.useBackward true
-
 open CategoryTheory CategoryTheory.Limits TopologicalSpace Topology Set
 
 namespace ProjectAinos.SmoothGeometry.GluingExample

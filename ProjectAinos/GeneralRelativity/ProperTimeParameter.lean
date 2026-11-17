@@ -19,7 +19,6 @@ smooth Lorentz manifold; no coordinate frame or global inverse is assumed.
 
 @[expose] public section
 noncomputable section
-set_option backward.isDefEq.respectTransparency false
 
 open Bundle MeasureTheory Set
 open scoped Manifold ContDiff Topology

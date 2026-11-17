@@ -55,7 +55,8 @@
   for its tactics with `import`. Open the declarations with
   `@[expose] public section`.
 - Write every binder: `autoImplicit` is off. Do not use `sorry`, `axiom`,
-  `set_option maxHeartbeats` or `set_option backward.*`. Keep lines within
+  `set_option maxHeartbeats` or `set_option backward.*`;
+  `checks/ForbiddenOptions.lean` enforces the last two. Keep lines within
   100 characters.
 - After adding a module, run `lake exe mk_all --lib ProjectAinos`.
 - Pin each new public statement with a typed `example` in a `checks/*API.lean`

@@ -19,9 +19,6 @@ open neighborhood. Only zero curvature near the point is required.
 @[expose] public section
 noncomputable section
 
-set_option backward.isDefEq.respectTransparency false
-set_option backward.defeqAttrib.useBackward true
-
 open ContinuousLinearMap Set Filter Metric
 open scoped ContDiff Manifold Topology
 

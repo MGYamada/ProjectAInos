@@ -18,7 +18,6 @@ No norm or global frame is installed on any actual tangent fibre.
 
 @[expose] public section
 noncomputable section
-set_option backward.isDefEq.respectTransparency false
 
 open Bundle Set Pretrivialization
 open scoped Manifold ContDiff Topology

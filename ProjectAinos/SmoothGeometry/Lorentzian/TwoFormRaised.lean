@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 module
 
+public import ProjectAinos.SmoothGeometry.Manifold.TangentSpace
 public import ProjectAinos.SmoothGeometry.Lorentzian.DualDerivative
 public import ProjectAinos.SmoothGeometry.Lorentzian.TwoFormDivergence
 public import ProjectAinos.SmoothGeometry.Lorentzian.DensityDerivative
@@ -13,8 +14,6 @@ public import ProjectAinos.SmoothGeometry.Lorentzian.ChartCurvature
 
 @[expose] public section
 noncomputable section
-set_option backward.isDefEq.respectTransparency false
-set_option backward.defeqAttrib.useBackward true
 open Bundle FiberBundle ContinuousLinearMap
 open scoped Manifold ContDiff Topology
 

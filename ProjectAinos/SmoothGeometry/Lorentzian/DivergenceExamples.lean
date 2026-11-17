@@ -11,7 +11,6 @@ public import ProjectAinos.SmoothGeometry.Lorentzian.VolumeExamples
 
 @[expose] public section
 noncomputable section
-set_option backward.isDefEq.respectTransparency false
 open scoped Manifold ContDiff
 
 namespace ProjectAinos.SmoothGeometry.LorentzianDivergenceExamples

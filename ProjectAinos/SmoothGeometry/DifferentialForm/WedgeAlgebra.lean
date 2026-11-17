@@ -14,7 +14,6 @@ equalities of alternating maps, rather than only equalities in an ambient algebr
 
 @[expose] public section
 noncomputable section
-set_option backward.isDefEq.respectTransparency false
 open Module exteriorPower
 
 namespace ProjectAinos.SmoothGeometry.DifferentialForm
@@ -84,7 +83,6 @@ theorem wedgeFiber_one_right (α : (Fin n → ℝ) [⋀^Fin k]→L[ℝ] ℝ) :
   apply covector_eq_of_coe_toExterior
   simp only [toExterior_wedgeFiber, DirectSum.gMulLHom_apply_apply,
     SetLike.coe_gMul, coe_toExterior_unit, mul_one]
-  rfl
 
 /-- The model Leibniz rule as an equality in its native alternating-map degree. -/
 theorem exteriorDerivative_wedge_cast (α : Form (Fin n → ℝ) k) (β : Form (Fin n → ℝ) l)

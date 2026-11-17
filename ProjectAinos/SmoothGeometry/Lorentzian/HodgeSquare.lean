@@ -14,7 +14,6 @@ sign, and this sign cancels in the square. No flatness is assumed.
 
 @[expose] public section
 noncomputable section
-set_option backward.isDefEq.respectTransparency false
 open Module
 open scoped Manifold ContDiff
 
@@ -93,12 +92,14 @@ theorem hodgeFiber_frame (g : LorentzMetric σ d M) (o : OrientedAtlas (d + 1) M
     (cotangent_topDegree (M := MinkowskiModel d) 0) L (ContinuousLinearMap.id ℝ (MinkowskiModel d))
     (g.frameVolume o x L) hm hv hkl β
   change g.hodgeFiber o x hkl _ = _ • (h.hodgeFiber o₀ 0 hkl _).compContinuousLinearMap _ at hh
-  rw [minkowskiMetric_hodgeFiber] at hh
   have hβ : β.compContinuousLinearMap (ContinuousLinearMap.id ℝ (MinkowskiModel d)) = β := by
     ext v
     rfl
-  rw [hβ] at hh
-  exact hh
+  exact hh.trans (congrArg
+    (fun γ : MinkowskiModel d [⋀^Fin l]→L[ℝ] ℝ =>
+      g.frameVolume o x L • γ.compContinuousLinearMap L.toContinuousLinearMap)
+    ((minkowskiMetric_hodgeFiber σ d 0 hkl _).trans
+      (congrArg (Minkowski.hodgeFiber σ .standard hkl) hβ)))
 
 /-- The general Lorentz square identity holds at every point, without flatness or a global frame. -/
 theorem hodgeFiber_square (g : LorentzMetric σ d M) (o : OrientedAtlas (d + 1) M) (x : M)

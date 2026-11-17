@@ -22,7 +22,6 @@ of their action on vector fields differentiable at the evaluation point.
 
 @[expose] public section
 noncomputable section
-set_option backward.isDefEq.respectTransparency false
 
 open Bundle FiberBundle VectorField ContinuousLinearMap
 open scoped Manifold ContDiff

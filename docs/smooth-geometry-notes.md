@@ -120,13 +120,52 @@ through `eqToHom` (`overlapToPiece_ι`).
 **Interface decision.** `OpenCover` states the criterion with injectivity or
 bijectivity on points as a hypothesis, for an arbitrary jointly surjective
 family of open immersions, and `GlueData.desc_isIso` specializes it. The new
-modules use no `set_option backward.*`; the modules they import still do.
+modules use no `set_option backward.*`; since G02 no module does.
 
 **Proof status.** `toLine` is proved to be an isomorphism of C∞ schemes, with
 the coordinate function followed through the gluing as a section. Gluing of
 morphisms out of an arbitrary scheme along an open cover, mathlib's
 `Scheme.Cover.glueMorphisms`, is not proved; for the line it follows from the
 isomorphism (`line_hom_ext` gives uniqueness).
+
+## G02. The tangent space of a vector space is the space, and Lean has to be told
+
+**Observation.** Mathlib defines `TangentSpace I x` as the model space `E`. The definition is
+not reducible, so that instance search does not confuse the structures of the two, and the
+identification is the named equivalence `NormedSpace.fromTangentSpace`. With the default options
+Lean does not unfold such a definition when it compares implicit arguments. A term that uses the
+identification silently still elaborates, for example a bilinear form on `E` given as the form of
+a metric on the model space, or a `Form E k` given as a `NativeForm 𝓘(ℝ, E) E k`. A `rw` or a
+`simp` lemma whose pattern passes through such a term does not: the motive is not type-correct
+at the transparency that these tactics use. The same happens with `Matrix m n ℝ` used as
+`m → n → ℝ`, and with instances that were found by unfolding a forgetful functor in the scheme
+layer. The option `backward.isDefEq.respectTransparency false` restores the unfolding, and 195
+files had set it for the whole file. 144 of them did not need it, and the option
+`backward.defeqAttrib.useBackward true` was needed by none.
+
+One instance of Mathlib is affected in the same way. The derived instance
+`IsNormableSpace 𝕜 (TangentSpace I x)` is stated with the module structure of `E`, so instance
+search does not find it, and `ContinuousLinearMap.flip` cannot be applied to a map between
+tangent spaces.
+
+**Interface decision.** No file sets a `backward` option or `maxHeartbeats`, and
+`checks/ForbiddenOptions.lean` enforces this. Statements and definitions keep the silent
+identification; no declaration changed its type, with one exception: the helper
+`minkowski_hodgeVolume_normalized` names the tangent space in an implicit argument that was
+inferred before. The proofs apply a lemma across the identification in term mode
+(`refine (lemma).trans ?_`, `exact (a.trans b).trans (congrFun c y)`, `congrArg` with a function
+whose domain is written out), state an equation for a variable of the right type before using
+it, or restate the goal with `change`. These steps unify at default transparency.
+`tangentSpace_isNormableSpace` states the normable instance for the module structure of the
+tangent space. Marking `TangentSpace` as implicitly reducible was measured and not adopted: it
+repaired 6 of the 51 failing files and goes against the reason for which Mathlib keeps the
+definition irreducible. The computation of `alternatize_bivectorVolume`, 64 cases under a raised
+heartbeat limit, is split into four lemmas that exclude the 40 cases with a repeated index by
+hypothesis.
+
+**Proof status.** The whole library builds with the default options. The pinned Mathlib still
+sets the option for 71 declarations in 17 files of its manifold library; a later version may
+make some of the term-mode steps unnecessary. [Tangent space instance](../ProjectAinos/SmoothGeometry/Manifold/TangentSpace.lean) · [Check](../checks/ForbiddenOptions.lean)
 
 ## Lorentz metrics and the common geometric base
 

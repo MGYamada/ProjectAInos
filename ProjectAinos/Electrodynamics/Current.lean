@@ -13,7 +13,6 @@ public import ProjectAinos.SmoothGeometry.DifferentialForm.InteriorDerivative
 
 @[expose] public section
 noncomputable section
-set_option backward.isDefEq.respectTransparency false
 open scoped Manifold ContDiff Topology
 
 namespace ProjectAinos.Electrodynamics.Curved

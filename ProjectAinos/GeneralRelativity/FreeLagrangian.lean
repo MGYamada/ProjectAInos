@@ -16,8 +16,6 @@ Lagrangian retains the derivative of the proper-speed factor.
 
 @[expose] public section
 noncomputable section
-set_option backward.isDefEq.respectTransparency false
-set_option backward.defeqAttrib.useBackward true
 
 open ContinuousLinearMap Set
 open scoped ContDiff Topology

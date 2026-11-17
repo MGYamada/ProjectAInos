@@ -16,7 +16,6 @@ action is not stationary in this parameter.
 
 @[expose] public section
 noncomputable section
-set_option backward.isDefEq.respectTransparency false
 
 open Set
 open scoped Manifold ContDiff

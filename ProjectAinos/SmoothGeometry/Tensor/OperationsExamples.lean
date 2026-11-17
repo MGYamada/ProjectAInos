@@ -5,13 +5,13 @@ Released under Apache 2.0 license as described in the file LICENSE.
 module
 
 public import ProjectAinos.SmoothGeometry.Lorentzian.ChartExamples
+public import ProjectAinos.SmoothGeometry.Manifold.TangentSpace
 public import ProjectAinos.SmoothGeometry.Tensor.Operations
 
 /-! # Tensor operations in the nonlinear Minkowski charts -/
 
 @[expose] public section
 noncomputable section
-set_option backward.isDefEq.respectTransparency false
 
 open Bundle ContinuousLinearMap
 open scoped Manifold ContDiff
@@ -26,7 +26,7 @@ local notation "I" => 𝓘(ℝ, Plane)
 def coordinateCovectorField (i : Fin 2) : (cotangent.bundle I (M := Plane)).Section I :=
   ⟨fun _ => proj i, by
     intro p
-    rw [contMDiffAt_section]
+    refine (contMDiffAt_section p).mpr ?_
     have h : ContMDiffAt I 𝓘(ℝ, Plane →L[ℝ] ℝ) ∞ (fun _ : Plane => (proj i : Plane →L[ℝ] ℝ)) p :=
       contMDiffAt_const
     convert h using 1

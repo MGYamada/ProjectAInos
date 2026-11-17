@@ -13,8 +13,6 @@ public import Mathlib.Analysis.Calculus.BumpFunction.FiniteDimension
 
 noncomputable section
 
-set_option backward.isDefEq.respectTransparency false
-
 namespace ProjectAinos.SmoothGeometry.RealSpectrum
 
 open SmoothAlgebra TopologicalSpace

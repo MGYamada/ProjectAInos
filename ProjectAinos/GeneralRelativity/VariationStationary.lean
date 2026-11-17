@@ -15,7 +15,6 @@ direction applies to arbitrary smooth Lorentz manifolds.
 
 @[expose] public section
 noncomputable section
-set_option backward.isDefEq.respectTransparency false
 
 open Set MeasureTheory
 open scoped Manifold ContDiff Topology

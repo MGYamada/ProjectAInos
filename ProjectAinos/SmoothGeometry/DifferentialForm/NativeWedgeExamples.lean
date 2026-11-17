@@ -11,7 +11,6 @@ public import ProjectAinos.SmoothGeometry.DifferentialForm.NativeWedgeCalculus
 
 @[expose] public section
 noncomputable section
-set_option backward.isDefEq.respectTransparency false
 open scoped Manifold ContDiff
 
 namespace ProjectAinos.SmoothGeometry.DifferentialForm.NativeExamples
@@ -51,8 +50,11 @@ theorem timeProjection_wedge (p v w : Plane) :
         (timeProjection : C^∞⟮𝓘(ℝ, Plane), Plane; 𝓘(ℝ, Plane), Plane⟯) temporal)
       (smoothPullback 𝓘(ℝ, Plane) 𝓘(ℝ, Plane)
         (timeProjection : C^∞⟮𝓘(ℝ, Plane), Plane; 𝓘(ℝ, Plane), Plane⟯) spatial) p ![v, w] = 0 := by
-  rw [← smoothPullback_wedge, temporal_wedge_spatial]
-  exact area_timeProjection p v w
+  have h := (smoothPullback_wedge
+    (timeProjection : C^∞⟮𝓘(ℝ, Plane), Plane; 𝓘(ℝ, Plane), Plane⟯)
+    temporal spatial).symm.trans (congrArg _ temporal_wedge_spatial)
+  exact (congrArg (fun α : SmoothForm 𝓘(ℝ, Plane) Plane 2 => α p ![v, w]) h).trans
+    (area_timeProjection p v w)
 
 /-- The time-axis inclusion, using the one-dimensional finite coordinate model. -/
 def oneTimeAxis : (Fin 1 → ℝ) →L[ℝ] Plane := timeAxis.comp (ContinuousLinearMap.proj 0)
@@ -63,13 +65,18 @@ theorem oneTimeAxis_wedge (t v w : Fin 1 → ℝ) :
         (oneTimeAxis : C^∞⟮𝓘(ℝ, Fin 1 → ℝ), (Fin 1 → ℝ); 𝓘(ℝ, Plane), Plane⟯) temporal)
       (smoothPullback 𝓘(ℝ, Fin 1 → ℝ) 𝓘(ℝ, Plane)
         (oneTimeAxis : C^∞⟮𝓘(ℝ, Fin 1 → ℝ), (Fin 1 → ℝ); 𝓘(ℝ, Plane), Plane⟯) spatial) t ![v, w] = 0 := by
-  rw [← smoothPullback_wedge, temporal_wedge_spatial, smoothPullback_apply]
+  have h := (smoothPullback_wedge
+    (oneTimeAxis : C^∞⟮𝓘(ℝ, Fin 1 → ℝ), (Fin 1 → ℝ); 𝓘(ℝ, Plane), Plane⟯)
+    temporal spatial).symm.trans (congrArg _ temporal_wedge_spatial)
+  refine (congrArg
+    (fun α : SmoothForm 𝓘(ℝ, Fin 1 → ℝ) (Fin 1 → ℝ) 2 => α t ![v, w]) h).trans ?_
   change coordinateForm ![0, 1]
     (fun i => mfderiv 𝓘(ℝ, Fin 1 → ℝ) 𝓘(ℝ, Plane) oneTimeAxis t (![v, w] i)) = 0
   have hd : mfderiv 𝓘(ℝ, Fin 1 → ℝ) 𝓘(ℝ, Plane) oneTimeAxis t = oneTimeAxis := by
     rw [mfderiv_eq_fderiv, oneTimeAxis.fderiv]
     rfl
   rw [hd]
+  change coordinateForm ![0, 1] (fun i => oneTimeAxis (![v, w] i)) = 0
   simp only [coordinateForm_apply, Matrix.det_fin_two, Matrix.of_apply,
     Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.cons_val_fin_one]
   change (v 0 * 1) * (w 0 * 0) - (v 0 * 0) * (w 0 * 1) = 0
@@ -106,7 +113,7 @@ theorem negative_leibniz_example :
     rw [map_smul]
     congr 1
     exact wedge_ofCovectors _ _
-  ext x v
+  ext x (v : Fin 3 → ThreeSpace)
   change nativeExteriorDerivative
     (nativeWedge (fun _ : ThreeSpace => coordinateForm ![0]) secondPotentialCoefficients) x v =
       -coordinateForm ![0, 1, 2] v

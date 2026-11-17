@@ -12,8 +12,6 @@ public import ProjectAinos.SmoothGeometry.Lorentzian.CurvatureExamples
 
 @[expose] public section
 noncomputable section
-set_option backward.isDefEq.respectTransparency false
-set_option backward.defeqAttrib.useBackward true
 open scoped Manifold ContDiff
 
 namespace ProjectAinos.Electrodynamics.Curved.Examples

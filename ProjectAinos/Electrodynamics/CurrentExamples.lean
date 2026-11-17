@@ -11,7 +11,6 @@ public import ProjectAinos.Electrodynamics.CurvedExamples
 
 @[expose] public section
 noncomputable section
-set_option backward.isDefEq.respectTransparency false
 open scoped Manifold ContDiff
 
 namespace ProjectAinos.Electrodynamics.Curved.Examples
@@ -26,7 +25,7 @@ def negativeSpatial : CurrentVector (M := E) :=
   ⟨modelField (-(Pi.single 1 1 : E)), fun x => modelField_contMDiff _ x⟩
 
 theorem negativeSpatial_currentForm : currentForm g o negativeSpatial = spatialCurrent := by
-  ext x w
+  ext x (w : Fin 3 → E)
   rw [currentForm_volume, LorentzianVolumeExamples.minkowski_volume]
   change interior (-(Pi.single 1 1 : E)) (coordinateForm id) w = coordinateForm ![0, 2, 3] w
   rw [Minkowski.interior_coordinate_volume]

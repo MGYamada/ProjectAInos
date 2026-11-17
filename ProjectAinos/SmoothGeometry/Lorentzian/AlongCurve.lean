@@ -16,7 +16,6 @@ no immersion or ambient extension of the field is assumed.
 
 @[expose] public section
 noncomputable section
-set_option backward.isDefEq.respectTransparency false
 
 open Bundle FiberBundle VectorField ContinuousLinearMap
 open scoped Manifold ContDiff Topology

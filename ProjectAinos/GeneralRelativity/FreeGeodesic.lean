@@ -17,8 +17,6 @@ proper-speed derivative supplies the non-affine acceleration term.
 
 @[expose] public section
 noncomputable section
-set_option backward.isDefEq.respectTransparency false
-set_option backward.defeqAttrib.useBackward true
 
 open Bundle ContinuousLinearMap Set
 open scoped Manifold ContDiff Topology

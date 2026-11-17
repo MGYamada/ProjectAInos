@@ -15,7 +15,6 @@ construction, preservation of the metric, reversal, and subdivision.
 
 @[expose] public section
 noncomputable section
-set_option backward.isDefEq.respectTransparency false
 
 open Bundle FiberBundle ContinuousLinearMap Set
 open scoped Manifold ContDiff Topology
