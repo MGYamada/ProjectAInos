@@ -51,6 +51,7 @@ Paths in this table are relative to `ProjectAinos/`.
 | 4 | `SpecialRelativity/ProperTime` | Local integrability, Poincaré and reparameterization invariance, null proper time, unit four-velocity, inertial time dilation |
 | 5 | `SmoothGeometry/DifferentialForm/{Flat,Exterior,Coordinates,Calculus,Naturality}` | Open-domain locality, d²=0, wedge normalization, graded Leibniz, pullback composition, d/pullback and wedge/pullback compatibility |
 | 6 | `SmoothGeometry/DifferentialForm/{Hodge,HodgeBasis}`, `SmoothGeometry/Minkowski/{Hodge,HodgeNaturality,HodgeFour,TwoForm}` | Wedge-normalized Hodge, mathlib comparison, square/sign/naturality, six coordinate signs, observer reconstruction |
+| 7 | `SmoothAlgebra/{RelEnergy,Poisson/LinearMomentum,Poisson/OrbitalCharge}`, `SpecialRelativity/{Hamiltonian,PoincareAlgebra,MassShellReduction}` | The energy `√(m² + Σ pᵢ²)` in a C∞-ring, the coordinate-time Hamiltonian of a free particle with its trajectories and its flow, the Poincaré algebra of the orbital charges and its family in `1/c`, the mass shell as a coisotropic ideal and the reduction of its future sheet |
 | Examples | `SpecialRelativity/{Examples,FormExamples}` | Nonzero boost and inverse, subluminality, clock rate, nonzero exact field and gauge identity |
 
 All shared modules are independent of `SpecialRelativity`. Every library
@@ -180,6 +181,88 @@ The [shared geometry guide](smooth-geometry.md) describes the native curved
 extensions for forms, Hodge, connections and curvature. No global-frame
 assumption is added to the manifold interface.
 
+## Relativistic particle mechanics: the algebraic layer
+
+These statements use the canonical Poisson structure of the
+[shared algebra](smooth-algebra.md#poisson-structures) and no chart of
+velocities. They are the targets SR-D7, SR-D8 and SR-C6 of the
+[research plan](cinfty-special-relativity.md), for every number `d` of space
+dimensions and for a mass `m ≠ 0`.
+
+**The energy in a C∞-ring.** The function `√(1 + Σ wᵢ²)` is smooth on all of
+`ℝᵈ`, so it is an operation of every C∞-ring.
+`relEnergy m π = m · √(1 + Σ (πᵢ/m)²)` is the energy of the momenta `π`, and
+`relEnergyInv m π` is its inverse. The proofs use `relEnergy_mul_self`
+(`E² = m² + Σ πᵢ²`), `relEnergy_mul_relEnergyInv` (`E E⁻¹ = 1`) and
+`SmoothDerivation.apply_relEnergy` (`D E = E⁻¹ Σ πᵢ D πᵢ`); after these three
+no derivative of a square root appears. On real numbers and for `m > 0`,
+`relEnergy_real` gives `√(m² + Σ πᵢ²)`, and `sum_sq_relEnergyInv_mul_lt_one`
+gives `Σ (πᵢ/E)² < 1`.
+
+**The Hamiltonian of a free particle (SR-D7).**
+`FreeParticle.hamiltonian d m` is `relEnergy m p` in `PhaseSpace (Fin d)`.
+
+| Statement | Declarations in `FreeParticle` |
+| --- | --- |
+| `{qᵢ, H} = pᵢ/H` and `{pᵢ, H} = 0` | `canonical_q_hamiltonian`, `canonical_p_hamiltonian` |
+| A curve is a trajectory if and only if `ṗ = 0` and `q̇ = p/H` | `isTrajectory_iff` |
+| `Σ (pᵢ/H)² = 1 − m²/H²`, and the speed is less than one at every point | `sum_velocity_mul_self`, `sum_sq_hamiltonianField_lt_one` |
+| The momentum and `qᵢ pⱼ − qⱼ pᵢ` are integrals, and `{H qᵢ, H} = pᵢ` | `isIntegral_p`, `isIntegral_angularMomentum`, `canonical_centreOfEnergy_hamiltonian` |
+| `q₀ + t p₀/H(p₀)`, `p₀` is a trajectory, and every trajectory has this form | `isTrajectory_motion`, `realCurve_eq_motion` |
+| The flow is defined for all times and points, it preserves the volume, and it is `(q, p) ↦ (q + t p/H, p)` | `flowDomain_hamiltonianField`, `measurePreserving_hamiltonianFlow`, `flow_hamiltonianField` |
+
+The Hamiltonian field is bounded by one, so completeness follows from the
+criterion of linear growth of the shared geometry. The comparison with the
+Lagrangian `−m√(1 − Σ vᵢ²)` on the ball of velocities, and through it with
+`free_stationary_iff`, is SR-D4 and is not proved.
+
+**The Poincaré algebra (SR-C6).** For a matrix `η`,
+`PhaseSpace.orbitalCharge η μ ν` is `x_μ p_ν − x_ν p_μ` with
+`x_μ = Σ η μ α q α`. For a symmetric `η`,
+`canonical_orbitalCharge_orbitalCharge` is
+`{J_μν, J_ρσ} = η_μρ J_νσ − η_νρ J_μσ + η_νσ J_μρ − η_μσ J_νρ`, and
+`canonical_orbitalCharge_p` is `{J_μν, p_ρ} = η_μρ p_ν − η_νρ p_μ`; the
+matrix may be degenerate. If `G` is the inverse of `η`, the charges have zero
+bracket with `Σ G σ τ p_σ p_τ` (`canonical_orbitalCharge_momentumQuadratic`).
+`Poincare.lorentzCharge σ d μ ν` is the case of the Minkowski metric of the
+convention `σ` on `PhaseSpace (Fin (d + 1))`, with the time at the index `0`.
+For all matrices, `PhaseSpace.linearMomentum A = Σ A μ ν q μ p ν` satisfies
+`{ℓ_A, ℓ_B} = ℓ_{BA − AB}`.
+
+On the phase space of the initial data and with `ε = 1/c`, the charges are
+`pᵢ`, `Poincare.angularMomentum d i j` and
+`Poincare.boostCharge d m ε i = inertia · qᵢ`, where
+`Poincare.inertia d m ε = √(m² + ε² Σ pᵢ²)` is the energy divided by `c²`.
+For every real `ε`,
+
+`{Kᵢ, pⱼ} = δᵢⱼ · inertia`, `{Kᵢ, Kⱼ} = −ε² Mᵢⱼ`,
+`{Kᵢ, inertia} = ε² pᵢ`, `{Mᵢⱼ, Kₖ} = δₖᵢ Kⱼ − δₖⱼ Kᵢ`.
+
+At `ε = 0` the inertia is the mass (`inertia_zero`), so these are the
+relations of the Galilei algebra, with the mass as the central term of
+`{K, p}`. The family is indexed by a real number; that it is smooth in `ε` is
+not stated.
+
+**The mass shell (SR-D8).** In `MassShell`, the phase space of an event and
+its momentum covector is `PhaseSpace (Fin (d + 1))`.
+
+| Statement | Declarations in `MassShell` |
+| --- | --- |
+| The ideal of `η⁻¹(p, p) − σ m²` is coisotropic, for both conventions | `isCoisotropic_shellIdeal` |
+| The momenta and the Lorentz charges are in its normalizer | `p_mem_normalizer_shellIdeal`, `lorentzCharge_mem_normalizer_shellIdeal` |
+| For `(−+++)`, `η⁻¹(p, p) + m² = (E − p₀)(p₀ + E)` | `shellFunction_eq` |
+| The normalizer of the shell is contained in the normalizer of the future sheet `(p₀ + E)` | `normalizer_shellIdeal_le` |
+| `Qᵢ = xᵢ − x⁰ pᵢ/E`, `Q⁰ = x⁰`, `Pᵢ = pᵢ`, `P₀ = p₀ + E` is canonical and has an inverse | `isPoissonHom_toShellCoordinates`, `toShellCoordinates_ofShellCoordinates`, `ofShellCoordinates_toShellCoordinates` |
+| The reduced ring of the future sheet is the phase space of the initial data, as a Poisson C∞-ring | `reductionHom_bijective`, `isPoissonHom_reductionHom` |
+| The class of `p₀` is `−H`, the class of `J₀ᵢ` is `H qᵢ`, and the class of `Jᵢⱼ` is `qᵢ pⱼ − qⱼ pᵢ` | `reductionHom_initialData`, `initialData_p_zero`, `initialData_lorentzCharge_zero_succ`, `initialData_lorentzCharge_succ_succ` |
+
+The change of variables is canonical because the matrix of the second
+derivatives of the energy is symmetric (`bracket_velocity_q_succ`). In the new
+variables the future sheet is `P₀ = 0`, and the theorem on cyclic
+co-ordinates of [mechanics](mechanics.md) gives the reduced ring. The
+quotient ring is not compared with the shell as a manifold (SR-D5). The
+[notes](special-relativity-notes.md) SR03–SR06 record the decisions.
+
 ## Verification
 
 The required **Lean build** CI job builds with warnings as errors, checks root
@@ -191,6 +274,8 @@ lake build --wfail ProjectAinos
 lake exe mk_all --check --lib ProjectAinos
 lake env lean -DwarningAsError=true checks/SmoothGeometryAPI.lean
 lake env lean -DwarningAsError=true checks/SpecialRelativityAPI.lean
+lake env lean -DwarningAsError=true checks/RelativisticEnergyAPI.lean
+lake env lean -DwarningAsError=true checks/RelativisticHamiltonianAPI.lean
 lake env lean -DwarningAsError=true checks/AxiomAudit.lean
 ```
 

@@ -140,6 +140,12 @@ and identify the next proofs for free relativistic particles, the Maxwell
 action with a prescribed current, and the differential Bianchi identity.
 Each plan has a ledger with one status for each section;
 [issue #135](https://github.com/MGYamada/ProjectAinos/issues/135) tracks the proofs.
+For the free relativistic particle the library proves the coordinate-time
+Hamiltonian `√(m² + Σ pᵢ²)` with its trajectories and its flow, the Poincaré
+algebra of the orbital charges with its contraction to the Galilei algebra,
+and the reduction of the future sheet of the mass shell to the phase space of
+the initial data.
+[Guide](docs/special-relativity.md#relativistic-particle-mechanics-the-algebraic-layer)
 
 Topic 6 follows the provisional Boltzmannian typicality plan in
 [issue #55](https://github.com/MGYamada/ProjectAinos/issues/55). Its guiding references are

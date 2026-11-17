@@ -24,6 +24,15 @@ theorem metricMatrix_eq (σ : LorentzConvention) :
   · simp [h, Ne.symm h, LinearMap.BilinForm.toMatrix'_apply, minkowskiForm_apply,
     Pi.single_apply, mul_ite, metricMatrix]
 
+theorem metricMatrix_isSymm (σ : LorentzConvention) : (metricMatrix σ d).IsSymm :=
+  Matrix.isSymm_diagonal _
+
+/-- The Minkowski metric matrix is its own inverse. -/
+theorem metricMatrix_mul_self (σ : LorentzConvention) :
+    metricMatrix σ d * metricMatrix σ d = 1 := by
+  rw [metricMatrix, Matrix.diagonal_mul_diagonal]
+  simp only [lorentzSign_sq, Matrix.diagonal_one]
+
 theorem metricMatrix_det_ne_zero (σ : LorentzConvention) :
     (metricMatrix σ d).det ≠ 0 := by
   rw [metricMatrix, Matrix.det_diagonal]

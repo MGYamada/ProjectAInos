@@ -375,6 +375,25 @@ momentum and the heavy top are in the
 [mechanics guide](mechanics.md#poisson-models). This stage is tracked in
 [issue #78](https://github.com/MGYamada/ProjectAinos/issues/78).
 
+`Poisson/LinearMomentum` and `Poisson/OrbitalCharge` give the charges of
+affine maps of the co-ordinates. A vector `a` and a matrix `A` give
+`translationMomentum a = Σ aᵢ pᵢ` and `linearMomentum A = Σ A μ ν q μ p ν`,
+with `{ℓ_A, P_a} = P_{a ᵥ* A}` and `{ℓ_A, ℓ_B} = ℓ_{BA − AB}`. A matrix `η`
+lowers the index of the co-ordinates, `x_μ = Σ η μ α q α`, and the orbital
+charges `orbitalCharge η μ ν = x_μ p_ν − x_ν p_μ` of a symmetric `η` satisfy
+`{J_μν, J_ρσ} = η_μρ J_νσ − η_νρ J_μσ + η_νσ J_μρ − η_μσ J_νρ` and
+`{J_μν, p_ρ} = η_μρ p_ν − η_νρ p_μ`. If `G` is the inverse of `η`, they have
+zero bracket with `momentumQuadratic G = Σ G σ τ p σ p τ`, and
+`{x_μ, G(p, p)} = 2 p_μ`.
+
+`RelEnergy` defines the energy `√(m² + Σ πᵢ²)` of a tuple `π` of elements of
+any C∞-ring, for `m ≠ 0`. The function `√(1 + Σ wᵢ²)` is smooth on all of
+`ℝᵈ`, and `relEnergy m π = m · √(1 + Σ (πᵢ/m)²)`. Its statements follow from
+`relEnergy_mul_self`, `relEnergy_mul_relEnergyInv` and
+`SmoothDerivation.apply_relEnergy`: `E² = m² + Σ πᵢ²`, `E E⁻¹ = 1` and
+`D E = E⁻¹ Σ πᵢ D πᵢ` for every vector field `D`. These three modules are
+used by the [relativistic particle](special-relativity.md#relativistic-particle-mechanics-the-algebraic-layer).
+
 ## Formal power series in `q` and `p`
 
 `SmoothAlgebra/FormalSeries` treats the ring `ℝ[[q, p]]` as
@@ -485,6 +504,9 @@ The application to the anharmonic oscillator is in the
 | [Poisson/Canonical](../ProjectAinos/SmoothAlgebra/Poisson/Canonical.lean) | `PhaseSpace`, `canonical`, `canonical_q_p`, `canonical_bracket`, `canonical_q_bracket`, `canonical_p_bracket`, `canonical_hamiltonian_apply`, `isPoissonHom_of_canonical` |
 | [Poisson/Hom](../ProjectAinos/SmoothAlgebra/Poisson/Hom.lean) | `IsPoissonHom`, `IsPoissonHom.comp`, `FreeSmoothRing.isPoissonHom_of_generators` |
 | [Poisson/Reduction](../ProjectAinos/SmoothAlgebra/Poisson/Reduction.lean) | `SmoothRing.ofSubalgebra`, `PoissonStructure.ofSurjective`, `ofSurjective_bracket`, `quotient`, `quotient_bracket`, `isPoissonHom_projection`, `normalizerInclusion`, `restrictNormalizer`, `normalizerIdeal`, `isPoissonIdeal_normalizerIdeal`, `Reduction`, `reduction`, `reductionMap`, `reductionMap_eq_iff`, `reduction_bracket`, `toNormalizer`, `toReduction`, `isPoissonHom_toReduction`, `toReduction_apply_eq`, `toReduction_bijective` |
+| [Poisson/LinearMomentum](../ProjectAinos/SmoothAlgebra/Poisson/LinearMomentum.lean) | `PhaseSpace.translationMomentum`, `linearMomentum`, `canonical_linearMomentum_q`, `canonical_linearMomentum_p`, `canonical_linearMomentum_translationMomentum`, `canonical_linearMomentum_linearMomentum`: `{ℓ_A, ℓ_B} = ℓ_{BA − AB}` |
+| [Poisson/OrbitalCharge](../ProjectAinos/SmoothAlgebra/Poisson/OrbitalCharge.lean) | `PhaseSpace.loweredCoordinate`, `orbitalCharge`, `momentumQuadratic`, `canonical_orbitalCharge_p`, `canonical_orbitalCharge_orbitalCharge`, `canonical_loweredCoordinate_momentumQuadratic`, `canonical_orbitalCharge_momentumQuadratic` |
+| [RelEnergy](../ProjectAinos/SmoothAlgebra/RelEnergy.lean) | `SmoothOperation.lorentzFactor`, `partialDeriv_lorentzFactor`, `SmoothRing.op_algebraMap`, `relEnergy`, `relEnergyInv`, `relEnergy_mul_self`, `relEnergy_mul_relEnergyInv`, `SmoothDerivation.apply_relEnergy`, `SmoothDerivation.apply_relEnergyInv`, `sum_relEnergyInv_mul_sq`, `relEnergy_real`, `sum_sq_relEnergyInv_mul_lt_one` |
 | [Derivation](../ProjectAinos/SmoothAlgebra/Derivation.lean) | `SmoothDerivation`, `map_mul`, `map_exp`, `toDerivation`, module and Lie-ring instances, `sum_apply`, `commutator_chain`, `equivInfinitesimalAut`, `equivCoordinates`, `lie_partialDerivation_proj_smul` |
 | [Category](../ProjectAinos/SmoothAlgebra/Category.lean) | `SmoothRingCat`, faithful forgetful functors, isomorphisms from bijective morphisms |
 | [Congruence](../ProjectAinos/SmoothAlgebra/Congruence.lean) | Smooth quotients, projection, factorization, generated smooth congruences |

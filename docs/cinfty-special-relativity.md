@@ -69,13 +69,13 @@ completion.
 | 5 | Transformation of velocities | proved | `Velocity.observerEquiv`, `Velocity.transform`, `Velocity.norm_transform_lt_one`, `Velocity.transform_boost`, `transform_collinear`, `rapidity_add`, `composed_speed_lt_one`. Scope: the orthochronous group acts on the open ball of velocities; velocities that are not collinear are composed by this action, and collinear ones by the addition of rapidities |
 | 6 | Four-vectors | informal | Proved: `flat`, `sharp`, `flat_natural`, and the tensor operations of the [shared geometry](smooth-geometry.md). Missing: the universal C∞ cotangent module and its comparison with the cotangent bundle (SR-F2, F26) |
 | 7 | Four-dimensional velocity | informal | Proved: `fourVelocity_unit`, `fourVelocity_metric`, `properTime_null`. Missing: the acceleration is orthogonal to the velocity (F2); mass shells and the massless particle (SR-D5, SR-D6, F3) |
-| 8 | The principle of least action | informal | Proved: `freeAction`, `freeLagrangian_contDiffOn`, `free_momentum`, `free_stationary_iff`. Missing: the stationary curves are the inertial motions, and the Hessian in the velocity (SR-D2, F2); the mass shell as a coisotropic ideal and its reduction (SR-D8, F1) |
-| 9 | Energy and momentum | informal | Proved: `kineticMomentum`, `kineticMomentum_eq`. Missing: the energy measured by an observer (SR-D3, F2), the Legendre transformation on the ball of velocities (SR-D4, F2), the Hamiltonian on all momenta (SR-D7, F1), the shell (SR-D5, F3), the Newtonian expansion (SR-K5, F2) |
+| 8 | The principle of least action | informal | Proved: `freeAction`, `freeLagrangian_contDiffOn`, `free_momentum`, `free_stationary_iff`; the mass shell as a coisotropic ideal, and the reduced ring of its future sheet as the phase space of the initial data (SR-D8: `MassShell.isCoisotropic_shellIdeal`, `MassShell.normalizer_shellIdeal_le`, `MassShell.isPoissonHom_toShellCoordinates`, `MassShell.reductionHom_bijective`, `MassShell.isPoissonHom_reductionHom`, `MassShell.initialData_p_zero`; the future sheet for `(−+++)`). Missing: the stationary curves are the inertial motions, and the Hessian in the velocity (SR-D2, F2) |
+| 9 | Energy and momentum | informal | Proved: `kineticMomentum`, `kineticMomentum_eq`, `sharp_kineticMomentum`, `metric_smul_fourVelocity`; the Hamiltonian on all momenta with its equations, its integrals, its trajectories and its flow (SR-D7: `FreeParticle.hamiltonian`, `FreeParticle.isTrajectory_iff`, `FreeParticle.sum_sq_hamiltonianField_lt_one`, `FreeParticle.isIntegral_angularMomentum`, `FreeParticle.realCurve_eq_motion`, `FreeParticle.flowDomain_hamiltonianField`). Missing: the energy measured by an observer (SR-D3, F2), the Legendre transformation on the ball of velocities (SR-D4, F2), the shell (SR-D5, F3), the Newtonian expansion (SR-K5, F2) |
 | 10 | Transformation of distribution functions | informal | Target: the invariant measure on the shell and the number flux (SR-M1, SR-M2, F4) |
 | 11 | Decay of particles | informal | Target: the invariant mass and the decay into two particles (SR-C1, SR-C2, F3) |
 | 12 | Invariant cross-section | informal | Conditional target: the phase space of two particles and the covariance of a cross-section for a given transition weight (SR-C4, F4). Special relativity does not supply the weight |
 | 13 | Elastic collisions of particles | informal | Target (SR-C3, F3) |
-| 14 | Angular momentum | informal | Target: the orbital charges and the centre of energy (SR-C5, F4); the Poincaré algebra of their brackets (SR-C6, F1) |
+| 14 | Angular momentum | informal | Proved: the Poincaré algebra of the orbital charges of one particle (SR-C6: `Poincare.canonical_lorentzCharge_p`, `Poincare.canonical_lorentzCharge_lorentzCharge`), its family in `1/c` with the relations of the Galilei algebra at `0` (`Poincare.canonical_boostCharge_p`, `Poincare.canonical_boostCharge_boostCharge`, `Poincare.inertia_zero`), and the classes of the charges in the reduced ring of the mass shell (`MassShell.initialData_lorentzCharge_zero_succ`, `MassShell.initialData_lorentzCharge_succ_succ`). Missing: the charges of a system of particles, their conservation and the centre of energy (SR-C5, F4); the comparison with the Noether boundary terms of the action (F4) |
 
 Count: 2 proved, 12 informal.
 
@@ -515,6 +515,10 @@ and no velocity chart. The explicit trajectory
 data. Prove completeness for this Hamiltonian before invoking the all-time
 flow interface. The comparison with SR-D1 goes through SR-D4.
 
+*Status.* Proved in
+[`SpecialRelativity/Hamiltonian.lean`](../ProjectAinos/SpecialRelativity/Hamiltonian.lean)
+for `m ≠ 0`; the comparison with SR-D1 is not.
+
 ### Massive and massless shells
 
 **Target SR-D5 [A*,C].** Define the positive-energy shell for `m≥0` by
@@ -560,6 +564,11 @@ identifies the reduced ring with the phase space of the initial data
 `TwoBody.reducedMassHom_bijective`: an explicit isomorphism of Poisson
 C∞-rings, then the general theorem. The quotient ring and the smooth shell
 of SR-D5 are compared by a separate theorem.
+
+*Status.* Proved in
+[`SpecialRelativity/MassShellReduction.lean`](../ProjectAinos/SpecialRelativity/MassShellReduction.lean):
+the quadratic ideal for both conventions, the future sheet and its reduction
+for `(−+++)` and `m ≠ 0`. The comparison with the smooth shell is not.
 
 ## Distributions, collisions and conservation
 
@@ -692,6 +701,13 @@ Lorentz transformations by momentum functions and prove their brackets on
 canonical generators. Compare these functions with the action's Noether
 boundary terms. This is the Poincaré algebra of classical orbital charges;
 intrinsic spin and quantum representations are later extensions.
+
+*Status.* The brackets are proved in
+[`SmoothAlgebra/Poisson/OrbitalCharge.lean`](../ProjectAinos/SmoothAlgebra/Poisson/OrbitalCharge.lean)
+for every symmetric matrix and in
+[`SpecialRelativity/PoincareAlgebra.lean`](../ProjectAinos/SpecialRelativity/PoincareAlgebra.lean)
+for the Minkowski metric. The comparison with the Noether boundary terms is
+not.
 
 <a id="landau-lifshitz-correspondence"></a>
 
