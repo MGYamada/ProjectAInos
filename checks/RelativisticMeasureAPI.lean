@@ -208,10 +208,10 @@ example (f : (Fin d → ℝ) → ℝ)
   time_numberCurrent f hf
 
 example (L : orthochronousLorentzGroup d)
-    (σ : Measure (MinkowskiModel d)) (n : MinkowskiModel d)
+    (σ : Measure (MinkowskiModel d)) (n : MinkowskiModel d → MinkowskiModel d)
     (f : MinkowskiModel d → (Fin d → ℝ) → ℝ)
     (hf : ∀ x, Integrable (fun π => f x π • point m π) (measure d m)) :
-    numberFlux m (Measure.map L.val.val σ) (L.val.val n)
+    numberFlux m (Measure.map L.val.val σ) (fun y => L.val.val (n (L.val.val.symm y)))
         (fun y => transformDistribution m L (f (L.val.val.symm y))) =
       numberFlux m σ n f :=
   numberFlux_transform L σ n f hf
@@ -222,7 +222,7 @@ example (τ : ℝ) :
 
 example (τ : ℝ) (f : MinkowskiModel d → (Fin d → ℝ) → ℝ)
     (hf : ∀ x, Integrable (fun π => f x π • point m π) (measure d m)) :
-    numberFlux m (hyperplaneMeasure d τ) (timeAxis d) f =
+    numberFlux m (hyperplaneMeasure d τ) (fun _ => timeAxis d) f =
       ∫ x : Fin d → ℝ, ∫ π in domain d m, f (Fin.cons τ x) π :=
   numberFlux_hyperplane τ f hf
 

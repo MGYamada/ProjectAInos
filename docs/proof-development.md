@@ -568,9 +568,10 @@ every mass: a rotation acts by a linear map of determinant `±1` that preserves
 the energy, a boost has the Jacobian `E′/E` as the determinant of the identity
 plus a map of rank one, and the formula for the change of variables applies.
 The number current `∫ f p dᵈπ/E` of a distribution is a vector, the number of
-particles through a hypersurface with a given surface measure does not change
-when the measure, the normal and the distribution are transformed together,
-and through a hyperplane of the co-ordinates it is `∫∫ f dᵈπ dᵈx`. The orbital
+particles through a hypersurface, given by a surface measure and a field of
+normals, does not change when the measure, the normals and the distribution are
+transformed together, and through a hyperplane of the co-ordinates it is
+`∫∫ f dᵈπ dᵈx`. The orbital
 moment `x ∧ p` is the charge that Noether's theorem assigns to the Lorentz
 transformations; for a system of particles the total moment is unchanged by
 free motion and by collisions in one event, a shift of the origin adds

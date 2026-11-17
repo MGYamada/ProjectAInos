@@ -462,10 +462,13 @@ momenta, `numberCurrent m f = ∫ f p dᵈπ/E` is a vector
 the observer `u`: it is unchanged when the observer and the distribution are
 transformed together, and in the frame of the co-ordinates it is `∫ f dᵈπ`
 (`time_numberCurrent`). For a distribution that depends on the event,
-`numberFlux m σ n f` is the number of particles through a hypersurface with
-the surface measure `σ` and the normal `n`; it is unchanged when the three are
-transformed together (`numberFlux_transform`), and through the hyperplane
-`x⁰ = τ` it is `∫∫ f dᵈπ dᵈx` (`numberFlux_hyperplane`).
+`numberFlux m σ n f = ∫ ⟨n(x), N(x)⟩ dσ(x)` is the number of particles through
+a hypersurface with the surface measure `σ` and the field `n` of its normals;
+it is unchanged when the three are transformed together
+(`numberFlux_transform`), and through the hyperplane `x⁰ = τ`, with the constant
+normal, it is `∫∫ f dᵈπ dᵈx` (`numberFlux_hyperplane`). The measure and the
+normals are given data: they are constructed for the hyperplanes of the
+co-ordinates only.
 
 **The charges of a system (SR-C5, §14).** `orbitalMoment x p α β` is
 `α(x) β(p) − α(p) β(x)`, the moment `x ∧ p` as a function of two covectors.

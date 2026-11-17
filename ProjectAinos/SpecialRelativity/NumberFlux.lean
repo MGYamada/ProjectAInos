@@ -24,14 +24,15 @@ A distribution of particles of mass `m` in the momenta is a function `f` of the 
   `u`. It does not change if the observer and the distribution are transformed together
   (`numberDensity_transform`), and `time_numberCurrent` shows that in the frame of the
   co-ordinates it is `∫ f(π) dᵈπ`.
-* `numberFlux m σ n f = ∫ pair n N[f(x, ·)] dσ(x)` is the number of particles that cross a
-  hypersurface with the surface measure `σ` and the normal `n`, for a distribution that
-  depends on the event. `numberFlux_transform`: it does not change if the measure, the normal
-  and the distribution are transformed together. For the hyperplane `x⁰ = τ` of the
-  co-ordinates with the measure `dᵈx` it is `∫∫ f dᵈπ dᵈx` (`numberFlux_hyperplane`).
+* `numberFlux m σ n f = ∫ pair (n x) N[f(x, ·)] dσ(x)` is the number of particles that cross
+  a hypersurface with the surface measure `σ` and the field `n` of its normals, for a
+  distribution that depends on the event. `numberFlux_transform`: it does not change if the
+  measure, the normals and the distribution are transformed together. For the hyperplane
+  `x⁰ = τ` of the co-ordinates with the measure `dᵈx` and the constant normal it is
+  `∫∫ f dᵈπ dᵈx` (`numberFlux_hyperplane`).
 
-The surface measure of a hypersurface is a given measure on the events. Only that of the
-hyperplanes of the co-ordinates is constructed.
+The surface measure and the normals of a hypersurface are given: a measure on the events and
+a field of vectors. Only those of the hyperplanes of the co-ordinates are constructed.
 -/
 
 @[expose] public section
@@ -133,28 +134,28 @@ theorem time_numberCurrent (f : (Fin d → ℝ) → ℝ)
   field_simp
 
 /-- The number of particles that cross a hypersurface with the surface measure `σ` and the
-normal `n`, for a distribution `f x` that depends on the event `x`. -/
-def numberFlux (m : ℝ) (σ : Measure (MinkowskiModel d)) (n : MinkowskiModel d)
-    (f : MinkowskiModel d → (Fin d → ℝ) → ℝ) : ℝ :=
-  ∫ x, pair n (numberCurrent m (f x)) ∂σ
+normal `n x` at the event `x`, for a distribution `f x` that depends on the event. -/
+def numberFlux (m : ℝ) (σ : Measure (MinkowskiModel d))
+    (n : MinkowskiModel d → MinkowskiModel d) (f : MinkowskiModel d → (Fin d → ℝ) → ℝ) : ℝ :=
+  ∫ x, pair (n x) (numberCurrent m (f x)) ∂σ
 
-/-- The number of particles does not change if the surface measure, the normal and the
+/-- The number of particles does not change if the surface measure, the normals and the
 distribution are transformed together. -/
 theorem numberFlux_transform (L : orthochronousLorentzGroup d)
-    (σ : Measure (MinkowskiModel d)) (n : MinkowskiModel d)
+    (σ : Measure (MinkowskiModel d)) (n : MinkowskiModel d → MinkowskiModel d)
     (f : MinkowskiModel d → (Fin d → ℝ) → ℝ)
     (hf : ∀ x, Integrable (fun π => f x π • point m π) (measure d m)) :
-    numberFlux m (Measure.map L.val.val σ) (L.val.val n)
+    numberFlux m (Measure.map L.val.val σ) (fun y => L.val.val (n (L.val.val.symm y)))
         (fun y => transformDistribution m L (f (L.val.val.symm y))) =
       numberFlux m σ n f := by
   have hemb : MeasurableEmbedding (L.val.val : MinkowskiModel d → MinkowskiModel d) :=
     (LorentzGroup.toContinuousLinearEquiv L.val).toHomeomorph.measurableEmbedding
   rw [numberFlux, hemb.integral_map, numberFlux]
   refine integral_congr_ae (Filter.Eventually.of_forall fun x => ?_)
-  change pair (L.val.val n) (numberCurrent m
+  change pair (L.val.val (n (L.val.val.symm (L.val.val x)))) (numberCurrent m
     (transformDistribution m L (f (L.val.val.symm (L.val.val x))))) = _
   rw [LinearEquiv.symm_apply_apply, numberCurrent_transform L (f x) (hf x)]
-  exact LorentzGroup.preserves_pair L.val n (numberCurrent m (f x))
+  exact LorentzGroup.preserves_pair L.val (n x) (numberCurrent m (f x))
 
 /-! ### The hyperplanes of the co-ordinates -/
 
@@ -176,7 +177,7 @@ def hyperplaneMeasure (d : ℕ) (τ : ℝ) : Measure (MinkowskiModel d) :=
 /-- Through the hyperplane `x⁰ = τ` the number of particles is `∫∫ f dᵈπ dᵈx`. -/
 theorem numberFlux_hyperplane (τ : ℝ) (f : MinkowskiModel d → (Fin d → ℝ) → ℝ)
     (hf : ∀ x, Integrable (fun π => f x π • point m π) (measure d m)) :
-    numberFlux m (hyperplaneMeasure d τ) (timeAxis d) f =
+    numberFlux m (hyperplaneMeasure d τ) (fun _ => timeAxis d) f =
       ∫ x : Fin d → ℝ, ∫ π in domain d m, f (Fin.cons τ x) π := by
   rw [numberFlux, hyperplaneMeasure, (measurableEmbedding_cons τ).integral_map]
   refine integral_congr_ae (Filter.Eventually.of_forall fun x => ?_)
