@@ -3,7 +3,7 @@
  "packages":
  [{"type": "path",
    "scope": "",
-   "name": "ProjectAInos",
+   "name": "ProjectAinos",
    "manifestFile": "lake-manifest.json",
    "inherited": false,
    "dir": "../",

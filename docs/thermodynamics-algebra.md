@@ -21,7 +21,7 @@ x+\varepsilon_n z_0\le y+\varepsilon_n z_1\ (\forall n)
 \quad\Longrightarrow\quad x\le y.
 $$
 
-Only the scalar sequence has a topology. No topology on `M` or its completion is assumed. Zero scaling and the empty state are part of the semimodule structure; the auxiliary scales in A6 are strictly positive. [Definition: `Stability`](../ProjectAInos/Thermodynamics/Basic.lean).
+Only the scalar sequence has a topology. No topology on `M` or its completion is assumed. Zero scaling and the empty state are part of the semimodule structure; the auxiliary scales in A6 are strictly positive. [Definition: `Stability`](../ProjectAinos/Thermodynamics/Basic.lean).
 
 ## Cancellation from A6
 
@@ -39,7 +39,7 @@ $$
 
 A6 removes the auxiliary system and gives `x ≤ y`. Applying this to both directions of an equality gives `x + z = y + z → x = y`.
 
-[Cancellation](../ProjectAInos/Thermodynamics/Cancellation.lean) exposes `Stability.le_of_add_le_add_right`, `Stability.eq_of_add_eq_add_right`, and `Stability.isOrderedCancelAddMonoid`. Cancellation is installed from this proof where needed; it is not an additional physical premise. This is the spectator cancellation of LY Theorem 2.1.
+[Cancellation](../ProjectAinos/Thermodynamics/Cancellation.lean) exposes `Stability.le_of_add_le_add_right`, `Stability.eq_of_add_eq_add_right`, and `Stability.isOrderedCancelAddMonoid`. Cancellation is installed from this proof where needed; it is not an additional physical premise. This is the spectator cancellation of LY Theorem 2.1.
 
 ## Grothendieck completion and real scalars
 
@@ -73,7 +73,7 @@ $$
 
 give scalar addition and multiplication. Thus `V` is a real vector space extending the nonnegative action on `M`. The extension is unique. An additive, nonnegatively homogeneous map from `M` to any real vector space extends uniquely to a real linear map from `V`.
 
-[Completion](../ProjectAInos/Thermodynamics/Completion.lean) provides `exists_sub_of`, `nnrealEndHom`, `realEndHom`, `module_unique`, `ofLinear`, `liftLinear`, `liftLinear_unique`, and `of_injective`. The real action itself needs no order or stability; stability is used to obtain injectivity for the ordered-state application.
+[Completion](../ProjectAinos/Thermodynamics/Completion.lean) provides `exists_sub_of`, `nnrealEndHom`, `realEndHom`, `module_unique`, `ofLinear`, `liftLinear`, `liftLinear_unique`, and `of_injective`. The real action itself needs no order or stability; stability is used to obtain injectivity for the ordered-state application.
 
 ## Process cone and order reflection
 
@@ -98,7 +98,7 @@ $$
 P\cap(-P)=\{0\}.
 $$
 
-The cone order is a partial order on the whole completion. There is no remaining radical to quotient out: mutual accessibility has already been quotiented at the state level, and cancellation has been proved. [Cone](../ProjectAInos/Thermodynamics/Cone.lean): `processCone_reflects`, `processCone_salient`, `completionPartialOrder`, and `completion_of_le_iff`.
+The cone order is a partial order on the whole completion. There is no remaining radical to quotient out: mutual accessibility has already been quotiented at the state level, and cancellation has been proved. [Cone](../ProjectAinos/Thermodynamics/Cone.lean): `processCone_reflects`, `processCone_salient`, `completionPartialOrder`, and `completion_of_le_iff`.
 
 ## Sequential closure and the Archimedean property
 
@@ -126,7 +126,7 @@ $$
 \tag{AR}
 $$
 
-Indeed, scaling the hypotheses gives `−v + w/n ∈ P`, to which SC applies. Once the process span has a linear order, this supplies its usual `Archimedean` instance. [Cone: `processCone_sequentialOrderClosed`](../ProjectAInos/Thermodynamics/Cone.lean); [Representation: `SequentialOrderClosed.archimedean`, `coneSpan_archimedean`](../ProjectAInos/Thermodynamics/Representation.lean).
+Indeed, scaling the hypotheses gives `−v + w/n ∈ P`, to which SC applies. Once the process span has a linear order, this supplies its usual `Archimedean` instance. [Cone: `processCone_sequentialOrderClosed`](../ProjectAinos/Thermodynamics/Cone.lean); [Representation: `SequentialOrderClosed.archimedean`, `coneSpan_archimedean`](../ProjectAinos/Thermodynamics/Representation.lean).
 
 ## Exchange comparison is totality on the process span
 
@@ -170,7 +170,7 @@ $$
 
 so comparison within that label proves ECH. Elementary-system CH alone does not establish this premise; the physical development constructs common scaled products for equal-label composites.
 
-[Comparison](../ProjectAInos/Thermodynamics/Comparison.lean): `ExchangeComparison`, `exchangeComparison_of_sectors`; [Cone](../ProjectAInos/Thermodynamics/Cone.lean): `exchangeComparison_iff_coneTotal`; [Representation](../ProjectAInos/Thermodynamics/Representation.lean): `ConeTotalOnSpan`, `coneSpanLinearOrder`.
+[Comparison](../ProjectAinos/Thermodynamics/Comparison.lean): `ExchangeComparison`, `exchangeComparison_of_sectors`; [Cone](../ProjectAinos/Thermodynamics/Cone.lean): `exchangeComparison_iff_coneTotal`; [Representation](../ProjectAinos/Thermodynamics/Representation.lean): `ConeTotalOnSpan`, `coneSpanLinearOrder`.
 
 ## The real cut and rank-one representation
 
@@ -201,7 +201,7 @@ The inverse is `r ↦ re`; additivity and real homogeneity follow from uniquenes
 
 The related ordered-group fact is that every additive order automorphism of the real line is multiplication by one positive real number. Additivity fixes its values on rationals, and order bounds between rational approximations fix its values on every real. Arbitrary increasing bijections of the real line have much greater freedom. This is background explaining the role of additivity; the dedicated Lean uniqueness theorem here is the classification of order-preserving linear entropy coordinates.
 
-[Representation](../ProjectAInos/Thermodynamics/Representation.lean) proves `entropyCut_nonempty`, `entropyCut_bddAbove`, `entropyCut_sSup_smul`, `coneEntropyEquiv`, `coneEntropyEquiv_nonneg_iff`, `coneEntropyEquiv_generator`, and `coneEntropyEquiv_unique_up_to_pos`. [Entropy](../ProjectAInos/Thermodynamics/Entropy.lean) specializes this construction to `entropyCoordinate` using A6 and ECH.
+[Representation](../ProjectAinos/Thermodynamics/Representation.lean) proves `entropyCut_nonempty`, `entropyCut_bddAbove`, `entropyCut_sSup_smul`, `coneEntropyEquiv`, `coneEntropyEquiv_nonneg_iff`, `coneEntropyEquiv_generator`, and `coneEntropyEquiv_unique_up_to_pos`. [Entropy](../ProjectAinos/Thermodynamics/Entropy.lean) specializes this construction to `entropyCoordinate` using A6 and ECH.
 
 If `P = {0}`, then `W = 0`; there is no distinguished entropy direction or unit. The [degenerate model](thermodynamics-models.md) records this separate case.
 
@@ -231,7 +231,7 @@ $$
 
 Sector equality is equivalent to `ι y − ι x ∈ W`, where the coordinate detects cone membership. Every accessible process lies in `W`, so entropy is monotone on all accessible pairs. An entropy inequality alone says nothing about pairs in different conserved sectors. The [entropy–amount model](thermodynamics-models.md) demonstrates this obstruction.
 
-[Conservation](../ProjectAInos/Thermodynamics/Conservation.lean): `entropyExtension_nonempty`, `EntropyExtension.le_iff`, `conservation_eq_iff`; [Entropy](../ProjectAInos/Thermodynamics/Entropy.lean): `EntropyExtension.state`, `EntropyExtension.state_le_iff`, `EntropyExtension.state_monotone`, `exists_normalized_entropy`.
+[Conservation](../ProjectAinos/Thermodynamics/Conservation.lean): `entropyExtension_nonempty`, `EntropyExtension.le_iff`, `conservation_eq_iff`; [Entropy](../ProjectAinos/Thermodynamics/Entropy.lean): `EntropyExtension.state`, `EntropyExtension.state_le_iff`, `EntropyExtension.state_monotone`, `exists_normalized_entropy`.
 
 ## Signed cutoff and relative entropy
 
@@ -258,7 +258,7 @@ $$
 
 The normalization fixes a difference, so the cutoff measures **relative** entropy. It equals `𝒮(x)` only with the further choice `𝒮(x₀) = 0`. The proof covers `λ < 0`, `λ > 1`, and the endpoints, where the relation becomes `x₀ ≤ x` or `x₁ ≤ x`.
 
-[Cutoff](../ProjectAInos/Thermodynamics/Cutoff.lean): `signedReferenceLE_iff`, `signedReferenceLE_iff_entropy_le`, `reference_cutoff_eq_relative_entropy`, `signedReferenceLE_zero`, `signedReferenceLE_one`. See also [formalization note T03](thermodynamics-notes.md#t03-the-reference-cutoff-measures-relative-entropy).
+[Cutoff](../ProjectAinos/Thermodynamics/Cutoff.lean): `signedReferenceLE_iff`, `signedReferenceLE_iff_entropy_le`, `reference_cutoff_eq_relative_entropy`, `signedReferenceLE_zero`, `signedReferenceLE_one`. See also [formalization note T03](thermodynamics-notes.md#t03-the-reference-cutoff-measures-relative-entropy).
 
 ## Conservation and the freedom in entropy
 
@@ -282,4 +282,4 @@ for a unique `φ`. Indeed, `S − S₀` vanishes on `W`; conversely adding any c
 
 Via `s⁻¹`, an extension is equivalently a linear retraction `V → W` of the inclusion. Changing the positive scale of `s` changes the entropy unit; changing `φ` changes composition-dependent offsets. A nonzero constant added uniformly to every composite is generally incompatible with additivity and zero entropy for the empty state.
 
-[Conservation](../ProjectAInos/Thermodynamics/Conservation.lean): `conservation_exact`, `existsUnique_process_factor_iff`, `existsUnique_conservation_factor_iff`, `EntropyExtension.existsUnique_difference`, `EntropyExtension.addConserved`, and `EntropyExtension.equivConserved`.
+[Conservation](../ProjectAinos/Thermodynamics/Conservation.lean): `conservation_exact`, `existsUnique_process_factor_iff`, `existsUnique_conservation_factor_iff`, `EntropyExtension.existsUnique_difference`, `EntropyExtension.addConserved`, and `EntropyExtension.equivConserved`.

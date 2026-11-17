@@ -15,12 +15,12 @@ The [research outline](../README.md) remains the subject-level plan;
 The proof-status baseline is `main` at `61d8fdf` on 13 November 2026,
 including the merged work tracked by #52 and the flat Maxwell action from #44.
 This document completes the GR design contribution to
-[issue #8](https://github.com/MGYamada/ProjectAInos/issues/8).
+[issue #8](https://github.com/MGYamada/ProjectAinos/issues/8).
 Writing the programme does not complete its future mathematical milestones,
 the remaining API design review, or the classical-to-quantum correspondence.
 
 **Revision of 14 November 2026.** The mechanics programme is complete
-([issue #78](https://github.com/MGYamada/ProjectAInos/issues/78), `main` at
+([issue #78](https://github.com/MGYamada/ProjectAinos/issues/78), `main` at
 `fd0ccaa`). [After the mechanics programme](#after-the-mechanics-programme)
 records the prerequisites it supplies, what it found out of reach, and the
 resulting changes to this plan. The GR modules are those of the baseline, and
@@ -1173,7 +1173,7 @@ solution spaces, symplectic/constraint reduction, and linearized observables
 may become inputs to quantization, but this manuscript does not construct a
 Hilbert space, quantum gravitational field, or ultraviolet completion.
 The dedicated quantum field theory design remains in
-[#46](https://github.com/MGYamada/ProjectAInos/issues/46).
+[#46](https://github.com/MGYamada/ProjectAinos/issues/46).
 The scalar QFT prototype is a neighboring formalization with different
 assumptions, not a proof of that correspondence.
 
@@ -1188,21 +1188,21 @@ row source present at `fd0ccaa`. The existing
 
 | Existing claim | Source and verified declaration or object |
 | --- | --- |
-| C∞ scheme and manifold comparison | [Manifold schemes](../ProjectAInos/SmoothGeometry/Manifold/Scheme.lean): `Manifold.scheme`, `schemeMap`; [Lorentzian](../ProjectAInos/SmoothGeometry/Lorentzian.lean): `LorentzManifold.toScheme` |
-| Native metric duality | [Dual](../ProjectAInos/SmoothGeometry/Lorentzian/Dual.lean): `flat`, `sharp`, `lower`, `raise` and smoothness/inverse laws |
-| Levi-Civita connection | [LeviCivita](../ProjectAInos/SmoothGeometry/Lorentzian/LeviCivita.lean), [Christoffel](../ProjectAInos/SmoothGeometry/Lorentzian/Christoffel.lean): native construction and coordinate comparison |
-| Algebraic curvature and Bianchi | [Curvature](../ProjectAInos/SmoothGeometry/Lorentzian/Curvature.lean): `curvature`, `curvature_first_bianchi`; [CurvatureSymmetry](../ProjectAInos/SmoothGeometry/Lorentzian/CurvatureSymmetry.lean): pair identities |
-| Ricci and scalar curvature | [Ricci](../ProjectAInos/SmoothGeometry/Lorentzian/Ricci.lean): `ricci`, `ricci_symmetric`, `ricci_smooth`, `scalarCurvature` |
-| Native motion and transport | [Geodesic](../ProjectAInos/SmoothGeometry/Lorentzian/Geodesic.lean), [MotionODE](../ProjectAInos/SmoothGeometry/Lorentzian/MotionODE.lean), [ParallelTransport](../ProjectAInos/SmoothGeometry/Lorentzian/ParallelTransport.lean) |
-| Local flatness equivalence | [LocalFlatnessConverse](../ProjectAInos/SmoothGeometry/Lorentzian/LocalFlatnessConverse.lean): `isLocallyMinkowski_iff_curvature_eq_zero` |
-| Quadratic and massive stationarity | [ManifoldStationary](../ProjectAInos/GeneralRelativity/ManifoldStationary.lean): `quadraticStationary_iff_geodesic`, `freeStationary_iff_tangential` |
-| Finite proper-time parametrization and null preservation | [ManifoldMotion](../ProjectAInos/GeneralRelativity/ManifoldMotion.lean): `freeStationary_finite_properTime`, `QuadraticStationary.null_initial` |
-| Exact SR specialization | [SpecialRelativity](../ProjectAInos/GeneralRelativity/SpecialRelativity.lean): `properTime_minkowski`, `freeAction_minkowski` |
-| Native curved Maxwell components | [CurvedComponents](../ProjectAInos/Electrodynamics/CurvedComponents.lean): `source_eq_twoFormDivergence`, `maxwell_iff_components` |
-| Flat vacuum Maxwell action | [VacuumAction](../ProjectAInos/Electrodynamics/VacuumAction.lean): `stationary_iff_vacuum` |
-| Uniform particle Newtonian limit | [NewtonianLimit](../ProjectAInos/GeneralRelativity/NewtonianLimit.lean): `exists_uniform_newtonian_limit`, `exists_newtonian_limit_with_rate` |
-| Nontrivial trajectory regression | [NewtonianLimitExamples](../ProjectAInos/GeneralRelativity/NewtonianLimitExamples.lean): `polynomial_trajectory_limit` |
-| Shared prerequisites from the mechanics programme | [Reduction](../ProjectAInos/SmoothAlgebra/Poisson/Reduction.lean): `PoissonStructure.Reduction`; [CyclicReduction](../ProjectAInos/Mechanics/Poisson/CyclicReduction.lean): `CyclicReduction.reductionHom_bijective`; [Quadrature](../ProjectAInos/Mechanics/Quadrature.lean): `integral_comp_eq_integral_div_sqrt`; [Trajectory](../ProjectAInos/Mechanics/Poisson/Trajectory.lean): `IsTrajectory` |
+| C∞ scheme and manifold comparison | [Manifold schemes](../ProjectAinos/SmoothGeometry/Manifold/Scheme.lean): `Manifold.scheme`, `schemeMap`; [Lorentzian](../ProjectAinos/SmoothGeometry/Lorentzian.lean): `LorentzManifold.toScheme` |
+| Native metric duality | [Dual](../ProjectAinos/SmoothGeometry/Lorentzian/Dual.lean): `flat`, `sharp`, `lower`, `raise` and smoothness/inverse laws |
+| Levi-Civita connection | [LeviCivita](../ProjectAinos/SmoothGeometry/Lorentzian/LeviCivita.lean), [Christoffel](../ProjectAinos/SmoothGeometry/Lorentzian/Christoffel.lean): native construction and coordinate comparison |
+| Algebraic curvature and Bianchi | [Curvature](../ProjectAinos/SmoothGeometry/Lorentzian/Curvature.lean): `curvature`, `curvature_first_bianchi`; [CurvatureSymmetry](../ProjectAinos/SmoothGeometry/Lorentzian/CurvatureSymmetry.lean): pair identities |
+| Ricci and scalar curvature | [Ricci](../ProjectAinos/SmoothGeometry/Lorentzian/Ricci.lean): `ricci`, `ricci_symmetric`, `ricci_smooth`, `scalarCurvature` |
+| Native motion and transport | [Geodesic](../ProjectAinos/SmoothGeometry/Lorentzian/Geodesic.lean), [MotionODE](../ProjectAinos/SmoothGeometry/Lorentzian/MotionODE.lean), [ParallelTransport](../ProjectAinos/SmoothGeometry/Lorentzian/ParallelTransport.lean) |
+| Local flatness equivalence | [LocalFlatnessConverse](../ProjectAinos/SmoothGeometry/Lorentzian/LocalFlatnessConverse.lean): `isLocallyMinkowski_iff_curvature_eq_zero` |
+| Quadratic and massive stationarity | [ManifoldStationary](../ProjectAinos/GeneralRelativity/ManifoldStationary.lean): `quadraticStationary_iff_geodesic`, `freeStationary_iff_tangential` |
+| Finite proper-time parametrization and null preservation | [ManifoldMotion](../ProjectAinos/GeneralRelativity/ManifoldMotion.lean): `freeStationary_finite_properTime`, `QuadraticStationary.null_initial` |
+| Exact SR specialization | [SpecialRelativity](../ProjectAinos/GeneralRelativity/SpecialRelativity.lean): `properTime_minkowski`, `freeAction_minkowski` |
+| Native curved Maxwell components | [CurvedComponents](../ProjectAinos/Electrodynamics/CurvedComponents.lean): `source_eq_twoFormDivergence`, `maxwell_iff_components` |
+| Flat vacuum Maxwell action | [VacuumAction](../ProjectAinos/Electrodynamics/VacuumAction.lean): `stationary_iff_vacuum` |
+| Uniform particle Newtonian limit | [NewtonianLimit](../ProjectAinos/GeneralRelativity/NewtonianLimit.lean): `exists_uniform_newtonian_limit`, `exists_newtonian_limit_with_rate` |
+| Nontrivial trajectory regression | [NewtonianLimitExamples](../ProjectAinos/GeneralRelativity/NewtonianLimitExamples.lean): `polynomial_trajectory_limit` |
+| Shared prerequisites from the mechanics programme | [Reduction](../ProjectAinos/SmoothAlgebra/Poisson/Reduction.lean): `PoissonStructure.Reduction`; [CyclicReduction](../ProjectAinos/Mechanics/Poisson/CyclicReduction.lean): `CyclicReduction.reductionHom_bijective`; [Quadrature](../ProjectAinos/Mechanics/Quadrature.lean): `integral_comp_eq_integral_div_sqrt`; [Trajectory](../ProjectAinos/Mechanics/Poisson/Trajectory.lean): `IsTrajectory` |
 
 The nonlinear flat chart and conformal curved example test coordinate
 covariance, connection terms, and nonzero curvature independently.
@@ -1252,8 +1252,8 @@ hypotheses or predicates, never extra axioms.
 The existing local commands relevant to this volume are:
 
 ```sh
-lake build --wfail ProjectAInos
-lake exe mk_all --check --lib ProjectAInos
+lake build --wfail ProjectAinos
+lake exe mk_all --check --lib ProjectAinos
 lake env lean -DwarningAsError=true checks/GeneralRelativityAPI.lean
 lake env lean -DwarningAsError=true checks/LorentzGeometryAPI.lean
 lake env lean -DwarningAsError=true checks/AxiomAudit.lean
@@ -1281,7 +1281,7 @@ This manuscript does not report a fresh run of the commands above.
   for comparison of linearized equations and radiation approximations.
 - Arnowitt, Deser and Misner, [*The Dynamics of General Relativity*](https://arxiv.org/abs/gr-qc/0405109),
   the authors' account of the canonical initial-data formulation.
-- Project AInos, [C∞ mechanics](cinfty-mechanics.md),
+- Project Ainos, [C∞ mechanics](cinfty-mechanics.md),
   [shared geometry](smooth-geometry.md),
   [GR proof map](general-relativity.md), and
   [Landau–Lifshitz subject map](landau-lifshitz.md).

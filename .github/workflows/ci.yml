@@ -30,7 +30,8 @@ jobs:
   lean:
     name: Lean build
     runs-on: ubuntu-24.04
-    timeout-minutes: 30
+    # A cold build and the full check suite can exceed 30 minutes.
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
         with:
@@ -70,14 +71,14 @@ jobs:
           MATHLIB_CACHE_GET_URL: ""
         with:
           build: "true"
-          build-args: --wfail ProjectAInos
+          build-args: --wfail ProjectAinos
           use-mathlib-cache: "true"
           # Run inside the action, before it saves the build cache, so the
           # linked mk_all executable is cached and not rebuilt on every run.
           mk_all-check: "true"
-          mk_all-args: --lib ProjectAInos
+          mk_all-args: --lib ProjectAinos
           axiom-audit: "true"
-          axiom-audit-root: ProjectAInos
+          axiom-audit-root: ProjectAinos
           axiom-audit-allow: propext,Classical.choice,Quot.sound
       - name: Run the import-boundary, API and axiom checks
         if: steps.scope.outputs.lean == 'true'

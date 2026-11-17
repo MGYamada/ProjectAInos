@@ -1,4 +1,4 @@
-# Project AInos Documentation
+# Project Ainos Documentation
 
 - [Research plan](../README.md)
 - [Proof development record](proof-development.md)

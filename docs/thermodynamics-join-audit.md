@@ -8,15 +8,15 @@ transversality by themselves are not advertised as supplying joined-system
 geometric regularity.
 
 This audit addresses the distinction raised in
-[issue #12](https://github.com/MGYamada/ProjectAInos/issues/12) and the populated
-model requested in [issue #10](https://github.com/MGYamada/ProjectAInos/issues/10).
+[issue #12](https://github.com/MGYamada/ProjectAinos/issues/12) and the populated
+model requested in [issue #10](https://github.com/MGYamada/ProjectAinos/issues/10).
 The [physical development](thermodynamics-physical.md) gives the full proof
 chain and public entropy endpoints.
 
 ## The contact layer and the geometric layer
 
 The weaker `ThermalJoin` type in
-[PhysicalComparison.lean](../ProjectAInos/Thermodynamics/PhysicalComparison.lean)
+[PhysicalComparison.lean](../ProjectAinos/Thermodynamics/PhysicalComparison.lean)
 requires only:
 
 1. A represented state at each coordinate in the joined domain.
@@ -31,7 +31,7 @@ maximum-entropy consequence of equilibrium when an additive monotone entropy
 is supplied, without adding a joined `SimpleSystem`.
 
 `SimpleThermalJoin` in
-[ThermalFamily.lean](../ProjectAInos/Thermodynamics/ThermalFamily.lean) adds a
+[ThermalFamily.lean](../ProjectAinos/Thermodynamics/ThermalFamily.lean) adds a
 complete `SimpleSystem` in the canonical coordinates
 
 $$
@@ -110,7 +110,7 @@ model.
 
 ## The smooth reservoir family
 
-[ReservoirModel.lean](../ProjectAInos/Thermodynamics/ReservoirModel.lean)
+[ReservoirModel.lean](../ProjectAinos/Thermodynamics/ReservoirModel.lean)
 constructs such a model in the namespace `Physical.Reservoir`. The carrier is
 `SectorState`, with coordinates $(s,r)$ for entropy and amount and order
 
@@ -203,6 +203,6 @@ transition model meets S2–S3. No general nonsmooth relaxation or preservation
 theorem for arbitrary physical joins is constructed here. The smooth reservoir
 witness and the conditional entropy theorems have exactly the scopes stated
 above. A populated family with distinct temperatures is constructed separately
-in [LogarithmicThermalModel.lean](../ProjectAInos/Thermodynamics/LogarithmicThermalModel.lean);
+in [LogarithmicThermalModel.lean](../ProjectAinos/Thermodynamics/LogarithmicThermalModel.lean);
 the [models guide](thermodynamics-models.md#a-populated-family-with-distinct-temperatures)
 describes it.

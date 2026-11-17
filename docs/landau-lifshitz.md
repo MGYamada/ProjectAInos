@@ -1,6 +1,6 @@
 # Landau–Lifshitz Correspondence
 
-This cross-reference connects the Project AInos research plan to the English editions of the *Course of Theoretical Physics*. Mechanics and the classical-field trilogy have section-level proof targets; the other subjects are mapped by chapter or volume. The implementation order follows the [research plan](../README.md).
+This cross-reference connects the Project Ainos research plan to the English editions of the *Course of Theoretical Physics*. Mechanics and the classical-field trilogy have section-level proof targets; the other subjects are mapped by chapter or volume. The implementation order follows the [research plan](../README.md).
 
 ## Mechanics
 
@@ -74,7 +74,7 @@ respectively. [Volume 2 contents](https://shop.elsevier.com/books/the-classical-
 The [C∞ special relativity dictionary](cinfty-special-relativity.md#landau-lifshitz-correspondence)
 assigns a target, hypotheses, proof tier and status to every section in §§1–14.
 The trilogy preserves the chapter/section allocation adopted in
-[issue #8](https://github.com/MGYamada/ProjectAInos/issues/8), with the fourth
+[issue #8](https://github.com/MGYamada/ProjectAinos/issues/8), with the fourth
 revised English edition as the cross-reference. Page numbers vary by reprint;
 the section labels in the dictionaries describe our formalization targets.
 
@@ -244,7 +244,7 @@ coefficient estimates and a uniform acceleration error of order `c⁻²`.
 The uniform relativistic Lipschitz bound, compact trajectory tube and
 Gronwall estimate give a common interval, uniform convergence and order
 `c⁻²` for suitably close initial data. Stage G is merged into `main`.
-[#52](https://github.com/MGYamada/ProjectAInos/issues/52)
+[#52](https://github.com/MGYamada/ProjectAinos/issues/52)
 Einstein equations and their Newtonian field-equation limit remain in 5.2;
 the Maxwell field action remains in 4.2.
 

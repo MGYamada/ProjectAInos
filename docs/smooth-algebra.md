@@ -1,10 +1,10 @@
 # Shared Mathematical Foundation: Smooth Algebra
 
-This is the first shared algebraic stage of [issue #7](https://github.com/MGYamada/ProjectAInos/issues/7).
+This is the first shared algebraic stage of [issue #7](https://github.com/MGYamada/ProjectAinos/issues/7).
 It provides C∞-rings, morphisms, and concrete smooth-function models for
 [smooth geometry](smooth-geometry.md), mechanics, and classical field theory.
 
-All declarations are in `ProjectAInos.SmoothAlgebra`. The original dependency
+All declarations are in `ProjectAinos.SmoothAlgebra`. The original dependency
 order is `Operations` → `Basic` → `Hom` → `Models` → `Differential`.
 `Category` bundles smooth rings and their morphisms. `Congruence` constructs
 quotients by smooth congruences; `LocalInverse` and `Localization` construct
@@ -173,7 +173,7 @@ morphism into its dual numbers and reads off the infinitesimal part; no calculus
 on an infinite product is needed. Coordinate vector fields commute because their
 commutator is a derivation that vanishes on every generator. The standard jet
 ring of the [mechanics guide](mechanics.md#jet-rings-and-conservation-laws) is
-built from these. The first stage is tracked in [issue #74](https://github.com/MGYamada/ProjectAInos/issues/74).
+built from these. The first stage is tracked in [issue #74](https://github.com/MGYamada/ProjectAinos/issues/74).
 
 ## Points and tangent vectors
 
@@ -373,7 +373,7 @@ C∞-ring is a Poisson morphism if it preserves the brackets of the generators
 (`FreeSmoothRing.isPoissonHom_of_generators`). The rigid body, the angular
 momentum and the heavy top are in the
 [mechanics guide](mechanics.md#poisson-models). This stage is tracked in
-[issue #78](https://github.com/MGYamada/ProjectAInos/issues/78).
+[issue #78](https://github.com/MGYamada/ProjectAinos/issues/78).
 
 ## Formal power series in `q` and `p`
 
@@ -455,46 +455,46 @@ The application to the anharmonic oscillator is in the
 
 | Module | Main checked results |
 | --- | --- |
-| [Operations](../ProjectAInos/SmoothAlgebra/Operations.lean) | `proj_comp`, `comp_proj`, `comp_assoc`, `exponential_addition` |
-| [Basic](../ProjectAInos/SmoothAlgebra/Basic.lean) | `op_const`, `op_add`, `op_mul`, `op_neg`, `op_sub`, `op_smul`, `op_sum`, `exp_add` |
-| [Hom](../ProjectAInos/SmoothAlgebra/Hom.lean) | `toAlgHom`, identity/composition laws, `map_neg`, `map_sub`, `map_sum`, `map_exp` |
-| [Models](../ProjectAInos/SmoothAlgebra/Models.lean) | Real and function-ring instances; `hom_ext`, `lift_unique`, `existsUnique_lift`, `pullback_comp`, `eval_comp_pullback` |
-| [Differential](../ProjectAInos/SmoothAlgebra/Differential.lean) | `directionalEvaluation_op`, the chain rule for every finite smooth operation on the concrete model; `directionalEvaluation_eq_sum` |
-| [PartialDerivative](../ProjectAInos/SmoothAlgebra/PartialDerivative.lean) | `partialDeriv`, `fderiv_apply_eq_sum_partialDeriv`, `partialDeriv_mul`, `partialDeriv_comp`, `partialDeriv_comm`, `partialDeriv_exponential` |
-| [DualNumber](../ProjectAInos/SmoothAlgebra/DualNumber.lean) | `SmoothRing (DualNumber A)`, `fst_op`, `snd_op`, `fstHom`, `inlHom`, `exp_inl_add_inr` |
-| [FreeDerivation](../ProjectAInos/SmoothAlgebra/FreeDerivation.lean) | `FreeSmoothRing.derivation`, `derivation_generator`, `derivation_ext`, `map_derivation_eq`, `derivationEquiv`, `partialDerivation_comm`, `exists_finset_partialDerivation_eq_zero` |
-| [FreeChainRule](../ProjectAInos/SmoothAlgebra/FreeChainRule.lean) | `FreeSmoothRing.derivation_lift`, `FreeSmoothRing.derivation_lift_mul`: the chain rule `E (s(y)) = Σₐ (∂ₐ s)(y) • E (yₐ)` for a substitution out of a free ring on finitely many generators. `FreeSmoothRing.apply_eq_sum_partialDerivation`, `FreeSmoothRing.apply_eq_zero_of_partialDerivation_eq_zero`: on any free ring a vector field is `Σₐ (∂ₐ s) E(xₐ)`, summed over the generators of a presentation of `s` |
-| [FreeCalculus](../ProjectAInos/SmoothAlgebra/FreeCalculus.lean) | `FreeSmoothRing.contDiff_val`, `fderiv_val_apply`, `realField`, `contDiff_realField`, `fderiv_realField_apply`: the elements of a free ring on finitely many generators as differentiable functions, and derivations as vector fields |
-| [DividedDifference](../ProjectAInos/SmoothAlgebra/DividedDifference.lean) | `dividedDifference`, `sub_eq_mul_dividedDifference`, `dividedDifference₂`, `dividedDifference_sub`, `sub_eq_mul_mul_dividedDifference₂`: Hadamard's lemma in one variable, applied twice |
-| [ImplicitFunction](../ProjectAInos/SmoothAlgebra/ImplicitFunction.lean) | `exists_contDiffOn_implicitFunction`: a smooth implicit function on an open neighbourhood |
-| [ImplicitFunctionReal](../ProjectAInos/SmoothAlgebra/ImplicitFunctionReal.lean) | `exists_contDiffOn_implicitFunction_real`: one real equation in one real unknown |
-| [FormalSeries/Filtration](../ProjectAInos/SmoothAlgebra/FormalSeries/Filtration.lean) | `orderGE`, `mem_orderGE_iff_le_order`, `mul_mem_orderGE`, `pderiv_mem_orderGE`, `eq_zero_of_forall_mem_orderGE`, `seqLimit`, `seqLimit_sub_mem` |
-| [FormalSeries/LieExp](../ProjectAInos/SmoothAlgebra/FormalSeries/LieExp.lean) | `Raises`, `expPartial`, `lieExp`, `lieExp_sub_expPartial_mem`, `lieExp_sub_self_mem`, `lieExp_add_sub_mem`, `pow_apply_bilinear`, `expPartial_bilinear`, `lieExp_bilinear`, `bijective_of_raises_sub_id`, `bijective_lieExp` |
-| [FormalSeries/Bracket](../ProjectAInos/SmoothAlgebra/FormalSeries/Bracket.lean) | `PhaseSeries`, `bracket`, `bracket_mul_right`, `bracket_bracket`, `bracket_mem_orderGE`, `ad`, `raises_ad`, `lieExp_ad_mul`, `lieExp_ad_bracket`, `lieAlgEquiv` |
-| [FormalSeries/Homological](../ProjectAInos/SmoothAlgebra/FormalSeries/Homological.lean) | `homogeneous`, `action`, `bracket_action`, `resonant`, `eq_zero_of_bracket_action_eq_zero`, `eq_smul_resonant`, `fischer`, `fischer_bracket_action`, `eq_zero_of_fischer_self`, `finiteDimensional_homogeneous`, `exists_homological` |
-| [FormalSeries/NormalForm](../ProjectAInos/SmoothAlgebra/FormalSeries/NormalForm.lean) | `homologicalSolution`, `normalize_step`, `generatorSeq`, `generator`, `exists_component_generator`, `homogeneousComponent_subst_action`, `exists_eq_subst_action`, `exists_normal_form_of_resonant`, `exists_birkhoff_normal_form` |
-| [FormalSeries/Scaling](../ProjectAInos/SmoothAlgebra/FormalSeries/Scaling.lean) | `pderiv_rescale`, `bracket_rescale`, `scale`, `scale_bracket`, `scale_X_zero`, `scale_X_one` |
-| [LineDerivative](../ProjectAInos/SmoothAlgebra/LineDerivative.lean) | `hasFDerivAt_of_hasDerivAt_line`: derivatives along all lines, with a continuous field of linear forms, give the Fréchet derivative |
-| [Point](../ProjectAInos/SmoothAlgebra/Point.lean) | `Point`, `TangentPoint`, `TangentPoint.congr`, `FreeSmoothRing.pointEquiv`, `FreeSmoothRing.lift_real`, `FreeSmoothRing.ext_lift`, `FreeSmoothRing.tangentPointEquiv`, `FreeSmoothRing.fst_tangentPoint`, `FreeSmoothRing.snd_tangentPoint`, `FreeSmoothRing.tangentPoint_map_lift`, `SmoothRingCon.generateHomEquiv`, `FreeSmoothRing.Presented`, `FreeSmoothRing.presentedPointEquiv`, `FreeSmoothRing.presentedTangentPointEquiv`, `FreeSmoothRing.circleTangentPointEquiv` |
-| [ParametricIntegral](../ProjectAInos/SmoothAlgebra/ParametricIntegral.lean) | `fderivLeft`, `hasFDerivAt_parametric_intervalIntegral`, `contDiff_parametric_intervalIntegral`, `contDiff_infty_parametric_intervalIntegral`, `contDiff_infty_parametric_intervalIntegral_limits`: a parametric integral of a smooth function is smooth |
-| [Hadamard](../ProjectAInos/SmoothAlgebra/Hadamard.lean) | `SmoothOperation.segment`, `SmoothOperation.hadamard`, `apply_sub_apply_eq_sum_hadamard`, `comp_castAdd_sub_comp_natAdd`, `SmoothRing.op_sub_op`: Hadamard's lemma for operations and in a C∞-ring |
-| [IdealQuotient](../ProjectAInos/SmoothAlgebra/IdealQuotient.lean) | `SmoothRingCon.ofIdeal`, `ofIdeal_projection_eq_iff`, `ofIdeal_projection_eq_zero_iff`, `ofIdealHomEquiv`, `generated_iff_sub_mem_span`, `FreeSmoothRing.presented_projection_eq_iff`, `FreeSmoothRing.presented_projection_eq_zero_iff`, `FreeSmoothRing.hom_sub_hom_mem`, `SmoothRingHom.mem_of_mem_span`, `SmoothRingHom.eq_zero_of_mem_span` |
-| [Poisson/Basic](../ProjectAInos/SmoothAlgebra/Poisson/Basic.lean) | `AlmostPoissonStructure`, `PoissonStructure`, `hamiltonian`, `bracket_mul_left`, `bracket_op_op`, `jacobiator_op`, `ofDerivations`, `bracket_bracket`, `hamiltonian_bracket`, `IsIntegral.bracket`, `IsIntegral.op`, `integrals`, `isIntegral_iff_hamiltonian_eq_zero` |
-| [Poisson/Ideal](../ProjectAInos/SmoothAlgebra/Poisson/Ideal.lean) | `IsPoissonIdeal`, `IsCoisotropic`, `isPoissonIdeal_span_singleton`, `normalizer`, `bracket_mem_normalizer`, `op_mem_normalizer`, `bracket_sub_bracket_mem`, `hamiltonJacobi`, `maupertuis`, `mem_normalizer_span`, `isCoisotropic_span` |
-| [Poisson/Free](../ProjectAInos/SmoothAlgebra/Poisson/Free.lean) | `jacobiator_eq_zero`, `almostPoisson`, `almostPoisson_bracket_generator`, `almostPoisson_bracket_eq_sum_left`, `poissonOfCoordinates`, `poissonOfConstants` |
-| [Poisson/Canonical](../ProjectAInos/SmoothAlgebra/Poisson/Canonical.lean) | `PhaseSpace`, `canonical`, `canonical_q_p`, `canonical_bracket`, `canonical_q_bracket`, `canonical_p_bracket`, `canonical_hamiltonian_apply`, `isPoissonHom_of_canonical` |
-| [Poisson/Hom](../ProjectAInos/SmoothAlgebra/Poisson/Hom.lean) | `IsPoissonHom`, `IsPoissonHom.comp`, `FreeSmoothRing.isPoissonHom_of_generators` |
-| [Poisson/Reduction](../ProjectAInos/SmoothAlgebra/Poisson/Reduction.lean) | `SmoothRing.ofSubalgebra`, `PoissonStructure.ofSurjective`, `ofSurjective_bracket`, `quotient`, `quotient_bracket`, `isPoissonHom_projection`, `normalizerInclusion`, `restrictNormalizer`, `normalizerIdeal`, `isPoissonIdeal_normalizerIdeal`, `Reduction`, `reduction`, `reductionMap`, `reductionMap_eq_iff`, `reduction_bracket`, `toNormalizer`, `toReduction`, `isPoissonHom_toReduction`, `toReduction_apply_eq`, `toReduction_bijective` |
-| [Derivation](../ProjectAInos/SmoothAlgebra/Derivation.lean) | `SmoothDerivation`, `map_mul`, `map_exp`, `toDerivation`, module and Lie-ring instances, `sum_apply`, `commutator_chain`, `equivInfinitesimalAut`, `equivCoordinates`, `lie_partialDerivation_proj_smul` |
-| [Category](../ProjectAInos/SmoothAlgebra/Category.lean) | `SmoothRingCat`, faithful forgetful functors, isomorphisms from bijective morphisms |
-| [Congruence](../ProjectAInos/SmoothAlgebra/Congruence.lean) | Smooth quotients, projection, factorization, generated smooth congruences |
-| [LocalInverse](../ProjectAInos/SmoothAlgebra/LocalInverse.lean) | `exists_localInverse`, a smooth inverse on the support of a cutoff |
-| [Localization](../ProjectAInos/SmoothAlgebra/Localization.lean) | Point localization, `existsUnique_lift`, real residue, local-ring property, induced local maps |
-| [Free](../ProjectAInos/SmoothAlgebra/Free.lean) | Free C∞-rings on arbitrary generators, presentation independence, lift and uniqueness, `map_lift` |
-| [GeneralLocalization](../ProjectAInos/SmoothAlgebra/GeneralLocalization.lean) | General C∞ localization, `existsUnique_lift`, `hom_ext`, induction on smooth expressions |
-| [LocalizationComparison](../ProjectAInos/SmoothAlgebra/LocalizationComparison.lean) | Point-local ring isomorphism after general localization |
-| [Limits](../ProjectAInos/SmoothAlgebra/Limits.lean) | Compatible-family limits and preservation by the forgetful functor |
-| [SmoothFunctions](../ProjectAInos/SmoothAlgebra/SmoothFunctions.lean) | Smooth operations, evaluation, and pullback on manifold function algebras |
+| [Operations](../ProjectAinos/SmoothAlgebra/Operations.lean) | `proj_comp`, `comp_proj`, `comp_assoc`, `exponential_addition` |
+| [Basic](../ProjectAinos/SmoothAlgebra/Basic.lean) | `op_const`, `op_add`, `op_mul`, `op_neg`, `op_sub`, `op_smul`, `op_sum`, `exp_add` |
+| [Hom](../ProjectAinos/SmoothAlgebra/Hom.lean) | `toAlgHom`, identity/composition laws, `map_neg`, `map_sub`, `map_sum`, `map_exp` |
+| [Models](../ProjectAinos/SmoothAlgebra/Models.lean) | Real and function-ring instances; `hom_ext`, `lift_unique`, `existsUnique_lift`, `pullback_comp`, `eval_comp_pullback` |
+| [Differential](../ProjectAinos/SmoothAlgebra/Differential.lean) | `directionalEvaluation_op`, the chain rule for every finite smooth operation on the concrete model; `directionalEvaluation_eq_sum` |
+| [PartialDerivative](../ProjectAinos/SmoothAlgebra/PartialDerivative.lean) | `partialDeriv`, `fderiv_apply_eq_sum_partialDeriv`, `partialDeriv_mul`, `partialDeriv_comp`, `partialDeriv_comm`, `partialDeriv_exponential` |
+| [DualNumber](../ProjectAinos/SmoothAlgebra/DualNumber.lean) | `SmoothRing (DualNumber A)`, `fst_op`, `snd_op`, `fstHom`, `inlHom`, `exp_inl_add_inr` |
+| [FreeDerivation](../ProjectAinos/SmoothAlgebra/FreeDerivation.lean) | `FreeSmoothRing.derivation`, `derivation_generator`, `derivation_ext`, `map_derivation_eq`, `derivationEquiv`, `partialDerivation_comm`, `exists_finset_partialDerivation_eq_zero` |
+| [FreeChainRule](../ProjectAinos/SmoothAlgebra/FreeChainRule.lean) | `FreeSmoothRing.derivation_lift`, `FreeSmoothRing.derivation_lift_mul`: the chain rule `E (s(y)) = Σₐ (∂ₐ s)(y) • E (yₐ)` for a substitution out of a free ring on finitely many generators. `FreeSmoothRing.apply_eq_sum_partialDerivation`, `FreeSmoothRing.apply_eq_zero_of_partialDerivation_eq_zero`: on any free ring a vector field is `Σₐ (∂ₐ s) E(xₐ)`, summed over the generators of a presentation of `s` |
+| [FreeCalculus](../ProjectAinos/SmoothAlgebra/FreeCalculus.lean) | `FreeSmoothRing.contDiff_val`, `fderiv_val_apply`, `realField`, `contDiff_realField`, `fderiv_realField_apply`: the elements of a free ring on finitely many generators as differentiable functions, and derivations as vector fields |
+| [DividedDifference](../ProjectAinos/SmoothAlgebra/DividedDifference.lean) | `dividedDifference`, `sub_eq_mul_dividedDifference`, `dividedDifference₂`, `dividedDifference_sub`, `sub_eq_mul_mul_dividedDifference₂`: Hadamard's lemma in one variable, applied twice |
+| [ImplicitFunction](../ProjectAinos/SmoothAlgebra/ImplicitFunction.lean) | `exists_contDiffOn_implicitFunction`: a smooth implicit function on an open neighbourhood |
+| [ImplicitFunctionReal](../ProjectAinos/SmoothAlgebra/ImplicitFunctionReal.lean) | `exists_contDiffOn_implicitFunction_real`: one real equation in one real unknown |
+| [FormalSeries/Filtration](../ProjectAinos/SmoothAlgebra/FormalSeries/Filtration.lean) | `orderGE`, `mem_orderGE_iff_le_order`, `mul_mem_orderGE`, `pderiv_mem_orderGE`, `eq_zero_of_forall_mem_orderGE`, `seqLimit`, `seqLimit_sub_mem` |
+| [FormalSeries/LieExp](../ProjectAinos/SmoothAlgebra/FormalSeries/LieExp.lean) | `Raises`, `expPartial`, `lieExp`, `lieExp_sub_expPartial_mem`, `lieExp_sub_self_mem`, `lieExp_add_sub_mem`, `pow_apply_bilinear`, `expPartial_bilinear`, `lieExp_bilinear`, `bijective_of_raises_sub_id`, `bijective_lieExp` |
+| [FormalSeries/Bracket](../ProjectAinos/SmoothAlgebra/FormalSeries/Bracket.lean) | `PhaseSeries`, `bracket`, `bracket_mul_right`, `bracket_bracket`, `bracket_mem_orderGE`, `ad`, `raises_ad`, `lieExp_ad_mul`, `lieExp_ad_bracket`, `lieAlgEquiv` |
+| [FormalSeries/Homological](../ProjectAinos/SmoothAlgebra/FormalSeries/Homological.lean) | `homogeneous`, `action`, `bracket_action`, `resonant`, `eq_zero_of_bracket_action_eq_zero`, `eq_smul_resonant`, `fischer`, `fischer_bracket_action`, `eq_zero_of_fischer_self`, `finiteDimensional_homogeneous`, `exists_homological` |
+| [FormalSeries/NormalForm](../ProjectAinos/SmoothAlgebra/FormalSeries/NormalForm.lean) | `homologicalSolution`, `normalize_step`, `generatorSeq`, `generator`, `exists_component_generator`, `homogeneousComponent_subst_action`, `exists_eq_subst_action`, `exists_normal_form_of_resonant`, `exists_birkhoff_normal_form` |
+| [FormalSeries/Scaling](../ProjectAinos/SmoothAlgebra/FormalSeries/Scaling.lean) | `pderiv_rescale`, `bracket_rescale`, `scale`, `scale_bracket`, `scale_X_zero`, `scale_X_one` |
+| [LineDerivative](../ProjectAinos/SmoothAlgebra/LineDerivative.lean) | `hasFDerivAt_of_hasDerivAt_line`: derivatives along all lines, with a continuous field of linear forms, give the Fréchet derivative |
+| [Point](../ProjectAinos/SmoothAlgebra/Point.lean) | `Point`, `TangentPoint`, `TangentPoint.congr`, `FreeSmoothRing.pointEquiv`, `FreeSmoothRing.lift_real`, `FreeSmoothRing.ext_lift`, `FreeSmoothRing.tangentPointEquiv`, `FreeSmoothRing.fst_tangentPoint`, `FreeSmoothRing.snd_tangentPoint`, `FreeSmoothRing.tangentPoint_map_lift`, `SmoothRingCon.generateHomEquiv`, `FreeSmoothRing.Presented`, `FreeSmoothRing.presentedPointEquiv`, `FreeSmoothRing.presentedTangentPointEquiv`, `FreeSmoothRing.circleTangentPointEquiv` |
+| [ParametricIntegral](../ProjectAinos/SmoothAlgebra/ParametricIntegral.lean) | `fderivLeft`, `hasFDerivAt_parametric_intervalIntegral`, `contDiff_parametric_intervalIntegral`, `contDiff_infty_parametric_intervalIntegral`, `contDiff_infty_parametric_intervalIntegral_limits`: a parametric integral of a smooth function is smooth |
+| [Hadamard](../ProjectAinos/SmoothAlgebra/Hadamard.lean) | `SmoothOperation.segment`, `SmoothOperation.hadamard`, `apply_sub_apply_eq_sum_hadamard`, `comp_castAdd_sub_comp_natAdd`, `SmoothRing.op_sub_op`: Hadamard's lemma for operations and in a C∞-ring |
+| [IdealQuotient](../ProjectAinos/SmoothAlgebra/IdealQuotient.lean) | `SmoothRingCon.ofIdeal`, `ofIdeal_projection_eq_iff`, `ofIdeal_projection_eq_zero_iff`, `ofIdealHomEquiv`, `generated_iff_sub_mem_span`, `FreeSmoothRing.presented_projection_eq_iff`, `FreeSmoothRing.presented_projection_eq_zero_iff`, `FreeSmoothRing.hom_sub_hom_mem`, `SmoothRingHom.mem_of_mem_span`, `SmoothRingHom.eq_zero_of_mem_span` |
+| [Poisson/Basic](../ProjectAinos/SmoothAlgebra/Poisson/Basic.lean) | `AlmostPoissonStructure`, `PoissonStructure`, `hamiltonian`, `bracket_mul_left`, `bracket_op_op`, `jacobiator_op`, `ofDerivations`, `bracket_bracket`, `hamiltonian_bracket`, `IsIntegral.bracket`, `IsIntegral.op`, `integrals`, `isIntegral_iff_hamiltonian_eq_zero` |
+| [Poisson/Ideal](../ProjectAinos/SmoothAlgebra/Poisson/Ideal.lean) | `IsPoissonIdeal`, `IsCoisotropic`, `isPoissonIdeal_span_singleton`, `normalizer`, `bracket_mem_normalizer`, `op_mem_normalizer`, `bracket_sub_bracket_mem`, `hamiltonJacobi`, `maupertuis`, `mem_normalizer_span`, `isCoisotropic_span` |
+| [Poisson/Free](../ProjectAinos/SmoothAlgebra/Poisson/Free.lean) | `jacobiator_eq_zero`, `almostPoisson`, `almostPoisson_bracket_generator`, `almostPoisson_bracket_eq_sum_left`, `poissonOfCoordinates`, `poissonOfConstants` |
+| [Poisson/Canonical](../ProjectAinos/SmoothAlgebra/Poisson/Canonical.lean) | `PhaseSpace`, `canonical`, `canonical_q_p`, `canonical_bracket`, `canonical_q_bracket`, `canonical_p_bracket`, `canonical_hamiltonian_apply`, `isPoissonHom_of_canonical` |
+| [Poisson/Hom](../ProjectAinos/SmoothAlgebra/Poisson/Hom.lean) | `IsPoissonHom`, `IsPoissonHom.comp`, `FreeSmoothRing.isPoissonHom_of_generators` |
+| [Poisson/Reduction](../ProjectAinos/SmoothAlgebra/Poisson/Reduction.lean) | `SmoothRing.ofSubalgebra`, `PoissonStructure.ofSurjective`, `ofSurjective_bracket`, `quotient`, `quotient_bracket`, `isPoissonHom_projection`, `normalizerInclusion`, `restrictNormalizer`, `normalizerIdeal`, `isPoissonIdeal_normalizerIdeal`, `Reduction`, `reduction`, `reductionMap`, `reductionMap_eq_iff`, `reduction_bracket`, `toNormalizer`, `toReduction`, `isPoissonHom_toReduction`, `toReduction_apply_eq`, `toReduction_bijective` |
+| [Derivation](../ProjectAinos/SmoothAlgebra/Derivation.lean) | `SmoothDerivation`, `map_mul`, `map_exp`, `toDerivation`, module and Lie-ring instances, `sum_apply`, `commutator_chain`, `equivInfinitesimalAut`, `equivCoordinates`, `lie_partialDerivation_proj_smul` |
+| [Category](../ProjectAinos/SmoothAlgebra/Category.lean) | `SmoothRingCat`, faithful forgetful functors, isomorphisms from bijective morphisms |
+| [Congruence](../ProjectAinos/SmoothAlgebra/Congruence.lean) | Smooth quotients, projection, factorization, generated smooth congruences |
+| [LocalInverse](../ProjectAinos/SmoothAlgebra/LocalInverse.lean) | `exists_localInverse`, a smooth inverse on the support of a cutoff |
+| [Localization](../ProjectAinos/SmoothAlgebra/Localization.lean) | Point localization, `existsUnique_lift`, real residue, local-ring property, induced local maps |
+| [Free](../ProjectAinos/SmoothAlgebra/Free.lean) | Free C∞-rings on arbitrary generators, presentation independence, lift and uniqueness, `map_lift` |
+| [GeneralLocalization](../ProjectAinos/SmoothAlgebra/GeneralLocalization.lean) | General C∞ localization, `existsUnique_lift`, `hom_ext`, induction on smooth expressions |
+| [LocalizationComparison](../ProjectAinos/SmoothAlgebra/LocalizationComparison.lean) | Point-local ring isomorphism after general localization |
+| [Limits](../ProjectAinos/SmoothAlgebra/Limits.lean) | Compatible-family limits and preservation by the forgetful functor |
+| [SmoothFunctions](../ProjectAinos/SmoothAlgebra/SmoothFunctions.lean) | Smooth operations, evaluation, and pullback on manifold function algebras |
 
 The models module also checks dimension zero (`nullary_eq_const`), nonlinear
 evaluation in dimension one (`eval_exp_square`), and a two-variable exponential
@@ -505,8 +505,8 @@ From the repository root:
 
 ```sh
 lake exe cache get
-lake build --wfail ProjectAInos
-lake exe mk_all --check --lib ProjectAInos
+lake build --wfail ProjectAinos
+lake exe mk_all --check --lib ProjectAinos
 lake env lean -DwarningAsError=true checks/AxiomAudit.lean
 lake env lean -DwarningAsError=true checks/SmoothAlgebraAPI.lean
 lake env lean -DwarningAsError=true checks/ReductionAPI.lean
@@ -516,7 +516,7 @@ git diff --check
 ```
 
 The local audit inspects transitive axiom dependencies of every imported
-declaration in the `ProjectAInos` namespace. Its allowlist is `propext`,
+declaration in the `ProjectAinos` namespace. Its allowlist is `propext`,
 `Classical.choice`, and `Quot.sound`, matching the existing required Lean CI job.
 The required Lean CI job also checks the external smooth-geometry API,
 including open immersions and categorical gluing, and pins the differential

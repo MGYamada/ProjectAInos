@@ -2,7 +2,7 @@
 
 This is the implemented physics layer for particle variation and the
 time-dependent Newtonian motion limit in
-[§5.1 / issue #52](https://github.com/MGYamada/ProjectAInos/issues/52).
+[§5.1 / issue #52](https://github.com/MGYamada/ProjectAinos/issues/52).
 The shared connection, curvature and motion APIs are described in the
 [smooth-geometry guide](smooth-geometry.md). Definitions here use the actual
 tangent bundle, time first, signature `(-+++)`, and `c = 1`. The dimension
@@ -16,7 +16,7 @@ a separate research stage.
 ## Intrinsic proper time and actions
 
 For a smooth `LorentzMetric .timeNegative d M`,
-[ProperTime](../ProjectAInos/GeneralRelativity/ProperTime.lean) defines
+[ProperTime](../ProjectAinos/GeneralRelativity/ProperTime.lean) defines
 `Timelike g v` by `g(v,v) < 0`, `properSpeed g v = sqrt(-g(v,v))`, and
 `properTime g γ a b` as the directed interval integral of the velocity's
 proper speed. The functional is total; its physical interpretation for
@@ -47,7 +47,7 @@ For a locally C² timelike curve, `hasDerivAt_speedAlong` proves
 \qquad s=\sqrt{-g(\dot\gamma,\dot\gamma)}.
 \]
 
-[ParticleAction](../ProjectAInos/GeneralRelativity/ParticleAction.lean)
+[ParticleAction](../ProjectAinos/GeneralRelativity/ParticleAction.lean)
 defines `quadraticAction = ∫ ½g(γ̇,γ̇)` and `freeAction = -m * properTime`.
 It proves integrability, interval subdivision, chart expressions for the
 quadratic action, parameter invariance of the free action, and evaluation
@@ -57,7 +57,7 @@ action alone is not a stationarity criterion.
 
 ## Actual first variation and affine geodesics in model coordinates
 
-[QuadraticLagrangian](../ProjectAInos/GeneralRelativity/QuadraticLagrangian.lean)
+[QuadraticLagrangian](../ProjectAinos/GeneralRelativity/QuadraticLagrangian.lean)
 treats `L(t,q,v) = ½B(q)(v,v)` on a finite-dimensional normed coordinate
 space. It differentiates the position-dependent coefficients and both
 velocity slots, deriving force, momentum and the Euler–Lagrange covector.
@@ -68,7 +68,7 @@ Small variations remain admissible by compactness. The open-domain theorem
 also proves fixed-endpoint stationarity iff the Euler–Lagrange covector
 vanishes on `(a,b)`, for `a < b`.
 
-[QuadraticGeodesic](../ProjectAInos/GeneralRelativity/QuadraticGeodesic.lean)
+[QuadraticGeodesic](../ProjectAinos/GeneralRelativity/QuadraticGeodesic.lean)
 then takes a native Lorentz metric on the model manifold `MinkowskiModel d`.
 The metric can be curved and nonconstant. `modelMetric` gives its smooth
 coordinate bilinear form. The intrinsic action equals the mechanical
@@ -100,14 +100,14 @@ Lorentz manifolds and actual fixed-endpoint families crossing chart boundaries.
 
 ## Massive stationarity and constructed proper-time parameters
 
-[FreeLagrangian](../ProjectAInos/GeneralRelativity/FreeLagrangian.lean)
+[FreeLagrangian](../ProjectAinos/GeneralRelativity/FreeLagrangian.lean)
 works on the open jet domain `q ∈ U` and `B(q)(v,v) < 0`. It proves
 smoothness there, differentiates the actual action using
 `Mechanics.OpenDomain`, and derives the full Euler–Lagrange covector.
 Differentiating the factor `m/s` in the momentum retains the proper-speed
 derivative. No global smoothness across the null cone is asserted.
 
-[FreeGeodesic](../ProjectAInos/GeneralRelativity/FreeGeodesic.lean) proves,
+[FreeGeodesic](../ProjectAinos/GeneralRelativity/FreeGeodesic.lean) proves,
 for a native smooth metric on the model manifold and locally C² timelike
 curves,
 
@@ -129,7 +129,7 @@ rate, stationarity is equivalent to the affine equation in the given
 parameter.
 
 The parameter is constructed in
-[ProperTimeParameter](../ProjectAInos/GeneralRelativity/ProperTimeParameter.lean),
+[ProperTimeParameter](../ProjectAinos/GeneralRelativity/ProperTimeParameter.lean),
 which works on **arbitrary Lorentz manifolds**. For a C² timelike curve on
 an open parameter interval, the fundamental theorem of calculus gives
 `d(properTime g γ t₀)/dt = speedAlong g γ t`; the clock is C² with positive
@@ -139,11 +139,11 @@ Tangential native acceleration is equivalent to the required speed factor;
 the full second-derivative parameter law proves that the constructed
 inverse removes it. The converse parameter law is also proved.
 
-[FiniteProperTime](../ProjectAInos/GeneralRelativity/FiniteProperTime.lean)
+[FiniteProperTime](../ProjectAinos/GeneralRelativity/FiniteProperTime.lean)
 extends this construction to one inverse covering an entire finite timelike
 segment. Its hypotheses are C² regularity at every point of `[a,b]`, including
 the endpoints, and timelikeness there. These give a slightly larger open
-interval. [Variational.Parameter](../ProjectAInos/Variational/Parameter.lean)
+interval. [Variational.Parameter](../ProjectAinos/Variational/Parameter.lean)
 constructs an open partial homeomorphism on that interval from positivity of
 the clock derivative; inverse C² regularity follows from the inverse function
 theorem. The forward and inverse images of the closed intervals are proved,
@@ -155,7 +155,7 @@ single finite-segment parameter. No geodesic completeness is asserted.
 
 ## Native manifold-family first variations
 
-[CurveFamily](../ProjectAInos/SmoothGeometry/Lorentzian/CurveFamily.lean)
+[CurveFamily](../ProjectAinos/SmoothGeometry/Lorentzian/CurveFamily.lean)
 defines the velocities of a genuine two-parameter family `Γ : ℝ × ℝ → M`
 by `mfderiv`, in actual tangent fibres. C² joint regularity implies C¹
 bundle regularity of these velocities. Zero torsion and symmetry of second
@@ -163,14 +163,14 @@ coordinate derivatives prove `∇ε ∂t Γ = ∇t ∂ε Γ`. The statement impo
 immersion, nonzero parameter velocity or global chart assumption, and supports
 both Lorentz conventions.
 
-[VariationDensity](../ProjectAInos/GeneralRelativity/VariationDensity.lean)
+[VariationDensity](../ProjectAinos/GeneralRelativity/VariationDensity.lean)
 uses this interchange law and metric compatibility to differentiate the actual
 scalar densities for signature `(-+++)`. Writing `T = ∂t Γ` and `V = ∂ε Γ`,
 their derivatives in the first parameter are `g(∇t V,T)` for `½g(T,T)` and
 `(m/s) g(∇t V,T)` for `-m s`. The latter requires timelikeness only at the
 point of differentiation.
 
-[VariationAction](../ProjectAInos/GeneralRelativity/VariationAction.lean)
+[VariationAction](../ProjectAinos/GeneralRelativity/VariationAction.lean)
 now differentiates the actual finite action integrals. Joint C² regularity is
 required only at points `(ε₀,t)` of the closed reference segment, with
 timelikeness there for the massive action. `Variational.IntervalParameter`
@@ -181,7 +181,7 @@ Domination and global regularity are derived, not supplied by the caller.
 This construction uses scalar functions on the parameter plane and requires
 no chart containing the full spacetime curve.
 
-[VariationBoundary](../ProjectAInos/GeneralRelativity/VariationBoundary.lean)
+[VariationBoundary](../ProjectAinos/GeneralRelativity/VariationBoundary.lean)
 uses metric compatibility to prove the intrinsic endpoint formulas
 
 \[
@@ -196,14 +196,14 @@ that actual derivatives add over subdivisions. These native formulas use the
 same endpoint pairing at a junction, so internal boundary terms cancel even
 when adjacent segments use different coordinate charts.
 
-[VariationStationary](../ProjectAInos/GeneralRelativity/VariationStationary.lean)
+[VariationStationary](../ProjectAinos/GeneralRelativity/VariationStationary.lean)
 takes actual fixed endpoints for nearby variation parameters and derives zero
 endpoint variation fields. It proves that every affine geodesic is stationary
 under these manifold families for the quadratic action, with no causal
 restriction on variations. Timelike tangential acceleration likewise implies
 massive stationarity; metric compatibility determines the speed factor.
 
-[ManifoldCurve](../ProjectAInos/Variational/ManifoldCurve.lean) defines
+[ManifoldCurve](../ProjectAinos/Variational/ManifoldCurve.lean) defines
 `ManifoldCurveVariation`: an actual two-parameter family through the reference
 curve, jointly C² near each point of the finite reference segment, fixing both
 endpoints for nearby parameters. `chartCurveVariation` constructs one from a
@@ -218,14 +218,14 @@ forces the residual to vanish. Realizability of tests is proved, not supplied
 as a premise. `AccelerationRegularity` derives continuous native acceleration
 from C² curve regularity.
 
-[ManifoldStationary](../ProjectAInos/GeneralRelativity/ManifoldStationary.lean)
+[ManifoldStationary](../ProjectAinos/GeneralRelativity/ManifoldStationary.lean)
 quantifies `QuadraticStationary` and `FreeStationary` over all such families.
 For `a < b` and local C² regularity along `[a,b]`:
 
 - `quadraticStationary_iff_geodesic` proves equivalence to affine motion on `(a,b)`.
 - `freeStationary_iff_acceleration`, for positive mass and a timelike reference
   segment, proves `∇tT = (s'/s)T`; `freeStationary_iff_tangential` is equivalent.
-- [ManifoldMotion](../ProjectAInos/GeneralRelativity/ManifoldMotion.lean) proves
+- [ManifoldMotion](../ProjectAinos/GeneralRelativity/ManifoldMotion.lean) proves
   equivalence to actual regular local affine reparametrization. Unit proper
   speed gives the affine equation, and `freeStationary_finite_properTime`
   constructs one inverse of the actual clock integral over the full segment.
@@ -238,13 +238,13 @@ orientation, completeness, or global Hausdorff hypothesis.
 
 ## Proved examples and validation
 
-[SpecialRelativity](../ProjectAInos/GeneralRelativity/SpecialRelativity.lean)
+[SpecialRelativity](../ProjectAinos/GeneralRelativity/SpecialRelativity.lean)
 proves exact equality with the existing SR proper-speed and proper-time
 functionals on Minkowski space, and with the four-dimensional free action
 and its Mechanics formulation. These are functional equalities, not only
 evaluations on inertial lines.
 
-The [clock examples](../ProjectAInos/GeneralRelativity/ClockExamples.lean)
+The [clock examples](../ProjectAinos/GeneralRelativity/ClockExamples.lean)
 and particle examples below include the following Lean proofs:
 
 | Metric and curve | Result |
@@ -254,14 +254,14 @@ and particle examples below include the following Lean proofs:
 | Same curved clock | Quadratic action `-(b-a) exp(2x²)/2`. |
 | Nonlinear flat metric, `γ(s)=(exp(s),-exp(2s))` | Timelike, native acceleration equals velocity, rate `exp(s)`, proper time `exp(b)-exp(a)`. |
 
-[ParticleExamples](../ProjectAInos/GeneralRelativity/ParticleExamples.lean)
+[ParticleExamples](../ProjectAinos/GeneralRelativity/ParticleExamples.lean)
 proves that the exponential clock makes the massive action stationary for
 positive mass on every nontrivial finite interval, while its quadratic
 action is not stationary in that parameter. The constructed finite-segment
 inverse is explicitly `r(τ) = log(τ + exp(a))`, maps both endpoints correctly,
 has unit rate and gives affine motion on the full proper-time interior.
 
-[VariationExamples](../ProjectAInos/GeneralRelativity/VariationExamples.lean)
+[VariationExamples](../ProjectAinos/GeneralRelativity/VariationExamples.lean)
 constructs the family with inertial coordinates `T=t+εt(1-t)`, `X=ε²t(1-t)`
 and evaluates it in the nonlinear shear chart. It is smooth and fixes both
 endpoints for every parameter. The native manifold theorems prove zero

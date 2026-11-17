@@ -1,6 +1,6 @@
-import ProjectAInos
+import ProjectAinos
 
-open ProjectAInos ProjectAInos.QuantumFieldTheory
+open ProjectAinos ProjectAinos.QuantumFieldTheory
 
 variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H] (F : ScalarField H)
 

@@ -14,16 +14,16 @@ def replace_once(html: str, anchor: str, replacement: str) -> str:
 
 
 def brand_api(directory: Path, *, handbook: bool = False) -> None:
-    project = '<a href="./ProjectAInos.html">Project API</a>'
-    thermo = '<a href="./ProjectAInos/Thermodynamics/Basic.html">Thermodynamics</a>'
+    project = '<a href="./ProjectAinos.html">Project API</a>'
+    thermo = '<a href="./ProjectAinos/Thermodynamics/Basic.html">Thermodynamics</a>'
     homepage = (
-        "<h1>Project AInos</h1>"
+        "<h1>Project Ainos</h1>"
         "<p>Lean 4 API reference for the formalization of theoretical physics.</p>"
         f"<ul><li>{project}</li><li>{thermo} — adiabatic stability (A6)</li></ul>"
     )
     general_heading = "<h3>General documentation</h3>"
     navigation = (
-        '<h3><a href="./">Project AInos</a></h3>'
+        '<h3><a href="./">Project Ainos</a></h3>'
         f'<div class="nav_link">{project}</div>'
         f'<div class="nav_link">{thermo}</div>'
         + general_heading
@@ -34,7 +34,7 @@ def brand_api(directory: Path, *, handbook: bool = False) -> None:
     original_index = index.read_text(encoding="utf-8")
     original_sidebar = sidebar.read_text(encoding="utf-8")
     branded_index = replace_once(
-        original_index, "<title>Index</title>", "<title>Project AInos | Lean API Reference</title>"
+        original_index, "<title>Index</title>", "<title>Project Ainos | Lean API Reference</title>"
     )
     branded_index = replace_once(
         branded_index, "<h1>Welcome to the documentation page </h1>", homepage

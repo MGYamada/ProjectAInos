@@ -4,8 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 module
 
-import ProjectAInos.SmoothAlgebra.FormalSeries.NormalForm
-import ProjectAInos.SmoothAlgebra.FormalSeries.Scaling
+import ProjectAinos.SmoothAlgebra.FormalSeries.NormalForm
+import ProjectAinos.SmoothAlgebra.FormalSeries.Scaling
 
 /-! Typed contracts for the formal power series in `q` and `p`: the filtration
 by the order and its limits, the exponential of a map that raises the order,
@@ -13,7 +13,7 @@ the Poisson bracket and the Lie transform, the homological equation of the
 harmonic oscillator, the Birkhoff normal form, and the canonical scaling.
 These examples use default elaborator options. -/
 
-open ProjectAInos ProjectAInos.SmoothAlgebra.FormalSeries
+open ProjectAinos ProjectAinos.SmoothAlgebra.FormalSeries
 open MvPowerSeries Finset
 open scoped Nat
 

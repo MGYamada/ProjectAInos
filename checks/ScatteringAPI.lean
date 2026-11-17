@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 module
 
-import ProjectAInos.Mechanics.Scattering.CrossSection
+import ProjectAinos.Mechanics.Scattering.CrossSection
 
 /-! Typed contracts for scattering: the radial motion from a simple turning
 point, the angle described from the closest approach to infinity, the
@@ -12,8 +12,8 @@ asymptotes of the motion in the plane, the Coulomb field with the angle of
 deflection, and the cross-section as a measure with Rutherford's formula.
 These examples use default elaborator options. -/
 
-open ProjectAInos ProjectAInos.Mechanics ProjectAInos.Mechanics.Scattering
-open ProjectAInos.SmoothGeometry.NonlinearODE
+open ProjectAinos ProjectAinos.Mechanics ProjectAinos.Mechanics.Scattering
+open ProjectAinos.SmoothGeometry.NonlinearODE
 open Set Filter MeasureTheory
 open scoped Real Topology ENNReal
 

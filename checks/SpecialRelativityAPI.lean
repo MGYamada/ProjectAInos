@@ -3,14 +3,14 @@ Copyright (c) 2026 Masahiko G. Yamada. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 module
-import ProjectAInos
+import ProjectAinos
 
 /-! Public consumers of the §3.1 API. Default elaborator options are intentional:
 these checks must not rely on the implementation's transparency settings. -/
 noncomputable section
 open CategoryTheory
-open ProjectAInos ProjectAInos.SmoothGeometry ProjectAInos.SmoothGeometry.Minkowski
-open ProjectAInos.SmoothGeometry.DifferentialForm ProjectAInos.SpecialRelativity
+open ProjectAinos ProjectAinos.SmoothGeometry ProjectAinos.SmoothGeometry.Minkowski
+open ProjectAinos.SmoothGeometry.DifferentialForm ProjectAinos.SpecialRelativity
 
 example (σ : LorentzConvention) (v : MinkowskiModel 3) :
     σ.timeSign * minkowskiForm σ 3 v v = intervalQuadratic v :=

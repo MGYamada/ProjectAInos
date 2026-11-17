@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 module
 
-import ProjectAInos.Mechanics.Oscillations.Triatomic
+import ProjectAinos.Mechanics.Oscillations.Triatomic
 
 /-! Typed contracts for the symmetry of the vibrations of a molecule: the
 decomposition into the spaces of the modes, representations by symmetries and
@@ -13,8 +13,8 @@ displacements of the atoms with its character, the rigid displacements, the
 model with springs along the bonds, and the molecules of three atoms. These
 examples use default elaborator options. -/
 
-open ProjectAInos ProjectAInos.Mechanics ProjectAInos.Mechanics.NormalModes
-open ProjectAInos.Mechanics.Molecule
+open ProjectAinos ProjectAinos.Mechanics ProjectAinos.Mechanics.NormalModes
+open ProjectAinos.Mechanics.Molecule
 open Matrix Module
 open scoped Kronecker
 
@@ -387,7 +387,7 @@ end Scalar
 
 section Equilateral
 
-open ProjectAInos.Mechanics.Molecule.Equilateral
+open ProjectAinos.Mechanics.Molecule.Equilateral
 
 variable {μ k : ℝ} {S : Matrix (Fin 3 × Fin 3) (Fin 3 × Fin 3) ℝ} {lam : Fin 3 × Fin 3 → ℝ}
 
@@ -468,7 +468,7 @@ end Equilateral
 
 section Isosceles
 
-open ProjectAInos.Mechanics.Molecule.Isosceles
+open ProjectAinos.Mechanics.Molecule.Isosceles
 
 variable {h d m₀ m₁ k₁ k₂ : ℝ} {S : Matrix (Fin 3 × Fin 3) (Fin 3 × Fin 3) ℝ}
   {lam : Fin 3 × Fin 3 → ℝ}

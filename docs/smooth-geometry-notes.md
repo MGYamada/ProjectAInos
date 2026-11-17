@@ -159,7 +159,7 @@ The Lorentz Levi-Civita connection and smooth curvature tensor are now
 constructed; equivalence of `IsLocallyMinkowski` with vanishing native
 curvature is now proved. Both implications, coordinate flat-frame
 construction and coframe-to-chart integration are implemented in stage D,
-merged through [#52](https://github.com/MGYamada/ProjectAInos/issues/52).
+merged through [#52](https://github.com/MGYamada/ProjectAinos/issues/52).
 
 The localization construction follows [Joyce, *Algebraic Geometry over
 C∞-rings*, §2.3](https://arxiv.org/pdf/1001.0023). The requested general
@@ -234,7 +234,7 @@ C∞-rings is used in this continuation.
 
 ## Verification
 
-The warning-free full build (`lake build --wfail ProjectAInos`), root-import
+The warning-free full build (`lake build --wfail ProjectAinos`), root-import
 check, external API regression check, and transitive axiom audit pass.
 The current motion increment's audit covers 7,309 project declarations,
 including 453 in smooth algebra and 3,144 in smooth geometry,

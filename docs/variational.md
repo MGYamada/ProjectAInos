@@ -1,11 +1,11 @@
 # Shared Local Variational Calculus
 
-The foundation for [issue #7](https://github.com/MGYamada/ProjectAInos/issues/7)
+The foundation for [issue #7](https://github.com/MGYamada/ProjectAinos/issues/7)
 treats a field as a section of the trivial bundle over a real coordinate
 domain. The same Lean theorem handles a single time coordinate and a
 higher-dimensional base. Its fibre is any real normed space, including a
 tuple of field components. The pointwise and integral derivative results build
-on the prototype in [PR #29](https://github.com/MGYamada/ProjectAInos/pull/29).
+on the prototype in [PR #29](https://github.com/MGYamada/ProjectAinos/pull/29).
 
 The [shared formalization notes](variational-notes.md) record the distinctions
 between ambient and restricted measures, the two compactness arguments for
@@ -51,19 +51,19 @@ open sets gives pointwise vanishing.
 
 | Module | Results |
 | --- | --- |
-| [Local](../ProjectAInos/Variational/Local.lean) | First jet and the pointwise chain rule along an affine variation |
-| [Action](../ProjectAInos/Variational/Action.lean) | `hasDerivAt_action`, with explicit measurability, integrability and uniform domination |
-| [Regularity](../ProjectAInos/Variational/Regularity.lean) | Compact support supplies domination; `hasDerivAt_action_restrict_compact` instead uses a compact base region, with no support condition on the variation |
-| [IntegrationByParts](../ProjectAInos/Variational/IntegrationByParts.lean) | Interval identity with endpoint pairing, fixed-endpoint specialization, and directional Haar identities |
-| [EulerLagrange](../ProjectAInos/Variational/EulerLagrange.lean) | Covector decomposition, derivative as the residual pairing, and `stationary_iff_eulerLagrange` |
-| [Parameter](../ProjectAInos/Variational/Parameter.lean) | A positive derivative gives one open interval chart with a constructed C² inverse; endpoint neighborhoods extend closed-interval predicates; `contDiff_primitive`: a primitive of a continuously differentiable function is twice continuously differentiable |
-| [IntervalParameter](../ProjectAInos/Variational/IntervalParameter.lean) | Local joint C¹ regularity along a compact reference segment gives differentiation of the actual parameter integral, with domination derived; intrinsic boundary/residual splitting |
-| [MovingLimits](../ProjectAInos/Variational/MovingLimits.lean) | Leibniz's rule for an integral whose limits move with the parameter, `hasDerivAt_intervalIntegral_moving`, and its form for an integrand that is smooth on an open set containing the reference segment, `hasDerivAt_intervalIntegral_moving_on` |
-| [ParametricIntegralOn](../ProjectAInos/Variational/ParametricIntegralOn.lean) | `contDiffAt_parametric_intervalIntegral`, `contDiffOn_parametric_intervalIntegral`: a parametric integral of a function that is smooth on an open set containing the segment of integration over a point is smooth at that point, for a parameter in a space of finite dimension |
-| [SecondOrderBound](../ProjectAInos/Variational/SecondOrderBound.lean) | `abs_sub_sub_le_of_abs_le`: `|f(ε) − f(0) − ε f′(0)| ≤ M ε²` if `|f″| ≤ M` on `[−δ, δ]`; `exists_pos_forall_abs_le_mem`: an open set containing `{0} × K` for a compact `K` contains `[−δ, δ] × K`; `exists_second_order_bound`: the remainder of the expansion of the first order in `ε`, with one `δ` and one `M` for all parameters in a compact set |
-| [LineDerivative](../ProjectAInos/Variational/LineDerivative.lean) | `hasDerivAt_line`, `hasDerivAt_line_sub`: the derivative along a line through a point of differentiability. `hasFDerivAt_of_hasDerivAt_line`: derivatives along the lines that are given by continuous linear maps depending continuously on the point are a derivative |
-| [ManifoldCurve](../ProjectAInos/Variational/ManifoldCurve.lean) | Actual fixed-endpoint C² manifold families and construction of supported chart perturbations, with gluing and coordinate velocity |
-| [Examples](../ProjectAInos/Variational/Examples.lean) | Nonzero variations on time and four-dimensional bases, and a base-dependent momentum with a nonzero divergence residual |
+| [Local](../ProjectAinos/Variational/Local.lean) | First jet and the pointwise chain rule along an affine variation |
+| [Action](../ProjectAinos/Variational/Action.lean) | `hasDerivAt_action`, with explicit measurability, integrability and uniform domination |
+| [Regularity](../ProjectAinos/Variational/Regularity.lean) | Compact support supplies domination; `hasDerivAt_action_restrict_compact` instead uses a compact base region, with no support condition on the variation |
+| [IntegrationByParts](../ProjectAinos/Variational/IntegrationByParts.lean) | Interval identity with endpoint pairing, fixed-endpoint specialization, and directional Haar identities |
+| [EulerLagrange](../ProjectAinos/Variational/EulerLagrange.lean) | Covector decomposition, derivative as the residual pairing, and `stationary_iff_eulerLagrange` |
+| [Parameter](../ProjectAinos/Variational/Parameter.lean) | A positive derivative gives one open interval chart with a constructed C² inverse; endpoint neighborhoods extend closed-interval predicates; `contDiff_primitive`: a primitive of a continuously differentiable function is twice continuously differentiable |
+| [IntervalParameter](../ProjectAinos/Variational/IntervalParameter.lean) | Local joint C¹ regularity along a compact reference segment gives differentiation of the actual parameter integral, with domination derived; intrinsic boundary/residual splitting |
+| [MovingLimits](../ProjectAinos/Variational/MovingLimits.lean) | Leibniz's rule for an integral whose limits move with the parameter, `hasDerivAt_intervalIntegral_moving`, and its form for an integrand that is smooth on an open set containing the reference segment, `hasDerivAt_intervalIntegral_moving_on` |
+| [ParametricIntegralOn](../ProjectAinos/Variational/ParametricIntegralOn.lean) | `contDiffAt_parametric_intervalIntegral`, `contDiffOn_parametric_intervalIntegral`: a parametric integral of a function that is smooth on an open set containing the segment of integration over a point is smooth at that point, for a parameter in a space of finite dimension |
+| [SecondOrderBound](../ProjectAinos/Variational/SecondOrderBound.lean) | `abs_sub_sub_le_of_abs_le`: `|f(ε) − f(0) − ε f′(0)| ≤ M ε²` if `|f″| ≤ M` on `[−δ, δ]`; `exists_pos_forall_abs_le_mem`: an open set containing `{0} × K` for a compact `K` contains `[−δ, δ] × K`; `exists_second_order_bound`: the remainder of the expansion of the first order in `ε`, with one `δ` and one `M` for all parameters in a compact set |
+| [LineDerivative](../ProjectAinos/Variational/LineDerivative.lean) | `hasDerivAt_line`, `hasDerivAt_line_sub`: the derivative along a line through a point of differentiability. `hasFDerivAt_of_hasDerivAt_line`: derivatives along the lines that are given by continuous linear maps depending continuously on the point are a derivative |
+| [ManifoldCurve](../ProjectAinos/Variational/ManifoldCurve.lean) | Actual fixed-endpoint C² manifold families and construction of supported chart perturbations, with gluing and coordinate velocity |
+| [Examples](../ProjectAinos/Variational/Examples.lean) | Nonzero variations on time and four-dimensional bases, and a base-dependent momentum with a nonzero divergence residual |
 
 The interval result keeps the term `[P η]ₐᵇ` and removes it when the variation
 vanishes at both endpoints. The stationarity theorem uses interior variations.
@@ -126,12 +126,12 @@ interval to justify the action derivative and `interval_firstVariation_pairing`
 for the covector-valued boundary term.
 
 [Electrodynamics §4.1](electrodynamics.md) uses the same variational API for the
-[charged-particle action](../ProjectAInos/Electrodynamics/ParticleAction.lean).
+[charged-particle action](../ProjectAinos/Electrodynamics/ParticleAction.lean).
 `stationary_iff_lorentzForce` relates fixed-endpoint stationarity to the
-[Lorentz-force equation](../ProjectAInos/Electrodynamics/LorentzForce.lean) on the
+[Lorentz-force equation](../ProjectAinos/Electrodynamics/LorentzForce.lean) on the
 interval interior. It assumes a C² curve that stays in an open spacetime domain
 with a C² potential and timelike velocity along the closed interval.
-The [gauge-action formula](../ProjectAInos/Electrodynamics/GaugeAction.lean)
+The [gauge-action formula](../ProjectAinos/Electrodynamics/GaugeAction.lean)
 adds the endpoint term `e (χ(γ(b)) − χ(γ(a)))` for a C¹ gauge function on the
 domain. Fixed-endpoint stationarity is gauge invariant under the theorem's C³
 gauge-function hypothesis.
@@ -148,7 +148,7 @@ Run the warning-free library build, root-import check, and transitive axiom
 audit from the repository root:
 
 ```sh
-lake build --wfail ProjectAInos
-lake exe mk_all --check --lib ProjectAInos
+lake build --wfail ProjectAinos
+lake exe mk_all --check --lib ProjectAinos
 lake env lean -DwarningAsError=true checks/AxiomAudit.lean
 ```

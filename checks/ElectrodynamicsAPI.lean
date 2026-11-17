@@ -1,8 +1,8 @@
-import ProjectAInos
+import ProjectAinos
 
 noncomputable section
 
-open ProjectAInos
+open ProjectAinos
 open SmoothGeometry SmoothGeometry.Minkowski SpecialRelativity Electrodynamics
 
 #check Variational.exists_contDiff_extension_near_compact

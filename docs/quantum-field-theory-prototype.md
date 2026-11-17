@@ -1,7 +1,7 @@
 # Scalar smeared fields on Minkowski spacetime
 
-The [scalar field module](../ProjectAInos/QuantumFieldTheory/SmearedField.lean)
-is an initial part of the [Wightman program](https://github.com/MGYamada/ProjectAInos/issues/46).
+The [scalar field module](../ProjectAinos/QuantumFieldTheory/SmearedField.lean)
+is an initial part of the [Wightman program](https://github.com/MGYamada/ProjectAinos/issues/46).
 It uses Mathlib's complex Schwartz topology and the complex-linear continuous
 dual on time-first four-dimensional Minkowski spacetime. The complex Hilbert
 inner product is conjugate-linear in its first argument.
@@ -24,8 +24,8 @@ next section do.
 
 ## Causal support witnesses and a noncommuting local field
 
-[LocalityExamples](../ProjectAInos/QuantumFieldTheory/LocalityExamples.lean)
-addresses [issue #72](https://github.com/MGYamada/ProjectAInos/issues/72).
+[LocalityExamples](../ProjectAinos/QuantumFieldTheory/LocalityExamples.lean)
+addresses [issue #72](https://github.com/MGYamada/ProjectAinos/issues/72).
 In the time-first coordinates `intervalQuadratic_spacetime` is
 `v₀² − v₁² − v₂² − v₃²`, negative on spacelike vectors. Spacelike vectors
 form an open set that is closed under negation and does not contain zero.

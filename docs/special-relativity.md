@@ -1,7 +1,7 @@
 # Minkowski geometry and relativistic kinematics
 
 This is the implemented foundation for README §3.1 and
-[issue #40](https://github.com/MGYamada/ProjectAInos/issues/40).
+[issue #40](https://github.com/MGYamada/ProjectAinos/issues/40).
 The [electrodynamics research plan](cinfty-electrodynamics.md) consumes
 its form calculus and observer decomposition. Particle actions and equations
 of motion belong to §3.2; charged-particle actions also require the shared
@@ -41,7 +41,7 @@ and local Minkowski coordinates remain a predicate, not a general premise.
 
 ## Proof map
 
-Paths in this table are relative to `ProjectAInos/`.
+Paths in this table are relative to `ProjectAinos/`.
 
 | Stage | Modules | Main public results |
 |---|---|---|
@@ -54,7 +54,7 @@ Paths in this table are relative to `ProjectAInos/`.
 | Examples | `SpecialRelativity/{Examples,FormExamples}` | Nonzero boost and inverse, subluminality, clock rate, nonzero exact field and gauge identity |
 
 All shared modules are independent of `SpecialRelativity`. Every library
-module is imported by `ProjectAInos.lean`.
+module is imported by `ProjectAinos.lean`.
 
 ## Causality, symmetry and observers
 
@@ -187,8 +187,8 @@ imports and public consumer APIs, and audits transitive axiom dependencies.
 The local counterparts are:
 
 ```sh
-lake build --wfail ProjectAInos
-lake exe mk_all --check --lib ProjectAInos
+lake build --wfail ProjectAinos
+lake exe mk_all --check --lib ProjectAinos
 lake env lean -DwarningAsError=true checks/SmoothGeometryAPI.lean
 lake env lean -DwarningAsError=true checks/SpecialRelativityAPI.lean
 lake env lean -DwarningAsError=true checks/AxiomAudit.lean

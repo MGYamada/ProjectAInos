@@ -4,17 +4,17 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 module
 
-import ProjectAInos.Mechanics.Poisson.AsymmetricTop
+import ProjectAinos.Mechanics.Poisson.AsymmetricTop
 
 /-! Typed contracts for the flow of a positive bounded field on the line,
 Jacobi's elliptic functions, and the solution of Euler's equations for the
 asymmetrical top by elliptic functions. These examples use default elaborator
 options. -/
 
-open ProjectAInos ProjectAInos.Mechanics ProjectAInos.Mechanics.RigidBody
-open ProjectAInos.SmoothAlgebra ProjectAInos.SmoothAlgebra.FreeSmoothRing
-open ProjectAInos.SmoothGeometry ProjectAInos.SmoothGeometry.NonlinearODE
-open ProjectAInos.SmoothGeometry.JacobiElliptic
+open ProjectAinos ProjectAinos.Mechanics ProjectAinos.Mechanics.RigidBody
+open ProjectAinos.SmoothAlgebra ProjectAinos.SmoothAlgebra.FreeSmoothRing
+open ProjectAinos.SmoothGeometry ProjectAinos.SmoothGeometry.NonlinearODE
+open ProjectAinos.SmoothGeometry.JacobiElliptic
 open Set MeasureTheory
 open scoped Real ContDiff
 

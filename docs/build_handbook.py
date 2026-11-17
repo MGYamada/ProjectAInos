@@ -79,13 +79,13 @@ def main() -> None:
     quarto = shutil.which("quarto")
     if quarto is None:
         raise SystemExit("Install Quarto and add it to PATH. See docs/build.md.")
-    if not (API / "ProjectAInos.html").is_file():
-        raise SystemExit("Build ProjectAInos:docs in docbuild first. See docs/build.md.")
+    if not (API / "ProjectAinos.html").is_file():
+        raise SystemExit("Build ProjectAinos:docs in docbuild first. See docs/build.md.")
 
     revision = subprocess.check_output(
         ["git", "rev-parse", "HEAD"], cwd=REPOSITORY, text=True
     ).strip()
-    repository_source = f"https://github.com/MGYamada/ProjectAInos/blob/{revision}/"
+    repository_source = f"https://github.com/MGYamada/ProjectAinos/blob/{revision}/"
     with TemporaryDirectory(prefix="handbook-", dir=DOCBUILD) as temporary:
         staging = Path(temporary)
         for name in ("_quarto.yml", "links.lua"):

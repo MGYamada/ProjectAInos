@@ -1,6 +1,6 @@
 # Axiomatic Thermodynamics in Lean
 
-The thermodynamics library proves the algebraic entropy theorem, derives physical comparison from explicit geometric and thermal premises, and constructs the weaker entropy principle for mixtures and reactions. It also provides diagnostic models and an operational ideal-gas model. Every definition and proof is available through [ProjectAInos.lean](../ProjectAInos.lean).
+The thermodynamics library proves the algebraic entropy theorem, derives physical comparison from explicit geometric and thermal premises, and constructs the weaker entropy principle for mixtures and reactions. It also provides diagnostic models and an operational ideal-gas model. Every definition and proof is available through [ProjectAinos.lean](../ProjectAinos.lean).
 
 This guide replaces the local working note `tex/axiomatic_thermodynamics_lean.tex`, *Axiomatic Thermodynamics as an Ordered Grothendieck Completion* (version 1.0, 10 November 2026). It reorganizes the note around the implemented results, replaces proposed interfaces with actual Lean declarations, and preserves the distinctions between proved consequences, physical assumptions, explanatory calculations, and later research.
 
@@ -67,7 +67,7 @@ All numbered proof obligations L01–L12 have implementations. The former physic
 | Former section | Replacement and current status |
 | --- | --- |
 | §1. Physical system layer | [Physical systems](thermodynamics-physical.md): finite expressions, structural coherence, accessibility axioms, and mutual-accessibility quotient |
-| §2. Adiabatic quotient and completion | [Algebra](thermodynamics-algebra.md): semimodule input, cancellation, scalar extension and uniqueness; physical construction in [Physical](../ProjectAInos/Thermodynamics/Physical.lean) |
+| §2. Adiabatic quotient and completion | [Algebra](thermodynamics-algebra.md): semimodule input, cancellation, scalar extension and uniqueness; physical construction in [Physical](../ProjectAinos/Thermodynamics/Physical.lean) |
 | §3. Process cone and reflection | [Algebra](thermodynamics-algebra.md): cone closure, injectivity, reflection, salience and disappearance of the radical |
 | §4. Stability and Archimedean order | [Algebra](thermodynamics-algebra.md): SC from A6, then AR, without a topology on the completion |
 | §5. Exact comparison hypothesis | [Algebra](thermodynamics-algebra.md): ECH iff totality on `W`; [physical chapter](thermodynamics-physical.md): conserved labels and common products |
@@ -82,20 +82,20 @@ All numbered proof obligations L01–L12 have implementations. The former physic
 
 | Obligation | Implemented declaration or construction | Module |
 | --- | --- | --- |
-| L01. Mutual accessibility is a congruence | `Accessibility`, adiabatic equivalence and its quotient | [Physical](../ProjectAInos/Thermodynamics/Physical.lean) |
-| L02. Quotient semimodule and stability | `Accessibility.StateSpace`, splitting and descended A6 | [Physical](../ProjectAInos/Thermodynamics/Physical.lean) |
-| L03. Spectator cancellation | `Stability.le_of_add_le_add_right`, `Stability.isOrderedCancelAddMonoid` | [Cancellation](../ProjectAInos/Thermodynamics/Cancellation.lean) |
-| L04. Injective embedding | `Completion.of_injective` | [Completion](../ProjectAInos/Thermodynamics/Completion.lean) |
-| L05. Unique real action | `Completion.realEndHom`, `Completion.module_unique` | [Completion](../ProjectAInos/Thermodynamics/Completion.lean) |
-| L06. Cone, salience, reflection | `processCone`, `processCone_salient`, `processCone_reflects` | [Cone](../ProjectAInos/Thermodynamics/Cone.lean) |
-| L07. A6 implies SC | `processCone_sequentialOrderClosed` | [Cone](../ProjectAInos/Thermodynamics/Cone.lean) |
-| L08. SC implies AR | `SequentialOrderClosed.archimedean`, `coneSpan_archimedean` | [Representation](../ProjectAInos/Thermodynamics/Representation.lean) |
-| L09. ECH iff totality | `exchangeComparison_iff_coneTotal` | [Cone](../ProjectAInos/Thermodynamics/Cone.lean) |
-| L10. Real-cut representation | `coneEntropyEquiv`, `entropyCoordinate` | [Representation](../ProjectAInos/Thermodynamics/Representation.lean), [Entropy](../ProjectAInos/Thermodynamics/Entropy.lean) |
-| L11. Matched-sector entropy principle | `EntropyExtension.state_le_iff`, `exists_normalized_entropy` | [Entropy](../ProjectAInos/Thermodynamics/Entropy.lean) |
-| L12. Conservation and extension classification | `conservation_exact`, `existsUnique_process_factor_iff`, `EntropyExtension.equivConserved` | [Conservation](../ProjectAInos/Thermodynamics/Conservation.lean) |
+| L01. Mutual accessibility is a congruence | `Accessibility`, adiabatic equivalence and its quotient | [Physical](../ProjectAinos/Thermodynamics/Physical.lean) |
+| L02. Quotient semimodule and stability | `Accessibility.StateSpace`, splitting and descended A6 | [Physical](../ProjectAinos/Thermodynamics/Physical.lean) |
+| L03. Spectator cancellation | `Stability.le_of_add_le_add_right`, `Stability.isOrderedCancelAddMonoid` | [Cancellation](../ProjectAinos/Thermodynamics/Cancellation.lean) |
+| L04. Injective embedding | `Completion.of_injective` | [Completion](../ProjectAinos/Thermodynamics/Completion.lean) |
+| L05. Unique real action | `Completion.realEndHom`, `Completion.module_unique` | [Completion](../ProjectAinos/Thermodynamics/Completion.lean) |
+| L06. Cone, salience, reflection | `processCone`, `processCone_salient`, `processCone_reflects` | [Cone](../ProjectAinos/Thermodynamics/Cone.lean) |
+| L07. A6 implies SC | `processCone_sequentialOrderClosed` | [Cone](../ProjectAinos/Thermodynamics/Cone.lean) |
+| L08. SC implies AR | `SequentialOrderClosed.archimedean`, `coneSpan_archimedean` | [Representation](../ProjectAinos/Thermodynamics/Representation.lean) |
+| L09. ECH iff totality | `exchangeComparison_iff_coneTotal` | [Cone](../ProjectAinos/Thermodynamics/Cone.lean) |
+| L10. Real-cut representation | `coneEntropyEquiv`, `entropyCoordinate` | [Representation](../ProjectAinos/Thermodynamics/Representation.lean), [Entropy](../ProjectAinos/Thermodynamics/Entropy.lean) |
+| L11. Matched-sector entropy principle | `EntropyExtension.state_le_iff`, `exists_normalized_entropy` | [Entropy](../ProjectAinos/Thermodynamics/Entropy.lean) |
+| L12. Conservation and extension classification | `conservation_exact`, `existsUnique_process_factor_iff`, `EntropyExtension.equivConserved` | [Conservation](../ProjectAinos/Thermodynamics/Conservation.lean) |
 
-The original `Thermo.Stability` proposal is implemented across `Basic`, `Cone`, and `Representation`; `Thermo.Holder` became `Representation`; the physical quotient and comparison occupy multiple modules. Actual modules live under `ProjectAInos.Thermodynamics` and are exported by the root module.
+The original `Thermo.Stability` proposal is implemented across `Basic`, `Cone`, and `Representation`; `Thermo.Holder` became `Representation`; the physical quotient and comparison occupy multiple modules. Actual modules live under `ProjectAinos.Thermodynamics` and are exported by the root module.
 
 ## Scope and proof conventions
 
@@ -114,8 +114,8 @@ The implementation uses mathlib's `Algebra.GrothendieckAddGroup` and its univers
 From the repository root, the required checks are
 
 ```sh
-lake build --wfail ProjectAInos
-lake exe mk_all --check --lib ProjectAInos
+lake build --wfail ProjectAinos
+lake exe mk_all --check --lib ProjectAinos
 ```
 
 The required CI job additionally audits transitive axioms for all project declarations. Symbolic and numerical experiments are separate from these proofs.

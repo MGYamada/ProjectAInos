@@ -1,4 +1,4 @@
-import ProjectAInos
+import ProjectAinos
 import Lean.Util.CollectAxioms
 
 /-!
@@ -22,21 +22,21 @@ run_cmd do
   for (name, _) in env.constants do
     let userName := privateToUserName name
     let isYangMills := (`YM).isPrefixOf userName || (`YangMills).isPrefixOf userName
-    if (`ProjectAInos).isPrefixOf userName || isYangMills then
+    if (`ProjectAinos).isPrefixOf userName || isYangMills then
       count := count + 1
       if isYangMills then
         yangMillsCount := yangMillsCount + 1
-      if (`ProjectAInos.SmoothAlgebra).isPrefixOf userName then
+      if (`ProjectAinos.SmoothAlgebra).isPrefixOf userName then
         smoothCount := smoothCount + 1
-      if (`ProjectAInos.SmoothGeometry).isPrefixOf userName then
+      if (`ProjectAinos.SmoothGeometry).isPrefixOf userName then
         geometryCount := geometryCount + 1
-      if (`ProjectAInos.Mechanics).isPrefixOf userName then
+      if (`ProjectAinos.Mechanics).isPrefixOf userName then
         mechanicsCount := mechanicsCount + 1
-      if (`ProjectAInos.SpecialRelativity).isPrefixOf userName then
+      if (`ProjectAinos.SpecialRelativity).isPrefixOf userName then
         relativityCount := relativityCount + 1
-      if (`ProjectAInos.GeneralRelativity).isPrefixOf userName then
+      if (`ProjectAinos.GeneralRelativity).isPrefixOf userName then
         generalRelativityCount := generalRelativityCount + 1
-      if (`ProjectAInos.Electrodynamics).isPrefixOf userName then
+      if (`ProjectAinos.Electrodynamics).isPrefixOf userName then
         electrodynamicsCount := electrodynamicsCount + 1
       let axioms ← collectAxioms name
       for axiomName in axioms do

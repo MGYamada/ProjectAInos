@@ -4,8 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 module
 
-import ProjectAInos.Mechanics.Poisson.LocalAction
-import ProjectAInos.Mechanics.Poisson.SymplecticFlow
+import ProjectAinos.Mechanics.Poisson.LocalAction
+import ProjectAinos.Mechanics.Poisson.SymplecticFlow
 
 /-! Typed contracts for the action along the flow of a Hamiltonian: quantities
 that are constant along a flow, the end-point formula `dS = p dq − H dt`, the
@@ -13,11 +13,11 @@ preservation of the symplectic form, and the action as a differentiable
 function of the time and the end point away from conjugate points. These
 examples use default elaborator options. -/
 
-open ProjectAInos ProjectAInos.Mechanics
-open ProjectAInos.SmoothAlgebra ProjectAInos.SmoothAlgebra.SmoothRing
-open ProjectAInos.SmoothAlgebra.FreeSmoothRing ProjectAInos.SmoothAlgebra.PhaseSpace
-open ProjectAInos.SmoothGeometry ProjectAInos.SmoothGeometry.LinearODE
-open ProjectAInos.SmoothGeometry.NonlinearODE
+open ProjectAinos ProjectAinos.Mechanics
+open ProjectAinos.SmoothAlgebra ProjectAinos.SmoothAlgebra.SmoothRing
+open ProjectAinos.SmoothAlgebra.FreeSmoothRing ProjectAinos.SmoothAlgebra.PhaseSpace
+open ProjectAinos.SmoothGeometry ProjectAinos.SmoothGeometry.LinearODE
+open ProjectAinos.SmoothGeometry.NonlinearODE
 open Set Filter
 open scoped Topology ContDiff
 

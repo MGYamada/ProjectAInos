@@ -3,13 +3,13 @@ Copyright (c) 2026 Masahiko G. Yamada. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 module
-import ProjectAInos
+import ProjectAinos
 
 /-! Public consumers of the rigid-body kinematics API. Default elaborator
 options are intentional: these checks must not rely on the implementation's
 transparency settings. Every statement is pinned with its type. -/
 noncomputable section
-open ProjectAInos.Mechanics ProjectAInos.Mechanics.Rigid
+open ProjectAinos.Mechanics ProjectAinos.Mechanics.Rigid
 open Matrix
 
 section AngularVelocity

@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 module
 
-import ProjectAInos.Mechanics.Poisson.OscillatorTorus
+import ProjectAinos.Mechanics.Poisson.OscillatorTorus
 
 /-! Typed contracts for the invariant tori of commuting flows: commuting
 fields and their flows, the joint flow as an action of `ℝ^ι`, its smoothness,
@@ -12,8 +12,8 @@ the period lattice on a compact connected set, the level sets of a submersion,
 the invariant tori of integrals in involution, and a system of oscillators.
 These examples use default elaborator options. -/
 
-open ProjectAInos ProjectAInos.Mechanics ProjectAInos.SmoothGeometry.NonlinearODE
-open ProjectAInos.SmoothAlgebra ProjectAInos.SmoothAlgebra.FreeSmoothRing
+open ProjectAinos ProjectAinos.Mechanics ProjectAinos.SmoothGeometry.NonlinearODE
+open ProjectAinos.SmoothAlgebra ProjectAinos.SmoothAlgebra.FreeSmoothRing
 open Set Filter Module
 open scoped Topology ContDiff
 

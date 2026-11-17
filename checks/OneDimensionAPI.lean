@@ -4,15 +4,15 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 module
 
-import ProjectAInos.Mechanics.OneDimension.Oscillator
+import ProjectAinos.Mechanics.OneDimension.Oscillator
 
 /-! Typed contracts for the motion in one dimension: divided differences, wells
 with simple turning points, the level curve and its period, the periodic
 motion, the derivative of the area in the energy, Abel's inversion formula and
 action–angle variables. These examples use default elaborator options. -/
 
-open ProjectAInos ProjectAInos.Mechanics ProjectAInos.Mechanics.OneDim
-open ProjectAInos.SmoothAlgebra ProjectAInos.SmoothGeometry.NonlinearODE
+open ProjectAinos ProjectAinos.Mechanics ProjectAinos.Mechanics.OneDim
+open ProjectAinos.SmoothAlgebra ProjectAinos.SmoothGeometry.NonlinearODE
 open Set Filter MeasureTheory
 open scoped Real Topology ContDiff ENNReal
 

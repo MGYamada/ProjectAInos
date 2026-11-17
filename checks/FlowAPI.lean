@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 module
 
-import ProjectAInos.SmoothGeometry.ODE.FlowComplete
+import ProjectAinos.SmoothGeometry.ODE.FlowComplete
 
 /-! Typed contracts for the solutions of an autonomous equation: a given family
 of solutions (the variational equation, uniqueness, the determinant of the
@@ -13,8 +13,8 @@ of a smooth vector field (the integral equation on the unit interval, the open
 domain, smoothness, the group law and completeness). These examples use default
 elaborator options. -/
 
-open ProjectAInos.SmoothGeometry ProjectAInos.SmoothGeometry.LinearODE
-open ProjectAInos.SmoothGeometry.NonlinearODE
+open ProjectAinos.SmoothGeometry ProjectAinos.SmoothGeometry.LinearODE
+open ProjectAinos.SmoothGeometry.NonlinearODE
 open Set Filter MeasureTheory
 open scoped Topology ContDiff
 
@@ -214,7 +214,7 @@ example {f : E₁ × E₂ → F} {W : Set (E₁ × E₂)}
     (hu : u ∈ W) :
     ∃ (V : Set E₁) (ψ : E₁ → E₂), IsOpen V ∧ u.1 ∈ V ∧ ψ u.1 = u.2 ∧ ContDiffOn ℝ ∞ ψ V ∧
       ∀ x ∈ V, (x, ψ x) ∈ W ∧ f (x, ψ x) = f u :=
-  ProjectAInos.SmoothAlgebra.exists_contDiffOn_implicitFunction hW hf hinv hu
+  ProjectAinos.SmoothAlgebra.exists_contDiffOn_implicitFunction hW hf hinv hu
 
 
 end ImplicitFunction

@@ -5,10 +5,10 @@ This is a research prototype for the finite-dimensional comparison in issue
 
 ## Reproducible base
 
-- Project AInos: `89cf6aac5cd41ff9fc1076ba4e50db764e1de28f` (main inspected 2026-11-12).
+- Project Ainos: `89cf6aac5cd41ff9fc1076ba4e50db764e1de28f` (main inspected 2026-11-12).
 - Lean: `leanprover/lean4:v4.35.0`.
 - Mathlib: `56a005855ea17e0b0958f73ec801ae140b0a1679` (`v4.35.0`).
-- Design: <https://github.com/MGYamada/ProjectAInos/issues/45>.
+- Design: <https://github.com/MGYamada/ProjectAinos/issues/45>.
 
 ## Independent types
 
@@ -103,7 +103,7 @@ C\{0}. Establish the appropriate topology, charted space, and real smooth
 manifold instance. Mathlib's `OnePoint.equivProjectivization` is an existing
 set-level comparison that may help; it is not a supplied Fubini–Study atlas.
 
-For the current Project AInos `SmoothGeometry.Manifold.scheme`, the chart
+For the current Project Ainos `SmoothGeometry.Manifold.scheme`, the chart
 model must be `Fin 2 → ℝ`, so transport the complex chart model through an
 explicit real linear equivalence. Once
 
@@ -182,8 +182,8 @@ Verified results on the pinned base:
 
 | Command | Result |
 |---|---|
-| `lake build --wfail ProjectAInos` | Passed; 9,236 build jobs, warnings treated as failures |
-| `lake exe mk_all --check --lib ProjectAInos` | Passed; no update necessary |
+| `lake build --wfail ProjectAinos` | Passed; 9,236 build jobs, warnings treated as failures |
+| `lake exe mk_all --check --lib ProjectAinos` | Passed; no update necessary |
 | `lake env lean -DwarningAsError=true checks/AxiomAudit.lean` | Passed; 5,673 project/YM declarations |
 | `lake env lean -DwarningAsError=true checks/QuantumMechanicsAPI.lean` | Passed; 113 quantum declarations, including generated declarations |
 | Existing smooth-geometry, Yang–Mills, special-relativity, atomic-nonreactive, and electrodynamics API checks | All five passed with warnings as errors |

@@ -5,7 +5,7 @@ Landau and Lifshitz's *The Classical Theory of Fields*, with separate
 extensions for global gauge geometry and macroscopic constitutive laws.
 
 This is the Electrodynamics volume of the classical-field trilogy migrated
-from [issue #8](https://github.com/MGYamada/ProjectAInos/issues/8).
+from [issue #8](https://github.com/MGYamada/ProjectAinos/issues/8).
 [Special Relativity](cinfty-special-relativity.md) owns §§1–14;
 [General Relativity](cinfty-general-relativity.md) owns §§81–119.
 The organization follows the research-manuscript format of
@@ -16,7 +16,7 @@ It does not inherit the mechanics manuscript's historical infrastructure gaps.
 ## Implementation plan and current progress
 
 The baseline is `main` at
-[`61d8fdf`](https://github.com/MGYamada/ProjectAInos/commit/61d8fdf),
+[`61d8fdf`](https://github.com/MGYamada/ProjectAinos/commit/61d8fdf),
 checked on 13 November 2026. A statement marked **proved** below means the
 indicated Lean statement with its actual hypotheses; it does not mean that
 every assertion in the corresponding textbook section has been formalized.
@@ -25,7 +25,7 @@ means that a named analytic result must first be proved or supplied as an
 explicit hypothesis. No new theorem is claimed by writing this manuscript.
 
 **Revision of 14 November 2026.** The mechanics programme is complete
-([issue #78](https://github.com/MGYamada/ProjectAInos/issues/78), `main` at
+([issue #78](https://github.com/MGYamada/ProjectAinos/issues/78), `main` at
 `fd0ccaa`). [After the mechanics programme](#after-the-mechanics-programme)
 records the prerequisites it supplies, what it found out of reach, and the
 resulting changes to this plan. The electrodynamics modules are those of the
@@ -36,11 +36,11 @@ in this document still refer to `61d8fdf`.
 | --- | --- | --- |
 | C∞ spectra, schemes, localization, open gluing and manifold comparison | Implemented shared foundation | Reuse actual structure sheaves; universal cotangent comparison and arbitrary nonreduced dynamics remain targets |
 | Flat forms, pullback, exterior derivative, wedge, Lorentz Hodge and observer reconstruction | Proved shared geometry | Their physical interpretation is specified here; they do not prove Maxwell evolution |
-| Local potentials, exact gauge invariance, Bianchi, covariance and two scalar invariants | Proved | [Field](../ProjectAInos/Electrodynamics/Field.lean), [Components](../ProjectAInos/Electrodynamics/Components.lean), [Invariants](../ProjectAInos/Electrodynamics/Invariants.lean), [Covariance](../ProjectAInos/Electrodynamics/Covariance.lean) |
-| Actual charged-particle action, Lorentz force, mass shell and gauge endpoint term | Proved on the open timelike jet domain in flat spacetime | [ParticleAction](../ProjectAInos/Electrodynamics/ParticleAction.lean), [LorentzForce](../ProjectAInos/Electrodynamics/LorentzForce.lean), [GaugeAction](../ProjectAInos/Electrodynamics/GaugeAction.lean); curved charged-particle variation remains a bridge target |
-| Homogeneous polynomial radial reconstruction | Proved, including nonzero degrees zero and one | [PolynomialRadial](../ProjectAInos/Electrodynamics/PolynomialRadial.lean) and [PolynomialBridge](../ProjectAInos/Electrodynamics/PolynomialBridge.lean); no arbitrary global potential is inferred |
-| Maxwell forms on a fixed curved background, current conservation and component equivalence | Proved | [Curved](../ProjectAInos/Electrodynamics/Curved.lean), [Current](../ProjectAInos/Electrodynamics/Current.lean), [CurvedComponents](../ProjectAInos/Electrodynamics/CurvedComponents.lean) |
-| Flat vacuum field action and stationarity iff the vacuum equations | Proved; [#44](https://github.com/MGYamada/ProjectAInos/issues/44) is completed | [VacuumAction](../ProjectAInos/Electrodynamics/VacuumAction.lean), with integrability and compact-support hypotheses |
+| Local potentials, exact gauge invariance, Bianchi, covariance and two scalar invariants | Proved | [Field](../ProjectAinos/Electrodynamics/Field.lean), [Components](../ProjectAinos/Electrodynamics/Components.lean), [Invariants](../ProjectAinos/Electrodynamics/Invariants.lean), [Covariance](../ProjectAinos/Electrodynamics/Covariance.lean) |
+| Actual charged-particle action, Lorentz force, mass shell and gauge endpoint term | Proved on the open timelike jet domain in flat spacetime | [ParticleAction](../ProjectAinos/Electrodynamics/ParticleAction.lean), [LorentzForce](../ProjectAinos/Electrodynamics/LorentzForce.lean), [GaugeAction](../ProjectAinos/Electrodynamics/GaugeAction.lean); curved charged-particle variation remains a bridge target |
+| Homogeneous polynomial radial reconstruction | Proved, including nonzero degrees zero and one | [PolynomialRadial](../ProjectAinos/Electrodynamics/PolynomialRadial.lean) and [PolynomialBridge](../ProjectAinos/Electrodynamics/PolynomialBridge.lean); no arbitrary global potential is inferred |
+| Maxwell forms on a fixed curved background, current conservation and component equivalence | Proved | [Curved](../ProjectAinos/Electrodynamics/Curved.lean), [Current](../ProjectAinos/Electrodynamics/Current.lean), [CurvedComponents](../ProjectAinos/Electrodynamics/CurvedComponents.lean) |
+| Flat vacuum field action and stationarity iff the vacuum equations | Proved; [#44](https://github.com/MGYamada/ProjectAinos/issues/44) is completed | [VacuumAction](../ProjectAinos/Electrodynamics/VacuumAction.lean), with integrability and compact-support hypotheses |
 | Sourced and curved field-action derivations; electromagnetic stress tensor and matter exchange | Targets | Preserve the explicit source-sign bridge below; fixed-background equations alone do not supply these proofs |
 | Static boundary problems, wave evolution, optics, retarded fields and radiation | Targets or conditional targets | Need independently specified function spaces, domains, boundary conditions and error estimates |
 | Nontrivial gauge bundles, media, singular sources and self-force | Separate extensions | Do not silently strengthen the smooth-potential API |
@@ -51,7 +51,7 @@ in this document still refer to `61d8fdf`.
 The [electrodynamics API guide](electrodynamics.md) records declaration-level
 contracts. The [shared geometry guide](smooth-geometry.md) records the
 underlying tensor and form operations. The geometric results delivered by
-[#52](https://github.com/MGYamada/ProjectAInos/issues/52) are already on `main`;
+[#52](https://github.com/MGYamada/ProjectAinos/issues/52) are already on `main`;
 they are not pending prerequisites for this document's fixed-background work.
 
 ### After the mechanics programme
@@ -175,7 +175,7 @@ dynamics into the electrodynamics core.
 
 Quantum electrodynamics, operator-valued distributions and quantum
 Yang–Mills are not consequences of the classical programme. Their dedicated
-design is [#46](https://github.com/MGYamada/ProjectAInos/issues/46).
+design is [#46](https://github.com/MGYamada/ProjectAinos/issues/46).
 Classical distributional currents are included here only with their own
 test-space and regularity contracts.
 
@@ -433,7 +433,7 @@ homogeneous coefficients and radial gauge are explicit. The project bridge
 transports coordinate evaluation and differentiation through the time-first /
 time-last axis exchange. It supplies no Wick rotation or hyperbolic estimate.
 Keep the original namespaces, Apache-2.0 attribution and
-[provenance record](../ProjectAInos/External/YM/PROVENANCE.md).
+[provenance record](../ProjectAinos/External/YM/PROVENANCE.md).
 
 ### Actual worldline variation
 
@@ -1169,10 +1169,10 @@ treated as a stable public API.
 
 | Evidence | Existing location | What it establishes |
 | --- | --- | --- |
-| Gauge, covariance, observer invariants and hyperbolic charged motion | [Examples](../ProjectAInos/Electrodynamics/Examples.lean), field/invariant modules | Machine-checked nonzero physical-sign and action examples |
-| Degree-zero and degree-one radial reconstruction | [PolynomialExamples](../ProjectAInos/Electrodynamics/PolynomialExamples.lean) | Correct homogeneous normalization and compatibility, not general smooth reconstruction |
-| Nonzero current and curved component bridge | [CurvedExamples](../ProjectAInos/Electrodynamics/CurvedExamples.lean), [CurrentExamples](../ProjectAInos/Electrodynamics/CurrentExamples.lean), [DivergenceExamples](../ProjectAInos/Electrodynamics/DivergenceExamples.lean) | Native source sign, conservation and geometric/component agreement |
-| Uniform electric vacuum field on a finite-volume domain | [VacuumActionExamples](../ProjectAInos/Electrodynamics/VacuumActionExamples.lean) | Nonzero curvature, density $1/2$ and actual stationarity |
+| Gauge, covariance, observer invariants and hyperbolic charged motion | [Examples](../ProjectAinos/Electrodynamics/Examples.lean), field/invariant modules | Machine-checked nonzero physical-sign and action examples |
+| Degree-zero and degree-one radial reconstruction | [PolynomialExamples](../ProjectAinos/Electrodynamics/PolynomialExamples.lean) | Correct homogeneous normalization and compatibility, not general smooth reconstruction |
+| Nonzero current and curved component bridge | [CurvedExamples](../ProjectAinos/Electrodynamics/CurvedExamples.lean), [CurrentExamples](../ProjectAinos/Electrodynamics/CurrentExamples.lean), [DivergenceExamples](../ProjectAinos/Electrodynamics/DivergenceExamples.lean) | Native source sign, conservation and geometric/component agreement |
+| Uniform electric vacuum field on a finite-volume domain | [VacuumActionExamples](../ProjectAinos/Electrodynamics/VacuumActionExamples.lean) | Nonzero curvature, density $1/2$ and actual stationarity |
 | Exact flat electromagnetic calculations | [SymPy runner](../experiments/ainos_experiments/verify_electrodynamics.py) | Independent sign, invariant, gauge, radial and worldline checks |
 | Exact nonlinear and curved coordinate calculations | [Lorentz SymPy runner](../experiments/ainos_experiments/verify_lorentz_geometry.py) | Hodge/current/density/component comparisons in nonconstant examples |
 | Public typed contracts | [Electrodynamics API checks](../checks/ElectrodynamicsAPI.lean) | Existing declarations remain usable under default elaboration settings |
@@ -1218,7 +1218,7 @@ workflow; documentation generation remains on demand.
   [authors' preprint](https://arxiv.org/abs/0806.1036).
 - The upstream polynomial Maxwell theorem and imported dependency closure
   are documented in the project's
-  [provenance record](../ProjectAInos/External/YM/PROVENANCE.md) and
+  [provenance record](../ProjectAinos/External/YM/PROVENANCE.md) and
   [NOTICE](../NOTICE). Imported statements retain their original scope.
 - Companion research plans: [C∞ mechanics](cinfty-mechanics.md),
   [Special Relativity](cinfty-special-relativity.md),

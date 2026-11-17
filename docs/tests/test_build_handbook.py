@@ -64,27 +64,27 @@ class HandbookLinksTests(unittest.TestCase):
             <a href="#top">Within this page</a>
             <a href="chapter.html#part%20one">Chapter fragment</a>
             <a href="api/">API index</a>
-            <a href="api/ProjectAInos.html#theorem">API theorem</a>
+            <a href="api/ProjectAinos.html#theorem">API theorem</a>
             <a href="https://example.test/missing#fragment">External</a>
             <a href="//example.test/missing">External without scheme</a>
             <a href="mailto:editor@example.test">Email</a>
         """)
         self.write("chapter.html", '<h2 id="part one">Section</h2>')
         self.write("api/index.html", "<h1>API</h1>")
-        self.write("api/ProjectAInos.html", '<div id="theorem">Theorem</div>')
+        self.write("api/ProjectAinos.html", '<div id="theorem">Theorem</div>')
         build_handbook.check_handbook_links(self.root)
 
     def test_missing_pages_and_fragments_report_origin_and_target(self):
         self.write("index.html", """
             <a href="missing.html">Missing page</a>
             <a href="#missing">Missing in-page fragment</a>
-            <a href="api/ProjectAInos.html#missing">Missing API fragment</a>
+            <a href="api/ProjectAinos.html#missing">Missing API fragment</a>
         """)
-        self.write("api/ProjectAInos.html", '<div id="present">Theorem</div>')
+        self.write("api/ProjectAinos.html", '<div id="present">Theorem</div>')
         with self.assertRaises(SystemExit) as failure:
             build_handbook.check_handbook_links(self.root)
 
-        for link in ("missing.html", "#missing", "api/ProjectAInos.html#missing"):
+        for link in ("missing.html", "#missing", "api/ProjectAinos.html#missing"):
             with self.subTest(link=link):
                 self.assertIn(f"index.html → {link}", str(failure.exception))
 

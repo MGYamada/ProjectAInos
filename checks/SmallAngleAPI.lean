@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 module
 
-import ProjectAInos.Mechanics.Scattering.SmallAngleExpansion
+import ProjectAinos.Mechanics.Scattering.SmallAngleExpansion
 
 /-! Typed contracts for small-angle scattering: the remainder of a first-order
 expansion uniformly on a compact set of parameters, the radicand in the
@@ -14,9 +14,9 @@ function of the parameters, and the expansion of the angle of deflection in
 the strength of the field with the remainder. These examples use default
 elaborator options. -/
 
-open ProjectAInos ProjectAInos.Mechanics ProjectAInos.Mechanics.Scattering
-open ProjectAInos.Mechanics.Scattering.SmallAngle ProjectAInos.Mechanics.OneDim
-open ProjectAInos.SmoothAlgebra
+open ProjectAinos ProjectAinos.Mechanics ProjectAinos.Mechanics.Scattering
+open ProjectAinos.Mechanics.Scattering.SmallAngle ProjectAinos.Mechanics.OneDim
+open ProjectAinos.SmoothAlgebra
 open Set Filter MeasureTheory
 open scoped Real Topology
 

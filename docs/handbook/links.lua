@@ -31,7 +31,7 @@ local function rewrite_link(link)
     link.target = "index.html" .. suffix
   elseif resolved:match("^docs/[^/]+%.md$") then
     link.target = pandoc.path.filename(resolved):gsub("%.md$", ".html") .. suffix
-  elseif resolved:match("^ProjectAInos/.*%.lean$") or resolved == "ProjectAInos.lean" then
+  elseif resolved:match("^ProjectAinos/.*%.lean$") or resolved == "ProjectAinos.lean" then
     link.target = "api/" .. resolved:gsub("%.lean$", ".html") .. suffix
   else
     link.target = repository_source .. resolved .. suffix

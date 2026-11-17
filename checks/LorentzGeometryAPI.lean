@@ -4,41 +4,41 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 module
 
-import ProjectAInos.SmoothGeometry.Lorentzian.AccelerationRegularity
-import ProjectAInos.SmoothGeometry.Lorentzian.LocalizedVariation
-import ProjectAInos.SmoothGeometry.Lorentzian.Dual
-import ProjectAInos.SmoothGeometry.Lorentzian.DivergenceExamples
-import ProjectAInos.SmoothGeometry.Lorentzian.HodgeCurrent
-import ProjectAInos.SmoothGeometry.Lorentzian.TwoFormExamples
-import ProjectAInos.SmoothGeometry.Lorentzian.TwoFormDivergenceExamples
-import ProjectAInos.SmoothGeometry.Lorentzian.PullbackExamples
-import ProjectAInos.SmoothGeometry.Lorentzian.ChartExamples
-import ProjectAInos.SmoothGeometry.Lorentzian.ChartConnection
-import ProjectAInos.SmoothGeometry.Lorentzian.ConnectionExamples
-import ProjectAInos.SmoothGeometry.Lorentzian.CurvatureExamples
-import ProjectAInos.SmoothGeometry.Lorentzian.CurvatureNaturality
-import ProjectAInos.SmoothGeometry.Lorentzian.CurveFamily
-import ProjectAInos.SmoothGeometry.Lorentzian.ConformalExample
-import ProjectAInos.SmoothGeometry.Lorentzian.LocalInertialExamples
-import ProjectAInos.SmoothGeometry.Lorentzian.LocalFlatnessExamples
-import ProjectAInos.SmoothGeometry.Lorentzian.FlatFrameExamples
-import ProjectAInos.SmoothGeometry.Lorentzian.RadialFrame
-import ProjectAInos.SmoothGeometry.Lorentzian.MotionExamples
-import ProjectAInos.SmoothGeometry.Lorentzian.MotionODE
-import ProjectAInos.SmoothGeometry.Lorentzian.PathExamples
-import ProjectAInos.SmoothGeometry.Lorentzian.Regularity
-import ProjectAInos.SmoothGeometry.Lorentzian.Restriction
-import ProjectAInos.SmoothGeometry.Lorentzian.VolumeExamples
-import ProjectAInos.SmoothGeometry.Lorentzian.HodgeExamples
-import ProjectAInos.SmoothGeometry.Lorentzian.HodgeCurvedExamples
-import ProjectAInos.SmoothGeometry.Tensor.OperationsExamples
-import ProjectAInos.SmoothGeometry.ODE.VolterraExamples
-import ProjectAInos.SmoothGeometry.ODE.RadialExamples
+import ProjectAinos.SmoothGeometry.Lorentzian.AccelerationRegularity
+import ProjectAinos.SmoothGeometry.Lorentzian.LocalizedVariation
+import ProjectAinos.SmoothGeometry.Lorentzian.Dual
+import ProjectAinos.SmoothGeometry.Lorentzian.DivergenceExamples
+import ProjectAinos.SmoothGeometry.Lorentzian.HodgeCurrent
+import ProjectAinos.SmoothGeometry.Lorentzian.TwoFormExamples
+import ProjectAinos.SmoothGeometry.Lorentzian.TwoFormDivergenceExamples
+import ProjectAinos.SmoothGeometry.Lorentzian.PullbackExamples
+import ProjectAinos.SmoothGeometry.Lorentzian.ChartExamples
+import ProjectAinos.SmoothGeometry.Lorentzian.ChartConnection
+import ProjectAinos.SmoothGeometry.Lorentzian.ConnectionExamples
+import ProjectAinos.SmoothGeometry.Lorentzian.CurvatureExamples
+import ProjectAinos.SmoothGeometry.Lorentzian.CurvatureNaturality
+import ProjectAinos.SmoothGeometry.Lorentzian.CurveFamily
+import ProjectAinos.SmoothGeometry.Lorentzian.ConformalExample
+import ProjectAinos.SmoothGeometry.Lorentzian.LocalInertialExamples
+import ProjectAinos.SmoothGeometry.Lorentzian.LocalFlatnessExamples
+import ProjectAinos.SmoothGeometry.Lorentzian.FlatFrameExamples
+import ProjectAinos.SmoothGeometry.Lorentzian.RadialFrame
+import ProjectAinos.SmoothGeometry.Lorentzian.MotionExamples
+import ProjectAinos.SmoothGeometry.Lorentzian.MotionODE
+import ProjectAinos.SmoothGeometry.Lorentzian.PathExamples
+import ProjectAinos.SmoothGeometry.Lorentzian.Regularity
+import ProjectAinos.SmoothGeometry.Lorentzian.Restriction
+import ProjectAinos.SmoothGeometry.Lorentzian.VolumeExamples
+import ProjectAinos.SmoothGeometry.Lorentzian.HodgeExamples
+import ProjectAinos.SmoothGeometry.Lorentzian.HodgeCurvedExamples
+import ProjectAinos.SmoothGeometry.Tensor.OperationsExamples
+import ProjectAinos.SmoothGeometry.ODE.VolterraExamples
+import ProjectAinos.SmoothGeometry.ODE.RadialExamples
 
 /-! Typed contracts for GR 5.1's shared metric, connection, curvature and motion APIs. These examples use
 default elaborator options and do not assume a global frame or flatness. -/
 
-open ProjectAInos.SmoothGeometry
+open ProjectAinos.SmoothGeometry
 open scoped Manifold ContDiff Topology
 
 noncomputable section
@@ -1493,7 +1493,7 @@ example {Y : ∀ y : Plane, TangentSpace 𝓘(ℝ, Plane) y} {p : Plane}
 end Charts
 
 section LocalizedManifoldVariation
-open Set Bundle ProjectAInos.Variational LorentzMetric
+open Set Bundle ProjectAinos.Variational LorentzMetric
 variable {σ : LorentzConvention} {d : ℕ} {M : Type} [TopologicalSpace M]
   [ChartedSpace (MinkowskiModel d) M] [IsManifold 𝓘(ℝ, MinkowskiModel d) ∞ M]
 local notation "E" => MinkowskiModel d

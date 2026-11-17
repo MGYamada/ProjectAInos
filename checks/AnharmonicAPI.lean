@@ -4,8 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 module
 
-import ProjectAInos.Mechanics.OneDimension.Anharmonic
-import ProjectAInos.Mechanics.Oscillations.AnharmonicNormalForm
+import ProjectAinos.Mechanics.OneDimension.Anharmonic
+import ProjectAinos.Mechanics.Oscillations.AnharmonicNormalForm
 
 /-! Typed contracts for the anharmonic oscillator: the implicit function
 theorem for one real equation, the period of the oscillation in the potential
@@ -14,8 +14,8 @@ of the frequency, and the Birkhoff normal form of the formal Hamiltonian with
 its coefficient of degree four. These examples use default elaborator
 options. -/
 
-open ProjectAInos ProjectAInos.SmoothAlgebra ProjectAInos.Mechanics
-open ProjectAInos.SmoothAlgebra.FormalSeries
+open ProjectAinos ProjectAinos.SmoothAlgebra ProjectAinos.Mechanics
+open ProjectAinos.SmoothAlgebra.FormalSeries
 open Set Filter MeasureTheory MvPowerSeries
 open scoped Real ContDiff Topology
 
