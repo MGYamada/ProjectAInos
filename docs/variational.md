@@ -79,6 +79,21 @@ the Euler–Lagrange expressions vanish on it. The jet ring of mechanics,
 `Mechanics.JetRing`, is the case of one independent variable; the two are
 written independently, because the shared layer imports no physics.
 
+**Quadratic Lagrangians and the gauge identity.** For constants `C^{aμ,bν}`,
+`quadraticLagrangian C = ½ Σ C^{aμ,bν} uᵃ_μ uᵇ_ν` is of the first order. For
+symmetric constants its momenta are `π^μ_a = Σ C^{aμ,bν} uᵇ_ν` and
+`Eₐ(L) = −Σ C^{aμ,bν} uᵇ_{μν}` (`momentum_quadraticLagrangian`,
+`euler_quadraticLagrangian`). When the fields are indexed by the independent
+variables and the constants are antisymmetric in the first pair, the gauge
+variation `ξₐ = Dₐ χ` does not change the Lagrangian for any `χ`
+(`prolong_gauge_quadraticLagrangian`), and the Euler–Lagrange expressions
+satisfy `Σₐ Dₐ Eₐ(L) = 0` (`divergence_euler_quadraticLagrangian`): Noether's
+second identity for this symmetry. The Lagrangian `−¼ F_{μν} F^{μν}` of a
+one-form with a constant symmetric matrix `η` has the constants
+`gaugeConstants η`; its momenta are `−F^{μa}` (`momentum_gauge`), the identity
+is `divergence_euler_gauge`, and its canonical stress tensor is conserved
+(`conserved_stress_gauge`).
+
 ## Proof entry points
 
 | Module | Results |
@@ -98,6 +113,7 @@ written independently, because the shared layer imports no physics.
 | [FieldJet/Basic](../ProjectAinos/Variational/FieldJet/Basic.lean) | `FieldJetRing`, `SupportIn`, `totalDeriv`, `apply_totalDeriv`, `dx_totalDeriv`, `d_totalDeriv`, `totalDeriv_u`, `totalDeriv_comm` |
 | [FieldJet/Euler](../ProjectAinos/Variational/FieldJet/Euler.lean) | `iterTotalDeriv`, `SupportIn.totalDeriv`, `euler`, `euler_totalDeriv`, `euler_add_totalDeriv` |
 | [FieldJet/Noether](../ProjectAinos/Variational/FieldJet/Noether.lean) | `FirstOrder`, `momentum`, `divergence`, `prolong`, `stress`, `euler_of_firstOrder`, `prolong_eq_euler_add_divergence`, `divergence_stress`, `eulerLagrangeIdeal`, `Conserved`, `conserved_noetherCurrent`, `conserved_stress` |
+| [FieldJet/Quadratic](../ProjectAinos/Variational/FieldJet/Quadratic.lean) | `quadraticLagrangian`, `firstOrder_quadraticLagrangian`, `momentum_quadraticLagrangian`, `euler_quadraticLagrangian`, `divergence_euler_quadraticLagrangian`, `prolong_gauge_quadraticLagrangian`, `gaugeConstants`, `fieldStrength`, `raisedFieldStrength`, `momentum_gauge`, `divergence_euler_gauge`, `conserved_stress_gauge` |
 | [FieldJet/Standard](../ProjectAinos/Variational/FieldJet/Standard.lean) | `StandardFieldJet.jetRing`, `totalDeriv_x`, `prolongation`, `prolongation_totalDeriv`, `IsSolution`, `isSolution_add_totalDeriv` |
 | [Examples](../ProjectAinos/Variational/Examples.lean) | Nonzero variations on time and four-dimensional bases, and a base-dependent momentum with a nonzero divergence residual |
 

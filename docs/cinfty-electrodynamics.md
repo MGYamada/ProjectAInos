@@ -404,8 +404,13 @@ operators with `Eₐ(D_μ F) = 0`, Noether's first identity and the canonical
 stress tensor for a Lagrangian of the first order, the standard model and the
 prolongation of a field are proved in
 [`Variational/FieldJet`](../ProjectAinos/Variational/FieldJet/Basic.lean)
-([guide](variational.md#jet-rings-of-fields)). The second identity and the
-identities of the Lagrangian of Maxwell are the next step.
+([guide](variational.md#jet-rings-of-fields)). For the Lagrangian of a
+one-form with a constant symmetric matrix, the invariance under the gauge
+variation, the identity `Σₐ Dₐ Eₐ(L) = 0`, the momenta `−F^{μa}` and the
+conservation of the canonical stress tensor are proved in
+[`Variational/FieldJet/Quadratic.lean`](../ProjectAinos/Variational/FieldJet/Quadratic.lean).
+The second identity for a general Lagrangian is not stated, and the difference
+of the canonical tensor from the symmetric one belongs to E18.
 
 **Target E4 (descent of first variation, C, B:INT).** Given a density and
 compatible local variations supported in a compact subset of a manifold,

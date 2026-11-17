@@ -636,8 +636,13 @@ every variation, and the canonical stress tensor has the divergence
 Lagrangian without explicit dependence on `x`, the stress tensor are conserved
 modulo the Euler–Lagrange ideal. The free C∞-ring on the co-ordinates is the
 standard model, and the prolongation of a smooth field carries `D_μ` to
-`∂_μ`. These are identities of the ring, without integrals; no ledger row is
-promoted. [Guide](variational.md#jet-rings-of-fields)
+`∂_μ`. For a Lagrangian that is quadratic in the first derivatives, with
+constants that are antisymmetric in the first pair of indices, the gauge
+variation `ξₐ = Dₐ χ` does not change the Lagrangian and the Euler–Lagrange
+expressions satisfy `Σₐ Dₐ Eₐ(L) = 0`, Noether's second identity; the
+Lagrangian `−¼ F_{μν} F^{μν}` of a one-form is of this kind for every constant
+symmetric matrix. These are identities of the ring, without integrals; no
+ledger row is promoted. [Guide](variational.md#jet-rings-of-fields)
 
 ## Shared Variational Foundation
 
