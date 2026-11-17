@@ -1377,7 +1377,92 @@ numbers. `eccentricity_sq_sub_one`: `2 E M²/m α² = (m v² ρ/α)²` for
 `0 < χ < π` and `e² − 1 = k²` with `k ≥ 0`, then `cot (χ/2) = k`.
 `hasDerivAt_impactParameter` and `rutherford`: for `ρ(χ) = a cot (χ/2)`,
 `ρ |dρ/dχ| / sin χ = (a/2)² / sin⁴ (χ/2)`. The angle of deflection as a limit
-along the orbit and the cross-section as a measure are not defined.
+along the orbit and the cross-section as a measure are in the next section.
+
+## Scattering
+
+`Mechanics/Scattering` treats Landau–Lifshitz §§18–19 for a motion in a
+central field, described in the plane of the orbit by the radius `r(t)` and
+the polar angle `φ(t)`, with `ṙ² = F(r)` and `φ̇ = ℓ/r²`. Here `ℓ = M/m` and
+`F(r) = (2/m)(E − U(r)) − ℓ²/r²`.
+
+`Scattering/RadialMotion`: `IsFactor W r₀ C` states that `W` is smooth,
+positive and at most `C` along `r = r₀ + s²`; then `F(r) = (r − r₀) W(r)` has
+the simple turning point `r₀`.
+
+- `parameter W r₀` is the solution of `ṡ = ½ √W(r₀ + s²)` with `s(0) = 0`,
+  defined for all times, odd and strictly increasing; `radius W r₀ t` is
+  `r₀ + s(t)²` and `radialVelocity` is `2 s ṡ`.
+- `IsFactor.radialVelocity_sq`: `ṙ² = (r − r₀) W(r)`.
+  `IsFactor.radialVelocity_pos`: `ṙ > 0` for `t > 0`. `IsFactor.radius_neg`:
+  the radius is an even function of the time.
+  `IsFactor.tendsto_radius_atTop`: `r → ∞`.
+- `IsFactor.hasDerivAt_radialVelocity`: `r̈ = F′(r)/2`, for `F` differentiable
+  on `[r₀, ∞)` with `F(r) = (r − r₀) W(r)` there.
+- `exists_isFactor_dividedDifference`: a smooth `G` with `G(r₀) = 0`,
+  `G′(r₀) > 0`, positive and bounded after `r₀`, has the factor
+  `dividedDifference G (r, r₀)`.
+- `angle W r₀ ℓ t = ∫₀ᵗ ℓ/r²`, an odd function of the time.
+
+`Scattering/Deflection`: statements about a given motion after the closest
+approach, with `r(0) > 0`, `ṙ > 0` and `ṙ² = F(r)` for `t > 0`.
+
+- `angleDensity ℓ F ρ = (ℓ/ρ²)/√F(ρ)`.
+  `integral_angleDensity_eq`: the density is integrable on `(r(0), r(T)]`, and
+  its integral there is `φ(T) − φ(0)`.
+- `tendsto_angle_atTop`: if `r → ∞` and the density is integrable on some
+  `(R, ∞)`, it is integrable on `(r(0), ∞)` and
+  `φ(t) → φ(0) + ∫_{r(0)}^∞ (ℓ/ρ²) dρ/√F(ρ)` (Landau–Lifshitz (18.4)).
+  `integrableOn_angleDensity_Ioi`: the hypothesis holds if `F` is continuous
+  and at least `c² > 0` on `[R, ∞)`.
+- `deflectionAngle ℓ F r₀ = π − 2 ∫_{r₀}^∞ (ℓ/ρ²) dρ/√F(ρ)`.
+
+`Scattering/Asymptote`: `position` and `velocity` are the motion in the plane.
+
+- `IsFactor.tendsto_angle_atTop`, `IsFactor.tendsto_angle_atBot`: the angle of
+  the motion `radius W r₀` tends to `± φ₀`.
+- `IsFactor.hasDerivAt_position`, `IsFactor.hasDerivAt_velocity`: the velocity
+  is the derivative of the position, and the acceleration is
+  `(F′(r)/2 − ℓ²/r³) (cos φ, sin φ)`, which is `−(U′(r)/m) (cos φ, sin φ)`.
+  `position_cross_velocity`: the moment of the velocity is `ℓ`.
+- `IsFactor.tendsto_velocity_atTop`, `IsFactor.tendsto_velocity_atBot`: if
+  `ṙ → v∞` and `φ → φ₀` as `t → ∞`, the velocity tends to
+  `v∞ (cos φ₀, sin φ₀)` as `t → ∞` and to `v∞ (−cos φ₀, sin φ₀)` as
+  `t → −∞`. `asymptote_inner`: the scalar product of these is
+  `v∞² cos (π − 2φ₀)`. `arccos_cos_deflection`: the angle between the two
+  velocities, `arccos (cos (π − 2φ₀))`, is `|π − 2φ₀|` when `|π − 2φ₀| ≤ π`.
+  For a motion that turns further round the centre `χ = π − 2φ₀` is the
+  unwrapped angle: with `φ₀ = 3π/2` the two velocities coincide.
+
+`Scattering/Coulomb`: `U = α/r`, with `a = α/m v∞²` of either sign.
+
+- `speedSq a ρ v∞ r = v∞² (1 − 2a/r − ρ²/r²)`, `closest a ρ = a + √(a² + ρ²)`,
+  and `isFactor`: the motion exists for all times.
+  `hasDerivAt_velocity`: its acceleration is `(v∞² a/r²) (cos φ, sin φ)`.
+- `integral_angleDensity`: `φ₀ = arccos (a/√(a² + ρ²))`, from the primitive
+  `arccos ((ρ²/r + a)/√(a² + ρ²))`.
+  `tendsto_angle_atTop`, `tendsto_velocity_atTop`, `tendsto_velocity_atBot`.
+- `deflection a ρ = π − 2 arccos (a/√(a² + ρ²))`, with
+  `sin (χ/2) = a/√(a² + ρ²)`, `cos (χ/2) = ρ/√(a² + ρ²)` and
+  `cot (χ/2) = ρ/a` (`cot_half_deflection`, Landau–Lifshitz (19.1)).
+
+`Scattering/CrossSection`: `impactMeasure` is `2πρ dρ` on `ρ > 0`,
+`solidAngle` is `2π sin χ dχ` on `0 < χ < π`, and `crossSection χ` is the
+push-forward of `impactMeasure` by a deflection function `χ`.
+
+- `crossSection_apply`: for a measurable `A ⊆ (0, π)` and a function `b` that
+  is injective and differentiable on `A` with `χ⁻¹(A) ∩ (0, ∞) = b(A)`,
+  `crossSection χ A = ∫_A (b |b′|/sin χ) dΩ` (Landau–Lifshitz (18.8)).
+- `Coulomb.deflection_impact`, `Coulomb.impact_deflection`: `a cot (χ/2)` is
+  the inverse of the deflection function of a repulsive Coulomb field.
+- `Coulomb.crossSection_coulomb`: Rutherford's formula,
+  `crossSection (deflection a) A = ∫_A (a/2)²/sin⁴ (χ/2) dΩ` for `a > 0`;
+  `Coulomb.crossSection_coulomb_abs` is the statement for either sign, in the
+  magnitude of the angle.
+
+The deflection function of a general potential as a function of the impact
+parameter, several branches, the laboratory system and small-angle scattering
+are not treated.
 
 ## The phase volume of the oscillator
 
@@ -2055,6 +2140,11 @@ semi-major axis is not computed.
 | [Poisson/ActionFunction](../ProjectAInos/Mechanics/Poisson/ActionFunction.lean) | `CompleteIntegral.IsHamiltonJacobi.timeDerivative_along` |
 | [KnifeEdge](../ProjectAInos/Mechanics/KnifeEdge.lean) | `Configuration`, `cosθ`, `sinθ`, `cos_mul_cos_add_sin_mul_sin`, `along`, `turn`, `across`, `constraint`, `constraint_across`, `commutator_turn_along`, `derivation_apply`, `eq_algebraMap_of_along_eq_zero_of_turn_eq_zero` |
 | [Rutherford](../ProjectAInos/Mechanics/Rutherford.lean) | `eccentricity_sq_sub_one`, `cot_half_eq`, `hasDerivAt_impactParameter`, `rutherford` |
+| [Scattering/RadialMotion](../ProjectAInos/Mechanics/Scattering/RadialMotion.lean) | `IsFactor`, `parameter`, `radius`, `radialVelocity`, `IsFactor.radialVelocity_sq`, `IsFactor.radialVelocity_pos`, `IsFactor.radius_neg`, `IsFactor.tendsto_radius_atTop`, `IsFactor.hasDerivAt_radialVelocity`, `exists_isFactor_dividedDifference`, `angle`, `IsFactor.angle_neg` |
+| [Scattering/Deflection](../ProjectAInos/Mechanics/Scattering/Deflection.lean) | `angleDensity`, `deflectionAngle`, `image_Ioc_radius`, `integral_angleDensity_eq`, `tendsto_angle_atTop`, `integrableOn_angleDensity_Ioi` |
+| [Scattering/Asymptote](../ProjectAInos/Mechanics/Scattering/Asymptote.lean) | `IsFactor.tendsto_angle_atTop`, `IsFactor.tendsto_angle_atBot`, `IsFactor.tendsto_radialVelocity_atTop`, `position`, `velocity`, `position_cross_velocity`, `IsFactor.hasDerivAt_position`, `IsFactor.hasDerivAt_velocity`, `IsFactor.tendsto_velocity_atTop`, `IsFactor.tendsto_velocity_atBot`, `asymptote_inner`, `arccos_cos_deflection` |
+| [Scattering/Coulomb](../ProjectAInos/Mechanics/Scattering/Coulomb.lean) | `speedSq`, `closest`, `factor`, `speedSq_eq`, `isFactor`, `hasDerivAt_primitive`, `integral_angleDensity`, `tendsto_angle_atTop`, `tendsto_velocity_atTop`, `tendsto_velocity_atBot`, `hasDerivAt_velocity`, `deflection`, `sin_half_deflection`, `cot_half_deflection`, `deflection_mem_Ioo`, `deflection_neg`, `abs_deflection_le`, `arccos_cos_deflection` |
+| [Scattering/CrossSection](../ProjectAInos/Mechanics/Scattering/CrossSection.lean) | `impactMeasure`, `solidAngle`, `crossSection`, `crossSection_apply`, `Coulomb.impact`, `Coulomb.deflection_impact`, `Coulomb.impact_deflection`, `Coulomb.crossSection_coulomb`, `Coulomb.abs_deflection`, `Coulomb.crossSection_coulomb_abs` |
 | [Oscillations/PhaseVolume](../ProjectAInos/Mechanics/Oscillations/PhaseVolume.lean) | `Oscillator.map_flowMatrix_volume`, `Oscillator.measurePreserving_flowMatrix` |
 | [Poisson/Liouville](../ProjectAInos/Mechanics/Poisson/Liouville.lean) | `divergence`, `divergence_eq`, `divergence_hamiltonian`, `divergence_dissipativeField`, `Oscillator.divergence_dissipativeField` |
 | [Poisson/HamiltonianField](../ProjectAInos/Mechanics/Poisson/HamiltonianField.lean) | `realCurve`, `lift_apply_const`, `isIntegralCurve_iff_hasDerivAt`, `isTrajectory_iff_hasDerivAt`, `traceCLM_fderiv_realField`, `hamiltonianField`, `contDiff_hamiltonianField`, `isTrajectory_canonical_iff_hasDerivAt`, `traceCLM_fderiv_hamiltonianField`, `volume_image_hamiltonianFlow`, `measurePreserving_hamiltonianFlow`, `IsTrajectory.flow_eq`, `exists_isTrajectory` |

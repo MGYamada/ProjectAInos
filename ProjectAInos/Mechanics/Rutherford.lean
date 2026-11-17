@@ -26,7 +26,7 @@ satisfies `sin (χ/2) = 1/e`.
   (Landau–Lifshitz (19.3)).
 
 The angle of deflection as a limit of the direction of the motion, and the
-cross-section as a measure, are not defined here.
+cross-section as a measure, are in `Mechanics/Scattering`.
 -/
 
 @[expose] public section
