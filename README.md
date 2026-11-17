@@ -314,6 +314,11 @@ Hamiltonians of Stäckel's form: the separated action is given by quadratures,
 it satisfies the Hamilton–Jacobi equation, it is complete, and Jacobi's
 theorem gives Hamilton's equations; spherical, parabolic and elliptic
 co-ordinates are instances.
+For integrals in involution on the canonical phase space, a compact connected
+level set with independent differentials is a torus: the joint flow of the
+Hamiltonian fields is transitive on it, its periods form a lattice, and the
+motion is conditionally periodic. The action–angle variables near the torus
+are not yet proved.
 Symplectic forms on manifolds and
 Dirac brackets are not implemented. Galilean symmetry as a group action and the topics of 2.1 and
 2.4 have no Lean counterpart yet. The

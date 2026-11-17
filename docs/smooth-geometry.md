@@ -1114,6 +1114,59 @@ and the case `k² = 1` are not treated.
 Only the first order of the method is treated: the constant is not explicit,
 and there is no statement on times of the order of the frequency.
 
+`ODE.CommutingFlows`: two smooth fields `A`, `B` commute if
+`DA(y) B(y) = DB(y) A(y)`.
+
+- `fderiv_flow_apply_of_commute`: `D_x Φ_A(t, x) B(x) = B(Φ_A(t, x))`. The
+  difference of the two sides solves a linear equation along the solution, by
+  the variational equation, and vanishes at the time zero.
+- `flow_add_of_commute`: the flow of `A + B` is `Φ_A(T, Φ_B(T, x))`, where
+  these are defined. `flow_smul_field`: the flow of `c A` at the time `T` is
+  the flow of `A` at the time `c T`.
+
+`ODE.JointFlow`: for fields `Xᵢ`, `i ∈ ι`, `jointField X t = Σᵢ tᵢ Xᵢ` and
+`jointFlow X t x` is the flow of this field at the time `1`.
+
+- `PairwiseCommute X`; `jointField_commute`: the fields `Σᵢ tᵢ Xᵢ` commute.
+- `IsInvariantSet X M`: the flows of all these fields are defined for all
+  times on `M` and preserve it; `isInvariantSet_of_isCompact`: a compact set
+  that the flows preserve, as long as they exist.
+- `jointFlow_add`, `jointFlow_zero`, `jointFlow_neg`, `jointFlow_comm`: on an
+  invariant set the joint flow is an action of `ℝ^ι`. `jointFlow_smul`:
+  `r ↦ jointFlow X (r • t) x` is the solution of `Σᵢ tᵢ Xᵢ` through `x`.
+
+`ODE.JointFlowSmooth`: `contDiffAt_jointFlow`, the joint flow is smooth in the
+times and the point together, from the flow of the field
+`(t, y) ↦ (0, Σᵢ tᵢ Xᵢ(y))`; `hasFDerivAt_jointFlow_zero`: at `(0, x)` its
+derivative is `(τ, v) ↦ Σᵢ τᵢ Xᵢ(x) + v`.
+
+`ODE.PeriodLattice`: `IsLocallyFree X M` states that at every point `x` of `M`
+the map `t ↦ g^t x` is injective near zero and that `M` is, near `x`, its image
+of a neighbourhood of zero.
+
+- `exists_jointFlow_eq`: on a connected set the joint flow is transitive.
+- `periods`: the subgroup of the `t` with `g^t x = x`; `jointFlow_eq_iff`,
+  `periods_eq`, `discreteTopology_periods`.
+- `span_periods_eq_top`, `exists_basis_periods`: on a compact set the periods
+  span `ℝ^ι` and are the integer combinations of a basis.
+- `exists_torus_chart`: there is a basis `b` such that for every `x ∈ M` the
+  map `θ ↦ g^{Σ θᵢ bᵢ} x` is onto `M`, two angles give the same point exactly
+  when they differ by integers, and the flow of `Σᵢ sᵢ Xᵢ` at the time `r` adds
+  `r b⁻¹ s` to the angles.
+
+`ODE.LevelSetFlow`: for a smooth `F : E → ℝ^κ` on a space of finite dimension
+with `DF(y) Xᵢ(y) = 0` and `dim E = |ι| + |κ|`.
+
+- `flow_jointField_levelSet`, `isInvariantSet_levelSet`: `F` is constant along
+  the flows, and a compact level set is invariant with complete flows.
+- `exists_levelSet_chart`, `isLocallyFree_levelSet`: at a point `x` of a level
+  set at which `DF(x)` is onto and the `Xᵢ(x)` are linearly independent,
+  `(t, s) ↦ g^t (x + L s)` is a homeomorphism near zero, `L` being a right
+  inverse of `DF(x)`, and its points with `s ≠ 0` are not on the level set; so
+  the joint flow is locally free on such a level set.
+- `exists_torus_chart_levelSet`: the conclusion of `exists_torus_chart` for a
+  compact connected regular level set of commuting fields.
+
 The field is smooth on the whole space. A field that is smooth only on an
 open set, and a field that depends on the time, are not treated.
 
