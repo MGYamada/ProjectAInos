@@ -289,6 +289,11 @@ the action by an automorphism that preserves the Poisson bracket. For the
 anharmonic oscillator `ẍ + ν² x = −α x² − β x³` the coefficient of the square
 of the action is `3β/8ν² − 5α²/12ν⁴`, and the frequency of the oscillation of
 half-width `ρ` is `ν + (3β/8ν − 5α²/12ν³) ρ² + o(ρ²)`, proved from the period.
+The adiabatic theorem is proved for one degree of freedom: for
+`H = p²/2m + V(λ, x)` with `λ = Λ(εt)` the action variable `(1/2π) ∮ p dx`
+changes by at most `C ε` up to the time `T/ε` along a motion that stays in a
+compact set of closed level curves, and for the oscillator with the frequency
+`Ω(εt)` by at most `C ε I(0)` for every motion.
 Symplectic forms on manifolds and
 Dirac brackets are not implemented. Galilean symmetry as a group action and the topics of 2.1 and
 2.4 have no Lean counterpart yet. The

@@ -1099,6 +1099,18 @@ and the case `k² = 1` are not treated.
 - `gronwallBound_le_mul_exp`: `gronwallBound δ K ε t ≤ (δ + ε L) e^{K L}` for
   `0 ≤ t ≤ L`.
 
+`ODE.SlowParameter` is the estimate behind adiabatic invariance, for a field
+`X(z, λ)` on a normed space with a parameter `λ = Λ(εt)`.
+
+- `abs_sub_le_of_corrector`: let `I` and `G` be differentiable on a set `S` of
+  pairs `(z, λ)`, with `dI(X, 0) = 0` and `dI(0, 1) = dG(X, 0)` there: `I` is
+  invariant under the field with a fixed parameter, and its derivative in the
+  parameter is the derivative of `G` along that field. If `|Λ′| ≤ L₁`,
+  `|Λ″| ≤ L₂` on `[0, T]` and `|G| ≤ M₀`, `|∂G/∂λ| ≤ M₁` on `S`, then a
+  solution of `ż = X(z, Λ(εt))` that stays in `S` on `[0, T/ε]` has
+  `|I(t) − I(0)| ≤ ε (T (L₂ M₀ + L₁² M₁) + 2 L₁ M₀)` there. The function
+  `I − ε Λ′(εt) G` has a derivative of the order `ε²` along the solution.
+
 Only the first order of the method is treated: the constant is not explicit,
 and there is no statement on times of the order of the frequency.
 

@@ -103,14 +103,17 @@ public import ProjectAInos.Mechanics.KnifeEdge
 public import ProjectAInos.Mechanics.Legendre
 public import ProjectAInos.Mechanics.OneDimension.Abel
 public import ProjectAInos.Mechanics.OneDimension.ActionAngle
+public import ProjectAInos.Mechanics.OneDimension.AdiabaticInvariant
 public import ProjectAInos.Mechanics.OneDimension.Anharmonic
 public import ProjectAInos.Mechanics.OneDimension.Area
 public import ProjectAInos.Mechanics.OneDimension.Motion
 public import ProjectAInos.Mechanics.OneDimension.Orbit
 public import ProjectAInos.Mechanics.OneDimension.Oscillator
 public import ProjectAInos.Mechanics.OneDimension.Well
+public import ProjectAInos.Mechanics.OneDimension.WellFamily
 public import ProjectAInos.Mechanics.OpenDomain
 public import ProjectAInos.Mechanics.Oscillations.Adiabatic
+public import ProjectAInos.Mechanics.Oscillations.AdiabaticOscillator
 public import ProjectAInos.Mechanics.Oscillations.AnharmonicNormalForm
 public import ProjectAInos.Mechanics.Oscillations.Damped
 public import ProjectAInos.Mechanics.Oscillations.Dissipation
@@ -393,6 +396,7 @@ public import ProjectAInos.SmoothGeometry.ODE.Radial
 public import ProjectAInos.SmoothGeometry.ODE.RadialExamples
 public import ProjectAInos.SmoothGeometry.ODE.RadialReparam
 public import ProjectAInos.SmoothGeometry.ODE.ScalarFlow
+public import ProjectAInos.SmoothGeometry.ODE.SlowParameter
 public import ProjectAInos.SmoothGeometry.ODE.Superposition
 public import ProjectAInos.SmoothGeometry.ODE.Volterra
 public import ProjectAInos.SmoothGeometry.ODE.VolterraExamples
@@ -510,4 +514,5 @@ public import ProjectAInos.Variational.LocalExtension
 public import ProjectAInos.Variational.ManifoldCurve
 public import ProjectAInos.Variational.MovingLimits
 public import ProjectAInos.Variational.Parameter
+public import ProjectAInos.Variational.ParametricIntegralOn
 public import ProjectAInos.Variational.Regularity
