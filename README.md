@@ -157,6 +157,10 @@ a relation of signals that is contained in the causal order, the energies and
 the momenta of a decay into two particles, and the invariants of an elastic
 collision.
 [Guide](docs/special-relativity.md#signals-the-factorization-of-a-lorentz-transformation-and-collisions)
+The future mass shell is a graph over the space momenta on which the Lorentz
+group acts smoothly, and the action with an auxiliary field describes the
+massive and the massless particle together.
+[Guide](docs/special-relativity.md#the-mass-shell-and-the-massless-particle)
 
 Topic 6 follows the provisional Boltzmannian typicality plan in
 [issue #55](https://github.com/MGYamada/ProjectAinos/issues/55). Its guiding references are

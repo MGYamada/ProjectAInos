@@ -23,7 +23,7 @@ The proofs of the three field plans are tracked in
 [issue #135](https://github.com/MGYamada/ProjectAinos/issues/135). Each plan now has a
 ledger with one status for each section, a count line and the list of rows closed
 with a remainder, in the vocabulary of the mechanics ledger:
-[special relativity](cinfty-special-relativity.md#ledger) (8 of 14 rows proved),
+[special relativity](cinfty-special-relativity.md#ledger) (10 of 14 rows proved),
 [electrodynamics](cinfty-electrodynamics.md#ledger) (none of 66) and
 [general relativity](cinfty-general-relativity.md#ledger) (5 of 39). The baseline
 counts a row as proved only when its whole target is proved; a row with a proved
@@ -546,6 +546,21 @@ of each particle in the frame of the centre of momentum, and for a target at
 rest `s = m₁² + m₂² + 2 m₂ E₁` and `t = −2 m₂ (E₄ − m₂)`. The ledger rows of §1,
 §4, §11 and §13 are *proved* in their stated scopes (8 of 14).
 [Guide](special-relativity.md#signals-the-factorization-of-a-lorentz-transformation-and-collisions)
+
+The wave ends with the mass shell and the massless particle. The future shell
+of a mass `m ≥ 0` is the graph of `√(m² + Σ πᵢ²)` over the open set
+`m² + Σ πᵢ² > 0` of the space momenta, which omits the origin for `m = 0`; the
+graph is smooth there, the orthochronous Lorentz group maps the shell to
+itself and acts smoothly in this chart, and for `m > 0` the real zeros of the
+function `p₀ + E` of the future sheet are the points whose momentum vector is
+on the shell. The action `½ ∫ (−Q(ẋ)/e − e m²)` with an auxiliary positive
+function `e` is stationary exactly when `Q(ẋ) = e² m²` and `ẋ/e` is constant.
+For a positive mass this is the action `−m ∫ ds` with `e = √Q(ẋ)/m`; for the
+mass zero the velocity is null and `ẋ = e k` with a constant null vector, and
+the action does not depend on the parameter. The ledger rows of §7 and §9 are
+*proved* in their stated scopes (10 of 14); §§10, 12 and 14 belong to the next
+wave and §6 to the comparison of cotangent modules.
+[Guide](special-relativity.md#the-mass-shell-and-the-massless-particle)
 
 ## Shared Variational Foundation
 
