@@ -49,3 +49,27 @@ These notes record mathematical distinctions and interface decisions in `Project
 **Interface decision.** No instance is added. A step that moves a negation through a product of elements of a phase space is written with `ring` or `linear_combination`, and a general identity is stated for an arbitrary C∞-ring where that is possible.
 
 **Proof status.** The proofs of `PhaseSpace.canonical_linearMomentum_linearMomentum` and of the brackets in `MassShell` are written in this way. [Linear momentum functions](../ProjectAinos/SmoothAlgebra/Poisson/LinearMomentum.lean)
+
+## SR07. The two actions are compared through their stationary curves
+
+**Observation.** The action of space-time `−m ∫ ds` and the action `−m ∫ √(1 − Σ vᵢ²) dt` in the time of an observer have the same value on a graph `t ↦ (t, x(t))`. Their stationarity is not the same condition by definition: the variations of the first move the time co-ordinate as well. A general route is the identity `EL(γ)·γ̇ = 0` for a Lagrangian that is homogeneous of degree one in the velocity, which gives the time component of the Euler–Lagrange covector from the space components. For the free particle both conditions have an explicit form: the first holds if and only if the unit four-velocity `γ (1, v)` is constant, the second if and only if the velocity `v` is constant.
+
+**Interface decision.** `FreeParticle.free_stationary_graph_iff` is proved from `free_stationary_iff_fourVelocity_const` and `FreeParticle.stationary_iff_deriv_const`. No lemma on graphs or on homogeneous Lagrangians is added to the shared variational layer. The same route applies to a charged particle if both conditions are reduced to the equations with the Lorentz force. The statement is for three space dimensions, because the action of space-time is (SR01); the Lagrangian in the time of an observer and its Legendre transformation are stated for every `d`.
+
+**Proof status.** `free_stationary_iff_inertial`, `FreeParticle.stationary_iff_deriv_const`, `FreeParticle.isTrajectory_iff_legendre` and `FreeParticle.free_stationary_graph_iff` are proved. [Free motion](../ProjectAinos/SpecialRelativity/FreeMotion.lean) · [Legendre transformation](../ProjectAinos/SpecialRelativity/SpatialLegendre.lean)
+
+## SR08. A curve with corners is a list of pieces with matching endpoints
+
+**Observation.** `TimelikeSegment γ a b` asks that `γ` is `C¹` near every point of the closed interval, the two ends included. A curve with a corner at a time `s` satisfies this on neither side of `s`. `properTime γ a b` is an integral of `deriv γ`, whose value at a corner is zero by convention and does not affect the integral.
+
+**Interface decision.** The inequality for a curve with corners, `sum_properTime_le_properSpeed`, takes the pieces as separate curves `pieces i`, each a `TimelikeSegment` on `[s i, s (i + 1)]`, that agree with the curve at the times `s i`. Its left-hand side is the sum of the proper times of the pieces. It also returns that the total displacement is future causal, which the induction uses. The case of equality is stated for one piece.
+
+**Proof status.** `TimelikeSegment.properTime_le_properSpeed`, `TimelikeSegment.properTime_eq_properSpeed_iff` and `sum_properTime_le_properSpeed` are proved. [Maximal proper time](../ProjectAinos/SpecialRelativity/MaximalProperTime.lean)
+
+## SR09. The expansion in `1/c` uses two exact identities
+
+**Observation.** With `s = √(1 − x)`, `1 − x/2 − s = (1 − s)²/2` and `s (1 + x/2 + x²/2) − 1 = (1 − s)² (s² + s³/2 − 1)`. For `0 ≤ x ≤ 1/4` these give `0 ≤ 1 − x/2 − √(1 − x) ≤ x²/2` and `0 ≤ 1/√(1 − x) − 1 − x/2 ≤ x²/2` without a bound on a second derivative. The remainders of the energy and of the Lagrangian have a sign: the energy is at least `m c² + ½ m v²` for `m ≥ 0`.
+
+**Interface decision.** `Newtonian` has its own definitions with the parameter `c`, and no definition of the files with `c = 1` is changed. The hypotheses are `Σ vᵢ² ≤ V²`, `2V ≤ c` and `0 < c`, and the constants are `|m| V⁴/(2c²)`, `|m| V³/c²` and `V⁴/(2c⁴)`. The estimates are for functions of the velocity; no statement is made on the limit of a trajectory.
+
+**Proof status.** `Newtonian.sqrt_one_sub_bounds`, `Newtonian.inv_sqrt_one_sub_bounds`, `Newtonian.abs_energy_sub_le`, `Newtonian.abs_lagrangian_sub_le`, `Newtonian.abs_momentum_sub_le` and `Newtonian.abs_clockRate_sub_le` are proved. [Expansion](../ProjectAinos/SpecialRelativity/NewtonianExpansion.lean)

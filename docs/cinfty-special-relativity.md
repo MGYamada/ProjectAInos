@@ -64,20 +64,20 @@ completion.
 |---:|:---|:---|:---|
 | 1 | Finite signal speed | informal | Proved: the closed future cone is convex and orders the events (`futureCausal_convex`, `causallyPrecedes_refl`, `causallyPrecedes_trans`, `causallyPrecedes_antisymm`), and `orthochronousLorentzGroup` preserves it. Missing: the covariance of a propagation relation that is contained in the cone (F3). That signals propagate inside the cone is a physical premise |
 | 2 | Intervals | proved | `intervalSq`, `Timelike`, `Spacelike`, `Lightlike`, `Causal`, `LorentzGroup.preserves_interval`, `LorentzGroup.timelike_iff`, `LorentzGroup.spacelike_iff`, `LorentzGroup.lightlike_iff`, `PoincareGroup.preserves_interval`, `timelike_convention`. Scope: real Minkowski space with `d` space dimensions, both sign conventions |
-| 3 | Proper time | informal | Proved: `properTime`, `properTime_integrable`, `properTime_poincare`, `properTime_reparametrize`, `properTime_inertial`, `properTime_timeDilation`. Missing: the inertial clock has the greatest proper time, with the case of equality (SR-K4, F2) |
+| 3 | Proper time | proved | `properTime`, `properTime_integrable`, `properTime_poincare`, `properTime_reparametrize`, `properTime_inertial`, `properTime_timeDilation`, `TimelikeSegment.futureTimelike_displacement`, `TimelikeSegment.properTime_le_properSpeed`, `TimelikeSegment.properTime_eq_properSpeed_iff`, `sum_properTime_le_properSpeed`. Scope: `d` space dimensions; curves that are `C¹` near every point of a compact segment with a future timelike velocity, and finitely many such pieces with matching endpoints |
 | 4 | The Lorentz transformation | informal | Proved: `LorentzGroup`, `properLorentzGroup`, `orthochronousLorentzGroup`, `matrix_preserves_metric`, `matrix_det_eq_one_or_neg_one`, `boost`, `boost_time`, `boost_space`, `boost_future`, `boost_neg_inverse`, `boost_det`. Missing: the factorization into a boost and a rotation of the rest space (SR-K2, F3) |
 | 5 | Transformation of velocities | proved | `Velocity.observerEquiv`, `Velocity.transform`, `Velocity.norm_transform_lt_one`, `Velocity.transform_boost`, `transform_collinear`, `rapidity_add`, `composed_speed_lt_one`. Scope: the orthochronous group acts on the open ball of velocities; velocities that are not collinear are composed by this action, and collinear ones by the addition of rapidities |
 | 6 | Four-vectors | informal | Proved: `flat`, `sharp`, `flat_natural`, and the tensor operations of the [shared geometry](smooth-geometry.md). Missing: the universal C∞ cotangent module and its comparison with the cotangent bundle (SR-F2, F26) |
-| 7 | Four-dimensional velocity | informal | Proved: `fourVelocity_unit`, `fourVelocity_metric`, `properTime_null`. Missing: the acceleration is orthogonal to the velocity (F2); mass shells and the massless particle (SR-D5, SR-D6, F3) |
-| 8 | The principle of least action | informal | Proved: `freeAction`, `freeLagrangian_contDiffOn`, `free_momentum`, `free_stationary_iff`; the mass shell as a coisotropic ideal, and the reduced ring of its future sheet as the phase space of the initial data (SR-D8: `MassShell.isCoisotropic_shellIdeal`, `MassShell.normalizer_shellIdeal_le`, `MassShell.isPoissonHom_toShellCoordinates`, `MassShell.reductionHom_bijective`, `MassShell.isPoissonHom_reductionHom`, `MassShell.initialData_p_zero`; the future sheet for `(−+++)`). Missing: the stationary curves are the inertial motions, and the Hessian in the velocity (SR-D2, F2) |
-| 9 | Energy and momentum | informal | Proved: `kineticMomentum`, `kineticMomentum_eq`, `sharp_kineticMomentum`, `metric_smul_fourVelocity`; the Hamiltonian on all momenta with its equations, its integrals, its trajectories and its flow (SR-D7: `FreeParticle.hamiltonian`, `FreeParticle.isTrajectory_iff`, `FreeParticle.sum_sq_hamiltonianField_lt_one`, `FreeParticle.isIntegral_angularMomentum`, `FreeParticle.realCurve_eq_motion`, `FreeParticle.flowDomain_hamiltonianField`). Missing: the energy measured by an observer (SR-D3, F2), the Legendre transformation on the ball of velocities (SR-D4, F2), the shell (SR-D5, F3), the Newtonian expansion (SR-K5, F2) |
+| 7 | Four-dimensional velocity | informal | Proved: `fourVelocity_unit`, `fourVelocity_metric`, `properTime_null`, and the orthogonality of the acceleration to the velocity for a `C²` curve in three space dimensions (`pair_fourVelocity_deriv`). Missing: mass shells and the massless particle (SR-D5, SR-D6, F3) |
+| 8 | The principle of least action | proved | `freeAction`, `freeLagrangian_contDiffOn`, `free_momentum`, `free_stationary_iff`, `free_stationary_iff_fourVelocity_const`, `free_stationary_iff_inertial`, `hasFDerivAt_kineticMomentum`, `ker_velocityHessian`, `finrank_range_velocityHessian`; for the mass shell `MassShell.isCoisotropic_shellIdeal`, `MassShell.normalizer_shellIdeal_le`, `MassShell.isPoissonHom_toShellCoordinates`, `MassShell.reductionHom_bijective`, `MassShell.isPoissonHom_reductionHom`, `MassShell.initialData_p_zero`. Scope: the action in three space dimensions, `C²` curves with a timelike velocity on `[a, b]`, and `m ≠ 0` for the inertial motion; the mass shell in `d` dimensions, its future sheet and the reduction for `(−+++)` |
+| 9 | Energy and momentum | informal | Proved: `kineticMomentum`, `kineticMomentum_eq`, `sharp_kineticMomentum`, `metric_smul_fourVelocity`; the Hamiltonian on all momenta with its equations, its integrals, its trajectories and its flow (SR-D7: `FreeParticle.hamiltonian`, `FreeParticle.isTrajectory_iff`, `FreeParticle.sum_sq_hamiltonianField_lt_one`, `FreeParticle.isIntegral_angularMomentum`, `FreeParticle.realCurve_eq_motion`, `FreeParticle.flowDomain_hamiltonianField`); the energy and the momentum measured by an observer (SR-D3: `observerEnergy_pos`, `observerEnergy_sq`, `restForm_observerVelocity_lt_one`, `observerEnergy_transform`, `observerEnergy_change`); the Legendre transformation on the ball of velocities (SR-D4: `FreeParticle.velocityOfMomentum_legendre`, `FreeParticle.legendre_velocityOfMomentum`, `FreeParticle.energy_eq_relEnergy`, `FreeParticle.stationary_iff_deriv_const`, `FreeParticle.isTrajectory_iff_legendre`, `FreeParticle.free_stationary_graph_iff`); the expansion in `1/c` with uniform remainders (SR-K5: `Newtonian.abs_energy_sub_le`, `Newtonian.abs_lagrangian_sub_le`, `Newtonian.abs_momentum_sub_le`, `Newtonian.abs_clockRate_sub_le`). Missing: the shell as a manifold with the action of the Lorentz group (SR-D5, F3) |
 | 10 | Transformation of distribution functions | informal | Target: the invariant measure on the shell and the number flux (SR-M1, SR-M2, F4) |
 | 11 | Decay of particles | informal | Target: the invariant mass and the decay into two particles (SR-C1, SR-C2, F3) |
 | 12 | Invariant cross-section | informal | Conditional target: the phase space of two particles and the covariance of a cross-section for a given transition weight (SR-C4, F4). Special relativity does not supply the weight |
 | 13 | Elastic collisions of particles | informal | Target (SR-C3, F3) |
 | 14 | Angular momentum | informal | Proved: the Poincaré algebra of the orbital charges of one particle (SR-C6: `Poincare.canonical_lorentzCharge_p`, `Poincare.canonical_lorentzCharge_lorentzCharge`), its family in `1/c` with the relations of the Galilei algebra at `0` (`Poincare.canonical_boostCharge_p`, `Poincare.canonical_boostCharge_boostCharge`, `Poincare.inertia_zero`), and the classes of the charges in the reduced ring of the mass shell (`MassShell.initialData_lorentzCharge_zero_succ`, `MassShell.initialData_lorentzCharge_succ_succ`). Missing: the charges of a system of particles, their conservation and the centre of energy (SR-C5, F4); the comparison with the Noether boundary terms of the action (F4) |
 
-Count: 2 proved, 12 informal.
+Count: 4 proved, 10 informal.
 
 Closed with a stated remainder: none.
 
@@ -412,6 +412,10 @@ by `Δ`; use continuity for the equality case. Piecewise C¹ curves follow
 by finite subdivision with matching endpoints. No assertion compares clocks
 whose endpoints or admissibility conditions differ.
 
+*Status.* Proved in
+[`SpecialRelativity/MaximalProperTime.lean`](../ProjectAinos/SpecialRelativity/MaximalProperTime.lean).
+The case of equality is stated for a single `C¹` piece.
+
 ### Restoring the light-speed parameter
 
 The baseline APIs use `c=1`. A dimensional comparison should explicitly use
@@ -424,6 +428,12 @@ prove uniform Taylor remainder estimates for `γ(v/c)`, clock rates and the
 free-particle energy on `‖v‖≤V`. State constants in terms of `m` and `V`.
 The limit of a trajectory requires a separate stability argument; estimates
 for a Lagrangian or momentum function alone do not prove trajectory convergence.
+
+*Status.* Proved in
+[`SpecialRelativity/NewtonianExpansion.lean`](../ProjectAinos/SpecialRelativity/NewtonianExpansion.lean)
+for the energy, the Lagrangian, the momentum and the rate of a clock, with
+the constants `|m| V⁴/(2c²)`, `|m| V³/c²` and `V⁴/(2c⁴)`. The limit of a
+trajectory is not stated.
 
 ## Relativistic particle dynamics
 
@@ -459,6 +469,10 @@ Legendre transform on all spacetime velocities is therefore inappropriate.
 The existing curved particle variation theorems provide an independent
 Minkowski specialization; SR must not import GR to obtain its basic result.
 
+*Status.* Proved in
+[`SpecialRelativity/FreeMotion.lean`](../ProjectAinos/SpecialRelativity/FreeMotion.lean)
+for `m ≠ 0`, in three space dimensions.
+
 The physical selection of the length action remains a premise. A possible
 uniqueness theorem assumes locality, dependence only on velocity, Lorentz
 invariance and positive one-homogeneity on a connected timelike cone. These
@@ -482,6 +496,11 @@ rest-space metric. Jointly transforming the observer and particle leaves
 energy unchanged. Changing only the observer gives the familiar energy and
 momentum transformation formulas.
 
+*Status.* Proved in
+[`SpecialRelativity/ObserverEnergy.lean`](../ProjectAinos/SpecialRelativity/ObserverEnergy.lean).
+The change of the observer is stated for the energy,
+`E' = γ E − ⟨γ w, p⊥⟩`.
+
 **Target SR-D4 [A*,B].** Fix an inertial observer and use its time as the
 parameter. For `m>0`, the spatial Lagrangian has an invertible fibre derivative:
 
@@ -503,6 +522,13 @@ $$
 
 The `O(c⁻²)` statement uses the uniform compact-velocity contract SR-K5.
 Subtracting the constant rest energy preserves Hamilton's equations.
+
+*Status.* Proved in
+[`SpecialRelativity/SpatialLegendre.lean`](../ProjectAinos/SpecialRelativity/SpatialLegendre.lean)
+for `m > 0`: the two maps are inverse to each other, the energy is
+`√(m² + Σ pᵢ²)`, Lagrange's and Hamilton's equations correspond, and in three
+space dimensions the action of space-time is stationary on a graph if and
+only if this action is stationary on the curve.
 
 **Target SR-D7 [A].** For `m > 0` the function `√(m² + ‖p‖²)` is smooth on
 all momenta, so `H` is an element of the canonical phase space

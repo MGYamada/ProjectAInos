@@ -407,6 +407,7 @@ public import ProjectAinos.SmoothGeometry.Minkowski.Matrix
 public import ProjectAinos.SmoothGeometry.Minkowski.Observer
 public import ProjectAinos.SmoothGeometry.Minkowski.Reflection
 public import ProjectAinos.SmoothGeometry.Minkowski.ReflectionDeterminant
+public import ProjectAinos.SmoothGeometry.Minkowski.ReverseCauchySchwarz
 public import ProjectAinos.SmoothGeometry.Minkowski.TwoForm
 public import ProjectAinos.SmoothGeometry.ODE.Averaging
 public import ProjectAinos.SmoothGeometry.ODE.CommutingFlows
@@ -470,13 +471,18 @@ public import ProjectAinos.SmoothGeometry.Tensor.Tensoriality
 public import ProjectAinos.SpecialRelativity.Boost
 public import ProjectAinos.SpecialRelativity.Examples
 public import ProjectAinos.SpecialRelativity.FormExamples
+public import ProjectAinos.SpecialRelativity.FreeMotion
 public import ProjectAinos.SpecialRelativity.Hamiltonian
 public import ProjectAinos.SpecialRelativity.MassShellReduction
+public import ProjectAinos.SpecialRelativity.MaximalProperTime
+public import ProjectAinos.SpecialRelativity.NewtonianExpansion
+public import ProjectAinos.SpecialRelativity.ObserverEnergy
 public import ProjectAinos.SpecialRelativity.ParticleAction
 public import ProjectAinos.SpecialRelativity.PoincareAlgebra
 public import ProjectAinos.SpecialRelativity.ProperTime
 public import ProjectAinos.SpecialRelativity.Rapidity
 public import ProjectAinos.SpecialRelativity.Spacetime
+public import ProjectAinos.SpecialRelativity.SpatialLegendre
 public import ProjectAinos.SpecialRelativity.Velocity
 public import ProjectAinos.Thermodynamics.AdiabatUniqueness
 public import ProjectAinos.Thermodynamics.AtomicObstruction
