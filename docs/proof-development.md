@@ -622,6 +622,23 @@ natural for smooth maps. The ledger rows of §§16, 18, 24 and 25 are *proved*
 in their stated scopes (10 of 66).
 [Guide](electrodynamics.md#a-charge-in-a-given-field-1525)
 
+## Jet rings of fields
+
+The algebra of local Lagrangians of fields is a C∞-ring with co-ordinates
+`x_μ` and `uᵃ_K`, where the multi-index `K` is a multiset of independent
+variables. The total derivatives `D_μ` are vector fields of this ring; they
+commute, which is proved from `μ + ν + K = ν + μ + K`, so `D^K` and the Euler
+operators `Eₐ = Σ_K (−1)^{|K|} D^K ∂ᵃ_K` are defined. A total derivative is a
+null Lagrangian, `Eₐ(D_μ F) = 0`. For a Lagrangian of the first order
+Noether's identity `pr ξ(L) = Σₐ ξᵃ Eₐ(L) + Σ_μ D_μ (Σₐ ξᵃ π^μ_a)` holds for
+every variation, and the canonical stress tensor has the divergence
+`−Σₐ uᵃ_ν Eₐ(L) − ∂_ν L`; hence the current of a symmetry and, for a
+Lagrangian without explicit dependence on `x`, the stress tensor are conserved
+modulo the Euler–Lagrange ideal. The free C∞-ring on the co-ordinates is the
+standard model, and the prolongation of a smooth field carries `D_μ` to
+`∂_μ`. These are identities of the ring, without integrals; no ledger row is
+promoted. [Guide](variational.md#jet-rings-of-fields)
+
 ## Shared Variational Foundation
 
 The electrodynamics development adds compact localization for C² Lagrangians

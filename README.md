@@ -177,6 +177,11 @@ of the four cases of the invariants `B² − E²` and `E · B`. The components o
 manifold the field of a potential is closed, gauge invariant and natural.
 [Guide](docs/electrodynamics.md#a-charge-in-a-given-field-1525)
 
+The local Lagrangians of fields form a jet ring with commuting total
+derivatives. In it a divergence is a null Lagrangian, and Noether's identity
+and the conservation of the canonical stress tensor hold for a Lagrangian of
+the first order. [Guide](docs/variational.md#jet-rings-of-fields)
+
 Topic 6 follows the provisional Boltzmannian typicality plan in
 [issue #55](https://github.com/MGYamada/ProjectAinos/issues/55). Its guiding references are
 
