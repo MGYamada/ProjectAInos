@@ -81,6 +81,20 @@ theorem kineticMomentum_eq (m : ℝ) (v : Spacetime) :
   simp [kineticMomentum, fourVelocity, flat_apply, metric_eq]
   ring
 
+/-- Raising the index of the kinetic momentum gives `m` times the unit four-velocity. -/
+theorem sharp_kineticMomentum (m : ℝ) (v : Spacetime) :
+    sharp .timeNegative (kineticMomentum m v) = m • fourVelocity v := by
+  rw [kineticMomentum, map_smul]
+  exact congrArg (fun w : Spacetime => m • w)
+    ((flat .timeNegative).symm_apply_apply (fourVelocity v))
+
+/-- The momentum `m U` of a timelike velocity is on the mass shell: `g(mU, mU) = −m²`. -/
+theorem metric_smul_fourVelocity (m : ℝ) {v : Spacetime} (hv : Timelike v) :
+    minkowskiForm .timeNegative 3 (m • fourVelocity v) (m • fourVelocity v) = -m ^ 2 := by
+  rw [map_smul, map_smul, smul_apply, fourVelocity_metric hv]
+  simp only [smul_eq_mul]
+  ring
+
 theorem hasFDerivAt_freeLagrangian (m : ℝ) {z : Spacetime × Spacetime}
     (hz : Timelike z.2) (t : ℝ) :
     HasFDerivAt (freeLagrangian m t)

@@ -259,7 +259,10 @@ public import ProjectAinos.SmoothAlgebra.Poisson.Canonical
 public import ProjectAinos.SmoothAlgebra.Poisson.Free
 public import ProjectAinos.SmoothAlgebra.Poisson.Hom
 public import ProjectAinos.SmoothAlgebra.Poisson.Ideal
+public import ProjectAinos.SmoothAlgebra.Poisson.LinearMomentum
+public import ProjectAinos.SmoothAlgebra.Poisson.OrbitalCharge
 public import ProjectAinos.SmoothAlgebra.Poisson.Reduction
+public import ProjectAinos.SmoothAlgebra.RelEnergy
 public import ProjectAinos.SmoothAlgebra.SmoothFunctions
 public import ProjectAinos.SmoothGeometry.AffineScheme
 public import ProjectAinos.SmoothGeometry.DifferentialForm.BivectorVolume
@@ -467,7 +470,10 @@ public import ProjectAinos.SmoothGeometry.Tensor.Tensoriality
 public import ProjectAinos.SpecialRelativity.Boost
 public import ProjectAinos.SpecialRelativity.Examples
 public import ProjectAinos.SpecialRelativity.FormExamples
+public import ProjectAinos.SpecialRelativity.Hamiltonian
+public import ProjectAinos.SpecialRelativity.MassShellReduction
 public import ProjectAinos.SpecialRelativity.ParticleAction
+public import ProjectAinos.SpecialRelativity.PoincareAlgebra
 public import ProjectAinos.SpecialRelativity.ProperTime
 public import ProjectAinos.SpecialRelativity.Rapidity
 public import ProjectAinos.SpecialRelativity.Spacetime

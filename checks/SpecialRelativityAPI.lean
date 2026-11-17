@@ -132,3 +132,46 @@ example (σ : LorentzConvention) (o : SpacetimeOrientation) (u : Observer 3) (F 
 example : properTime
     (fun t : ℝ => (0 : MinkowskiModel 1) + t • vector 1 Examples.beta.val) 0 1 = 4/5 :=
   Examples.time_dilation
+
+/-! The action of a free massive particle. -/
+
+example (m : ℝ) :
+    ContDiffOn ℝ 2 (Function.uncurry (freeLagrangian m)) timelikeJets :=
+  freeLagrangian_contDiffOn m
+
+example : IsOpen timelikeJets := isOpen_timelikeJets
+
+example (m : ℝ) (γ : ℝ → Spacetime) (a b : ℝ) :
+    freeAction m γ a b = Mechanics.action a b (freeLagrangian m) γ :=
+  freeAction_eq_action m γ a b
+
+example (m : ℝ) (v : Spacetime) :
+    kineticMomentum m v = (-m * (properSpeed v)⁻¹) • pair v :=
+  kineticMomentum_eq m v
+
+example (m : ℝ) (v : Spacetime) :
+    sharp .timeNegative (kineticMomentum m v) = m • fourVelocity v :=
+  sharp_kineticMomentum m v
+
+example (m : ℝ) {v : Spacetime} (hv : Timelike v) :
+    minkowskiForm .timeNegative 3 (m • fourVelocity v) (m • fourVelocity v) = -m ^ 2 :=
+  metric_smul_fourVelocity m hv
+
+example (m : ℝ) {z : Spacetime × Spacetime} (hz : Timelike z.2) (t : ℝ) :
+    HasFDerivAt (freeLagrangian m t)
+      ((kineticMomentum m z.2).comp (ContinuousLinearMap.snd ℝ Spacetime Spacetime)) z :=
+  hasFDerivAt_freeLagrangian m hz t
+
+example (m : ℝ) {γ : ℝ → Spacetime} {t : ℝ} (hv : Timelike (deriv γ t)) :
+    Mechanics.force (freeLagrangian m) γ t = 0 :=
+  free_force m hv
+
+example (m : ℝ) {γ : ℝ → Spacetime} {t : ℝ} (hv : Timelike (deriv γ t)) :
+    Mechanics.momentum (freeLagrangian m) γ t = kineticMomentum m (deriv γ t) :=
+  free_momentum m hv
+
+example (m : ℝ) {γ : ℝ → Spacetime} {a b : ℝ} (hab : a < b) (hγ : ContDiff ℝ 2 γ)
+    (hv : ∀ t ∈ Set.Icc a b, Timelike (deriv γ t)) :
+    Mechanics.Stationary a b (freeLagrangian m) γ ↔
+      ∀ t ∈ Set.Ioo a b, Mechanics.eulerLagrange (freeLagrangian m) γ t = 0 :=
+  free_stationary_iff m hab hγ hv

@@ -480,6 +480,28 @@ records the API, scope, and verification commands for
 [issue #40](https://github.com/MGYamada/ProjectAinos/issues/40), the shared
 prerequisite of [issue #8](https://github.com/MGYamada/ProjectAinos/issues/8).
 
+The algebraic layer of relativistic particle mechanics is the first wave of
+[issue #135](https://github.com/MGYamada/ProjectAinos/issues/135) for special
+relativity. The energy `√(m² + Σ pᵢ²)` is an operation of the momenta in every
+C∞-ring, and its statements follow from `E² = m² + Σ pᵢ²`, `E E⁻¹ = 1` and
+`D E = E⁻¹ Σ pᵢ D pᵢ`. On the canonical phase space the coordinate-time
+Hamiltonian has the equations `q̇ = p/H`, `ṗ = 0`, a speed less than one at
+every point, the momentum and the angular momentum as integrals, the
+trajectories `q₀ + t p₀/H`, and a flow defined for all times. The orbital
+charges `x_μ p_ν − x_ν p_μ` of a symmetric matrix satisfy the brackets of the
+affine isometries, which for the Minkowski metric is the Poincaré algebra;
+with `ε = 1/c` the charges of the initial data form a family whose member at
+`ε = 0` has the relations of the Galilei algebra with the mass as its central
+term. The mass shell is a coisotropic ideal with the momenta and the Lorentz
+charges in its normalizer, and for `(−+++)` the reduced ring of its future
+sheet `p₀ + E` is the phase space of the initial data, with `−H`, `H qᵢ` and
+`qᵢ pⱼ − qⱼ pᵢ` as the classes of `p₀`, `J₀ᵢ` and `Jᵢⱼ`. The ledger rows of
+§§8, 9 and 14 name these results and stay *informal*: the comparison with the
+action, the Legendre transformation and the charges of a system of particles
+are not proved. [Guide](special-relativity.md#relativistic-particle-mechanics-the-algebraic-layer) ·
+[Notes](special-relativity-notes.md) ·
+[Ledger](cinfty-special-relativity.md#ledger)
+
 ## Shared Variational Foundation
 
 The electrodynamics development adds compact localization for C² Lagrangians
