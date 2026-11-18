@@ -1835,6 +1835,14 @@ of a field of coefficients with its native reading, and computes the divergence 
 the stress of a scalar field; `Lorentzian/CoordinateScalarField.lean` varies the
 scalar field on a fixed metric and proves that its action is stationary exactly when
 the Klein–Gordon equation holds.
+`Lorentzian/CoordinatePotential.lean` varies a field of covectors on a fixed metric:
+its relative action with a prescribed current is exactly quadratic in the variation,
+and it is stationary exactly when `∂_a(√|g| F^{ab}) = √|g| j^b`, the native equation
+`∇_a F^{ab} = j^b` of `LorentzMetric.twoFormDivergence`.
+`Lorentzian/CoordinateTangent.lean` reads tangent fields on an open set of the model
+space in co-ordinates: the trivialization of its tangent bundle is the identity, a
+tangent field along a map is as regular as its co-ordinates, and the native velocities
+of curves and families are the derivatives of the co-ordinates.
 
 ## Scope and next stages
 

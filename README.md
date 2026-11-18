@@ -176,6 +176,10 @@ of the four cases of the invariants `B² − E²` and `E · B`. The components o
 `E` and `B` for a moving observer are derived from the boost, and on a
 manifold the field of a potential is closed, gauge invariant and natural.
 [Guide](docs/electrodynamics.md#a-charge-in-a-given-field-1525)
+On a curved background the action of a charge is stationary exactly when
+`m ∇_τ U = −e (ι_U F)^♯`, and the action of the field with a prescribed current
+exactly when `dH = J`; at the Minkowski metric both are the flat actions.
+[Guide](docs/electrodynamics.md#the-field-and-a-charge-on-a-curved-background-17-27-90)
 
 The local Lagrangians of fields form a jet ring with commuting total
 derivatives. In it a divergence is a null Lagrangian, and Noether's identity
@@ -224,6 +228,10 @@ their source is then conserved. On a fixed background the scalar field obeys the
 Klein–Gordon equation exactly when its action is stationary, and then its stress is
 conserved without the Einstein equations.
 [Guide](docs/general-relativity.md#matter-and-the-einstein-equations-94-95)
+On a fixed background given by coefficients on an open set, the Maxwell equations
+`∇_a F^{ab} = j^b` follow from the action of the field, and the covariant Lorentz force
+from the action of a charge, with the flat theorems as the Minkowski case.
+[Guide](docs/general-relativity.md#the-field-and-a-charge-on-a-fixed-background-90)
 
 Topic 6 follows the provisional Boltzmannian typicality plan in
 [issue #55](https://github.com/MGYamada/ProjectAinos/issues/55). Its guiding references are

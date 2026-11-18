@@ -461,6 +461,31 @@ Maxwell with its current, the total stress is conserved
 field is an instance (`total_stress_conserved_uniform`). The [notes](electrodynamics-notes.md) ED12–ED13
 record the decisions.
 
+## The field and a charge on a curved background (§§17, 27, 90)
+
+**The field (E13, §§27, 90).** For a metric given by coefficients on an open set `U`
+of the model space, the action `∫ (−¼ F_{ab} F^{ab} − A_b j^b) √|g|` of a smooth
+potential with a prescribed continuous current is stationary under every smooth
+variation with compact support in `U` if and only if the native field `F` with the
+components `∂_a A_b − ∂_b A_a` satisfies `dH = J`
+(`Curved.potentialStationary_iff_sourced`), and with `dF = 0` the system
+`Curved.Maxwell` (`Curved.maxwell_iff_potentialStationary`). With the coupling
+`+A_b k^b` of a matter current the source is `−k`
+(`Curved.potentialStationary_matter_iff`), the sign of §28. At the Minkowski metric the
+density is the flat density `−¼ F_{ab} F^{ab} − A(j)` of `SourcedAction.lagrangian` with
+the current form `ι_j vol` (`vacuumDensity_eq`, `potentialDensity_minkowski`), so the
+relative actions agree (`potentialAction_minkowski`): the coefficient of `F ∧ ⋆F` is the
+induced pairing (`coefficient_wedge_star`), in the time-first orientation and with
+`√|g| = 1`.
+
+**A charge (E10, §§17, 90).** On a Lorentz metric on `U` with a `C¹` potential, the
+action of a charge is stationary under every fixed-endpoint family of curves if and
+only if `m ∇_τ U = −e (ι_U F)^♯` (`GeneralRelativity.chargedStationary_iff`), and for
+the Minkowski coordinate metric and a flat potential this stationarity is that of
+`stationary_iff_lorentzForce` (`GeneralRelativity.chargedStationary_minkowski_iff`).
+The [general relativity guide](general-relativity.md#the-field-and-a-charge-on-a-fixed-background-90)
+has the proofs, and the [notes](electrodynamics-notes.md) ED16 records the decisions.
+
 ## Proof and API map
 
 All names below are under `ProjectAinos`, except imported `YM` names.
@@ -493,6 +518,8 @@ All names below are under `ProjectAinos`, except imported `YM` names.
 | Energy and momentum in an inertial frame | `poynting_local`, `momentum_local`, `box_divergence`, `energy_balance`, `momentum_balance` | [EnergyMomentum](../ProjectAinos/Electrodynamics/EnergyMomentum.lean) |
 | Stress tensor | `stressForm_symm`, `stressForm_trace`, `stressForm_observer`, `divergence_raisedStress_zero`, `divergence_raisedStress_succ` | [StressTensor](../ProjectAinos/Electrodynamics/StressTensor.lean) |
 | Charged dust | `ChargedDust.divergence_matterStress`, `total_stress_conserved` | [ChargedDust](../ProjectAinos/Electrodynamics/ChargedDust.lean) |
+| Field action on a curved background | `Curved.potentialStationary_iff_sourced`, `maxwell_iff_potentialStationary`, `potentialStationary_matter_iff`, `potentialDensity_minkowski`, `potentialAction_minkowski` | [CurvedAction](../ProjectAinos/Electrodynamics/CurvedAction.lean) |
+| A charge on a curved background | `GeneralRelativity.chargedStationary_iff`, `chargedStationary_gauge_iff`, `chargedStationary_minkowski_iff` | [ChargedMotion](../ProjectAinos/GeneralRelativity/ChargedMotion.lean), [FlatChargedMotion](../ProjectAinos/GeneralRelativity/FlatChargedMotion.lean) |
 | Nonzero regression examples | `Examples.hyperbola_stationary`; `Polynomial.constantJet_reconstruction`, `linearJet_reconstruction` | [Examples](../ProjectAinos/Electrodynamics/Examples.lean), [PolynomialExamples](../ProjectAinos/Electrodynamics/PolynomialExamples.lean) |
 
 ## Verification and review
