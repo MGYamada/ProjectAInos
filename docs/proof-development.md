@@ -807,8 +807,9 @@ The superpotential `h^{ikl} = ∂_m (|g| (g^{ik} g^{lm} − g^{il} g^{km}))` is 
 coefficients vanish, `∂_l h^{ikl} = 2 |g| G^{ik}`, an identity of the second derivatives of the
 metric. The pseudotensor defined by `2 |g| (G^{ik} + t^{ik}) = ∂_l h^{ikl}` vanishes at such a
 point and is symmetric, and with the Einstein equations the total energy and momentum density
-is conserved in the ordinary sense. The ledger row of §96 stays *informal*: its expression by
-the Christoffel symbols (96.9) and the charges at infinity are not stated.
+is conserved in the ordinary sense. At every point the pseudotensor is half the braces of
+(96.9) in the Christoffel symbols. The ledger row of §96 stays *informal* and is closed with a
+stated remainder: the energy and momentum as integrals over a hypersurface are not stated.
 [Guide](general-relativity.md#the-energy-momentum-pseudotensor-96)
 
 ## Shared Variational Foundation

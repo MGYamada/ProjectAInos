@@ -240,8 +240,9 @@ split into the constraints and the evolution of the spatial metric; de Sitter sp
 flat slicing has `Ric = 3 g`.
 [Guide](docs/general-relativity.md#the-synchronous-reference-system-97)
 The superpotential of Landau and Lifshitz gives a pseudotensor that vanishes where the first
-derivatives of the metric vanish, and with the Einstein equations the total energy and momentum
-density is conserved in the ordinary sense.
+derivatives of the metric vanish and is the expression (96.9) in the Christoffel symbols, and
+with the Einstein equations the total energy and momentum density is conserved in the ordinary
+sense.
 [Guide](docs/general-relativity.md#the-energy-momentum-pseudotensor-96)
 
 Topic 6 follows the provisional Boltzmannian typicality plan in

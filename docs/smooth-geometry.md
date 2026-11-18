@@ -1867,6 +1867,9 @@ geometry of the slices. The physics is in the
 derivatives of a metric at a point where its first derivatives vanish, and
 `Lorentzian/Pseudotensor.lean` defines the superpotential `h^{ikl}` and the pseudotensor of a
 coordinate metric and proves `∂_k ∂_l h^{ikl} = 0` and `∂_l h^{ikl} = 2 |g| G^{ik}` at such a
+point. `Lorentzian/PseudotensorQuadratic.lean` proves the identities of arrays behind the
+expression (96.9), and `Lorentzian/PseudotensorChristoffel.lean` writes the superpotential, the
+derivative of the Christoffel symbols and the pseudotensor in the Christoffel symbols at every
 point. The physics is in the
 [general relativity guide](general-relativity.md#the-energy-momentum-pseudotensor-96).
 
