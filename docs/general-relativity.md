@@ -781,7 +781,8 @@ metric `e^{2z} η` is not a vacuum solution (`conformal_not_isStationary_vacuum`
 **Scope.** As in §93, the metric is given by coefficients on an open set of the
 model space. Conservation is derived from the Einstein equations; its derivation
 from the equations of the matter fields alone, through the invariance under
-diffeomorphisms, is not stated.
+diffeomorphisms, is not stated, and the ledger row of §94 stays *informal* until it
+is. The row of §95 is *proved* in this scope.
 
 | Result | Declarations | Source |
 | --- | --- | --- |
