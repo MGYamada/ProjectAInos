@@ -415,6 +415,8 @@ public import ProjectAinos.SmoothGeometry.Lorentzian.ParallelTransport
 public import ProjectAinos.SmoothGeometry.Lorentzian.ParallelUniqueness
 public import ProjectAinos.SmoothGeometry.Lorentzian.PathExamples
 public import ProjectAinos.SmoothGeometry.Lorentzian.PiecewisePath
+public import ProjectAinos.SmoothGeometry.Lorentzian.Pseudotensor
+public import ProjectAinos.SmoothGeometry.Lorentzian.PseudotensorAlgebra
 public import ProjectAinos.SmoothGeometry.Lorentzian.Pullback
 public import ProjectAinos.SmoothGeometry.Lorentzian.PullbackExamples
 public import ProjectAinos.SmoothGeometry.Lorentzian.RadialFrame

@@ -963,3 +963,41 @@ in a finite time, is planned with the equation of Raychaudhuri (F25).
 
 The typed examples are in `checks/SynchronousAPI.lean`. The decisions are recorded in
 [GR17](general-relativity-notes.md).
+
+## The energy-momentum pseudotensor (§96)
+
+**The superpotential.** For a metric given by coefficients on an open set `U`,
+`CoordinateMetric.superpotentialDensity` is `λ^{iklm} = |g| (g^{ik} g^{lm} − g^{il} g^{km})`
+with `|g| = (√|det g|)²`, and `superpotential` is `h^{ikl} = ∂_m λ^{iklm}`. It is antisymmetric
+in `k, l` (`superpotential_antisymm`), so `∂_k ∂_l h^{ikl} = 0` on `U` by the symmetry of
+second derivatives (`divergence_divergence_superpotential`).
+
+**The identity (96.5).** At a point where the first derivatives of the coefficients vanish,
+the Christoffel symbols and the first derivatives of `g^{ik}` and `√|g|` vanish, and every
+second derivative is linear in `S_{ab,cd} = ∂_c ∂_d g_{ab}` (`secondDerivative`):
+`∂_m Γ^k_{ij} = ½ g^{kl}(S_{jl,mi} + S_{li,mj} − S_{ij,ml})`
+(`fderiv_christoffel_of_critical`), `∂_l ∂_m g^{bc} = −g^{ba} g^{ce} S_{ae,lm}`
+(`fderiv_fderiv_coefficient_inv`), `∂_l ∂_m √|g| = ½ √|g| g^{ce} S_{ce,lm}`
+(`fderiv_fderiv_densityOf`) and the Ricci tensor (`ricciOf_of_critical`). The product rule
+at such a point keeps only `(∂∂u) v + u (∂∂v)` (`fderiv_fderiv_mul_of_critical`). The identity
+`∂_l h^{ikl} = 2 |g| G^{ik}` (`divergence_superpotential_eq`) then reduces to an identity of
+arrays (`pseudotensor_algebra`), whose four-fold sums match after reindexing with the
+symmetries of `S` and `g`.
+
+**The pseudotensor.** `pseudotensor` is `t^{ik}` defined by
+`2 |g| (G^{ik} + t^{ik}) = ∂_l h^{ikl}`, with the raised Einstein tensor `raisedEinstein`. It
+vanishes at a point where the first derivatives vanish (`pseudotensor_eq_zero`) and is
+symmetric (`pseudotensor_symm`); with the Einstein equations `G^{ik} = κ T^{ik}` on `U` the total
+`|g| (κ T^{ik} + t^{ik})` has zero ordinary divergence (`divergence_total_eq_zero`). The
+pseudotensor depends on the co-ordinates; it is not a tensor.
+
+**Scope.** The expression (96.9) of `t^{ik}` by the Christoffel symbols, and the energy and
+momentum as integrals over a spacelike hypersurface, are not stated.
+
+| Result | Declarations | Source |
+| --- | --- | --- |
+| Identities of arrays | `pseudotensor_algebra`, `inverse_second_algebra`, `density_second_algebra`, `ricci_algebra` | [PseudotensorAlgebra](../ProjectAinos/SmoothGeometry/Lorentzian/PseudotensorAlgebra.lean) |
+| Superpotential and pseudotensor | `fderiv_fderiv_mul_of_critical`, `fderiv_mul_of_critical`, `fderiv_fderiv_sub`, `CoordinateMetric.superpotentialDensity`, `superpotential`, `raisedEinstein`, `pseudotensor`, `superpotential_antisymm`, `divergence_divergence_superpotential`, `secondDerivative`, `fderiv_christoffel_of_critical`, `fderiv_fderiv_coefficient_inv`, `fderiv_fderiv_densityOf`, `ricciOf_of_critical`, `divergence_superpotential_eq`, `pseudotensor_eq_zero`, `divergence_superpotential_symm`, `pseudotensor_symm`, `divergence_total_eq_zero` | [Pseudotensor](../ProjectAinos/SmoothGeometry/Lorentzian/Pseudotensor.lean) |
+
+The typed examples are in `checks/PseudotensorAPI.lean`. The decisions are recorded in
+[GR18](general-relativity-notes.md).

@@ -1861,6 +1861,15 @@ time lines, and the Ricci tensor in terms of the rate `κ` of the spatial metric
 geometry of the slices. The physics is in the
 [general relativity guide](general-relativity.md#the-synchronous-reference-system-97).
 
+## The superpotential of Landau and Lifshitz
+
+`Lorentzian/PseudotensorAlgebra.lean` proves the identities of arrays behind the second
+derivatives of a metric at a point where its first derivatives vanish, and
+`Lorentzian/Pseudotensor.lean` defines the superpotential `h^{ikl}` and the pseudotensor of a
+coordinate metric and proves `∂_k ∂_l h^{ikl} = 0` and `∂_l h^{ikl} = 2 |g| G^{ik}` at such a
+point. The physics is in the
+[general relativity guide](general-relativity.md#the-energy-momentum-pseudotensor-96).
+
 ## Scope and next stages
 
 These definitions impose neither finite generation nor global Hausdorffness
