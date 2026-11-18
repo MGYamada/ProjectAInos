@@ -616,8 +616,9 @@ Stage C's proof endpoints are implemented and merged into `main`.
 Typed API examples fix the chart formula/overlap hypotheses, all metric
 symmetries, Ricci symmetry, conformal signature construction and curved
 example conclusions. Exact experiments independently check these examples
-and nonzero curvature covariance under the shear. Differential and
-contracted Bianchi are explicitly deferred to 5.2.
+and nonzero curvature covariance under the shear. The differential and
+contracted Bianchi identities were deferred to 5.2; they are proved in F10
+([below](#the-covariant-derivative-of-the-curvature-and-the-einstein-tensor)).
 
 The completed stage C increment passes the warning-free full Lean build
 (9,265 jobs), root-import check, all six API checks and the transitive audit
@@ -1771,6 +1772,25 @@ convex set of parameters, and gives the red shift `N ω = const` for the
 observers that move along a timelike Killing field; a co-ordinate field `∂_k` is
 a Killing field where the metric does not change along it. The physical
 measurements are in the [general relativity guide](general-relativity.md#observers-killing-fields-and-rotation-82-84-88-89).
+
+## The covariant derivative of the curvature and the Einstein tensor
+
+`Tensor/TrilinearTensoriality.lean` builds a continuous trilinear map from an
+operation that is tensorial in three slots (`ContMDiffTensorialAt.mkHom₃`), and
+`Tensor/TrilinearDerivative.lean` differentiates a smooth field of tangent-valued
+trilinear maps for any connection on the tangent bundle, with the direction last
+(`trilinearCovariantDerivative`). `Lorentzian/CurvatureDerivative.lean` applies
+it to the curvature, gives the chart formula of `∇_m R^l_{ijk}`, and proves the
+second Bianchi identity with the co-ordinate fields of a chart as a frame.
+`Lorentzian/InertialDerivatives.lean` gives the contraction, the Ricci tensor and
+the scalar curvature in a chart, with the inverse metric `dx^i(♯dx^j)` as a
+function of the point, and the derivatives at the centre of an inertial chart.
+`Lorentzian/Einstein.lean` defines the divergence of a covariant two-tensor, proves
+the contracted identity `∇^a Ric_{ab} = ½ ∂_b R`, and defines the Einstein tensor
+with its vanishing divergence. `Lorentzian/CoordinateConnection.lean` reads the
+connection of a coordinate metric off the Koszul formula, and
+`Lorentzian/ExponentialConformalExample.lean` is the four-dimensional regression.
+The statements are in the [general relativity guide](general-relativity.md#the-derivative-of-the-curvature-the-bianchi-identities-and-the-einstein-tensor-85-92).
 
 ## Scope and next stages
 

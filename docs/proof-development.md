@@ -25,7 +25,7 @@ ledger with one status for each section, a count line and the list of rows close
 with a remainder, in the vocabulary of the mechanics ledger:
 [special relativity](cinfty-special-relativity.md#ledger) (12 of 14 rows proved),
 [electrodynamics](cinfty-electrodynamics.md#ledger) (18 of 66) and
-[general relativity](cinfty-general-relativity.md#ledger) (9 of 39). The baseline
+[general relativity](cinfty-general-relativity.md#ledger) (10 of 39). The baseline
 counts a row as proved only when its whole target is proved; a row with a proved
 core names the core and stays *informal*. Observations are recorded in the notes
 of [special relativity](special-relativity-notes.md),
@@ -700,6 +700,22 @@ clocks `√(1 − Ω²ρ²)`, the circumference `2πρ/√(1 − Ω²ρ²)` and 
 synchronization gap `2πΩρ²/(1 − Ω²ρ²)`. The ledger rows of §§82, 84, 88 and 89
 are *proved* in their stated scopes (9 of 39).
 [Guide](general-relativity.md#observers-killing-fields-and-rotation-82-84-88-89)
+
+## The Bianchi identities and the Einstein tensor
+
+The covariant derivative of a tangent-valued trilinear tensor is defined for any
+connection on the tangent bundle, and its value on the curvature of a Lorentz
+metric is `(∇_u R)(v, w)z`, with its chart formula. For every smooth Lorentz
+metric, in either convention and every dimension, the second Bianchi identity
+holds on any tangent vectors, the contracted identity `∇^a Ric_{ab} = ½ ∂_b R`
+holds, and the Einstein tensor `Ric − (R/2) g` is symmetric, smooth and
+divergence-free. The metric `e^{2z}(−dt² + dx² + dy² + dz²)` on `ℝ⁴` has
+`∇R ≠ 0` and a nonzero Einstein tensor, so the identities are not empty there.
+The ledger row of §92 is *proved* in its stated scope (10 of 39), and the row of
+§85 is closed with a stated remainder: covectors, contravariant and mixed tensors
+and the general tensor shapes have no derivative, because the pinned Mathlib
+induces no connection on dual or hom bundles.
+[Guide](general-relativity.md#the-derivative-of-the-curvature-the-bianchi-identities-and-the-einstein-tensor-85-92)
 
 ## Shared Variational Foundation
 

@@ -167,6 +167,34 @@ hypothesis.
 sets the option for 71 declarations in 17 files of its manifold library; a later version may
 make some of the term-mode steps unnecessary. [Tangent space instance](../ProjectAinos/SmoothGeometry/Manifold/TangentSpace.lean) · [Check](../checks/ForbiddenOptions.lean)
 
+## G03. Four elaboration limits met with tangent-valued trilinear tensors
+
+**Observation.** Four limits appeared while building the covariant derivative of the curvature
+(F10).
+1. Instance search does not find a norm on a threefold space of continuous linear maps
+   `E →L[ℝ] E →L[ℝ] E →L[ℝ] E`, even for a normed `E`; on the twofold space it does. The bundle
+   of tangent-valued trilinear maps cannot be written as `Cₛ^∞⟮I; E →L[ℝ] E →L[ℝ] E →L[ℝ] E, …⟯`.
+2. A `local notation` whose body names a section variable, such as `"E" => MinkowskiModel d`,
+   does not resolve that variable inside a later `variable` command. The declared variable gets
+   the type `OpenPartialHomeomorph M (MinkowskiModel sorry)`, no error is reported at the
+   `variable` line, and each theorem that uses it fails in its proof. In the binders of a theorem
+   the same notation works.
+3. A named argument `(I := I)` is parsed with the local notation `I` on its left; it has to be
+   written `(«I» := I)`.
+4. On spaces of continuous linear maps between tangent spaces, `simp` left `(0 : ℝ) • 0` and
+   `g.ricci x - 0 • g.form x` unsimplified, as in G02. A chain of `rw` steps through the terms
+   `R y (∇_{∂_a} ∂_u) (∂_v y) (∂_w y)` on the manifold of an open set `U` exceeded the heartbeat
+   limit.
+
+**Interface decision.** `Tensor.trilinearBundle` is the iterated `SmoothBundle.hom`, whose
+model carries the norm of each level, as `curvatureBundle` does. A field of trilinear maps is a
+function to `TM x →L[ℝ] TM x →L[ℝ] TM x →L[ℝ] TM x`, and its smoothness is the predicate
+`IsSmoothTrilinear`, the form in which `curvature_smooth` is stated. `variable` commands write
+the model `MinkowskiModel d` out. Equalities of bilinear maps are proved after `ext`, on the
+scalars, and a long rewrite is split into one `have` for each term, combined by `simp only`.
+
+**Proof status.** Applied in F10; no option is set. [Trilinear derivative](../ProjectAinos/SmoothGeometry/Tensor/TrilinearDerivative.lean) · [Inertial derivatives](../ProjectAinos/SmoothGeometry/Lorentzian/InertialDerivatives.lean) · [Coordinate connection](../ProjectAinos/SmoothGeometry/Lorentzian/CoordinateConnection.lean)
+
 ## Lorentz metrics and the common geometric base
 
 The smooth structure of a spacetime is independent of its Lorentz metric.

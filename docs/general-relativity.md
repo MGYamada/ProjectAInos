@@ -544,3 +544,86 @@ cylinder the observers at rest measure frequencies with `√(1 − Ω²ρ²) ω 
 The typed examples are in `checks/CoordinateMetricAPI.lean`,
 `checks/GeodesicHamiltonianAPI.lean` and `checks/ObserverAPI.lean`. The
 decisions are recorded in [GR03–GR07](general-relativity-notes.md).
+
+## The derivative of the curvature, the Bianchi identities and the Einstein tensor (§§85, 92)
+
+**Covariant differentiation (§85).** The text differentiates vectors, covectors
+and tensors of every rank. The library has `leviCivita` on vector fields,
+`Tensor.bilinearCovariantDerivative` on covariant two-tensors and
+`twoFormDerivative`; this wave adds tangent-valued trilinear tensors. Covectors,
+contravariant and mixed tensors and the general shapes have no derivative yet:
+the pinned Mathlib induces no connection on dual or hom bundles, and the ledger
+row is closed with this remainder. `Tensor.ContMDiffTensorialAt.mkHom₃`
+turns an operation that is linear over scalar germs in each of three slots into a
+continuous trilinear map on the tangent spaces, and
+`Tensor.trilinearCovariantDerivative connection R hR x v w z u` is
+`(∇_u R)(v, w)z` for any connection on the tangent bundle and any smooth field
+`R` of trilinear maps: on locally `C¹` fields it is
+`∇_u(R(X, Y)Z) − R(∇_u X, Y)Z − R(X, ∇_u Y)Z − R(X, Y)∇_u Z`
+(`trilinearCovariantDerivative_apply`). The direction comes last, as for the
+other tensors. `LorentzMetric.curvatureDerivative g x v w z u` is its value on
+the curvature. Components are written in the library's order
+`R^l_{ijk} = (R(∂_i, ∂_j)∂_k)^l`, with the antisymmetric pair first; Landau–Lifshitz
+write the transported vector first, so this is their `R^l_{kij}`. The
+chart formula `chartCurvatureDerivative_eq` is
+`∇_m R^l_{ijk} = ∂_m R^l_{ijk} + Γ^l_{ma} R^a_{ijk} − Γ^a_{mi} R^l_{ajk} − Γ^a_{mj} R^l_{iak} − Γ^a_{mk} R^l_{ija}`;
+`leviCivita_chart_components` and `bilinearCovariantDerivative_chart` are the
+formulas for a vector field and for a covariant two-tensor.
+`bilinearDivergenceCovector g B x b` is the divergence `∇^a B_{ab}` of a smooth
+covariant two-tensor on its first index.
+
+**The second Bianchi identity (§92).** `curvature_second_bianchi` is
+`(∇_u R)(v, w)z + (∇_v R)(w, u)z + (∇_w R)(u, v)z = 0` for any tangent vectors
+of a smooth Lorentz metric, in either convention and every dimension, and
+`chartCurvatureDerivative_bianchi` is
+`∇_m R^l_{ijk} + ∇_i R^l_{jmk} + ∇_j R^l_{mik} = 0`. The proof takes the
+co-ordinate fields of a chart as a frame: they commute, so on them
+`R(B, C) = [∇_B, ∇_C]`, and the cyclic sum of the triple covariant derivatives
+cancels in pairs; the remaining terms `R(∇_A B, C)` cancel by the symmetry of
+`∇_A B` in `A` and `B` and the antisymmetry of `R`.
+
+**The contracted identity and the Einstein tensor (§92).**
+`ricci_contracted_bianchi` is `∇^a Ric_{ab} = ½ ∂_b R`. It is proved at the
+centre of an inertial chart (`exists_inertialChart`), where the Christoffel
+symbols vanish, so the co-ordinate fields are parallel
+(`IsInertialChartAt.leviCivita_chartField`) and the inverse metric
+`g^{ij} = dx^i(♯dx^j)` (`chartInverse`) has zero derivative
+(`IsInertialChartAt.mvfderiv_chartInverse`). There the covariant derivatives of
+the Ricci and Riemann components are their partial derivatives, `Ric_{jk} = R^i_{ijk}`
+(`ricci_chartField`), `R^i_{jmk} g^{mk} = g^{il} Ric_{lj}` (`chartCurvature_contract`,
+from the pair symmetry), and the second Bianchi identity contracted twice is an
+identity between arrays of numbers. `einstein g x = Ric − (R/2) g` is symmetric
+and smooth and does not depend on the convention (`einstein_opposite`); its trace
+is `(1 − n/2) R` in dimension `n = d + 1` (`contract_einstein`), so it vanishes
+only where the Ricci tensor does, except in dimension two
+(`ricci_eq_zero_of_einstein_eq_zero`), and `einstein_divergence_eq_zero` is
+`∇^a G_{ab} = 0`. These are identities of every smooth metric: the Einstein
+equations are not a premise.
+
+**A four-dimensional regression.** In dimension two the cyclic sum and the
+Einstein tensor vanish for every metric (GR01).
+`ExponentialConformalExample.metric` is `e^{2z}(−dt² + dx² + dy² + dz²)` on
+`ℝ⁴`, a `CoordinateMetric` on the whole space. For a coordinate metric,
+`toLorentzMetric_leviCivita_eq` reads `∇_{∂_v} ∂_w` off the Koszul formula with
+the co-ordinate fields, and `toLorentzMetric_curvature_of_connection` and
+`toLorentzMetric_curvatureDerivative_of_connection` compute the curvature and
+its derivative when the connection is a map `Γ` that does not depend on the
+point. Here `Γ(v, w) = v₃ w + w₃ v − η(v, w) e₃`, and the example has
+`Ric = diag(2, −2, −2, 0)`, `R = −6 e^{−2z}`, `G = diag(−1, 1, 1, 3) ≠ 0`,
+`∇_{∂_z} R = −2 R ≠ 0`, and, through the contracted identity,
+`∇^a Ric_{az} = 6 e^{−2z}`, half of `∂_z R = 12 e^{−2z}`: on this metric both
+sides of the identity are nonzero.
+
+| Result | Declarations | Source |
+| --- | --- | --- |
+| Tensoriality in three slots | `Tensor.ContMDiffTensorialAt.pointwise₃`, `mkHom₃`, `mkHom₃_apply` | [TrilinearTensoriality](../ProjectAinos/SmoothGeometry/Tensor/TrilinearTensoriality.lean) |
+| Derivative of trilinear tensors | `Tensor.trilinearBundle`, `IsSmoothTrilinear`, `trilinearCovariantDerivative`, `trilinearCovariantDerivative_apply` | [TrilinearDerivative](../ProjectAinos/SmoothGeometry/Tensor/TrilinearDerivative.lean) |
+| Derivative of the curvature, second Bianchi | `LorentzMetric.curvatureDerivative`, `curvatureDerivative_apply`, `leviCivita_chart_components`, `bilinearCovariantDerivative_chart`, `chartCurvatureDerivative_eq`, `covariantField_chartField_comm`, `curvature_second_bianchi`, `chartCurvatureDerivative_bianchi` | [CurvatureDerivative](../ProjectAinos/SmoothGeometry/Lorentzian/CurvatureDerivative.lean) |
+| Chart contractions, inertial centre | `chartInverse`, `contract_chart`, `ricci_chartField`, `scalarCurvature_chart`, `chartCurvature_contract`, `IsInertialChartAt.mvfderiv_chartInverse`, `IsInertialChartAt.bilinearCovariantDerivative_chartField`, `IsInertialChartAt.chartCurvatureDerivative_eq` | [InertialDerivatives](../ProjectAinos/SmoothGeometry/Lorentzian/InertialDerivatives.lean) |
+| Contracted Bianchi, Einstein tensor | `bilinearDivergenceCovector`, `ricciBilinear`, `ricci_contracted_bianchi`, `einstein`, `einstein_symmetric`, `einstein_smooth`, `contract_einstein`, `ricci_eq_zero_of_einstein_eq_zero`, `bilinearCovariantDerivative_einstein`, `einstein_divergence_eq_zero` | [Einstein](../ProjectAinos/SmoothGeometry/Lorentzian/Einstein.lean) |
+| Connection of a coordinate metric | `CoordinateMetric.toLorentzMetric_pairing_derivative`, `toLorentzMetric_leviCivita_eq`, `toLorentzMetric_curvature_of_connection`, `toLorentzMetric_curvatureDerivative_of_connection` | [CoordinateConnection](../ProjectAinos/SmoothGeometry/Lorentzian/CoordinateConnection.lean) |
+| Four-dimensional regression | `ExponentialConformalExample.metric_leviCivita`, `metric_curvature`, `metric_ricci_chartField`, `metric_scalarCurvature`, `metric_einstein_chartField`, `metric_einstein_ne_zero`, `metric_curvatureDerivative_dz`, `metric_curvatureDerivative_ne_zero`, `metric_scalarCurvature_derivative`, `metric_ricci_divergence` | [ExponentialConformalExample](../ProjectAinos/SmoothGeometry/Lorentzian/ExponentialConformalExample.lean) |
+
+The typed examples are in `checks/BianchiAPI.lean`. The decisions are recorded
+in [GR01, GR08 and GR09](general-relativity-notes.md) and in
+[G03](smooth-geometry-notes.md).
