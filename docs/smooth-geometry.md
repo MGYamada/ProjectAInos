@@ -1815,6 +1815,21 @@ the Einstein tensor. `Lorentzian/InertialDerivatives.lean` gains the derivative 
 the inverse metric in any chart (`mvfderiv_chartInverse_chartField`). The physical
 action is in the [general relativity guide](general-relativity.md#the-first-variation-of-the-einsteinhilbert-action-93).
 
+## Matter and the Einstein equations in co-ordinates
+
+`Variational/RelativeIntegral.lean` differentiates a relative integral
+`∫ (L(ε, x) − L(0, x)) dx` of a density that is smooth near `[−r, r] × U` and does
+not depend on `ε` off a compact set (`hasDerivAt_integral_sub`).
+`Lorentzian/CoordinateMatter.lean` applies it to admissible variations of a
+coordinate metric and gives the Hilbert tensors of a scalar field and of a fixed
+electromagnetic field. `Lorentzian/EinsteinEquation.lean` states the Einstein
+equations `G + Λ g = κ T` on a Lorentz manifold, with the conservation of the
+source, the trace and the trace-reversed form, and
+`Lorentzian/CoordinateEinsteinEquation.lean` proves that a continuous symmetric
+field that pairs to zero with every metric variation vanishes, builds native
+tensors from coefficients and identifies the co-ordinate equations with the native
+ones. The physics is in the [general relativity guide](general-relativity.md#matter-and-the-einstein-equations-94-95).
+
 ## Scope and next stages
 
 These definitions impose neither finite generation nor global Hausdorffness

@@ -722,3 +722,76 @@ is not stated. The divergence vector is written with `δΓ`; its tensorial form
 The typed examples are in `checks/EinsteinHilbertAPI.lean`. The decisions are
 recorded in [GR01, GR02, GR10 and GR11](general-relativity-notes.md) and in
 [G04](smooth-geometry-notes.md).
+
+## Matter and the Einstein equations (§§94, 95)
+
+**Hilbert tensors (§94).** A matter density that depends on the metric only
+through `g^{ab}` and `√|g|` at the point has a first variation
+`δℒ = −½ T_{ik} δg^{ik} √|g|`, which defines its Hilbert tensor.
+`CoordinateMetric.scalarFieldDensity` is `−½ (g^{ab} ∂_aφ ∂_bφ + m² φ²) √|g|`,
+with `scalarStress`
+`T_{ik} = ∂_iφ ∂_kφ − ½ g_{ik} (g^{ab} ∂_aφ ∂_bφ + m² φ²)`; in Minkowski space
+`T₀₀ = ½ (φ̇² + |∇φ|² + m² φ²)` (`scalarStress_minkowski_zero_zero`).
+`maxwellDensity` is `−¼ F_{ab} F^{ab} √|g|` for a fixed antisymmetric field
+`F_{ab}`, with `maxwellStress` `T_{ik} = F_{ib} F_k{}^b − ¼ g_{ik} F²`, symmetric
+and, in four dimensions, trace-free; in Minkowski space it is the tensor
+`stressForm` of §33 (`Electrodynamics.maxwellStress_minkowski`). The field is held
+fixed while the metric varies. `hasDerivAt_integral_scalarFieldDensity` and
+`hasDerivAt_integral_maxwellDensity` differentiate the relative actions under the
+integral with `Variational.hasDerivAt_integral_sub`, the general form of the
+argument of §93.
+
+**Matter actions.** `EinsteinEquations.MatterAction g` bundles a relative action
+for each variation with its Hilbert tensor, smooth and symmetric on `U`, and the
+theorem `δS_m = −½ ∫ T_{ik} δg^{ik} √|g| d⁴x`. The tensor is a theorem of the
+action, not a datum beside it. The instances are `vacuum`, `scalarField` and
+`maxwellField`.
+
+**The Einstein equations (§95).** `totalAction g M κ Λ h` is
+`ΔS_g + ΔS_m` for the variation `g + εh`, and `hasDerivAt_totalAction` gives its
+derivative `(1/2κ) ∫ (G_{ik} + Λ g_{ik} − κ T_{ik}) δg^{ik} √|g| d⁴x`.
+`isStationary_iff` is the theorem of the section: for `κ ≠ 0`, the total action is
+stationary under every smooth symmetric variation with compact support in `U` if
+and only if `G_{ik} + Λ g_{ik} = κ T_{ik}` on `U` (`CoordinateMetric.IsEinstein`).
+The converse uses the variations `φ (dx^p ⊗ dx^q + dx^q ⊗ dx^p)` with a bump
+function `φ` (`testVariation`), which read off `E^{pq}` of the tensor `E` of the
+equations, the fundamental lemma of the calculus of variations, `√|g| > 0`, and
+the lowering of indices (`integral_inverseVariation_eq_zero_iff`). This is an
+equivalence for given fields; no metric is constructed from a source.
+
+**Native form, trace and conservation.** `LorentzMetric.SatisfiesEinstein κ Λ T`
+is `G + Λ g = κ T` for a smooth covariant two-tensor `T` on any Lorentz manifold.
+`satisfiesEinstein_bilinearOf_iff` identifies it with the co-ordinate equations for
+the tensor `bilinearOf T` with the coefficients `T_{ik}`, so a stationary metric
+satisfies the native equations (`isStationary_iff_satisfiesEinstein`). For
+`κ ≠ 0` the source is conserved, `∇^a T_{ab} = 0`
+(`SatisfiesEinstein.divergence_eq_zero`, `divergence_stress_eq_zero`), from the
+contracted Bianchi identity and `∇g = 0`. The trace is
+`(1 − n/2) R + n Λ = κ T^a{}_a` (`SatisfiesEinstein.contract`), and away from
+dimension two `Ric = κ (T − T^a{}_a g/(n − 2)) + 2Λ g/(n − 2)`
+(`SatisfiesEinstein.ricci_eq`); in four dimensions
+`Ric = κ (T − ½ T^a{}_a g) + Λ g` (`ricci_eq_four`, `ricci_eq_of_isStationary`).
+
+**Regressions.** Minkowski space is a vacuum solution with `Λ = 0`
+(`minkowski_isStationary_vacuum`); with a constant scalar field `c` it is a
+solution with `Λ = −κ m² c²/2`, the potential energy of the field acting as a
+cosmological constant (`minkowski_isStationary_constantScalar`); the curved
+metric `e^{2z} η` is not a vacuum solution (`conformal_not_isStationary_vacuum`).
+
+**Scope.** As in §93, the metric is given by coefficients on an open set of the
+model space. Conservation is derived from the Einstein equations; its derivation
+from the equations of the matter fields alone, through the invariance under
+diffeomorphisms, is not stated.
+
+| Result | Declarations | Source |
+| --- | --- | --- |
+| Relative integrals | `Variational.hasDerivAt_integral_sub`, `Variational.integrable_deriv_sub` | [RelativeIntegral](../ProjectAinos/Variational/RelativeIntegral.lean) |
+| Hilbert tensors | `CoordinateMetric.hasDerivAt_integral_of_pointwise`, `sum_coefficient_mul_inverseVariation`, `scalarFieldDensity`, `scalarStress`, `hasDerivAt_scalarFieldDensity`, `hasDerivAt_integral_scalarFieldDensity`, `maxwellDensity`, `maxwellProduct`, `maxwellInvariant`, `maxwellStress`, `maxwellStress_symm`, `sum_inv_mul_maxwellStress`, `hasDerivAt_maxwellDensity`, `hasDerivAt_integral_maxwellDensity` | [CoordinateMatter](../ProjectAinos/SmoothGeometry/Lorentzian/CoordinateMatter.lean) |
+| Native Einstein equations | `LorentzMetric.SatisfiesEinstein`, `SatisfiesEinstein.bilinearCovariantDerivative_eq`, `SatisfiesEinstein.divergence_eq_zero`, `SatisfiesEinstein.contract`, `SatisfiesEinstein.ricci_eq`, `SatisfiesEinstein.ricci_eq_four` | [EinsteinEquation](../ProjectAinos/SmoothGeometry/Lorentzian/EinsteinEquation.lean) |
+| Test variations and native tensors | `contDiffAt_ricciOf`, `contDiffAt_einsteinOf`, `einsteinOf_symm`, `testVariation`, `raised`, `sum_mul_inverseVariation_test`, `eq_zero_of_raised_eq_zero`, `integral_inverseVariation_eq_zero_iff`, `coefficientForm`, `bilinearOf`, `bilinearOf_chartField`, `IsEinstein`, `satisfiesEinstein_bilinearOf_iff` | [CoordinateEinsteinEquation](../ProjectAinos/SmoothGeometry/Lorentzian/CoordinateEinsteinEquation.lean) |
+| Matter and the equations | `EinsteinEquations.MatterAction`, `vacuum`, `scalarField`, `maxwellField`, `totalAction`, `fieldEquation`, `IsStationary`, `hasDerivAt_totalAction`, `isStationary_iff`, `isStationary_iff_satisfiesEinstein`, `divergence_stress_eq_zero`, `ricci_eq_of_isStationary`, `minkowski_isStationary_vacuum`, `minkowski_isStationary_constantScalar`, `conformal_not_isStationary_vacuum`, `scalarStress_minkowski_zero_zero` | [EinsteinEquations](../ProjectAinos/GeneralRelativity/EinsteinEquations.lean) |
+| The tensor of §33 | `Electrodynamics.componentMatrix`, `maxwellStress_minkowski` | [HilbertStress](../ProjectAinos/Electrodynamics/HilbertStress.lean) |
+
+The typed examples are in `checks/EinsteinEquationsAPI.lean`. The decisions are
+recorded in [GR12 and GR13](general-relativity-notes.md) and in
+[ED14](electrodynamics-notes.md).
