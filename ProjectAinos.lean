@@ -424,6 +424,7 @@ public import ProjectAinos.SmoothGeometry.Lorentzian.ScalarCurvatureVariation
 public import ProjectAinos.SmoothGeometry.Lorentzian.SignatureStability
 public import ProjectAinos.SmoothGeometry.Lorentzian.SpatialForm
 public import ProjectAinos.SmoothGeometry.Lorentzian.Tensor
+public import ProjectAinos.SmoothGeometry.Lorentzian.Tetrad
 public import ProjectAinos.SmoothGeometry.Lorentzian.TwoFormDerivative
 public import ProjectAinos.SmoothGeometry.Lorentzian.TwoFormDivergence
 public import ProjectAinos.SmoothGeometry.Lorentzian.TwoFormDivergenceExamples

@@ -25,7 +25,7 @@ ledger with one status for each section, a count line and the list of rows close
 with a remainder, in the vocabulary of the mechanics ledger:
 [special relativity](cinfty-special-relativity.md#ledger) (12 of 14 rows proved),
 [electrodynamics](cinfty-electrodynamics.md#ledger) (20 of 66) and
-[general relativity](cinfty-general-relativity.md#ledger) (14 of 39). The baseline
+[general relativity](cinfty-general-relativity.md#ledger) (15 of 39). The baseline
 counts a row as proved only when its whole target is proved; a row with a proved
 core names the core and stays *informal*. Observations are recorded in the notes
 of [special relativity](special-relativity-notes.md),
@@ -777,6 +777,17 @@ and for the Minkowski metric the stationarity is that of the flat action. The le
 electrodynamics §17 (20 of 66) and general relativity §90 (14 of 39) are *proved* in this
 scope.
 [Guide](general-relativity.md#the-field-and-a-charge-on-a-fixed-background-90)
+
+## Orthonormal frames and the tetrad equations
+
+For a smooth orthonormal frame on an open set of a Lorentz manifold, the rotation
+coefficients `γ_{abc} = g(∇_{E_c} E_a, E_b)` are antisymmetric in their first pair, the
+commutator coefficients are `λ_{abc} = γ_{abc} − γ_{acb}` and conversely
+`γ_{abc} = ½ (λ_{abc} + λ_{bca} − λ_{cab})`, and the frame components of the curvature
+follow from `γ`, `λ` and the frame derivatives of `γ`. The Einstein equations hold
+exactly when their frame components hold in the frames of a cover, and two orthonormal
+frames differ by a Lorentz matrix. The ledger row of §98 is *proved* (15 of 39).
+[Guide](general-relativity.md#orthonormal-frames-and-the-tetrad-equations-98)
 
 ## Shared Variational Foundation
 

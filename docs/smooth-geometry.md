@@ -1844,6 +1844,14 @@ space in co-ordinates: the trivialization of its tangent bundle is the identity,
 tangent field along a map is as regular as its co-ordinates, and the native velocities
 of curves and families are the derivatives of the co-ordinates.
 
+## Orthonormal frames
+
+`Lorentzian/Tetrad.lean` treats a smooth orthonormal frame on an open set of a Lorentz
+manifold: the expansion of vectors and bilinear forms in it, the rotation and
+commutator coefficients, the second structure equation of Cartan in components, the
+Ricci, scalar and Einstein tensors in the frame, and the change of frame. The physics is
+in the [general relativity guide](general-relativity.md#orthonormal-frames-and-the-tetrad-equations-98).
+
 ## Scope and next stages
 
 These definitions impose neither finite generation nor global Hausdorffness
