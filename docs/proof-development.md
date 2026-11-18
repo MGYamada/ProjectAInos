@@ -25,7 +25,7 @@ ledger with one status for each section, a count line and the list of rows close
 with a remainder, in the vocabulary of the mechanics ledger:
 [special relativity](cinfty-special-relativity.md#ledger) (12 of 14 rows proved),
 [electrodynamics](cinfty-electrodynamics.md#ledger) (18 of 66) and
-[general relativity](cinfty-general-relativity.md#ledger) (10 of 39). The baseline
+[general relativity](cinfty-general-relativity.md#ledger) (11 of 39). The baseline
 counts a row as proved only when its whole target is proved; a row with a proved
 core names the core and stays *informal*. Observations are recorded in the notes
 of [special relativity](special-relativity-notes.md),
@@ -716,6 +716,22 @@ The ledger row of §92 is *proved* in its stated scope (10 of 39), and the row o
 and the general tensor shapes have no derivative, because the pinned Mathlib
 induces no connection on dual or hom bundles.
 [Guide](general-relativity.md#the-derivative-of-the-curvature-the-bianchi-identities-and-the-einstein-tensor-85-92)
+
+## The first variation of the Einstein–Hilbert action
+
+For a metric given by coefficients on an open set `U` of the model space and a
+smooth symmetric variation `h` with compact support in `U`, every `g + εh` with
+`ε` near `0` is a Lorentz metric on `U`, the inverse metric and the density have
+the derivatives `−g^{im} h_{mn} g^{nk}` and `½ g^{ab} h_{ab} √|g|`, and the
+Palatini identity turns `g^{ik} δR_{ik} √|g|` into a divergence of compact
+support. The relative action `(1/2κ) ∫ ((R_ε − 2Λ)√|g_ε| − (R − 2Λ)√|g|) d⁴x`
+integrates the difference of the native Lagrangians and has the derivative
+`(1/2κ) ∫ (G_{ik} + Λ g_{ik}) δg^{ik} √|g| d⁴x` at `ε = 0`, with the native
+Einstein tensor. On the curved metric `e^{2z} η` with `h = f η` the derivative is
+`−(1/2κ) ∫ f (6 + 4Λ e^{2z})`, which is not zero for a bump function. The ledger
+row of §93 is *proved* in this scope (11 of 39); a variation supported in a chart
+of a general manifold is not stated.
+[Guide](general-relativity.md#the-first-variation-of-the-einsteinhilbert-action-93)
 
 ## Shared Variational Foundation
 

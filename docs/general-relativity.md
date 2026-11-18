@@ -627,3 +627,98 @@ sides of the identity are nonzero.
 The typed examples are in `checks/BianchiAPI.lean`. The decisions are recorded
 in [GR01, GR08 and GR09](general-relativity-notes.md) and in
 [G03](smooth-geometry-notes.md).
+
+## The first variation of the Einstein–Hilbert action (§93)
+
+**Admissible variations.** A metric is a `CoordinateMetric σ d U`: smooth
+symmetric coefficients `g_{ik}` on an open set `U` of the model space with the
+Lorentz signature at each point. A variation is a smooth field `h` of symmetric
+bilinear forms with compact support in `U`. `g.IsAdmissible h ε` says that
+`g + εh` has the Lorentz signature on `U`, and then `g.addVariation h hh ε hε`
+is the varied coordinate metric. `eventually_isAdmissible` gives one interval
+of `ε` for all points: `Minkowski.exists_lorentzFrame_of_near` keeps the
+signature of a form whose quadratic form is close to that of a Lorentz form in
+the norm of a frame, and the tube lemma makes the bound uniform on the compact
+support. Off the support nothing changes.
+
+**The coefficient formulas.** `christoffelOf`, `ricciOf`, `scalarOf` and
+`densityOf` are the textbook formulas in a matrix-valued function `C` of the
+point: `Γ^k_{ij} = ½ g^{kl}(∂_i g_{jl} + ∂_j g_{li} − ∂_l g_{ij})`,
+`R_{jk} = ∂_i Γ^i_{jk} − ∂_j Γ^i_{ik} + Γ^i_{ia} Γ^a_{jk} − Γ^i_{ja} Γ^a_{ik}`,
+`R = g^{ac} R_{ac}` and `√|det g|`. For a coordinate metric they are the native
+Christoffel symbols, Ricci tensor, scalar curvature and chart density
+(`toLorentzMetric_chartChristoffel`, `toLorentzMetric_ricci_chartField`,
+`toLorentzMetric_scalarCurvature`, `toLorentzMetric_chartDensity`), and
+`einsteinOf` is the native Einstein tensor on the co-ordinate fields
+(`toLorentzMetric_einstein_chartField`). The same formulas applied to the slices
+of a family `C(ε, x)` (`familyChristoffel`, `familyRicci`, `familyScalar`,
+`familyDensity`) are jointly smooth in `(ε, x)` where `det C ≠ 0`, and their
+derivatives in `ε` are computed under the swap of the mixed partials.
+
+**The pointwise first variation.** For the family `g + εh`,
+`δg^{ik} = −g^{im} h_{mn} g^{nk}` (`hasDerivAt_inverseVariation`) and
+`δ√|g| = ½ g^{ab} h_{ab} √|g|` (`hasDerivAt_variationFamily_density`).
+`palatini_algebra` is the Palatini identity as an identity between arrays of
+numbers: with metric compatibility `∂_e g^{bc} = −Γ^b_{ed} g^{dc} − Γ^c_{ed} g^{bd}`
+(`fderiv_coefficient_inv`, and natively `mvfderiv_chartInverse_chartField`) and
+`∂_k √|g| = √|g| Γ^c_{ck}` (`fderiv_densityOf`), it turns `g^{bc} δR_{bc} √|g|`
+into the divergence `∂_a(√|g| V^a)` of
+`V^a = g^{bc} δΓ^a_{bc} − g^{ab} δΓ^c_{cb}` (`variationVector`).
+`hasDerivAt_scalarDensity` is then
+`δ((R − 2Λ)√|g|) = −(R^{mn} − (R/2 − Λ) g^{mn}) h_{mn} √|g| + ∂_a(√|g| V^a)`
+at each point of `U`.
+
+**The integrated first variation.** `scalarDensity g h Λ (ε, x)` is
+`(R_ε − 2Λ) √|g_ε|` at `x`; it does not change off the support of `h`
+(`scalarDensity_of_notMem`), and for an admissible `ε` it is the native density
+of `g + εh` (`scalarDensity_eq_toLorentzMetric`). The derivative is taken under
+the integral (`hasDerivAt_integral_of_dominated_loc_of_deriv_le`) on a closed
+interval of admissible `ε`, where the derivative in `ε` is bounded on the
+compact set `[−δ, δ] × supp h`. The divergence term has compact support, so its
+integral vanishes (`integral_fderiv_density_mul_variationVector`), and
+`hasDerivAt_integral_scalarDensity` is
+`d/dε ∫ ((R_ε − 2Λ)√|g_ε| − (R − 2Λ)√|g|) dx = −∫ (R^{mn} − (R/2 − Λ) g^{mn}) h_{mn} √|g| dx`
+at `ε = 0`; `eulerLagrangeDensity_eq` writes the integrand as
+`(G_{ik} + Λ g_{ik}) δg^{ik} √|g|`.
+
+**The physical action.** `GeneralRelativity/EinsteinHilbertAction.lean` states
+Landau–Lifshitz's action in four dimensions and the convention `(−+++)`, with
+`S = (1/2κ) ∫ (R − 2Λ) √|g| d⁴x`. An action over a region that is not compact
+need not converge, so `relativeAction g h κ Λ ε` is
+`(1/2κ) ∫ ((R_ε − 2Λ)√|g_ε| − (R − 2Λ)√|g|) d⁴x`.
+`eventually_relativeAction_integrand` says that for every `ε` near `0` its
+integrand is the difference of the native Lagrangians `lagrangian`, and
+`hasDerivAt_relativeAction` is
+`ΔS'(0) = (1/2κ) ∫ (G_{ik} + Λ g_{ik}) δg^{ik} √|g| d⁴x`, the variation of
+Landau–Lifshitz with a cosmological term; `integrand_eq_native` reads `G_{ik}`, `g_{ik}`
+and `√|g|` as the native tensors and density on the co-ordinate fields.
+
+**Regressions.** For the Minkowski metric and `h = f η`,
+`ΔS'(0) = −(2Λ/κ) ∫ f` (`hasDerivAt_relativeAction_flat`); it is not zero for a
+bump function when `Λ ≠ 0`. For the curved metric `e^{2z} η` of §92 and
+`h = f η`, `ΔS'(0) = −(1/2κ) ∫ f (6 + 4Λ e^{2z})`
+(`hasDerivAt_relativeAction_conformal`): the `6` is `η^{ik} G_{ik}` with
+`G = diag(−1, 1, 1, 3)`, so the Einstein tensor alone gives a nonzero derivative
+when `Λ = 0` (`exists_deriv_relativeAction_conformal_ne_zero`).
+
+**Scope.** The variation is supported in an open set of the model space, which
+is the domain of the co-ordinates. A variation supported in a chart of a general
+Lorentz manifold needs the extension by zero and the comparison of charts, and
+is not stated. The divergence vector is written with `δΓ`; its tensorial form
+`∇_b h^{ab} − ∇^a tr h` is not stated.
+
+| Result | Declarations | Source |
+| --- | --- | --- |
+| Stability of the signature | `Minkowski.abs_apply_self_le`, `Minkowski.exists_lorentzFrame_of_near` | [SignatureStability](../ProjectAinos/SmoothGeometry/Lorentzian/SignatureStability.lean) |
+| Admissible variations | `CoordinateMetric.IsAdmissible`, `isAdmissible_zero`, `eventually_isAdmissible`, `addVariation`, `addVariation_form` | [CoordinateVariation](../ProjectAinos/SmoothGeometry/Lorentzian/CoordinateVariation.lean) |
+| Coefficient formulas | `christoffelOf`, `ricciOf`, `scalarOf`, `densityOf`, `toLorentzMetric_chartChristoffel`, `toLorentzMetric_chartCurvature`, `toLorentzMetric_ricci_chartField`, `toLorentzMetric_scalarCurvature`, `toLorentzMetric_chartDensity` | [CoordinateCurvature](../ProjectAinos/SmoothGeometry/Lorentzian/CoordinateCurvature.lean) |
+| Families of coefficients | `familyChristoffel`, `familyRicci`, `familyScalar`, `familyDensity`, `contDiffAt_familyScalar`, `hasDerivAt_familyChristoffel`, `hasDerivAt_familyRicci`, `hasDerivAt_familyScalar` | [CoordinateFamily](../ProjectAinos/SmoothGeometry/Lorentzian/CoordinateFamily.lean) |
+| Palatini identity | `palatini_algebra` | [PalatiniAlgebra](../ProjectAinos/SmoothGeometry/Lorentzian/PalatiniAlgebra.lean) |
+| Inverse metric and density | `variationFamily`, `hasDerivAt_variationFamily_inv`, `hasDerivAt_variationFamily_density`, `fderiv_coefficient_inv`, `fderiv_densityOf`, `LorentzMetric.mvfderiv_chartInverse_chartField` | [CoordinateFirstVariation](../ProjectAinos/SmoothGeometry/Lorentzian/CoordinateFirstVariation.lean), [InertialDerivatives](../ProjectAinos/SmoothGeometry/Lorentzian/InertialDerivatives.lean) |
+| Pointwise first variation | `variationVector`, `ricciUp`, `hasDerivAt_scalarDensity` | [ScalarCurvatureVariation](../ProjectAinos/SmoothGeometry/Lorentzian/ScalarCurvatureVariation.lean) |
+| Integrated first variation | `scalarDensity`, `scalarDensity_of_notMem`, `integral_fderiv_density_mul_variationVector`, `eulerLagrangeDensity`, `hasDerivAt_integral_scalarDensity`, `scalarDensity_eq_toLorentzMetric`, `einsteinOf`, `toLorentzMetric_einstein_chartField`, `inverseVariation`, `hasDerivAt_inverseVariation`, `eulerLagrangeDensity_eq` | [CoordinateEinsteinHilbert](../ProjectAinos/SmoothGeometry/Lorentzian/CoordinateEinsteinHilbert.lean) |
+| The action and its regressions | `EinsteinHilbert.lagrangian`, `relativeAction`, `relativeAction_integrand`, `eventually_relativeAction_integrand`, `hasDerivAt_relativeAction`, `integrand_eq_native`, `hasDerivAt_relativeAction_flat`, `exists_deriv_relativeAction_flat_ne_zero`, `conformal_einsteinOf`, `hasDerivAt_relativeAction_conformal`, `exists_deriv_relativeAction_conformal_ne_zero` | [EinsteinHilbertAction](../ProjectAinos/GeneralRelativity/EinsteinHilbertAction.lean) |
+
+The typed examples are in `checks/EinsteinHilbertAPI.lean`. The decisions are
+recorded in [GR01, GR02, GR10 and GR11](general-relativity-notes.md) and in
+[G04](smooth-geometry-notes.md).
