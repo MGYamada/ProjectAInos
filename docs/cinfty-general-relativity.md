@@ -31,9 +31,9 @@ The next major step is to make the metric dynamical.
 | --- | --- | --- |
 | Smooth rings, real spectra, localizations, schemes, open gluing | Constructed | Complete/fair rings, Γ–Spec comparison, universal cotangent modules |
 | Manifolds as C∞ schemes | Constructed for the documented finite-dimensional models | Full faithfulness and broader comparison domains |
-| Smooth Lorentz metrics and native tensors | Constructed | Generic tensor covariant derivatives needed by field dynamics |
-| Levi-Civita connection and curvature | Constructed, including coordinate covariance and algebraic Bianchi | Differential and contracted Bianchi identities |
-| Ricci and scalar curvature | Constructed intrinsic contractions | Einstein tensor and its divergence identity |
+| Smooth Lorentz metrics and native tensors | Constructed | Generic tensor covariant derivatives needed by field dynamics (trilinear tensors done in F10) |
+| Levi-Civita connection and curvature | Constructed, including coordinate covariance and algebraic Bianchi | Differential and contracted Bianchi identities (done in F10) |
+| Ricci and scalar curvature | Constructed intrinsic contractions | Einstein tensor and its divergence identity (done in F10) |
 | Geodesics and parallel transport | Local existence/uniqueness and finite-segment transport proved | Geodesic deviation, global causal geometry, completeness questions |
 | Local inertial coordinates and local flatness | Proved, with their different hypotheses | Applications to observers and gravitational measurements |
 | Proper time and particle variational principles | Proved on arbitrary supported Lorentz manifolds | Charged curved motion and coupled matter models |
@@ -73,14 +73,14 @@ completion.
 | 82 | The gravitational field in relativistic mechanics | proved | `LorentzMetric`, `LorentzManifold`, `LorentzMetric.opposite`, `CoordinateMetric.toLorentzMetric`, `CoordinateMetric.ofCriterion`, `Minkowski.exists_lorentzFrame_convention`, `LorentzMetric.spatialForm_nonneg`, `LorentzMetric.spatialForm_pos`, `Minkowski.radar`, `Minkowski.radar_distance`, `Minkowski.exists_radar`. Scope: in the convention `(−+++)`, an observer is a timelike vector `u` at an event; it reads time from the proper time of its worldline and distances from the spatial form `γ_u(v, w) = g(v, w) − g(u, v) g(u, w)/g(u, u)`, which is positive on every displacement not along `u` and whose square root `√(γ_u(v, v))` is half the proper time of a light signal sent to a neighbouring event `v` and back, and the event of the worldline at the middle of the signal is simultaneous with `v`; a metric may be given by smooth coefficients on an open set of the model space; no time orientation is used |
 | 83 | Curvilinear co-ordinates | proved | `chartField_transition`, `leviCivita_chart_transition`, `chartChristoffel_transformation`, `chartCurvature_transformation`. Scope: the overlap of two smooth charts of the manifold |
 | 84 | Distances and time intervals | proved | `properTime`, `properTime_integrable`, `properTime_add`, `properTime_reparametrize`, `properTime_chart`, `exists_finite_properTime_parameter`, `properTime_coordinate`, `properTime_atRest`, `Minkowski.spatialForm_timeAxis`, `CoordinateMetric.spatialMetric_pos`, `Minkowski.orthogonal_timeAxis_iff`. Scope: for a metric given by coefficients on an open set of the model space, the proper time of a smooth curve is `∫ √(−g_{μν} ẋ^μ ẋ^ν) dt` (the integrand is zero where the curve is spacelike); an observer at rest on `[a, b]` has `dτ = √(−g₀₀) dx⁰`; the spatial metric `γ_{ij} = g_{ij} − g_{0i} g_{0j}/g_{00}` does not depend on `dx⁰` and is positive definite where `g₀₀ < 0`; two neighbouring events are simultaneous for the observer at rest when `dx⁰ = −g_{0i} dx^i/g_{00}`, the event that the radar signal of §82 (`Minkowski.radar`) singles out. The length of a finite path is stated only where the spatial metric does not depend on `x⁰` (the rotating circle of §89); in general it depends on the slice. The relations `γ^{ij} = g^{ij}` and `−g = −g₀₀ det γ` are not stated |
-| 85 | Covariant differentiation | informal | Proved: `leviCivita` on vector fields, `Tensor.bilinearCovariantDerivative`, `twoFormDerivative`. Missing: the derivative of the tensors of the other types, in the first place of the curvature (F8, F10) |
+| 85 | Covariant differentiation | informal | Closed with a stated remainder. Proved: `leviCivita` on vector fields with `leviCivita_chart_components`; `Tensor.bilinearCovariantDerivative` on covariant two-tensors with `LorentzMetric.bilinearCovariantDerivative_chart` and the divergence `LorentzMetric.bilinearDivergenceCovector`; `twoFormDerivative` with `twoFormDerivative_chart`; `Tensor.ContMDiffTensorialAt.mkHom₃` and `Tensor.trilinearCovariantDerivative` on tangent-valued trilinear tensors for any connection on the tangent bundle, and on the curvature `LorentzMetric.curvatureDerivative` with `chartCurvatureDerivative_eq`. Each is the Leibniz correction on locally `C¹` fields. Not proved: the derivatives of covectors, of contravariant and mixed tensors of rank two, and of the general shapes of `Tensor.Shape`. The pinned Mathlib defines a covariant derivative on one vector bundle and induces none on its dual, hom or tensor bundles, and the library has no such construction; each type above is built by its own tensoriality argument |
 | 86 | The relation of the Christoffel symbols to the metric tensor | proved | `leviCivita`, `isLeviCivita_leviCivita`, `IsLeviCivita.eq_leviCivita`, `christoffel_eq`, `chartChristoffel_eq`, `chartChristoffel_symmetric` |
 | 87 | Motion of a particle in a gravitational field | proved | `quadraticStationary_iff_geodesic`, `freeStationary_iff_acceleration`, `freeStationary_iff_tangential`, `freeStationary_iff_localGeodesic`, `exists_geodesic`, `geodesic_unique`. Scope: variations with fixed end points; the action of a massive particle along a timelike curve, the quadratic action without a causal restriction |
 | 88 | The constant gravitational field | proved | `LorentzMetric.IsKillingField`, `LorentzMetric.IsKillingField.pairing_eq`, `LorentzMetric.killingNorm_mul_observedFrequency_eq`, `CoordinateMetric.isKillingField_of_invariant`, `SchwarzschildExterior.killingNorm_mul_observedFrequency_eq`, `GeodesicHamiltonian.isTrajectory_iff`, `GeodesicHamiltonian.isIntegral_vectorMomentum_iff_killing`, `GeodesicHamiltonian.isIntegral_p_of_metric_independent`, `GeodesicHamiltonian.killingNorm_mul_frequency_eq`. Scope: on a Lorentz manifold in the convention `(−+++)`, the pairing `g(K, γ̇)` of a Killing field is constant along a given geodesic on any convex set of parameters, and the observers that move along a timelike Killing field measure frequencies with `N ω = const`, `N = √(−g(K, K))`; the ray need not be null. A metric whose coefficients do not depend on `x^k` has the Killing field `∂_k`; the exterior Schwarzschild field on `r > 2M`, `0 < θ < π` is the instance, with the red shift along every geodesic segment, radial rays included. In the Hamiltonian form, for a chart whose domain is all of `ℝⁿ` with coefficients in the free C∞-ring, the trajectories of `½ g^{μν} p_μ p_ν` are the geodesics of the chart defined for all values of the affine parameter, with `p_μ = g_{μν} ẋ^ν`, and `ξ^μ p_μ` is an integral exactly when `L_ξ g = 0`; its instances are the curve at rest and the straight lines of constant coefficients (`isTrajectory_rest`, `isTrajectory_line`) and the equatorial plane of the exterior field in the co-ordinate `r = 2M + eˢ`, where no radial geodesic along which `r` changes is a trajectory |
 | 89 | Rotation | proved | `RotatingFrame.metric`, `RotatingFrame.form_eq_pullback`, `RotatingFrame.hasDerivAt_toInertial`, `RotatingFrame.properTime_static`, `RotatingFrame.spatialForm_radial`, `RotatingFrame.circumference_circle`, `RotatingFrame.synchronization_circle`, `RotatingFrame.killingNorm_mul_observedFrequency_eq`. Scope: Minkowski space in co-ordinates that rotate about the `z` axis, on the domain `Ω²(x² + y²) < 1` where the rotating time axis is timelike: the clocks at rest, the radial lengths, the circumference `2πρ/√(1 − Ω²ρ²)` of a circle about the axis, the synchronization gap along that circle, and the frequency shift between observers at rest |
 | 90 | The equations of electrodynamics in the presence of a gravitational field | informal | Proved: `Curved.Maxwell`, `Curved.maxwell_iff_components`, `Curved.sourced_iff_divergence`, `Curved.current_closed_iff_divergence`. Missing: the action of the field and of a charge on a curved background (F12) |
 | 91 | The curvature tensor | proved | `curvature`, `curvature_apply`, `curvatureTensor`, `chartCurvature_eq`, `curvature_naturality`, `isLocallyMinkowski_iff_curvature_eq_zero` |
-| 92 | Properties of the curvature tensor | informal | Proved: `curvature_swap`, `curvature_first_bianchi`, `curvature_skewAdjoint`, `curvature_pair_interchange`, `ricci_symmetric`. Missing: the differential identity of Bianchi and its contraction (F10) |
+| 92 | Properties of the curvature tensor | proved | `curvature_swap`, `curvature_first_bianchi`, `curvature_skewAdjoint`, `curvature_pair_interchange`, `ricci_symmetric`, `curvature_second_bianchi`, `chartCurvatureDerivative_bianchi`, `ricci_contracted_bianchi`, `einstein`, `einstein_symmetric`, `contract_einstein`, `einstein_divergence_eq_zero`, `ExponentialConformalExample.metric_einstein_ne_zero`, `ExponentialConformalExample.metric_curvatureDerivative_ne_zero`. Scope: every smooth Lorentz metric, in either convention and every dimension; the identities hold at each point for any tangent vectors. The regression is the metric `e^{2z}(−dt² + dx² + dy² + dz²)` on `ℝ⁴`, with `∇R ≠ 0`, `G ≠ 0` and `∇^a Ric_{az} = ½ ∂_z R ≠ 0` |
 | 93 | The action function for the gravitational field | informal | Planned (F11) |
 | 94 | The energy-momentum tensor | informal | Planned (F12) |
 | 95 | The Einstein equations | informal | Planned (F12) |
@@ -109,9 +109,9 @@ completion.
 | 118 | Oscillating regime of approach to a singular point | informal | Open research target (F25) |
 | 119 | The time singularity in the general cosmological solution of the Einstein equations | informal | Open research target; the focusing of a congruence of geodesics is the planned proved part (F25) |
 
-Count: 9 proved, 30 informal.
+Count: 10 proved, 29 informal.
 
-Closed with a stated remainder: none.
+Closed with a stated remainder: §85 (the derivatives of covectors, of contravariant and mixed tensors, and of the general tensor shapes).
 
 ### After the mechanics programme
 
@@ -455,6 +455,15 @@ Proposed **contracted Bianchi** [C]: contraction and metric compatibility give
 `∇ᵃRic_ab = (1/2)∇_b R`, hence `∇ᵃEin_ab = 0`.
 This is a geometric theorem for every smooth Lorentz metric. Einstein's
 equations are not a premise, and matter conservation is not its definition.
+
+Delivered in F10: `Tensor.trilinearCovariantDerivative` differentiates a
+tangent-valued trilinear tensor for any connection on the tangent bundle, and
+`LorentzMetric.curvatureDerivative` is its value on the curvature, with the
+direction last. `curvature_second_bianchi` takes the intrinsic route, with the
+co-ordinate fields of a chart as a frame; `ricci_contracted_bianchi` is proved at
+the centre of an inertial chart, and `einstein_divergence_eq_zero` follows. The
+four-dimensional regression is `ExponentialConformalExample`
+([GR01, GR08, GR09](general-relativity-notes.md)).
 
 ### Inertial charts, tidal effects, and transport
 
@@ -1030,14 +1039,14 @@ The dependency names refer to the interfaces and milestones below.
 | 82 | Relativistic gravity: define metric spacetime and physical observers | Lorentz metric; time orientation only when used | [C] / spacetime contract | Existing geometry; observer applications planned |
 | 83 | Coordinates: prove tensor and connection transition rules | Actual smooth chart overlap and invertible chart derivative | [C] / native tensor calculus | Existing principal rules |
 | 84 | Local clock and distance measurements: compare observer rest metrics and proper time | Timelike observer, specified simultaneous events or spatial slice | [C,B: ODE] / observers | Existing clocks; general measurement design planned |
-| 85 | Covariant differentiation: extend the connection to all tensor types | Smooth sections and the stated derivative regularity | [C] / tensor derivative extension | Existing vector/two-form cases; general extension planned |
+| 85 | Covariant differentiation: extend the connection to all tensor types | Smooth sections and the stated derivative regularity | [C] / tensor derivative extension | Closed with a remainder (F10): vectors, covariant two-tensors, two-forms and tangent-valued trilinear tensors; covectors, contravariant and mixed tensors and the general shapes not constructed |
 | 86 | Metric connection: derive uniqueness and Christoffel coefficients | Smooth nondegenerate Lorentz metric, torsion-free compatibility | [C] / Levi-Civita | Existing |
 | 87 | Free gravitational motion: identify stationary curves with geodesics | Fixed endpoints; massive reference timelike, quadratic case allows null | [B: Variation,C] / particle foundation | Existing variational equivalences |
 | 88 | Stationary gravitational effects: prove Killing energy and redshift | Timelike Killing region and a supplied connecting null geodesic | [A,C,B: ODE] / G-H, Killing theory | Planned; conservation along a given geodesic is algebra in G-H |
 | 89 | Rotating observations: compute stationary-domain clocks and timing | Explicit rotating chart, timelike range, prescribed paths and events | [A*,C] / observers | Planned |
 | 90 | Electromagnetism on curved backgrounds: form/component equations and coupling | Oriented four-dimensional metric, current sign contract; smooth fields | [C,B: Variation] / ED bridge | Existing Maxwell; coupled actions planned |
 | 91 | Curvature: construct the native tensor and its coordinate expression | Smooth metric; local extension regularity retained | [C] / curvature | Existing |
-| 92 | Curvature identities: prove differential and contracted Bianchi | Tensor derivative and metric-compatible contraction | [C] / G1 | Algebraic symmetries existing; differential identities planned |
+| 92 | Curvature identities: prove differential and contracted Bianchi | Tensor derivative and metric-compatible contraction | [C] / G1 | Proved (F10), with a four-dimensional regression |
 | 93 | Gravitational action: differentiate the actual relative action | Compactly supported symmetric variation, signature preservation | [B: Variation,Stokes,C] / G2 | Planned |
 | 94 | Matter response: derive Hilbert stress-energy and conservation | Concrete differentiable matter action, field equations for conservation | [B: Variation,C] / G3 | Planned |
 | 95 | Einstein dynamics: prove stationarity equivalence and trace reversal | κ positive, constant Λ, realized arbitrary compact metric tests | [C,B: Support] / G3 | Planned |
@@ -1211,7 +1220,8 @@ completion closes the design task; these proof milestones remain future work.
 | G9 | Focusing, global causal results and singularity targets | Precise conclusions and explicit [D] premises; no genericity claims inferred from examples |
 | G10 | Universal cotangent and nonreduced deformation comparison | Compatibility with existing native geometry and explicit test-ring scope; no assumed moduli representability |
 
-Start with the curvature derivative and differential Bianchi in G1. The
+G1 is delivered (wave F10 of
+[#135](https://github.com/MGYamada/ProjectAinos/issues/135)). The
 signature and density parts of G2 can proceed in parallel and supply shared
 metric-variation lemmas for the electromagnetic stress tensor. G3 combines
 the completed gravitational variation with concrete matter variational laws.

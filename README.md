@@ -207,6 +207,11 @@ Killing momenta as integrals. Rotating
 co-ordinates in Minkowski space give the slower clocks, the longer
 circumference and the synchronization gap of a rotating disc.
 [Guide](docs/general-relativity.md#observers-killing-fields-and-rotation-82-84-88-89)
+The curvature of every smooth Lorentz metric satisfies the second Bianchi
+identity, its contraction `∇^a Ric_{ab} = ½ ∂_b R` holds, and the Einstein
+tensor `Ric − (R/2) g` is divergence-free; a conformally flat metric on `ℝ⁴`
+with a nonzero Einstein tensor is the test case.
+[Guide](docs/general-relativity.md#the-derivative-of-the-curvature-the-bianchi-identities-and-the-einstein-tensor-85-92)
 
 Topic 6 follows the provisional Boltzmannian typicality plan in
 [issue #55](https://github.com/MGYamada/ProjectAinos/issues/55). Its guiding references are

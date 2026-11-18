@@ -343,8 +343,10 @@ public import ProjectAinos.SmoothGeometry.Lorentzian.Conformal
 public import ProjectAinos.SmoothGeometry.Lorentzian.ConformalExample
 public import ProjectAinos.SmoothGeometry.Lorentzian.Connection
 public import ProjectAinos.SmoothGeometry.Lorentzian.ConnectionExamples
+public import ProjectAinos.SmoothGeometry.Lorentzian.CoordinateConnection
 public import ProjectAinos.SmoothGeometry.Lorentzian.CoordinateMetric
 public import ProjectAinos.SmoothGeometry.Lorentzian.Curvature
+public import ProjectAinos.SmoothGeometry.Lorentzian.CurvatureDerivative
 public import ProjectAinos.SmoothGeometry.Lorentzian.CurvatureExamples
 public import ProjectAinos.SmoothGeometry.Lorentzian.CurvatureNaturality
 public import ProjectAinos.SmoothGeometry.Lorentzian.CurvatureRegularity
@@ -355,6 +357,8 @@ public import ProjectAinos.SmoothGeometry.Lorentzian.Divergence
 public import ProjectAinos.SmoothGeometry.Lorentzian.DivergenceExamples
 public import ProjectAinos.SmoothGeometry.Lorentzian.Dual
 public import ProjectAinos.SmoothGeometry.Lorentzian.DualDerivative
+public import ProjectAinos.SmoothGeometry.Lorentzian.Einstein
+public import ProjectAinos.SmoothGeometry.Lorentzian.ExponentialConformalExample
 public import ProjectAinos.SmoothGeometry.Lorentzian.FlatConnection
 public import ProjectAinos.SmoothGeometry.Lorentzian.FlatFrameExamples
 public import ProjectAinos.SmoothGeometry.Lorentzian.FlatTransport
@@ -367,6 +371,7 @@ public import ProjectAinos.SmoothGeometry.Lorentzian.HodgeFiber
 public import ProjectAinos.SmoothGeometry.Lorentzian.HodgeFlat
 public import ProjectAinos.SmoothGeometry.Lorentzian.HodgeSmooth
 public import ProjectAinos.SmoothGeometry.Lorentzian.HodgeSquare
+public import ProjectAinos.SmoothGeometry.Lorentzian.InertialDerivatives
 public import ProjectAinos.SmoothGeometry.Lorentzian.Killing
 public import ProjectAinos.SmoothGeometry.Lorentzian.LeviCivita
 public import ProjectAinos.SmoothGeometry.Lorentzian.LocalFlatness
@@ -497,6 +502,8 @@ public import ProjectAinos.SmoothGeometry.Tensor.OperationsExamples
 public import ProjectAinos.SmoothGeometry.Tensor.Pullback
 public import ProjectAinos.SmoothGeometry.Tensor.Regularity
 public import ProjectAinos.SmoothGeometry.Tensor.Tensoriality
+public import ProjectAinos.SmoothGeometry.Tensor.TrilinearDerivative
+public import ProjectAinos.SmoothGeometry.Tensor.TrilinearTensoriality
 public import ProjectAinos.SpecialRelativity.Boost
 public import ProjectAinos.SpecialRelativity.Causality
 public import ProjectAinos.SpecialRelativity.CrossSection
