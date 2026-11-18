@@ -1,5 +1,6 @@
 module  -- shake: keep-all --deprecated_module: ignore
 
+public import ProjectAinos.Electrodynamics.CanonicalStress
 public import ProjectAinos.Electrodynamics.ChargeBalance
 public import ProjectAinos.Electrodynamics.ChargedDust
 public import ProjectAinos.Electrodynamics.Components
@@ -94,6 +95,7 @@ public import ProjectAinos.GeneralRelativity.ProperTimeParameter
 public import ProjectAinos.GeneralRelativity.QuadraticGeodesic
 public import ProjectAinos.GeneralRelativity.QuadraticLagrangian
 public import ProjectAinos.GeneralRelativity.RotatingFrame
+public import ProjectAinos.GeneralRelativity.ScalarFieldEquation
 public import ProjectAinos.GeneralRelativity.SchwarzschildEquatorial
 public import ProjectAinos.GeneralRelativity.SchwarzschildExterior
 public import ProjectAinos.GeneralRelativity.SpecialRelativity
@@ -347,6 +349,7 @@ public import ProjectAinos.SmoothGeometry.Lorentzian.ConformalExample
 public import ProjectAinos.SmoothGeometry.Lorentzian.Connection
 public import ProjectAinos.SmoothGeometry.Lorentzian.ConnectionExamples
 public import ProjectAinos.SmoothGeometry.Lorentzian.CoordinateConnection
+public import ProjectAinos.SmoothGeometry.Lorentzian.CoordinateConservation
 public import ProjectAinos.SmoothGeometry.Lorentzian.CoordinateCurvature
 public import ProjectAinos.SmoothGeometry.Lorentzian.CoordinateEinsteinEquation
 public import ProjectAinos.SmoothGeometry.Lorentzian.CoordinateEinsteinHilbert
@@ -354,6 +357,7 @@ public import ProjectAinos.SmoothGeometry.Lorentzian.CoordinateFamily
 public import ProjectAinos.SmoothGeometry.Lorentzian.CoordinateFirstVariation
 public import ProjectAinos.SmoothGeometry.Lorentzian.CoordinateMatter
 public import ProjectAinos.SmoothGeometry.Lorentzian.CoordinateMetric
+public import ProjectAinos.SmoothGeometry.Lorentzian.CoordinateScalarField
 public import ProjectAinos.SmoothGeometry.Lorentzian.CoordinateVariation
 public import ProjectAinos.SmoothGeometry.Lorentzian.Curvature
 public import ProjectAinos.SmoothGeometry.Lorentzian.CurvatureDerivative
@@ -618,6 +622,7 @@ public import ProjectAinos.Variational.Action
 public import ProjectAinos.Variational.EulerLagrange
 public import ProjectAinos.Variational.Examples
 public import ProjectAinos.Variational.FieldJet.Basic
+public import ProjectAinos.Variational.FieldJet.Belinfante
 public import ProjectAinos.Variational.FieldJet.Euler
 public import ProjectAinos.Variational.FieldJet.Noether
 public import ProjectAinos.Variational.FieldJet.Quadratic

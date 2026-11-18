@@ -778,11 +778,27 @@ solution with `Λ = −κ m² c²/2`, the potential energy of the field acting a
 cosmological constant (`minkowski_isStationary_constantScalar`); the curved
 metric `e^{2z} η` is not a vacuum solution (`conformal_not_isStationary_vacuum`).
 
+**Conservation from the field equation of the matter (§94).** On a fixed metric,
+`CoordinateMetric.fieldAction g m φ ψ ε` is the relative action
+`S[φ + εψ] − S[φ]` of the scalar field. For a smooth `ψ` with compact support in
+`U`, `hasDerivAt_fieldAction` gives `∫ ψ (□φ − m² φ) √|g| dx`, through the wave
+operator in divergence form `∂_b(√|g| g^{ab} ∂_aφ) = √|g| □φ`
+(`sum_fderiv_density_inv_mul`), with `□φ = g^{ab} ∇_a ∇_b φ` (`boxOf`,
+`hessianOf`); so the action is stationary in `φ` exactly when `□φ = m² φ`
+(`isFieldStationary_iff`, `EinsteinEquations.isFieldStationary_iff_kleinGordon`).
+`divergenceOf_scalarStress` computes `∇^a T_{ab} = (□φ − m² φ) ∂_bφ` from metric
+compatibility `∂_c g_{ab} = Γ^l_{ca} g_{lb} + Γ^l_{cb} g_{al}` (`fderiv_coefficient`)
+and the symmetry of the Hessian; `bilinearDivergence_bilinearOf` identifies the
+co-ordinate divergence with the native one, so a solution of the Klein–Gordon
+equation has a conserved stress on the fixed background
+(`divergence_scalarStress_eq_zero`), without the Einstein equations. In Minkowski
+space `φ = e^{m x}` is a solution (`kleinGordon_exp`).
+
 **Scope.** As in §93, the metric is given by coefficients on an open set of the
-model space. Conservation is derived from the Einstein equations; its derivation
-from the equations of the matter fields alone, through the invariance under
-diffeomorphisms, is not stated, and the ledger row of §94 stays *informal* until it
-is. The row of §95 is *proved* in this scope.
+model space. The conservation from the field equation of the matter is proved for
+the scalar field; for the fixed electromagnetic field it needs the Maxwell
+equations on the curved background, and the derivation from the invariance under
+diffeomorphisms for a general matter action is not stated.
 
 | Result | Declarations | Source |
 | --- | --- | --- |
@@ -793,6 +809,11 @@ is. The row of §95 is *proved* in this scope.
 | Matter and the equations | `EinsteinEquations.MatterAction`, `vacuum`, `scalarField`, `maxwellField`, `totalAction`, `fieldEquation`, `IsStationary`, `hasDerivAt_totalAction`, `isStationary_iff`, `isStationary_iff_satisfiesEinstein`, `divergence_stress_eq_zero`, `ricci_eq_of_isStationary`, `minkowski_isStationary_vacuum`, `minkowski_isStationary_constantScalar`, `conformal_not_isStationary_vacuum`, `scalarStress_minkowski_zero_zero` | [EinsteinEquations](../ProjectAinos/GeneralRelativity/EinsteinEquations.lean) |
 | The tensor of §33 | `Electrodynamics.componentMatrix`, `maxwellStress_minkowski` | [HilbertStress](../ProjectAinos/Electrodynamics/HilbertStress.lean) |
 
-The typed examples are in `checks/EinsteinEquationsAPI.lean`. The decisions are
-recorded in [GR12 and GR13](general-relativity-notes.md) and in
-[ED14](electrodynamics-notes.md).
+| Conservation on a fixed metric | `CoordinateMetric.fderiv_coefficient`, `hessianOf`, `hessianOf_symm`, `boxOf`, `divergenceOf`, `bilinearDivergence_bilinearOf`, `scalarInvariant`, `fderiv_scalarInvariant`, `covariantDerivative_scalarStress`, `divergenceOf_scalarStress` | [CoordinateConservation](../ProjectAinos/SmoothGeometry/Lorentzian/CoordinateConservation.lean) |
+| Field equation of the scalar field | `CoordinateMetric.fieldDensity`, `fieldAction`, `sum_fderiv_density_inv_mul`, `hasDerivAt_fieldAction`, `isFieldStationary_iff`, `bilinearDivergence_scalarStress`, `bilinearDivergence_scalarStress_eq_zero` | [CoordinateScalarField](../ProjectAinos/SmoothGeometry/Lorentzian/CoordinateScalarField.lean) |
+| Klein–Gordon and conservation | `EinsteinEquations.KleinGordon`, `isFieldStationary_iff_kleinGordon`, `divergence_scalarStress`, `divergence_scalarStress_eq_zero`, `kleinGordon_exp` | [ScalarFieldEquation](../ProjectAinos/GeneralRelativity/ScalarFieldEquation.lean) |
+
+The typed examples are in `checks/EinsteinEquationsAPI.lean` and
+`checks/MatterConservationAPI.lean`. The decisions are recorded in
+[GR12, GR13 and GR14](general-relativity-notes.md) and in
+[ED14 and ED15](electrodynamics-notes.md).
