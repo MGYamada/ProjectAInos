@@ -1792,6 +1792,29 @@ connection of a coordinate metric off the Koszul formula, and
 `Lorentzian/ExponentialConformalExample.lean` is the four-dimensional regression.
 The statements are in the [general relativity guide](general-relativity.md#the-derivative-of-the-curvature-the-bianchi-identities-and-the-einstein-tensor-85-92).
 
+## Varying a coordinate metric
+
+`Lorentzian/SignatureStability.lean` keeps the Lorentz signature of a bilinear
+form whose quadratic form is close to that of a Lorentz form
+(`Minkowski.exists_lorentzFrame_of_near`), and
+`Lorentzian/CoordinateVariation.lean` uses it with the tube lemma to give one
+interval of admissible `ε` for a variation `g + εh` with compact support
+(`CoordinateMetric.eventually_isAdmissible`, `addVariation`).
+`Lorentzian/CoordinateCurvature.lean` writes the Christoffel symbols, the Ricci
+tensor, the scalar curvature and the density as formulas in the coefficients and
+identifies them with the native quantities of a coordinate metric;
+`Lorentzian/CoordinateFamily.lean` applies the formulas to the slices of a
+jointly smooth family `C(ε, x)` and differentiates them in `ε`.
+`Lorentzian/PalatiniAlgebra.lean` is the Palatini identity between arrays of
+numbers, `Lorentzian/CoordinateFirstVariation.lean` differentiates the inverse
+metric and the density of `g + εh`, and
+`Lorentzian/ScalarCurvatureVariation.lean` and
+`Lorentzian/CoordinateEinsteinHilbert.lean` give the pointwise and the integrated
+first variation of `(R − 2Λ)√|g|`, with the native reading of the integrand and of
+the Einstein tensor. `Lorentzian/InertialDerivatives.lean` gains the derivative of
+the inverse metric in any chart (`mvfderiv_chartInverse_chartField`). The physical
+action is in the [general relativity guide](general-relativity.md#the-first-variation-of-the-einsteinhilbert-action-93).
+
 ## Scope and next stages
 
 These definitions impose neither finite generation nor global Hausdorffness

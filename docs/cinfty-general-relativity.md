@@ -41,7 +41,7 @@ The next major step is to make the metric dynamical.
 | Compact-support Stokes in Euclidean coordinates | Proved | `integral_exteriorDerivative_basis_zero`. Transport to chart-supported densities and then to an oriented manifold |
 | Fixed-background Maxwell equations | Proved form/component equivalence and current conservation | Metric variation and Einstein–Maxwell coupling |
 | Controlled Newtonian particle limit | Proved for time-dependent coefficient families | The separate Newtonian limit of the gravitational field equations |
-| Einstein–Hilbert action, Einstein equations and stress-energy | Planned | Compactly supported metric variations first |
+| Einstein–Hilbert action, Einstein equations and stress-energy | First variation of the relative action proved for coefficients on an open set of the model space (F11) | Hilbert stress-energy and the Einstein equations (F12); variations supported in a chart of a manifold |
 | Exact gravitating solutions, gravitational waves and cosmology | Planned | Explicit solution checks before existence or classification claims |
 | C∞-derivations, dual numbers, tangent points and quotients by ideals | Constructed in the shared algebra by the mechanics programme | The universal cotangent module `Ω_A` and its comparison |
 | Jet C∞-rings for curves and their comparison with stationary paths | Constructed in `Mechanics` | Jets of fields and of the metric |
@@ -81,7 +81,7 @@ completion.
 | 90 | The equations of electrodynamics in the presence of a gravitational field | informal | Proved: `Curved.Maxwell`, `Curved.maxwell_iff_components`, `Curved.sourced_iff_divergence`, `Curved.current_closed_iff_divergence`. Missing: the action of the field and of a charge on a curved background (F12) |
 | 91 | The curvature tensor | proved | `curvature`, `curvature_apply`, `curvatureTensor`, `chartCurvature_eq`, `curvature_naturality`, `isLocallyMinkowski_iff_curvature_eq_zero` |
 | 92 | Properties of the curvature tensor | proved | `curvature_swap`, `curvature_first_bianchi`, `curvature_skewAdjoint`, `curvature_pair_interchange`, `ricci_symmetric`, `curvature_second_bianchi`, `chartCurvatureDerivative_bianchi`, `ricci_contracted_bianchi`, `einstein`, `einstein_symmetric`, `contract_einstein`, `einstein_divergence_eq_zero`, `ExponentialConformalExample.metric_einstein_ne_zero`, `ExponentialConformalExample.metric_curvatureDerivative_ne_zero`. Scope: every smooth Lorentz metric, in either convention and every dimension; the identities hold at each point for any tangent vectors. The regression is the metric `e^{2z}(−dt² + dx² + dy² + dz²)` on `ℝ⁴`, with `∇R ≠ 0`, `G ≠ 0` and `∇^a Ric_{az} = ½ ∂_z R ≠ 0` |
-| 93 | The action function for the gravitational field | informal | Planned (F11) |
+| 93 | The action function for the gravitational field | proved | `CoordinateMetric.IsAdmissible`, `CoordinateMetric.eventually_isAdmissible`, `CoordinateMetric.addVariation`, `CoordinateMetric.hasDerivAt_inverseVariation`, `CoordinateMetric.hasDerivAt_variationFamily_density`, `palatini_algebra`, `CoordinateMetric.hasDerivAt_scalarDensity`, `CoordinateMetric.integral_fderiv_density_mul_variationVector`, `CoordinateMetric.hasDerivAt_integral_scalarDensity`, `CoordinateMetric.scalarDensity_eq_toLorentzMetric`, `CoordinateMetric.toLorentzMetric_einstein_chartField`, `CoordinateMetric.eulerLagrangeDensity_eq`, `EinsteinHilbert.eventually_relativeAction_integrand`, `EinsteinHilbert.hasDerivAt_relativeAction`, `EinsteinHilbert.hasDerivAt_relativeAction_conformal`, `EinsteinHilbert.exists_deriv_relativeAction_conformal_ne_zero`. Scope: a metric given by coefficients on an open set `U` of the model space and a smooth symmetric variation `h` with compact support in `U`. For every `ε` near `0` the form `g + εh` is a Lorentz metric on `U`, and the relative action `ΔS(ε) = (1/2κ) ∫ ((R_ε − 2Λ)√|g_ε| − (R − 2Λ)√|g|) d⁴x` integrates the difference of the native Lagrangians; `ΔS'(0) = (1/2κ) ∫ (G_{ik} + Λ g_{ik}) δg^{ik} √|g| d⁴x` with `δg^{ik} = −g^{im} h_{mn} g^{nk}` and the native Einstein tensor, because the term `g^{ik} δR_{ik} √|g| = ∂_a(√|g| V^a)` has compact support and integrates to zero. The shared statements hold in every dimension and either convention, the action is stated in four dimensions and `(−+++)`. The regression is the metric `e^{2z}η` of §92 with `h = fη`, where `ΔS'(0) = −(1/2κ) ∫ f (6 + 4Λ e^{2z})` is not zero for a bump function even when `Λ = 0`. Not stated: a variation supported in a chart of a general Lorentz manifold (it needs the extension by zero and the comparison of charts), and the tensorial forms `δΓ = ½ g^{-1}(∇h + ∇h − ∇h)` and `V^a = ∇_b h^{ab} − ∇^a tr h`; the vector `V^a` is written with `δΓ` |
 | 94 | The energy-momentum tensor | informal | Planned (F12) |
 | 95 | The Einstein equations | informal | Planned (F12) |
 | 96 | The energy-momentum pseudotensor of the gravitational field | informal | Planned: the identities in given co-ordinates (F13); the charges at infinity need decay hypotheses |
@@ -109,7 +109,7 @@ completion.
 | 118 | Oscillating regime of approach to a singular point | informal | Open research target (F25) |
 | 119 | The time singularity in the general cosmological solution of the Einstein equations | informal | Open research target; the focusing of a congruence of geodesics is the planned proved part (F25) |
 
-Count: 10 proved, 29 informal.
+Count: 11 proved, 28 informal.
 
 Closed with a stated remainder: §85 (the derivatives of covectors, of contravariant and mixed tensors, and of the general tensor shapes).
 
@@ -1047,7 +1047,7 @@ The dependency names refer to the interfaces and milestones below.
 | 90 | Electromagnetism on curved backgrounds: form/component equations and coupling | Oriented four-dimensional metric, current sign contract; smooth fields | [C,B: Variation] / ED bridge | Existing Maxwell; coupled actions planned |
 | 91 | Curvature: construct the native tensor and its coordinate expression | Smooth metric; local extension regularity retained | [C] / curvature | Existing |
 | 92 | Curvature identities: prove differential and contracted Bianchi | Tensor derivative and metric-compatible contraction | [C] / G1 | Proved (F10), with a four-dimensional regression |
-| 93 | Gravitational action: differentiate the actual relative action | Compactly supported symmetric variation, signature preservation | [B: Variation,Stokes,C] / G2 | Planned |
+| 93 | Gravitational action: differentiate the actual relative action | Compactly supported symmetric variation, signature preservation | [B: Variation,Stokes,C] / G2 | Proved (F11) for coefficients on an open set of the model space, with a four-dimensional curved regression; chart-supported variations on a manifold not stated |
 | 94 | Matter response: derive Hilbert stress-energy and conservation | Concrete differentiable matter action, field equations for conservation | [B: Variation,C] / G3 | Planned |
 | 95 | Einstein dynamics: prove stationarity equivalence and trace reversal | κ positive, constant Λ, realized arbitrary compact metric tests | [C,B: Support] / G3 | Planned |
 | 96 | Gravitational energy bookkeeping: distinguish pseudotensors and charges | Declared coordinates or asymptotic structure, convergence and flux bounds | [A*,C,D] / boundary and charge interfaces | Planned |
@@ -1221,7 +1221,8 @@ completion closes the design task; these proof milestones remain future work.
 | G10 | Universal cotangent and nonreduced deformation comparison | Compatibility with existing native geometry and explicit test-ring scope; no assumed moduli representability |
 
 G1 is delivered (wave F10 of
-[#135](https://github.com/MGYamada/ProjectAinos/issues/135)). The
+[#135](https://github.com/MGYamada/ProjectAinos/issues/135)), and G2 (wave F11)
+for a metric given by coefficients on an open set of the model space. The
 signature and density parts of G2 can proceed in parallel and supply shared
 metric-variation lemmas for the electromagnetic stress tensor. G3 combines
 the completed gravitational variation with concrete matter variational laws.

@@ -212,6 +212,11 @@ identity, its contraction `∇^a Ric_{ab} = ½ ∂_b R` holds, and the Einstein
 tensor `Ric − (R/2) g` is divergence-free; a conformally flat metric on `ℝ⁴`
 with a nonzero Einstein tensor is the test case.
 [Guide](docs/general-relativity.md#the-derivative-of-the-curvature-the-bianchi-identities-and-the-einstein-tensor-85-92)
+The relative Einstein–Hilbert action of a metric given by coefficients on an
+open set of `ℝ⁴` has, for a variation `g + εh` with compact support, the first
+variation `(1/2κ) ∫ (G_{ik} + Λ g_{ik}) δg^{ik} √|g| d⁴x`; the divergence term
+integrates to zero, and the curved metric `e^{2z} η` gives a nonzero test.
+[Guide](docs/general-relativity.md#the-first-variation-of-the-einsteinhilbert-action-93)
 
 Topic 6 follows the provisional Boltzmannian typicality plan in
 [issue #55](https://github.com/MGYamada/ProjectAinos/issues/55). Its guiding references are

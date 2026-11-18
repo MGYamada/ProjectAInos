@@ -66,6 +66,7 @@ public import ProjectAinos.External.YM.Wilson.Symmetry
 public import ProjectAinos.External.YM.WilsonLawBridge
 public import ProjectAinos.GeneralRelativity.ClockExamples
 public import ProjectAinos.GeneralRelativity.CoordinateTime
+public import ProjectAinos.GeneralRelativity.EinsteinHilbertAction
 public import ProjectAinos.GeneralRelativity.FiniteProperTime
 public import ProjectAinos.GeneralRelativity.FreeGeodesic
 public import ProjectAinos.GeneralRelativity.FreeLagrangian
@@ -344,7 +345,12 @@ public import ProjectAinos.SmoothGeometry.Lorentzian.ConformalExample
 public import ProjectAinos.SmoothGeometry.Lorentzian.Connection
 public import ProjectAinos.SmoothGeometry.Lorentzian.ConnectionExamples
 public import ProjectAinos.SmoothGeometry.Lorentzian.CoordinateConnection
+public import ProjectAinos.SmoothGeometry.Lorentzian.CoordinateCurvature
+public import ProjectAinos.SmoothGeometry.Lorentzian.CoordinateEinsteinHilbert
+public import ProjectAinos.SmoothGeometry.Lorentzian.CoordinateFamily
+public import ProjectAinos.SmoothGeometry.Lorentzian.CoordinateFirstVariation
 public import ProjectAinos.SmoothGeometry.Lorentzian.CoordinateMetric
+public import ProjectAinos.SmoothGeometry.Lorentzian.CoordinateVariation
 public import ProjectAinos.SmoothGeometry.Lorentzian.Curvature
 public import ProjectAinos.SmoothGeometry.Lorentzian.CurvatureDerivative
 public import ProjectAinos.SmoothGeometry.Lorentzian.CurvatureExamples
@@ -384,6 +390,7 @@ public import ProjectAinos.SmoothGeometry.Lorentzian.LorentzFrame
 public import ProjectAinos.SmoothGeometry.Lorentzian.MotionExamples
 public import ProjectAinos.SmoothGeometry.Lorentzian.MotionODE
 public import ProjectAinos.SmoothGeometry.Lorentzian.Naturality
+public import ProjectAinos.SmoothGeometry.Lorentzian.PalatiniAlgebra
 public import ProjectAinos.SmoothGeometry.Lorentzian.ParallelCoframe
 public import ProjectAinos.SmoothGeometry.Lorentzian.ParallelExtension
 public import ProjectAinos.SmoothGeometry.Lorentzian.ParallelFrame
@@ -399,6 +406,8 @@ public import ProjectAinos.SmoothGeometry.Lorentzian.RegularPath
 public import ProjectAinos.SmoothGeometry.Lorentzian.Regularity
 public import ProjectAinos.SmoothGeometry.Lorentzian.Restriction
 public import ProjectAinos.SmoothGeometry.Lorentzian.Ricci
+public import ProjectAinos.SmoothGeometry.Lorentzian.ScalarCurvatureVariation
+public import ProjectAinos.SmoothGeometry.Lorentzian.SignatureStability
 public import ProjectAinos.SmoothGeometry.Lorentzian.SpatialForm
 public import ProjectAinos.SmoothGeometry.Lorentzian.Tensor
 public import ProjectAinos.SmoothGeometry.Lorentzian.TwoFormDerivative

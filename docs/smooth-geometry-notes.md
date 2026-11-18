@@ -195,6 +195,31 @@ scalars, and a long rewrite is split into one `have` for each term, combined by 
 
 **Proof status.** Applied in F10; no option is set. [Trilinear derivative](../ProjectAinos/SmoothGeometry/Tensor/TrilinearDerivative.lean) · [Inertial derivatives](../ProjectAinos/SmoothGeometry/Lorentzian/InertialDerivatives.lean) · [Coordinate connection](../ProjectAinos/SmoothGeometry/Lorentzian/CoordinateConnection.lean)
 
+## G04. Five elaboration limits met with matrices and bilinear forms of the model space
+
+**Observation.** Five limits appeared while varying coordinate metrics (F11).
+1. On the space `MinkowskiModel d →L[ℝ] MinkowskiModel d →L[ℝ] ℝ`, instance search failed for
+   `IsBoundedSMul`, `ContinuousAdd`, `NormSMulClass`, and for the matching of `norm_add_le`,
+   `dist_eq_norm` and `zero_smul`; `ContDiff.smul` with a scalar function and a constant form
+   did not elaborate, and one statement reached the heartbeat limit in `whnf`.
+2. `-(M) a c` for a matrix `M` parses as `-(M a c)`, the negation of an entry, not as the entry
+   of `-M`; lemmas about `(-M) a c` do not match it.
+3. A matrix-valued variable introduced by `set` made later applications fail with "function
+   expected".
+4. A `local notation` for a term cannot be followed by a projection: `gc.coefficient` is read
+   as an identifier `«gc».coefficient`.
+5. `HasFDerivAt.fun_sum` and the composition lemmas leave the index set, or the function, as a
+   metavariable unless they are named (`(u := Finset.univ)`, `(g := …)`), and `HasDerivAt.mul`
+   gives the function as a product of functions, which `convert … using 1` matches.
+
+**Interface decision.** Smoothness of a field of bilinear forms is proved on its values,
+with `contDiff_clm_apply_iff` twice, and bounds on bilinear forms are bounds on the values of
+the quadratic form (`Minkowski.abs_apply_self_le`). Statements write entry negation as
+`-(M a c)`, matrices are not introduced with `set`, and a notation is parenthesized before a
+projection, `(gc).coefficient`.
+
+**Proof status.** Applied in F11; no option is set. [Signature stability](../ProjectAinos/SmoothGeometry/Lorentzian/SignatureStability.lean) · [Inverse metric and density](../ProjectAinos/SmoothGeometry/Lorentzian/CoordinateFirstVariation.lean) · [Action](../ProjectAinos/GeneralRelativity/EinsteinHilbertAction.lean)
+
 ## Lorentz metrics and the common geometric base
 
 The smooth structure of a spacetime is independent of its Lorentz metric.

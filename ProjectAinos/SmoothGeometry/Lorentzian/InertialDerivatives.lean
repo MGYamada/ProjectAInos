@@ -200,6 +200,26 @@ theorem chartCurvature_contract {e : OpenPartialHomeomorph M E}
     Finset.sum_congr rfl fun l _ => mul_comm _ _, ← h]
   rfl
 
+/-- The derivative of the inverse metric in a chart: metric compatibility gives
+`∂_k g^{ij} = −Γ^i_{kb} g^{jb} − Γ^j_{kb} g^{ib}`. -/
+theorem mvfderiv_chartInverse_chartField {e : OpenPartialHomeomorph M E}
+    (he : e ∈ IsManifold.maximalAtlas I ∞ M) {x : M} (hx : x ∈ e.source)
+    (i j k : Fin (d + 1)) :
+    mvfderiv I (fun y => g.chartInverse e y i j) x (chartField e (Pi.single k 1) x) =
+      -∑ b, (g.chartChristoffel e x i k b * g.chartInverse e x j b +
+        g.chartChristoffel e x j k b * g.chartInverse e x i b) := by
+  have hα (a : Fin (d + 1)) :=
+    (chartCovector_contMDiffAt he hx a).mdifferentiableAt (by simp)
+  have hd := g.inversePairing_derivative (hα i) (hα j) (chartField e (Pi.single k 1) x)
+  change mvfderiv I (fun y => chartCovector e y i (g.sharp y (chartCovector e y j))) x _ = _
+  rw [hd]
+  change chartCovector e x j (g.leviCivita (fun y => g.chartRaisedCovector e y i) x
+      (chartField e (Pi.single k 1) x)) + chartCovector e x i (g.leviCivita
+        (fun y => g.chartRaisedCovector e y j) x (chartField e (Pi.single k 1) x)) = _
+  rw [g.leviCivita_chartRaisedCovector he hx, g.leviCivita_chartRaisedCovector he hx]
+  simp only [map_neg, map_sum, map_smul, smul_eq_mul, Finset.sum_add_distrib, neg_add]
+  rfl
+
 section Inertial
 
 variable {g} {e : OpenPartialHomeomorph M (MinkowskiModel d)} {p : M}
