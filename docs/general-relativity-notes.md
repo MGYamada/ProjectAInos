@@ -108,3 +108,11 @@ Only these types are constructed: the pinned Mathlib induces no connection on th
 
 **Proof status.** Proved and built. [Test variations](../ProjectAinos/SmoothGeometry/Lorentzian/CoordinateEinsteinEquation.lean) · [Native equations](../ProjectAinos/SmoothGeometry/Lorentzian/EinsteinEquation.lean) · [Einstein equations](../ProjectAinos/GeneralRelativity/EinsteinEquations.lean)
 
+## GR14. The conservation of matter on a fixed background is derived from the field equation of the scalar field
+
+**Observation.** The target of §94 asks for the conservation that follows from the equations of the matter fields, on a fixed metric, as well as the one through the Einstein equations (the Codex review of #153). Landau–Lifshitz derive it from the invariance of the matter action under diffeomorphisms; that needs the variation of the fields under a flow, which the library does not have. For a concrete action the direct computation suffices: the action of the scalar field varied in `φ` gives the Klein–Gordon equation, and `∇^a T_{ab} = (□φ − m² φ) ∂_bφ` holds for every field smooth on `U`.
+
+**Interface decision.** `CoordinateMetric.fieldAction` is the actual relative action `S[φ + εψ] − S[φ]`, and `hasDerivAt_fieldAction` integrates by parts with the integration-by-parts theorem of the pinned Mathlib, which needs differentiability only on the supports; `isFieldStationary_iff` uses the same fundamental lemma as GR13. `divergenceOf T x b` is `g^{ac}(∂_c T_{ab} − Γ^l_{ca} T_{lb} − Γ^l_{cb} T_{al})`, identified with the native divergence by `bilinearDivergence_bilinearOf` through the chart formula of F10, and `fderiv_coefficient` is metric compatibility for the coefficients. The conservation for the fixed electromagnetic field from the Maxwell equations, and a general Noether argument, are not stated.
+
+**Proof status.** Proved and built; the ledger row of §94 is *proved*. [Conservation](../ProjectAinos/SmoothGeometry/Lorentzian/CoordinateConservation.lean) · [Field equation](../ProjectAinos/SmoothGeometry/Lorentzian/CoordinateScalarField.lean) · [Klein–Gordon](../ProjectAinos/GeneralRelativity/ScalarFieldEquation.lean)
+

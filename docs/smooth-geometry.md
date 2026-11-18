@@ -1829,6 +1829,12 @@ source, the trace and the trace-reversed form, and
 field that pairs to zero with every metric variation vanishes, builds native
 tensors from coefficients and identifies the co-ordinate equations with the native
 ones. The physics is in the [general relativity guide](general-relativity.md#matter-and-the-einstein-equations-94-95).
+`Lorentzian/CoordinateConservation.lean` proves metric compatibility of the
+coefficients, defines the covariant Hessian, the wave operator and the divergence
+of a field of coefficients with its native reading, and computes the divergence of
+the stress of a scalar field; `Lorentzian/CoordinateScalarField.lean` varies the
+scalar field on a fixed metric and proves that its action is stationary exactly when
+the Klein–Gordon equation holds.
 
 ## Scope and next stages
 

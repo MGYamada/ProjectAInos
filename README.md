@@ -220,7 +220,9 @@ integrates to zero, and the curved metric `e^{2z} η` gives a nonzero test.
 With a scalar field or a fixed electromagnetic field, whose Hilbert tensors are
 derived from their actions, the total action is stationary under every compactly
 supported variation of the metric exactly when the Einstein equations hold, and
-their source is then conserved.
+their source is then conserved. On a fixed background the scalar field obeys the
+Klein–Gordon equation exactly when its action is stationary, and then its stress is
+conserved without the Einstein equations.
 [Guide](docs/general-relativity.md#matter-and-the-einstein-equations-94-95)
 
 Topic 6 follows the provisional Boltzmannian typicality plan in

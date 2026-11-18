@@ -24,8 +24,8 @@ The proofs of the three field plans are tracked in
 ledger with one status for each section, a count line and the list of rows closed
 with a remainder, in the vocabulary of the mechanics ledger:
 [special relativity](cinfty-special-relativity.md#ledger) (12 of 14 rows proved),
-[electrodynamics](cinfty-electrodynamics.md#ledger) (18 of 66) and
-[general relativity](cinfty-general-relativity.md#ledger) (12 of 39). The baseline
+[electrodynamics](cinfty-electrodynamics.md#ledger) (19 of 66) and
+[general relativity](cinfty-general-relativity.md#ledger) (13 of 39). The baseline
 counts a row as proved only when its whole target is proved; a row with a proved
 core names the core and stays *informal*. Observations are recorded in the notes
 of [special relativity](special-relativity-notes.md),
@@ -745,10 +745,23 @@ the Lorentz metric there. For every smooth Lorentz metric that satisfies them th
 source is conserved, by the contracted Bianchi identity, and the trace-reversed
 form holds. Minkowski space with a constant scalar field is a solution with a
 cosmological constant, and the curved metric `e^{2z} η` is not a vacuum solution.
-The ledger row of §95 is *proved* in this scope (12 of 39). The row of §94 stays
-*informal*: its target also asks for the conservation that follows from the
-equations of the matter fields on a fixed background, which is not yet proved.
+The ledger row of §95 is *proved* in this scope. On a fixed background, the
+action of a scalar field is stationary under every compactly supported variation of
+the field exactly when `□φ = m² φ`, and then its stress is conserved,
+`∇^a T_{ab} = (□φ − m² φ) ∂_bφ = 0`, without the Einstein equations; with this the
+row of §94 is *proved* as well (13 of 39).
 [Guide](general-relativity.md#matter-and-the-einstein-equations-94-95)
+
+## The symmetric and the canonical stress tensor
+
+In the jet ring of a one-form with the Lagrangian `−¼ F²`, the symmetric tensor
+`Θ^μ_ν = F^{μa} F_{νa} + δ^μ_ν L` differs from minus the canonical tensor of the
+translations by the divergence of `F^{μa} A_ν`, which is divergence-free
+identically, and by a multiple of the field equations. On the jet of a smooth
+potential in Minkowski space `Θ` is the Hilbert tensor that the variation of the
+metric gives. The ledger row of electrodynamics §32 is *proved* in this scope
+(19 of 66).
+[Guide](electrodynamics.md#energy-and-momentum-31-3335)
 
 ## Shared Variational Foundation
 

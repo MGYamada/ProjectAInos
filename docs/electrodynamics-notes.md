@@ -110,7 +110,15 @@ These notes record mathematical distinctions and interface decisions in `Project
 
 **Observation.** Target E19 asks for `δ_g S = −½ ∫ T^{EM}_{μν} δg^{μν} vol_g` with the potential held fixed. The density `−¼ F_{ab} F^{ab} √|g|` depends on the potential only through `F`, and the metric is varied with `F_{ab}` fixed, so the variation needs a field of coefficients `F_{ab}`, not a potential. The library has no integral of a density on a manifold (GR02); the integral is taken on an open set of the model space, as in §93.
 
-**Interface decision.** `CoordinateMetric.maxwellStress` is the Hilbert tensor of a fixed antisymmetric field `F_{ab}` for a metric given by coefficients, and `Electrodynamics.maxwellStress_minkowski` identifies it in Minkowski space with `stressForm G` for `F_{ab} = G(e_a, e_b)`. The native tensor on a Lorentzian manifold is not constructed. The comparison with the canonical tensor of the translations, which the ledger row of §32 also asks for, is left to the second part of F12.
+**Interface decision.** `CoordinateMetric.maxwellStress` is the Hilbert tensor of a fixed antisymmetric field `F_{ab}` for a metric given by coefficients, and `Electrodynamics.maxwellStress_minkowski` identifies it in Minkowski space with `stressForm G` for `F_{ab} = G(e_a, e_b)`. The native tensor on a Lorentzian manifold is not constructed. The comparison with the canonical tensor of the translations, which the ledger row of §32 also asks for, is ED15.
 
 **Proof status.** Proved and built. [Hilbert tensor](../ProjectAinos/SmoothGeometry/Lorentzian/CoordinateMatter.lean) · [Comparison with §33](../ProjectAinos/Electrodynamics/HilbertStress.lean)
+
+## ED15. The canonical tensor is compared with the Hilbert tensor in the jet ring, and evaluated on a potential
+
+**Observation.** The canonical tensor of F6 lives in a jet ring, the Hilbert tensor of ED14 in the co-ordinates of a metric. In the jet ring the comparison is an identity: `Θ^μ_ν + T^μ_ν + Σₐ Dₐ(F^{μa} A_ν) = −A_ν E_μ(L)` for the Lagrangian of a one-form with any constant symmetric matrix, and the term `F^{μa} A_ν` is antisymmetric in `μ, a`, so its divergence vanishes because total derivatives commute. The two settings meet in the standard jet ring, whose prolongation substitutes the jet of a smooth potential.
+
+**Interface decision.** `FieldJetRing.symmetricStress η μ ν` is defined in the jet ring with `L = quadraticLagrangian (gaugeConstants η)`, and `Electrodynamics.prolongation_symmetricStress` proves that on the jet of a potential with the Minkowski matrix it is `η^{μα} T_{αν}` with `CoordinateMetric.maxwellStress` for `F = dA`; `gauge_quadratic_identity` is `½ C w w = −¼ F²` for any symmetric matrix. The canonical tensor keeps the sign of F6, `T^0_0 = H`; the mixed Hilbert tensor is minus the energy density in `(−+++)`, so the relation carries a minus sign. Only the free field in Minkowski space is compared; a general Lagrangian and a curved background are not.
+
+**Proof status.** Proved and built; the ledger row of §32 is *proved* in this scope. [Jet ring](../ProjectAinos/Variational/FieldJet/Belinfante.lean) · [Evaluation](../ProjectAinos/Electrodynamics/CanonicalStress.lean)
 

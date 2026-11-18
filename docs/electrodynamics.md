@@ -434,9 +434,22 @@ is `T_{μν} = G_{μα} G_ν{}^α − ¼ g_{μν} G²`.
 the Hilbert tensor `CoordinateMetric.maxwellStress`
 (`CoordinateMetric.hasDerivAt_integral_maxwellDensity`, F12). In Minkowski space,
 for `F_{ab} = G(e_a, e_b)`, it is `stressForm G` (`maxwellStress_minkowski`): the
-variation of the metric characterizes the tensor of §33. The comparison with the
-canonical tensor of the translations (§32) is not yet proved. The physics of the
+variation of the metric characterizes the tensor of §33. The physics of the
 equations is in the [general relativity guide](general-relativity.md#matter-and-the-einstein-equations-94-95).
+
+**The symmetric and the canonical tensor (§32).** In the jet ring of a one-form with
+the Lagrangian `L = −¼ F²` and a constant symmetric matrix `η`,
+`FieldJetRing.symmetricStress η μ ν` is `Θ^μ_ν = F^{μa} F_{νa} + δ^μ_ν L`, and
+`symmetricStress_add_stress` is `Θ^μ_ν + T^μ_ν + Σₐ Dₐ(F^{μa} A_ν) = −A_ν E_μ(L)`
+with the canonical tensor `T^μ_ν` of `FieldJetRing.stress`. The added term is
+divergence-free identically (`divergence_belinfante`), and `Θ` is conserved
+(`conserved_symmetricStress`). On the jet of a smooth potential `A` in Minkowski
+space (`StandardFieldJet.prolongation`), `Θ^μ_ν` is `η^{μα} T_{αν}` with the
+Hilbert tensor of `F = dA` (`prolongation_symmetricStress`; the Lagrangian is
+`−¼ F_{ab} F^{ab}` by `prolongation_gaugeLagrangian`), and on a solution
+`η^{μα} T_{αν} = −T^μ_ν − Σₐ ∂ₐ(F^{μa} A_ν)` (`hilbertStress_eq_neg_canonical`). The
+sign: the canonical tensor has `T^0_0 = H`, while in the signature `(−+++)` the
+mixed Hilbert tensor has `η^{00} T_{00} = −T_{00}`, minus the energy density.
 
 **Charged dust (§35).** `ChargedDust` has the densities `μ` of the rest mass
 and `ρₑ` of the charge and the four-velocity `U`, with the current `ρₑ U` and the
