@@ -239,6 +239,11 @@ Geodesics normal to a slice give synchronous co-ordinates, in which the Einstein
 split into the constraints and the evolution of the spatial metric; de Sitter space in the
 flat slicing has `Ric = 3 g`.
 [Guide](docs/general-relativity.md#the-synchronous-reference-system-97)
+The superpotential of Landau and Lifshitz gives a pseudotensor that vanishes where the first
+derivatives of the metric vanish and is the expression (96.9) in the Christoffel symbols, and
+with the Einstein equations the total energy and momentum density is conserved in the ordinary
+sense.
+[Guide](docs/general-relativity.md#the-energy-momentum-pseudotensor-96)
 
 Topic 6 follows the provisional Boltzmannian typicality plan in
 [issue #55](https://github.com/MGYamada/ProjectAinos/issues/55). Its guiding references are

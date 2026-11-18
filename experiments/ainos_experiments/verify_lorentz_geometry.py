@@ -5,7 +5,8 @@ All computations are symbolic over the reals; no tolerances or random seeds
 are needed. Formal claims are established separately in Lean.
 """
 
-from itertools import combinations
+from fractions import Fraction
+from itertools import combinations, permutations, product
 
 import sympy as sp
 
@@ -1043,7 +1044,143 @@ def verify_newtonian_family():
                static_acceleration-sp.Matrix([-1, 0, 0])-2*eps*v[0]/(1+2*eps*x)*v)
 
 
+def verify_pseudotensor_expression():
+    """Landau–Lifshitz (96.9) for a nonconstant metric in four dimensions.
+
+    With |g| = -det g and lambda^{iklm} = |g|(g^{ik} g^{lm} - g^{il} g^{km}), the
+    pseudotensor is defined by 2|g|(G^{ik} + t^{ik}) = d_l d_m lambda^{iklm}. The
+    metric is quadratic in the coordinates, so every quantity at the origin is
+    computed exactly from Taylor polynomials truncated at degree two.
+    """
+    size, top = 4, 2
+
+    def mul(p, q):
+        out = {}
+        for (a, x), (b, y) in product(p.items(), q.items()):
+            e = tuple(u + v for u, v in zip(a, b))
+            if sum(e) <= top:
+                out[e] = out.get(e, 0) + x * y
+        return out
+
+    def add(*ps):
+        out = {}
+        for p in ps:
+            for e, x in p.items():
+                out[e] = out.get(e, 0) + x
+        return out
+
+    def scale(c, p):
+        return {e: c * x for e, x in p.items()}
+
+    def diff(p, k):
+        out = {}
+        for e, x in p.items():
+            if e[k]:
+                f = tuple(v - (j == k) for j, v in enumerate(e))
+                out[f] = out.get(f, 0) + e[k] * x
+        return out
+
+    def value(p):
+        return p.get((0,) * size, 0)
+
+    def const(c):
+        return {(0,) * size: Fraction(c)}
+
+    unit = [tuple(int(j == k) for j in range(size)) for k in range(size)]
+    base = [[Fraction(-1 if i == j == 0 else int(i == j)) for j in range(size)]
+            for i in range(size)]
+    base[0][1] = base[1][0] = Fraction(1, 5)
+    base[2][3] = base[3][2] = Fraction(-1, 7)
+    metric = [[None] * size for _ in range(size)]
+    for i in range(size):
+        for j in range(i, size):
+            entry = const(base[i][j])
+            for c in range(size):
+                entry = add(entry, {unit[c]: Fraction((3 * i + 5 * j + 7 * c) % 9 - 4, 6)})
+                for e in range(c, size):
+                    exponent = tuple(u + v for u, v in zip(unit[c], unit[e]))
+                    entry = add(entry, {exponent: Fraction(
+                        (i + 2 * j + 3 * c + 5 * e) % 7 - 3, 8)})
+            metric[i][j] = metric[j][i] = entry
+
+    base_inverse = [[Fraction(x) for x in row] for row in sp.Matrix(base).inv().tolist()]
+    shift = [[add(metric[i][j], const(-base[i][j])) for j in range(size)] for i in range(size)]
+
+    def matmul(a, b):
+        return [[add(*(mul(a[i][k], b[k][j]) for k in range(size))) for j in range(size)]
+                for i in range(size)]
+
+    a_inv = [[const(base_inverse[i][j]) for j in range(size)] for i in range(size)]
+    first = matmul(matmul(a_inv, shift), a_inv)
+    second = matmul(matmul(first, shift), a_inv)
+    inverse = [[add(a_inv[i][j], scale(-1, first[i][j]), second[i][j]) for j in range(size)]
+               for i in range(size)]
+    for i, j in product(range(size), repeat=2):
+        residual = add(*(mul(metric[i][k], inverse[k][j]) for k in range(size)),
+                       const(-int(i == j)))
+        if any(residual.values()):
+            raise AssertionError("pseudotensor: truncated inverse metric")
+
+    def determinant(m):
+        total = {}
+        for perm in permutations(range(size)):
+            sign = 1
+            for a, b in combinations(range(size), 2):
+                if perm[a] > perm[b]:
+                    sign = -sign
+            term = const(sign)
+            for row in range(size):
+                term = mul(term, m[row][perm[row]])
+            total = add(total, term)
+        return total
+
+    density = scale(-1, determinant(metric))
+    if value(density) <= 0:
+        raise AssertionError("pseudotensor: the metric is not Lorentzian at the origin")
+    divergence = [[Fraction(0)] * size for _ in range(size)]
+    for i, k in product(range(size), repeat=2):
+        for l, m in product(range(size), repeat=2):
+            lam = mul(density, add(mul(inverse[i][k], inverse[l][m]),
+                                   scale(-1, mul(inverse[i][l], inverse[k][m]))))
+            divergence[i][k] += value(diff(diff(lam, m), l))
+    gamma = [[[{e: x for e, x in add(*(scale(Fraction(1, 2), mul(inverse[k][d], add(
+        diff(metric[j][d], i), diff(metric[i][d], j), scale(-1, diff(metric[i][j], d)))))
+        for d in range(size))).items() if sum(e) <= 1}
+        for j in range(size)] for i in range(size)] for k in range(size)]
+    g0 = [[value(metric[i][j]) for j in range(size)] for i in range(size)]
+    h0 = [[value(inverse[i][j]) for j in range(size)] for i in range(size)]
+    c0 = [[[value(gamma[k][i][j]) for j in range(size)] for i in range(size)]
+          for k in range(size)]
+    if not any(c0[k][i][j] for k, i, j in product(range(size), repeat=3)):
+        raise AssertionError("pseudotensor: the Christoffel symbols vanish at the origin")
+    ricci = [[sum(value(diff(gamma[c][a][b], c)) - value(diff(gamma[c][c][b], a))
+                  + sum(c0[c][c][e] * c0[e][a][b] - c0[c][a][e] * c0[e][c][b]
+                        for e in range(size)) for c in range(size))
+              for b in range(size)] for a in range(size)]
+    scalar = sum(h0[a][b] * ricci[a][b] for a, b in product(range(size), repeat=2))
+    N = range(size)
+    for i, k in product(N, repeat=2):
+        einstein = sum(h0[i][a] * h0[k][b] * (ricci[a][b] - g0[a][b] * scalar / 2)
+                       for a, b in product(N, repeat=2))
+        t = divergence[i][k] / (2 * value(density)) - einstein
+        braces = sum((2 * c0[n][l][m] * c0[p][n][p] - c0[n][l][p] * c0[p][m][n]
+                      - c0[n][l][n] * c0[p][m][p]) * (h0[i][l] * h0[k][m] - h0[i][k] * h0[l][m])
+                     for l, m, n, p in product(N, repeat=4))
+        for x, y in ((i, k), (k, i)):
+            braces += sum(h0[x][l] * h0[m][n] * (
+                c0[y][l][p] * c0[p][m][n] + c0[y][m][n] * c0[p][l][p]
+                - c0[y][n][p] * c0[p][l][m] - c0[y][l][m] * c0[p][n][p])
+                for l, m, n, p in product(N, repeat=4))
+        braces += sum(h0[l][m] * h0[n][p] * (c0[i][n][l] * c0[k][p][m]
+                                             - c0[i][l][m] * c0[k][n][p])
+                      for l, m, n, p in product(N, repeat=4))
+        if t != braces / 2:
+            raise AssertionError(
+                f"pseudotensor (96.9): t[{i}][{k}] = {t}, braces/2 = {braces / 2}")
+
+
 def verify():
+    verify_pseudotensor_expression()
     verify_density_divergence()
     verify_volterra_solution()
     verify_radial_family()
@@ -1234,7 +1371,8 @@ def verify():
           "the time-dependent Maxwell current and constitutive sign, "
           "curved current/volume/divergence identities in both signatures and orientations, "
           "native two-form covariant differentiation, nonlinear chart covariance and cyclic exterior identities, "
-          "and nonstatic Newtonian coefficient/physical-time calibrations.")
+          "nonstatic Newtonian coefficient/physical-time calibrations, "
+          "and the Landau–Lifshitz pseudotensor expression (96.9).")
 
 
 def main():

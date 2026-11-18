@@ -800,6 +800,18 @@ geometry of the slices. De Sitter space in the flat slicing has `Ric = 3 g` by t
 The ledger row of §97 is *proved* in this scope (16 of 39).
 [Guide](general-relativity.md#the-synchronous-reference-system-97)
 
+## The energy-momentum pseudotensor
+
+The superpotential `h^{ikl} = ∂_m (|g| (g^{ik} g^{lm} − g^{il} g^{km}))` is antisymmetric in
+`k, l`, so its double divergence vanishes; at a point where the first derivatives of the
+coefficients vanish, `∂_l h^{ikl} = 2 |g| G^{ik}`, an identity of the second derivatives of the
+metric. The pseudotensor defined by `2 |g| (G^{ik} + t^{ik}) = ∂_l h^{ikl}` vanishes at such a
+point and is symmetric, and with the Einstein equations the total energy and momentum density
+is conserved in the ordinary sense. At every point the pseudotensor is half the braces of
+(96.9) in the Christoffel symbols. The ledger row of §96 stays *informal* and is closed with a
+stated remainder: the energy and momentum as integrals over a hypersurface are not stated.
+[Guide](general-relativity.md#the-energy-momentum-pseudotensor-96)
+
 ## Shared Variational Foundation
 
 The electrodynamics development adds compact localization for C² Lagrangians
