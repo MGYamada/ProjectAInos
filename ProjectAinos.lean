@@ -22,6 +22,7 @@ public import ProjectAinos.Electrodynamics.FieldTransformation
 public import ProjectAinos.Electrodynamics.GaugeAction
 public import ProjectAinos.Electrodynamics.Hamiltonian
 public import ProjectAinos.Electrodynamics.HamiltonianExamples
+public import ProjectAinos.Electrodynamics.HilbertStress
 public import ProjectAinos.Electrodynamics.Homogeneous
 public import ProjectAinos.Electrodynamics.HomogeneousExamples
 public import ProjectAinos.Electrodynamics.Invariants
@@ -66,6 +67,7 @@ public import ProjectAinos.External.YM.Wilson.Symmetry
 public import ProjectAinos.External.YM.WilsonLawBridge
 public import ProjectAinos.GeneralRelativity.ClockExamples
 public import ProjectAinos.GeneralRelativity.CoordinateTime
+public import ProjectAinos.GeneralRelativity.EinsteinEquations
 public import ProjectAinos.GeneralRelativity.EinsteinHilbertAction
 public import ProjectAinos.GeneralRelativity.FiniteProperTime
 public import ProjectAinos.GeneralRelativity.FreeGeodesic
@@ -346,9 +348,11 @@ public import ProjectAinos.SmoothGeometry.Lorentzian.Connection
 public import ProjectAinos.SmoothGeometry.Lorentzian.ConnectionExamples
 public import ProjectAinos.SmoothGeometry.Lorentzian.CoordinateConnection
 public import ProjectAinos.SmoothGeometry.Lorentzian.CoordinateCurvature
+public import ProjectAinos.SmoothGeometry.Lorentzian.CoordinateEinsteinEquation
 public import ProjectAinos.SmoothGeometry.Lorentzian.CoordinateEinsteinHilbert
 public import ProjectAinos.SmoothGeometry.Lorentzian.CoordinateFamily
 public import ProjectAinos.SmoothGeometry.Lorentzian.CoordinateFirstVariation
+public import ProjectAinos.SmoothGeometry.Lorentzian.CoordinateMatter
 public import ProjectAinos.SmoothGeometry.Lorentzian.CoordinateMetric
 public import ProjectAinos.SmoothGeometry.Lorentzian.CoordinateVariation
 public import ProjectAinos.SmoothGeometry.Lorentzian.Curvature
@@ -364,6 +368,7 @@ public import ProjectAinos.SmoothGeometry.Lorentzian.DivergenceExamples
 public import ProjectAinos.SmoothGeometry.Lorentzian.Dual
 public import ProjectAinos.SmoothGeometry.Lorentzian.DualDerivative
 public import ProjectAinos.SmoothGeometry.Lorentzian.Einstein
+public import ProjectAinos.SmoothGeometry.Lorentzian.EinsteinEquation
 public import ProjectAinos.SmoothGeometry.Lorentzian.ExponentialConformalExample
 public import ProjectAinos.SmoothGeometry.Lorentzian.FlatConnection
 public import ProjectAinos.SmoothGeometry.Lorentzian.FlatFrameExamples
@@ -627,4 +632,5 @@ public import ProjectAinos.Variational.MovingLimits
 public import ProjectAinos.Variational.Parameter
 public import ProjectAinos.Variational.ParametricIntegralOn
 public import ProjectAinos.Variational.Regularity
+public import ProjectAinos.Variational.RelativeIntegral
 public import ProjectAinos.Variational.SecondOrderBound

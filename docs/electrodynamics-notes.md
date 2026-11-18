@@ -105,3 +105,12 @@ These notes record mathematical distinctions and interface decisions in `Project
 **Interface decision.** `ChargedDust` is a structure of three functions with no constraint; the normalization `g(U, U) = −1` is not needed for the identity and is not assumed. The equations of the dust and of the field are hypotheses at a point. A fluid with a pressure, and the virial of §34, are not treated; the row of §34 names the trace of the field as its proved part.
 
 **Proof status.** `ChargedDust.divergence_matterStress`, `lorentzForce_zero_eq`, `lorentzForce_succ_eq` and `total_stress_conserved` are proved. `total_stress_conserved_uniform` is an instance: neutral dust that moves uniformly in any constant field satisfies all the hypotheses. [Charged dust](../ProjectAinos/Electrodynamics/ChargedDust.lean)
+
+## ED14. The tensor of §33 is characterized by the variation of the metric in co-ordinates
+
+**Observation.** Target E19 asks for `δ_g S = −½ ∫ T^{EM}_{μν} δg^{μν} vol_g` with the potential held fixed. The density `−¼ F_{ab} F^{ab} √|g|` depends on the potential only through `F`, and the metric is varied with `F_{ab}` fixed, so the variation needs a field of coefficients `F_{ab}`, not a potential. The library has no integral of a density on a manifold (GR02); the integral is taken on an open set of the model space, as in §93.
+
+**Interface decision.** `CoordinateMetric.maxwellStress` is the Hilbert tensor of a fixed antisymmetric field `F_{ab}` for a metric given by coefficients, and `Electrodynamics.maxwellStress_minkowski` identifies it in Minkowski space with `stressForm G` for `F_{ab} = G(e_a, e_b)`. The native tensor on a Lorentzian manifold is not constructed. The comparison with the canonical tensor of the translations, which the ledger row of §32 also asks for, is left to the second part of F12.
+
+**Proof status.** Proved and built. [Hilbert tensor](../ProjectAinos/SmoothGeometry/Lorentzian/CoordinateMatter.lean) · [Comparison with §33](../ProjectAinos/Electrodynamics/HilbertStress.lean)
+

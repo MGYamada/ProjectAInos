@@ -8,6 +8,7 @@ public import ProjectAinos.SmoothGeometry.Lorentzian.ScalarCurvatureVariation
 public import ProjectAinos.SmoothGeometry.Lorentzian.Einstein
 public import Mathlib.Analysis.Calculus.LineDeriv.IntegrationByParts
 public import Mathlib.Analysis.Calculus.ParametricIntegral
+public import ProjectAinos.Variational.RelativeIntegral
 
 /-!
 # The first variation of the relative scalar-curvature action
@@ -278,82 +279,17 @@ theorem hasDerivAt_integral_scalarDensity (hh : ContDiff ℝ ∞ h) (hK : HasCom
     (hKU : tsupport h ⊆ U) (hs : ∀ z v w, h z v w = h z w v) (Λ : ℝ) :
     HasDerivAt (fun ε => ∫ x, (g.scalarDensity h Λ (ε, x) - g.scalarDensity h Λ (0, x)))
       (∫ x, g.eulerLagrangeDensity h Λ x) 0 := by
-  set K := tsupport h
-  have hKc : IsCompact K := hK
   obtain ⟨δ, hδ, hadm⟩ :=
     Metric.eventually_nhds_iff.mp (g.eventually_isAdmissible hh.continuous hK hKU hs)
-  set s := Metric.closedBall (0 : ℝ) (δ / 2)
-  have hs0 : s ∈ 𝓝 (0 : ℝ) := Metric.closedBall_mem_nhds _ (half_pos hδ)
-  have h0s : (0 : ℝ) ∈ s := Metric.mem_closedBall_self (half_pos hδ).le
-  have hsadm : ∀ ε ∈ s, g.IsAdmissible h ε := fun ε hε => hadm (by
-    rw [Metric.mem_closedBall] at hε
-    linarith [half_lt_self hδ])
   set L := g.scalarDensity h Λ
-  have hL : ∀ ε ∈ s, ∀ z ∈ U, ContDiffAt ℝ ∞ L (ε, z) := fun ε hε z hz =>
-    contDiffAt_scalarDensity hh Λ hz (variationFamily_det_ne_zero hh (hsadm ε hε) hz)
-  have hconst : ∀ x ∉ K, (fun t => L (t, x)) = fun _ => L (0, x) := fun x hx =>
-    funext fun t => scalarDensity_of_notMem Λ hx t
-  -- the bound on the derivative in `ε`
-  set D : ℝ × MinkowskiModel d → ℝ := fun q => fderiv ℝ L q (1, 0)
-  have hDat : ∀ ε ∈ s, ∀ z ∈ U, ContinuousAt D (ε, z) := fun ε hε z hz =>
-    ((hL ε hε z hz).fderiv_right (m := 0) (by simp)).continuousAt.clm_apply continuousAt_const
-  have hDcont : ContinuousOn D (s ×ˢ K) := fun q hq =>
-    (hDat q.1 hq.1 q.2 (hKU hq.2)).continuousWithinAt
-  obtain ⟨C, hC⟩ :=
-    ((isCompact_closedBall (0 : ℝ) (δ / 2)).prod hKc).exists_bound_of_continuousOn hDcont
-  have hslice : ∀ ε ∈ s, ∀ z ∈ U, deriv (fun t => L (t, z)) ε = D (ε, z) := fun ε hε z hz =>
-    (hasDerivAt_slice ((hL ε hε z hz).differentiableAt (by simp))).deriv
-  have hderiv : ∀ x, ∀ ε ∈ s, HasDerivAt (fun t => L (t, x) - L (0, x))
-      (deriv (fun t => L (t, x)) ε) ε := by
-    intro x ε hε
-    by_cases hxK : x ∈ K
-    · have hd := hasDerivAt_slice ((hL ε hε x (hKU hxK)).differentiableAt (by simp))
-      rw [hd.deriv]
-      exact hd.sub_const _
-    · have h1 : (fun t => L (t, x) - L (0, x)) = fun _ => 0 := funext fun t => by
-        rw [show L (t, x) = L (0, x) from congrFun (hconst x hxK) t, sub_self]
-      rw [h1, hconst x hxK, deriv_const]
-      exact hasDerivAt_const _ _
-  have hbound : ∀ x, ∀ ε ∈ s, ‖deriv (fun t => L (t, x)) ε‖ ≤ K.indicator (fun _ => C) x := by
-    intro x ε hε
-    by_cases hxK : x ∈ K
-    · rw [Set.indicator_of_mem hxK, hslice ε hε x (hKU hxK)]
-      exact hC (ε, x) ⟨hε, hxK⟩
-    · rw [Set.indicator_of_notMem hxK, hconst x hxK, deriv_const, norm_zero]
-  have hbint : Integrable (K.indicator fun _ => C) volume :=
-    (continuousOn_const.integrableOn_compact hKc).integrable_indicator
-      hKc.isClosed.measurableSet
-  -- continuity in the point
-  have hin (t : ℝ) (x : MinkowskiModel d) : ContinuousAt (fun z : MinkowskiModel d => (t, z)) x :=
-    (continuous_const.prodMk continuous_id).continuousAt
-  have hFcont : ∀ ε ∈ s, Continuous (fun x => L (ε, x) - L (0, x)) := by
-    intro ε hε
-    refine continuous_iff_continuousAt.mpr fun x => ?_
-    by_cases hx : x ∈ U
-    · exact ((hL ε hε x hx).continuousAt.comp_of_eq (hin ε x) rfl).sub
-        ((hL 0 h0s x hx).continuousAt.comp_of_eq (hin 0 x) rfl)
-    · have hxK : x ∉ K := fun h' => hx (hKU h')
-      refine (continuousAt_const (y := (0 : ℝ))).congr ?_
-      filter_upwards [(isClosed_tsupport h).isOpen_compl.mem_nhds hxK] with z hz
-      rw [show L (ε, z) = L (0, z) from congrFun (hconst z hz) ε, sub_self]
-  have hF'cont : Continuous (fun x => deriv (fun t => L (t, x)) 0) := by
-    refine continuous_iff_continuousAt.mpr fun x => ?_
-    by_cases hx : x ∈ U
-    · have hDc : ContinuousAt (fun z => D (0, z)) x := (hDat 0 h0s x hx).comp_of_eq (hin 0 x) rfl
-      refine hDc.congr ?_
-      filter_upwards [U.isOpen.mem_nhds hx] with z hz
-      exact (hslice 0 h0s z hz).symm
-    · have hxK : x ∉ K := fun h' => hx (hKU h')
-      refine (continuousAt_const (y := (0 : ℝ))).congr ?_
-      filter_upwards [(isClosed_tsupport h).isOpen_compl.mem_nhds hxK] with z hz
-      rw [hconst z hz, deriv_const]
-  have hmain := hasDerivAt_integral_of_dominated_loc_of_deriv_le (μ := volume)
-    (F := fun ε x => L (ε, x) - L (0, x)) (F' := fun ε x => deriv (fun t => L (t, x)) ε)
-    (bound := K.indicator fun _ => C) hs0
-    (Filter.eventually_of_mem hs0 fun ε hε => (hFcont ε hε).aestronglyMeasurable)
-    (by simp) hF'cont.aestronglyMeasurable
-    (Filter.Eventually.of_forall fun x ε hε => hbound x ε hε) hbint
-    (Filter.Eventually.of_forall fun x ε hε => hderiv x ε hε)
+  have hL : ∀ ε ∈ Metric.closedBall (0 : ℝ) (δ / 2), ∀ z ∈ U, ContDiffAt ℝ ∞ L (ε, z) :=
+    fun ε hε z hz => contDiffAt_scalarDensity hh Λ hz (variationFamily_det_ne_zero hh (hadm (by
+      rw [Metric.mem_closedBall] at hε
+      linarith [half_lt_self hδ])) hz)
+  have hmain := Variational.hasDerivAt_integral_sub (μ := volume) U.isOpen hK hKU (half_pos hδ)
+    hL fun x hx t => scalarDensity_of_notMem Λ hx t
+  have hmint := Variational.integrable_deriv_sub (μ := volume) hK hKU (half_pos hδ)
+    hL fun x hx t => scalarDensity_of_notMem Λ hx t
   -- the divergence terms integrate to zero
   have hdivint (a : Fin (d + 1)) : Integrable (fun x => fderiv ℝ
       (fun z => densityOf g.coefficient z * g.variationVector h z a) x (Pi.single a 1)) volume :=
@@ -369,7 +305,7 @@ theorem hasDerivAt_integral_scalarDensity (hh : ContDiff ℝ ∞ h) (hK : HasCom
         (Pi.single a 1) :=
     deriv_scalarDensity_zero (g := g) hh hs hKU Λ x
   have heint : Integrable (g.eulerLagrangeDensity h Λ) volume := by
-    refine (hmain.1.sub hsumint).congr (Filter.Eventually.of_forall fun x => ?_)
+    refine (hmint.sub hsumint).congr (Filter.Eventually.of_forall fun x => ?_)
     change deriv (fun t => L (t, x)) 0 - _ = _
     rw [hpt x]
     ring
@@ -380,7 +316,7 @@ theorem hasDerivAt_integral_scalarDensity (hh : ContDiff ℝ ∞ h) (hK : HasCom
     rw [integral_add heint hsumint, integral_finsetSum _ fun a _ => hdivint a]
     simp [integral_fderiv_density_mul_variationVector (g := g) hh hK hKU]
   rw [← hval]
-  exact hmain.2
+  exact hmain
 
 /-! ### The native reading -/
 

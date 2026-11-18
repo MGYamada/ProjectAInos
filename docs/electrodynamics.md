@@ -428,6 +428,16 @@ is `T_{μν} = G_{μα} G_ν{}^α − ¼ g_{μν} G²`.
 | `T₀₀ = u`, `T₀ᵢ = −Sᵢ`, `Tᵢⱼ = σᵢⱼ` in the frame of the co-ordinates | `stressForm_zero_zero`, `stressForm_zero_succ`, `stressForm_succ_succ` |
 | `∂_μ T^{μ0} = −E · 𝐤` and `∂_μ T^{μ,i} = −(ρ Eᵢ + (𝐤 × B)ᵢ)` | `divergence_raisedStress_zero`, `divergence_raisedStress_succ` |
 
+**The tensor from the variation of the metric.** For a fixed antisymmetric field
+`F_{ab}` and a metric given by coefficients on an open set, the first variation of
+`−¼ F_{ab} F^{ab} √|g|` with respect to the metric is `−½ T_{ik} δg^{ik} √|g|` with
+the Hilbert tensor `CoordinateMetric.maxwellStress`
+(`CoordinateMetric.hasDerivAt_integral_maxwellDensity`, F12). In Minkowski space,
+for `F_{ab} = G(e_a, e_b)`, it is `stressForm G` (`maxwellStress_minkowski`): the
+variation of the metric characterizes the tensor of §33. The comparison with the
+canonical tensor of the translations (§32) is not yet proved. The physics of the
+equations is in the [general relativity guide](general-relativity.md#matter-and-the-einstein-equations-94-95).
+
 **Charged dust (§35).** `ChargedDust` has the densities `μ` of the rest mass
 and `ρₑ` of the charge and the four-velocity `U`, with the current `ρₑ U` and the
 stress `μ U^μ U^ν`. If the mass is conserved, the divergence of the stress is

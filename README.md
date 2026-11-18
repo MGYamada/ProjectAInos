@@ -217,6 +217,11 @@ open set of `ℝ⁴` has, for a variation `g + εh` with compact support, the fi
 variation `(1/2κ) ∫ (G_{ik} + Λ g_{ik}) δg^{ik} √|g| d⁴x`; the divergence term
 integrates to zero, and the curved metric `e^{2z} η` gives a nonzero test.
 [Guide](docs/general-relativity.md#the-first-variation-of-the-einsteinhilbert-action-93)
+With a scalar field or a fixed electromagnetic field, whose Hilbert tensors are
+derived from their actions, the total action is stationary under every compactly
+supported variation of the metric exactly when the Einstein equations hold, and
+their source is then conserved.
+[Guide](docs/general-relativity.md#matter-and-the-einstein-equations-94-95)
 
 Topic 6 follows the provisional Boltzmannian typicality plan in
 [issue #55](https://github.com/MGYamada/ProjectAinos/issues/55). Its guiding references are

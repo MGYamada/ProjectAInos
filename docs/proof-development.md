@@ -25,7 +25,7 @@ ledger with one status for each section, a count line and the list of rows close
 with a remainder, in the vocabulary of the mechanics ledger:
 [special relativity](cinfty-special-relativity.md#ledger) (12 of 14 rows proved),
 [electrodynamics](cinfty-electrodynamics.md#ledger) (18 of 66) and
-[general relativity](cinfty-general-relativity.md#ledger) (11 of 39). The baseline
+[general relativity](cinfty-general-relativity.md#ledger) (12 of 39). The baseline
 counts a row as proved only when its whole target is proved; a row with a proved
 core names the core and stays *informal*. Observations are recorded in the notes
 of [special relativity](special-relativity-notes.md),
@@ -732,6 +732,23 @@ Einstein tensor. On the curved metric `e^{2z} η` with `h = f η` the derivative
 row of §93 is *proved* in this scope (11 of 39); a variation supported in a chart
 of a general manifold is not stated.
 [Guide](general-relativity.md#the-first-variation-of-the-einsteinhilbert-action-93)
+
+## Matter and the Einstein equations
+
+For a metric given by coefficients on an open set of `ℝ⁴`, the relative actions of
+a scalar field and of a fixed electromagnetic field have the first variations
+`−½ ∫ T_{ik} δg^{ik} √|g| d⁴x` with their Hilbert tensors; in Minkowski space the
+tensor of the field is that of §33. For `κ ≠ 0`, the total relative action is
+stationary under every compactly supported variation of the metric if and only if
+`G_{ik} + Λ g_{ik} = κ T_{ik}` on the open set, the native Einstein equations of
+the Lorentz metric there. For every smooth Lorentz metric that satisfies them the
+source is conserved, by the contracted Bianchi identity, and the trace-reversed
+form holds. Minkowski space with a constant scalar field is a solution with a
+cosmological constant, and the curved metric `e^{2z} η` is not a vacuum solution.
+The ledger row of §95 is *proved* in this scope (12 of 39). The row of §94 stays
+*informal*: its target also asks for the conservation that follows from the
+equations of the matter fields on a fixed background, which is not yet proved.
+[Guide](general-relativity.md#matter-and-the-einstein-equations-94-95)
 
 ## Shared Variational Foundation
 
