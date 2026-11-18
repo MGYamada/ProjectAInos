@@ -8,6 +8,7 @@ public import ProjectAinos.GeneralRelativity.NewtonianBounds
 public import ProjectAinos.GeneralRelativity.CoordinateTime
 public import ProjectAinos.SmoothGeometry.Manifold.OpenTangent
 public import ProjectAinos.SmoothGeometry.Lorentzian.ChartDerivatives
+public import ProjectAinos.SmoothGeometry.Lorentzian.CoordinateMetric
 public import Mathlib.LinearAlgebra.Matrix.NonsingularInverse
 public import Mathlib.LinearAlgebra.QuadraticForm.Real
 
@@ -37,174 +38,38 @@ theorem form_symmetric {U : Opens E} (f : NewtonianMetricFamily U) {c : ℝ}
   rw [f.coefficient_symmetric hc hq j i]
   ring
 
-private theorem positiveQuadraticCoordinates (Q : QuadraticForm ℝ S)
-    (hQ : ∀ v ≠ 0, 0 < Q v) :
-    ∃ e : S ≃ₗ[ℝ] S, ∀ v, Q v = ∑ i, (e v i)^2 := by
-  obtain ⟨w, ⟨e⟩⟩ := Q.equivalent_weightedSumSquares
-  have hdim : Module.finrank ℝ S = 3 := Module.finrank_fin_fun ℝ
-  revert w e
-  rw [hdim]
-  intro w e
-  have hw (i : Fin 3) : 0 < w i := by
-    let v : S := Pi.single i 1
-    have hv : v ≠ 0 := by
-      intro h
-      have h' := congrFun h i
-      simp [v] at h'
-    have hp := hQ (e.symm v) (by
-      intro hz
-      exact hv (by simpa using congrArg e hz))
-    rw [← e.map_app, e.apply_symm_apply, QuadraticMap.weightedSumSquares_apply] at hp
-    simpa [v, Pi.single_apply, ite_pow, Finset.sum_ite_eq', mul_comm] using hp
-  let r := QuadraticForm.isometryEquivSignWeightedSumSquares w
-  refine ⟨(e.trans r).toLinearEquiv, fun v => ?_⟩
-  rw [← (e.trans r).map_app, QuadraticMap.weightedSumSquares_apply]
-  apply Finset.sum_congr rfl
-  intro i _
-  simp [sign_pos (hw i), smul_eq_mul, pow_two]
-
-/-- Completing the square along the negative time line gives a positive
-quadratic form on its orthogonal complement and hence an inertial frame. -/
-private theorem exists_lorentzFrame (B : E →L[ℝ] E →L[ℝ] ℝ)
-    (hs : ∀ v w, B v w = B w v)
-    (ht : B (Fin.cons 1 (0 : S)) (Fin.cons 1 (0 : S)) < 0)
-    (hx : ∀ v : S, v ≠ 0 → 0 < B (Fin.cons 0 v) (Fin.cons 0 v)) :
-    ∃ e : E ≃L[ℝ] E, ∀ v w, B v w = minkowskiForm .timeNegative 3 (e v) (e w) := by
-  let z : E := Fin.cons 1 (0 : S)
-  let a := B z z
-  have ha : a < 0 := ht
-  let J : S →L[ℝ] E := (0 : S →L[ℝ] ℝ).finCons (ContinuousLinearMap.id ℝ S)
-  have hJ (v : S) : J v = Fin.cons 0 v := rfl
-  let b : S →L[ℝ] ℝ := ((B.flip) z).comp J
-  let P : S →L[ℝ] E := J - (a⁻¹ • b).smulRight z
-  have hP (v : S) : P v = J v - (b v / a) • z := by
-    simp [P, div_eq_mul_inv, mul_comm]
-  have hb (v : S) : b v = B (J v) z := rfl
-  let Q : QuadraticForm ℝ S := LinearMap.BilinMap.toQuadraticMap (LinearMap.mk₂ ℝ (fun u v => B (P u) (P v))
-    (by intros; simp [add_apply])
-    (by intros; simp [smul_apply])
-    (by intros; simp)
-    (by intros; simp))
-  have hQ (v : S) : Q v = B (P v) (P v) := rfl
-  have horth (v : S) : B (P v) z = 0 := by
-    rw [hP, map_sub, map_smul]
-    simp only [sub_apply, smul_apply, smul_eq_mul, ← hb]
-    change b v - (b v / a) * a = 0
-    field_simp [ha.ne]
-    ring
-  have hsplit (v : S) : B (P v) (P v) = B (J v) (J v) - (b v)^2 / a := by
-    calc
-      B (P v) (P v) = B (P v) (J v) := by
-        conv_lhs => arg 2; rw [hP v]
-        simp [horth]
-      _ = _ := by
-        rw [hP, map_sub, map_smul]
-        simp only [sub_apply, smul_apply, smul_eq_mul, hs z (J v), ← hb]
-        ring
-  obtain ⟨e, he⟩ := positiveQuadraticCoordinates Q (fun v hv => by
-    rw [hQ, hsplit]
-    have hp := hx v hv
-    rw [← hJ v] at hp
-    exact sub_pos.mpr ((div_nonpos_of_nonneg_of_nonpos (sq_nonneg _) ha.le).trans_lt hp))
-  let tailMap : E →L[ℝ] S := ContinuousLinearMap.pi fun i => proj i.succ
-  let timeMap : E →L[ℝ] ℝ := proj 0 + a⁻¹ • (b.comp tailMap)
-  let r := Real.sqrt (-a)
-  have hr : r ≠ 0 := (Real.sqrt_pos.2 (neg_pos.mpr ha)).ne'
-  let L : E →L[ℝ] E := (r • timeMap).finCons (e.toContinuousLinearEquiv.toContinuousLinearMap.comp tailMap)
-  have htL (v : E) : L v 0 = r * (v 0 + b (Fin.tail v) / a) := by
-    change r * (v 0 + a⁻¹ * b (Fin.tail v)) = _
-    rw [div_eq_mul_inv, mul_comm a⁻¹]
-  have hxL (v : E) : Fin.tail (L v) = e (Fin.tail v) := rfl
-  have hinj : Function.Injective L := by
-    intro v w h
-    have hs' := e.injective ((hxL v).symm.trans ((congrArg Fin.tail h).trans (hxL w)))
-    have ht' := congrFun h 0
-    rw [htL, htL, hs'] at ht'
-    have h0 := add_right_cancel (mul_left_cancel₀ hr ht')
-    rw [← Fin.cons_self_tail v, ← Fin.cons_self_tail w, h0, hs']
-  let iso := (LinearEquiv.ofBijective L.toLinearMap
-    ⟨hinj, (LinearMap.injective_iff_surjective_of_finrank_eq_finrank rfl).mp hinj⟩).toContinuousLinearEquiv
-  have hdiag (v : E) : B v v = minkowskiForm .timeNegative 3 (iso v) (iso v) := by
-    let u := Fin.tail v
-    let t := v 0 + b u / a
-    have hv : v = t • z + P u := by
-      rw [hP, hJ]
-      ext i
-      refine Fin.cases ?_ (fun j => ?_) i
-      · change v 0 = t * 1 + (0 - b u / a * 1)
-        dsimp [t]
-        ring
-      · change v j.succ = t * 0 + (u j - b u / a * 0)
-        simp only [mul_zero, sub_zero, zero_add]
-        rfl
-    calc
-      B v v = a * t^2 + Q u := by
-        nth_rw 1 2 [hv]
-        simp only [map_add, map_smul, add_apply, smul_apply, smul_eq_mul, horth,
-          hs z (P u), mul_zero, zero_add, add_zero, ← hQ]
-        change t * (t * a) + Q u = _
-        ring
-      _ = _ := by
-        have hsqrt : r^2 = -a := Real.sq_sqrt (neg_nonneg.mpr ha.le)
-        rw [he, minkowskiForm_apply, Fin.sum_univ_succ]
-        change a * t^2 + ∑ i, (e u i)^2 =
-          lorentzSign .timeNegative (0 : Fin 4) * (L v 0 * L v 0) +
-            ∑ i : Fin 3, lorentzSign .timeNegative i.succ * (L v i.succ * L v i.succ)
-        have htail (i : Fin 3) : L v i.succ = e u i := congrFun (hxL v) i
-        have ht0 : L v 0 = r * t := htL v
-        simp only [ht0, htail, lorentzSign, LorentzConvention.timeSign, Fin.succ_ne_zero,
-          ite_false, ite_true, neg_mul, one_mul, mul_neg, mul_one, neg_neg]
-        simp_rw [← pow_two]
-        rw [mul_pow, hsqrt]
-        ring
-  refine ⟨iso, fun v w => ?_⟩
-  have h := hdiag (v + w)
-  simp only [map_add, add_apply] at h
-  rw [hs w v, hdiag v, hdiag w, minkowskiForm_symmetric .timeNegative (iso w) (iso v)] at h
-  linarith
-
 /-- Every sufficiently large member has Lorentz signature at every point. -/
 theorem form_signature {U : Opens E} (f : NewtonianMetricFamily U) {c : ℝ}
     (hc : 1 ≤ c) (hlarge : 9 * f.bound < c^2) (q : U) :
     ∃ e : E ≃L[ℝ] E, ∀ v w,
       f.form c q v w = minkowskiForm .timeNegative 3 (e v) (e w) := by
-  apply exists_lorentzFrame (f.form c q) (f.form_symmetric (by linarith) q.property)
+  apply Minkowski.exists_lorentzFrame (d := 3) (f.form c q)
+    (f.form_symmetric (by linarith) q.property)
   · exact f.form_timeVelocity_neg hc q.property (v := 0) (V := 0) (by simp) le_rfl (by
       simpa [timelikeThreshold] using (show 3 * f.bound < c^2 by linarith [f.bound_nonneg]))
   · exact fun _ hv => f.form_spatial_pos hc q.property hlarge hv
 
 /-- The physical coordinate chart of the common open domain, with source all of
-the domain and target its underlying open subset of the coordinate model. -/
-def physicalChart {U : Opens E} (x : U) : OpenPartialHomeomorph U E := chartAt E x
+the domain and target its underlying open subset of the coordinate model: the chart
+`CoordinateMetric.physicalChart` of the shared geometry. -/
+def physicalChart {U : Opens E} (x : U) : OpenPartialHomeomorph U E :=
+  CoordinateMetric.physicalChart (d := 3) x
 
 theorem physicalChart_eq {U : Opens E} (x y : U) :
-    physicalChart x = physicalChart y := by
-  simp only [physicalChart, Opens.chartAt_eq, chartAt_self_eq]
+    physicalChart x = physicalChart y :=
+  CoordinateMetric.physicalChart_eq (d := 3) x y
 
 @[simp] theorem physicalChart_apply {U : Opens E} (x y : U) :
-    physicalChart x y = (y : E) := by
-  simp [physicalChart, Opens.chartAt_eq, chartAt_self_eq]
+    physicalChart x y = (y : E) :=
+  CoordinateMetric.physicalChart_apply (d := 3) x y
 
 @[simp] theorem physicalChart_source {U : Opens E} (x : U) :
-    (physicalChart x).source = univ := by
-  simp [physicalChart, Opens.chartAt_eq, chartAt_self_eq]
+    (physicalChart x).source = univ :=
+  CoordinateMetric.physicalChart_source (d := 3) x
 
 theorem physicalChart_mem {U : Opens E} (x : U) :
     physicalChart x ∈ IsManifold.maximalAtlas I ∞ U :=
-  IsManifold.chart_mem_maximalAtlas x
-
-private theorem physicalChart_symmL {U : Opens E} (x y : U) :
-    (trivializationAt E (TangentSpace I) x).symmL ℝ y =
-      (ContinuousLinearMap.id ℝ E : E →L[ℝ] E) := by
-  have hy : y ∈ (chartAt E x).source := by
-    change y ∈ (physicalChart x).source
-    simp
-  rw [TangentBundle.symmL_trivializationAt_eq_core hy]
-  have he : achart E x = achart E y := Subtype.ext (physicalChart_eq x y)
-  rw [he]
-  apply ContinuousLinearMap.ext
-  intro v
-  exact (tangentBundleCore I U).coordChange_self (achart E y) y (mem_achart_source E y) v
+  CoordinateMetric.physicalChart_mem (d := 3) x
 
 /-- The native metric on the common open domain for a sufficiently large
 positive value of `c`. Its smoothness and signature follow from the family. -/
@@ -224,7 +89,7 @@ def lorentzMetric {U : Opens E} (f : NewtonianMetricFamily U) (c : ℝ)
       simp
     rw [hom_trivializationAt_apply, inCoordinates_apply_eq₂ hy hy (by simp),
       ← Trivialization.symmL_apply (R := ℝ) _ hy, ← Trivialization.symmL_apply (R := ℝ) _ hy,
-      physicalChart_symmL]
+      CoordinateMetric.physicalChart_symmL (d := 3)]
     simp
     rfl
   signature x := f.form_signature hc hlarge x
@@ -234,23 +99,12 @@ def lorentzMetric {U : Opens E} (f : NewtonianMetricFamily U) (c : ℝ)
     (f.lorentzMetric c hc hlarge).form x v w = f.form c x v w := rfl
 
 @[simp] theorem physicalChart_target {U : Opens E} (x : U) :
-    (physicalChart x).target = (U : Set E) := by
-  ext y
-  constructor
-  · intro hy
-    rw [← (physicalChart x).right_inv hy, physicalChart_apply]
-    exact ((physicalChart x).symm y).property
-  · intro hy
-    exact (physicalChart x).map_source (x := ⟨y, hy⟩) (by simp)
+    (physicalChart x).target = (U : Set E) :=
+  CoordinateMetric.physicalChart_target (d := 3) x
 
 @[simp] theorem physicalChart_tangentMap {U : Opens E} (x y : U) (v : TangentSpace I y) :
-    chartTangentMap (physicalChart x) y v = (v : E) := by
-  have he : (physicalChart x : U → E) = Subtype.val :=
-    funext (physicalChart_apply x)
-  change NormedSpace.fromTangentSpace (physicalChart x y)
-    (mfderiv I I (physicalChart x : U → E) y v) = v
-  rw [he, Manifold.mfderiv_subtype_val_apply U]
-  rfl
+    chartTangentMap (physicalChart x) y v = (v : E) :=
+  CoordinateMetric.physicalChart_tangentMap (d := 3) x y v
 
 theorem lorentzMetric_component {U : Opens E} (f : NewtonianMetricFamily U) {c : ℝ}
     (hc : 1 ≤ c) (hlarge : 9 * f.bound < c^2) (x y : U) (i j : Fin 4) :

@@ -25,7 +25,7 @@ ledger with one status for each section, a count line and the list of rows close
 with a remainder, in the vocabulary of the mechanics ledger:
 [special relativity](cinfty-special-relativity.md#ledger) (12 of 14 rows proved),
 [electrodynamics](cinfty-electrodynamics.md#ledger) (18 of 66) and
-[general relativity](cinfty-general-relativity.md#ledger) (5 of 39). The baseline
+[general relativity](cinfty-general-relativity.md#ledger) (9 of 39). The baseline
 counts a row as proved only when its whole target is proved; a row with a proved
 core names the core and stays *informal*. Observations are recorded in the notes
 of [special relativity](special-relativity-notes.md),
@@ -675,6 +675,31 @@ is `−F^ν{}_λ k^λ`. Charged dust that conserves its mass and moves by the
 Lorentz force has the opposite divergence, so the total stress is conserved.
 The ledger rows of §§31, 33 and 35 are *proved* in their stated scopes (18 of
 66). [Guide](electrodynamics.md#energy-and-momentum-31-3335)
+
+## Observers, Killing fields and rotation
+
+A symmetric bilinear form that is negative on the time axis and positive
+definite on the space has a Lorentz frame for `(−+++)`, in every dimension, and
+the same criterion with the factor `−σ.timeSign` gives a frame for either
+convention; so smooth coefficients on an open set of the model space define a
+Lorentz metric with its chart components, its inverse and its Christoffel
+symbols. An observer with a timelike velocity `u` measures distances with the
+spatial form `g − g(u, ·)²/g(u, u)`, positive on every displacement not along
+`u`, whose square root is half the proper time of a light signal to a
+neighbouring event and back, with the middle event simultaneous. The observer at rest has the clock `√(−g₀₀)` and
+the spatial metric `γᵢⱼ = gᵢⱼ − g₀ᵢ g₀ⱼ/g₀₀`. Along a geodesic segment the pairing
+of a Killing field with the velocity is constant, and the frequency measured by
+the observers that move along a timelike Killing field obeys `N ω = const`; a
+coordinate metric that does not depend on `x^k` has the Killing field `∂_k`, and
+the exterior Schwarzschild field gives the red shift `√(1 − 2M/r) ω = const`
+along every geodesic segment off the axis, radial rays included. In a chart whose coefficients lie
+in the free C∞-ring the trajectories of `½ g^{μν} p_μ p_ν` are the geodesics of
+the chart defined for all values of the parameter, and `ξ^μ p_μ` is an integral
+exactly when `L_ξ g = 0`. In rotating co-ordinates Minkowski space has the
+clocks `√(1 − Ω²ρ²)`, the circumference `2πρ/√(1 − Ω²ρ²)` and the
+synchronization gap `2πΩρ²/(1 − Ω²ρ²)`. The ledger rows of §§82, 84, 88 and 89
+are *proved* in their stated scopes (9 of 39).
+[Guide](general-relativity.md#observers-killing-fields-and-rotation-82-84-88-89)
 
 ## Shared Variational Foundation
 

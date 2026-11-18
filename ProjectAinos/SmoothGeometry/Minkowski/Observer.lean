@@ -12,6 +12,35 @@ public import ProjectAinos.SmoothGeometry.Minkowski.Isometry
 noncomputable section
 namespace ProjectAinos.SmoothGeometry.Minkowski
 
+/-- A nonzero vector orthogonal to a timelike vector of Minkowski space is spacelike. -/
+theorem intervalQuadratic_neg_of_pair_eq_zero {d : ℕ} {U W : MinkowskiModel d}
+    (hU : 0 < intervalQuadratic U) (hW : pair U W = 0) (hW0 : W ≠ 0) :
+    intervalQuadratic W < 0 := by
+  rw [intervalQuadratic_coordinates] at hU
+  rw [pair_apply] at hW
+  have hc : (inner ℝ (space U) (space W)) ^ 2 ≤ ‖space U‖ ^ 2 * ‖space W‖ ^ 2 := by
+    have h := mul_self_le_mul_self (abs_nonneg _) (abs_real_inner_le_norm (space U) (space W))
+    simpa only [← pow_two, sq_abs, mul_pow] using h
+  have hn : 0 < ‖space W‖ ^ 2 := by
+    by_contra h
+    have hz : space W = 0 := norm_eq_zero.mp (by nlinarith [norm_nonneg (space W)])
+    have htU : time U ≠ 0 := by
+      intro h0
+      rw [h0] at hU
+      nlinarith [sq_nonneg ‖space U‖]
+    have hv0 : time W = 0 := by
+      rw [hz, inner_zero_right] at hW
+      exact (mul_eq_zero.mp (sub_eq_zero.mp hW)).resolve_left htU
+    apply hW0
+    rw [← vector_time_space W, hz, hv0]
+    ext i
+    refine Fin.cases ?_ (fun j => ?_) i <;> rfl
+  rw [intervalQuadratic_coordinates]
+  have hc' : (time U * time W) ^ 2 ≤ ‖space U‖ ^ 2 * ‖space W‖ ^ 2 := by
+    rw [sub_eq_zero.mp hW]
+    exact hc
+  nlinarith [sq_nonneg (time W), sq_nonneg (time U)]
+
 @[ext] structure Observer (d : ℕ) where
   velocity : MinkowskiModel d
   unit : intervalQuadratic velocity = 1
@@ -61,34 +90,9 @@ def restForm : LinearMap.BilinForm ℝ u.restSpace :=
 
 /-- A vector orthogonal to a unit timelike vector has negative Q unless it is zero. -/
 theorem rest_negative (v : u.restSpace) (hne : v ≠ 0) :
-    intervalQuadratic (v : MinkowskiModel d) < 0 := by
-  have hu := u.unit
-  rw [intervalQuadratic_coordinates] at hu
-  have ho := u.clock_rest v
-  change pair u.velocity (v : MinkowskiModel d) = 0 at ho
-  rw [pair_apply] at ho
-  have hc : (inner ℝ (space u.velocity) (space (v : MinkowskiModel d))) ^ 2 ≤
-      ‖space u.velocity‖ ^ 2 * ‖space (v : MinkowskiModel d)‖ ^ 2 := by
-    have h := mul_self_le_mul_self (abs_nonneg _)
-      (abs_real_inner_le_norm (space u.velocity) (space (v : MinkowskiModel d)))
-    simpa only [← pow_two, sq_abs, mul_pow] using h
-  have ht : time u.velocity ^ 2 > 0 := sq_pos_of_pos u.future
-  have hn : 0 < ‖space (v : MinkowskiModel d)‖ ^ 2 := by
-    by_contra h
-    have hz : space (v : MinkowskiModel d) = 0 := norm_eq_zero.mp (by nlinarith [norm_nonneg (space (v : MinkowskiModel d))])
-    have hv0 : time (v : MinkowskiModel d) = 0 := by
-      rw [hz, inner_zero_right] at ho
-      exact (mul_eq_zero.mp (sub_eq_zero.mp ho)).resolve_left (ne_of_gt u.future)
-    apply hne
-    apply Subtype.ext
-    rw [← vector_time_space (v : MinkowskiModel d), hz, hv0]
-    ext i; refine Fin.cases ?_ (fun j => ?_) i <;> rfl
-  rw [intervalQuadratic_coordinates]
-  have hc' : (time u.velocity * time (v : MinkowskiModel d)) ^ 2 ≤
-      ‖space u.velocity‖ ^ 2 * ‖space (v : MinkowskiModel d)‖ ^ 2 := by
-    rw [sub_eq_zero.mp ho]
-    exact hc
-  nlinarith [sq_nonneg (time (v : MinkowskiModel d))]
+    intervalQuadratic (v : MinkowskiModel d) < 0 :=
+  intervalQuadratic_neg_of_pair_eq_zero (by rw [u.unit]; exact one_pos) (u.clock_rest v)
+    (fun h => hne (Subtype.ext h))
 
 theorem restForm_posDef : (LinearMap.BilinMap.toQuadraticMap u.restForm).PosDef := by
   intro v hv
