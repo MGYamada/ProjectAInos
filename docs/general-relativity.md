@@ -875,3 +875,48 @@ stress between the field and the matter on a curved background are not stated.
 
 The typed examples are in `checks/CurvedChargeAPI.lean`. The decisions are recorded in
 [GR15](general-relativity-notes.md) and [ED16](electrodynamics-notes.md).
+
+## Orthonormal frames and the tetrad equations (§98)
+
+**Frames.** `LorentzMetric.OrthonormalFrame g W` is a family of vector fields `E_a`
+smooth on an open set `W` with `g(E_a, E_b) = η_{ab}` there, `η_{aa} = lorentzSign σ a`.
+At a point of `W` every vector is `Σ_a η_{aa} g(v, E_a) E_a` (`sum_coord_smul`): the
+frame coordinates `coord` and the combination `combine` are inverse, so `E_a` is a
+basis (`coordEquiv`), the metric is `Σ_a η_{aa} g(u, E_a) g(w, E_a)` (`form_eq_sum`)
+and a bilinear form is determined by its frame components (`bilinear_ext`). Two
+orthonormal frames differ by a Lorentz matrix (`transition_orthonormal`). The coordinate
+fields of the Minkowski coordinate metric are a frame (`CoordinateMetric.minkowskiFrame`).
+
+**Rotation coefficients.** `rotation a b c` is `γ_{abc} = g(∇_{E_c} E_a, E_b)`, the
+index order of Landau–Lifshitz, and `commutator a b c` is
+`λ_{abc} = g(E_a, [E_b, E_c])`, which is their
+`(e_{(a)i,k} − e_{(a)k,i}) e^i_{(b)} e^k_{(c)}`. Metric compatibility makes `γ`
+antisymmetric in `a, b` (`rotation_antisymm`), the vanishing torsion gives
+`λ_{abc} = γ_{abc} − γ_{acb}` (`commutator_eq`), and together
+`γ_{abc} = ½ (λ_{abc} + λ_{bca} − λ_{cab})` (`rotation_eq`).
+
+**Curvature.** `curvatureComponent a b c k` is `R_{abck} = g(R(E_c, E_k) E_b, E_a)` with
+the convention `R(X, Y) = [∇_X, ∇_Y] − ∇_{[X,Y]}`, and `curvatureComponent_eq` is the
+second structure equation of Cartan in components:
+`R_{abck} = E_c(γ_{bak}) − E_k(γ_{bac}) −
+Σ_f η_{ff} (γ_{bfk} γ_{afc} − γ_{bfc} γ_{afk} + λ_{fck} γ_{baf})`. Each `∇∇` term is
+differentiated by metric compatibility, and `∇_{[E_c, E_k]}` is expanded in the frame,
+so no Leibniz rule for the frame fields is needed. `ricci_field`, `ricci_field_eq` and
+`scalarCurvature_eq` give `Ric(E_b, E_k) = Σ_i η_{ii} R_{ikib}` in the rotation
+coefficients and `R = Σ_i η_{ii} Ric(E_i, E_i)`, and `einstein_field` the frame
+components of `G`.
+
+**The tetrad equations.** `einstein_eq_iff`: at a point of the frame,
+`G + Λ g = κ T` if and only if `G_{ab} + Λ η_{ab} = κ T_{ab}` for all frame indices;
+`satisfiesEinstein_iff_frames` states this for the Einstein equations on a manifold
+covered by the open sets of frames. The existence of a smooth orthonormal frame near every
+point is not stated, and the Ricci tensor is written with `γ` rather than with `λ` alone.
+
+| Result | Declarations | Source |
+| --- | --- | --- |
+| Frames and expansion | `LorentzMetric.OrthonormalFrame`, `OrthonormalFrame.coord`, `combine`, `coord_combine`, `sum_coord_smul`, `coordEquiv`, `coordEquiv_symm_single`, `form_eq_sum`, `bilinear_ext`, `coord_field`, `transition_orthonormal`, `CoordinateMetric.minkowskiFrame` | [Tetrad](../ProjectAinos/SmoothGeometry/Lorentzian/Tetrad.lean) |
+| Rotation coefficients | `OrthonormalFrame.rotation`, `commutator`, `rotation_antisymm`, `commutator_eq`, `rotation_eq` | [Tetrad](../ProjectAinos/SmoothGeometry/Lorentzian/Tetrad.lean) |
+| Curvature and the equations | `OrthonormalFrame.curvatureComponent`, `curvatureComponent_eq`, `ricci_eq_sum_frame`, `ricci_field`, `ricci_field_eq`, `scalarCurvature_eq`, `einstein_field`, `einstein_eq_iff`, `LorentzMetric.satisfiesEinstein_iff_frames` | [Tetrad](../ProjectAinos/SmoothGeometry/Lorentzian/Tetrad.lean) |
+
+The typed examples are in `checks/TetradAPI.lean`. The decisions are recorded in
+[GR16](general-relativity-notes.md).

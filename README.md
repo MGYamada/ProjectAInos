@@ -232,6 +232,9 @@ On a fixed background given by coefficients on an open set, the Maxwell equation
 `∇_a F^{ab} = j^b` follow from the action of the field, and the covariant Lorentz force
 from the action of a charge, with the flat theorems as the Minkowski case.
 [Guide](docs/general-relativity.md#the-field-and-a-charge-on-a-fixed-background-90)
+In a smooth orthonormal frame the curvature is given by the rotation coefficients and
+their frame derivatives, and the Einstein equations are equivalent to their tetrad form.
+[Guide](docs/general-relativity.md#orthonormal-frames-and-the-tetrad-equations-98)
 
 Topic 6 follows the provisional Boltzmannian typicality plan in
 [issue #55](https://github.com/MGYamada/ProjectAinos/issues/55). Its guiding references are
