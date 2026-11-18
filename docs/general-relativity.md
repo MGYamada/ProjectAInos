@@ -920,3 +920,46 @@ point is not stated, and the Ricci tensor is written with `γ` rather than with 
 
 The typed examples are in `checks/TetradAPI.lean`. The decisions are recorded in
 [GR16](general-relativity-notes.md).
+
+## The synchronous reference system (§97)
+
+**Normal geodesics.** `LorentzMetric.familyVelocity_pairing_eq`: for a two-parameter
+family whose curves `t ↦ Γ(s, t)` are geodesics with the same metric norm `c` of their
+velocity, the pairing `g(γ̇, ∂_s Γ)` is constant in `t`. Its derivative is
+`g(γ̇, D_t ∂_sΓ) = g(γ̇, D_s γ̇) = ½ ∂_s g(γ̇, γ̇) = 0` by the interchange of the covariant
+derivatives of a family (`covariantAlong_family_interchange`). So a variation field
+orthogonal to the velocity at `t = 0` stays orthogonal (`familyVelocity_orthogonal`, the
+lemma of Gauss): geodesics normal to a slice with unit velocity have synchronous
+co-ordinates. The family is data; its construction from a slice needs the geodesic flow
+of a metric smooth only on an open set and the inverse function theorem.
+
+**Synchronous co-ordinates.** `CoordinateMetric.IsSynchronous g` is `g_{00} = −1` and
+`g_{0α} = 0` on `U`, so `ds² = −dt² + γ_{αβ} dx^α dx^β`. The inverse has the same time row
+(`inv_zero`), `Γ^k_{00} = 0`, `Γ^0_{0j} = 0`, `Γ^α_{0β} = ½ κ^α_β` and
+`Γ^0_{αβ} = ½ ∂_t γ_{αβ}`, with `κ^α_β = γ^{αδ} ∂_t γ_{βδ}` (`extrinsicRate`) and
+`κ_{αβ} = ∂_t γ_{αβ}` (`metricRate`). The time lines are geodesics in the proper time,
+orthogonal to the slices (`isGeodesicOn_timeLine`). The Ricci tensor is (97.11)–(97.13):
+`ricci_zero_zero`, `R_{00} = −½ ∂_t κ^α_α − ¼ κ^α_β κ^β_α`; `ricci_zero_succ`,
+`R_{0α} = ½ (κ^β_{α;β} − κ^β_{β;α})` with the covariant derivative of the slices, where
+`∂_t Γ^β_{βα} = ½ ∂_α κ^β_β` comes from `Γ^c_{ck} = ∂_k log √|g|` (`fderiv_log_densityOf`)
+and the symmetry of second derivatives; `ricci_succ_succ`,
+`R_{αβ} = P_{αβ} + ½ ∂_t κ_{αβ} + ¼ (κ^γ_γ κ_{αβ} − κ_{αγ} κ^γ_β − κ^γ_α κ_{γβ})` with the
+Ricci tensor `P_{αβ}` of the slices (`sliceRicci`). The components are read natively by
+`toLorentzMetric_ricci_chartField`; with them the Einstein equations in this system are
+the constraints `R_{00}`, `R_{0α}` and the evolution `R_{αβ}`.
+
+**Regression.** `DeSitterSlicing.metric` is `−dt² + e^{2t}(dx² + dy² + dz²)` on `ℝ⁴`:
+it is synchronous with `κ^α_β = 2 δ^α_β`, and the three formulas give `Ric = 3 g`
+(`DeSitterSlicing.ricci_eq`), the vacuum equations with `Λ = 3`.
+
+**Scope.** The focusing of the time lines, by which a synchronous system meets a caustic
+in a finite time, is planned with the equation of Raychaudhuri (F25).
+
+| Result | Declarations | Source |
+| --- | --- | --- |
+| Normal geodesics | `LorentzMetric.familyVelocity_pairing_eq`, `familyVelocity_orthogonal` | [NormalGeodesics](../ProjectAinos/SmoothGeometry/Lorentzian/NormalGeodesics.lean) |
+| Synchronous co-ordinates | `CoordinateMetric.IsSynchronous`, `extrinsicRate`, `metricRate`, `sliceRicci`, `fderiv_log_densityOf`, `IsSynchronous.coefficient_zero`, `inv_zero`, `christoffel_zero_zero`, `christoffel_zero_zero_succ`, `christoffel_succ_zero_succ`, `christoffel_zero_succ_succ`, `ricci_zero_zero`, `ricci_zero_succ`, `ricci_succ_succ`, `isGeodesicOn_timeLine` | [Synchronous](../ProjectAinos/SmoothGeometry/Lorentzian/Synchronous.lean) |
+| De Sitter space | `DeSitterSlicing.metric`, `isSynchronous`, `extrinsicRate_eq`, `metricRate_eq`, `christoffel_spatial`, `ricci_eq` | [DeSitterSlicing](../ProjectAinos/GeneralRelativity/DeSitterSlicing.lean) |
+
+The typed examples are in `checks/SynchronousAPI.lean`. The decisions are recorded in
+[GR17](general-relativity-notes.md).

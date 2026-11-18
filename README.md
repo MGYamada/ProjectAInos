@@ -235,6 +235,10 @@ from the action of a charge, with the flat theorems as the Minkowski case.
 In a smooth orthonormal frame the curvature is given by the rotation coefficients and
 their frame derivatives, and the Einstein equations are equivalent to their tetrad form.
 [Guide](docs/general-relativity.md#orthonormal-frames-and-the-tetrad-equations-98)
+Geodesics normal to a slice give synchronous co-ordinates, in which the Einstein equations
+split into the constraints and the evolution of the spatial metric; de Sitter space in the
+flat slicing has `Ric = 3 g`.
+[Guide](docs/general-relativity.md#the-synchronous-reference-system-97)
 
 Topic 6 follows the provisional Boltzmannian typicality plan in
 [issue #55](https://github.com/MGYamada/ProjectAinos/issues/55). Its guiding references are

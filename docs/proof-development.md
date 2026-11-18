@@ -25,7 +25,7 @@ ledger with one status for each section, a count line and the list of rows close
 with a remainder, in the vocabulary of the mechanics ledger:
 [special relativity](cinfty-special-relativity.md#ledger) (12 of 14 rows proved),
 [electrodynamics](cinfty-electrodynamics.md#ledger) (20 of 66) and
-[general relativity](cinfty-general-relativity.md#ledger) (15 of 39). The baseline
+[general relativity](cinfty-general-relativity.md#ledger) (16 of 39). The baseline
 counts a row as proved only when its whole target is proved; a row with a proved
 core names the core and stays *informal*. Observations are recorded in the notes
 of [special relativity](special-relativity-notes.md),
@@ -788,6 +788,17 @@ follow from `γ`, `λ` and the frame derivatives of `γ`. The Einstein equations
 exactly when their frame components hold in the frames of a cover, and two orthonormal
 frames differ by a Lorentz matrix. The ledger row of §98 is *proved* (15 of 39).
 [Guide](general-relativity.md#orthonormal-frames-and-the-tetrad-equations-98)
+
+## The synchronous reference system
+
+Geodesics whose velocities have the same metric norm keep a variation field orthogonal to the
+velocity once it is orthogonal at one time, by the interchange of the covariant derivatives of
+a family; so geodesics normal to a slice give synchronous co-ordinates. For a metric with
+`g_{00} = −1` and `g_{0α} = 0` on an open set, the time lines are geodesics in the proper time,
+and the Ricci tensor is the system (97.11)–(97.13) in the rate `κ` of the spatial metric and the
+geometry of the slices. De Sitter space in the flat slicing has `Ric = 3 g` by these formulas.
+The ledger row of §97 is *proved* in this scope (16 of 39).
+[Guide](general-relativity.md#the-synchronous-reference-system-97)
 
 ## Shared Variational Foundation
 

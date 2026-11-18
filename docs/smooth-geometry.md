@@ -1852,6 +1852,15 @@ commutator coefficients, the second structure equation of Cartan in components, 
 Ricci, scalar and Einstein tensors in the frame, and the change of frame. The physics is
 in the [general relativity guide](general-relativity.md#orthonormal-frames-and-the-tetrad-equations-98).
 
+## Normal geodesics and synchronous co-ordinates
+
+`Lorentzian/NormalGeodesics.lean` proves the lemma of Gauss for a two-parameter family of
+geodesics with the same metric norm of their velocity. `Lorentzian/Synchronous.lean` treats a
+coordinate metric with `g_{00} = −1` and `g_{0α} = 0`: its inverse, Christoffel symbols and
+time lines, and the Ricci tensor in terms of the rate `κ` of the spatial metric and the
+geometry of the slices. The physics is in the
+[general relativity guide](general-relativity.md#the-synchronous-reference-system-97).
+
 ## Scope and next stages
 
 These definitions impose neither finite generation nor global Hausdorffness
