@@ -1747,6 +1747,31 @@ the source vector is orientation independent and conserved. The shared
 geometry modules import no physics. See the [electrodynamics guide](electrodynamics.md#fixed-background-maxwell-forms)
 for exact assumptions and the textbook convention comparison.
 
+## Metrics from coordinate coefficients, observers and Killing fields
+
+`Lorentzian/LorentzFrame.lean` proves the signature criterion in every
+dimension: a symmetric bilinear form on `MinkowskiModel d` that is negative on
+the time axis and positive definite on the space has a frame in which it is
+the Minkowski form of `.timeNegative` (`Minkowski.exists_lorentzFrame`);
+`exists_lorentzFrame_convention` is the statement for either convention, with
+the hypotheses on `−σ.timeSign · B`. `Lorentzian/CoordinateMetric.lean`
+turns a family of such forms, smooth on an open set `U` of the model, into a
+`LorentzMetric` on the manifold `U` with the inclusion as its chart; its
+components, its inverse and its Christoffel symbols in this chart are the
+matrix formulas (`toLorentzMetric_chartComponent`, `toLorentzMetric_inverseComponent`,
+`toLorentzMetric_christoffel`), and `toLorentzMetric_chartMetric` identifies the
+metric in the chart at each point with the given form. `Lorentzian/SpatialForm.lean`
+defines the spatial form `B(v, w) − B(u, v) B(u, w)/B(u, u)` of a timelike vector
+`u`, proves that its square root is the radar distance of a light signal sent
+to a neighbouring event and back, that it is positive on every vector not along
+`u` when `B` has a Lorentz frame of the convention `.timeNegative`, and gives its coefficients `gᵢⱼ − g₀ᵢ g₀ⱼ/g₀₀` for
+`u = e₀`. `Lorentzian/Killing.lean` defines the Killing equation, proves that the
+pairing of a Killing field with the velocity of a geodesic is constant on any
+convex set of parameters, and gives the red shift `N ω = const` for the
+observers that move along a timelike Killing field; a co-ordinate field `∂_k` is
+a Killing field where the metric does not change along it. The physical
+measurements are in the [general relativity guide](general-relativity.md#observers-killing-fields-and-rotation-82-84-88-89).
+
 ## Scope and next stages
 
 These definitions impose neither finite generation nor global Hausdorffness

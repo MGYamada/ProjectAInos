@@ -112,12 +112,12 @@ theorem magneticTensor_gaugeShift (a : Fin d → FreeSmoothRing (Fin d))
 /-- The kinetic momentum `πᵢ = pᵢ − e aᵢ`. -/
 def kineticMomentum (e : ℝ) (a : Fin d → FreeSmoothRing (Fin d)) (i : Fin d) :
     PhaseSpace (Fin d) :=
-  p i - algebraMap ℝ (PhaseSpace (Fin d)) e * ofPosition (a i)
+  p i - algebraMap ℝ (PhaseSpace (Fin d)) e * ofPosition (Fin d) (a i)
 
 /-- The Hamiltonian `√(m² + Σ (pᵢ − e aᵢ)²) + e φ` of a charge in a static field. -/
 def hamiltonian (m e : ℝ) (φ : FreeSmoothRing (Fin d)) (a : Fin d → FreeSmoothRing (Fin d)) :
     PhaseSpace (Fin d) :=
-  relEnergy m (kineticMomentum e a) + algebraMap ℝ (PhaseSpace (Fin d)) e * ofPosition φ
+  relEnergy m (kineticMomentum e a) + algebraMap ℝ (PhaseSpace (Fin d)) e * ofPosition (Fin d) φ
 
 /-- The velocity `πᵢ/√(m² + Σ πⱼ²)` as a function on the phase space. -/
 def velocity (m e : ℝ) (a : Fin d → FreeSmoothRing (Fin d)) (i : Fin d) : PhaseSpace (Fin d) :=
@@ -145,7 +145,7 @@ theorem canonical_q_kineticMomentum (i j : Fin d) :
 /-- `{pᵢ, πⱼ} = e ∂ᵢaⱼ`. -/
 theorem canonical_p_kineticMomentum (i j : Fin d) :
     (canonical (Fin d)).bracket (p i) (kineticMomentum e a j) =
-      algebraMap ℝ (PhaseSpace (Fin d)) e * ofPosition (partialDerivation i (a j)) := by
+      algebraMap ℝ (PhaseSpace (Fin d)) e * ofPosition (Fin d) (partialDerivation i (a j)) := by
   simp only [kineticMomentum, AlmostPoissonStructure.bracket_sub_right,
     AlmostPoissonStructure.bracket_mul_right, AlmostPoissonStructure.bracket_algebraMap_right,
     canonical_p_ofPosition, canonical_p_p, mul_zero, add_zero]
@@ -153,8 +153,8 @@ theorem canonical_p_kineticMomentum (i j : Fin d) :
 
 /-- `{πᵢ, f} = −∂ᵢf` for a function `f` of the position. -/
 theorem canonical_kineticMomentum_ofPosition (i : Fin d) (f : FreeSmoothRing (Fin d)) :
-    (canonical (Fin d)).bracket (kineticMomentum e a i) (ofPosition f) =
-      -ofPosition (partialDerivation i f) := by
+    (canonical (Fin d)).bracket (kineticMomentum e a i) (ofPosition (Fin d) f) =
+      -ofPosition (Fin d) (partialDerivation i f) := by
   simp only [kineticMomentum, AlmostPoissonStructure.bracket_sub_left,
     AlmostPoissonStructure.bracket_mul_left, AlmostPoissonStructure.bracket_algebraMap_left,
     canonical_ofPosition_ofPosition, canonical_p_ofPosition, mul_zero, add_zero, sub_zero]
@@ -163,15 +163,15 @@ theorem canonical_kineticMomentum_ofPosition (i : Fin d) (f : FreeSmoothRing (Fi
 field. -/
 theorem canonical_kineticMomentum_kineticMomentum (i j : Fin d) :
     (canonical (Fin d)).bracket (kineticMomentum e a i) (kineticMomentum e a j) =
-      algebraMap ℝ (PhaseSpace (Fin d)) e * ofPosition (magneticTensor a i j) := by
+      algebraMap ℝ (PhaseSpace (Fin d)) e * ofPosition (Fin d) (magneticTensor a i j) := by
   have h1 := canonical_kineticMomentum_ofPosition e a i (a j)
   have h2 : (canonical (Fin d)).bracket (kineticMomentum e a i) (p j) =
-      -(algebraMap ℝ (PhaseSpace (Fin d)) e * ofPosition (partialDerivation j (a i))) := by
+      -(algebraMap ℝ (PhaseSpace (Fin d)) e * ofPosition (Fin d) (partialDerivation j (a i))) := by
     rw [(canonical (Fin d)).antisymm, canonical_p_kineticMomentum]
   have h : (canonical (Fin d)).bracket (kineticMomentum e a i) (kineticMomentum e a j) =
       (canonical (Fin d)).bracket (kineticMomentum e a i) (p j) -
         algebraMap ℝ (PhaseSpace (Fin d)) e *
-          (canonical (Fin d)).bracket (kineticMomentum e a i) (ofPosition (a j)) := by
+          (canonical (Fin d)).bracket (kineticMomentum e a i) (ofPosition (Fin d) (a j)) := by
     conv_lhs => rw [kineticMomentum.eq_1 e a j]
     simp only [AlmostPoissonStructure.bracket_sub_right,
       AlmostPoissonStructure.bracket_mul_right, AlmostPoissonStructure.bracket_algebraMap_right,
@@ -198,13 +198,13 @@ theorem canonical_q_hamiltonian (hm : m ≠ 0) (i : Fin d) :
 theorem canonical_p_hamiltonian (hm : m ≠ 0) (i : Fin d) :
     (canonical (Fin d)).bracket (p i) (hamiltonian m e φ a) =
       algebraMap ℝ (PhaseSpace (Fin d)) e *
-        (∑ j, ofPosition (partialDerivation i (a j)) * velocity m e a j -
-          ofPosition (partialDerivation i φ)) := by
+        (∑ j, ofPosition (Fin d) (partialDerivation i (a j)) * velocity m e a j -
+          ofPosition (Fin d) (partialDerivation i φ)) := by
   have hsum : relEnergyInv m (kineticMomentum e a) *
       ∑ j, kineticMomentum e a j * (algebraMap ℝ (PhaseSpace (Fin d)) e *
-        ofPosition (partialDerivation i (a j))) =
+        ofPosition (Fin d) (partialDerivation i (a j))) =
       algebraMap ℝ (PhaseSpace (Fin d)) e *
-        ∑ j, ofPosition (partialDerivation i (a j)) * velocity m e a j := by
+        ∑ j, ofPosition (Fin d) (partialDerivation i (a j)) * velocity m e a j := by
     rw [Finset.mul_sum, Finset.mul_sum]
     refine Finset.sum_congr rfl fun j _ => ?_
     rw [velocity]
@@ -220,13 +220,13 @@ theorem canonical_p_hamiltonian (hm : m ≠ 0) (i : Fin d) :
 second term is `(v × B)ᵢ`. -/
 theorem canonical_kineticMomentum_hamiltonian (hm : m ≠ 0) (i : Fin d) :
     (canonical (Fin d)).bracket (kineticMomentum e a i) (hamiltonian m e φ a) =
-      algebraMap ℝ (PhaseSpace (Fin d)) e * (ofPosition (electricField φ i) +
-        ∑ j, ofPosition (magneticTensor a i j) * velocity m e a j) := by
+      algebraMap ℝ (PhaseSpace (Fin d)) e * (ofPosition (Fin d) (electricField φ i) +
+        ∑ j, ofPosition (Fin d) (magneticTensor a i j) * velocity m e a j) := by
   have hsum : relEnergyInv m (kineticMomentum e a) *
       ∑ j, kineticMomentum e a j * (algebraMap ℝ (PhaseSpace (Fin d)) e *
-        ofPosition (magneticTensor a i j)) =
+        ofPosition (Fin d) (magneticTensor a i j)) =
       algebraMap ℝ (PhaseSpace (Fin d)) e *
-        ∑ j, ofPosition (magneticTensor a i j) * velocity m e a j := by
+        ∑ j, ofPosition (Fin d) (magneticTensor a i j) * velocity m e a j := by
     rw [Finset.mul_sum, Finset.mul_sum]
     refine Finset.sum_congr rfl fun j _ => ?_
     rw [velocity]
@@ -244,9 +244,9 @@ theorem canonical_kineticMomentum_hamiltonian (hm : m ≠ 0) (i : Fin d) :
 theorem canonical_kineticEnergy_hamiltonian (hm : m ≠ 0) :
     (canonical (Fin d)).bracket (relEnergy m (kineticMomentum e a)) (hamiltonian m e φ a) =
       algebraMap ℝ (PhaseSpace (Fin d)) e *
-        ∑ i, ofPosition (electricField φ i) * velocity m e a i := by
-  have hφ : (canonical (Fin d)).bracket (relEnergy m (kineticMomentum e a)) (ofPosition φ) =
-      ∑ i, ofPosition (electricField φ i) * velocity m e a i := by
+        ∑ i, ofPosition (Fin d) (electricField φ i) * velocity m e a i := by
+  have hφ : (canonical (Fin d)).bracket (relEnergy m (kineticMomentum e a)) (ofPosition (Fin d) φ) =
+      ∑ i, ofPosition (Fin d) (electricField φ i) * velocity m e a i := by
     rw [(canonical (Fin d)).antisymm, AlmostPoissonStructure.bracket_relEnergy_right _ hm,
       Finset.mul_sum, ← Finset.sum_neg_distrib]
     refine Finset.sum_congr rfl fun i _ => ?_
@@ -325,8 +325,8 @@ theorem timeDerivative_kineticMomentum (hm : m ≠ 0) {c : Fin d ⊕ Fin d → T
     (h : IsTrajectory (canonical (Fin d)) (hamiltonian m e φ a) c) (i : Fin d) :
     timeDerivative (FreeSmoothRing.lift c (kineticMomentum e a i)) =
       FreeSmoothRing.lift c (algebraMap ℝ (PhaseSpace (Fin d)) e *
-        (ofPosition (electricField φ i) +
-          ∑ j, ofPosition (magneticTensor a i j) * velocity m e a j)) := by
+        (ofPosition (Fin d) (electricField φ i) +
+          ∑ j, ofPosition (Fin d) (magneticTensor a i j) * velocity m e a j)) := by
   rw [h.timeDerivative_lift, canonical_kineticMomentum_hamiltonian e φ a hm]
 
 /-- The momentum changes by the change of the kinetic momentum and of the vector potential
@@ -335,14 +335,14 @@ theorem canonical_p_hamiltonian_eq (hm : m ≠ 0) (i : Fin d) :
     (canonical (Fin d)).bracket (p i) (hamiltonian m e φ a) =
       (canonical (Fin d)).bracket (kineticMomentum e a i) (hamiltonian m e φ a) +
         algebraMap ℝ (PhaseSpace (Fin d)) e *
-          ∑ j, ofPosition (partialDerivation j (a i)) * velocity m e a j := by
+          ∑ j, ofPosition (Fin d) (partialDerivation j (a i)) * velocity m e a j := by
   have hp : p i =
-      kineticMomentum e a i + algebraMap ℝ (PhaseSpace (Fin d)) e * ofPosition (a i) := by
+      kineticMomentum e a i + algebraMap ℝ (PhaseSpace (Fin d)) e * ofPosition (Fin d) (a i) := by
     rw [kineticMomentum]
     ring
   have h : (canonical (Fin d)).bracket (p i) (hamiltonian m e φ a) =
       (canonical (Fin d)).bracket
-        (kineticMomentum e a i + algebraMap ℝ (PhaseSpace (Fin d)) e * ofPosition (a i))
+        (kineticMomentum e a i + algebraMap ℝ (PhaseSpace (Fin d)) e * ofPosition (Fin d) (a i))
         (hamiltonian m e φ a) :=
     congrArg (fun f => (canonical (Fin d)).bracket f (hamiltonian m e φ a)) hp
   rw [h, AlmostPoissonStructure.bracket_add_left, AlmostPoissonStructure.bracket_mul_left,
@@ -356,11 +356,11 @@ theorem timeDerivative_p_eq (c : Fin d ⊕ Fin d → TimeFunction) (i : Fin d) :
     timeDerivative (c (Sum.inr i)) =
       timeDerivative (FreeSmoothRing.lift c (kineticMomentum e a i)) +
         algebraMap ℝ TimeFunction e * ∑ j, FreeSmoothRing.lift c
-          (ofPosition (partialDerivation j (a i))) * timeDerivative (c (Sum.inl j)) := by
+          (ofPosition (Fin d) (partialDerivation j (a i))) * timeDerivative (c (Sum.inl j)) := by
   have hpos (f : FreeSmoothRing (Fin d)) :
-      FreeSmoothRing.lift c (ofPosition f) = FreeSmoothRing.lift (fun j => c (Sum.inl j)) f := by
-    rw [ofPosition, map_lift]
-    simp only [q, lift_generator]
+      FreeSmoothRing.lift c (ofPosition (Fin d) f) =
+        FreeSmoothRing.lift (fun j => c (Sum.inl j)) f :=
+    lift_ofPosition c f
   have h1 : c (Sum.inr i) = FreeSmoothRing.lift c (kineticMomentum e a i) +
       algebraMap ℝ TimeFunction e * FreeSmoothRing.lift (fun j => c (Sum.inl j)) (a i) := by
     rw [kineticMomentum, SmoothRingHom.map_sub, SmoothRingHom.map_mul,
@@ -379,8 +379,8 @@ theorem isTrajectory_iff_lorentzForce (hm : m ≠ 0) (c : Fin d ⊕ Fin d → Ti
       (∀ i, timeDerivative (c (Sum.inl i)) = FreeSmoothRing.lift c (velocity m e a i)) ∧
       ∀ i, timeDerivative (FreeSmoothRing.lift c (kineticMomentum e a i)) =
         FreeSmoothRing.lift c (algebraMap ℝ (PhaseSpace (Fin d)) e *
-          (ofPosition (electricField φ i) +
-            ∑ j, ofPosition (magneticTensor a i j) * velocity m e a j)) := by
+          (ofPosition (Fin d) (electricField φ i) +
+            ∑ j, ofPosition (Fin d) (magneticTensor a i j) * velocity m e a j)) := by
   constructor
   · intro h
     exact ⟨timeDerivative_q e φ a hm h, timeDerivative_kineticMomentum e φ a hm h⟩

@@ -395,7 +395,10 @@ any C∞-ring, for `m ≠ 0`. The function `√(1 + Σ wᵢ²)` is smooth on all
 used by the [relativistic particle](special-relativity.md#relativistic-particle-mechanics-the-algebraic-layer).
 
 `Poisson/Position` maps a function of the positions into the phase space:
-`PhaseSpace.ofPosition` is the substitution `xᵢ ↦ qᵢ`. Its derivative in a
+`PhaseSpace.ofPosition ι` is the substitution `xᵢ ↦ qᵢ`, with the index type as an
+explicit argument, since no other argument determines it. Along any
+substitution `lift_ofPosition` evaluates `ofPosition ι f` at the substituted
+positions, and `ofPosition_injective` recovers `f`. The derivative of `ofPosition ι f` in a
 position is the derivative of the function and its derivative in a momentum is
 zero, so `{f, H} = Σᵢ ∂ᵢf ∂H/∂pᵢ`, `{pᵢ, f} = −∂ᵢf`, and two functions of the
 positions commute. `momentumShift c χ` is the substitution `q ↦ q`,
@@ -517,7 +520,7 @@ The application to the anharmonic oscillator is in the
 | [Poisson/LinearMomentum](../ProjectAinos/SmoothAlgebra/Poisson/LinearMomentum.lean) | `PhaseSpace.translationMomentum`, `linearMomentum`, `canonical_linearMomentum_q`, `canonical_linearMomentum_p`, `canonical_linearMomentum_translationMomentum`, `canonical_linearMomentum_linearMomentum`: `{ℓ_A, ℓ_B} = ℓ_{BA − AB}` |
 | [Poisson/OrbitalCharge](../ProjectAinos/SmoothAlgebra/Poisson/OrbitalCharge.lean) | `PhaseSpace.loweredCoordinate`, `orbitalCharge`, `momentumQuadratic`, `canonical_orbitalCharge_p`, `canonical_orbitalCharge_orbitalCharge`, `canonical_loweredCoordinate_momentumQuadratic`, `canonical_orbitalCharge_momentumQuadratic` |
 | [RelEnergy](../ProjectAinos/SmoothAlgebra/RelEnergy.lean) | `SmoothOperation.lorentzFactor`, `partialDeriv_lorentzFactor`, `SmoothRing.op_algebraMap`, `relEnergy`, `relEnergyInv`, `relEnergy_mul_self`, `relEnergy_mul_relEnergyInv`, `SmoothDerivation.apply_relEnergy`, `SmoothDerivation.apply_relEnergyInv`, `sum_relEnergyInv_mul_sq`, `relEnergy_real`, `sum_sq_relEnergyInv_mul_lt_one` |
-| [Poisson/Position](../ProjectAinos/SmoothAlgebra/Poisson/Position.lean) | `PhaseSpace.ofPosition`, `partialDerivation_inl_ofPosition`, `partialDerivation_inr_ofPosition`, `canonical_ofPosition_bracket`, `canonical_p_ofPosition`, `canonical_ofPosition_ofPosition`, `momentumShift`, `isPoissonHom_momentumShift`, `momentumShift_ofPosition`, `momentumShift_neg_momentumShift` |
+| [Poisson/Position](../ProjectAinos/SmoothAlgebra/Poisson/Position.lean) | `PhaseSpace.ofPosition`, `lift_ofPosition`, `ofPosition_injective`, `partialDerivation_inl_ofPosition`, `partialDerivation_inr_ofPosition`, `canonical_ofPosition_bracket`, `canonical_p_ofPosition`, `canonical_ofPosition_ofPosition`, `momentumShift`, `isPoissonHom_momentumShift`, `momentumShift_ofPosition`, `momentumShift_neg_momentumShift` |
 | [Derivation](../ProjectAinos/SmoothAlgebra/Derivation.lean) | `SmoothDerivation`, `map_mul`, `map_exp`, `toDerivation`, module and Lie-ring instances, `sum_apply`, `commutator_chain`, `equivInfinitesimalAut`, `equivCoordinates`, `lie_partialDerivation_proj_smul` |
 | [Category](../ProjectAinos/SmoothAlgebra/Category.lean) | `SmoothRingCat`, faithful forgetful functors, isomorphisms from bijective morphisms |
 | [Congruence](../ProjectAinos/SmoothAlgebra/Congruence.lean) | Smooth quotients, projection, factorization, generated smooth congruences |

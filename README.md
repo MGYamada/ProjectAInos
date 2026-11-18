@@ -193,6 +193,21 @@ trace-free with the energy density `½ (E² + B²)` for every observer, and with
 charged dust the total stress is conserved.
 [Guide](docs/electrodynamics.md#energy-and-momentum-31-3335)
 
+For general relativity, an observer with a timelike velocity measures
+distances with a spatial form whose square root is half the proper time of a
+light signal to a neighbouring event and back, and in co-ordinates the observer at rest has the
+clock `√(−g₀₀)` and the spatial metric `gᵢⱼ − g₀ᵢ g₀ⱼ/g₀₀`. Along a geodesic the
+pairing of a Killing field with the velocity is constant, and the frequency
+measured by stationary observers obeys the red shift `N ω = const`; in the
+exterior Schwarzschild field this is `√(1 − 2M/r) ω = const` along every
+geodesic segment off the axis, radial rays included. In a chart on all of `ℝⁿ`
+with coefficients smooth there, the geodesics defined for all values of the
+parameter are the trajectories of the Hamiltonian `½ g^{μν} p_μ p_ν`, with the
+Killing momenta as integrals. Rotating
+co-ordinates in Minkowski space give the slower clocks, the longer
+circumference and the synchronization gap of a rotating disc.
+[Guide](docs/general-relativity.md#observers-killing-fields-and-rotation-82-84-88-89)
+
 Topic 6 follows the provisional Boltzmannian typicality plan in
 [issue #55](https://github.com/MGYamada/ProjectAinos/issues/55). Its guiding references are
 

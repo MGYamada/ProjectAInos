@@ -433,3 +433,114 @@ other spatial coordinates zero. Lean verifies the reference equation and
 domain membership and proves convergence at order `c⁻²` for equal zero
 initial data. Exact SymPy checks the trajectory and both nonzero corrections
 along it. The stage G implementation is merged into `main`.
+
+## Observers, Killing fields and rotation (§§82, 84, 88, 89)
+
+**Metrics from coefficients.** `Minkowski.exists_lorentzFrame` completes the
+square along `e₀`: a symmetric bilinear form on `MinkowskiModel d` that is
+negative on the time axis and positive definite on `{(0, v)}` is the
+Minkowski form of `.timeNegative` in some frame. `exists_lorentzFrame_convention`
+is the statement for either convention, with the hypotheses on `−σ.timeSign · B`.
+A `CoordinateMetric σ d U` is a family of forms on the model, smooth on the
+open set `U`, with the signature of `σ` at every point of `U`. `toLorentzMetric`
+makes it a Lorentz metric on the manifold `U`, whose chart is the inclusion
+`physicalChart`; the components, the inverse and the Christoffel symbols in this
+chart are the matrix formulas of the coefficients, and `ofCriterion` builds an
+instance from the criterion.
+
+**Observers (§§82, 84).** In the convention `(−+++)` an observer at an event is
+a timelike vector `u`. `Minkowski.spatialForm B u v w = B(v, w) − B(u, v) B(u, w)/B(u, u)`
+is the metric of the parts orthogonal to `u` (`spatialForm_eq`), and the
+observer measures with it: if a light signal leaves the worldline `τ ↦ τ u` at
+`τ₁`, reaches the event `v` and returns at `τ₂`, then half the proper time of
+the round trip is `√(γ_u(v, v))` and the event of the worldline at the middle
+parameter is simultaneous with `v` (`radar`, `radar_distance`; `exists_radar`
+gives the two signals). These are statements in one tangent space, about
+neighbouring events. With a Lorentz frame the spatial form is positive
+semidefinite and positive on every vector that is not a multiple of `u`
+(`LorentzMetric.spatialForm_nonneg`, `LorentzMetric.spatialForm_pos`). For the
+observer at rest, `u = e₀`, `spatialForm_timeAxis` gives `γᵢⱼ dxⁱ dxʲ` with
+`γᵢⱼ = gᵢⱼ − g₀ᵢ g₀ⱼ/g₀₀`, independent of `dx⁰`, `CoordinateMetric.spatialMetric_pos`
+its positivity where `g₀₀ < 0`, and `orthogonal_timeAxis_iff` the simultaneity
+`dx⁰ = −g₀ᵢ dxⁱ/g₀₀`. In the co-ordinates of `U`, `properTime_coordinate` is
+`τ = ∫ √(−g_{μν} ẋ^μ ẋ^ν) dt` for a smooth curve, and `properTime_atRest` the
+clock `∫ √(−g₀₀) dt` of a curve that is at rest on `[a, b]`.
+
+**Killing fields and the red shift (§88).** `LorentzMetric.IsKillingField g K` is
+the Killing equation `g(∇_v K, w) + g(v, ∇_w K) = 0` at every event. Along a
+geodesic given on any convex set of parameters, `IsKillingField.pairing_eq`
+keeps `g(K, γ̇)` constant: it differentiates the pairing with
+`hasDerivAt_pairing_along` and uses the geodesic equation and the Killing
+equation. The observer that moves along a timelike Killing field has the unit
+velocity `u = K/N`, `N = √(−g(K, K))` (`form_stationaryVelocity`), and measures
+the frequency `ω = −g(u, γ̇)` of a ray `γ` (`observedFrequency`);
+`killingNorm_mul_observedFrequency_eq` is the red shift `N(γ(a)) ω(a) = N(γ(b)) ω(b)`,
+for any geodesic, null or not. For a coordinate metric,
+`CoordinateMetric.isKillingField_of_invariant` makes `∂_k` a Killing field when
+the form does not change under the translations along `x^k`; it rests on
+`killing_chartField_of`, which reads `L_{∂_k} g = ∂_k g_{ij}` from metric
+compatibility and the vanishing torsion. `SchwarzschildExterior` is the exterior
+field `−(1 − 2M/r) dt² + dr²/(1 − 2M/r) + r² dθ² + r² sin²θ dφ²` on
+`r > 2M`, `0 < θ < π`: `∂_t` and `∂_φ` are Killing fields, and along every
+geodesic segment of this domain, radial rays included, `√(1 − 2M/r) ω` is
+constant.
+
+**The geodesic Hamiltonian (§88, stage G-H).** In a chart whose domain is all
+of `ℝⁿ`, the coefficients `gm` of the metric and `gi` of its inverse are
+elements of the free C∞-ring with `Σ_λ gm μ λ * gi λ ν = δ`.
+`GeodesicHamiltonian.hamiltonian gi` is `½ g^{μν}(x) p_μ p_ν`. Its brackets give
+`ẋ^μ = g^{μν} p_ν` and `ṗ_l = −½ ∂_l g^{μν} p_μ p_ν = ½ ∂_l g_{αβ} ẋ^α ẋ^β`
+(`canonical_q_hamiltonian`, `canonical_p_hamiltonian_eq`), and `isTrajectory_iff`
+shows that a curve is a trajectory exactly when `p_μ = g_{μν} ẋ^ν` and
+`g_{μν} ẍ^ν + Γ_{μαβ} ẋ^α ẋ^β = 0`. For a vector field `ξ`,
+`canonical_vectorMomentum_hamiltonian` is `{ξ^μ p_μ, H} = −½ (L_ξ g⁻¹)^{μν} p_μ p_ν`,
+and `of_lieInverse` is `L_ξ g⁻¹ = −g⁻¹ (L_ξ g) g⁻¹`; so the momentum is an
+integral exactly when `L_ξ g = 0` (`isIntegral_vectorMomentum_iff_killing`), the
+momentum of a co-ordinate on which the metric does not depend is an integral
+(`isIntegral_p_of_metric_independent`), and `g(ξ, ẋ)` is then constant
+(`pairing_eq_of_killing`); `killingNorm_mul_frequency_eq` is `N ω = const`. A
+trajectory is defined for all values of the affine parameter; `isTrajectory_rest`
+and `isTrajectory_line` show that the curve at rest with zero momenta, and for
+constant coefficients every straight line with constant momenta, are
+trajectories.
+`GeodesicHamiltonian.SchwarzschildEquatorial` is the equatorial plane of the
+exterior field with `r = 2M + eˢ`: the metric `diag(−eˢ/r, eˢ r, r²)` and its
+inverse are smooth on all of `ℝ³`, the energy `−p_t` and `p_φ` are integrals,
+and `√(1 − 2M/r) ω` is constant along every trajectory. Every radial geodesic
+along which `r` changes, and every ray that enters `r < 3M`, reaches `r = 2M` at
+a finite parameter and is not a trajectory; the red shift along such rays is the one of
+`SchwarzschildExterior`.
+
+**Rotation (§89).** `RotatingFrame.form Ω` is
+`−(1 − Ω²ρ²) dt² + 2Ω (x dy − y dx) dt + dx² + dy² + dz²`; `form_eq_pullback` and
+`hasDerivAt_toInertial` show that it is the pullback of the Minkowski form by
+the map to the inertial co-ordinates. `metric Ω` is the Lorentz metric on the
+domain `Ω²ρ² < 1`. A clock at rest runs at `√(1 − Ω²ρ²)` (`properTime_static`);
+the spatial form gives radial displacements their Euclidean length and the
+tangent of the circle of radius `ρ` per unit angle the squared length
+`ρ²/(1 − Ω²ρ²)` (`spatialForm_radial`, `spatialForm_tangential`), so the circle
+has the length `2πρ/√(1 − Ω²ρ²)` (`circumference_circle`); the metric does not
+depend on `t`, so this length does not depend on the slice. Synchronizing each
+clock on the circle with its neighbour, going round in the sense of increasing
+`φ`, gives the co-ordinate time `2πΩρ²/(1 − Ω²ρ²)` over one turn
+(`synchronization_circle`; for `Ω > 0` this is the sense of the rotation); a clock on the
+circle reads `√(1 − Ω²ρ²)` times this gap, and the Sagnac delay of two signals
+sent round in opposite senses is twice it. `∂_t` is a Killing field
+(`isKillingField_time`), and along every geodesic segment inside the light
+cylinder the observers at rest measure frequencies with `√(1 − Ω²ρ²) ω = const`.
+
+| Result | Declarations | Source |
+| --- | --- | --- |
+| Lorentz frames of a bilinear form | `Minkowski.exists_lorentzFrame`, `exists_lorentzFrame_convention` | [LorentzFrame](../ProjectAinos/SmoothGeometry/Lorentzian/LorentzFrame.lean) |
+| Metrics from coefficients | `CoordinateMetric.toLorentzMetric`, `toLorentzMetric_chartMetric`, `toLorentzMetric_christoffel`, `ofCriterion`, `minkowski`, `spatialMetric_pos`; `LorentzMetric.spatialForm_pos` | [CoordinateMetric](../ProjectAinos/SmoothGeometry/Lorentzian/CoordinateMetric.lean) |
+| The spatial form and radar | `Minkowski.spatialForm_eq`, `spatialForm_pos`, `radar`, `radar_distance`, `exists_radar`, `spatialForm_timeAxis`, `orthogonal_timeAxis_iff` | [SpatialForm](../ProjectAinos/SmoothGeometry/Lorentzian/SpatialForm.lean) |
+| Clocks in co-ordinates | `properTime_coordinate`, `properTime_atRest` | [ObserverMeasurement](../ProjectAinos/GeneralRelativity/ObserverMeasurement.lean) |
+| Killing fields and the red shift | `LorentzMetric.IsKillingField`, `IsKillingField.pairing_eq`, `killingNorm_mul_observedFrequency_eq`, `killing_chartField_of`, `CoordinateMetric.isKillingField_of_invariant` | [Killing](../ProjectAinos/SmoothGeometry/Lorentzian/Killing.lean) |
+| The exterior Schwarzschild field | `SchwarzschildExterior.metric`, `isKillingField_time`, `isKillingField_angle`, `killingNorm_time`, `killingNorm_mul_observedFrequency_eq` | [SchwarzschildExterior](../ProjectAinos/GeneralRelativity/SchwarzschildExterior.lean) |
+| The geodesic Hamiltonian | `GeodesicHamiltonian.isTrajectory_iff`, `canonical_vectorMomentum_hamiltonian`, `of_lieInverse`, `isIntegral_vectorMomentum_iff_killing`, `isIntegral_p_of_metric_independent`, `isTrajectory_rest`, `pairing_eq_of_killing`, `killingNorm_mul_frequency_eq` | [GeodesicHamiltonian](../ProjectAinos/GeneralRelativity/GeodesicHamiltonian.lean) |
+| The Schwarzschild plane in `r = 2M + eˢ` | `GeodesicHamiltonian.SchwarzschildEquatorial.isTrajectory_iff`, `isIntegral_p_time`, `isIntegral_p_angle`, `killingNorm_eq`, `killingNorm_mul_frequency_eq` | [SchwarzschildEquatorial](../ProjectAinos/GeneralRelativity/SchwarzschildEquatorial.lean) |
+| Rotating co-ordinates | `RotatingFrame.metric`, `form_eq_pullback`, `properTime_static`, `circumference_circle`, `synchronization_circle`, `killingNorm_mul_observedFrequency_eq` | [RotatingFrame](../ProjectAinos/GeneralRelativity/RotatingFrame.lean) |
+
+The typed examples are in `checks/CoordinateMetricAPI.lean`,
+`checks/GeodesicHamiltonianAPI.lean` and `checks/ObserverAPI.lean`. The
+decisions are recorded in [GR03–GR07](general-relativity-notes.md).

@@ -11,13 +11,15 @@ import Mathlib.Tactic.Ring
 /-!
 # Functions of the positions on a canonical phase space
 
-A smooth function `f` of the positions is the element `ofPosition f` of the canonical phase
+A smooth function `f` of the positions is the element `ofPosition ι f` of the canonical phase
 space: the substitution `xᵢ ↦ qᵢ`.
 
 * `partialDerivation_inl_ofPosition`, `partialDerivation_inr_ofPosition`: its derivative in a
   position is the derivative of `f`, and its derivative in a momentum is zero.
 * `canonical_ofPosition_bracket`: `{f, H} = Σᵢ ∂ᵢf ∂H/∂pᵢ`, and
   `canonical_p_ofPosition`: `{pᵢ, f} = −∂ᵢf`. Two functions of the positions commute.
+* `lift_ofPosition`: along a substitution, `f` is evaluated at the substituted positions, and
+  `ofPosition_injective`: a function of the positions is determined by its image.
 * `momentumShift c χ` is the substitution `q ↦ q`, `pᵢ ↦ pᵢ + c ∂ᵢχ`. It is a Poisson
   automorphism (`isPoissonHom_momentumShift`, `momentumShift_neg_momentumShift`) and it fixes
   the functions of the positions.
@@ -35,23 +37,38 @@ namespace PhaseSpace
 
 variable {ι : Type*}
 
-/-- A function of the positions as a function on the phase space. -/
+variable (ι) in
+/-- A function of the positions as a function on the phase space. The index type is explicit,
+since no argument determines it. -/
 def ofPosition : SmoothRingHom (FreeSmoothRing ι) (PhaseSpace ι) := lift q
 
-@[simp] theorem ofPosition_generator (i : ι) : ofPosition (generator i) = q i :=
+@[simp] theorem ofPosition_generator (i : ι) : ofPosition ι (generator i) = q i :=
   lift_generator _ i
 
-/-- The value at a point of the phase space is the value at its position. -/
-theorem lift_ofPosition (z : ι ⊕ ι → ℝ) (f : FreeSmoothRing ι) :
-    lift z (ofPosition f) = lift (fun i => z (Sum.inl i)) f := by
+/-- A substitution into the phase space evaluates a function of the positions at the
+substituted positions; at a point of the phase space, the value is the value at its position. -/
+theorem lift_ofPosition {B : Type*} [CommRing B] [Algebra ℝ B] [SmoothRing B]
+    (y : ι ⊕ ι → B) (f : FreeSmoothRing ι) :
+    lift y (ofPosition ι f) = lift (fun i => y (Sum.inl i)) f := by
   rw [ofPosition, map_lift]
   simp only [q, lift_generator]
+
+/-- A function of the positions is determined by its image in the phase space. -/
+theorem ofPosition_injective : Function.Injective (ofPosition ι) := by
+  have hr (f : FreeSmoothRing ι) :
+      lift (Sum.elim (fun i => generator i) (fun _ => 0)) (ofPosition ι f) = f := by
+    rw [lift_ofPosition]
+    exact congrArg (fun χ : SmoothRingHom (FreeSmoothRing ι) (FreeSmoothRing ι) => χ f)
+      (hom_ext (f := lift fun i => generator i) (g := SmoothRingHom.id _) fun i => by
+        rw [lift_generator, SmoothRingHom.id_apply])
+  intro f g h
+  rw [← hr f, ← hr g, h]
 
 variable [Fintype ι] [DecidableEq ι]
 
 /-- The derivative of a function of the positions in a position. -/
 theorem partialDerivation_inl_ofPosition (i : ι) (f : FreeSmoothRing ι) :
-    partialDerivation (Sum.inl i) (ofPosition f) = ofPosition (partialDerivation i f) := by
+    partialDerivation (Sum.inl i) (ofPosition ι f) = ofPosition ι (partialDerivation i f) := by
   rw [ofPosition, derivation_lift_mul, Finset.sum_eq_single i]
   · rw [q, partialDerivation_generator_self, mul_one]
   · intro j _ hj
@@ -62,37 +79,37 @@ theorem partialDerivation_inl_ofPosition (i : ι) (f : FreeSmoothRing ι) :
 
 /-- A function of the positions does not depend on the momenta. -/
 theorem partialDerivation_inr_ofPosition (i : ι) (f : FreeSmoothRing ι) :
-    partialDerivation (Sum.inr i) (ofPosition f) = 0 := by
+    partialDerivation (Sum.inr i) (ofPosition ι f) = 0 := by
   rw [ofPosition, derivation_lift_mul]
   refine Finset.sum_eq_zero fun j _ => ?_
   rw [q, partialDerivation_generator_of_ne (c := Sum.inr i) (i := Sum.inl j) (by simp), mul_zero]
 
 /-- `{f, H} = Σᵢ ∂ᵢf ∂H/∂pᵢ` for a function `f` of the positions. -/
 theorem canonical_ofPosition_bracket (f : FreeSmoothRing ι) (H : PhaseSpace ι) :
-    (canonical ι).bracket (ofPosition f) H =
-      ∑ i, ofPosition (partialDerivation i f) * partialDerivation (Sum.inr i) H := by
+    (canonical ι).bracket (ofPosition ι f) H =
+      ∑ i, ofPosition ι (partialDerivation i f) * partialDerivation (Sum.inr i) H := by
   rw [canonical_bracket]
   refine Finset.sum_congr rfl fun i _ => ?_
   rw [partialDerivation_inl_ofPosition, partialDerivation_inr_ofPosition, zero_mul, sub_zero]
 
 /-- `{pᵢ, f} = −∂ᵢf` for a function `f` of the positions. -/
 theorem canonical_p_ofPosition (i : ι) (f : FreeSmoothRing ι) :
-    (canonical ι).bracket (p i) (ofPosition f) = -ofPosition (partialDerivation i f) := by
+    (canonical ι).bracket (p i) (ofPosition ι f) = -ofPosition ι (partialDerivation i f) := by
   rw [canonical_p_bracket, partialDerivation_inl_ofPosition]
 
 /-- `{f, pᵢ} = ∂ᵢf` for a function `f` of the positions. -/
 theorem canonical_ofPosition_p (i : ι) (f : FreeSmoothRing ι) :
-    (canonical ι).bracket (ofPosition f) (p i) = ofPosition (partialDerivation i f) := by
+    (canonical ι).bracket (ofPosition ι f) (p i) = ofPosition ι (partialDerivation i f) := by
   rw [(canonical ι).antisymm, canonical_p_ofPosition, neg_neg]
 
 /-- `{qᵢ, f} = 0` for a function `f` of the positions. -/
 theorem canonical_q_ofPosition (i : ι) (f : FreeSmoothRing ι) :
-    (canonical ι).bracket (q i) (ofPosition f) = 0 := by
+    (canonical ι).bracket (q i) (ofPosition ι f) = 0 := by
   rw [canonical_q_bracket, partialDerivation_inr_ofPosition]
 
 /-- Two functions of the positions commute. -/
 theorem canonical_ofPosition_ofPosition (f g : FreeSmoothRing ι) :
-    (canonical ι).bracket (ofPosition f) (ofPosition g) = 0 := by
+    (canonical ι).bracket (ofPosition ι f) (ofPosition ι g) = 0 := by
   rw [canonical_ofPosition_bracket]
   refine Finset.sum_eq_zero fun i _ => ?_
   rw [partialDerivation_inr_ofPosition, mul_zero]
@@ -102,7 +119,7 @@ theorem canonical_ofPosition_ofPosition (f g : FreeSmoothRing ι) :
 /-- The substitution `q ↦ q`, `pᵢ ↦ pᵢ + c ∂ᵢχ` for a function `χ` of the positions. -/
 def momentumShift (c : ℝ) (χ : FreeSmoothRing ι) : SmoothRingHom (PhaseSpace ι) (PhaseSpace ι) :=
   lift (Sum.elim q fun i => p i + algebraMap ℝ (PhaseSpace ι) c *
-    ofPosition (partialDerivation i χ))
+    ofPosition ι (partialDerivation i χ))
 
 omit [Fintype ι] in
 @[simp] theorem momentumShift_q (c : ℝ) (χ : FreeSmoothRing ι) (i : ι) :
@@ -112,13 +129,13 @@ omit [Fintype ι] in
 omit [Fintype ι] in
 @[simp] theorem momentumShift_p (c : ℝ) (χ : FreeSmoothRing ι) (i : ι) :
     momentumShift c χ (p i) =
-      p i + algebraMap ℝ (PhaseSpace ι) c * ofPosition (partialDerivation i χ) :=
+      p i + algebraMap ℝ (PhaseSpace ι) c * ofPosition ι (partialDerivation i χ) :=
   lift_generator _ _
 
 omit [Fintype ι] in
 /-- The shift of the momenta fixes the functions of the positions. -/
 theorem momentumShift_ofPosition (c : ℝ) (χ f : FreeSmoothRing ι) :
-    momentumShift c χ (ofPosition f) = ofPosition f := by
+    momentumShift c χ (ofPosition ι f) = ofPosition ι f := by
   rw [ofPosition, map_lift]
   simp only [momentumShift_q]
 

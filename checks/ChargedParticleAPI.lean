@@ -28,42 +28,50 @@ namespace PhaseSpace
 
 variable {ι : Type*}
 
-example (i : ι) : ofPosition (generator i) = q i :=
+example (i : ι) : ofPosition ι (generator i) = q i :=
   ofPosition_generator i
 
 example (z : ι ⊕ ι → ℝ) (f : FreeSmoothRing ι) :
-    lift z (ofPosition f) = lift (fun i => z (Sum.inl i)) f :=
+    lift z (ofPosition ι f) = lift (fun i => z (Sum.inl i)) f :=
   lift_ofPosition z f
+
+example {B : Type*} [CommRing B] [Algebra ℝ B] [SmoothRing B] (y : ι ⊕ ι → B)
+    (f : FreeSmoothRing ι) :
+    lift y (ofPosition ι f) = lift (fun i => y (Sum.inl i)) f :=
+  lift_ofPosition y f
+
+example : Function.Injective (ofPosition ι) :=
+  ofPosition_injective
 
 variable [Fintype ι] [DecidableEq ι]
 
 example (i : ι) (f : FreeSmoothRing ι) :
-    partialDerivation (Sum.inl i) (ofPosition f) = ofPosition (partialDerivation i f) :=
+    partialDerivation (Sum.inl i) (ofPosition ι f) = ofPosition ι (partialDerivation i f) :=
   partialDerivation_inl_ofPosition i f
 
 example (i : ι) (f : FreeSmoothRing ι) :
-    partialDerivation (Sum.inr i) (ofPosition f) = 0 :=
+    partialDerivation (Sum.inr i) (ofPosition ι f) = 0 :=
   partialDerivation_inr_ofPosition i f
 
 example (f : FreeSmoothRing ι) (H : PhaseSpace ι) :
-    (canonical ι).bracket (ofPosition f) H =
-      ∑ i, ofPosition (partialDerivation i f) * partialDerivation (Sum.inr i) H :=
+    (canonical ι).bracket (ofPosition ι f) H =
+      ∑ i, ofPosition ι (partialDerivation i f) * partialDerivation (Sum.inr i) H :=
   canonical_ofPosition_bracket f H
 
 example (i : ι) (f : FreeSmoothRing ι) :
-    (canonical ι).bracket (p i) (ofPosition f) = -ofPosition (partialDerivation i f) :=
+    (canonical ι).bracket (p i) (ofPosition ι f) = -ofPosition ι (partialDerivation i f) :=
   canonical_p_ofPosition i f
 
 example (i : ι) (f : FreeSmoothRing ι) :
-    (canonical ι).bracket (ofPosition f) (p i) = ofPosition (partialDerivation i f) :=
+    (canonical ι).bracket (ofPosition ι f) (p i) = ofPosition ι (partialDerivation i f) :=
   canonical_ofPosition_p i f
 
 example (i : ι) (f : FreeSmoothRing ι) :
-    (canonical ι).bracket (q i) (ofPosition f) = 0 :=
+    (canonical ι).bracket (q i) (ofPosition ι f) = 0 :=
   canonical_q_ofPosition i f
 
 example (f g : FreeSmoothRing ι) :
-    (canonical ι).bracket (ofPosition f) (ofPosition g) = 0 :=
+    (canonical ι).bracket (ofPosition ι f) (ofPosition ι g) = 0 :=
   canonical_ofPosition_ofPosition f g
 
 omit [Fintype ι] in
@@ -74,12 +82,12 @@ example (c : ℝ) (χ : FreeSmoothRing ι) (i : ι) :
 omit [Fintype ι] in
 example (c : ℝ) (χ : FreeSmoothRing ι) (i : ι) :
     momentumShift c χ (p i) =
-      p i + algebraMap ℝ (PhaseSpace ι) c * ofPosition (partialDerivation i χ) :=
+      p i + algebraMap ℝ (PhaseSpace ι) c * ofPosition ι (partialDerivation i χ) :=
   momentumShift_p c χ i
 
 omit [Fintype ι] in
 example (c : ℝ) (χ f : FreeSmoothRing ι) :
-    momentumShift c χ (ofPosition f) = ofPosition f :=
+    momentumShift c χ (ofPosition ι f) = ofPosition ι f :=
   momentumShift_ofPosition c χ f
 
 example (c : ℝ) (χ : FreeSmoothRing ι) :
@@ -217,17 +225,17 @@ example (i j : Fin d) :
 
 example (i j : Fin d) :
     (canonical (Fin d)).bracket (p i) (kineticMomentum e a j) =
-      algebraMap ℝ (PhaseSpace (Fin d)) e * ofPosition (partialDerivation i (a j)) :=
+      algebraMap ℝ (PhaseSpace (Fin d)) e * ofPosition (Fin d) (partialDerivation i (a j)) :=
   canonical_p_kineticMomentum e a i j
 
 example (i : Fin d) (f : FreeSmoothRing (Fin d)) :
-    (canonical (Fin d)).bracket (kineticMomentum e a i) (ofPosition f) =
-      -ofPosition (partialDerivation i f) :=
+    (canonical (Fin d)).bracket (kineticMomentum e a i) (ofPosition (Fin d) f) =
+      -ofPosition (Fin d) (partialDerivation i f) :=
   canonical_kineticMomentum_ofPosition e a i f
 
 example (i j : Fin d) :
     (canonical (Fin d)).bracket (kineticMomentum e a i) (kineticMomentum e a j) =
-      algebraMap ℝ (PhaseSpace (Fin d)) e * ofPosition (magneticTensor a i j) :=
+      algebraMap ℝ (PhaseSpace (Fin d)) e * ofPosition (Fin d) (magneticTensor a i j) :=
   canonical_kineticMomentum_kineticMomentum e a i j
 
 example (hm : m ≠ 0) (i : Fin d) :
@@ -237,20 +245,20 @@ example (hm : m ≠ 0) (i : Fin d) :
 example (hm : m ≠ 0) (i : Fin d) :
     (canonical (Fin d)).bracket (p i) (hamiltonian m e φ a) =
       algebraMap ℝ (PhaseSpace (Fin d)) e *
-        (∑ j, ofPosition (partialDerivation i (a j)) * velocity m e a j -
-          ofPosition (partialDerivation i φ)) :=
+        (∑ j, ofPosition (Fin d) (partialDerivation i (a j)) * velocity m e a j -
+          ofPosition (Fin d) (partialDerivation i φ)) :=
   canonical_p_hamiltonian e φ a hm i
 
 example (hm : m ≠ 0) (i : Fin d) :
     (canonical (Fin d)).bracket (kineticMomentum e a i) (hamiltonian m e φ a) =
-      algebraMap ℝ (PhaseSpace (Fin d)) e * (ofPosition (electricField φ i) +
-        ∑ j, ofPosition (magneticTensor a i j) * velocity m e a j) :=
+      algebraMap ℝ (PhaseSpace (Fin d)) e * (ofPosition (Fin d) (electricField φ i) +
+        ∑ j, ofPosition (Fin d) (magneticTensor a i j) * velocity m e a j) :=
   canonical_kineticMomentum_hamiltonian e φ a hm i
 
 example (hm : m ≠ 0) :
     (canonical (Fin d)).bracket (relEnergy m (kineticMomentum e a)) (hamiltonian m e φ a) =
       algebraMap ℝ (PhaseSpace (Fin d)) e *
-        ∑ i, ofPosition (electricField φ i) * velocity m e a i :=
+        ∑ i, ofPosition (Fin d) (electricField φ i) * velocity m e a i :=
   canonical_kineticEnergy_hamiltonian e φ a hm
 
 example (hm : m ≠ 0) :
@@ -291,22 +299,22 @@ example (hm : m ≠ 0) {c : Fin d ⊕ Fin d → TimeFunction}
     (h : IsTrajectory (canonical (Fin d)) (hamiltonian m e φ a) c) (i : Fin d) :
     timeDerivative (FreeSmoothRing.lift c (kineticMomentum e a i)) =
       FreeSmoothRing.lift c (algebraMap ℝ (PhaseSpace (Fin d)) e *
-        (ofPosition (electricField φ i) +
-          ∑ j, ofPosition (magneticTensor a i j) * velocity m e a j)) :=
+        (ofPosition (Fin d) (electricField φ i) +
+          ∑ j, ofPosition (Fin d) (magneticTensor a i j) * velocity m e a j)) :=
   timeDerivative_kineticMomentum e φ a hm h i
 
 example (hm : m ≠ 0) (i : Fin d) :
     (canonical (Fin d)).bracket (p i) (hamiltonian m e φ a) =
       (canonical (Fin d)).bracket (kineticMomentum e a i) (hamiltonian m e φ a) +
         algebraMap ℝ (PhaseSpace (Fin d)) e *
-          ∑ j, ofPosition (partialDerivation j (a i)) * velocity m e a j :=
+          ∑ j, ofPosition (Fin d) (partialDerivation j (a i)) * velocity m e a j :=
   canonical_p_hamiltonian_eq e φ a hm i
 
 example (c : Fin d ⊕ Fin d → TimeFunction) (i : Fin d) :
     timeDerivative (c (Sum.inr i)) =
       timeDerivative (FreeSmoothRing.lift c (kineticMomentum e a i)) +
         algebraMap ℝ TimeFunction e * ∑ j, FreeSmoothRing.lift c
-          (ofPosition (partialDerivation j (a i))) * timeDerivative (c (Sum.inl j)) :=
+          (ofPosition (Fin d) (partialDerivation j (a i))) * timeDerivative (c (Sum.inl j)) :=
   timeDerivative_p_eq e a c i
 
 example (hm : m ≠ 0) (c : Fin d ⊕ Fin d → TimeFunction) :
@@ -314,8 +322,8 @@ example (hm : m ≠ 0) (c : Fin d ⊕ Fin d → TimeFunction) :
       (∀ i, timeDerivative (c (Sum.inl i)) = FreeSmoothRing.lift c (velocity m e a i)) ∧
       ∀ i, timeDerivative (FreeSmoothRing.lift c (kineticMomentum e a i)) =
         FreeSmoothRing.lift c (algebraMap ℝ (PhaseSpace (Fin d)) e *
-          (ofPosition (electricField φ i) +
-            ∑ j, ofPosition (magneticTensor a i j) * velocity m e a j)) :=
+          (ofPosition (Fin d) (electricField φ i) +
+            ∑ j, ofPosition (Fin d) (magneticTensor a i j) * velocity m e a j)) :=
   isTrajectory_iff_lorentzForce e φ a hm c
 
 example (z : Fin d ⊕ Fin d → ℝ) (i : Fin d) :
