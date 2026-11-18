@@ -70,6 +70,7 @@ public import ProjectAinos.External.YM.WilsonLawBridge
 public import ProjectAinos.GeneralRelativity.ChargedMotion
 public import ProjectAinos.GeneralRelativity.ClockExamples
 public import ProjectAinos.GeneralRelativity.CoordinateTime
+public import ProjectAinos.GeneralRelativity.DeSitterSlicing
 public import ProjectAinos.GeneralRelativity.EinsteinEquations
 public import ProjectAinos.GeneralRelativity.EinsteinHilbertAction
 public import ProjectAinos.GeneralRelativity.FiniteProperTime
@@ -404,6 +405,7 @@ public import ProjectAinos.SmoothGeometry.Lorentzian.LorentzFrame
 public import ProjectAinos.SmoothGeometry.Lorentzian.MotionExamples
 public import ProjectAinos.SmoothGeometry.Lorentzian.MotionODE
 public import ProjectAinos.SmoothGeometry.Lorentzian.Naturality
+public import ProjectAinos.SmoothGeometry.Lorentzian.NormalGeodesics
 public import ProjectAinos.SmoothGeometry.Lorentzian.PalatiniAlgebra
 public import ProjectAinos.SmoothGeometry.Lorentzian.ParallelCoframe
 public import ProjectAinos.SmoothGeometry.Lorentzian.ParallelExtension
@@ -423,6 +425,7 @@ public import ProjectAinos.SmoothGeometry.Lorentzian.Ricci
 public import ProjectAinos.SmoothGeometry.Lorentzian.ScalarCurvatureVariation
 public import ProjectAinos.SmoothGeometry.Lorentzian.SignatureStability
 public import ProjectAinos.SmoothGeometry.Lorentzian.SpatialForm
+public import ProjectAinos.SmoothGeometry.Lorentzian.Synchronous
 public import ProjectAinos.SmoothGeometry.Lorentzian.Tensor
 public import ProjectAinos.SmoothGeometry.Lorentzian.Tetrad
 public import ProjectAinos.SmoothGeometry.Lorentzian.TwoFormDerivative
