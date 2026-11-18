@@ -808,7 +808,6 @@ diffeomorphisms for a general matter action is not stated.
 | Test variations and native tensors | `contDiffAt_ricciOf`, `contDiffAt_einsteinOf`, `einsteinOf_symm`, `testVariation`, `raised`, `sum_mul_inverseVariation_test`, `eq_zero_of_raised_eq_zero`, `integral_inverseVariation_eq_zero_iff`, `coefficientForm`, `bilinearOf`, `bilinearOf_chartField`, `IsEinstein`, `satisfiesEinstein_bilinearOf_iff` | [CoordinateEinsteinEquation](../ProjectAinos/SmoothGeometry/Lorentzian/CoordinateEinsteinEquation.lean) |
 | Matter and the equations | `EinsteinEquations.MatterAction`, `vacuum`, `scalarField`, `maxwellField`, `totalAction`, `fieldEquation`, `IsStationary`, `hasDerivAt_totalAction`, `isStationary_iff`, `isStationary_iff_satisfiesEinstein`, `divergence_stress_eq_zero`, `ricci_eq_of_isStationary`, `minkowski_isStationary_vacuum`, `minkowski_isStationary_constantScalar`, `conformal_not_isStationary_vacuum`, `scalarStress_minkowski_zero_zero` | [EinsteinEquations](../ProjectAinos/GeneralRelativity/EinsteinEquations.lean) |
 | The tensor of §33 | `Electrodynamics.componentMatrix`, `maxwellStress_minkowski` | [HilbertStress](../ProjectAinos/Electrodynamics/HilbertStress.lean) |
-
 | Conservation on a fixed metric | `CoordinateMetric.fderiv_coefficient`, `hessianOf`, `hessianOf_symm`, `boxOf`, `divergenceOf`, `bilinearDivergence_bilinearOf`, `scalarInvariant`, `fderiv_scalarInvariant`, `covariantDerivative_scalarStress`, `divergenceOf_scalarStress` | [CoordinateConservation](../ProjectAinos/SmoothGeometry/Lorentzian/CoordinateConservation.lean) |
 | Field equation of the scalar field | `CoordinateMetric.fieldDensity`, `fieldAction`, `sum_fderiv_density_inv_mul`, `hasDerivAt_fieldAction`, `isFieldStationary_iff`, `bilinearDivergence_scalarStress`, `bilinearDivergence_scalarStress_eq_zero` | [CoordinateScalarField](../ProjectAinos/SmoothGeometry/Lorentzian/CoordinateScalarField.lean) |
 | Klein–Gordon and conservation | `EinsteinEquations.KleinGordon`, `isFieldStationary_iff_kleinGordon`, `divergence_scalarStress`, `divergence_scalarStress_eq_zero`, `kleinGordon_exp` | [ScalarFieldEquation](../ProjectAinos/GeneralRelativity/ScalarFieldEquation.lean) |
@@ -817,3 +816,62 @@ The typed examples are in `checks/EinsteinEquationsAPI.lean` and
 `checks/MatterConservationAPI.lean`. The decisions are recorded in
 [GR12, GR13 and GR14](general-relativity-notes.md) and in
 [ED14 and ED15](electrodynamics-notes.md).
+
+## The field and a charge on a fixed background (§90)
+
+**The action of the field.** For a metric given by coefficients on an open set `U`
+of the model space, `CoordinateMetric.potentialAction g j A η ε` is the relative
+action `S[A + εη] − S[A]` of a field of covectors `A` smooth on `U`, with the density
+`(−¼ F_{ab} F^{ab} − A_b j^b) √|g|` (`potentialDensity`), the field
+`F_{ab} = ∂_a A_b − ∂_b A_a` (`potentialField`) and a prescribed current `j`
+continuous on `U`. The metric is held fixed. For a smooth `η` with compact support in
+`U` the action is exactly quadratic in `ε` (`potentialDensity_sub`), and
+`hasDerivAt_potentialAction` gives `∫ η_b (∂_a(√|g| F^{ab}) − √|g| j^b) dx` by
+integration by parts; so the action is stationary under every such `η` exactly when
+`∂_a(√|g| F^{ab}) = √|g| j^b` on `U` (`isPotentialStationary_iff`). For a native
+two-form `F` with the components `F_{ab}` and a native vector field `J` with the
+components `j^b` this is `∇_a F^{ab} = J^b` (`twoFormDivergence_eq_iff`), and in
+electrodynamics the sourced equation `dH = J` of `Curved.Maxwell`
+(`Curved.potentialStationary_iff_sourced`); with `dF = 0` it is the whole system
+(`Curved.maxwell_iff_potentialStationary`). With the coupling `+A_b k^b` of a matter
+current `k` the source is `−k` (`Curved.potentialStationary_matter_iff`). At the
+Minkowski metric the density and the relative action are those of the flat
+functional `SourcedAction.lagrangian` with the current form `ι_j vol`
+(`Electrodynamics.potentialDensity_minkowski`, `potentialAction_minkowski`).
+
+**The action of a charge.** For a Lorentz metric `g` on `U` and a field of covectors
+`A` that is `C¹` on `U`, `chargedAction g m e A γ a b` is `−m ∫ dτ + e ∫ A(γ̇) dt`
+(`lineIntegral`), varied by the actual fixed-endpoint families of curves in `U`
+(`ChargedStationary`). The first variation of the line integral is
+`∫ F(J, γ̇) dt` with the variation field `J` and `F(u, w) = ∂_u A(w) − ∂_w A(u)`
+(`fieldCovector`, `lineIntegral_family_hasDerivAt`): the term `d/dt A(J)` integrates to
+zero at the fixed end points, and the symmetry of the second derivative of the family
+exchanges the two parameters. With the free variation of
+`freeAction_variation_hasDerivAt` this gives `chargedAction_variation_hasDerivAt`, and
+`chargedStationary_iff` is the theorem of the section: for a timelike `C²` curve the
+action is stationary if and only if `(m/s)(∇_t γ̇ − (ṡ/s) γ̇) = e F(·, γ̇)^♯` on the open
+interval, that is `m ∇_t U = e F(·, γ̇)^♯` with `U = γ̇/s`, and `m ∇_τ U = −e (ι_U F)^♯`
+in proper time. No sign of `m` is assumed. A gauge change `A ↦ A + dχ` with a `C²`
+function leaves `F` unchanged (`fieldCovector_gauge`), changes the action by the
+end-point term `e (χ(γ(b)) − χ(γ(a)))` (`lineIntegral_gauge`) and does not change the
+stationary curves (`chargedStationary_gauge_iff`). For the Minkowski coordinate metric
+and the covector field of a flat potential, the stationarity is that of the flat action
+of `Electrodynamics.stationary_iff_lorentzForce` (`chargedStationary_minkowski_iff`):
+the native velocity is the derivative of the coordinates, the Christoffel symbols vanish
+and the native raising is that of the model.
+
+**Scope.** The background is an open set of the model space with its identity chart.
+A potential given only on a chart of a general Lorentz manifold, the joint variation of
+the field and of point charges, whose current is a distribution, and the exchange of
+stress between the field and the matter on a curved background are not stated.
+
+| Result | Declarations | Source |
+| --- | --- | --- |
+| Tangent fields in co-ordinates | `CoordinateMetric.trivializationAt_snd`, `contMDiffAt_tangent_iff`, `contDiffAt_val`, `contMDiffAt_iff_contDiffAt_val`, `curveVelocity_val`, `familyVelocity_val`, `minkowski_sharp` | [CoordinateTangent](../ProjectAinos/SmoothGeometry/Lorentzian/CoordinateTangent.lean) |
+| Action of the field | `CoordinateMetric.potentialField`, `fieldPairing`, `raisedField`, `potentialDensity`, `potentialAction`, `potentialEuler`, `potentialDensity_sub`, `hasDerivAt_potentialAction`, `isPotentialStationary_iff`, `twoFormDivergence_component`, `twoFormDivergence_eq_iff` | [CoordinatePotential](../ProjectAinos/SmoothGeometry/Lorentzian/CoordinatePotential.lean) |
+| Maxwell equations from the action | `Electrodynamics.Curved.potentialStationary_iff_sourced`, `maxwell_iff_potentialStationary`, `potentialDensity_matter`, `potentialStationary_matter_iff`, `Electrodynamics.potentialDensity_minkowski`, `potentialAction_minkowski` | [CurvedAction](../ProjectAinos/Electrodynamics/CurvedAction.lean) |
+| Action of a charge | `lineIntegral`, `fieldCovector`, `chargedAction`, `ChargedStationary`, `chargedResidual`, `lineIntegral_family_hasDerivAt`, `lineIntegral_variation_hasDerivAt`, `chargedAction_variation_hasDerivAt`, `chargedStationary_iff`, `fieldCovector_gauge`, `lineIntegral_gauge`, `chargedStationary_gauge_iff` | [ChargedMotion](../ProjectAinos/GeneralRelativity/ChargedMotion.lean) |
+| The flat case | `fieldCovector_potentialCovector`, `chargedStationary_minkowski_iff` | [FlatChargedMotion](../ProjectAinos/GeneralRelativity/FlatChargedMotion.lean) |
+
+The typed examples are in `checks/CurvedChargeAPI.lean`. The decisions are recorded in
+[GR15](general-relativity-notes.md) and [ED16](electrodynamics-notes.md).

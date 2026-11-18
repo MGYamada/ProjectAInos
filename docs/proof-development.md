@@ -24,8 +24,8 @@ The proofs of the three field plans are tracked in
 ledger with one status for each section, a count line and the list of rows closed
 with a remainder, in the vocabulary of the mechanics ledger:
 [special relativity](cinfty-special-relativity.md#ledger) (12 of 14 rows proved),
-[electrodynamics](cinfty-electrodynamics.md#ledger) (19 of 66) and
-[general relativity](cinfty-general-relativity.md#ledger) (13 of 39). The baseline
+[electrodynamics](cinfty-electrodynamics.md#ledger) (20 of 66) and
+[general relativity](cinfty-general-relativity.md#ledger) (14 of 39). The baseline
 counts a row as proved only when its whole target is proved; a row with a proved
 core names the core and stays *informal*. Observations are recorded in the notes
 of [special relativity](special-relativity-notes.md),
@@ -762,6 +762,21 @@ potential in Minkowski space `Θ` is the Hilbert tensor that the variation of th
 metric gives. The ledger row of electrodynamics §32 is *proved* in this scope
 (19 of 66).
 [Guide](electrodynamics.md#energy-and-momentum-31-3335)
+
+## The field and a charge on a fixed background
+
+On a metric given by coefficients on an open set of the model space, the action
+`∫ (−¼ F_{ab} F^{ab} − A_b j^b) √|g|` of a smooth potential with a prescribed current is
+exactly quadratic in the variation, and it is stationary under every compactly supported
+variation exactly when `∇_a F^{ab} = j^b`, the sourced Maxwell equation `dH = J` for the
+native field and current; at the Minkowski metric it is the flat functional. On a Lorentz
+metric on the same open set, the action `−m ∫ dτ + e ∫ A` of a charge is stationary under
+every fixed-endpoint family of curves exactly when `m ∇_τ U = −e (ι_U F)^♯`; the first
+variation of the line integral is `∫ F(J, γ̇)`, a gauge change adds only an end-point term,
+and for the Minkowski metric the stationarity is that of the flat action. The ledger rows of
+electrodynamics §17 (20 of 66) and general relativity §90 (14 of 39) are *proved* in this
+scope.
+[Guide](general-relativity.md#the-field-and-a-charge-on-a-fixed-background-90)
 
 ## Shared Variational Foundation
 

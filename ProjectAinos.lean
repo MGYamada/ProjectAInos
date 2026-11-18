@@ -10,6 +10,7 @@ public import ProjectAinos.Electrodynamics.Covariance
 public import ProjectAinos.Electrodynamics.Current
 public import ProjectAinos.Electrodynamics.CurrentExamples
 public import ProjectAinos.Electrodynamics.Curved
+public import ProjectAinos.Electrodynamics.CurvedAction
 public import ProjectAinos.Electrodynamics.CurvedComponents
 public import ProjectAinos.Electrodynamics.CurvedExamples
 public import ProjectAinos.Electrodynamics.CurvedPotential
@@ -66,11 +67,13 @@ public import ProjectAinos.External.YM.Space.Orthogonal
 public import ProjectAinos.External.YM.Wilson.Law
 public import ProjectAinos.External.YM.Wilson.Symmetry
 public import ProjectAinos.External.YM.WilsonLawBridge
+public import ProjectAinos.GeneralRelativity.ChargedMotion
 public import ProjectAinos.GeneralRelativity.ClockExamples
 public import ProjectAinos.GeneralRelativity.CoordinateTime
 public import ProjectAinos.GeneralRelativity.EinsteinEquations
 public import ProjectAinos.GeneralRelativity.EinsteinHilbertAction
 public import ProjectAinos.GeneralRelativity.FiniteProperTime
+public import ProjectAinos.GeneralRelativity.FlatChargedMotion
 public import ProjectAinos.GeneralRelativity.FreeGeodesic
 public import ProjectAinos.GeneralRelativity.FreeLagrangian
 public import ProjectAinos.GeneralRelativity.GeodesicHamiltonian
@@ -357,7 +360,9 @@ public import ProjectAinos.SmoothGeometry.Lorentzian.CoordinateFamily
 public import ProjectAinos.SmoothGeometry.Lorentzian.CoordinateFirstVariation
 public import ProjectAinos.SmoothGeometry.Lorentzian.CoordinateMatter
 public import ProjectAinos.SmoothGeometry.Lorentzian.CoordinateMetric
+public import ProjectAinos.SmoothGeometry.Lorentzian.CoordinatePotential
 public import ProjectAinos.SmoothGeometry.Lorentzian.CoordinateScalarField
+public import ProjectAinos.SmoothGeometry.Lorentzian.CoordinateTangent
 public import ProjectAinos.SmoothGeometry.Lorentzian.CoordinateVariation
 public import ProjectAinos.SmoothGeometry.Lorentzian.Curvature
 public import ProjectAinos.SmoothGeometry.Lorentzian.CurvatureDerivative

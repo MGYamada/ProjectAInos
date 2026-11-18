@@ -122,3 +122,10 @@ These notes record mathematical distinctions and interface decisions in `Project
 
 **Proof status.** Proved and built; the ledger row of §32 is *proved* in this scope. [Jet ring](../ProjectAinos/Variational/FieldJet/Belinfante.lean) · [Evaluation](../ProjectAinos/Electrodynamics/CanonicalStress.lean)
 
+## ED16. The curved field action is stated in co-ordinates, and its stationarity gives the sourced half of the equations
+
+**Observation.** Target E13 asks for the integral on an oriented curved manifold, the native equation, the component equivalence and the flat functional. The library has no integral of a density on a manifold (GR02), so the functional is taken on an open set `U` of the model space with the density `√|g|`, as in §93. The density is exactly quadratic in the variation, so the derivative at `0` needs no domination argument beyond the integrability of continuous functions with compact support. Stationarity under variations of the potential gives only `dH = J`; the equation `dF = 0` comes from `F = dA` and is a separate hypothesis on the native field. At the Minkowski metric the flat Lagrangian `−½ coefficient(F ∧ ⋆F)` is `−¼ F_{ab} F^{ab}`, because the coefficient of `F ∧ ⋆G` is the induced pairing of two-forms, and the source term `coefficient(A ∧ ι_j vol)` is `A(j)`.
+
+**Interface decision.** `CoordinateMetric.potentialAction g j A η ε` takes the current as coordinates `j : E → Fin 4 → ℝ`, continuous on `U`; the physics theorems relate it to a native `CurrentVector` by the components. The native field `F` is given with the components `∂_a A_b − ∂_b A_a`. The positive coupling `+A_b k^b` of a matter current is the current `−k`, as in the flat `matterCurrentForm`. The charge on a curved background is in general relativity (GR15), with its flat case against `stationary_iff_lorentzForce`.
+
+**Proof status.** Proved and built; the ledger row of §17 is *proved*, and the remark of §27 names the curved functional. [Field action](../ProjectAinos/SmoothGeometry/Lorentzian/CoordinatePotential.lean) · [Maxwell equations](../ProjectAinos/Electrodynamics/CurvedAction.lean)
