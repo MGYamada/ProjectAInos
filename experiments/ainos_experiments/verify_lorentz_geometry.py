@@ -1084,6 +1084,148 @@ def verify_kerr_vacuum():
     check_zero("Kerr at a = 0", list(metric.subs(a, 0) - schwarzschild))
 
 
+def verify_homogeneous_cosmology():
+    """Homogeneous cosmological models (Landau–Lifshitz §§116, 117).
+
+    Time first, signature (-+++), c = 1. Checks, exactly:
+    * the frame reduction of the Lean file HomogeneousSpace.lean: for the invariant frames of
+      types II (class A) and V (class B) and a diagonal triad, the frame formula `frameRicci`
+      built from the commutator coefficients equals the co-ordinate Ricci tensor contracted
+      with the frame;
+    * the closed forms of BianchiClassA.lean for C^c_ab = eps_abc n_c and a general n;
+    * the Kasner conditions of Kasner.lean (R_00 = -(sum p^2 - sum p)/t^2,
+      R_aa = p_a t^(2 p_a - 2)(sum p - 1)), the Lifshitz–Khalatnikov parametrisation and the
+      dust-filled solution a_i = t^(p_i) (t + t0)^(2/3 - p_i) with G_00 = 4/(3 t (t + t0)).
+    """
+    t, x1, x2, x3 = sp.symbols("t x1 x2 x3", real=True)
+    space = [x1, x2, x3]
+    coords = [t, x1, x2, x3]
+    eta = [-1, 1, 1, 1]
+
+    def bracket(u, w):
+        return sp.Matrix([sum(u[b] * sp.diff(w[m], space[b]) - w[b] * sp.diff(u[m], space[b])
+                              for b in range(3)) for m in range(3)])
+
+    def frame_ricci(e, f, structure):
+        """The Lean formula `frameRicci` from the commutator coefficients."""
+        fdot = f.diff(t)
+
+        def lam(k, i, j):
+            if k == 0 or (i == 0 and j == 0):
+                return 0
+            if i == 0:
+                return sum(e[k - 1, q] * fdot[q, j - 1] for q in range(3))
+            if j == 0:
+                return -sum(e[k - 1, q] * fdot[q, i - 1] for q in range(3))
+            return sum(e[k - 1, c] * f[q, i - 1] * f[r, j - 1] * structure[(c, q, r)]
+                       for c in range(3) for q in range(3) for r in range(3))
+
+        table = {key: sp.simplify(lam(*key)) for key in product(range(4), repeat=3)}
+        rates = {key: sp.diff(value, t) for key, value in table.items()}
+
+        def rot(source, p, q, r):
+            return (source[(p, q, r)] + source[(q, r, p)] - source[(r, p, q)]) / 2
+
+        def component(b, k):
+            return sp.simplify(sum(eta[i] * (
+                (rot(rates, k, i, b) if i == 0 else 0) - (rot(rates, k, i, i) if b == 0 else 0)
+                - sum(eta[g] * (rot(table, k, g, b) * rot(table, i, g, i)
+                                - rot(table, k, g, i) * rot(table, i, g, b)
+                                + table[(g, i, b)] * rot(table, k, i, g)) for g in range(4)))
+                for i in range(4)))
+        return {(b, k): component(b, k) for b, k in product(range(4), repeat=2)}
+
+    scale = [sp.Function(f"a{i}")(t) for i in range(3)]
+    e = sp.diag(*scale)
+    f = e.inv()
+    # Type II (class A): X_2 = e_2 + x1 e_0; type V (class B): X_1 = exp(x0) e_1, X_2 = exp(x0) e_2.
+    frames = {
+        "II": (sp.Matrix([[1, 0, -x2], [0, 1, 0], [0, 0, 1]]),
+               {(c, a, b): (sp.LeviCivita(a, b, 0) if c == 0 else 0)
+                for c, a, b in product(range(3), repeat=3)}),
+        "V": (sp.diag(1, sp.exp(-x1), sp.exp(-x1)),
+              {(c, a, b): (int(a == 0 and c == b) - int(b == 0 and c == a))
+               for c, a, b in product(range(3), repeat=3)}),
+    }
+    for label, (coframe, expected) in frames.items():
+        fields = sp.simplify(coframe.inv())
+        columns = [fields[:, a] for a in range(3)]
+        structure = {}
+        for a, b in product(range(3), repeat=2):
+            components = sp.simplify(coframe * bracket(columns[a], columns[b]))
+            for c in range(3):
+                structure[(c, a, b)] = components[c]
+                check_zero(f"Bianchi {label} structure constant {c}{a}{b}",
+                           components[c] - expected[(c, a, b)])
+        theta = e * coframe
+        metric = sp.zeros(4)
+        metric[0, 0] = -1
+        for al, be in product(range(3), repeat=2):
+            metric[al + 1, be + 1] = sp.simplify(sum(theta[k, al] * theta[k, be]
+                                                     for k in range(3)))
+        gamma = christoffel(metric, coords)
+        ricci = sp.zeros(4)
+        for j, k in product(range(4), repeat=2):
+            ricci[j, k] = sp.simplify(sum(
+                sp.diff(gamma[i][j, k], coords[i]) - sp.diff(gamma[i][i, k], coords[j])
+                + sum(gamma[i][i, m] * gamma[m][j, k] - gamma[i][j, m] * gamma[m][i, k]
+                      for m in range(4)) for i in range(4)))
+        frame = [sp.Matrix([1, 0, 0, 0])] + [
+            sp.Matrix([0] + list(sum((f[a, i] * columns[a] for a in range(3)),
+                                     sp.zeros(3, 1))))
+            for i in range(3)]
+        formula = frame_ricci(e, f, structure)
+        for b, k in product(range(4), repeat=2):
+            check_zero(f"Bianchi {label} frame Ricci {b}{k}",
+                       formula[(b, k)] - (frame[b].T * ricci * frame[k])[0])
+
+    n = sp.symbols("n0 n1 n2", real=True)
+    class_a = {(c, a, b): sp.LeviCivita(a, b, c) * n[c] for c, a, b in product(range(3), repeat=3)}
+    formula = frame_ricci(e, f, class_a)
+    hubble = [sp.diff(s, t) / s for s in scale]
+    volume = (scale[0] * scale[1] * scale[2])**2
+    check_zero("class A R_00", formula[(0, 0)] + sum(sp.diff(s, t, 2) / s for s in scale))
+    for i in range(3):
+        j, k = [m for m in range(3) if m != i]
+        expected = (sp.diff(scale[i], t, 2) / scale[i] + hubble[i] * (hubble[j] + hubble[k])
+                    + ((n[i] * scale[i]**2)**2 - (n[j] * scale[j]**2 - n[k] * scale[k]**2)**2)
+                    / (2 * volume))
+        check_zero(f"class A R_{i + 1}{i + 1}", formula[(i + 1, i + 1)] - expected)
+    check_zero("class A off-diagonal", [formula[(b, k)] for b, k in product(range(4), repeat=2)
+                                        if b != k])
+
+    tp = sp.symbols("t", positive=True)
+    p = sp.symbols("p0 p1 p2", real=True)
+    kasner = sp.diag(-1, *[tp**(2 * q) for q in p])
+    kasner_coords = [tp, x1, x2, x3]
+    gamma = christoffel(kasner, kasner_coords)
+
+    def coordinate_ricci(gamma, coordinates):
+        return sp.Matrix(4, 4, lambda j, k: sp.simplify(sum(
+            sp.diff(gamma[i][j, k], coordinates[i]) - sp.diff(gamma[i][i, k], coordinates[j])
+            + sum(gamma[i][i, m] * gamma[m][j, k] - gamma[i][j, m] * gamma[m][i, k]
+                  for m in range(4)) for i in range(4))))
+
+    ricci = coordinate_ricci(gamma, kasner_coords)
+    check_zero("Kasner R_00", ricci[0, 0] + (sum(q**2 for q in p) - sum(p)) / tp**2)
+    for a in range(3):
+        check_zero(f"Kasner R_{a + 1}{a + 1}",
+                   ricci[a + 1, a + 1] - p[a] * tp**(2 * p[a] - 2) * (sum(p) - 1))
+    u = sp.symbols("u", real=True)
+    exponents = [-u / (1 + u + u**2), (1 + u) / (1 + u + u**2), u * (1 + u) / (1 + u + u**2)]
+    check_zero("Kasner parametrisation", [sum(exponents) - 1,
+                                          sum(q**2 for q in exponents) - 1])
+    t0 = sp.symbols("t0", positive=True)
+    dust = sp.diag(-1, *[(tp**q * (tp + t0)**(sp.Rational(2, 3) - q))**2 for q in exponents])
+    gamma = christoffel(dust, kasner_coords)
+    ricci = coordinate_ricci(gamma, kasner_coords)
+    inverse = dust.inv()
+    scalar = sp.simplify(sum(inverse[i, i] * ricci[i, i] for i in range(4)))
+    einstein = sp.simplify(ricci - scalar / 2 * dust)
+    check_zero("dust Kasner G_00", einstein[0, 0] - 4 / (3 * tp * (tp + t0)))
+    check_zero("dust Kasner spatial G", [einstein[a, a] for a in range(1, 4)])
+
+
 def verify_spherical_vacuum():
     """The Schwarzschild field and its orbits (Landau–Lifshitz §§100, 101).
 
@@ -1337,6 +1479,7 @@ def verify_pseudotensor_expression():
 
 def verify():
     verify_kerr_vacuum()
+    verify_homogeneous_cosmology()
     verify_spherical_vacuum()
     verify_pseudotensor_expression()
     verify_density_divergence()
@@ -1532,7 +1675,8 @@ def verify():
           "nonstatic Newtonian coefficient/physical-time calibrations, "
           "the Landau–Lifshitz pseudotensor expression (96.9), "
           "the Schwarzschild field, Birkhoff identities and orbit integrals, "
-          "and the Kerr vacuum.")
+          "the Kerr vacuum, the frame reduction of homogeneous models, the diagonal "
+          "class-A equations, the Kasner conditions and the dust-filled Kasner solution.")
 
 
 def main():

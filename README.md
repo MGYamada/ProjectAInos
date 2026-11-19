@@ -254,6 +254,11 @@ whose closed, open and flat models are exact solutions, and light is red-shifted
 `a_obs/a_em`.
 [Guide](docs/general-relativity.md#the-rotating-field-104) ·
 [Guide](docs/general-relativity.md#isotropic-cosmology-111-114)
+For a given invariant frame the Einstein equations of a homogeneous universe reduce to ordinary
+differential equations, the structure constants satisfy the Jacobi identity exactly when
+`n a = 0`, and the Kasner metric is a vacuum solution exactly when `Σp = Σp² = 1` or `p = 0`,
+with an exact dust-filled solution.
+[Guide](docs/general-relativity.md#homogeneous-cosmological-models-116-117)
 
 Topic 6 follows the provisional Boltzmannian typicality plan in
 [issue #55](https://github.com/MGYamada/ProjectAinos/issues/55). Its guiding references are

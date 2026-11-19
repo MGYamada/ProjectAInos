@@ -1883,9 +1883,12 @@ coordinate metric in its co-ordinates, `Lorentzian/CoordinateKilling.lean` the K
 in components, and `Lorentzian/CoordinateFrameCriterion.lean` the Lorentz criterion for a form
 in a pointwise frame. `Lorentzian/SpaceForm.lean` gives the three-dimensional spaces of constant
 curvature in conformally flat charts, with their embeddings into the sphere and the hyperboloid
-and the volume of the closed space. The physics is in the
+and the volume of the closed space. `Lorentzian/CoordinateFrame.lean` builds an orthonormal
+frame of a coordinate metric from the components of its fields, with the coordinate brackets of
+the fields and the Ricci tensor in given commutator functions. The physics is in the
 [general relativity guide](general-relativity.md#the-centrally-symmetric-field-100-101) and its
-section on [isotropic cosmology](general-relativity.md#isotropic-cosmology-111-114).
+sections on [isotropic cosmology](general-relativity.md#isotropic-cosmology-111-114) and
+[homogeneous models](general-relativity.md#homogeneous-cosmological-models-116-117).
 
 ## Scope and next stages
 

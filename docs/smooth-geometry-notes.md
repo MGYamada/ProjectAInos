@@ -380,3 +380,11 @@ bundle.
 **Interface decision.** `SpaceForm` is shared mathematics, with no physics imports; the topology is stated by `sphereHomeomorph` and `hyperboloidHomeomorph`. Generated Lean writes exponents as `^ (n : ℕ)` and generalizes polynomial denominators to variables before `field_simp`, then substitutes them back and closes with `ring` (GR22).
 
 **Proof status.** Proved and built. [SpaceForm](../ProjectAinos/SmoothGeometry/Lorentzian/SpaceForm.lean)
+
+## G07. Orthonormal frames of a coordinate metric are built from their components
+
+**Observation.** The tetrad theorems of §98 take an `OrthonormalFrame` of native vector fields. For a metric given by coefficients, the natural data are the components of the fields. Their brackets are the coordinate brackets `∂_ξ η − ∂_η ξ`. The proof avoids the chart pullback of `mlieBracket`: the Levi-Civita connection of the Minkowski coefficients is torsion free and has vanishing Christoffel symbols, so `[X, Y] = ∇_X Y − ∇_Y X` gives the coordinate bracket directly. A function on `U` differentiated along a field of components is the ordinary derivative along the components, for any normed target.
+
+**Interface decision.** `CoordinateMetric.orthonormalFrameOf` takes components smooth on `U` with `g(ξ_a, ξ_b) = η_{ab}` and returns a frame on all of `U`; the chart is fixed by a base point. `ricci_orthonormalFrameOf` takes commutator functions `Λ_{abc}` smooth on `U` with `g(ξ_a, [ξ_b, ξ_c]) = Λ_{abc}` and gives the frame components of the Ricci tensor in `Λ` and its derivatives along the components (`ricciOfFrame`). The homogeneous models of §116 use it (GR24); it is also the frame route that the Kerr certificate made unnecessary.
+
+**Proof status.** Proved and built. [CoordinateFrame](../ProjectAinos/SmoothGeometry/Lorentzian/CoordinateFrame.lean)
