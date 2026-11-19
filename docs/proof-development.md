@@ -947,6 +947,15 @@ hyperbolic charged worldline are regression proofs. The
 [electrodynamics guide](electrodynamics.md) records the full theorem map,
 regularity conditions, experiment runner, and boundaries of §4.1.
 
+For a stress supported in a box, the virial moment changes by the integral of the spatial trace,
+so its time average tends to zero, and the averaged energy is minus the averaged four-trace. A
+relativistic charge in a Coulomb field moves on a rosette whose perihelia are
+`2π|ℓ|/√(ℓ² − α²)` apart, or, for attraction with `ℓ² ≤ α²`, falls to the centre in finite time.
+In the symmetric gauge the Hamiltonian of charges with a common `e/m` is the rotating-frame
+Hamiltonian at the Larmor frequency plus a diamagnetic term, with an explicit bound for the
+neglected term. The ledger rows of §§34, 39 and 45 are *proved* in their scopes (23 of 66).
+[Guide](electrodynamics.md#the-virial-theorem-the-coulomb-field-and-larmors-theorem-34-39-45)
+
 
 ## GR 5.1 native differential-form foundation
 

@@ -33,6 +33,68 @@ def check_zero(name, expression):
         raise AssertionError(f"{name}: exact residual is nonzero: {expression}")
 
 
+def verify_virial_coulomb_larmor():
+    """The virial identity, motion in a Coulomb field and Larmor's theorem (§§34, 39, 45).
+
+    * §34: the improvement stress T^{mu nu} = (d^mu d^nu - eta^{mu nu} box) chi is symmetric
+      and conserved, with spatial trace 3 d_0^2 chi - 2 Laplacian chi, and T^00 plus the
+      four-trace is the spatial trace;
+    * §39: for H = sqrt(m^2 + e^{-2s}(p_s^2 + p_phi^2)) + alpha e^{-s}, X = (p_phi^2 - alpha^2)
+      e^{-s} + alpha H and Y = p_phi p_s e^{-s} have the brackets of CoulombMotion.lean, and
+      d^2X/dphi^2 = -kappa^2 X with kappa^2 = 1 - alpha^2/p_phi^2 (the rosette);
+    * §45: in the symmetric gauge, |p - (e/2) B x q|^2/2m = |p|^2/2m - Omega.(q x p)
+      + (e^2/8m)|B x q|^2 with Omega = e B/2m.
+    """
+    coordinates = sp.symbols("t x y z", real=True)
+    eta = sp.diag(-1, 1, 1, 1)
+    chi = sp.Function("chi")(*coordinates)
+    box = sum(eta[a, a] * sp.diff(chi, coordinates[a], 2) for a in range(4))
+    stress = sp.Matrix(4, 4, lambda m, n: eta[m, m] * eta[n, n]
+                       * sp.diff(chi, coordinates[m], coordinates[n]) - eta[m, n] * box)
+    check_zero("improvement stress symmetry", stress - stress.T)
+    check_zero("improvement stress conservation", sp.Matrix(
+        [sum(sp.diff(stress[m, n], coordinates[m]) for m in range(4)) for n in range(4)]))
+    spatial_trace = sum(stress[a, a] for a in range(1, 4))
+    laplacian = sum(sp.diff(chi, coordinates[a], 2) for a in range(1, 4))
+    check_zero("improvement spatial trace",
+               spatial_trace - 3 * sp.diff(chi, coordinates[0], 2) + 2 * laplacian)
+    check_zero("energy plus four-trace", stress[0, 0] + (-stress[0, 0] + spatial_trace)
+               - spatial_trace)
+
+    s, phi, ps, pphi = sp.symbols("s phi p_s p_phi", real=True)
+    mass, alpha = sp.symbols("m alpha", positive=True)
+    energy = sp.sqrt(mass**2 + sp.exp(-2 * s) * (ps**2 + pphi**2))
+    hamiltonian = energy + alpha * sp.exp(-s)
+
+    def bracket(f, g):
+        return (sp.diff(f, s) * sp.diff(g, ps) - sp.diff(f, ps) * sp.diff(g, s)
+                + sp.diff(f, phi) * sp.diff(g, pphi) - sp.diff(f, pphi) * sp.diff(g, phi))
+
+    orbit_x = (pphi**2 - alpha**2) * sp.exp(-s) + alpha * hamiltonian
+    orbit_y = pphi * ps * sp.exp(-s)
+    check_zero("Coulomb bracket X", bracket(orbit_x, hamiltonian)
+               + (pphi**2 - alpha**2) * ps * sp.exp(-3 * s) / energy)
+    check_zero("Coulomb bracket Y", bracket(orbit_y, hamiltonian)
+               - orbit_x * pphi * sp.exp(-2 * s) / energy)
+    check_zero("Coulomb angular velocity", bracket(phi, hamiltonian)
+               - pphi * sp.exp(-2 * s) / energy)
+    check_zero("Coulomb angular momentum", bracket(pphi, hamiltonian))
+    x_rate = bracket(orbit_x, hamiltonian) / bracket(phi, hamiltonian)
+    y_rate = bracket(orbit_y, hamiltonian) / bracket(phi, hamiltonian)
+    check_zero("rosette first equation", x_rate + (pphi**2 - alpha**2) * orbit_y / pphi**2)
+    check_zero("rosette second equation", y_rate - orbit_x)
+
+    q = sp.Matrix(sp.symbols("q0:3", real=True))
+    p = sp.Matrix(sp.symbols("p0:3", real=True))
+    field = sp.Matrix(sp.symbols("B0:3", real=True))
+    charge = sp.symbols("e", real=True)
+    kinetic = p - charge / 2 * field.cross(q)
+    larmor = charge * field / (2 * mass)
+    rotating = (p.dot(p)) / (2 * mass) - larmor.dot(q.cross(p))
+    check_zero("Larmor identity", kinetic.dot(kinetic) / (2 * mass) - rotating
+               - charge**2 / (8 * mass) * field.cross(q).dot(field.cross(q)))
+
+
 def verify():
     t, x, y, z = coordinates = sp.symbols("t x y z", real=True)
     ex, ey, ez, bx, by, bz = sp.symbols("E_x E_y E_z B_x B_y B_z", real=True)
@@ -86,8 +148,10 @@ def verify():
     check_zero("proper-time mass shell", (velocity.T * metric * velocity)[0] + 1)
     check_zero("hyperbolic Lorentz force", velocity.diff(tau) - force)
     check_zero("force orthogonality", (velocity.T * metric * force)[0])
+    verify_virial_coulomb_larmor()
     print("Electrodynamics exact checks passed: signs, invariants, covariance, gauge, "
-          "Bianchi, degree 0/1 radial reconstruction, and hyperbolic worldline.")
+          "Bianchi, degree 0/1 radial reconstruction, hyperbolic worldline, the virial "
+          "improvement stress, the Coulomb brackets and rosette, and Larmor's identity.")
 
 
 def main():

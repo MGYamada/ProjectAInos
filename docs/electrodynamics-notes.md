@@ -129,3 +129,27 @@ These notes record mathematical distinctions and interface decisions in `Project
 **Interface decision.** `CoordinateMetric.potentialAction g j A η ε` takes the current as coordinates `j : E → Fin 4 → ℝ`, continuous on `U`; the physics theorems relate it to a native `CurrentVector` by the components. The native field `F` is given with the components `∂_a A_b − ∂_b A_a`. The positive coupling `+A_b k^b` of a matter current is the current `−k`, as in the flat `matterCurrentForm`. The charge on a curved background is in general relativity (GR15), with its flat case against `stationary_iff_lorentzForce`.
 
 **Proof status.** Proved and built; the ledger row of §17 is *proved*, and the remark of §27 names the curved functional. [Field action](../ProjectAinos/SmoothGeometry/Lorentzian/CoordinatePotential.lean) · [Maxwell equations](../ProjectAinos/Electrodynamics/CurvedAction.lean)
+
+## ED17. The virial theorem is an identity on a box for a smooth stress with support
+
+**Observation.** The divergence theorem on a box, applied to `P^μ = Σ_α x_α T^{μα}`, gives the change of the virial moment as the integral of the spatial trace once the stress is conserved and vanishes on the spatial faces. Symmetry of the stress is not needed, only conservation in the first index. A time average then needs only a bounded moment. Charged dust cannot be at rest, because `ρₑE = 0` forces `E = 0` on its support, and free dust disperses; so the dust corollary has only the static neutral instance. The improvement stress `(∂^μ∂^ν − η^{μν}□)χ` is identically conserved and can have a nonzero spatial trace, so it shows that the hypotheses are not vacuous.
+
+**Interface decision.** Finite motion is read as support in one spatial box for all times (decision 6 on #135), with the moment bounded. The decay version over all of space is not stated: it needs face fluxes on growing cubes and dominated convergence. Point charges are excluded, since their stress is a distribution.
+
+**Proof status.** Proved and built: the box identity, the Fubini split, the two time averages, the trace-free field stress, the dust corollary with its instance, and the improvement instance. The ledger row of §34 is *proved* in this scope. [Virial](../ProjectAinos/Electrodynamics/Virial.lean) · [VirialExamples](../ProjectAinos/Electrodynamics/VirialExamples.lean)
+
+## ED18. Coulomb orbits are rosettes or fall to the centre, and the fall is a finite exit from the flow domain
+
+**Observation.** In the chart `s = log r` the relativistic Coulomb Hamiltonian is smooth on the whole phase space, so the flow of `hamiltonianField` has a maximal open domain. The orbit functions `X`, `Y` are linear in each other along the angle, which gives the rosette for `ℓ² > α²` with the perihelion spacing `2π|ℓ|/√(ℓ² − α²)`. For attraction with `ℓ² ≤ α²` no all-time solution exists: `p_s/r` strictly decreases, so `p_s` becomes negative and bounded away from zero, and the radius reaches zero in finite time. One argument covers the radial motion `ℓ = 0`, where the orbit equation is empty. Both the circular orbit and the fall need `m > 0`; for `m < 0` the flow is the time-reversed repulsive problem.
+
+**Interface decision.** The rosette is stated for trajectories defined for all times, with the circular orbit as instance. The spiral forms are stated on intervals of a solution, since no all-time trajectory exists. The fall is stated as leaving the flow domain, with the collision `r < ε` before the exit time, using the compactness criterion of the flow domain. The redesign's planned fallback, which assumed no maximal-interval theory, was not needed.
+
+**Proof status.** Proved and built: the Hamiltonian and its brackets, the integrals, the rosette with its perihelia and the circular instance, the spiral forms, the fall to the centre and the collision. The ledger row of §39 is *proved* in this scope; the limit `r → 0` at the exit time and the continuation are not stated. [CoulombMotion](../ProjectAinos/Electrodynamics/CoulombMotion.lean)
+
+## ED19. Larmor's theorem is an identity in the free ring and a bound for given solutions
+
+**Observation.** In the symmetric gauge the kinetic momentum `p − (e/2)B × q` squared splits exactly into `|p|² − e B·(q × p) + (e²/4)|B × q|²`. Dividing by `2m` gives the rotating-frame Hamiltonian at `Ω_L = eB/2m` plus the diamagnetic term. With a common ratio `eₐ/mₐ = γ` the frequency is the same for every particle, which is the content of the theorem. The diamagnetic force is `−(eₐ²/4mₐ)(|B|²qₐ − (B·qₐ)B)`, with Euclidean norm at most `(eₐ²/4mₐ)|B|²|qₐ|`.
+
+**Interface decision.** The identity is stated in the free ring for any momentum-independent `U`, so it holds without regularity. The bound is stated for real functions with an arbitrary force, for given solutions on `[0, L]` that stay in a set where the rotating field is Lipschitz (decision 7 on #135), so a Coulomb potential is admitted away from collisions. Norms are sup norms with the Euclidean bound `Σᵢ qᵢ² ≤ R²`. The ratio is stated as `eₐ/mₐ = γ`.
+
+**Proof status.** Proved and built: the one-particle and `N`-particle identities, the decomposition of the field, the bound in both forms, and the oscillator example. The ledger row of §45 is *proved* in this scope. [Larmor](../ProjectAinos/Electrodynamics/Larmor.lean)
