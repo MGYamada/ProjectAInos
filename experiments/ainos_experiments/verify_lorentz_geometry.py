@@ -1044,6 +1044,122 @@ def verify_newtonian_family():
                static_acceleration-sp.Matrix([-1, 0, 0])-2*eps*v[0]/(1+2*eps*x)*v)
 
 
+def verify_spherical_vacuum():
+    """The Schwarzschild field and its orbits (Landau–Lifshitz §§100, 101).
+
+    Time first, signature (-+++), units G = c = 1, co-ordinates (t, r, theta, phi).
+    Exact SymPy checks of the Christoffel table and the Einstein tensor of the
+    ansatz -A dt^2 + B dr^2 + r^2 dOmega^2 with A, B functions of (t, r), the
+    identities behind Birkhoff's theorem, the vanishing Ricci tensor of the
+    Schwarzschild metric and of its Eddington-Finkelstein form, the effective
+    potential of the radial motion, and the integrals of the perihelion advance
+    and of the deflection of light. No tolerances or random seeds are needed.
+    """
+    t, r, th, ph, M, L, R, f0 = sp.symbols("t r theta phi M L R f0", real=True)
+    coords = [t, r, th, ph]
+    A = sp.Function("A")(t, r)
+    B = sp.Function("B")(t, r)
+
+    def christoffel_table(metric, xs):
+        inverse = metric.inv()
+        n = len(xs)
+        return [[[sp.simplify(sum(inverse[k, l] * (sp.diff(metric[j, l], xs[i])
+                                                    + sp.diff(metric[l, i], xs[j])
+                                                    - sp.diff(metric[i, j], xs[l]))
+                                  for l in range(n)) / 2)
+                  for j in range(n)] for i in range(n)] for k in range(n)]
+
+    def ricci_tensor(gamma, xs):
+        n = len(xs)
+        return sp.Matrix(n, n, lambda j, k: sp.simplify(sum(
+            sp.diff(gamma[i][j][k], xs[i]) - sp.diff(gamma[i][i][k], xs[j])
+            + sum(gamma[i][i][a] * gamma[a][j][k] - gamma[i][j][a] * gamma[a][i][k]
+                  for a in range(n)) for i in range(n))))
+
+    metric = sp.diag(-A, B, r**2, r**2 * sp.sin(th)**2)
+    gamma = christoffel_table(metric, coords)
+    expected = {(0, 0, 0): sp.diff(A, t) / (2 * A), (0, 0, 1): sp.diff(A, r) / (2 * A),
+                (0, 1, 1): sp.diff(B, t) / (2 * A), (1, 0, 0): sp.diff(A, r) / (2 * B),
+                (1, 0, 1): sp.diff(B, t) / (2 * B), (1, 1, 1): sp.diff(B, r) / (2 * B),
+                (1, 2, 2): -r / B, (1, 3, 3): -r * sp.sin(th)**2 / B, (2, 1, 2): 1 / r,
+                (2, 3, 3): -sp.sin(th) * sp.cos(th), (3, 1, 3): 1 / r,
+                (3, 2, 3): sp.cos(th) / sp.sin(th)}
+    for k, i, j in product(range(4), repeat=3):
+        value = expected.get((k, min(i, j), max(i, j)), 0)
+        check_zero(f"spherical Christoffel symbol {k}{i}{j}", gamma[k][i][j] - value)
+    ricci = ricci_tensor(gamma, coords)
+    scalar = sp.simplify(sum(metric.inv()[a, b] * ricci[a, b]
+                             for a, b in product(range(4), repeat=2)))
+    einstein = sp.simplify(ricci - metric * scalar / 2)
+    check_zero("Einstein 00", einstein[0, 0]
+               - A / r**2 * (1 - 1 / B + r * sp.diff(B, r) / B**2))
+    check_zero("Einstein 01", einstein[0, 1] - sp.diff(B, t) / (r * B))
+    check_zero("Einstein 11", einstein[1, 1] - (sp.diff(A, r) / (r * A) - (B - 1) / r**2))
+    check_zero("Einstein 33", einstein[3, 3] - sp.sin(th)**2 * einstein[2, 2])
+    for j, k in ((0, 2), (0, 3), (1, 2), (1, 3), (2, 3)):
+        check_zero(f"Einstein {j}{k}", einstein[j, k])
+    # Birkhoff: G00/A + G11/B = (AB)'/(r A B^2), and G00 = 0 gives (r/B)' = 1.
+    check_zero("Birkhoff combination", einstein[0, 0] / A + einstein[1, 1] / B
+               - sp.diff(A * B, r) / (r * A * B**2))
+    check_zero("Birkhoff radial equation", sp.diff(r / B, r) - 1
+               + r**2 * einstein[0, 0] / A)
+    # The exterior field and its change of time A = f(t)(1 - 2M/r).
+    f = sp.Function("f")(t)
+    for name, a_value in (("Schwarzschild", 1 - 2 * M / r), ("time change", f * (1 - 2 * M / r))):
+        substituted = ricci.subs({A: a_value, B: 1 / (1 - 2 * M / r)}).doit()
+        check_zero(f"{name} Ricci tensor", list(substituted))
+    # Eddington-Finkelstein: -(1 - 2M/r) dv^2 + 2 dv dr + r^2 dOmega^2 on r > 0.
+    v = sp.symbols("v", real=True)
+    ef = sp.Matrix([[-(1 - 2 * M / r), 1, 0, 0], [1, 0, 0, 0],
+                    [0, 0, r**2, 0], [0, 0, 0, r**2 * sp.sin(th)**2]])
+    ef_coords = [v, r, th, ph]
+    check_zero("Eddington-Finkelstein Ricci tensor",
+               list(ricci_tensor(christoffel_table(ef, ef_coords), ef_coords)))
+    # Effective potential V = (1 - 2M/r)(kappa + L^2/r^2).
+    def potential(kappa, x):
+        return (1 - 2 * M / x) * (kappa + L**2 / x**2)
+    dV = sp.diff(potential(1, r), r)
+    check_zero("radial force", dV - 2 * (M * r**2 - L**2 * r + 3 * M * L**2) / r**4)
+    critical = {L**2: M * R**2 / (R - 3 * M)}
+    second = sp.diff(potential(1, r), r, 2).subs(r, R).subs(critical)
+    check_zero("stability of circular orbits", second
+               - M * (2 * R - 12 * M) / (R**3 * (R - 3 * M)))
+    check_zero("photon sphere", sp.diff(potential(0, r), r) - 2 * L**2 * (3 * M - r) / r**4)
+    # The circular geodesic t = alpha s, r = R, theta = pi/2, phi = Omega s.
+    s_ = sp.symbols("s", real=True)
+    alpha = 1 / sp.sqrt(1 - 3 * M / R)
+    omega = alpha * sp.sqrt(M / R**3)
+    path = [alpha * s_, R, sp.pi / 2, omega * s_]
+    schwarzschild = metric.subs({A: 1 - 2 * M / r, B: 1 / (1 - 2 * M / r)}).doit()
+    table = christoffel_table(schwarzschild, coords)
+    at_path = dict(zip(coords, path))
+    for k in range(4):
+        acceleration = sp.diff(path[k], s_, 2) + sum(
+            table[k][i][j].subs(at_path) * sp.diff(path[i], s_) * sp.diff(path[j], s_)
+            for i, j in product(range(4), repeat=2))
+        check_zero(f"circular geodesic {k}", sp.simplify(acceleration.subs(M, R / 7)))
+        check_zero(f"circular geodesic {k} (symbolic)", acceleration)
+    check_zero("circular normalization", sp.simplify(sum(
+        schwarzschild[i, j].subs(at_path) * sp.diff(path[i], s_) * sp.diff(path[j], s_)
+        for i, j in product(range(4), repeat=2)) + 1))
+    # The perihelion advance: the first-order term of the apsidal angle.
+    u1, u2, theta_ = sp.symbols("u1 u2 theta_", positive=True)
+    turning = (u2 + u1) / 2 + (u1 - u2) / 2 * sp.cos(theta_)
+    check_zero("integral of the turning parameter",
+               sp.integrate(turning, (theta_, 0, sp.pi)) - sp.pi * (u1 + u2) / 2)
+    first_order = sp.integrate(sp.diff(1 / sp.sqrt(1 - 2 * M * (u1 + u2 + turning)), M).subs(M, 0),
+                               (theta_, 0, sp.pi))
+    check_zero("perihelion advance", 2 * first_order - 3 * sp.pi * (u1 + u2))
+    a_, e_ = sp.symbols("a e", positive=True)
+    check_zero("perihelion in a and e", 3 * sp.pi * M * (1 / (a_ * (1 - e_)) + 1 / (a_ * (1 + e_)))
+               - 6 * sp.pi * M / (a_ * (1 - e_**2)))
+    # The deflection of light: f(u) = -u^3 gives the coefficient -2 of epsilon = 2M/rho.
+    psi = sp.symbols("psi", real=True)
+    check_zero("deflection coefficient", sp.integrate(
+        sp.sin(psi) * sp.diff(-sp.Symbol("w")**3, sp.Symbol("w")).subs(sp.Symbol("w"), sp.sin(psi)),
+        (psi, 0, sp.pi / 2)) + 2)
+
+
 def verify_pseudotensor_expression():
     """Landau–Lifshitz (96.9) for a nonconstant metric in four dimensions.
 
@@ -1180,6 +1296,7 @@ def verify_pseudotensor_expression():
 
 
 def verify():
+    verify_spherical_vacuum()
     verify_pseudotensor_expression()
     verify_density_divergence()
     verify_volterra_solution()
@@ -1372,7 +1489,8 @@ def verify():
           "curved current/volume/divergence identities in both signatures and orientations, "
           "native two-form covariant differentiation, nonlinear chart covariance and cyclic exterior identities, "
           "nonstatic Newtonian coefficient/physical-time calibrations, "
-          "and the Landau–Lifshitz pseudotensor expression (96.9).")
+          "the Landau–Lifshitz pseudotensor expression (96.9), "
+          "and the Schwarzschild field, Birkhoff identities and orbit integrals.")
 
 
 def main():

@@ -812,6 +812,20 @@ is conserved in the ordinary sense. At every point the pseudotensor is half the 
 stated remainder: the energy and momentum as integrals over a hypersurface are not stated.
 [Guide](general-relativity.md#the-energy-momentum-pseudotensor-96)
 
+## The centrally symmetric field
+
+The ansatz `−A dt² + B dr² + r² dΩ²` has its Christoffel symbols, Ricci and Einstein tensors in
+closed form, and the exterior Schwarzschild field solves the vacuum equations. Within the ansatz,
+on preconnected open sets of times and radii, a vacuum field is the exterior field after a
+change of time (Birkhoff). In Eddington–Finkelstein co-ordinates the field continues across
+`r = 2M`, where every causal vector with `dv > 0` points inward. Along a given geodesic the
+motion is planar, the energy and angular momentum are constant and `ṙ² = E² − V(r)`; the
+circular orbits are stable exactly for `r > 6M`; a bound orbit advances its perihelion by
+`6πM/(a(1 − e²))` up to an explicit `O(M²)` bound; and a ray is deflected by `4M/ρ` up to
+`O((M/ρ)²)`. The trajectories of the geodesic Hamiltonian of the equatorial plane are its native
+geodesics. The ledger rows of §§100 and 101 are *proved* in this scope (18 of 39).
+[Guide](general-relativity.md#the-centrally-symmetric-field-100-101)
+
 ## Shared Variational Foundation
 
 The electrodynamics development adds compact localization for C² Lagrangians

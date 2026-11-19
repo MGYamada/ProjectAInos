@@ -364,3 +364,11 @@ The metric smoothness field was also checked after elaboration: it uses the
 tangent bundle and the bundle of continuous linear maps, including their
 bundle topology and charts. It does not accidentally use a trivial tangent
 bundle.
+
+## G05. Coordinate metrics are computed from diagonal coefficients or from a certified table
+
+**Observation.** The Christoffel symbols of a coordinate metric contain the inverse matrix, and the Ricci tensor differentiates them. Differentiating the inverse is avoidable in two ways. For diagonal coefficients the symbols are explicit and need no differentiability, since the off-diagonal entries are the constant zero (`christoffelOf_diagonal`). For any metric, a table that satisfies the lowering identity `g_{lq} Γ^q_{ij} = ½(∂_i g_{jl} + ∂_j g_{li} − ∂_l g_{ij})` equals `christoffelOf`, because the coefficient matrix is invertible (`christoffelOf_eq_of_lowered`). The Ricci tensor then needs the table only near the point (`ricciOf_eq_ricciOfChristoffel`). A form whose time co-ordinate is null somewhere, as in Eddington–Finkelstein, fails `ofCriterion` but passes it in a pointwise frame (`ofFrameCriterion`); the frame need not depend smoothly on the point.
+
+**Interface decision.** `ofDiagonal`, `christoffelOf_eq_of_lowered`, `ricciOfChristoffel`, `curvatureOf`, `isGeodesicOn_iff` (the geodesic equation of a coordinate metric in its co-ordinates), `vectorFieldOf`, `lieOf` with `isKillingField_iff_lieOf` (the Killing equation in components), and `ofFrameCriterion` are shared. Each file has a proved regression, among them `minkowski_eq_ofDiagonal`, a two-dimensional certified table with `Ric = g`, the straight lines of the Minkowski metric, its rotations and boosts as Killing fields, and a null form that fails `ofCriterion`.
+
+**Proof status.** Proved and built. The general physical consumers are the Schwarzschild files of F14 (GR20, GR21). [DiagonalMetric](../ProjectAinos/SmoothGeometry/Lorentzian/DiagonalMetric.lean) · [ChristoffelCertificate](../ProjectAinos/SmoothGeometry/Lorentzian/ChristoffelCertificate.lean) · [CoordinateGeodesic](../ProjectAinos/SmoothGeometry/Lorentzian/CoordinateGeodesic.lean) · [CoordinateKilling](../ProjectAinos/SmoothGeometry/Lorentzian/CoordinateKilling.lean) · [CoordinateFrameCriterion](../ProjectAinos/SmoothGeometry/Lorentzian/CoordinateFrameCriterion.lean)

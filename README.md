@@ -244,6 +244,10 @@ derivatives of the metric vanish and is the expression (96.9) in the Christoffel
 with the Einstein equations the total energy and momentum density is conserved in the ordinary
 sense.
 [Guide](docs/general-relativity.md#the-energy-momentum-pseudotensor-96)
+The Schwarzschild field solves the vacuum equations, and within the centrally symmetric ansatz it
+is the only vacuum field up to a change of time (Birkhoff); along its geodesics the perihelion
+advances by `6πM/(a(1 − e²))` and light is deflected by `4M/ρ`, with remainder bounds.
+[Guide](docs/general-relativity.md#the-centrally-symmetric-field-100-101)
 
 Topic 6 follows the provisional Boltzmannian typicality plan in
 [issue #55](https://github.com/MGYamada/ProjectAinos/issues/55). Its guiding references are
