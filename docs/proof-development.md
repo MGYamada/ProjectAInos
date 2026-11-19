@@ -823,8 +823,22 @@ motion is planar, the energy and angular momentum are constant and `ṙ² = E² 
 circular orbits are stable exactly for `r > 6M`; a bound orbit advances its perihelion by
 `6πM/(a(1 − e²))` up to an explicit `O(M²)` bound; and a ray is deflected by `4M/ρ` up to
 `O((M/ρ)²)`. The trajectories of the geodesic Hamiltonian of the equatorial plane are its native
-geodesics. The ledger rows of §§100 and 101 are *proved* in this scope (18 of 39).
+geodesics. The ledger rows of §§100 and 101 are *proved* in this scope.
 [Guide](general-relativity.md#the-centrally-symmetric-field-100-101)
+
+## The Kerr field and isotropic cosmology
+
+The Kerr metric in a rational chart solves the vacuum equations, by a certified table of
+Christoffel symbols generated with SymPy and checked by Lean. Its ergoregion, the angular
+velocities of stationary observers with their limit at the horizon, and its Schwarzschild limit
+are proved. The spaces of constant curvature have `Ric = 2k h`, with their embeddings and the
+volume of the closed space. With a lapse and a comoving perfect fluid, the Einstein equations
+are the Friedmann equations, and continuity follows without dividing by the Hubble rate. The
+closed, open and flat dust and radiation models are exact solutions, and along a null geodesic
+`1 + z = a_obs/a_em`. The ledger rows of §§104 and 111–114 are *proved* in their scopes
+(23 of 39).
+[Guide](general-relativity.md#the-rotating-field-104) ·
+[Guide](general-relativity.md#isotropic-cosmology-111-114)
 
 ## Shared Variational Foundation
 
