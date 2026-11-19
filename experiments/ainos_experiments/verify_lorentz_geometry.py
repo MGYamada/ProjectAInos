@@ -1226,6 +1226,110 @@ def verify_homogeneous_cosmology():
     check_zero("dust Kasner spatial G", [einstein[a, a] for a in range(1, 4)])
 
 
+def verify_weak_fields_and_waves():
+    """Weak fields and gravitational waves (Landau–Lifshitz §§99, 107, 109).
+
+    Time first, signature (-+++), c = 1. Checks, exactly:
+    * §109: the diagonal Rosen wave -dt^2 + a(u)^2 dx^2 + b(u)^2 dy^2 + dz^2, u = t - z, has
+      R_ik = -(a''/a + b''/b) l_i l_k with l = (1, 0, 0, -1); with a = L e^beta, b = L e^-beta
+      the factor is 2 (L'' + beta'^2 L)/L; L = cos u, beta = u is a vacuum solution with
+      R^1_010 = -2 tan u; and a = e^(eps f), b = e^(-eps f) has R_00 = -2 eps^2 f'^2;
+    * §107: the derivative in eps at 0 of the Ricci tensor of eta + eps h is the linearized
+      Ricci tensor, it is invariant under h -> h + d xi + (d xi)^T, and a plane wave e cos(k.x)
+      with null k in harmonic gauge is a linearized vacuum solution;
+    * §99: a static metric -N^2 dt^2 + gamma_ab dx^a dx^b has R_00 = N Delta_gamma N.
+    """
+    t, x, y, z = sp.symbols("t x y z", real=True)
+    coords = [t, x, y, z]
+    eta = sp.diag(-1, 1, 1, 1)
+
+    def ricci_of(metric):
+        gamma = christoffel(metric, coords)
+        return sp.Matrix(4, 4, lambda j, k: sp.simplify(sum(
+            sp.diff(gamma[i][j, k], coords[i]) - sp.diff(gamma[i][i, k], coords[j])
+            + sum(gamma[i][i, m] * gamma[m][j, k] - gamma[i][j, m] * gamma[m][i, k]
+                  for m in range(4)) for i in range(4))))
+
+    u = t - z
+    a, b = sp.Function("a"), sp.Function("b")
+    wave = sp.diag(-1, a(u)**2, b(u)**2, 1)
+    ricci = ricci_of(wave)
+    null = sp.Matrix([1, 0, 0, -1])
+    factor = sp.diff(a(u), t, 2) / a(u) + sp.diff(b(u), t, 2) / b(u)
+    check_zero("Rosen wave Ricci", list(ricci + factor * null * null.T))
+    s = sp.symbols("s", real=True)
+    L, beta = sp.Function("L")(s), sp.Function("beta")(s)
+    rosen = (sp.diff(L * sp.exp(beta), s, 2) / (L * sp.exp(beta))
+             + sp.diff(L * sp.exp(-beta), s, 2) / (L * sp.exp(-beta)))
+    check_zero("Rosen factor in L and beta",
+               rosen - 2 * (sp.diff(L, s, 2) + sp.diff(beta, s)**2 * L) / L)
+    strong = sp.diag(-1, (sp.cos(u) * sp.exp(u))**2, (sp.cos(u) * sp.exp(-u))**2, 1)
+    check_zero("strong wave vacuum", list(ricci_of(strong)))
+    accel = sp.diff(sp.cos(s) * sp.exp(s), s, 2) / (sp.cos(s) * sp.exp(s))
+    check_zero("strong wave curvature", accel + 2 * sp.tan(s))
+    eps = sp.symbols("epsilon", real=True)
+    f = sp.Function("f")
+    weak = sp.diag(-1, sp.exp(2 * eps * f(u)), sp.exp(-2 * eps * f(u)), 1)
+    check_zero("weak wave residual",
+               ricci_of(weak)[0, 0] + 2 * eps**2 * sp.diff(f(u), t)**2)
+
+    # A concrete symmetric polynomial perturbation keeps the exact computation small.
+    h = sp.Matrix(4, 4, lambda i, j: (i + j + 1) * coords[i] * coords[j]
+                  + (i - j)**2 * coords[(i + j) % 4]**3 + (1 if i == j else 0) * t * x * z)
+    perturbed = eta + eps * h
+    inverse = sp.simplify(perturbed.inv())
+    first = [sp.Matrix(4, 4, lambda i, j: sp.diff(sum(
+        inverse[kk, ell] * (sp.diff(perturbed[ell, j], coords[i])
+                            + sp.diff(perturbed[ell, i], coords[j])
+                            - sp.diff(perturbed[i, j], coords[ell])) for ell in range(4)) / 2,
+        eps).subs(eps, 0)) for kk in range(4)]
+    derivative = sp.Matrix(4, 4, lambda j, kk: sum(
+        sp.diff(first[i][j, kk], coords[i]) - sp.diff(first[i][i, kk], coords[j])
+        for i in range(4)))
+
+    def linearized(field):
+        trace = sum(eta[i, i] * field[i, i] for i in range(4))
+        return sp.Matrix(4, 4, lambda j, k: sum(eta[i, i] * (
+            sp.diff(field[i, k], coords[i], coords[j]) + sp.diff(field[i, j], coords[i], coords[k])
+            - sp.diff(field[j, k], coords[i], coords[i])) for i in range(4)) / 2
+            - sp.diff(trace, coords[j], coords[k]) / 2)
+
+    # At eps = 0 the Christoffel symbols vanish, so only the derivative terms of Ricci remain.
+    check_zero("linearized Ricci", list(sp.expand(derivative - linearized(h))))
+    xi = [sp.Function(f"xi{i}")(*coords) for i in range(4)]
+    gauge = sp.Matrix(4, 4, lambda i, j: sp.diff(xi[j], coords[i]) + sp.diff(xi[i], coords[j]))
+    check_zero("linearized gauge invariance", list(sp.expand(linearized(gauge))))
+    omega = sp.symbols("omega", positive=True)
+    k = [omega, 0, 0, omega]
+    e = sp.Matrix(4, 4, lambda i, j: sp.Symbol(f"e{min(i, j)}{max(i, j)}"))
+    phase = sum(k[i] * coords[i] for i in range(4))
+    plane = e * sp.cos(phase)
+    trace_e = sum(eta[i, i] * e[i, i] for i in range(4))
+    reversed_e = e - eta * trace_e / 2
+    harmonic = [sum(eta[i, i] * k[i] * reversed_e[i, j] for i in range(4)) for j in range(4)]
+    solution = sp.solve(harmonic, [e[0, 1], e[0, 2], e[0, 3], e[1, 1]], dict=True)[0]
+    check_zero("plane wave linearized vacuum",
+               list(sp.simplify(linearized(plane).subs(solution))))
+
+    N = sp.Function("N")(x, y, z)
+    space = [x, y, z]
+    q = sp.Matrix([[1 + x**2, x * y, 0], [x * y, 1 + y**2 * z, z], [0, z, 2 + x * z]])
+    static = sp.zeros(4)
+    static[0, 0] = -N**2
+    static[1:, 1:] = q
+    spatial_gamma = christoffel(q, space)
+    q_inverse = q.inv()
+    laplacian = sum(q_inverse[i, j] * (sp.diff(N, space[i], space[j])
+                                       - sum(spatial_gamma[m][i, j] * sp.diff(N, space[m])
+                                             for m in range(3)))
+                    for i in range(3) for j in range(3))
+    gamma = christoffel(static, coords)
+    r00 = sum(sp.diff(gamma[i][0, 0], coords[i]) - sp.diff(gamma[i][i, 0], coords[0])
+              + sum(gamma[i][i, m] * gamma[m][0, 0] - gamma[i][0, m] * gamma[m][i, 0]
+                    for m in range(4)) for i in range(4))
+    check_zero("static R_00", sp.simplify(r00 - N * laplacian))
+
+
 def verify_spherical_vacuum():
     """The Schwarzschild field and its orbits (Landau–Lifshitz §§100, 101).
 
@@ -1480,6 +1584,7 @@ def verify_pseudotensor_expression():
 def verify():
     verify_kerr_vacuum()
     verify_homogeneous_cosmology()
+    verify_weak_fields_and_waves()
     verify_spherical_vacuum()
     verify_pseudotensor_expression()
     verify_density_divergence()
@@ -1676,7 +1781,8 @@ def verify():
           "the Landau–Lifshitz pseudotensor expression (96.9), "
           "the Schwarzschild field, Birkhoff identities and orbit integrals, "
           "the Kerr vacuum, the frame reduction of homogeneous models, the diagonal "
-          "class-A equations, the Kasner conditions and the dust-filled Kasner solution.")
+          "class-A equations, the Kasner conditions and the dust-filled Kasner solution, "
+          "the static R_00, the linearized Einstein operator and exact plane waves.")
 
 
 def main():

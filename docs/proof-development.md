@@ -853,6 +853,18 @@ solution passes from the Kasner regime to isotropic expansion. The ledger rows o
 are *proved* in their scopes (25 of 39).
 [Guide](general-relativity.md#homogeneous-cosmological-models-116-117)
 
+## The Newtonian limit and gravitational waves
+
+A static metric has `R₀₀ = N Δ_γ N`, and for static weak-field families the field equations give
+`ΔΦ_ε − 4πGρ_ε = εR_ε` with an explicit remainder, a bound of order `ε` and the Poisson equation
+in the limit. The linearized Ricci and Einstein tensors are the derivatives along an actual family
+of Lorentz metrics `η + εh`, gauge invariant and equal to `−½□h̄` in harmonic gauge; a nonzero null
+covector has two polarizations, the quotient of dimension 2 of the harmonic amplitudes by the gauge
+amplitudes. Exact plane waves of Rosen form satisfy `L'' + β'²L = 0`, an explicit strong wave is
+curved, and a first-order solution has an exact residual of second order. The ledger rows of
+§§99, 107 and 109 are *proved* in their scopes (28 of 39).
+[Guide](general-relativity.md#the-newtonian-limit-and-gravitational-waves-99-107-109)
+
 ## Shared Variational Foundation
 
 The electrodynamics development adds compact localization for C² Lagrangians

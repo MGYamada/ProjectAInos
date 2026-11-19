@@ -82,6 +82,7 @@ public import ProjectAinos.GeneralRelativity.EddingtonFinkelstein
 public import ProjectAinos.GeneralRelativity.EinsteinEquations
 public import ProjectAinos.GeneralRelativity.EinsteinHilbertAction
 public import ProjectAinos.GeneralRelativity.EquatorialComparison
+public import ProjectAinos.GeneralRelativity.ExactPlaneWave
 public import ProjectAinos.GeneralRelativity.FLRW
 public import ProjectAinos.GeneralRelativity.FiniteProperTime
 public import ProjectAinos.GeneralRelativity.FlatChargedMotion
@@ -98,6 +99,7 @@ public import ProjectAinos.GeneralRelativity.NewtonianAccelerationBounds
 public import ProjectAinos.GeneralRelativity.NewtonianBounds
 public import ProjectAinos.GeneralRelativity.NewtonianExamples
 public import ProjectAinos.GeneralRelativity.NewtonianExistence
+public import ProjectAinos.GeneralRelativity.NewtonianFieldLimit
 public import ProjectAinos.GeneralRelativity.NewtonianInverseBounds
 public import ProjectAinos.GeneralRelativity.NewtonianLimit
 public import ProjectAinos.GeneralRelativity.NewtonianLimitExamples
@@ -130,6 +132,7 @@ public import ProjectAinos.GeneralRelativity.VariationBoundary
 public import ProjectAinos.GeneralRelativity.VariationDensity
 public import ProjectAinos.GeneralRelativity.VariationExamples
 public import ProjectAinos.GeneralRelativity.VariationStationary
+public import ProjectAinos.GeneralRelativity.WeakWaves
 public import ProjectAinos.Integrations.YangMillsBridge
 public import ProjectAinos.Integrations.YangMillsCoordinates
 public import ProjectAinos.Mechanics.Basic
@@ -423,6 +426,7 @@ public import ProjectAinos.SmoothGeometry.Lorentzian.HodgeSquare
 public import ProjectAinos.SmoothGeometry.Lorentzian.InertialDerivatives
 public import ProjectAinos.SmoothGeometry.Lorentzian.Killing
 public import ProjectAinos.SmoothGeometry.Lorentzian.LeviCivita
+public import ProjectAinos.SmoothGeometry.Lorentzian.Linearized
 public import ProjectAinos.SmoothGeometry.Lorentzian.LocalFlatness
 public import ProjectAinos.SmoothGeometry.Lorentzian.LocalFlatnessConverse
 public import ProjectAinos.SmoothGeometry.Lorentzian.LocalFlatnessExamples
@@ -458,6 +462,7 @@ public import ProjectAinos.SmoothGeometry.Lorentzian.ScalarCurvatureVariation
 public import ProjectAinos.SmoothGeometry.Lorentzian.SignatureStability
 public import ProjectAinos.SmoothGeometry.Lorentzian.SpaceForm
 public import ProjectAinos.SmoothGeometry.Lorentzian.SpatialForm
+public import ProjectAinos.SmoothGeometry.Lorentzian.Static
 public import ProjectAinos.SmoothGeometry.Lorentzian.Synchronous
 public import ProjectAinos.SmoothGeometry.Lorentzian.Tensor
 public import ProjectAinos.SmoothGeometry.Lorentzian.Tetrad

@@ -388,3 +388,11 @@ bundle.
 **Interface decision.** `CoordinateMetric.orthonormalFrameOf` takes components smooth on `U` with `g(ξ_a, ξ_b) = η_{ab}` and returns a frame on all of `U`; the chart is fixed by a base point. `ricci_orthonormalFrameOf` takes commutator functions `Λ_{abc}` smooth on `U` with `g(ξ_a, [ξ_b, ξ_c]) = Λ_{abc}` and gives the frame components of the Ricci tensor in `Λ` and its derivatives along the components (`ricciOfFrame`). The homogeneous models of §116 use it (GR24); it is also the frame route that the Kerr certificate made unnecessary.
 
 **Proof status.** Proved and built. [CoordinateFrame](../ProjectAinos/SmoothGeometry/Lorentzian/CoordinateFrame.lean)
+
+## G08. Static coefficients and linearized curvature are formulas of coefficient arrays
+
+**Observation.** Both the static Ricci component and the linearized curvature are statements about `christoffelOf` and `ricciOf` of coefficient arrays, so they need no manifold structure. The static fields depend on the spatial point through a continuous linear projection, which makes the time derivatives vanish by construction. The linearization at the Minkowski coefficients uses the general first variation of F11 with vanishing background Christoffel symbols. `ContDiffAt ℝ ∞` at one point does not propagate to nearby points in the pinned Mathlib (`ContDiffAt.eventually` needs a finite order), so the symmetry of second derivatives is stated under a `C²` hypothesis on a neighbourhood.
+
+**Interface decision.** `Lorentzian/Static.lean` and `Lorentzian/Linearized.lean` are shared mathematics with no physics imports. Second derivatives are `fderiv` of `fderiv` along coordinate vectors. The trace reversal of the coordinate Einstein equations (`IsEinstein.ricciOf_eq`) is in the static file.
+
+**Proof status.** Proved and built. [Static](../ProjectAinos/SmoothGeometry/Lorentzian/Static.lean) · [Linearized](../ProjectAinos/SmoothGeometry/Lorentzian/Linearized.lean)
