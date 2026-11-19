@@ -71,6 +71,7 @@ public import ProjectAinos.GeneralRelativity.ChargedMotion
 public import ProjectAinos.GeneralRelativity.ClockExamples
 public import ProjectAinos.GeneralRelativity.CoordinateTime
 public import ProjectAinos.GeneralRelativity.DeSitterSlicing
+public import ProjectAinos.GeneralRelativity.DeflectionIntegral
 public import ProjectAinos.GeneralRelativity.EinsteinEquations
 public import ProjectAinos.GeneralRelativity.EinsteinHilbertAction
 public import ProjectAinos.GeneralRelativity.FiniteProperTime
@@ -94,6 +95,7 @@ public import ProjectAinos.GeneralRelativity.NewtonianTrajectoryComparison
 public import ProjectAinos.GeneralRelativity.ObserverMeasurement
 public import ProjectAinos.GeneralRelativity.ParticleAction
 public import ProjectAinos.GeneralRelativity.ParticleExamples
+public import ProjectAinos.GeneralRelativity.PerihelionIntegral
 public import ProjectAinos.GeneralRelativity.ProperTime
 public import ProjectAinos.GeneralRelativity.ProperTimeParameter
 public import ProjectAinos.GeneralRelativity.QuadraticGeodesic
@@ -348,6 +350,7 @@ public import ProjectAinos.SmoothGeometry.Lorentzian.ChartDerivatives
 public import ProjectAinos.SmoothGeometry.Lorentzian.ChartDuality
 public import ProjectAinos.SmoothGeometry.Lorentzian.ChartExamples
 public import ProjectAinos.SmoothGeometry.Lorentzian.Christoffel
+public import ProjectAinos.SmoothGeometry.Lorentzian.ChristoffelCertificate
 public import ProjectAinos.SmoothGeometry.Lorentzian.Conformal
 public import ProjectAinos.SmoothGeometry.Lorentzian.ConformalExample
 public import ProjectAinos.SmoothGeometry.Lorentzian.Connection
@@ -359,6 +362,9 @@ public import ProjectAinos.SmoothGeometry.Lorentzian.CoordinateEinsteinEquation
 public import ProjectAinos.SmoothGeometry.Lorentzian.CoordinateEinsteinHilbert
 public import ProjectAinos.SmoothGeometry.Lorentzian.CoordinateFamily
 public import ProjectAinos.SmoothGeometry.Lorentzian.CoordinateFirstVariation
+public import ProjectAinos.SmoothGeometry.Lorentzian.CoordinateFrameCriterion
+public import ProjectAinos.SmoothGeometry.Lorentzian.CoordinateGeodesic
+public import ProjectAinos.SmoothGeometry.Lorentzian.CoordinateKilling
 public import ProjectAinos.SmoothGeometry.Lorentzian.CoordinateMatter
 public import ProjectAinos.SmoothGeometry.Lorentzian.CoordinateMetric
 public import ProjectAinos.SmoothGeometry.Lorentzian.CoordinatePotential
@@ -373,6 +379,7 @@ public import ProjectAinos.SmoothGeometry.Lorentzian.CurvatureRegularity
 public import ProjectAinos.SmoothGeometry.Lorentzian.CurvatureSymmetry
 public import ProjectAinos.SmoothGeometry.Lorentzian.CurveFamily
 public import ProjectAinos.SmoothGeometry.Lorentzian.DensityDerivative
+public import ProjectAinos.SmoothGeometry.Lorentzian.DiagonalMetric
 public import ProjectAinos.SmoothGeometry.Lorentzian.Divergence
 public import ProjectAinos.SmoothGeometry.Lorentzian.DivergenceExamples
 public import ProjectAinos.SmoothGeometry.Lorentzian.Dual
