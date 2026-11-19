@@ -1881,8 +1881,11 @@ certifies a table of Christoffel symbols by the lowering identity and computes t
 curvature tensors from it. `Lorentzian/CoordinateGeodesic.lean` is the geodesic equation of a
 coordinate metric in its co-ordinates, `Lorentzian/CoordinateKilling.lean` the Killing equation
 in components, and `Lorentzian/CoordinateFrameCriterion.lean` the Lorentz criterion for a form
-in a pointwise frame. The physics is in the
-[general relativity guide](general-relativity.md#the-centrally-symmetric-field-100-101).
+in a pointwise frame. `Lorentzian/SpaceForm.lean` gives the three-dimensional spaces of constant
+curvature in conformally flat charts, with their embeddings into the sphere and the hyperboloid
+and the volume of the closed space. The physics is in the
+[general relativity guide](general-relativity.md#the-centrally-symmetric-field-100-101) and its
+section on [isotropic cosmology](general-relativity.md#isotropic-cosmology-111-114).
 
 ## Scope and next stages
 

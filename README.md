@@ -248,6 +248,12 @@ The Schwarzschild field solves the vacuum equations, and within the centrally sy
 is the only vacuum field up to a change of time (Birkhoff); along its geodesics the perihelion
 advances by `6πM/(a(1 − e²))` and light is deflected by `4M/ρ`, with remainder bounds.
 [Guide](docs/general-relativity.md#the-centrally-symmetric-field-100-101)
+The Kerr field solves the vacuum equations, with its ergoregion and frame dragging; with a
+comoving fluid the Einstein equations of an isotropic universe are the Friedmann equations,
+whose closed, open and flat models are exact solutions, and light is red-shifted by
+`a_obs/a_em`.
+[Guide](docs/general-relativity.md#the-rotating-field-104) ·
+[Guide](docs/general-relativity.md#isotropic-cosmology-111-114)
 
 Topic 6 follows the provisional Boltzmannian typicality plan in
 [issue #55](https://github.com/MGYamada/ProjectAinos/issues/55). Its guiding references are

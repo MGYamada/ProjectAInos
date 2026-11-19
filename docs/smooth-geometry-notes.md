@@ -372,3 +372,11 @@ bundle.
 **Interface decision.** `ofDiagonal`, `christoffelOf_eq_of_lowered`, `ricciOfChristoffel`, `curvatureOf`, `isGeodesicOn_iff` (the geodesic equation of a coordinate metric in its co-ordinates), `vectorFieldOf`, `lieOf` with `isKillingField_iff_lieOf` (the Killing equation in components), and `ofFrameCriterion` are shared. Each file has a proved regression, among them `minkowski_eq_ofDiagonal`, a two-dimensional certified table with `Ric = g`, the straight lines of the Minkowski metric, its rotations and boosts as Killing fields, and a null form that fails `ofCriterion`.
 
 **Proof status.** Proved and built. The general physical consumers are the Schwarzschild files of F14 (GR20, GR21). [DiagonalMetric](../ProjectAinos/SmoothGeometry/Lorentzian/DiagonalMetric.lean) · [ChristoffelCertificate](../ProjectAinos/SmoothGeometry/Lorentzian/ChristoffelCertificate.lean) · [CoordinateGeodesic](../ProjectAinos/SmoothGeometry/Lorentzian/CoordinateGeodesic.lean) · [CoordinateKilling](../ProjectAinos/SmoothGeometry/Lorentzian/CoordinateKilling.lean) · [CoordinateFrameCriterion](../ProjectAinos/SmoothGeometry/Lorentzian/CoordinateFrameCriterion.lean)
+
+## G06. Riemannian space forms are coefficient arrays, and long rational identities need typed exponents
+
+**Observation.** `CoordinateMetric` is Lorentzian, but `christoffelOf`, `ricciOf` and `curvatureOf` are formulas for any matrix of coefficients, so a three-dimensional Riemannian metric is a coefficient array on ℝ³ (`MinkowskiModel 2`). Positive definiteness is then `Matrix.PosDef`. Generated identities of rational functions met two elaboration limits: literal exponents in a long real expression made the elaborator time out before any tactic ran, and `field_simp` did not clear a polynomial denominator in its own normal form unless that denominator was a variable.
+
+**Interface decision.** `SpaceForm` is shared mathematics, with no physics imports; the topology is stated by `sphereHomeomorph` and `hyperboloidHomeomorph`. Generated Lean writes exponents as `^ (n : ℕ)` and generalizes polynomial denominators to variables before `field_simp`, then substitutes them back and closes with `ring` (GR22).
+
+**Proof status.** Proved and built. [SpaceForm](../ProjectAinos/SmoothGeometry/Lorentzian/SpaceForm.lean)
