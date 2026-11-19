@@ -1345,3 +1345,74 @@ tensor for the frames of types II and V, the class-A closed forms for a general 
 conditions and the dust solution. The decisions are recorded in GR24 and GR25 of the
 [notes](general-relativity-notes.md) and in G07 of the
 [smooth-geometry notes](smooth-geometry-notes.md).
+
+## The Newtonian limit and gravitational waves (§§99, 107, 109)
+
+**Static fields.** `CoordinateMetric.staticCoefficient N γ` is `−N² dt² + γ_{αβ} dx^α dx^β` with
+`N` and `γ` functions of the spatial point alone. Its Christoffel symbols are
+`Γ⁰_{0α} = ∂_αN/N`, `Γ^α_{00} = N γ^{αβ}∂_βN` and the spatial `Γ̃^α_{βγ}`
+(`christoffelOf_staticCoefficient_*`), and `R₀₀ = N Δ_γ N` with
+`Δ_γ N = γ^{αβ}(∂_α∂_βN − Γ̃^μ_{αβ}∂_μN)` (`ricciOf_staticCoefficient_zero_zero`). The
+trace-reversed form `R_{ik} = κ(T_{ik} − ½ g_{ik} g^{ab}T_{ab})` follows from `IsEinstein`
+(`IsEinstein.ricciOf_eq`).
+
+**Newton's law (§99).** `NewtonianFieldLimit.StaticWeakFieldFamily` is a family with
+`N_ε = 1 + εΦ_ε`, `γ_ε = δ + εq_ε`, an energy density `ερ_ε` and a spatial trace `τ_ε` with
+`|τ_ε| ≤ ε²P`, uniform bounds `K` on the fields and their derivatives, and the 00 component of
+the trace-reversed field equations. The field equation is then exactly
+`ΔΦ_ε − 4πGρ_ε = ε R_ε` with an explicit remainder (`flatLaplacian_sub_eq`), so
+`|ΔΦ_ε − 4πGρ_ε| ≤ C ε` for `ε ≤ ε₁` with explicit `ε₁` and `C`
+(`abs_flatLaplacian_sub_le`), and the limit satisfies the Poisson equation `ΔΦ = 4πGρ`
+(`flatLaplacian_eq_of_tendsto`). The hypothesis follows from the Einstein equations
+(`fieldEquation_of_isEinstein`). The sourced family `halfSquare` satisfies it exactly. Unlike
+§81, where the metric was assumed, here the metric solves the field equations.
+
+**The linearized field equations (§107).** `CoordinateMetric.linearizedRicci σ h` is
+`½ Σ_i η^{ii}(∂_i∂_j h_{ik} + ∂_i∂_k h_{ij} − ∂_i∂_i h_{jk} − ∂_j∂_k h_{ii})`, the derivative at
+`ε = 0` of the Ricci tensor of `η + εh` (`hasDerivAt_ricciOf_linear`, with the Einstein tensor
+in `hasDerivAt_einsteinOf_linear`). For bounded `h` and small `ε`, `η + εh` is an actual Lorentz
+metric (`isAdmissible_linear`, `linearMetric`), and the linearization is the derivative of its
+native Ricci and Einstein tensors (`hasDerivAt_ricci_linearMetricFamily`). It is invariant under
+`h ↦ h + L_ξη` (`linearizedRicci_add_lie`), and in harmonic gauge `∂^a h̄_{ab} = 0` it is
+`−½□h`, with the Einstein tensor `−½□h̄` (`linearizedRicci_of_isHarmonicGauge`,
+`linearizedEinstein_of_isHarmonicGauge`).
+
+**Weak waves.** A plane wave `e cos(k·x)` with null `k` satisfies `□h = 0`; it is in harmonic
+gauge exactly when `k^a ē_{ab} = 0` (`isHarmonicGauge_planeWave_iff`), and is then a linearized
+vacuum solution (`linearizedRicci_planeWave`). For every nonzero null `k`, the harmonic amplitudes
+form a space of dimension 6 (`finrank_polarizationSpace`). It contains the amplitudes
+`k ⊗ ζ + ζ ⊗ k` of the residual gauge transformations, which form a space of dimension 4
+(`gaugeSpace_le_polarizationSpace`, `finrank_gaugeSpace`). The quotient has dimension 2
+(`finrank_polarizationQuotient`): the two polarizations, with the plus and cross amplitudes as a
+basis for an axial `k` (`polarizationBasis`).
+
+**Strong waves (§109).** `ExactPlaneWave.metric` is the diagonal Rosen form
+`−dt² + a(u)² dx² + b(u)² dy² + dz²`, `u = t − z`, on the slab where `a, b > 0`. Its Ricci tensor
+is exactly `−(a''/a + b''/b) ℓ_iℓ_k` with the null covector `ℓ = du` (`ricciOf_eq_null`), so
+the vacuum equation is `a''/a + b''/b = 0` (`ricciOf_eq_zero_iff`), and with `a = Le^β`,
+`b = Le^{−β}` it is `L'' + β'²L = 0` (`ricciOf_toData_eq_zero_iff`). The wave `L = cos u`,
+`β = u` on `|u| < π/2` is an exact vacuum solution (`ricciOf_strong`) with `R¹₀₁₀ = −2 tan u`,
+nonzero wherever `u ≠ 0` (`chartCurvature_strong_ne_zero`); `L` vanishes at `u = ±π/2`, where the
+co-ordinates focus. For `a = e^{εf}`, `b = e^{−εf}` the exact Ricci tensor is `−2ε²f'²ℓℓ`
+(`ricciOf_weak`): its first-order part vanishes (`hasDerivAt_ricciOf_weak`), but it is not Ricci
+flat for `ε ≠ 0` (`not_ricciFlat_weak`).
+
+**Scope.** §99 is stated for static fields (decision 4 on #135); slowly varying fields and their
+compatibility with the equations of motion are §106 (F24). In §107 gauge fixing, which needs a
+solution of `□χ = f`, and the energy flux (107.11) are not stated. In §109 the transverse metric is
+diagonal (one polarization), and the global structure of the focusing surface is not stated.
+
+| Result | Declarations | Source |
+| --- | --- | --- |
+| Static fields | `CoordinateMetric.staticCoefficient`, `christoffelOf_staticCoefficient_zero_zero_succ`, `christoffelOf_staticCoefficient_succ_zero_zero`, `spatialLaplacian`, `ricciOf_staticCoefficient_zero_zero`, `staticMetric`, `IsEinstein.ricciOf_eq` | [Static](../ProjectAinos/SmoothGeometry/Lorentzian/Static.lean) |
+| Newton's law | `NewtonianFieldLimit.StaticWeakFieldFamily`, `remainder`, `flatLaplacian_sub_eq`, `abs_flatLaplacian_sub_le`, `flatLaplacian_eq_of_tendsto`, `fieldEquation_of_isEinstein`, `trivialFamily`, `halfSquare`, `halfSquare_poisson` | [NewtonianFieldLimit](../ProjectAinos/GeneralRelativity/NewtonianFieldLimit.lean) |
+| The linearized field equations | `CoordinateMetric.linearizedChristoffel`, `linearizedRicci`, `linearizedEinstein`, `hasDerivAt_ricciOf_linear`, `hasDerivAt_einsteinOf_linear`, `isAdmissible_linear`, `linearMetricFamily`, `hasDerivAt_ricci_linearMetricFamily`, `linearizedRicci_add_lie`, `IsHarmonicGauge`, `linearizedRicci_of_isHarmonicGauge`, `linearizedEinstein_of_isHarmonicGauge` | [Linearized](../ProjectAinos/SmoothGeometry/Lorentzian/Linearized.lean) |
+| Weak waves | `WeakWaves.planeWave`, `isHarmonicGauge_planeWave_iff`, `linearizedRicci_planeWave`, `gaugeMap`, `polarizationSpace`, `gaugeSpace`, `finrank_polarizationSpace`, `finrank_gaugeSpace`, `finrank_polarizationQuotient`, `polarizationBasis` | [WeakWaves](../ProjectAinos/GeneralRelativity/WeakWaves.lean) |
+| Strong waves | `ExactPlaneWave.metric`, `christoffelOf_eq`, `ricciOf_eq_null`, `ricciOf_eq_zero_iff`, `ricciOf_toData_eq_zero_iff`, `strong`, `ricciOf_strong`, `chartCurvature_strong_ne_zero`, `weak`, `ricciOf_weak`, `hasDerivAt_ricciOf_weak`, `not_ricciFlat_weak` | [ExactPlaneWave](../ProjectAinos/GeneralRelativity/ExactPlaneWave.lean) |
+
+The typed examples are in `checks/NewtonianFieldLimitAPI.lean` and
+`checks/LinearizedGravityAPI.lean`. The exact experiment `verify_weak_fields_and_waves` checks the
+Rosen-wave Ricci tensor and its two examples, the linearized Ricci tensor against the exact
+derivative for a polynomial perturbation, gauge invariance, the plane-wave vacuum and the static
+`R₀₀`. The decisions are recorded in GR26–GR28 of the [notes](general-relativity-notes.md) and
+in G08 of the [smooth-geometry notes](smooth-geometry-notes.md).

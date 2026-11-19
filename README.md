@@ -259,6 +259,11 @@ differential equations, the structure constants satisfy the Jacobi identity exac
 `n a = 0`, and the Kasner metric is a vacuum solution exactly when `Σp = Σp² = 1` or `p = 0`,
 with an exact dust-filled solution.
 [Guide](docs/general-relativity.md#homogeneous-cosmological-models-116-117)
+Static weak fields satisfy the Poisson equation to order `ε`, the linearized field equations are
+the derivative of an actual family of metrics with two polarizations for every null wave vector,
+and exact plane waves solve `L'' + β'²L = 0`, with a curved strong wave and a second-order residual
+of a first-order solution.
+[Guide](docs/general-relativity.md#the-newtonian-limit-and-gravitational-waves-99-107-109)
 
 Topic 6 follows the provisional Boltzmannian typicality plan in
 [issue #55](https://github.com/MGYamada/ProjectAinos/issues/55). Its guiding references are

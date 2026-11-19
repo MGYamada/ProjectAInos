@@ -1885,10 +1885,14 @@ in a pointwise frame. `Lorentzian/SpaceForm.lean` gives the three-dimensional sp
 curvature in conformally flat charts, with their embeddings into the sphere and the hyperboloid
 and the volume of the closed space. `Lorentzian/CoordinateFrame.lean` builds an orthonormal
 frame of a coordinate metric from the components of its fields, with the coordinate brackets of
-the fields and the Ricci tensor in given commutator functions. The physics is in the
+the fields and the Ricci tensor in given commutator functions. `Lorentzian/Static.lean` gives
+the static coefficients `−N² dt² + γ` with `R₀₀ = N Δ_γ N`, and `Lorentzian/Linearized.lean` the
+linearized Christoffel symbols, Ricci and Einstein tensors of `η + εh` as derivatives, with gauge
+invariance and the harmonic gauge. The physics is in the
 [general relativity guide](general-relativity.md#the-centrally-symmetric-field-100-101) and its
 sections on [isotropic cosmology](general-relativity.md#isotropic-cosmology-111-114) and
-[homogeneous models](general-relativity.md#homogeneous-cosmological-models-116-117).
+[homogeneous models](general-relativity.md#homogeneous-cosmological-models-116-117) and
+[the Newtonian limit and gravitational waves](general-relativity.md#the-newtonian-limit-and-gravitational-waves-99-107-109).
 
 ## Scope and next stages
 
