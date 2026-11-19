@@ -72,6 +72,7 @@ public import ProjectAinos.GeneralRelativity.ClockExamples
 public import ProjectAinos.GeneralRelativity.CoordinateTime
 public import ProjectAinos.GeneralRelativity.DeSitterSlicing
 public import ProjectAinos.GeneralRelativity.DeflectionIntegral
+public import ProjectAinos.GeneralRelativity.EddingtonFinkelstein
 public import ProjectAinos.GeneralRelativity.EinsteinEquations
 public import ProjectAinos.GeneralRelativity.EinsteinHilbertAction
 public import ProjectAinos.GeneralRelativity.FiniteProperTime
@@ -102,9 +103,12 @@ public import ProjectAinos.GeneralRelativity.QuadraticGeodesic
 public import ProjectAinos.GeneralRelativity.QuadraticLagrangian
 public import ProjectAinos.GeneralRelativity.RotatingFrame
 public import ProjectAinos.GeneralRelativity.ScalarFieldEquation
+public import ProjectAinos.GeneralRelativity.SchwarzschildCircular
 public import ProjectAinos.GeneralRelativity.SchwarzschildEquatorial
 public import ProjectAinos.GeneralRelativity.SchwarzschildExterior
+public import ProjectAinos.GeneralRelativity.SchwarzschildRotations
 public import ProjectAinos.GeneralRelativity.SpecialRelativity
+public import ProjectAinos.GeneralRelativity.SphericalAnsatz
 public import ProjectAinos.GeneralRelativity.VariationAction
 public import ProjectAinos.GeneralRelativity.VariationBoundary
 public import ProjectAinos.GeneralRelativity.VariationDensity
