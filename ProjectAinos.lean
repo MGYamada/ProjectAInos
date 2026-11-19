@@ -67,6 +67,9 @@ public import ProjectAinos.External.YM.Space.Orthogonal
 public import ProjectAinos.External.YM.Wilson.Law
 public import ProjectAinos.External.YM.Wilson.Symmetry
 public import ProjectAinos.External.YM.WilsonLawBridge
+public import ProjectAinos.GeneralRelativity.BianchiClassA
+public import ProjectAinos.GeneralRelativity.BianchiExamples
+public import ProjectAinos.GeneralRelativity.BianchiFrames
 public import ProjectAinos.GeneralRelativity.Birkhoff
 public import ProjectAinos.GeneralRelativity.ChargedMotion
 public import ProjectAinos.GeneralRelativity.ClockExamples
@@ -85,6 +88,8 @@ public import ProjectAinos.GeneralRelativity.FlatChargedMotion
 public import ProjectAinos.GeneralRelativity.FreeGeodesic
 public import ProjectAinos.GeneralRelativity.FreeLagrangian
 public import ProjectAinos.GeneralRelativity.GeodesicHamiltonian
+public import ProjectAinos.GeneralRelativity.HomogeneousSpace
+public import ProjectAinos.GeneralRelativity.Kasner
 public import ProjectAinos.GeneralRelativity.Kerr
 public import ProjectAinos.GeneralRelativity.LightDeflection
 public import ProjectAinos.GeneralRelativity.ManifoldMotion
@@ -119,6 +124,7 @@ public import ProjectAinos.GeneralRelativity.SchwarzschildRotations
 public import ProjectAinos.GeneralRelativity.SchwarzschildVacuum
 public import ProjectAinos.GeneralRelativity.SpecialRelativity
 public import ProjectAinos.GeneralRelativity.SphericalAnsatz
+public import ProjectAinos.GeneralRelativity.StructureConstants
 public import ProjectAinos.GeneralRelativity.VariationAction
 public import ProjectAinos.GeneralRelativity.VariationBoundary
 public import ProjectAinos.GeneralRelativity.VariationDensity
@@ -376,6 +382,7 @@ public import ProjectAinos.SmoothGeometry.Lorentzian.CoordinateEinsteinEquation
 public import ProjectAinos.SmoothGeometry.Lorentzian.CoordinateEinsteinHilbert
 public import ProjectAinos.SmoothGeometry.Lorentzian.CoordinateFamily
 public import ProjectAinos.SmoothGeometry.Lorentzian.CoordinateFirstVariation
+public import ProjectAinos.SmoothGeometry.Lorentzian.CoordinateFrame
 public import ProjectAinos.SmoothGeometry.Lorentzian.CoordinateFrameCriterion
 public import ProjectAinos.SmoothGeometry.Lorentzian.CoordinateGeodesic
 public import ProjectAinos.SmoothGeometry.Lorentzian.CoordinateKilling

@@ -1248,7 +1248,7 @@ In de Sitter space the radial ray `λ ↦ (log λ, x₀ − 1/λ, 0, 0)` is an e
 **Scope.** The local classification of homogeneous isotropic three-metrics is not stated. The
 models are explicit solutions; the existence and uniqueness of solutions of the Friedmann
 equation through `a = 0` is not stated. The observers of the conformal models are given curves.
-Homogeneous spaces and the Kasner solution (§§116, 117) are the next stage.
+Homogeneous spaces and the Kasner solution (§§116, 117) follow below.
 
 | Result | Declarations | Source |
 | --- | --- | --- |
@@ -1259,3 +1259,89 @@ Homogeneous spaces and the Kasner solution (§§116, 117) are the next stage.
 
 The typed examples are in `checks/CosmologyAPI.lean`. The decisions are recorded in GR23 of the
 [notes](general-relativity-notes.md) and in G06 of the [smooth-geometry notes](smooth-geometry-notes.md).
+
+## Homogeneous cosmological models (§§116, 117)
+
+**Structure constants.** `StructureConstants.ofBianchi n a` is the Bianchi decomposition
+`C^c_{ab} = Σ_d ε_{abd} n_{dc} + δ^c_b a_a − δ^c_a a_b` (L&L (116.8)). Every set of constants
+antisymmetric in the lower indices has exactly one such form with `n` symmetric
+(`existsUnique_bianchi`, with the inverse maps `bianchiN`, `bianchiA`). The Jacobi identity of
+`[X_a, X_b] = Σ C^c_{ab} X_c` is `n a = 0` (`jacobi_ofBianchi_iff`, `jacobi_iff`), and class A is
+`a = 0`, the vanishing of the traces `Σ_c C^c_{bc}` (`bianchiA_eq_zero_iff`). The canonical types
+`bianchiI`, …, `bianchiIX` of L&L's table satisfy the identity (`jacobi_bianchiI`, …), and
+`not_jacobi_ofBianchi_one` shows that it is a genuine condition.
+
+**The homogeneous metric.** `HomogeneousSpace.InvariantFrame` is the data of a given invariant
+frame: vector fields `X_a` and dual one-forms `ω^a` with components smooth on a nonempty open set
+of ℝ³, and constant structure constants. `HomogeneousSpace.Data` adds a triad `e(t)` with a smooth
+inverse `f(t)`; the metric is `−dt² + Σ_k (θ^k)²` with `θ^k = Σ_a e_{ka} ω^a`, that is
+`γ_{ab} = (eᵀe)_{ab}` in the invariant frame (`Data.metric`). The fields `∂_t` and
+`E_i = Σ_a f_{ai} X_a` are an orthonormal frame (`form_frameField`, `Data.frame`, built with
+`CoordinateMetric.orthonormalFrameOf`). Their commutators are `[E₀, E_j] = Σ ḟ_{aj} X_a` and
+`[E_i, E_j] = Σ_c (Σ_{ab} f_{ai} f_{bj} C^c_{ab}) X_c` (`bracket_zero_succ`, `bracket_succ_succ`),
+so the commutator coefficients `λ_{abc}` are functions of the time alone (`Data.lam`,
+`commutator_frame`).
+
+**The reduction of the field equations.** The frame components of the Ricci tensor at a point are
+`frameRicci` at its time (`ricci_frame`): Cartan's structure equations in the coefficients
+`λ_{abc}`, the rotation coefficients `γ_{abc} = ½(λ_{abc} + λ_{bca} − λ_{cab})` and their time
+derivatives. Hence the vacuum equations on the whole domain are equivalent to ordinary
+differential equations on the interval of times (`ricci_eq_zero_iff`), and so are the equations
+`G + Λg = κT` with a comoving perfect fluid (`einstein_iff`). This is the statement of the
+dictionary that the reduction preserves the full field equations; no action is reduced.
+
+**Diagonal models of class A.** For `C^c_{ab} = ε_{abc} n_c` (`ofBianchi_diagonal`) and
+`e = diag(a₁, a₂, a₃)` (`Data.diagonal`), `λ_{k0j} = −(ȧ_k/a_k) δ_{kj}` and
+`λ_{kij} = ε_{ijk} n_k a_k/(a_i a_j)` (`lam_diagonal`). The Ricci tensor is diagonal in the
+frame, with `R₀₀ = −Σ ä_i/a_i` and
+`R_{ii} = ä_i/a_i + (ȧ_i/a_i)(ȧ_j/a_j + ȧ_k/a_k) + ((n_i a_i²)² − (n_j a_j² − n_k a_k²)²)/(2(a₁a₂a₃)²)`
+(`frameRicci_zero_zero`, `frameRicci_one_one`, `frameRicci_two_two`, `frameRicci_three_three`,
+`frameRicci_ne`), and the vacuum equations are these four (`ricci_eq_zero_iff_diagonal`). For type
+IX they are the equations that L&L use in §118 (`ricci_eq_zero_iff_bianchiIX`).
+
+**Invariant frames.** `BianchiFrames.lean` gives the frames of type I (the co-ordinate fields),
+type II (`X₂ = ∂₂ + x₁∂₀`), type V (`X₁ = e^{x₀}∂₁`, `X₂ = e^{x₀}∂₂`) and type IX (the
+left-invariant frame of `SU(2)` in Euler angles on `0 < x₀ < π`), each with its canonical
+structure constants (`InvariantFrame.bianchiI`, …, `InvariantFrame.bianchiIX`). The Kasner metric
+is a vacuum solution of type I through the frame reduction (`kasnerModel`,
+`ricci_kasnerModel_eq_zero`), independently of the co-ordinate computation below.
+
+**The Kasner solution.** `Kasner.Data` is the diagonal metric `−dt² + Σ a_α(t)² dx_α²` with its
+Christoffel, Ricci and Einstein tables (`christoffelOf_eq`, `ricciOf_eq`, `einsteinOf_eq`). With a
+comoving perfect fluid the Einstein equations are one constraint and three evolution equations
+(`isEinstein_iff`). The metric `a_α = t^{p_α}` on `t > 0` is Ricci flat if and only if
+`Σp = Σp² = 1` or `p = 0`, the latter being Minkowski space (`ricciOf_kasner_eq_zero_iff`,
+(117.3)); its volume element is `t` (`volume_kasner`). Ordered exponents lie in
+`−1/3 ≤ p₁ ≤ 0 ≤ p₂ ≤ 2/3 ≤ p₃ ≤ 1` (`kasner_ranges`) and are `(0, 0, 1)` or
+`p(u) = (−u, 1 + u, u(1 + u))/(1 + u + u²)` with `u ≥ 1` (`eq_kasnerExponents`, (117.5)–(117.6));
+`u ↦ 1/u` exchanges the last two (`kasnerExponents_inv`). Apart from the permutations of
+`(1, 0, 0)`, `R^α_{0α0} = p_α(p_α − 1)/t²` is nonzero at every point
+(`chartCurvature_kasner_ne_zero`).
+
+**Dust.** The declared matter model is dust: `a_α = t^{p_α}(t + t₀)^{2/3 − p_α}` with `t₀ ≥ 0` is an
+exact solution with `ρ = 4/(3κ t(t + t₀))` (`isEinstein_dustKasner`). It approaches the Kasner
+metric as `t → 0⁺` for `t₀ > 0` (`tendsto_dustKasner_nhdsGT`) and the isotropic dust model
+`a = t^{2/3}` as `t → ∞` (`tendsto_dustKasner_atTop`); `t₀ = 0` is that model.
+
+**Scope.** The invariant frame and the triad are data (decision 5 on #135): the group of motions,
+Lie's third theorem, the classification of the structure constants up to a change of frame and
+the construction of an invariant frame for a given homogeneous space are not stated. The approach
+of a general solution with matter to the Kasner regime is not stated; one exact transition between
+Kasner epochs is the planned part of §118.
+
+| Result | Declarations | Source |
+| --- | --- | --- |
+| Frames from components | `CoordinateMetric.lieBracketOf`, `mlieBracket_vectorFieldOf`, `contMDiffAt_vectorFieldOf`, `mvfderiv_vectorFieldOf`, `orthonormalFrameOf`, `commutator_orthonormalFrameOf`, `rotationOf`, `ricciOfFrame`, `ricci_orthonormalFrameOf`, `ricci_eq_zero_iff_frame` | [CoordinateFrame](../ProjectAinos/SmoothGeometry/Lorentzian/CoordinateFrame.lean) |
+| Structure constants | `StructureConstants.levi`, `IsAntisymm`, `Jacobi`, `ofBianchi`, `bianchiN`, `bianchiA`, `existsUnique_bianchi`, `jacobi_ofBianchi_iff`, `jacobi_iff`, `bianchiA_eq_zero_iff`, `bianchiI`, …, `bianchiIX`, `jacobi_bianchiIX` | [StructureConstants](../ProjectAinos/GeneralRelativity/StructureConstants.lean) |
+| The homogeneous metric and its reduction | `HomogeneousSpace.InvariantFrame`, `Data`, `Data.metric`, `form_frameField`, `frame`, `bracket_zero_succ`, `bracket_succ_succ`, `lam`, `commutator_frame`, `frameRicci`, `ricci_frame`, `ricci_eq_zero_iff`, `fluid`, `einstein_iff` | [HomogeneousSpace](../ProjectAinos/GeneralRelativity/HomogeneousSpace.lean) |
+| Diagonal models of class A | `ofBianchi_diagonal`, `Data.diagonal`, `lam_diagonal`, `frameRicci_zero_zero`, `frameRicci_one_one`, `frameRicci_two_two`, `frameRicci_three_three`, `frameRicci_ne`, `ricci_eq_zero_iff_diagonal` | [BianchiClassA](../ProjectAinos/GeneralRelativity/BianchiClassA.lean) |
+| Invariant frames | `InvariantFrame.bianchiI`, `bianchiII`, `bianchiV`, `bianchiIX`, `bracket_fieldIX`, `coframe_fieldIX` | [BianchiFrames](../ProjectAinos/GeneralRelativity/BianchiFrames.lean) |
+| Types I and IX | `bianchiIX_eq_diagonal`, `ricci_eq_zero_iff_bianchiIX`, `kasnerModel`, `ricci_kasnerModel_eq_zero` | [BianchiExamples](../ProjectAinos/GeneralRelativity/BianchiExamples.lean) |
+| The Kasner solution | `Kasner.Data`, `metric`, `ricciOf_eq`, `einsteinOf_eq`, `isEinstein_iff`, `kasner`, `ricciOf_kasner_eq_zero_iff`, `isEinstein_kasner`, `volume_kasner`, `kasnerExponents`, `kasner_ranges`, `eq_kasnerExponents`, `kasnerExponents_inv`, `chartCurvature_kasner_ne_zero`, `dustKasner`, `isEinstein_dustKasner`, `tendsto_dustKasner_nhdsGT`, `tendsto_dustKasner_atTop` | [Kasner](../ProjectAinos/GeneralRelativity/Kasner.lean) |
+
+The typed examples are in `checks/HomogeneousSpaceAPI.lean` and `checks/KasnerAPI.lean`. The exact
+experiment `verify_homogeneous_cosmology` checks the frame formula against the co-ordinate Ricci
+tensor for the frames of types II and V, the class-A closed forms for a general `n`, the Kasner
+conditions and the dust solution. The decisions are recorded in GR24 and GR25 of the
+[notes](general-relativity-notes.md) and in G07 of the
+[smooth-geometry notes](smooth-geometry-notes.md).

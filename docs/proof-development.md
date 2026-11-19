@@ -840,6 +840,19 @@ closed, open and flat dust and radiation models are exact solutions, and along a
 [Guide](general-relativity.md#the-rotating-field-104) ·
 [Guide](general-relativity.md#isotropic-cosmology-111-114)
 
+## Homogeneous models and the Kasner solution
+
+For a given invariant frame and triad, the orthonormal frame `∂_t`, `Σ f_{ai} X_a` has
+commutator coefficients that depend on the time alone, and the Einstein equations on the whole
+domain, in vacuum and with a comoving perfect fluid, are equivalent to ordinary differential
+equations on the times. The structure constants decompose uniquely into `(n, a)` with the Jacobi
+identity `n a = 0`; the diagonal models of class A have the equations of L&L §118, and the frames
+of types I, II, V and IX are given explicitly. The Kasner metric is Ricci flat exactly when
+`Σp = Σp² = 1` or `p = 0`, with the Lifshitz–Khalatnikov parametrisation, and the dust-filled
+solution passes from the Kasner regime to isotropic expansion. The ledger rows of §§116 and 117
+are *proved* in their scopes (25 of 39).
+[Guide](general-relativity.md#homogeneous-cosmological-models-116-117)
+
 ## Shared Variational Foundation
 
 The electrodynamics development adds compact localization for C² Lagrangians
