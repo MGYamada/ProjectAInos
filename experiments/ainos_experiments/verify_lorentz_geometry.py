@@ -1044,6 +1044,46 @@ def verify_newtonian_family():
                static_acceleration-sp.Matrix([-1, 0, 0])-2*eps*v[0]/(1+2*eps*x)*v)
 
 
+def verify_kerr_vacuum():
+    """The Kerr metric (Landau–Lifshitz §104) in the chart (t, r, chi = cos theta, phi).
+
+    Exact SymPy check that the Ricci tensor vanishes, that g_tt g_phiphi - g_tphi^2 =
+    -Delta (1 - chi^2), and that a = 0 gives the Schwarzschild coefficients. The Lean
+    certificate in ProjectAinos/GeneralRelativity/Kerr.lean is generated from the same table
+    (experiments/kerr_certificate).
+    """
+    t, r, c, ph, M, a = sp.symbols("t r chi phi M a", real=True)
+    coords = [t, r, c, ph]
+    sigma = r**2 + a**2 * c**2
+    delta = r**2 - 2 * M * r + a**2
+    s2 = 1 - c**2
+    metric = sp.zeros(4)
+    metric[0, 0] = -(1 - 2 * M * r / sigma)
+    metric[0, 3] = metric[3, 0] = -2 * M * a * r * s2 / sigma
+    metric[1, 1] = sigma / delta
+    metric[2, 2] = sigma / s2
+    metric[3, 3] = (r**2 + a**2 + 2 * M * a**2 * r * s2 / sigma) * s2
+    check_zero("Kerr time-angle determinant", metric[0, 0] * metric[3, 3] - metric[0, 3]**2
+               + delta * s2)
+    inverse = sp.simplify(metric.inv())
+    gamma = [[[sp.cancel(sum(inverse[k, l] * (sp.diff(metric[j, l], coords[i])
+                                              + sp.diff(metric[l, i], coords[j])
+                                              - sp.diff(metric[i, j], coords[l]))
+                             for l in range(4)) / 2)
+               for j in range(4)] for i in range(4)] for k in range(4)]
+    nonzero = sum(1 for k in range(4) for i in range(4) for j in range(i, 4) if gamma[k][i][j] != 0)
+    if nonzero != 20:
+        raise AssertionError(f"Kerr: expected 20 independent Christoffel symbols, got {nonzero}")
+    for j in range(4):
+        for k in range(j, 4):
+            component = sum(sp.diff(gamma[i][j][k], coords[i]) - sp.diff(gamma[i][i][k], coords[j])
+                            + sum(gamma[i][i][b] * gamma[b][j][k] - gamma[i][j][b] * gamma[b][i][k]
+                                  for b in range(4)) for i in range(4))
+            check_zero(f"Kerr Ricci {j}{k}", sp.cancel(sp.together(component)))
+    schwarzschild = sp.diag(-(1 - 2 * M / r), 1 / (1 - 2 * M / r), r**2 / s2, r**2 * s2)
+    check_zero("Kerr at a = 0", list(metric.subs(a, 0) - schwarzschild))
+
+
 def verify_spherical_vacuum():
     """The Schwarzschild field and its orbits (Landau–Lifshitz §§100, 101).
 
@@ -1296,6 +1336,7 @@ def verify_pseudotensor_expression():
 
 
 def verify():
+    verify_kerr_vacuum()
     verify_spherical_vacuum()
     verify_pseudotensor_expression()
     verify_density_divergence()
@@ -1490,7 +1531,8 @@ def verify():
           "native two-form covariant differentiation, nonlinear chart covariance and cyclic exterior identities, "
           "nonstatic Newtonian coefficient/physical-time calibrations, "
           "the Landau–Lifshitz pseudotensor expression (96.9), "
-          "and the Schwarzschild field, Birkhoff identities and orbit integrals.")
+          "the Schwarzschild field, Birkhoff identities and orbit integrals, "
+          "and the Kerr vacuum.")
 
 
 def main():
