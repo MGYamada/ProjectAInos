@@ -1023,3 +1023,146 @@ metric and of the matter at spatial infinity and co-ordinates that are Galilean 
 The typed examples are in `checks/PseudotensorAPI.lean` and
 `checks/PseudotensorChristoffelAPI.lean`. The decisions are recorded in GR18 and GR19 of the
 [notes](general-relativity-notes.md).
+
+## The centrally symmetric field (§§100, 101)
+
+**Co-ordinate tools.** Five shared files carry the computations. `CoordinateMetric.ofDiagonal`
+builds a metric from diagonal coefficients. `christoffelOf_diagonal` gives its Christoffel
+symbols with no differentiability hypothesis, because the off-diagonal entries are the constant
+zero. `christoffelOf_eq_of_lowered` certifies a table of Christoffel symbols by the lowering
+identity `g_{lq} Γ^q_{ij} = ½(∂_i g_{jl} + ∂_j g_{li} − ∂_l g_{ij})`, without computing an
+inverse, and `ricciOf_eq_ricciOfChristoffel` then computes the Ricci tensor from the table.
+`CoordinateMetric.isGeodesicOn_iff` is the geodesic equation of a coordinate metric in its
+co-ordinates, `isKillingField_iff_lieOf` the Killing equation in components, and
+`ofFrameCriterion` the Lorentz criterion for a form in a pointwise frame, which a time
+co-ordinate that becomes null needs.
+
+**The ansatz (100.1).** `SphericalAnsatz.Data` is a pair of smooth positive functions
+`A, B` of `(t, r)` on open sets `I × J` with `J ⊆ (0, ∞)`, and `SphericalAnsatz.metric` is
+`−A dt² + B dr² + r² dθ² + r² sin²θ dφ²` on `I × J × (0, π) × ℝ`. Its Christoffel symbols
+(`christoffelOf_eq`), Ricci tensor (`ricciOf_eq`) and Einstein tensor (`einsteinOf_eq`) are
+computed at every point in the partial derivatives `partialT`, `partialR`:
+`G₀₀ = A/r² (1 − 1/B + r ∂_rB/B²)`, `G₀₁ = ∂_tB/(rB)`, `G₁₁ = ∂_rA/(rA) − (B − 1)/r²`,
+`G₃₃ = sin²θ G₂₂` (100.3)–(100.5), with `G₀₀/A + G₁₁/B = ∂_r(AB)/(rAB²)`
+(`einstein_zero_zero_div_add_one_one_div`).
+
+**The Schwarzschild field.** The exterior metric of `SchwarzschildExterior` is the ansatz with
+`A = 1 − 2M/r`, `B = (1 − 2M/r)⁻¹` (`coefficient_eq_ansatz`). Its Ricci tensor vanishes on the
+domain `r > 2M`, `0 < θ < π` (`ricciOf_eq_zero`), so it satisfies the vacuum Einstein
+equations for every coupling (`isEinstein_zero`, `satisfiesEinstein_zero`), and the native
+Ricci tensor vanishes on all tangent vectors (`ricci_eq_zero`).
+
+**Birkhoff's theorem.** `SphericalAnsatz.birkhoff`: if `I` and `J` are preconnected and the
+Ricci tensor of the ansatz vanishes, there are a constant `M` with `2M < r` on `J` and a
+smooth positive `f` with `B = r/(r − 2M)` and `A = f(t)(1 − 2M/r)`. The proof uses only
+`G₀₁ = 0` (so `∂_tB = 0`), `G₀₀ = 0` (so `∂_r(r/B) = 1`) and `G₀₀/A + G₁₁/B = 0` (so
+`∂_r(AB) = 0`). Conversely the Ricci tensor of these coefficients vanishes for every `M` and
+`f` (`ricciOf_schwarzschildData`), and a change of the time co-ordinate with `T' = √f` turns
+the metric into the exterior Schwarzschild form (`form_schwarzschildData`,
+`birkhoff_timeChange`). The mass is unique (`mass_schwarzschildData`). `M` may be negative:
+then the exterior has no horizon.
+
+**Across the horizon.** `EddingtonFinkelstein.metric` is
+`−(1 − 2M/r) dv² + 2 dv dr + r² dΩ²` on `r > 0`, a Lorentz metric by `ofFrameCriterion`, since
+`v` is a null co-ordinate where `r = 2M`. Its Christoffel symbols are certified
+(`christoffelOf_eq`) and its Ricci tensor vanishes on the whole domain (`ricciOf_eq_zero`,
+`ricci_eq_zero`). The ingoing radial line `(v₀, r₀ − λ, θ₀, φ₀)` is a null geodesic
+(`isGeodesicOn_ingoing`, `form_ingoingRay_velocity`) that crosses `r = 2M`
+(`exists_ingoingRay_lt`). Inside `r = 2M` every causal vector with `dv > 0` has `dr < 0`
+(`radial_lt_zero_of_causal`). The substitution `v = t + r + 2M log(r/2M − 1)` pulls the form
+back to the exterior form (`hasFDerivAt_toEddington`, `form_toEddington`).
+
+**Rotations and the plane of the motion.** The generators of the rotations,
+`K₀ = −sin φ ∂_θ − cot θ cos φ ∂_φ`, `K₁ = cos φ ∂_θ − cot θ sin φ ∂_φ`, `K₂ = ∂_φ`
+(`rotationField`), are Killing fields of the exterior metric
+(`isKillingField_rotationField`, by `lieOf_rotationField`). Along a geodesic, the components
+`J_a = g(K_a, γ̇)` are constant (`angularMomentum_eq`),
+`J₀² + J₁² + J₂² = r⁴(θ̇² + sin²θ φ̇²)` (`sum_angularMomentum_sq`), and the radial direction
+stays orthogonal to the constant vector `J` (`planar_motion`): the motion is in a plane
+through the centre.
+
+**The integrals of the motion.** Along a geodesic given on an open convex set of
+parameters, the energy `E = −g(∂_t, γ̇) = (1 − 2M/r) ṫ` (`energy_eq`, `energy_eq_coord`), the
+square of the angular momentum (`angularMomentumSq_eq`) and the normalization `κ = −g(γ̇, γ̇)`
+(`normalization_eq`) are constant, and the radial equation is
+`ṙ² = E² − (1 − 2M/r)(κ + L²/r²)` (`radial_sq_eq`, with `effectivePotential`). The angle
+swept in the plane of the motion (`sweptAngle`) has the rate `L/r²`
+(`hasDerivAt_sweptAngle_eq_div`), and the co-ordinate time the rate `E/(1 − 2M/r)`
+(`timeRate_eq`).
+
+**Circular orbits.** For bodies (`κ = 1`, `M > 0`) the effective potential is critical at `R`
+if and only if `L²(R − 3M) = MR²` (`deriv_effectivePotential_eq_zero_iff`), which forces
+`R > 3M`. At a critical point the second derivative is `2M(R − 6M)/(R³(R − 3M))`, so the
+circular orbit is stable if and only if `R > 6M` (`deriv_deriv_effectivePotential_pos_iff`).
+For light the only critical radius is `R = 3M`, a maximum
+(`deriv_effectivePotential_light_eq_zero_iff`, `isMaxOn_effectivePotential_light`). The
+circular orbits `s ↦ (αs, R, π/2, Ωs)` with `α = (1 − 3M/R)^{−1/2}`, `Ω = α√(M/R³)` and the
+photon circle at `3M` are geodesics (`isGeodesicOn_circular`, `isGeodesicOn_photonCircle`),
+with `E² = (1 − 2M/R)²/(1 − 3M/R)` (`circularEnergy_sq`).
+
+**The perihelion advance.** For a bound orbit of a body given between a perihelion and an
+aphelion, `u = 1/r` satisfies `u̇² = L²u⁴(u₁ − u)(u − u₂)(1 − 2M(u₁ + u₂ + u))`, from the two
+roots `u₁ = 1/r_min`, `u₂ = 1/r_max` of the cubic (`cubic_eq_factor_of_roots`,
+`radial_sq_eq_factor`). The simple-apsides condition `2M(2u₁ + u₂) < 1` is derived, by a
+Grönwall argument that excludes a double root at the perihelion (`simple_apsides_lt`). The
+angle swept between the apsides is the exact integral
+`∫₀^π dθ/√(1 − 2M(u₁ + u₂ + u(θ)))` (`angle_between_apsides`, with
+`Perihelion.apsidalAngle`), the return from the aphelion sweeps the same angle
+(`return_half`), and the advance between successive perihelia satisfies
+`0 ≤ δφ − 3πM(u₁ + u₂) ≤ 4πM²(2u₁ + u₂)²` for `2M(2u₁ + u₂) ≤ 1/4`
+(`perihelion_advance_between_perihelia`). With `r_min = a(1 − e)`, `r_max = a(1 + e)` the
+leading term is `6πM/(a(1 − e²))` (101.7) (`perihelion_advance_bounds_semiMajor`).
+
+**The deflection of light.** For a ray given from its closest approach to infinity, with
+the impact parameter `ρ = L/E` (`impactParameter`), the radial equation is the small-angle
+radicand of the potential `−u³` with strength `2M/ρ` (`radial_sq_eq_light`), and twice the
+angle swept to infinity tends to `π − χ` with the deflection angle `χ` of the scattering
+library (`tendsto_two_mul_sweptAngle_atTop`, L&L (18.1)). The closest approach is the root
+of `IsClosest` (`closest_eq`, `exists_isClosest_light`), and for `2M/ρ` small
+`|χ + 4M/ρ| ≤ C(M/ρ)²` (`deflection_bound`, `deflection_bound_sweptAngle`): the ray is turned
+towards the centre by `4M/ρ` (101.9), with a quadratic remainder. The constants `δ` and `C`
+come from the implicit function theorem and are not explicit. `exists_ray_zero_mass` is a
+ray with `M = 0` that satisfies every hypothesis.
+
+**The chart geodesics of the geodesic Hamiltonian.** The comparison deferred in GR04 is
+proved. For a coordinate metric on all of the model space whose coefficients are the values
+of a matrix of the free C∞-ring, a curve of `TimeFunction`s is an `IsCoordinateGeodesic`
+exactly when it is a native geodesic for all values of the parameter
+(`GeodesicHamiltonian.isCoordinateGeodesic_iff_isGeodesicOn`). For the equatorial plane of
+the exterior field the trajectories of `H = ½ g^{μν} p_μ p_ν` are the native geodesics of
+`SchwarzschildEquatorial.equatorialMetric` with `p_μ = g_{μν} ẋ^ν`
+(`isCoordinateGeodesic_iff`, `isTrajectory_iff_isGeodesicOn`, `momentum_apply`); the
+circular orbits of Kepler's law in co-ordinate time are an instance (`isTrajectory_kepler`).
+
+**Scope.** Units `G = c = 1`, time first, signature `(−+++)`. The orbits and rays are given
+geodesics on a convex set of parameters, as AGENTS.md prescribes for a field smooth only on
+an open set; the existence of a non-circular bound orbit and of a ray from infinity with
+`M > 0` is not constructed. The deflection angle is defined from the outgoing half of the ray,
+as in the scattering library; the symmetry of the incoming half is not stated. Birkhoff's
+theorem is stated within the ansatz (100.1): the reduction of a metric with an isometric
+action of `SO(3)` to that ansatz, and charts that cover the axis or the whole sphere, are not
+stated. The rotating field of §104 is the next stage.
+
+| Result | Declarations | Source |
+| --- | --- | --- |
+| Diagonal metrics | `CoordinateMetric.diagonalForm`, `ofDiagonal`, `coefficient_ofDiagonal`, `christoffelOf_diagonal`, `christoffelOf_ofDiagonal`, `minkowski_eq_ofDiagonal` | [DiagonalMetric](../ProjectAinos/SmoothGeometry/Lorentzian/DiagonalMetric.lean) |
+| Certified Christoffel tables | `CoordinateMetric.ricciOfChristoffel`, `ricciOf_eq_ricciOfChristoffel`, `christoffelOf_eq_of_lowered`, `curvatureOf`, `toLorentzMetric_chartCurvature_eq_curvatureOf`, `fderiv_single_eq_deriv_update` | [ChristoffelCertificate](../ProjectAinos/SmoothGeometry/Lorentzian/ChristoffelCertificate.lean) |
+| Geodesics and Killing fields in co-ordinates | `CoordinateMetric.isGeodesicOn_iff`, `form_curveVelocity`, `pairing_curveVelocity`, `vectorFieldOf`, `lieOf`, `isKillingField_iff_lieOf`, `isKillingField_of_lieOf` | [CoordinateGeodesic](../ProjectAinos/SmoothGeometry/Lorentzian/CoordinateGeodesic.lean), [CoordinateKilling](../ProjectAinos/SmoothGeometry/Lorentzian/CoordinateKilling.lean) |
+| The frame criterion | `CoordinateMetric.ofFrameCriterion`, `ofFrameCriterion_refl`, `nullMetric` | [CoordinateFrameCriterion](../ProjectAinos/SmoothGeometry/Lorentzian/CoordinateFrameCriterion.lean) |
+| The ansatz (100.1) | `SphericalAnsatz.Data`, `metric`, `christoffelOf_eq`, `ricciOf_eq`, `einsteinOf_eq`, `einstein_zero_zero`, `einstein_zero_one`, `einstein_one_one`, `einstein_two_two`, `einstein_zero_zero_div_add_one_one_div` | [SphericalAnsatz](../ProjectAinos/GeneralRelativity/SphericalAnsatz.lean) |
+| The Schwarzschild field | `SchwarzschildExterior.coefficient_eq_ansatz`, `ricciOf_eq_zero`, `isEinstein_zero`, `satisfiesEinstein_zero`, `ricci_eq_zero` | [SchwarzschildVacuum](../ProjectAinos/GeneralRelativity/SchwarzschildVacuum.lean) |
+| Birkhoff's theorem | `SphericalAnsatz.birkhoff`, `birkhoff_timeChange`, `ricciOf_schwarzschildData`, `form_schwarzschildData`, `mass_schwarzschildData` | [Birkhoff](../ProjectAinos/GeneralRelativity/Birkhoff.lean) |
+| Eddington–Finkelstein | `EddingtonFinkelstein.metric`, `ricciOf_eq_zero`, `ricci_eq_zero`, `isGeodesicOn_ingoing`, `exists_ingoingRay_lt`, `radial_lt_zero_of_causal`, `form_toEddington` | [EddingtonFinkelstein](../ProjectAinos/GeneralRelativity/EddingtonFinkelstein.lean) |
+| Rotations | `SchwarzschildExterior.rotationField`, `isKillingField_rotationField`, `angularMomentum_eq`, `sum_angularMomentum_sq`, `planar_motion` | [SchwarzschildRotations](../ProjectAinos/GeneralRelativity/SchwarzschildRotations.lean) |
+| Integrals of the motion | `SchwarzschildExterior.energy_eq`, `angularMomentumSq_eq`, `normalization_eq`, `radial_sq_eq`, `sweptAngle`, `hasDerivAt_sweptAngle_eq_div`, `timeRate_eq` | [SchwarzschildOrbit](../ProjectAinos/GeneralRelativity/SchwarzschildOrbit.lean) |
+| Circular orbits | `SchwarzschildExterior.effectivePotential`, `deriv_effectivePotential_eq_zero_iff`, `deriv_deriv_effectivePotential_pos_iff`, `deriv_effectivePotential_light_eq_zero_iff`, `isGeodesicOn_circular`, `isGeodesicOn_photonCircle`, `circularEnergy_sq` | [SchwarzschildCircular](../ProjectAinos/GeneralRelativity/SchwarzschildCircular.lean) |
+| The perihelion advance | `Perihelion.apsidalAngle`, `apsidalAngle_bounds`, `SchwarzschildExterior.simple_apsides_lt`, `angle_between_apsides`, `return_half`, `perihelion_advance_between_perihelia`, `perihelion_advance_bounds_semiMajor` | [PerihelionIntegral](../ProjectAinos/GeneralRelativity/PerihelionIntegral.lean), [Perihelion](../ProjectAinos/GeneralRelativity/Perihelion.lean) |
+| The deflection of light | `LightDeflection.exists_abs_deflectionAngle_schwarzschild_add_le`, `SchwarzschildExterior.radial_sq_eq_light`, `tendsto_two_mul_sweptAngle_atTop`, `closest_eq`, `deflection_bound`, `deflection_bound_sweptAngle`, `exists_ray_zero_mass` | [DeflectionIntegral](../ProjectAinos/GeneralRelativity/DeflectionIntegral.lean), [LightDeflection](../ProjectAinos/GeneralRelativity/LightDeflection.lean) |
+| Chart geodesics | `GeodesicHamiltonian.isCoordinateGeodesic_iff_isGeodesicOn`, `SchwarzschildEquatorial.equatorialMetric`, `isCoordinateGeodesic_iff`, `isTrajectory_iff_isGeodesicOn`, `isTrajectory_kepler` | [EquatorialComparison](../ProjectAinos/GeneralRelativity/EquatorialComparison.lean) |
+
+The typed examples are in `checks/CoordinateToolsAPI.lean`, `checks/SchwarzschildAPI.lean` and
+`checks/SchwarzschildOrbitAPI.lean`. The exact experiment `verify_spherical_vacuum` in
+[`verify_lorentz_geometry.py`](../experiments/ainos_experiments/verify_lorentz_geometry.py)
+checks the formulas of the ansatz, Birkhoff's identities and the orbits. The decisions are
+recorded in GR20 and GR21 of the [notes](general-relativity-notes.md) and in G05 of the
+[smooth-geometry notes](smooth-geometry-notes.md).

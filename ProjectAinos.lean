@@ -76,11 +76,13 @@ public import ProjectAinos.GeneralRelativity.DeflectionIntegral
 public import ProjectAinos.GeneralRelativity.EddingtonFinkelstein
 public import ProjectAinos.GeneralRelativity.EinsteinEquations
 public import ProjectAinos.GeneralRelativity.EinsteinHilbertAction
+public import ProjectAinos.GeneralRelativity.EquatorialComparison
 public import ProjectAinos.GeneralRelativity.FiniteProperTime
 public import ProjectAinos.GeneralRelativity.FlatChargedMotion
 public import ProjectAinos.GeneralRelativity.FreeGeodesic
 public import ProjectAinos.GeneralRelativity.FreeLagrangian
 public import ProjectAinos.GeneralRelativity.GeodesicHamiltonian
+public import ProjectAinos.GeneralRelativity.LightDeflection
 public import ProjectAinos.GeneralRelativity.ManifoldMotion
 public import ProjectAinos.GeneralRelativity.ManifoldStationary
 public import ProjectAinos.GeneralRelativity.NewtonianAccelerationBounds
@@ -97,6 +99,7 @@ public import ProjectAinos.GeneralRelativity.NewtonianTrajectoryComparison
 public import ProjectAinos.GeneralRelativity.ObserverMeasurement
 public import ProjectAinos.GeneralRelativity.ParticleAction
 public import ProjectAinos.GeneralRelativity.ParticleExamples
+public import ProjectAinos.GeneralRelativity.Perihelion
 public import ProjectAinos.GeneralRelativity.PerihelionIntegral
 public import ProjectAinos.GeneralRelativity.ProperTime
 public import ProjectAinos.GeneralRelativity.ProperTimeParameter

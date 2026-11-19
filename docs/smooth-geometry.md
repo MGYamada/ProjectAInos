@@ -1873,6 +1873,17 @@ derivative of the Christoffel symbols and the pseudotensor in the Christoffel sy
 point. The physics is in the
 [general relativity guide](general-relativity.md#the-energy-momentum-pseudotensor-96).
 
+## Coordinate tools for exact solutions
+
+`Lorentzian/DiagonalMetric.lean` builds a coordinate metric from diagonal coefficients and gives
+its Christoffel symbols with no differentiability hypothesis. `Lorentzian/ChristoffelCertificate.lean`
+certifies a table of Christoffel symbols by the lowering identity and computes the Ricci and
+curvature tensors from it. `Lorentzian/CoordinateGeodesic.lean` is the geodesic equation of a
+coordinate metric in its co-ordinates, `Lorentzian/CoordinateKilling.lean` the Killing equation
+in components, and `Lorentzian/CoordinateFrameCriterion.lean` the Lorentz criterion for a form
+in a pointwise frame. The physics is in the
+[general relativity guide](general-relativity.md#the-centrally-symmetric-field-100-101).
+
 ## Scope and next stages
 
 These definitions impose neither finite generation nor global Hausdorffness

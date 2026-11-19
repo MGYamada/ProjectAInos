@@ -5,11 +5,15 @@ Released under Apache 2.0 license as described in the file LICENSE.
 module
 import ProjectAinos.GeneralRelativity.SphericalAnsatz
 import ProjectAinos.GeneralRelativity.EddingtonFinkelstein
+import ProjectAinos.GeneralRelativity.SchwarzschildVacuum
+import ProjectAinos.GeneralRelativity.Birkhoff
 
 /-! Public consumers of the centrally symmetric field (Landau–Lifshitz §100): the ansatz
 `−A dt² + B dr² + r² dΩ²` with its Christoffel symbols, Ricci and Einstein tensors, and the
 Schwarzschild field in Eddington–Finkelstein co-ordinates with its ingoing ray, the direction of
-causal vectors inside `r = 2M` and the pullback to the exterior chart. Default elaborator options
+causal vectors inside `r = 2M` and the pullback to the exterior chart, the vacuum Einstein
+equations of the exterior field, and Birkhoff's theorem within the ansatz with its converse, the
+change of time and the uniqueness of the mass. Default elaborator options
 are intentional: these checks must not rely on the implementation's transparency settings. Every
 statement is pinned with its type. -/
 
@@ -840,3 +844,349 @@ example {x : MinkowskiModel 3} (h0 : 0 < x 1) (hx : 2 * M < x 1) (v w : Minkowsk
 end ProjectAinos.GeneralRelativity.EddingtonFinkelstein
 
 end EddingtonFinkelstein
+
+section SchwarzschildVacuum
+
+
+open ContinuousLinearMap Set
+
+open scoped Manifold ContDiff
+
+namespace ProjectAinos.GeneralRelativity.SchwarzschildExterior
+
+open SmoothGeometry Minkowski
+
+open LorentzMetric (chartField)
+
+open CoordinateMetric (physicalChart ricciOf scalarOf einsteinOf)
+
+open SphericalAnsatz (partialT partialR)
+
+variable {M : ℝ}
+
+example (hM : 0 ≤ M) :
+    SphericalAnsatz.Data :=
+  ansatzData hM
+
+example (hM : 0 ≤ M) :
+    SphericalAnsatz.domain (ansatzData hM) = domain M :=
+  domain_ansatzData hM
+
+example (hM : 0 ≤ M) {x : MinkowskiModel 3} (hx : x ∈ domain M) :
+    x ∈ SphericalAnsatz.domain (ansatzData hM) :=
+  mem_ansatzDomain hM hx
+
+example (hM : 0 ≤ M) :
+    diagonalCoefficients M = SphericalAnsatz.coefficients (ansatzData hM) :=
+  diagonalCoefficients_eq_coefficients hM
+
+example (hM : 0 ≤ M) :
+    (metric hM).coefficient = (SphericalAnsatz.metric (ansatzData hM)).coefficient :=
+  coefficient_eq_ansatz hM
+
+example (hM : 0 ≤ M) :
+    partialT (ansatzData hM).A = fun _ _ => 0 :=
+  partialT_ansatzA hM
+
+example (hM : 0 ≤ M) :
+    partialT (ansatzData hM).B = fun _ _ => 0 :=
+  partialT_ansatzB hM
+
+example (hM : 0 ≤ M) (t : ℝ) {r : ℝ} (hr : r ≠ 0) :
+    partialR (ansatzData hM).A t r = 2 * M / r ^ 2 :=
+  partialR_ansatzA hM t hr
+
+example (hM : 0 ≤ M) (t : ℝ) {r : ℝ} (hr : r ≠ 2 * M) :
+    partialR (ansatzData hM).B t r = -(2 * M) / (r - 2 * M) ^ 2 :=
+  partialR_ansatzB hM t hr
+
+example (hM : 0 ≤ M) (t : ℝ) {r : ℝ} (hr : r ≠ 0) :
+    partialR (partialR (ansatzData hM).A) t r = -(4 * M) / r ^ 3 :=
+  partialR_partialR_ansatzA hM t hr
+
+example (hM : 0 ≤ M) (t : ℝ) {r : ℝ} (hr : r ≠ 2 * M) :
+    partialR (partialR (ansatzData hM).B) t r = 4 * M / (r - 2 * M) ^ 3 :=
+  partialR_partialR_ansatzB hM t hr
+
+example (hM : 0 ≤ M) :
+    partialT (partialT (ansatzData hM).A) = fun _ _ => 0 :=
+  partialT_partialT_ansatzA hM
+
+example (hM : 0 ≤ M) :
+    partialT (partialT (ansatzData hM).B) = fun _ _ => 0 :=
+  partialT_partialT_ansatzB hM
+
+example (hM : 0 ≤ M) :
+    partialT (partialR (ansatzData hM).A) = fun _ _ => 0 :=
+  partialT_partialR_ansatzA hM
+
+example (hM : 0 ≤ M) :
+    partialT (partialR (ansatzData hM).B) = fun _ _ => 0 :=
+  partialT_partialR_ansatzB hM
+
+example (hM : 0 ≤ M) {x : MinkowskiModel 3} (hx : x ∈ domain M) (j k : Fin 4) :
+    ricciOf (metric hM).coefficient x j k = 0 :=
+  ricciOf_eq_zero hM hx j k
+
+example (hM : 0 ≤ M) {x : MinkowskiModel 3} (hx : x ∈ domain M) :
+    scalarOf (metric hM).coefficient x = 0 :=
+  scalarOf_eq_zero hM hx
+
+example (hM : 0 ≤ M) {x : MinkowskiModel 3} (hx : x ∈ domain M) (i k : Fin 4) :
+    einsteinOf (metric hM).coefficient x i k = 0 :=
+  einsteinOf_eq_zero hM hx i k
+
+example (hM : 0 ≤ M) (κ : ℝ) :
+    (metric hM).IsEinstein κ 0 0 :=
+  isEinstein_zero hM κ
+
+example (hM : 0 ≤ M) (x y : domain M) (i k : Fin 4) :
+    (metric hM).toLorentzMetric.einstein y (chartField (physicalChart x) (Pi.single i 1) y)
+      (chartField (physicalChart x) (Pi.single k 1) y) = 0 :=
+  einstein_chartField hM x y i k
+
+example (hM : 0 ≤ M) (κ : ℝ) :
+    (metric hM).toLorentzMetric.SatisfiesEinstein κ 0 0 :=
+  satisfiesEinstein_zero hM κ
+
+example (hM : 0 ≤ M) (x y : domain M) (j k : Fin 4) :
+    (metric hM).toLorentzMetric.ricci y (chartField (physicalChart x) (Pi.single j 1) y)
+      (chartField (physicalChart x) (Pi.single k 1) y) = 0 :=
+  ricci_chartField hM x y j k
+
+example (hM : 0 ≤ M) (y : domain M) (u w : TangentSpace 𝓘(ℝ, MinkowskiModel 3) y) :
+    (metric hM).toLorentzMetric.ricci y u w = 0 :=
+  ricci_eq_zero hM y u w
+
+example {t r : ℝ} (hr : r ∈ (ansatzData (le_refl (0 : ℝ))).J) :
+    (ansatzData (le_refl (0 : ℝ))).A t r = 1 :=
+  ansatzData_zero_A hr
+
+example {t r : ℝ} (hr : r ∈ (ansatzData (le_refl (0 : ℝ))).J) :
+    (ansatzData (le_refl (0 : ℝ))).B t r = 1 :=
+  ansatzData_zero_B hr
+
+example :
+    (ansatzData (le_refl (0 : ℝ))).I = SphericalAnsatz.Data.flat.I ∧
+      (ansatzData (le_refl (0 : ℝ))).J = SphericalAnsatz.Data.flat.J :=
+  ansatzData_zero_sets
+
+example :
+    domain 0 = SphericalAnsatz.domain SphericalAnsatz.Data.flat :=
+  domain_zero
+
+example {x : MinkowskiModel 3} (hx : x ∈ domain 0) :
+    (metric (le_refl (0 : ℝ))).coefficient x =
+      (SphericalAnsatz.metric SphericalAnsatz.Data.flat).coefficient x :=
+  coefficient_zero hx
+
+end ProjectAinos.GeneralRelativity.SchwarzschildExterior
+
+end SchwarzschildVacuum
+
+section Birkhoff
+
+
+open ContinuousLinearMap Set Filter
+
+open scoped ContDiff Topology
+
+namespace ProjectAinos.GeneralRelativity.SphericalAnsatz
+
+open SmoothGeometry CoordinateMetric
+
+variable {D : Data}
+
+example {x : MinkowskiModel 3} (h : ∀ j k, ricciOf (metric D).coefficient x j k = 0) (i k : Fin 4) :
+    einsteinOf (metric D).coefficient x i k = 0 :=
+  einsteinOf_eq_zero_of_ricciOf h i k
+
+example (t r : ℝ) :
+    MinkowskiModel 3 :=
+  equatorialPoint t r
+
+example {t r : ℝ} (ht : t ∈ D.I) (hr : r ∈ D.J) :
+    equatorialPoint t r ∈ domain D :=
+  equatorialPoint_mem ht hr
+
+example (hvac : ∀ x ∈ domain D, ∀ j k, ricciOf (metric D).coefficient x j k = 0) {t r : ℝ}
+    (ht : t ∈ D.I) (hr : r ∈ D.J) :
+    partialT D.B t r = 0 :=
+  partialT_B_eq_zero_of_vacuum hvac ht hr
+
+example (hvac : ∀ x ∈ domain D, ∀ j k, ricciOf (metric D).coefficient x j k = 0) {t r : ℝ}
+    (ht : t ∈ D.I) (hr : r ∈ D.J) :
+    1 - 1 / D.B t r + r * partialR D.B t r / D.B t r ^ 2 = 0 :=
+  one_sub_inv_add_eq_zero_of_vacuum hvac ht hr
+
+example (hvac : ∀ x ∈ domain D, ∀ j k, ricciOf (metric D).coefficient x j k = 0) {t r : ℝ}
+    (ht : t ∈ D.I) (hr : r ∈ D.J) :
+    partialR D.A t r * D.B t r + D.A t r * partialR D.B t r = 0 :=
+  partialR_mul_eq_zero_of_vacuum hvac ht hr
+
+example (D : Data) (hI : IsPreconnected D.I) (hJ : IsPreconnected D.J)
+    (hvac : ∀ x ∈ domain D, ∀ j k, ricciOf (metric D).coefficient x j k = 0) :
+    ∃ M : ℝ, (∀ r ∈ D.J, 2 * M < r) ∧ ∃ f : ℝ → ℝ, ContDiffOn ℝ ∞ f D.I ∧
+      (∀ t ∈ D.I, 0 < f t) ∧
+      ∀ t ∈ D.I, ∀ r ∈ D.J, D.B t r = r / (r - 2 * M) ∧ D.A t r = f t * ((r - 2 * M) / r) :=
+  birkhoff D hI hJ hvac
+
+example (M : ℝ) (f : ℝ → ℝ) (t r : ℝ) :
+    ℝ :=
+  schwarzschildA M f t r
+
+example (M : ℝ) (_t r : ℝ) :
+    ℝ :=
+  schwarzschildB M _t r
+
+example (M : ℝ) (I J : Set ℝ) (hI : IsOpen I) (hJ : IsOpen J) (hJM : ∀ r ∈ J, 0 < r ∧ 2 * M < r)
+    (f : ℝ → ℝ) (hf : ContDiffOn ℝ ∞ f I) (hfpos : ∀ t ∈ I, 0 < f t) :
+    Data :=
+  schwarzschildData M I J hI hJ hJM f hf hfpos
+
+variable {M : ℝ} {f : ℝ → ℝ}
+
+example :
+    partialT (schwarzschildB M) = fun _ _ => 0 :=
+  partialT_schwarzschildB
+
+example {t r : ℝ} (hr : r - 2 * M ≠ 0) :
+    partialR (schwarzschildB M) t r = -(2 * M) / (r - 2 * M) ^ 2 :=
+  partialR_schwarzschildB hr
+
+example {t r : ℝ} (hr : r ≠ 0) :
+    partialR (schwarzschildA M f) t r = f t * (2 * M / r ^ 2) :=
+  partialR_schwarzschildA hr
+
+example {t r : ℝ} (hr : r ≠ 0) :
+    partialR (partialR (schwarzschildA M f)) t r = f t * (-(4 * M) / r ^ 3) :=
+  partialR_partialR_schwarzschildA hr
+
+section SchwarzschildData
+
+variable {I J : Set ℝ} {hI : IsOpen I} {hJ : IsOpen J} {hJM : ∀ r ∈ J, 0 < r ∧ 2 * M < r}
+  {hf : ContDiffOn ℝ ∞ f I} {hfpos : ∀ t ∈ I, 0 < f t}
+
+example {x : MinkowskiModel 3} (hx : x ∈ domain (schwarzschildData M I J hI hJ hJM f hf hfpos))
+    (j k : Fin 4) :
+    ricciOf (metric (schwarzschildData M I J hI hJ hJM f hf hfpos)).coefficient x j k = 0 :=
+  ricciOf_schwarzschildData hx j k
+
+example (T : ℝ → ℝ) (x : MinkowskiModel 3) :
+    MinkowskiModel 3 :=
+  timeChange T x
+
+example (f : ℝ → ℝ) (x : MinkowskiModel 3) :
+    MinkowskiModel 3 →L[ℝ] MinkowskiModel 3 :=
+  timeChangeDeriv f x
+
+example (f : ℝ → ℝ) (x v : MinkowskiModel 3) :
+    timeChangeDeriv f x v = ![Real.sqrt (f (x 0)) * v 0, v 1, v 2, v 3] :=
+  timeChangeDeriv_apply f x v
+
+example {T : ℝ → ℝ} {x : MinkowskiModel 3} (hT : HasDerivAt T (Real.sqrt (f (x 0))) (x 0)) :
+    HasFDerivAt (timeChange T) (timeChangeDeriv f x) x :=
+  hasFDerivAt_timeChange hT
+
+example (D : Data) {T : ℝ → ℝ} {x : MinkowskiModel 3}
+    (hA : D.A (x 0) (x 1) = f (x 0) * ((x 1 - 2 * M) / x 1))
+    (hB : D.B (x 0) (x 1) = x 1 / (x 1 - 2 * M)) (hf : 0 ≤ f (x 0)) (v w : MinkowskiModel 3) :
+    (metric D).form x v w = SchwarzschildExterior.form M (timeChange T x)
+      (timeChangeDeriv f x v) (timeChangeDeriv f x w) :=
+  form_eq_timeChange D hA hB hf v w
+
+example {D : Data} (hJM : ∀ r ∈ D.J, 2 * M < r) (T : ℝ → ℝ) {x : MinkowskiModel 3}
+    (hx : x ∈ domain D) :
+    timeChange T x ∈ SchwarzschildExterior.domain M :=
+  timeChange_mem hJM T hx
+
+example {I : Set ℝ} (hI : IsOpen I) (hI' : IsPreconnected I) (hf : ContinuousOn f I) :
+    ∃ T : ℝ → ℝ, ∀ t ∈ I, HasDerivAt T (Real.sqrt (f t)) t :=
+  exists_hasDerivAt_sqrt hI hI' hf
+
+example (D : Data) (hI : IsPreconnected D.I) (hJ : IsPreconnected D.J)
+    (hvac : ∀ x ∈ domain D, ∀ j k, ricciOf (metric D).coefficient x j k = 0) :
+    ∃ M : ℝ, (∀ r ∈ D.J, 2 * M < r) ∧ ∃ f T : ℝ → ℝ,
+      (∀ t ∈ D.I, 0 < f t ∧ HasDerivAt T (Real.sqrt (f t)) t) ∧
+      ∀ x ∈ domain D, HasFDerivAt (timeChange T) (timeChangeDeriv f x) x ∧
+        timeChange T x ∈ SchwarzschildExterior.domain M ∧
+        ∀ v w, (metric D).form x v w = SchwarzschildExterior.form M (timeChange T x)
+          (timeChangeDeriv f x v) (timeChangeDeriv f x w) :=
+  birkhoff_timeChange D hI hJ hvac
+
+example {T : ℝ → ℝ} {x : MinkowskiModel 3} (hx : x 0 ∈ I) (v w : MinkowskiModel 3) :
+    (metric (schwarzschildData M I J hI hJ hJM f hf hfpos)).form x v w =
+      SchwarzschildExterior.form M (timeChange T x) (timeChangeDeriv f x v)
+        (timeChangeDeriv f x w) :=
+  form_schwarzschildData hx v w
+
+example {T : ℝ → ℝ} (hT : ∀ t ∈ I, HasDerivAt T (Real.sqrt (f t)) t) {x : MinkowskiModel 3}
+    (hx : x ∈ domain (schwarzschildData M I J hI hJ hJM f hf hfpos)) :
+    HasFDerivAt (timeChange T) (timeChangeDeriv f x) x ∧
+      timeChange T x ∈ SchwarzschildExterior.domain M ∧
+      ∀ v w, (metric (schwarzschildData M I J hI hJ hJM f hf hfpos)).form x v w =
+        SchwarzschildExterior.form M (timeChange T x) (timeChangeDeriv f x v)
+          (timeChangeDeriv f x w) :=
+  timeChange_schwarzschildData hT hx
+
+example (D : Data) (hI : D.I.Nonempty) (hJ : D.J.Nonempty) {M₁ M₂ : ℝ}
+    (h₁ : ∀ t ∈ D.I, ∀ r ∈ D.J, D.B t r = r / (r - 2 * M₁))
+    (h₂ : ∀ t ∈ D.I, ∀ r ∈ D.J, D.B t r = r / (r - 2 * M₂)) :
+    M₁ = M₂ :=
+  eq_of_B_eq D hI hJ h₁ h₂
+
+example (hIne : I.Nonempty) (hJne : J.Nonempty) {M' : ℝ}
+    (h : ∀ t ∈ I, ∀ r ∈ J,
+      (schwarzschildData M I J hI hJ hJM f hf hfpos).B t r = r / (r - 2 * M')) :
+    M' = M :=
+  mass_schwarzschildData hIne hJne h
+
+end SchwarzschildData
+
+example (hM : 0 ≤ M) :
+    Data :=
+  exteriorData hM
+
+example (hM : 0 ≤ M) {x : MinkowskiModel 3} (hx : x ∈ domain (exteriorData hM)) (j k : Fin 4) :
+    ricciOf (metric (exteriorData hM)).coefficient x j k = 0 :=
+  ricciOf_exteriorData hM hx j k
+
+example (hM : 0 ≤ M) (x : MinkowskiModel 3) :
+    (metric (exteriorData hM)).form x = SchwarzschildExterior.form M x :=
+  form_exteriorData hM x
+
+example (hM : 0 ≤ M) :
+    ∃ M' : ℝ, M' = M ∧ (∀ r ∈ Ioi (2 * M), 2 * M' < r) ∧ ∃ f : ℝ → ℝ,
+      ContDiffOn ℝ ∞ f univ ∧ (∀ t ∈ univ, 0 < f t) ∧
+      ∀ t ∈ univ, ∀ r ∈ Ioi (2 * M), (exteriorData hM).B t r = r / (r - 2 * M') ∧
+        (exteriorData hM).A t r = f t * ((r - 2 * M') / r) :=
+  exists_birkhoff_exteriorData hM
+
+example (hM : 0 ≤ M) :
+    Data :=
+  expTimeData hM
+
+example (hM : 0 ≤ M) {x : MinkowskiModel 3} (hx : x ∈ domain (expTimeData hM)) (j k : Fin 4) :
+    ricciOf (metric (expTimeData hM)).coefficient x j k = 0 :=
+  ricciOf_expTimeData hM hx j k
+
+example (t : ℝ) :
+    HasDerivAt (fun s => 2 * Real.exp (s / 2)) (Real.sqrt (Real.exp t)) t :=
+  hasDerivAt_expTime t
+
+example (hM : 0 ≤ M) (x v w : MinkowskiModel 3) :
+    (metric (expTimeData hM)).form x v w =
+      SchwarzschildExterior.form M (timeChange (fun s => 2 * Real.exp (s / 2)) x)
+        (timeChangeDeriv Real.exp x v) (timeChangeDeriv Real.exp x w) :=
+  form_expTimeData hM x v w
+
+example (hM : 0 ≤ M) :
+    ∃ M' : ℝ, M' = M ∧ (∀ r ∈ Ioi (2 * M), 2 * M' < r) ∧ ∃ f : ℝ → ℝ,
+      ContDiffOn ℝ ∞ f univ ∧ (∀ t ∈ univ, 0 < f t) ∧
+      ∀ t ∈ univ, ∀ r ∈ Ioi (2 * M), (expTimeData hM).B t r = r / (r - 2 * M') ∧
+        (expTimeData hM).A t r = f t * ((r - 2 * M') / r) :=
+  exists_birkhoff_expTimeData hM
+
+end ProjectAinos.GeneralRelativity.SphericalAnsatz
+
+end Birkhoff
