@@ -6,6 +6,7 @@ public import ProjectAinos.Electrodynamics.ChargedDust
 public import ProjectAinos.Electrodynamics.Components
 public import ProjectAinos.Electrodynamics.ConstantField
 public import ProjectAinos.Electrodynamics.ConstantFieldExamples
+public import ProjectAinos.Electrodynamics.CoulombMotion
 public import ProjectAinos.Electrodynamics.Covariance
 public import ProjectAinos.Electrodynamics.Current
 public import ProjectAinos.Electrodynamics.CurrentExamples
@@ -28,6 +29,7 @@ public import ProjectAinos.Electrodynamics.HilbertStress
 public import ProjectAinos.Electrodynamics.Homogeneous
 public import ProjectAinos.Electrodynamics.HomogeneousExamples
 public import ProjectAinos.Electrodynamics.Invariants
+public import ProjectAinos.Electrodynamics.Larmor
 public import ProjectAinos.Electrodynamics.LorentzForce
 public import ProjectAinos.Electrodynamics.MatterCurrent
 public import ProjectAinos.Electrodynamics.ParticleAction
@@ -41,6 +43,8 @@ public import ProjectAinos.Electrodynamics.StressTensor
 public import ProjectAinos.Electrodynamics.ThreePlusOne
 public import ProjectAinos.Electrodynamics.VacuumAction
 public import ProjectAinos.Electrodynamics.VacuumActionExamples
+public import ProjectAinos.Electrodynamics.Virial
+public import ProjectAinos.Electrodynamics.VirialExamples
 public import ProjectAinos.External.YM.Analysis.Homogeneous
 public import ProjectAinos.External.YM.Analysis.Nonnegative
 public import ProjectAinos.External.YM.Analysis.SmoothJets

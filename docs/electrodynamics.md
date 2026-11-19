@@ -486,12 +486,64 @@ the Minkowski coordinate metric and a flat potential this stationarity is that o
 The [general relativity guide](general-relativity.md#the-field-and-a-charge-on-a-fixed-background-90)
 has the proofs, and the [notes](electrodynamics-notes.md) ED16 records the decisions.
 
+## The virial theorem, the Coulomb field and Larmor's theorem (§§34, 39, 45)
+
+**The virial theorem (§34).** For a stress tensor `T^{μν}`, the virial moment `virialMoment T`
+is `∫ x_α T^{0α}` over the spatial box. For a `C¹` stress that is conserved on the box and whose
+components `T^{iα}` vanish on the faces `xⁱ = aⁱ, bⁱ`, the moment changes between two times by the
+integral of the spatial trace `Σ_α T^{αα}` (`virial_box`, with the Fubini split
+`integral_Icc_eq_intervalIntegral`). If the stress stays in one box for all times and the moment is
+bounded, the time average of the integrated spatial trace tends to zero
+(`tendsto_average_spatialTrace`). Since `T⁰⁰` plus the four-trace is the spatial trace, the averaged
+energy is minus the averaged four-trace (`tendsto_average_energy_add_fourTrace`). The stress of the
+field is trace-free (`fourTrace_raisedStress`), so for charged dust the averaged energy tends to the
+rest mass (`ChargedDust.tendsto_average_energy_sub_restMass`). The improvement stress
+`(∂^μ∂^ν − η^{μν}□)χ` with `χ = cos t · b(x)` for a bump `b` is conserved and supported in a box,
+with `∫ spatialTrace = −3 cos t ∫ b ≠ 0`, an instance of every hypothesis
+(`tendsto_average_spatialTrace_improvement`). Charged dust cannot be at rest, so the dust corollary
+has only the static neutral instance.
+
+**Motion in the Coulomb field (§39).** In the polar chart `s = log r`,
+`coulombHamiltonian m α` is `√(m² + e^{−2s}(p_s² + p_φ²)) + α e^{−s}`, smooth on all of the phase
+space. The angular momentum is an integral (`isIntegral_pφ`). The orbit functions
+`X = (p_φ² − α²)/r + αH` and `Y = p_φ p_s/r` satisfy `dX/dφ = −(1 − α²/p_φ²)Y` and `dY/dφ = X`
+(`canonical_orbitX`, `canonical_orbitY`). So for `ℓ² > α²` they turn by
+`κ = √(1 − α²/ℓ²)` per radian (`rosette`), and the perihelia are `2π|ℓ|/√(ℓ² − α²)` apart in angle,
+more than `2π` when `α ≠ 0` (`perihelion_iff`, `two_pi_lt_two_pi_div_rosetteRate`). A circular orbit
+is an instance (`isTrajectory_circular`). For attraction with `ℓ² ≤ α²` the hyperbolic and linear
+forms hold on intervals of a solution (`orbit_hyperbolic`, `orbit_linear`). Every solution leaves the
+domain of the flow in finite time (`fall_to_centre`), so no trajectory exists for all times
+(`not_isTrajectory_of_sq_le`). Before it leaves, the radius falls below every `ε`
+(`exists_r_lt_of_not_mem_flowDomain`). The argument is uniform in `ℓ`, including radial motion:
+`p_s/r` decreases strictly. The statements need `m > 0`.
+
+**Larmor's theorem (§45).** In the symmetric gauge `A = ½ B × x` (`symmetricGauge`,
+`magneticTensor_symmetricGauge`), the Hamiltonian of a charge in a uniform field is exactly the
+rotating-frame Hamiltonian at the Larmor frequency `Ω_L = eB/2m` plus `(e²/8m)|B × q|²`
+(`hamiltonian_eq_rotating`). For charges with a common ratio `eₐ/mₐ = γ` the same identity holds
+with `Ω_L = γB/2` and `Σₐ (eₐ²/8mₐ)|B × qₐ|²` (`systemHamiltonian_eq_rotating`). The field of the
+second-order term is bounded by `c|B|²R` where `Σᵢ qᵢ² ≤ R²` (`norm_diamagneticField_le`). For given
+solutions of the two systems that stay in a set where the rotating field is `K`-Lipschitz,
+`‖z(t) − Z(t)‖ ≤ c|B|²R t e^{Kt}` in the sup norm (`norm_sub_le_larmor`, and
+`norm_sub_le_larmor_of_hamiltonianField` for the trajectories of the Hamiltonians). The force is an
+arbitrary function, so a Coulomb potential is admitted on a set that avoids collisions. An
+oscillator in the field and in the rotating frame gives an explicit pair of orbits that satisfies
+every hypothesis (`norm_exampleOrbit_sub_le`).
+
+**Scope.** The virial theorem is for a smooth stress with support in a box (decision 6 on #135);
+point charges, whose stress is a distribution, and decay in place of support are not stated. The
+limit `r → 0` at the end of the Coulomb flow and any continuation after the collision are not
+stated. Larmor's bound is for given solutions on a finite interval (decision 7 on #135).
+
 ## Proof and API map
 
 All names below are under `ProjectAinos`, except imported `YM` names.
 
 | Claim | Main declarations | Source |
 | --- | --- | --- |
+| The virial theorem | `virialMoment`, `virial_box`, `integral_Icc_eq_intervalIntegral`, `tendsto_average_spatialTrace`, `tendsto_average_energy_add_fourTrace`, `fourTrace_raisedStress`, `ChargedDust.tendsto_average_energy_sub_restMass`, `Virial.Examples.tendsto_average_spatialTrace_improvement` | [Virial](../ProjectAinos/Electrodynamics/Virial.lean), [VirialExamples](../ProjectAinos/Electrodynamics/VirialExamples.lean) |
+| Motion in the Coulomb field | `CoulombMotion.coulombHamiltonian`, `canonical_orbitX`, `canonical_orbitY`, `rosette`, `perihelion_iff`, `isTrajectory_circular`, `orbit_hyperbolic`, `orbit_linear`, `fall_to_centre`, `exists_r_lt_of_not_mem_flowDomain` | [CoulombMotion](../ProjectAinos/Electrodynamics/CoulombMotion.lean) |
+| Larmor's theorem | `Larmor.symmetricGauge`, `hamiltonian_eq_rotating`, `systemHamiltonian_eq_rotating`, `larmorField_eq`, `norm_sub_le_larmor`, `norm_sub_le_larmor_of_hamiltonianField`, `norm_exampleOrbit_sub_le` | [Larmor](../ProjectAinos/Electrodynamics/Larmor.lean) |
 | Local gauge invariance, reconstruction | `Electrodynamics.fieldTensor_gauge_on`, `observer_reconstruction` | [Field](../ProjectAinos/Electrodynamics/Field.lean) |
 | Bianchi components, covariance | `bianchi_components`, `fieldTensor_component`, `fieldTensor_poincare` | [Components](../ProjectAinos/Electrodynamics/Components.lean) |
 | Observer invariants and rest norm | `scalarInvariant_observer`, `pseudoscalarInvariant_observer`, `covectorPairing_nonneg` | [Invariants](../ProjectAinos/Electrodynamics/Invariants.lean) |
