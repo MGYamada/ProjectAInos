@@ -67,6 +67,7 @@ public import ProjectAinos.External.YM.Space.Orthogonal
 public import ProjectAinos.External.YM.Wilson.Law
 public import ProjectAinos.External.YM.Wilson.Symmetry
 public import ProjectAinos.External.YM.WilsonLawBridge
+public import ProjectAinos.GeneralRelativity.Birkhoff
 public import ProjectAinos.GeneralRelativity.ChargedMotion
 public import ProjectAinos.GeneralRelativity.ClockExamples
 public import ProjectAinos.GeneralRelativity.CoordinateTime
@@ -106,7 +107,9 @@ public import ProjectAinos.GeneralRelativity.ScalarFieldEquation
 public import ProjectAinos.GeneralRelativity.SchwarzschildCircular
 public import ProjectAinos.GeneralRelativity.SchwarzschildEquatorial
 public import ProjectAinos.GeneralRelativity.SchwarzschildExterior
+public import ProjectAinos.GeneralRelativity.SchwarzschildOrbit
 public import ProjectAinos.GeneralRelativity.SchwarzschildRotations
+public import ProjectAinos.GeneralRelativity.SchwarzschildVacuum
 public import ProjectAinos.GeneralRelativity.SpecialRelativity
 public import ProjectAinos.GeneralRelativity.SphericalAnsatz
 public import ProjectAinos.GeneralRelativity.VariationAction
