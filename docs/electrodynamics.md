@@ -535,12 +535,84 @@ point charges, whose stress is a distribution, and decay in place of support are
 limit `r → 0` at the end of the Coulomb flow and any continuation after the collision are not
 stated. Larmor's bound is for given solutions on a finite interval (decision 7 on #135).
 
+## Static fields, the moving charge and waves (§§36–38, 46–48, 50)
+
+**Coulomb's law (§36).** `SmoothGeometry.Potential` is shared potential theory on ℝ³ with the
+Euclidean norm. The Newton potential `φ(x) = ∫ ρ(y)/(4π|x − y|) dy` of a `C²` density of compact
+support is as smooth as `ρ` (`contDiff_newtonPotential`) and solves `Δφ = −ρ`
+(`laplacian_newtonPotential`). The proof goes through the pairing `∫ K Δχ = −χ(0)`
+(`integral_newtonKernel_mul_laplacian`), the point-source identity, obtained from the regularized
+kernel by Green's identity and two limits. Outside the support ball `|φ| ≤ Q/(4π(|x| − a))` and
+`|∇φ| ≤ Q/(4π(|x| − a)²)` (`abs_newtonPotential_le`, `norm_fderiv_newtonPotential_le`). By the
+maximum principle a harmonic function that tends to zero is zero
+(`eq_zero_of_harmonic_of_tendsto`), so the potential is the only decaying solution
+(`eq_newtonPotential_of_tendsto`). In the conventions of the field, `E = −∇φ` solves Maxwell's
+equations with the static current (`Electrostatics.maxwell_electrostaticPotential`), and the
+field of a point charge has the flux `q` through every sphere (`flux_pointChargeField`).
+
+**The electrostatic energy (§37).** `½∫ρφ`, `½∬ρ(x)ρ(y)/(4π|x − y|)` and `½∫|E|²` are finite and
+equal (`electrostaticEnergy_eq`), by Fubini and by an integration by parts against a cut-off whose
+boundary term vanishes as the cut-off grows. For a point charge the field energy outside the radius
+`ε` is `q²/(8πε)` (`integral_pointCharge_energy_outside`), which diverges as `ε → 0`
+(`tendsto_pointCharge_energy`, `not_integrable_pointCharge_energy`).
+
+**The moving charge (§38).** The current form and the sourced equation `d(−⋆F) = J` are carried by
+every proper Lorentz map (`matterCurrentForm_lorentz`, `excitation_lorentz`,
+`excitation_pullback`). A static solution `−Δφ = ρ` (`MovingCharge.StaticSolution`), boosted along
+an axis, solves Maxwell's equations with the moving current `γρ(1, V, 0, 0)` at the comoving
+position (`maxwell_movingScalar`), with `E′` from the boost and `B = V × E`
+(`electricField_movingScalar`, `magneticField_movingScalar`). The Newton potential is such a
+solution on all of space (`newtonSolution`, `maxwell_movingNewton`). Off its world line, a
+uniformly moving point charge has the field (38.8),
+`E = q(1 − V²)R/(4πR³(1 − V² sin²θ)^{3/2})` with `R` measured from the present position
+(`electricField_movingCoulomb`, `movingCoulomb_field`).
+
+**The wave equation (§46).** With `□ = −∂₀² + Σ∂ᵢ²` and the Lorenz divergence `L`,
+`div E = −□φ − ∂ₜL` and `curl B − ∂ₜE = −□a + ∇L`. So in Lorenz gauge Maxwell's equations are
+`□A_ν = −k_ν`, in vector form and in form (`maxwell_iff_box_of_lorenz`,
+`excitation_iff_box_of_lorenz`). A gauge function with `□χ = −L` gives the Lorenz gauge and the
+same field (`lorenz_gaugeShift`). For a conserved current `□L = 0` (`box_lorenzDivergence`), and
+a solution of the wave equation with vanishing initial data and spatial support in a box vanishes,
+by the energy identity (`eq_zero_of_box_eq_zero`), so the Lorenz condition propagates
+(`lorenzDivergence_eq_zero_of_initial`). The divergence constraints are preserved
+(`constraint_propagation`).
+
+**Plane and monochromatic waves (§§47, 48).** A plane wave `f(ℓx)a` with null `ℓ` and
+`⟨ℓ, a⟩ = 0` is a vacuum solution with both invariants zero (`vacuum_planeWave`). For
+`ℓ = κ(dt − n·dx)` it is transverse, `B = n × E`, with energy density `|E|²`, Poynting vector
+`|E|²n` and stress `|E|²ℓℓ/κ²` (`transverse_planeWave`). A vacuum field that depends only on
+`t − n·x` has constant longitudinal parts (`transverse_of_vacuum`). Complex amplitudes are real
+pairs `(a, b)`. Two give the same field exactly when they differ by multiples of `ℓ`
+(`fieldTensor_monochromatic_eq_iff`). For a nonzero null `ℓ` the polarizations form a space of
+dimension 2 (`finrank_polarization_quotient`). The field traces an ellipse with orthogonal axes
+after a change of phase (`exists_phase_orthogonal`), and under an axis boost the frequency is
+`κ′ = γκ(1 − V n₁)` (`frequency_boost`).
+
+**Partially polarized light (§50).** The time averages of `E₀E₀†` for a continuous amplitude are
+positive semidefinite (`posSemidef_coherenceAverage`), and so is their long-time limit, the
+coherency matrix (`HasCoherenceMatrix.posSemidef`). It transforms as `AJA†` under a linear
+element (`HasCoherenceMatrix.mulVec`). The Stokes parameters satisfy `s₁² + s₂² + s₃² ≤ s₀²`
+(`stokes_sq_le`), so the degree of polarization lies in `[0, 1]`. `J` decomposes into a polarized
+and an unpolarized part (`exists_decomposition`), and a 2×2 matrix is positive exactly when it is
+Hermitian with nonnegative trace and determinant (`posSemidef_iff_trace_det`). Constant,
+incoherent and unpolarized amplitudes are instances with `P = 1`, intermediate `P`, and `P = 0`.
+
+**Scope.** The excitation of a point charge as a closed form that is not exact, the existence of a
+gauge function solving `□χ = f`, finite speed of propagation and the quantum density matrix are
+not stated.
+
 ## Proof and API map
 
 All names below are under `ProjectAinos`, except imported `YM` names.
 
 | Claim | Main declarations | Source |
 | --- | --- | --- |
+| Coulomb's law | `Potential.newtonPotential`, `laplacian_newtonPotential`, `integral_newtonKernel_mul_laplacian`, `abs_newtonPotential_le`, `norm_fderiv_newtonPotential_le`, `eq_newtonPotential_of_tendsto`, `Electrostatics.maxwell_electrostaticPotential`, `flux_pointChargeField` | [Potential](../ProjectAinos/SmoothGeometry/Potential/NewtonPotential.lean), [Electrostatics](../ProjectAinos/Electrodynamics/Electrostatics.lean) |
+| The electrostatic energy | `ElectrostaticEnergy.electrostaticEnergy_eq`, `integral_mul_newtonPotential_eq_integral_sq`, `integral_pointCharge_energy_outside`, `tendsto_pointCharge_energy` | [ElectrostaticEnergy](../ProjectAinos/Electrodynamics/ElectrostaticEnergy.lean) |
+| The moving charge | `matterCurrentForm_lorentz`, `excitation_lorentz`, `MovingCharge.maxwell_movingScalar`, `electricField_movingCoulomb`, `movingCoulomb_field`, `maxwell_movingNewton` | [SourceCovariance](../ProjectAinos/Electrodynamics/SourceCovariance.lean), [MovingCharge](../ProjectAinos/Electrodynamics/MovingCharge.lean), [MovingSource](../ProjectAinos/Electrodynamics/MovingSource.lean) |
+| The wave equation | `box`, `lorenzDivergence`, `maxwell_iff_box_of_lorenz`, `lorenz_gaugeShift`, `box_lorenzDivergence`, `eq_zero_of_box_eq_zero`, `constraint_propagation` | [WaveEquation](../ProjectAinos/Electrodynamics/WaveEquation.lean) |
+| Plane and monochromatic waves | `planeWave`, `vacuum_planeWave`, `transverse_planeWave`, `fieldTensor_monochromatic_eq_iff`, `finrank_polarization_quotient`, `exists_phase_orthogonal`, `frequency_boost` | [PlaneWave](../ProjectAinos/Electrodynamics/PlaneWave.lean), [Monochromatic](../ProjectAinos/Electrodynamics/Monochromatic.lean) |
+| Partially polarized light | `Coherence.posSemidef_coherenceAverage`, `HasCoherenceMatrix.posSemidef`, `stokes_sq_le`, `exists_decomposition`, `posSemidef_iff_trace_det` | [Coherence](../ProjectAinos/Electrodynamics/Coherence.lean) |
 | The virial theorem | `virialMoment`, `virial_box`, `integral_Icc_eq_intervalIntegral`, `tendsto_average_spatialTrace`, `tendsto_average_energy_add_fourTrace`, `fourTrace_raisedStress`, `ChargedDust.tendsto_average_energy_sub_restMass`, `Virial.Examples.tendsto_average_spatialTrace_improvement` | [Virial](../ProjectAinos/Electrodynamics/Virial.lean), [VirialExamples](../ProjectAinos/Electrodynamics/VirialExamples.lean) |
 | Motion in the Coulomb field | `CoulombMotion.coulombHamiltonian`, `canonical_orbitX`, `canonical_orbitY`, `rosette`, `perihelion_iff`, `isTrajectory_circular`, `orbit_hyperbolic`, `orbit_linear`, `fall_to_centre`, `exists_r_lt_of_not_mem_flowDomain` | [CoulombMotion](../ProjectAinos/Electrodynamics/CoulombMotion.lean) |
 | Larmor's theorem | `Larmor.symmetricGauge`, `hamiltonian_eq_rotating`, `systemHamiltonian_eq_rotating`, `larmorField_eq`, `norm_sub_le_larmor`, `norm_sub_le_larmor_of_hamiltonianField`, `norm_exampleOrbit_sub_le` | [Larmor](../ProjectAinos/Electrodynamics/Larmor.lean) |

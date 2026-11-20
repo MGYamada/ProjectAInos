@@ -153,3 +153,35 @@ These notes record mathematical distinctions and interface decisions in `Project
 **Interface decision.** The identity is stated in the free ring for any momentum-independent `U`, so it holds without regularity. The bound is stated for real functions with an arbitrary force, for given solutions on `[0, L]` that stay in a set where the rotating field is Lipschitz (decision 7 on #135), so a Coulomb potential is admitted away from collisions. Norms are sup norms with the Euclidean bound `Σᵢ qᵢ² ≤ R²`. The ratio is stated as `eₐ/mₐ = γ`.
 
 **Proof status.** Proved and built: the one-particle and `N`-particle identities, the decomposition of the field, the bound in both forms, and the oscillator example. The ledger row of §45 is *proved* in this scope. [Larmor](../ProjectAinos/Electrodynamics/Larmor.lean)
+
+## ED20. Coulomb's law is proved through the point-source pairing
+
+**Observation.** With the derivatives on the density, `Δφ(x) = ∫ K(y) Δρ(x − y) dy`, so `Δφ = −ρ` is the pairing `∫ K Δχ = −χ(0)` for the translated density. The pairing follows from the regularized kernel `1/(4π√(|x|² + ε²))`, whose Laplacian is `−ε⁻³` times a peak of integral 1. Green's identity moves the Laplacian onto it, an approximation of the identity gives `χ(0)`, and dominated convergence removes the regularization. The decay bounds need only a continuous density. Uniqueness follows from the maximum principle on balls, which needs a positive dimension.
+
+**Interface decision.** The potential theory is shared mathematics on `EuclideanSpace ℝ (Fin 3)`, with the convolution in the order `K ⋆ ρ` so that Mathlib differentiates the density. The point source is stated in pairing form; the name `Distribution` is not used. The energy equality uses a cut-off from `ContDiffBump`. Its boundary term is `O(1/R)` by the decay of the potential and its gradient.
+
+**Proof status.** Proved and built: the Laplacian and kernel facts, `Δφ = −ρ`, the decay bounds, the pairing, uniqueness, the static Maxwell equations, the flux of a point charge, the three equal energies and the divergent self-energy. The ledger rows of §§36 and 37 are *proved* in this scope. [Potential](../ProjectAinos/SmoothGeometry/Potential/NewtonPotential.lean) · [Electrostatics](../ProjectAinos/Electrodynamics/Electrostatics.lean) · [ElectrostaticEnergy](../ProjectAinos/Electrodynamics/ElectrostaticEnergy.lean)
+
+## ED21. The moving charge is the boost of a static solution
+
+**Observation.** The current form `−ι_k vol` pulls back under a proper Lorentz map to the form of the transported current `L⁻¹k(L·)`, since `det L = 1`, and the Hodge star commutes with the pullback. The sourced equation is therefore carried to the boosted frame. With `A = −φ dt` the boost gives `A = −γφ′(dt − V dx)` at the comoving position. The field of a moving point charge then follows from the harmonicity of `1/|x|` away from the origin.
+
+**Interface decision.** Static solutions are a structure with an open domain, so the point charge and the smooth Newton potential are both instances; `MovingSource.lean` connects §36 to §38. The world line is the zero set of the present separation `x − Vt e₁`. The converse `excitation_of_inhomogeneous` (3+1 equations ⇒ `d(−⋆F) = J`) is in `SourceCovariance.lean`, and the wave equation uses it.
+
+**Proof status.** Proved and built: the transport theorems, the boosted static solution with `E′` and `B = V × E`, (38.8) off the world line, and the boosted Newton potential. The ledger row of §38 is *proved* in this scope. [SourceCovariance](../ProjectAinos/Electrodynamics/SourceCovariance.lean) · [MovingCharge](../ProjectAinos/Electrodynamics/MovingCharge.lean) · [MovingSource](../ProjectAinos/Electrodynamics/MovingSource.lean)
+
+## ED22. The wave equation is gauge-fixed Maxwell, and its uniqueness comes from the energy identity
+
+**Observation.** `div E = −□φ − ∂ₜL` and `curl B − ∂ₜE = −□a + ∇L`, so the Lorenz condition turns Maxwell's equations into `□A_ν = −k_ν`. For a conserved current the Lorenz divergence itself solves the wave equation; with vanishing initial data and support in a box, the energy current `(½((∂₀u)² + |∇u|²), −∂₀u ∇u)` shows that it stays zero. A plane wave `f(ℓx)a` needs `ℓ` null and `a` transverse, and is then transverse in the frame of any observer. For monochromatic waves the gauge classes of the amplitudes are cosets of `span ℓ`, and the transverse ones modulo `ℓ` have dimension 2.
+
+**Interface decision.** The box and the divergence are in co-ordinates through `partialAt`. The uniqueness theorem asks for a `C²` function on all of space-time, because the divergence theorem on a box needs a `C¹` energy current there. The polarization quotient is taken in `FourCovector ⧸ span ℓ`, as the kernel of `⟨ℓ, ·⟩`, since a quotient of a submodule of a submodule was not found by instance search. Complex amplitudes are real pairs.
+
+**Proof status.** Proved and built: the box identities, the equivalence in Lorenz gauge, the gauge change, the propagation of the gauge and the constraints, uniqueness, the plane wave with its transversality and stress, the gauge classes, the two polarizations, the ellipse and the Doppler formula. The ledger rows of §§46–48 are *proved* in this scope; the existence of a gauge function and finite speed of propagation are not stated. [WaveEquation](../ProjectAinos/Electrodynamics/WaveEquation.lean) · [PlaneWave](../ProjectAinos/Electrodynamics/PlaneWave.lean) · [Monochromatic](../ProjectAinos/Electrodynamics/Monochromatic.lean)
+
+## ED23. The coherency matrix is a limit of averages, stated as a premise with instances
+
+**Observation.** The average of `E₀E₀†` over `[0, T]` is positive semidefinite, because `x†Mx` is the average of `|x†E₀|²`. The cone is closed, so the limit is positive too. For a Hermitian 2×2 matrix, `s₁² + s₂² + s₃² = s₀² − 4 det J`, so positivity is the Stokes bound. A 2×2 Hermitian matrix with nonnegative trace and determinant is positive. The positivity needs a continuous amplitude: an interval integral of a non-integrable function is zero, which can break positivity entrywise.
+
+**Interface decision.** The long-time limit is the named premise `HasCoherenceMatrix`, with constant, incoherent and unpolarized instances. The ensemble is classical; no quantum module is imported.
+
+**Proof status.** Proved and built. The ledger row of §50 is *proved* in this scope. [Coherence](../ProjectAinos/Electrodynamics/Coherence.lean)

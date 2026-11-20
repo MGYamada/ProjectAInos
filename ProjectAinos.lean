@@ -3,6 +3,7 @@ module  -- shake: keep-all --deprecated_module: ignore
 public import ProjectAinos.Electrodynamics.CanonicalStress
 public import ProjectAinos.Electrodynamics.ChargeBalance
 public import ProjectAinos.Electrodynamics.ChargedDust
+public import ProjectAinos.Electrodynamics.Coherence
 public import ProjectAinos.Electrodynamics.Components
 public import ProjectAinos.Electrodynamics.ConstantField
 public import ProjectAinos.Electrodynamics.ConstantFieldExamples
@@ -16,6 +17,8 @@ public import ProjectAinos.Electrodynamics.CurvedComponents
 public import ProjectAinos.Electrodynamics.CurvedExamples
 public import ProjectAinos.Electrodynamics.CurvedPotential
 public import ProjectAinos.Electrodynamics.DivergenceExamples
+public import ProjectAinos.Electrodynamics.ElectrostaticEnergy
+public import ProjectAinos.Electrodynamics.Electrostatics
 public import ProjectAinos.Electrodynamics.EnergyMomentum
 public import ProjectAinos.Electrodynamics.Examples
 public import ProjectAinos.Electrodynamics.ExcitationChart
@@ -32,10 +35,15 @@ public import ProjectAinos.Electrodynamics.Invariants
 public import ProjectAinos.Electrodynamics.Larmor
 public import ProjectAinos.Electrodynamics.LorentzForce
 public import ProjectAinos.Electrodynamics.MatterCurrent
+public import ProjectAinos.Electrodynamics.Monochromatic
+public import ProjectAinos.Electrodynamics.MovingCharge
+public import ProjectAinos.Electrodynamics.MovingSource
 public import ProjectAinos.Electrodynamics.ParticleAction
+public import ProjectAinos.Electrodynamics.PlaneWave
 public import ProjectAinos.Electrodynamics.PolynomialBridge
 public import ProjectAinos.Electrodynamics.PolynomialExamples
 public import ProjectAinos.Electrodynamics.PolynomialRadial
+public import ProjectAinos.Electrodynamics.SourceCovariance
 public import ProjectAinos.Electrodynamics.SourcedAction
 public import ProjectAinos.Electrodynamics.SourcedActionExamples
 public import ProjectAinos.Electrodynamics.StaticField
@@ -45,6 +53,7 @@ public import ProjectAinos.Electrodynamics.VacuumAction
 public import ProjectAinos.Electrodynamics.VacuumActionExamples
 public import ProjectAinos.Electrodynamics.Virial
 public import ProjectAinos.Electrodynamics.VirialExamples
+public import ProjectAinos.Electrodynamics.WaveEquation
 public import ProjectAinos.External.YM.Analysis.Homogeneous
 public import ProjectAinos.External.YM.Analysis.Nonnegative
 public import ProjectAinos.External.YM.Analysis.SmoothJets
@@ -548,6 +557,10 @@ public import ProjectAinos.SmoothGeometry.OpenCover
 public import ProjectAinos.SmoothGeometry.OpenImmersion
 public import ProjectAinos.SmoothGeometry.OpenPullback
 public import ProjectAinos.SmoothGeometry.PeriodicInjective
+public import ProjectAinos.SmoothGeometry.Potential.Laplacian
+public import ProjectAinos.SmoothGeometry.Potential.MaximumPrinciple
+public import ProjectAinos.SmoothGeometry.Potential.NewtonKernel
+public import ProjectAinos.SmoothGeometry.Potential.NewtonPotential
 public import ProjectAinos.SmoothGeometry.RealSpectrum
 public import ProjectAinos.SmoothGeometry.RealSpectrumTopology
 public import ProjectAinos.SmoothGeometry.Restrict

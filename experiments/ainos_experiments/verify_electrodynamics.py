@@ -95,6 +95,93 @@ def verify_virial_coulomb_larmor():
                - charge**2 / (8 * mass) * field.cross(q).dot(field.cross(q)))
 
 
+def verify_static_fields_and_waves():
+    """Static fields, the moving charge and waves (§§36–38, 46–48, 50).
+
+    * §36: the regularized Newton kernel 1/(4 pi sqrt(r^2 + eps^2)) has the Laplacian
+      -3 eps^2/(4 pi (r^2 + eps^2)^(5/2)), and the peak 3/(4 pi (r^2 + 1)^(5/2)) has integral 1;
+    * §37: the point charge has field energy q^2/(8 pi eps) outside the radius eps;
+    * §38: the boosted static potential -phi(gamma(x - Vt), y, z) (dt - V dx) gives L&L (38.8);
+    * §46: div E = -box phi - d_t L and curl B - d_t E = -box a + grad L for A = (-phi, a);
+    * §§47–48: the plane wave f(l.x) a with null l and <l, a> = 0 is a vacuum solution, and the
+      Doppler factor is gamma (1 - V n_1);
+    * §50: s1^2 + s2^2 + s3^2 = s0^2 - 4 det J for a Hermitian 2x2 matrix.
+    """
+    x, y, z = sp.symbols("x y z", real=True)
+    eps, r = sp.symbols("epsilon r", positive=True)
+    kernel = 1 / (4 * sp.pi * sp.sqrt(x**2 + y**2 + z**2 + eps**2))
+    laplacian = sum(sp.diff(kernel, v, 2) for v in (x, y, z))
+    check_zero("regularized kernel Laplacian",
+               laplacian + 3 * eps**2 / (4 * sp.pi * (x**2 + y**2 + z**2 + eps**2)**sp.Rational(5, 2)))
+    peak = sp.integrate(4 * sp.pi * r**2 * 3 / (4 * sp.pi * (r**2 + 1)**sp.Rational(5, 2)),
+                        (r, 0, sp.oo))
+    check_zero("peak integral", peak - 1)
+    q = sp.symbols("q", real=True)
+    energy = sp.integrate(4 * sp.pi * r**2 * (q / (4 * sp.pi * r**2))**2 / 2, (r, eps, sp.oo))
+    check_zero("point-charge energy outside eps", energy - q**2 / (8 * sp.pi * eps))
+
+    t = sp.symbols("t", real=True)
+    coordinates = (t, x, y, z)
+    velocity = sp.symbols("V", real=True)
+    gamma = 1 / sp.sqrt(1 - velocity**2)
+    comoving = (gamma * (x - velocity * t), y, z)
+    coulomb = q / (4 * sp.pi * sp.sqrt(sum(c**2 for c in comoving)))
+    potential = sp.Matrix([-gamma * coulomb, gamma * velocity * coulomb, 0, 0])
+    field = curvature(potential, coordinates)
+    electric = sp.Matrix([field[i, 0] for i in range(1, 4)])
+    separation = sp.Matrix([x - velocity * t, y, z])
+    distance = sp.sqrt(separation.dot(separation))
+    sine_sq = (y**2 + z**2) / distance**2
+    expected = q * (1 - velocity**2) * separation / (
+        4 * sp.pi * distance**3 * (1 - velocity**2 * sine_sq)**sp.Rational(3, 2))
+    point = {t: sp.Rational(1, 3), x: sp.Rational(7, 5), y: sp.Rational(-2, 3), z: sp.Rational(1, 2),
+             velocity: sp.Rational(3, 5), q: 2}
+    residual = (electric - expected).subs(point)
+    if any(abs(sp.N(entry, 30)) > sp.Float("1e-25") for entry in residual):
+        raise AssertionError(f"moving charge (38.8): residual {residual}")
+
+    phi = sp.Function("phi")(*coordinates)
+    a = [sp.Function(f"a{i}")(*coordinates) for i in range(3)]
+    four = sp.Matrix([-phi] + a)
+    field = curvature(four, coordinates)
+    electric = [field[i, 0] for i in range(1, 4)]
+    magnetic = [field[2, 3], field[3, 1], field[1, 2]]
+
+    def box(f):
+        return -sp.diff(f, t, 2) + sum(sp.diff(f, v, 2) for v in (x, y, z))
+
+    lorenz = sp.diff(phi, t) + sum(sp.diff(a[i], v) for i, v in enumerate((x, y, z)))
+    check_zero("div E in Lorenz form", sum(sp.diff(electric[i], v) for i, v in enumerate((x, y, z)))
+               + box(phi) + sp.diff(lorenz, t))
+    curl = [sp.diff(magnetic[2], y) - sp.diff(magnetic[1], z),
+            sp.diff(magnetic[0], z) - sp.diff(magnetic[2], x),
+            sp.diff(magnetic[1], x) - sp.diff(magnetic[0], y)]
+    for i, v in enumerate((x, y, z)):
+        check_zero(f"curl B - d_t E in Lorenz form {i}",
+                   curl[i] - sp.diff(electric[i], t) + box(a[i]) - sp.diff(lorenz, v))
+
+    kappa = sp.symbols("kappa", positive=True)
+    profile = sp.Function("f")
+    phase = kappa * (t - x)
+    wave = sp.Matrix([0, 0, profile(phase), 0])
+    wave_field = curvature(wave, coordinates)
+    raised = sp.diag(-1, 1, 1, 1) * wave_field * sp.diag(-1, 1, 1, 1)
+    check_zero("plane wave vacuum", sp.Matrix(
+        [sum(sp.diff(raised[m, n], coordinates[m]) for m in range(4)) for n in range(4)]))
+    normal = sp.Matrix(sp.symbols("n1:4", real=True))
+    wavevector = kappa * sp.Matrix([1, -normal[0], -normal[1], -normal[2]])
+    observer = gamma * sp.Matrix([1, velocity, 0, 0])
+    check_zero("Doppler factor", wavevector.dot(observer)
+               - gamma * kappa * (1 - velocity * normal[0]))
+
+    j00, j11 = sp.symbols("J00 J11", real=True)
+    re, im = sp.symbols("Re Im", real=True)
+    coherency = sp.Matrix([[j00, re + sp.I * im], [re - sp.I * im, j11]])
+    stokes = [j00 + j11, 2 * re, -2 * im, j00 - j11]
+    check_zero("Stokes identity", sum(s**2 for s in stokes[1:]) - stokes[0]**2
+               + 4 * coherency.det())
+
+
 def verify():
     t, x, y, z = coordinates = sp.symbols("t x y z", real=True)
     ex, ey, ez, bx, by, bz = sp.symbols("E_x E_y E_z B_x B_y B_z", real=True)
@@ -149,9 +236,12 @@ def verify():
     check_zero("hyperbolic Lorentz force", velocity.diff(tau) - force)
     check_zero("force orthogonality", (velocity.T * metric * force)[0])
     verify_virial_coulomb_larmor()
+    verify_static_fields_and_waves()
     print("Electrodynamics exact checks passed: signs, invariants, covariance, gauge, "
           "Bianchi, degree 0/1 radial reconstruction, hyperbolic worldline, the virial "
-          "improvement stress, the Coulomb brackets and rosette, and Larmor's identity.")
+          "improvement stress, the Coulomb brackets and rosette, Larmor's identity, the Newton kernel "
+          "and the point-charge energy, the moving charge (38.8), the wave equation in Lorenz "
+          "form, plane waves, the Doppler factor and the Stokes identity.")
 
 
 def main():

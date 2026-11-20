@@ -396,3 +396,11 @@ bundle.
 **Interface decision.** `Lorentzian/Static.lean` and `Lorentzian/Linearized.lean` are shared mathematics with no physics imports. Second derivatives are `fderiv` of `fderiv` along coordinate vectors. The trace reversal of the coordinate Einstein equations (`IsEinstein.ricciOf_eq`) is in the static file.
 
 **Proof status.** Proved and built. [Static](../ProjectAinos/SmoothGeometry/Lorentzian/Static.lean) · [Linearized](../ProjectAinos/SmoothGeometry/Lorentzian/Linearized.lean)
+
+## G09. Potential theory on ℝ³ is a shared layer
+
+**Observation.** The Newton potential needs the coordinate Laplacian, Green's identities, the kernel with its regularization, the maximum principle and convolution. All of these concern functions on `EuclideanSpace ℝ (Fin n)` and need no field theory. Mathlib differentiates a convolution on its right factor without a `precompL` analogue, so the potential is `K ⋆ ρ`.
+
+**Interface decision.** `SmoothGeometry/Potential/` imports only Mathlib and itself. The coordinate Laplacian is identified with Mathlib's `Δ` through `EuclideanSpace.basisFun`. The maximum principle needs `[NeZero n]`.
+
+**Proof status.** Proved and built. [Laplacian](../ProjectAinos/SmoothGeometry/Potential/Laplacian.lean) · [NewtonKernel](../ProjectAinos/SmoothGeometry/Potential/NewtonKernel.lean) · [MaximumPrinciple](../ProjectAinos/SmoothGeometry/Potential/MaximumPrinciple.lean) · [NewtonPotential](../ProjectAinos/SmoothGeometry/Potential/NewtonPotential.lean)
