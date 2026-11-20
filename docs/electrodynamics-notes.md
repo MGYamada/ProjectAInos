@@ -185,3 +185,43 @@ These notes record mathematical distinctions and interface decisions in `Project
 **Interface decision.** The long-time limit is the named premise `HasCoherenceMatrix`, with constant, incoherent and unpolarized instances. The ensemble is classical; no quantum module is imported.
 
 **Proof status.** Proved and built. The ledger row of §50 is *proved* in this scope. [Coherence](../ProjectAinos/Electrodynamics/Coherence.lean)
+
+## ED24. Multipole remainders are Taylor bounds of the kernel outside a ball
+
+**Observation.** On the segment from `x` to `x − y` with `|y| < |x|`, every point stays at distance `|x| − |y|` from the origin. So Taylor's theorem bounds the multipole remainders by the next derivative of the kernel there. The second and third derivatives have explicit forms, which give the constants `1/(4π)` for the dipole and quadrupole remainders. At a general order, the homogeneity of degree `−(n + 1)` and the compactness of the unit sphere give a constant. The translation law is proved by comparing the expansions of `φ(x + b)` and of the translated density along a ray, with a lemma that a polynomial of degree `k` in `t` bounded by `t^{k+1}` vanishes.
+
+**Interface decision.** The kernel estimates are shared mathematics in `Potential/Multipole.lean`. Densities need only be continuous with support in a ball. The external potential in §42 is bounded through a hypothesis on its next derivative over the source ball, not a supremum. The translation law is stated for `x ≠ 0`, where the derivatives of the kernel are not junk values.
+
+**Proof status.** Proved and built, with the dipole–dipole case for a neutral source in the field of a point dipole. The ledger rows of §§40–42 are *proved* in this scope. [Potential multipoles](../ProjectAinos/SmoothGeometry/Potential/Multipole.lean) · [Multipole](../ProjectAinos/Electrodynamics/Multipole.lean)
+
+## ED25. Magnetostatics reuses the Newton potential componentwise
+
+**Observation.** The vector potential is the Newton potential of each component of the current. Its divergence is the potential of `div j`, so it vanishes for a conserved current. Then `curl curl a = ∇div a − Δa = j`. Uniqueness follows componentwise from the harmonic uniqueness. A conserved current of compact support has a vanishing integral and antisymmetric first moments, so its first nonvanishing far field is the magnetic dipole.
+
+**Interface decision.** `curl3` and `div3` act on fields of space, and the space-time equations are obtained through `potentialOf 0` and `Minkowski.space`. The matter model of §44 is a stationary flow with one ratio `e/m`, with the instance of a rigidly rotating radial density. L&L's time averages over point particles are not used. Biot–Savart is stated outside the support only, where the integral is not singular.
+
+**Proof status.** Proved and built. The ledger rows of §§43 and 44 are *proved* in this scope. [Magnetostatics](../ProjectAinos/Electrodynamics/Magnetostatics.lean) · [MagneticMoment](../ProjectAinos/Electrodynamics/MagneticMoment.lean)
+
+## ED26. The Fourier solution of the wave equation is a Fourier integral on the light cone
+
+**Observation.** Writing the solution as the Fourier integral of a density against the image of Lebesgue measure on the two sheets `s = ±|ξ|` of the light cone makes Mathlib's theorems on Fourier integrals of finite measures apply. They give smoothness in `(t, x)` and the derivatives directly. The wave equation holds because the second-derivative integrand is a multiple of `−s² + |η|²`, which vanishes on the cone. The temporal Plancherel identity comes from Mathlib's Schwartz Plancherel, and (49.8) from the conjugate symmetry of the transform of a real signal.
+
+**Interface decision.** Mathlib's normalization `e^{−2πiνt}` is used, with L&L's `f_ω = 𝓕f(−ω/2π)`. The propagator `sin(2π|ξ|t)/(2π|ξ|)` is `t·sinc(2π|ξ|t)`, smooth through `ξ = 0`. The solution is not shown to be a Schwartz function in space.
+
+**Proof status.** Proved and built. The ledger row of §49 is *proved* in this scope. [WaveSolution](../ProjectAinos/SmoothGeometry/Fourier/WaveSolution.lean) · [Spectral](../ProjectAinos/Electrodynamics/Spectral.lean)
+
+## ED27. The Coulomb kernel is a Fourier multiplier in pairing form, by Gaussian subordination
+
+**Observation.** `1/|z| = π^{−1/2}∫₀^∞ t^{−1/2}e^{−t|z|²} dt`. The Gaussian has an explicit transform, and Fubini with the local integrability of `|ξ|⁻²` in three dimensions gives `∫K𝓕χ = ∫χ/(4π²|ξ|²)` for every Schwartz `χ`. The symbol has no temperate growth, so the result is stated as a pairing and, for the potential, in `𝓢′` through the bounded potential; it is not a multiplier operator. The route of decision 8 closed, so its fallback was not needed.
+
+**Interface decision.** The zero-frequency prescription is identified against constants only: `φ + c` has the extra term `c δ₀`, and only `c = 0` decays. The classification of all tempered solutions, which differ by harmonic polynomials, needs the structure of distributions supported at a point and is not claimed.
+
+**Proof status.** Proved and built. The ledger row of §51 is *proved* in this scope. [KernelFourier](../ProjectAinos/SmoothGeometry/Potential/KernelFourier.lean) · [CoulombFourier](../ProjectAinos/Electrodynamics/CoulombFourier.lean)
+
+## ED28. The cavity is the periodic box, with explicit conductor modes
+
+**Observation.** A periodic box rescales to the unit torus, where Mathlib has Fourier coefficients and Parseval for the Haar probability measure. The derivative of a coefficient comes from the translation law, without boundary terms. The wave equation gives `ä_k = −ω_k²a_k`, and the Coulomb gauge gives transversality. Lagrange's identity turns `|K × a_k|²` into `ω_k²|a_k|²`, so the energy is a sum over the modes. The conductor modes are periodic with periods `2Lᵢ`, so the energy theorem applies to them on the doubled box.
+
+**Interface decision.** The cavity is the periodic box of L&L (decision 9 on #135), with the torus measure fixed by a local instance. The conductor modes are explicit. Their completeness by reflection to the doubled box is within reach (about 300 lines with a bounded-measurable Parseval) and is not stated here; it is not a genuine remainder reason.
+
+**Proof status.** Proved and built. The ledger row of §52 is *proved* in this scope. [CavityModes](../ProjectAinos/Electrodynamics/CavityModes.lean)

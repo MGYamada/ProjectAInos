@@ -1,12 +1,14 @@
 module  -- shake: keep-all --deprecated_module: ignore
 
 public import ProjectAinos.Electrodynamics.CanonicalStress
+public import ProjectAinos.Electrodynamics.CavityModes
 public import ProjectAinos.Electrodynamics.ChargeBalance
 public import ProjectAinos.Electrodynamics.ChargedDust
 public import ProjectAinos.Electrodynamics.Coherence
 public import ProjectAinos.Electrodynamics.Components
 public import ProjectAinos.Electrodynamics.ConstantField
 public import ProjectAinos.Electrodynamics.ConstantFieldExamples
+public import ProjectAinos.Electrodynamics.CoulombFourier
 public import ProjectAinos.Electrodynamics.CoulombMotion
 public import ProjectAinos.Electrodynamics.Covariance
 public import ProjectAinos.Electrodynamics.Current
@@ -34,10 +36,13 @@ public import ProjectAinos.Electrodynamics.HomogeneousExamples
 public import ProjectAinos.Electrodynamics.Invariants
 public import ProjectAinos.Electrodynamics.Larmor
 public import ProjectAinos.Electrodynamics.LorentzForce
+public import ProjectAinos.Electrodynamics.MagneticMoment
+public import ProjectAinos.Electrodynamics.Magnetostatics
 public import ProjectAinos.Electrodynamics.MatterCurrent
 public import ProjectAinos.Electrodynamics.Monochromatic
 public import ProjectAinos.Electrodynamics.MovingCharge
 public import ProjectAinos.Electrodynamics.MovingSource
+public import ProjectAinos.Electrodynamics.Multipole
 public import ProjectAinos.Electrodynamics.ParticleAction
 public import ProjectAinos.Electrodynamics.PlaneWave
 public import ProjectAinos.Electrodynamics.PolynomialBridge
@@ -46,6 +51,7 @@ public import ProjectAinos.Electrodynamics.PolynomialRadial
 public import ProjectAinos.Electrodynamics.SourceCovariance
 public import ProjectAinos.Electrodynamics.SourcedAction
 public import ProjectAinos.Electrodynamics.SourcedActionExamples
+public import ProjectAinos.Electrodynamics.Spectral
 public import ProjectAinos.Electrodynamics.StaticField
 public import ProjectAinos.Electrodynamics.StressTensor
 public import ProjectAinos.Electrodynamics.ThreePlusOne
@@ -369,6 +375,7 @@ public import ProjectAinos.SmoothGeometry.DifferentialForm.TwoForm
 public import ProjectAinos.SmoothGeometry.DifferentialForm.VolumeNormalization
 public import ProjectAinos.SmoothGeometry.DifferentialForm.WedgeAlgebra
 public import ProjectAinos.SmoothGeometry.Examples
+public import ProjectAinos.SmoothGeometry.Fourier.WaveSolution
 public import ProjectAinos.SmoothGeometry.Gluing
 public import ProjectAinos.SmoothGeometry.GluingExample
 public import ProjectAinos.SmoothGeometry.GluingExampleIso
@@ -557,8 +564,10 @@ public import ProjectAinos.SmoothGeometry.OpenCover
 public import ProjectAinos.SmoothGeometry.OpenImmersion
 public import ProjectAinos.SmoothGeometry.OpenPullback
 public import ProjectAinos.SmoothGeometry.PeriodicInjective
+public import ProjectAinos.SmoothGeometry.Potential.KernelFourier
 public import ProjectAinos.SmoothGeometry.Potential.Laplacian
 public import ProjectAinos.SmoothGeometry.Potential.MaximumPrinciple
+public import ProjectAinos.SmoothGeometry.Potential.Multipole
 public import ProjectAinos.SmoothGeometry.Potential.NewtonKernel
 public import ProjectAinos.SmoothGeometry.Potential.NewtonPotential
 public import ProjectAinos.SmoothGeometry.RealSpectrum

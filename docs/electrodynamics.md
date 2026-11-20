@@ -601,12 +601,83 @@ incoherent and unpolarized amplitudes are instances with `P = 1`, intermediate `
 gauge function solving `□χ = f`, finite speed of propagation and the quantum density matrix are
 not stated.
 
+## Multipoles, magnetostatics and the Fourier resolution (§§40–44, 49, 51, 52)
+
+**Multipoles (§§40, 41).** The Newton kernel has Taylor bounds outside a ball, explicit through
+order two (`abs_newtonKernel_sub_dipole_le`, `abs_newtonKernel_sub_quadrupole_le`) and at every
+order with a constant from homogeneity and compactness (`newtonKernel_taylor_le`). Its derivatives
+are symmetric and trace-free away from the origin (`iteratedFDeriv_newtonKernel_comp_perm`,
+`sum_iteratedFDeriv_newtonKernel_snoc_snoc`). For a continuous charge in the ball of radius `a`,
+the potential is `Q/(4π|x|) + ⟪d, x⟫/(4π|x|³)` up to `(∫|ρ|y²)/(4π(|x| − a)³)`
+(`abs_newtonPotential_sub_dipole_le`). With the quadrupole moment, which is trace-free
+(`quadrupoleMoment_trace`), the remainder is `(∫|ρ|y³)/(4π(|x| − a)⁴)`
+(`abs_newtonPotential_sub_moments_le`); at order `n` it is `Cₙ(∫|ρ|yⁿ⁺¹)/(|x| − a)ⁿ⁺²`
+(`abs_newtonPotential_sub_multipole_le`). The dipole changes by `−Qb` under a translation
+(`dipoleMoment_translate`), and the first multipole that does not vanish is independent of the
+origin (`multipoleTerm_translate`). The dipole field is `(3⟪n, d⟫n − d)/(4π|x|³)`
+(`neg_gradient_dipolePotential`).
+
+**A system in an external field (§42).** For an external potential harmonic at the centre,
+the energy of a localized charge is `Qψ(0) + d·∇ψ(0) + (1/6)ΣDᵢⱼ∂ᵢ∂ⱼψ(0)`
+(`abs_externalEnergy_sub_le`), the force `QE(0) + (d·∇)E(0)` (`norm_externalForce_sub_le`) and the
+torque `d × E(0)` (`norm_externalTorque_sub_le`), each with an explicit remainder in the moments
+and the next derivative of `ψ` on the source ball. A uniform field is an instance.
+
+**Magnetostatics (§§43, 44).** For a smooth, divergence-free current of compact support, the
+vector potential `a = ∫ j/(4π|x − y|)` is in Coulomb gauge (`div3_vectorPotential`) with
+`Δa = −j` (`laplacian_vectorPotential`). `B = curl a` has `div B = 0` and `curl B = j`
+(`div3_magneticField3`, `curl3_magneticField3`). Both are unique among decaying solutions
+(`vectorPotential_unique`, `magneticField3_unique`), B is given by Biot–Savart outside the support
+(`magneticField3_eq_biotSavart`), and the potential solves Maxwell's equations on space-time
+(`maxwell_staticVector`). The integral of such a current vanishes and its first moments are
+antisymmetric (`integral_current_eq_zero`, `integral_moment_symm`). So far away the potential is
+`m × x/(4π|x|³)` with `m = ½∫ y × j` (`norm_vectorPotential_sub_dipole_le`). For a stationary flow
+with one ratio `e/m` (`StationaryFlow`, with the instance `rigidRotation`), `m` is `e/2m` times the
+angular momentum (`magneticMoment_flow`), and the torque in a uniform field is `m × B`
+(`torque_uniformField`).
+
+**The spectral resolution (§49).** For Schwartz signals, `f(t) = (2π)⁻¹∫f_ω e^{−iωt} dω`
+(`eq_integral_fourierComponent`, (49.1)) and `∫f² = π⁻¹∫_{ω>0}|f_ω|²`
+(`integral_sq_eq_integral_Ioi_fourierComponent`, (49.8)). For Schwartz initial data the Fourier
+solution of the wave equation (`Fourier.waveSolution`) is a Fourier integral against a measure on
+the light cone. It is smooth in `(t, x)` (`contDiff_waveSolution`), solves the wave equation
+(`wave_waveSolution`), takes the given data (`waveSolution_zero`, `deriv_waveSolution_zero`) and
+conserves the energy at each frequency (`fourierEnergy_waveSolution`). Its real part solves the
+wave equation on space-time (`box_re_waveSolution`).
+
+**The Fourier resolution of the electrostatic field (§51).** By Gaussian subordination, the Newton
+kernel pairs with the transform of every Schwartz function as the symbol `1/(4π²|ξ|²)`
+(`integral_newtonKernel_mul_fourier`). So the potential of a smooth charge has the transform
+`𝓕ρ/(4π²|ξ|²)` (`fourier_newtonPotential_apply`, also in `𝓢′`), and the field `−2πiξ𝓕φ`
+(`fourier_electricField_apply`). A constant adds `c δ₀` (`fourier_newtonPotential_add_const`), so
+the decaying solution is the one with no part at `ξ = 0`
+(`tendsto_newtonPotential_add_const_iff_fourier`, `fourier_eq_of_tendsto`).
+
+**Characteristic vibrations (§52).** For fields periodic in the box `L₁ × L₂ × L₃` in Coulomb
+gauge, each Fourier coefficient oscillates with `ω_k = |K|` and is transverse
+(`hasDerivAt_boxCoeff_of_maxwell`, `transverse_boxCoeff`). By Parseval on the box
+(`hasSum_sq_boxCoeff`), the field energy is the sum over the modes of
+`V(|ȧ_k|² + ω_k²|a_k|²)/2` (`fieldEnergy_eq_tsum`). The modes `cᵢ cos(Ωt) cos(kᵢxᵢ) Π sin(kⱼxⱼ)`
+of a perfectly conducting rectangular cavity solve Maxwell's equations, with `n × E = 0` and
+`n·B = 0` on the walls (`conductingMode_maxwell`, `conductingMode_boundary_cross`), with an
+instance in the unit cube.
+
+**Scope.** Spherical harmonics, two extended sources in interaction, the field of a line current,
+the solution as a Schwartz function, the classification of tempered solutions, the completeness of
+the conductor modes and cavities of other shapes are not stated (decisions 8 and 9 on #135).
+
 ## Proof and API map
 
 All names below are under `ProjectAinos`, except imported `YM` names.
 
 | Claim | Main declarations | Source |
 | --- | --- | --- |
+| Multipoles | `Potential.abs_newtonKernel_sub_dipole_le`, `newtonKernel_taylor_le`, `Multipole.abs_newtonPotential_sub_dipole_le`, `abs_newtonPotential_sub_multipole_le`, `abs_newtonPotential_sub_moments_le`, `multipoleTerm_translate`, `quadrupoleMoment_trace` | [Potential multipoles](../ProjectAinos/SmoothGeometry/Potential/Multipole.lean), [Multipole](../ProjectAinos/Electrodynamics/Multipole.lean) |
+| A system in an external field | `Multipole.abs_externalEnergy_sub_le`, `norm_externalForce_sub_le`, `norm_externalTorque_sub_le` | [Multipole](../ProjectAinos/Electrodynamics/Multipole.lean) |
+| Magnetostatics | `Magnetostatics.vectorPotential`, `curl3_magneticField3`, `magneticField3_unique`, `magneticField3_eq_biotSavart`, `maxwell_staticVector`, `MagneticMoment.norm_vectorPotential_sub_dipole_le`, `magneticMoment_flow`, `torque_uniformField` | [Magnetostatics](../ProjectAinos/Electrodynamics/Magnetostatics.lean), [MagneticMoment](../ProjectAinos/Electrodynamics/MagneticMoment.lean) |
+| The spectral resolution | `Spectral.integral_sq_eq_integral_Ioi_fourierComponent`, `Fourier.waveSolution`, `contDiff_waveSolution`, `wave_waveSolution`, `fourierEnergy_waveSolution` | [WaveSolution](../ProjectAinos/SmoothGeometry/Fourier/WaveSolution.lean), [Spectral](../ProjectAinos/Electrodynamics/Spectral.lean) |
+| The Fourier resolution of the static field | `Potential.integral_newtonKernel_mul_fourier`, `CoulombFourier.fourier_newtonPotential_apply`, `fourier_electricField_apply`, `fourier_newtonPotential_add_const` | [KernelFourier](../ProjectAinos/SmoothGeometry/Potential/KernelFourier.lean), [CoulombFourier](../ProjectAinos/Electrodynamics/CoulombFourier.lean) |
+| Characteristic vibrations | `CavityModes.conductingMode_maxwell`, `hasDerivAt_boxCoeff_of_maxwell`, `transverse_boxCoeff`, `fieldEnergy_eq_tsum` | [CavityModes](../ProjectAinos/Electrodynamics/CavityModes.lean) |
 | Coulomb's law | `Potential.newtonPotential`, `laplacian_newtonPotential`, `integral_newtonKernel_mul_laplacian`, `abs_newtonPotential_le`, `norm_fderiv_newtonPotential_le`, `eq_newtonPotential_of_tendsto`, `Electrostatics.maxwell_electrostaticPotential`, `flux_pointChargeField` | [Potential](../ProjectAinos/SmoothGeometry/Potential/NewtonPotential.lean), [Electrostatics](../ProjectAinos/Electrodynamics/Electrostatics.lean) |
 | The electrostatic energy | `ElectrostaticEnergy.electrostaticEnergy_eq`, `integral_mul_newtonPotential_eq_integral_sq`, `integral_pointCharge_energy_outside`, `tendsto_pointCharge_energy` | [ElectrostaticEnergy](../ProjectAinos/Electrodynamics/ElectrostaticEnergy.lean) |
 | The moving charge | `matterCurrentForm_lorentz`, `excitation_lorentz`, `MovingCharge.maxwell_movingScalar`, `electricField_movingCoulomb`, `movingCoulomb_field`, `maxwell_movingNewton` | [SourceCovariance](../ProjectAinos/Electrodynamics/SourceCovariance.lean), [MovingCharge](../ProjectAinos/Electrodynamics/MovingCharge.lean), [MovingSource](../ProjectAinos/Electrodynamics/MovingSource.lean) |

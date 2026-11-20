@@ -965,6 +965,17 @@ matrix of partially polarized light is positive with the Stokes bound. The ledge
 §§36–38, 46–48 and 50 are *proved* in their scopes (30 of 66).
 [Guide](electrodynamics.md#static-fields-the-moving-charge-and-waves-3638-4648-50)
 
+The potential of a localized charge has its multipole expansion with uniform remainders at every
+order, explicit through the quadrupole, and the first nonvanishing multipole is independent of the
+origin; in an external field its energy, force and torque have explicit expansions. A conserved
+current has a unique Coulomb-gauge vector potential with `curl B = j`, its magnetic moment is `e/2m`
+times the angular momentum of a stationary flow, and the torque is `m × B`. Schwartz signals satisfy
+(49.8), the wave equation has a smooth Fourier solution, the Coulomb kernel has the symbol
+`1/(4π²|ξ|²)` with the zero-frequency prescription, and the periodic box has its modes and their
+energy, with explicit conductor modes. The ledger rows of §§40–44, 49, 51 and 52 are *proved* in
+their scopes (38 of 66).
+[Guide](electrodynamics.md#multipoles-magnetostatics-and-the-fourier-resolution-4044-49-51-52)
+
 
 ## GR 5.1 native differential-form foundation
 
