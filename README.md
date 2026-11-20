@@ -201,6 +201,10 @@ relativistic charge in a Coulomb field moves on a rosette or falls to the centre
 and in a uniform magnetic field charges with a common `e/m` move as in a frame rotating at the
 Larmor frequency, up to an explicitly bounded term.
 [Guide](docs/electrodynamics.md#the-virial-theorem-the-coulomb-field-and-larmors-theorem-34-39-45)
+A smooth charge has a unique decaying potential with `−Δφ = ρ` and a finite energy, a moving charge
+has the boosted field, in Lorenz gauge the field equations are wave equations, plane waves have
+two polarizations, and the coherency matrix of partially polarized light is positive.
+[Guide](docs/electrodynamics.md#static-fields-the-moving-charge-and-waves-3638-4648-50)
 
 For general relativity, an observer with a timelike velocity measures
 distances with a spatial form whose square root is half the proper time of a

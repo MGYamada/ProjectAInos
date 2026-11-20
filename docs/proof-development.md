@@ -956,6 +956,15 @@ Hamiltonian at the Larmor frequency plus a diamagnetic term, with an explicit bo
 neglected term. The ledger rows of §§34, 39 and 45 are *proved* in their scopes (23 of 66).
 [Guide](electrodynamics.md#the-virial-theorem-the-coulomb-field-and-larmors-theorem-34-39-45)
 
+The Newton potential of a smooth charge of compact support solves `−Δφ = ρ`, decays, is unique,
+and its three energies agree, while a point charge has an infinite self-energy. Boosting a static
+solution gives the field of a moving charge, (38.8) for a point charge. In Lorenz gauge Maxwell's
+equations are wave equations whose constraints propagate; plane waves are transverse, a null
+wave vector has two polarizations, the frequency changes by the Doppler factor, and the coherency
+matrix of partially polarized light is positive with the Stokes bound. The ledger rows of
+§§36–38, 46–48 and 50 are *proved* in their scopes (30 of 66).
+[Guide](electrodynamics.md#static-fields-the-moving-charge-and-waves-3638-4648-50)
+
 
 ## GR 5.1 native differential-form foundation
 
