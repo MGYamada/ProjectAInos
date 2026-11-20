@@ -404,3 +404,11 @@ bundle.
 **Interface decision.** `SmoothGeometry/Potential/` imports only Mathlib and itself. The coordinate Laplacian is identified with Mathlib's `Δ` through `EuclideanSpace.basisFun`. The maximum principle needs `[NeZero n]`.
 
 **Proof status.** Proved and built. [Laplacian](../ProjectAinos/SmoothGeometry/Potential/Laplacian.lean) · [NewtonKernel](../ProjectAinos/SmoothGeometry/Potential/NewtonKernel.lean) · [MaximumPrinciple](../ProjectAinos/SmoothGeometry/Potential/MaximumPrinciple.lean) · [NewtonPotential](../ProjectAinos/SmoothGeometry/Potential/NewtonPotential.lean)
+
+## G10. Kernel expansions and Fourier integrals are shared layers
+
+**Observation.** The multipole bounds, the Fourier pairing of the Newton kernel and the Fourier solution of the wave equation concern functions on Euclidean space and need no field theory. Mathlib's Fourier integrals of finite measures give the smoothness of the wave solution once it is written over the light cone.
+
+**Interface decision.** `Potential/Multipole.lean`, `Potential/KernelFourier.lean` and `Fourier/WaveSolution.lean` import only Mathlib and the potential layer. Names in the shared `Potential` namespace carry prefixes where helpers could clash.
+
+**Proof status.** Proved and built. [Multipole](../ProjectAinos/SmoothGeometry/Potential/Multipole.lean) · [KernelFourier](../ProjectAinos/SmoothGeometry/Potential/KernelFourier.lean) · [WaveSolution](../ProjectAinos/SmoothGeometry/Fourier/WaveSolution.lean)

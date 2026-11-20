@@ -1890,8 +1890,11 @@ the static coefficients `−N² dt² + γ` with `R₀₀ = N Δ_γ N`, and `Lore
 linearized Christoffel symbols, Ricci and Einstein tensors of `η + εh` as derivatives, with gauge
 invariance and the harmonic gauge. `Potential/` is potential theory on ℝ³: the co-ordinate
 Laplacian with Green's identities, the Newton kernel with the pairing `∫ K Δχ = −χ(0)`, the
-maximum principle, and the Newton potential with `Δφ = −ρ`, its decay and its uniqueness; the
-electrostatics is in the [electrodynamics guide](electrodynamics.md#static-fields-the-moving-charge-and-waves-3638-4648-50). The physics is in the
+maximum principle, the Newton potential with `Δφ = −ρ`, its decay and its uniqueness, the Taylor
+bounds of the kernel for multipoles and its Fourier pairing. `Fourier/WaveSolution.lean` is the
+Fourier solution of the wave equation. Their physics is in the
+[electrodynamics guide](electrodynamics.md#static-fields-the-moving-charge-and-waves-3638-4648-50).
+The physics of the Lorentzian layer is in the
 [general relativity guide](general-relativity.md#the-centrally-symmetric-field-100-101) and its
 sections on [isotropic cosmology](general-relativity.md#isotropic-cosmology-111-114) and
 [homogeneous models](general-relativity.md#homogeneous-cosmological-models-116-117) and

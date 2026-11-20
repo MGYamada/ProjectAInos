@@ -182,6 +182,72 @@ def verify_static_fields_and_waves():
                + 4 * coherency.det())
 
 
+def verify_multipoles_magnetostatics_and_modes():
+    """Multipoles, magnetostatics, the Fourier kernel and cavity modes (§§40–44, 51, 52).
+
+    * §§40–41: the second derivative of 1/(4 pi |z|) is (3 z z - |z|^2 1)/(4 pi |z|^5), the
+      dipole field is (3 (n.d) n - d)/(4 pi |x|^3), and the quadrupole term is
+      sum D_ij x_i x_j/(8 pi |x|^5) with D_ij = 3 y_i y_j - |y|^2 delta_ij;
+    * §43: curl curl a = grad div a - Laplacian a;
+    * §44: for j = rho v with v = Omega x r, the moment (1/2) r x j is (e/2m) times r x (mu v);
+    * §51: int_0^oo t^(-1/2) e^(-r t) dt = sqrt(pi/r), and the radial transform of 1/(4 pi |x|)
+      with a damping e^(-eps |x|) tends to 1/(4 pi^2 |xi|^2);
+    * §52: the conducting mode a = c_i cos(W t) cos(k_i x_i) prod sin(k_j x_j) solves the wave
+      equation when W^2 = sum k_j^2.
+    """
+    x, y, z = coords = sp.symbols("x y z", real=True)
+    point = sp.Matrix(coords)
+    radius = sp.sqrt(point.dot(point))
+    kernel = 1 / (4 * sp.pi * radius)
+    hessian = sp.hessian(kernel, coords)
+    check_zero("second derivative of the kernel",
+               hessian - (3 * point * point.T - radius**2 * sp.eye(3)) / (4 * sp.pi * radius**5))
+    d = sp.Matrix(sp.symbols("d0:3", real=True))
+    dipole = d.dot(point) / (4 * sp.pi * radius**3)
+    field = -sp.Matrix([sp.diff(dipole, v) for v in coords])
+    normal = point / radius
+    check_zero("dipole field", field - (3 * normal.dot(d) * normal - d) / (4 * sp.pi * radius**3))
+    yv = sp.Matrix(sp.symbols("y0:3", real=True))
+    second = (sp.Rational(1, 2) * (yv.T * hessian * yv))[0]
+    quadrupole = 3 * yv * yv.T - yv.dot(yv) * sp.eye(3)
+    check_zero("quadrupole term", second - (point.T * quadrupole * point)[0]
+               / (8 * sp.pi * radius**5))
+
+    a = sp.Matrix([sp.Function(f"a{i}")(*coords) for i in range(3)])
+
+    def curl(f):
+        return sp.Matrix([sp.diff(f[2], y) - sp.diff(f[1], z), sp.diff(f[0], z) - sp.diff(f[2], x),
+                          sp.diff(f[1], x) - sp.diff(f[0], y)])
+
+    divergence = sum(sp.diff(a[i], v) for i, v in enumerate(coords))
+    gradient = sp.Matrix([sp.diff(divergence, v) for v in coords])
+    laplacian = a.applyfunc(lambda f: sum(sp.diff(f, v, 2) for v in coords))
+    check_zero("curl curl", curl(curl(a)) - gradient + laplacian)
+    charge, mass = sp.symbols("e m", positive=True)
+    mu = sp.Function("mu")(*coords)
+    rotation = sp.Matrix(sp.symbols("W0:3", real=True))
+    velocity = rotation.cross(point)
+    current = charge / mass * mu * velocity
+    check_zero("magnetic moment ratio", point.cross(current) / 2
+               - charge / (2 * mass) * point.cross(mu * velocity))
+
+    t, r = sp.symbols("t r", positive=True)
+    check_zero("subordination integral", sp.integrate(t**sp.Rational(-1, 2) * sp.exp(-r * t),
+                                                      (t, 0, sp.oo)) - sp.sqrt(sp.pi / r))
+    k, eps = sp.symbols("k epsilon", positive=True)
+    damped = sp.integrate(4 * sp.pi * r**2 * sp.exp(-eps * r) / (4 * sp.pi * r)
+                          * sp.sin(2 * sp.pi * k * r) / (2 * sp.pi * k * r), (r, 0, sp.oo))
+    check_zero("Fourier transform of the kernel", sp.limit(damped, eps, 0)
+               - 1 / (4 * sp.pi**2 * k**2))
+
+    time = sp.symbols("t", real=True)
+    wave = sp.symbols("k0:3", positive=True)
+    frequency = sp.sqrt(sum(q**2 for q in wave))
+    mode = sp.cos(frequency * time) * sp.cos(wave[0] * x) * sp.sin(wave[1] * y) * sp.sin(wave[2] * z)
+    check_zero("conducting mode wave equation", -sp.diff(mode, time, 2)
+               + sum(sp.diff(mode, v, 2) for v in coords))
+
+
 def verify():
     t, x, y, z = coordinates = sp.symbols("t x y z", real=True)
     ex, ey, ez, bx, by, bz = sp.symbols("E_x E_y E_z B_x B_y B_z", real=True)
@@ -237,11 +303,14 @@ def verify():
     check_zero("force orthogonality", (velocity.T * metric * force)[0])
     verify_virial_coulomb_larmor()
     verify_static_fields_and_waves()
+    verify_multipoles_magnetostatics_and_modes()
     print("Electrodynamics exact checks passed: signs, invariants, covariance, gauge, "
           "Bianchi, degree 0/1 radial reconstruction, hyperbolic worldline, the virial "
           "improvement stress, the Coulomb brackets and rosette, Larmor's identity, the Newton kernel "
           "and the point-charge energy, the moving charge (38.8), the wave equation in Lorenz "
-          "form, plane waves, the Doppler factor and the Stokes identity.")
+          "form, plane waves, the Doppler factor, the Stokes identity, the kernel derivatives, the "
+          "dipole and quadrupole terms, curl curl, the magnetic moment ratio, the Fourier "
+          "transform of the kernel and the conducting modes.")
 
 
 def main():
