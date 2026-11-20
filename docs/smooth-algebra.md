@@ -573,6 +573,10 @@ Smooth congruence quotients and general localizations now support the
 satisfying the chain rule for every smooth operation, and the infinitesimal
 thickening `A[ε]`, are implemented as described above, and so are Poisson
 structures, quotients by ordinary ideals and the reduced Poisson rings.
-Subsequent algebraic stages include the universal cotangent module with its
-universal property, derivations along a morphism, and comparison theorems with
-ordinary local jets.
+The universal cotangent module `CotangentModule A` is implemented: the quotient of
+the free module on `da` by the full chain rule, with its universal property, its
+functoriality, the bases `dxᵢ` of free rings and evaluation at a point (the
+[special relativity guide](special-relativity.md#four-vectors-and-the-universal-cotangent-module-6)
+compares it with covectors of space-time). Subsequent algebraic stages include
+derivations along a morphism, the comparison with the cotangent bundle of a
+general manifold, and comparison theorems with ordinary local jets.

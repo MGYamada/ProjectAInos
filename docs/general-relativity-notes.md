@@ -227,3 +227,11 @@ Only these types are constructed: the pinned Mathlib induces no connection on th
 **Interface decision.** The data are a slab of retarded times and the two scale factors (`Data`), or `L` and `β` (`LogData`). Non-flatness is stated by one curvature component, not by an invariant. The comparison with first order is stated as the vanishing of the `ε`-derivative together with a nonzero exact residual. The non-diagonal transverse metric (the second polarization) is not stated.
 
 **Proof status.** Proved and built: the tables, the vacuum equation in both forms, the strong wave with its curvature, and the second-order residual. The ledger row of §109 is *proved* in this scope. [ExactPlaneWave](../ProjectAinos/GeneralRelativity/ExactPlaneWave.lean)
+
+## GR29. The flat retarded integral replaces the Green operator for linearized radiation
+
+**Observation.** ED29 proves the flat retarded integral explicitly. The linearized field equations in harmonic gauge are `−½□h̄ = κT` (GR27), so the retarded solution for a conserved source of compact support is the retarded integral of the source, with no causal Green operator on a curved background.
+
+**Interface decision.** §110 will use `SmoothGeometry.Wave.retardedIntegral` componentwise; the curved Green operator of E25 is not used by any row.
+
+**Proof status.** The integral is proved and built (ED29); §110 is planned for wave F24b. [RetardedIntegral](../ProjectAinos/SmoothGeometry/Wave/RetardedIntegral.lean)

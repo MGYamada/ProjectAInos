@@ -666,12 +666,45 @@ instance in the unit cube.
 the solution as a Schwartz function, the classification of tempered solutions, the completeness of
 the conductor modes and cavities of other shapes are not stated (decisions 8 and 9 on #135).
 
+## The retarded potentials (§§62, 64)
+
+**The retarded integral (§62).** `SmoothGeometry.Wave.retardedIntegral f` is
+`∫ f(t − |y|, x − y)/(4π|y|) dy` on `ℝ × ℝ³`, explicit, with no Green-operator hypothesis. For a
+`C²` source whose past cone meets its support in a bounded set,
+`∫ (□f)(t − |y|, x − y)/(4π|y|) dy = f(t, x)` (`integral_wave_div_norm`). The proof writes
+`□f(t − r, x − y)/r` as the divergence of an explicit field away from `y = 0`, integrates against a
+smooth cut-off about the origin, and passes to the limit by a peak function and dominated
+convergence. Derivatives commute with the integral, so for sources whose support moves slower
+than light (`SubluminalSupport`) the retarded integral is as smooth as the source and solves the
+wave equation (`wave_retardedIntegral`). It vanishes where the past cone of a point misses the
+support (`retardedIntegral_eq_zero_of_support`), with finite speed of propagation
+(`retardedIntegral_eq_zero_of_far`).
+
+**The retarded potentials.** For a conserved current `k`, `retardedPotential k` satisfies the
+Lorenz condition (`lorenz_retardedPotential`), `□A_μ = −k_μ` (`box_retardedPotential`) and so
+Maxwell's equations, in vector form and in form (`maxwell_retardedPotential`,
+`excitation_retardedPotential`). It vanishes before the source does
+(`retardedPotential_eq_zero_of_le`). It is the unique solution that vanishes in the past with
+bounded spatial support (`eq_retardedScalar`, from the energy uniqueness of §46). A circulating
+current gives an instance (`maxwell_retardedPotential_circulatingCurrent`).
+
+**The spectral resolution (§64).** For sources with compact support in space-time, the time
+transform of the retarded potential is `∫ e^{−2πiν|y|} k̂(ν, x − y)/(4π|y|) dy`
+(`fourier_retardedPotential`), and it solves the Helmholtz equation
+`(Δ + (2πν)²)Â_μ = −k̂_μ` (`helmholtz_fourier_retardedPotential`).
+
+**Scope.** Flat space-time. The uniqueness class consists of solutions that vanish in the past, so
+it covers sources that vanish in the past. The far-zone amplitude of a point charge is the next
+wave (§63).
+
 ## Proof and API map
 
 All names below are under `ProjectAinos`, except imported `YM` names.
 
 | Claim | Main declarations | Source |
 | --- | --- | --- |
+| The retarded potentials | `Wave.retardedIntegral`, `integral_wave_div_norm`, `wave_retardedIntegral`, `retardedIntegral_eq_zero_of_support`, `retardedPotential`, `maxwell_retardedPotential`, `eq_retardedScalar` | [RetardedIntegral](../ProjectAinos/SmoothGeometry/Wave/RetardedIntegral.lean), [RetardedPotential](../ProjectAinos/Electrodynamics/RetardedPotential.lean) |
+| The spectral resolution of the retarded potentials | `fourier_retardedPotential`, `helmholtz_fourier_retardedPotential` | [RetardedSpectrum](../ProjectAinos/Electrodynamics/RetardedSpectrum.lean) |
 | Multipoles | `Potential.abs_newtonKernel_sub_dipole_le`, `newtonKernel_taylor_le`, `Multipole.abs_newtonPotential_sub_dipole_le`, `abs_newtonPotential_sub_multipole_le`, `abs_newtonPotential_sub_moments_le`, `multipoleTerm_translate`, `quadrupoleMoment_trace` | [Potential multipoles](../ProjectAinos/SmoothGeometry/Potential/Multipole.lean), [Multipole](../ProjectAinos/Electrodynamics/Multipole.lean) |
 | A system in an external field | `Multipole.abs_externalEnergy_sub_le`, `norm_externalForce_sub_le`, `norm_externalTorque_sub_le` | [Multipole](../ProjectAinos/Electrodynamics/Multipole.lean) |
 | Magnetostatics | `Magnetostatics.vectorPotential`, `curl3_magneticField3`, `magneticField3_unique`, `magneticField3_eq_biotSavart`, `maxwell_staticVector`, `MagneticMoment.norm_vectorPotential_sub_dipole_le`, `magneticMoment_flow`, `torque_uniformField` | [Magnetostatics](../ProjectAinos/Electrodynamics/Magnetostatics.lean), [MagneticMoment](../ProjectAinos/Electrodynamics/MagneticMoment.lean) |

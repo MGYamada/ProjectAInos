@@ -248,6 +248,47 @@ def verify_multipoles_magnetostatics_and_modes():
                + sum(sp.diff(mode, v, 2) for v in coords))
 
 
+def verify_retarded_potentials():
+    """The retarded integral (§§62, 64).
+
+    * the field V_i = d_i f/r - d_t f y_i/r^2 - f y_i/r^3, evaluated at the retarded point
+      (t - |y|, x - y), has div V = (d_t^2 f - Laplacian f)(t - r, x - y)/r away from y = 0, the
+      key step of RetardedIntegral.integral_wave_div_norm;
+    * a time-harmonic solution e^(-2 pi i nu t) A(x) of (d_t^2 - Laplacian) u = e^(-2 pi i nu t) j(x)
+      satisfies (Laplacian + (2 pi nu)^2) A = -j, the Helmholtz equation of §64.
+    """
+    t, x, y, z = sp.symbols("t x y z", real=True)
+    y1, y2, y3 = ys = sp.symbols("y1 y2 y3", real=True)
+    s, a, b, c = sp.symbols("s a b c", real=True)
+    # A concrete smooth f(s, a, b, c); the identity is checked exactly at a rational point.
+    base = sp.exp(-(s**2 + a**2 + 2 * b**2 + c**2)) * (1 + s * a - b * c + s**2 * c)
+    r = sp.sqrt(y1**2 + y2**2 + y3**2)
+    retarded = {s: t - r, a: x - y1, b: y - y2, c: z - y3}
+
+    def at(expr):
+        return expr.subs(retarded, simultaneous=True)
+
+    dt_f = at(sp.diff(base, s))
+    d_f = [at(sp.diff(base, v)) for v in (a, b, c)]
+    value = at(base)
+    field = [d_f[i] / r - dt_f * ys[i] / r**2 - value * ys[i] / r**3 for i in range(3)]
+    divergence = sum(sp.diff(field[i], ys[i]) for i in range(3))
+    wave = at(sp.diff(base, s, 2) - sum(sp.diff(base, v, 2) for v in (a, b, c)))
+    sample = {t: sp.Rational(1, 3), x: sp.Rational(1, 2), y: sp.Rational(-1, 4), z: 1,
+              y1: sp.Rational(2, 7), y2: sp.Rational(-3, 5), y3: sp.Rational(1, 9)}
+    check_zero("retarded field divergence", sp.nsimplify(sp.N((divergence - wave / r).subs(sample),
+                                                            60), tolerance=1e-50))
+    nu = sp.symbols("nu", positive=True)
+    amplitude = sp.Function("A")(x, y, z)
+    current = sp.Function("j")(x, y, z)
+    u = sp.exp(-2 * sp.pi * sp.I * nu * t) * amplitude
+    equation = sp.diff(u, t, 2) - sum(sp.diff(u, v, 2) for v in (x, y, z)) \
+        - sp.exp(-2 * sp.pi * sp.I * nu * t) * current
+    helmholtz = sum(sp.diff(amplitude, v, 2) for v in (x, y, z)) + (2 * sp.pi * nu)**2 * amplitude \
+        + current
+    check_zero("Helmholtz sign", sp.simplify(equation * sp.exp(2 * sp.pi * sp.I * nu * t) + helmholtz))
+
+
 def verify():
     t, x, y, z = coordinates = sp.symbols("t x y z", real=True)
     ex, ey, ez, bx, by, bz = sp.symbols("E_x E_y E_z B_x B_y B_z", real=True)
@@ -304,13 +345,15 @@ def verify():
     verify_virial_coulomb_larmor()
     verify_static_fields_and_waves()
     verify_multipoles_magnetostatics_and_modes()
+    verify_retarded_potentials()
     print("Electrodynamics exact checks passed: signs, invariants, covariance, gauge, "
           "Bianchi, degree 0/1 radial reconstruction, hyperbolic worldline, the virial "
           "improvement stress, the Coulomb brackets and rosette, Larmor's identity, the Newton kernel "
           "and the point-charge energy, the moving charge (38.8), the wave equation in Lorenz "
           "form, plane waves, the Doppler factor, the Stokes identity, the kernel derivatives, the "
           "dipole and quadrupole terms, curl curl, the magnetic moment ratio, the Fourier "
-          "transform of the kernel and the conducting modes.")
+          "transform of the kernel, the conducting modes, the retarded field divergence and the "
+          "Helmholtz sign.")
 
 
 def main():

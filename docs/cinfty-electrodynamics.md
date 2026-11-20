@@ -108,9 +108,9 @@ completion.
 | 59 | Diffraction | informal | Conditional target (E27, F20) |
 | 60 | Fresnel diffraction | informal | Target (E27, F20) |
 | 61 | Fraunhofer diffraction | informal | Target (E27, F20) |
-| 62 | The retarded potentials | informal | Conditional target: needs the causal Green operator (E25, E29, F21) |
+| 62 | The retarded potentials | proved | `Wave.retardedIntegral`, `Wave.integral_wave_div_norm`, `Wave.wave_retardedIntegral`, `Wave.contDiff_retardedIntegral`, `Wave.retardedIntegral_eq_zero_of_support`, `Wave.retardedIntegral_eq_zero_of_far`, `Wave.SubluminalSupport`, `retardedPotential`, `lorenz_retardedPotential`, `box_retardedPotential`, `maxwell_retardedPotential`, `excitation_retardedPotential`, `retardedPotential_eq_zero_of_le`, `eq_retardedScalar`, `maxwell_retardedPotential_circulatingCurrent`. Scope: flat space-time, and `C²` sources whose support moves slower than light. No Green-operator hypothesis is used: the retarded integral `∫ f(t − |y|, x − y)/(4π|y|) dy` is explicit. The identity `∫ (□f)(t − |y|, x − y)/(4π|y|) dy = f(t, x)` is proved by a smooth cut-off about `y = 0`, so the integral solves the wave equation; it is as smooth as the source and vanishes where the past cone misses the support. For a conserved current the retarded potentials satisfy the Lorenz condition and Maxwell's equations, with causal support, and they are the unique solutions that vanish in the past with bounded spatial support. A circulating current is an instance. The curved causal Green operator of E25 is not used by any row |
 | 63 | The Liénard–Wiechert potentials | informal | Target (E28, E29, F21) |
-| 64 | Spectral resolution of the retarded potentials | informal | Conditional target (E29, F21) |
+| 64 | Spectral resolution of the retarded potentials | proved | `timeFourier`, `fourier_retardedIntegral`, `helmholtz_timeFourier`, `helmholtz_fourier_retardedIntegral`, `fourier_retardedPotential`, `helmholtz_fourier_retardedPotential`, `fourier_retardedPotential_circulatingCurrent`. Scope: sources with compact support in space-time, in Mathlib's normalization `∫ e^{−2πiνt} f dt`. The time transform of the retarded potential is `∫ e^{−2πiν|y|} k̂(ν, x − y)/(4π|y|) dy` (L&L's `e^{ikR}/R`), and it solves the Helmholtz equation `(Δ + (2πν)²)Â_μ = −k̂_μ`. The circulating current is an instance. The far-zone amplitude of a point charge needs the Liénard–Wiechert field and comes with §63 (F21b) |
 | 65 | The Lagrangian to terms of second order | informal | Conditional target (E29, F21) |
 | 66 | The field of a system of charges at large distances | informal | Conditional target (E30, F22) |
 | 67 | Dipole radiation | informal | Target (E30, F22) |
@@ -128,7 +128,7 @@ completion.
 | 79 | Scattering of low-frequency waves | informal | Conditional target (E32, F23) |
 | 80 | Scattering of high-frequency waves | informal | Conditional target (E32, F23) |
 
-Count: 38 proved, 28 informal.
+Count: 40 proved, 26 informal.
 
 Closed with a stated remainder: none.
 
@@ -1152,9 +1152,9 @@ of the textbook's derivations.
 
 | § | Formalization target and hypotheses | Tier / dependency | Status |
 | --- | --- | --- | --- |
-| 62 | Construct a causal solution for admissible conserved sources and prove support properties | D, B:RET / E25, E29 | Conditional target |
+| 62 | Construct a causal solution for admissible conserved sources and prove support properties | D, B:RET / E25, E29 | Proved (F21a): the explicit flat retarded integral, its causal support, the Lorenz gauge and Maxwell's equations, without a Green-operator hypothesis |
 | 63 | Derive the off-worldline retarded field after proving the retarded parameter exists uniquely | B:RET / E28–E29 | Target |
-| 64 | Transform retarded potentials in time under convergence or distributional hypotheses | B:FOURIER, RET / E29 | Conditional target |
+| 64 | Transform retarded potentials in time under convergence or distributional hypotheses | B:FOURIER, RET / E29 | Proved (F21a): the time transform of the retarded potentials of compactly supported sources and the Helmholtz equation |
 | 65 | Derive a controlled order-$v^2/c^2$ interaction approximation for separated slow sources | B:ASYM, P / E29 | Conditional target |
 
 ### Chapter IX: §§66–80
