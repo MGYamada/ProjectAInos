@@ -289,6 +289,284 @@ def verify_retarded_potentials():
     check_zero("Helmholtz sign", sp.simplify(equation * sp.exp(2 * sp.pi * sp.I * nu * t) + helmholtz))
 
 
+def sphere_integral(expr, n, theta, phi):
+    """Integrate a polynomial-trigonometric expression over the unit sphere."""
+    sub = {n[0]: sp.sin(theta) * sp.cos(phi), n[1]: sp.sin(theta) * sp.sin(phi),
+           n[2]: sp.cos(theta)}
+    inner = sp.integrate(sp.expand(expr.subs(sub, simultaneous=True)), (phi, 0, 2 * sp.pi))
+    return sp.integrate(sp.simplify(inner) * sp.sin(theta), (theta, 0, sp.pi))
+
+
+def verify_radiation():
+    """The Liénard–Wiechert field, near-zone flux, multipole powers, Darwin gauge, Liénard power."""
+    e = sp.symbols("e", real=True)
+    t = sp.symbols("t", real=True)
+    xs = sp.Matrix(sp.symbols("x1 x2 x3", real=True))
+    tau = sp.symbols("tau", real=True)
+    # (63.8): a polynomial worldline r(tau) = r0 + v0 tau + a0 tau^2/2 + j0 tau^3/6.
+    r0 = sp.Matrix([sp.Rational(1, 3), -sp.Rational(1, 2), sp.Rational(1, 5)])
+    v0 = sp.Matrix([sp.Rational(1, 4), sp.Rational(1, 6), -sp.Rational(1, 7)])
+    a0 = sp.Matrix([sp.Rational(2, 3), -1, sp.Rational(1, 2)])
+    j0 = sp.Matrix([1, sp.Rational(1, 3), -2])
+    r = r0 + v0 * tau + a0 * tau**2 / 2 + j0 * tau**3 / 6
+    v = r.diff(tau)
+    Rv = xs - r
+    Rn = sp.sqrt(Rv.dot(Rv))
+    kappa = Rn - Rv.dot(v)
+    phi = e / (4 * sp.pi * kappa)
+    avec = e * v / (4 * sp.pi * kappa)
+    # Implicit derivatives of the retarded time: d_t tau = R/kappa, grad tau = -R_vec/kappa.
+    dtau_t = Rn / kappa
+    dtau_x = [-Rv[i] / kappa for i in range(3)]
+
+    def d_t(f):
+        return sp.diff(f, tau) * dtau_t
+
+    def d_x(f, i):
+        return sp.diff(f, xs[i]) + sp.diff(f, tau) * dtau_x[i]
+
+    efield = sp.Matrix([-d_x(phi, i) - d_t(avec[i]) for i in range(3)])
+    bfield = sp.Matrix([d_x(avec[2], 1) - d_x(avec[1], 2), d_x(avec[0], 2) - d_x(avec[2], 0),
+                        d_x(avec[1], 0) - d_x(avec[0], 1)])
+    acc = v.diff(tau)
+    lw = e / (4 * sp.pi) * ((1 - v.dot(v)) * (Rv - Rn * v) / kappa**3
+                            + Rv.cross((Rv - Rn * v).cross(acc)) / kappa**3)
+    sample = {tau: 0, xs[0]: r0[0] + 3, xs[1]: r0[1] + 4, xs[2]: r0[2] + 12}
+    check_zero("Lienard-Wiechert electric field (63.8)", (efield - lw).subs(sample))
+    nvec = Rv / Rn
+    check_zero("Lienard-Wiechert magnetic field (63.9)", (bfield - nvec.cross(lw)).subs(sample))
+
+    # §63, the source identity: the Jacobian of (tau, y) -> (tau + |y|, r(tau) + y) is 1 - n.v,
+    # which cancels the denominator of the potentials; the charge at rest pairs to -e chi(t, 0).
+    nv = sp.Matrix(sp.symbols("m1:4", real=True))
+    vv = sp.Matrix(sp.symbols("w1:4", real=True))
+    jac = sp.Matrix([[1, nv[0], nv[1], nv[2]], [vv[0], 1, 0, 0], [vv[1], 0, 1, 0],
+                     [vv[2], 0, 0, 1]])
+    check_zero("light-cone Jacobian", jac.det() - (1 - nv.dot(vv)))
+    yy = sp.Matrix(sp.symbols("y1:4", real=True))
+    ynorm = sp.sqrt(yy.dot(yy))
+    check_zero("light-cone cancellation", (1 - yy.dot(vv) / ynorm)
+               * e / (4 * sp.pi * (ynorm - yy.dot(vv))) - e / (4 * sp.pi * ynorm))
+    rad = sp.symbols("rho", positive=True)
+    chi = sp.exp(-t**2 - rad**2)
+    lap = sp.diff(chi, rad, 2) + 2 * sp.diff(chi, rad) / rad
+    pairing = sp.integrate(sp.simplify(lap / rad * 4 * sp.pi * rad**2), (rad, 0, sp.oo))
+    check_zero("point charge at rest is the source", pairing + 4 * sp.pi * chi.subs(rad, 0))
+    # Liénard (73.x): the angular integral of |n x ((n - v) x a)|^2/(1 - n.v)^5.
+    theta, ph = sp.symbols("theta phi", real=True)
+    n = sp.Matrix(sp.symbols("n1 n2 n3", real=True))
+    beta = sp.Rational(1, 2)
+    vel = sp.Matrix([0, 0, beta])
+    for accel in (sp.Matrix([1, 0, 2]), sp.Matrix([0, 3, 0])):
+        num = n.cross((n - vel).cross(accel))
+        sub = {n[0]: sp.sin(theta) * sp.cos(ph), n[1]: sp.sin(theta) * sp.sin(ph),
+               n[2]: sp.cos(theta)}
+        inner = sp.integrate(sp.expand(num.dot(num).subs(sub)), (ph, 0, 2 * sp.pi))
+        s = sp.symbols("s", real=True)
+        inner_s = sp.simplify(inner.subs(sp.sin(theta)**2, 1 - sp.cos(theta)**2)
+                              .subs(sp.cos(theta), s))
+        total = sp.integrate(inner_s / (1 - beta * s)**5, (s, -1, 1))
+        gamma2 = 1 / (1 - beta**2)
+        expected = sp.Rational(8, 3) * sp.pi * gamma2**3 * (accel.dot(accel)
+                                                            - vel.cross(accel).dot(vel.cross(accel)))
+        check_zero("Lienard angular integral", total - expected)
+
+    # §73: the one-variable integrals behind Liénard's formula, the four-acceleration, and the
+    # momentum identity ∫ (n.v) dI = |v|^2 ∫ dI; §74: the synchrotron reduction.
+    s, bt = sp.symbols("s beta", real=True)
+    bsub = {bt: sp.Rational(3, 7)}
+    for name, integrand, value in [
+            ("1/(1-bs)^3", 1 / (1 - bt * s)**3, 2 / (1 - bt**2)**2),
+            ("s/(1-bs)^3", s / (1 - bt * s)**3, 2 * bt / (1 - bt**2)**2),
+            ("(1-s^2)/(1-bs)^5", (1 - s**2) / (1 - bt * s)**5, sp.Rational(4, 3) / (1 - bt**2)**3),
+            ("s(1-s^2)/(1-bs)^5", s * (1 - s**2) / (1 - bt * s)**5,
+             sp.Rational(4, 3) * bt / (1 - bt**2)**3)]:
+        check_zero(f"Lienard integral {name}",
+                   sp.integrate(integrand.subs(bsub), (s, -1, 1)) - value.subs(bsub))
+    v3 = sp.Matrix(sp.symbols("u1:4", real=True))
+    a3 = sp.Matrix(sp.symbols("a1:4", real=True))
+    gam2 = 1 / (1 - v3.dot(v3))
+    w_space = gam2 * a3 + gam2**2 * v3.dot(a3) * v3
+    w_time = gam2**2 * v3.dot(a3)
+    check_zero("four-acceleration square", w_space.dot(w_space) - w_time**2
+               - gam2**3 * (a3.dot(a3) - v3.cross(a3).dot(v3.cross(a3))))
+    radius, omega = sp.symbols("R Omega", positive=True)
+    v_c = sp.Matrix([0, radius * omega, 0])
+    a_c = sp.Matrix([-radius * omega**2, 0, 0])
+    g_c = 1 / (1 - v_c.dot(v_c))
+    check_zero("synchrotron reduction", g_c**3 * (a_c.dot(a_c) - v_c.cross(a_c).dot(v_c.cross(a_c)))
+               - g_c**2 * radius**2 * omega**4)
+    vel_m = sp.Matrix([0, 0, sp.Rational(1, 2)])
+    acc_m = sp.Matrix([1, 0, 2])
+    num_m = n.cross((n - vel_m).cross(acc_m))
+    sub_m = {n[0]: sp.sin(theta) * sp.cos(ph), n[1]: sp.sin(theta) * sp.sin(ph),
+             n[2]: sp.cos(theta)}
+    s_m = sp.symbols("s_m", real=True)
+
+    def power_moment(weight):
+        inner_m = sp.integrate(sp.expand((weight * num_m.dot(num_m)).subs(sub_m)),
+                               (ph, 0, 2 * sp.pi))
+        inner_m = sp.simplify(inner_m.subs(sp.sin(theta)**2, 1 - sp.cos(theta)**2)
+                              .subs(sp.cos(theta), s_m))
+        return sp.integrate(inner_m / (1 - s_m / 2)**5, (s_m, -1, 1))
+
+    check_zero("momentum of the radiation along v",
+               power_moment(n.dot(vel_m)) - vel_m.dot(vel_m) * power_moment(1))
+    # §72: the point dipole, fields of all orders and the flux identity.
+    rr = sp.sqrt(xs.dot(xs))
+    d = [sp.Function(f"d{i}") for i in range(3)]
+    dip = sp.Matrix([d[i](t - rr) for i in range(3)])
+    a_dip = sp.Matrix([sp.diff(d[i](t - rr), t) / (4 * sp.pi * rr) for i in range(3)])
+    phi_dip = -sum(sp.diff(d[i](t - rr) / (4 * sp.pi * rr), xs[i]) for i in range(3))
+    e_dip = sp.Matrix([-sp.diff(phi_dip, xs[i]) - sp.diff(a_dip[i], t) for i in range(3)])
+    b_dip = sp.Matrix([sp.diff(a_dip[2], xs[1]) - sp.diff(a_dip[1], xs[2]),
+                       sp.diff(a_dip[0], xs[2]) - sp.diff(a_dip[2], xs[0]),
+                       sp.diff(a_dip[1], xs[0]) - sp.diff(a_dip[0], xs[1])])
+    u = sp.symbols("u", real=True)
+    D0, D1, D2, D3 = [sp.Matrix(sp.symbols(f"D{k}_1:4", real=True)) for k in range(4)]
+    derivs = {}
+    for i in range(3):
+        f = d[i]
+        derivs[sp.Derivative(f(u), (u, 3))] = D3[i]
+        derivs[sp.Derivative(f(u), (u, 2))] = D2[i]
+        derivs[sp.Derivative(f(u), u)] = D1[i]
+        derivs[f(u)] = D0[i]
+
+    def at_u(expr):
+        expr = expr.subs(t, u + rr).doit()
+        for key in sorted(derivs, key=lambda k: -sp.count_ops(k)):
+            expr = expr.subs(key, derivs[key])
+        return sp.simplify(expr)
+
+    nn = xs / rr
+    b_expected = (D2 / rr + D1 / rr**2).cross(nn) / (4 * sp.pi)
+    e_expected = ((3 * nn * nn.dot(D0) - D0) / rr**3 + (3 * nn * nn.dot(D1) - D1) / rr**2
+                  + (nn * nn.dot(D2) - D2) / rr) / (4 * sp.pi)
+    point = {xs[0]: sp.Rational(2, 3), xs[1]: sp.Rational(-1, 3), xs[2]: sp.Rational(2, 3)}
+    check_zero("dipole magnetic field (72.x)", (b_dip.applyfunc(at_u) - b_expected).subs(point))
+    check_zero("dipole electric field (72.x)", (e_dip.applyfunc(at_u) - e_expected).subs(point))
+    # Flux through the sphere of radius R: R^2 ∫ (E x B).n dσ.
+    R = sp.symbols("R", positive=True)
+    bR = (D2 / R + D1 / R**2).cross(n) / (4 * sp.pi)
+    eR = ((3 * n * n.dot(D0) - D0) / R**3 + (3 * n * n.dot(D1) - D1) / R**2
+          + (n * n.dot(D2) - D2) / R) / (4 * sp.pi)
+    flux = R**2 * sphere_integral(eR.cross(bR).dot(n), n, theta, ph)
+    q_r = (D1.dot(D1) / R + D0.dot(D1) / R**2 + D0.dot(D0) / (2 * R**3)) / (6 * sp.pi)
+    # d/dt Q_R at fixed R is d/du along the jet D0 -> D1 -> D2 -> D3.
+    dq = sum(sp.diff(q_r, D0[i]) * D1[i] + sp.diff(q_r, D1[i]) * D2[i] for i in range(3))
+    check_zero("near-zone flux (72.x)", flux - (D2.dot(D2) / (6 * sp.pi) + dq))
+    sq = D0 + R * D1
+    check_zero("near-zone energy is a sum of squares",
+               q_r - (sq.dot(sq) + R**2 * D1.dot(D1)) / (12 * sp.pi * R**3))
+
+    # The moments of the sphere (SphereIntegral): ∫ n3^k = 4π/(k+1) for even k, 0 for odd k,
+    # the second and fourth moments, and the orthogonal moment against g(n3) = n3^2.
+    for k in range(7):
+        moment = sphere_integral(n[2]**k, n, theta, ph)
+        check_zero(f"sphere moment n3^{k}",
+                   moment - (4 * sp.pi / (k + 1) if k % 2 == 0 else 0))
+    check_zero("second moment", sphere_integral(n[0] * n[1], n, theta, ph))
+    check_zero("fourth moment", sphere_integral(n[0]**2 * n[1]**2, n, theta, ph)
+               - 4 * sp.pi / 15)
+    check_zero("orthogonal moment", sphere_integral(n[0]**2 * n[2]**2, n, theta, ph)
+               - sphere_integral((1 - n[2]**2) * n[2]**2, n, theta, ph) / 2)
+    # §§67, 71: the angular integrals of the multipole powers.
+    acc_d = sp.Matrix(sp.symbols("dd1:4", real=True))
+    nx = n.cross(acc_d)
+    check_zero("dipole angular integral", sphere_integral(nx.dot(nx), n, theta, ph)
+               - sp.Rational(8, 3) * sp.pi * acc_d.dot(acc_d))
+    q3 = sp.Matrix(3, 3, lambda i, j: sp.Symbol(f"Q{min(i, j)}{max(i, j)}", real=True))
+    m2 = sp.Matrix(sp.symbols("m1:4", real=True))
+    # M_ik = ∫ y_i (d_s^2 j_k) = (1/2) Q'''_ik + eps_ikl m''_l (conservation and m = ½∫ y × j).
+    mmat = sp.Matrix(3, 3, lambda i, k: q3[i, k] / 2
+                     + sum(sp.LeviCivita(i, k, l) * m2[l] for l in range(3)))
+    tvec = sp.Matrix([sum(n[i] * mmat[i, k] for i in range(3)) for k in range(3)])
+    ntv = n.cross(tvec)
+    power = sphere_integral(ntv.dot(ntv), n, theta, ph) / (16 * sp.pi**2)
+    dq3 = 3 * q3 - q3.trace() * sp.eye(3)
+    expected = (sum(dq3[i, j]**2 for i in range(3) for j in range(3)) / 180
+                + sp.Rational(2, 3) * m2.dot(m2)) / (4 * sp.pi)
+    check_zero("quadrupole and magnetic dipole power (71.x)", power - expected)
+
+    # The instances of §§67, 71: rho = cos s d1 chi has d = -(cos s)(∫chi) e1, and
+    # rho = cos s d1^2 chi has D_11 = 4 cos s ∫chi, D_22 = D_33 = -2 cos s ∫chi, so the power
+    # coefficient is (1/4π)(24/180) = 1/(30π).
+    g1, g2, g3 = sp.symbols("g1 g2 g3", real=True)
+    gauss = sp.exp(-(g1**2 + g2**2 + g3**2))
+    mass = sp.integrate(gauss, (g1, -sp.oo, sp.oo), (g2, -sp.oo, sp.oo), (g3, -sp.oo, sp.oo))
+
+    def space_integral(expr):
+        return sp.integrate(expr, (g1, -sp.oo, sp.oo), (g2, -sp.oo, sp.oo), (g3, -sp.oo, sp.oo))
+
+    check_zero("dipole instance moment", space_integral(g1 * sp.diff(gauss, g1)) + mass)
+    rho2 = sp.diff(gauss, g1, 2)
+    gs = (g1, g2, g3)
+    dq = [space_integral(rho2 * (3 * gs[i]**2 - (g1**2 + g2**2 + g3**2))) for i in range(3)]
+    check_zero("quadrupole instance moments", sp.Matrix(dq) - mass * sp.Matrix([4, -2, -2]))
+    check_zero("quadrupole instance coefficient",
+               sum(c**2 for c in (4, -2, -2)) / sp.Integer(180) / (4 * sp.pi) - 1 / (30 * sp.pi))
+    # §65: the Darwin gauge for a point charge to second order.
+    rt = sp.Matrix([sp.Function(f"r{i}")(t) for i in range(3)])
+    sep = xs - rt
+    dist = sp.sqrt(sep.dot(sep))
+    vt = rt.diff(t)
+    chi = e / (8 * sp.pi) * sp.diff(dist, t)
+    phi2 = e / (4 * sp.pi * dist) + e / (8 * sp.pi) * sp.diff(dist, t, 2)
+    a1 = e * vt / (4 * sp.pi * dist)
+    check_zero("Darwin scalar potential (65.x)", sp.simplify(phi2 - sp.diff(chi, t)
+                                                             - e / (4 * sp.pi * dist)))
+    a_darwin = e / (8 * sp.pi * dist) * (vt + vt.dot(sep / dist) * sep / dist)
+    check_zero("Darwin vector potential (65.6)",
+               (a1 + sp.Matrix([sp.diff(chi, xs[i]) for i in range(3)]) - a_darwin)
+               .applyfunc(sp.simplify))
+
+
+def verify_darwin_point_charge():
+    """§65: the Liénard–Wiechert field of a slow point charge is the Darwin field to order κ²."""
+    e, kappa, s = sp.symbols("e kappa s", real=True)
+    path = sp.Matrix([s / 2 + s**2 / 3, -s / 3 + s**3 / 5, s**2 / 4])
+    point = sp.Matrix([3, 4, 0])
+    a1, a2, a3 = sp.symbols("a1:4", real=True)
+    tau = -5 + a1 * kappa + a2 * kappa**2 + a3 * kappa**3
+    at = path.subs(s, kappa * tau)
+    sep = point - at
+    eq = sp.expand(sp.series(tau**2 - sep.dot(sep), kappa, 0, 4).removeO())
+    sol = sp.solve([eq.coeff(kappa, k) for k in (1, 2, 3)], [a1, a2, a3], dict=True)[0]
+    tau = tau.subs(sol)
+    vel = (kappa * path.diff(s)).subs(s, kappa * tau)
+    acc = (kappa**2 * path.diff(s, 2)).subs(s, kappa * tau)
+    sep = point - path.subs(s, kappa * tau)
+    dist = -tau
+    den = dist - sep.dot(vel)
+    lw = e / (4 * sp.pi) * ((1 - vel.dot(vel)) * (sep - dist * vel) / den**3
+                            + sep.cross((sep - dist * vel).cross(acc)) / den**3)
+    t = sp.symbols("t", real=True)
+    xs = sp.Matrix(sp.symbols("x1:4", real=True))
+    c = path.subs(s, kappa * t)
+    cdot = c.diff(t)
+    x_c = xs - c
+    rho = sp.sqrt(x_c.dot(x_c))
+    nn = x_c / rho
+    phi_d = e / (4 * sp.pi * rho)
+    a_d = e / (8 * sp.pi * rho) * (cdot + cdot.dot(nn) * nn)
+    e_d = sp.Matrix([-sp.diff(phi_d, xs[i]) - sp.diff(a_d[i], t) for i in range(3)])
+    e_d = e_d.subs({t: 0, xs[0]: 3, xs[1]: 4, xs[2]: 0})
+    diff = (lw - e_d).applyfunc(lambda f: sp.series(f, kappa, 0, 3).removeO())
+    check_zero("Lienard-Wiechert field of a slow charge is the Darwin field to order kappa^2",
+               diff.applyfunc(sp.simplify))
+    b_lw = (sep / dist).cross(lw)
+    b_d = sp.Matrix([sp.diff(a_d[2], xs[1]) - sp.diff(a_d[1], xs[2]),
+                     sp.diff(a_d[0], xs[2]) - sp.diff(a_d[2], xs[0]),
+                     sp.diff(a_d[1], xs[0]) - sp.diff(a_d[0], xs[1])])
+    b_d = b_d.subs({t: 0, xs[0]: 3, xs[1]: 4, xs[2]: 0})
+    diff_b = (b_lw - b_d).applyfunc(lambda f: sp.series(f, kappa, 0, 2).removeO())
+    check_zero("Lienard-Wiechert magnetic field of a slow charge to order kappa",
+               diff_b.applyfunc(sp.simplify))
+    lw_wrong = (lw - e_d).applyfunc(lambda f: sp.series(f, kappa, 0, 4).removeO())
+    if all(sp.simplify(entry) == 0 for entry in lw_wrong):
+        raise AssertionError("the Darwin comparison did not see the third order")
+
+
 def verify():
     t, x, y, z = coordinates = sp.symbols("t x y z", real=True)
     ex, ey, ez, bx, by, bz = sp.symbols("E_x E_y E_z B_x B_y B_z", real=True)
@@ -346,6 +624,8 @@ def verify():
     verify_static_fields_and_waves()
     verify_multipoles_magnetostatics_and_modes()
     verify_retarded_potentials()
+    verify_radiation()
+    verify_darwin_point_charge()
     print("Electrodynamics exact checks passed: signs, invariants, covariance, gauge, "
           "Bianchi, degree 0/1 radial reconstruction, hyperbolic worldline, the virial "
           "improvement stress, the Coulomb brackets and rosette, Larmor's identity, the Newton kernel "
@@ -353,7 +633,10 @@ def verify():
           "form, plane waves, the Doppler factor, the Stokes identity, the kernel derivatives, the "
           "dipole and quadrupole terms, curl curl, the magnetic moment ratio, the Fourier "
           "transform of the kernel, the conducting modes, the retarded field divergence and the "
-          "Helmholtz sign.")
+          "Helmholtz sign, the Liénard–Wiechert fields and the light-cone Jacobian, the moments of the "
+          "sphere, Liénard's integral and the synchrotron reduction, the near-zone fields and flux, "
+          "the multipole powers and their instances, the Darwin potentials, and the field of a slow "
+          "point charge to second order.")
 
 
 def main():

@@ -985,6 +985,20 @@ SR §6 are *proved* in their scopes (ED 40 of 66; special relativity complete).
 [Guide](electrodynamics.md#the-retarded-potentials-62-64) ·
 [Guide](special-relativity.md#four-vectors-and-the-universal-cotangent-module-6)
 
+A world line slower than light has a unique smooth retarded time, its Liénard–Wiechert potentials
+satisfy the vacuum equations off the world line with the fields (63.8)–(63.9), and the point charge
+is their source in the sense of test functions, by a light-cone change of variables. For slow
+sources the retarded potentials are expanded in the slowness, and for point charges the force from
+the fields of the others is the Euler–Lagrange expression of the Darwin Lagrangian to second order.
+A localized current has a far-field amplitude, transverse fields at infinity and a Poynting flux
+that tends to the radiated power; for slow sources the power is the dipole term with an `O(κ⁶)`
+remainder, and the quadrupole and magnetic-dipole terms with `O(κ⁷)`. The flux of a point dipole
+splits exactly into the radiated power and the derivative of a near-zone energy. A fast charge
+radiates with Liénard's power, concentrated in the cone `c/γ`; on a circular orbit the loss per turn
+is explicit. The ledger rows ED §§63, 65–67, 71–73 are *proved* in their scopes, and §§74 and 77 are
+closed with stated remainders (ED 47 of 66).
+[Guide](electrodynamics.md#radiation-63-6567-7174-77)
+
 
 ## GR 5.1 native differential-form foundation
 
