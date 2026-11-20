@@ -976,6 +976,15 @@ energy, with explicit conductor modes. The ledger rows of §§40–44, 49, 51 an
 their scopes (38 of 66).
 [Guide](electrodynamics.md#multipoles-magnetostatics-and-the-fourier-resolution-4044-49-51-52)
 
+The flat retarded integral solves the wave equation for sources slower than light without a
+Green-operator hypothesis, so the retarded potentials of a conserved current satisfy the Lorenz
+condition and Maxwell's equations with causal support and uniqueness, and their time transform
+solves the Helmholtz equation. The universal C∞ cotangent module `Ω_A`, with the full chain rule
+and its universal property, matches the covectors of space-time. The ledger rows ED §§62, 64 and
+SR §6 are *proved* in their scopes (ED 40 of 66; special relativity complete).
+[Guide](electrodynamics.md#the-retarded-potentials-62-64) ·
+[Guide](special-relativity.md#four-vectors-and-the-universal-cotangent-module-6)
+
 
 ## GR 5.1 native differential-form foundation
 

@@ -225,3 +225,11 @@ These notes record mathematical distinctions and interface decisions in `Project
 **Interface decision.** The cavity is the periodic box of L&L (decision 9 on #135), with the torus measure fixed by a local instance. The conductor modes are explicit. Their completeness by reflection to the doubled box is within reach (about 300 lines with a bounded-measurable Parseval) and is not stated here; it is not a genuine remainder reason.
 
 **Proof status.** Proved and built. The ledger row of §52 is *proved* in this scope. [CavityModes](../ProjectAinos/Electrodynamics/CavityModes.lean)
+
+## ED29. The retarded potentials need no Green-operator hypothesis
+
+**Observation.** The outline made §62 conditional on a causal Green operator (E25). In flat space-time the retarded integral is explicit, and the identity `∫ (□f)(t − |y|, x − y)/(4π|y|) dy = f(t, x)` is proved directly. Away from `y = 0`, `□f(t − r, x − y)/r` is the divergence of `V_i = ∂ᵢf/r − ∂ₜf yᵢ/r² − f yᵢ/r³` evaluated at the retarded point. Against a smooth cut-off about the origin the integral becomes a peak-function average of `f + r∂ₜf − y·∇f`, whose value at the origin is `f(t, x)`. No divergence theorem on balls is needed. This corrects the outline's judgement that §62 is conditional.
+
+**Interface decision.** The retarded integral is shared mathematics on `ℝ × ℝ³` with the Euclidean norm, with a continuous linear equivalence to the electrodynamics space-time. Sources are required to have support moving slower than light (`SubluminalSupport`), of which compact support is an instance. Uniqueness is among solutions that vanish in the past with bounded spatial support. For §64 the transform is taken in time at fixed position, in Mathlib's normalization.
+
+**Proof status.** Proved and built. The ledger rows of §§62 and 64 are *proved* in this scope. [RetardedIntegral](../ProjectAinos/SmoothGeometry/Wave/RetardedIntegral.lean) · [RetardedPotential](../ProjectAinos/Electrodynamics/RetardedPotential.lean) · [RetardedSpectrum](../ProjectAinos/Electrodynamics/RetardedSpectrum.lean)

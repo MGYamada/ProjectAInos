@@ -137,3 +137,11 @@ These notes record mathematical distinctions and interface decisions in `Project
 **Interface decision.** `orbitalMoment`, `totalMoment` and `centreOfEnergy` are stated for vectors in `d` space dimensions and a finite index type of particles. A collision is the hypothesis that the particles are at one event. `crossSection ν W F S` takes the measure of the final states and the weight as arguments, and `crossSection_covariant` assumes that the transformation preserves both. The ledger row of §12 is *proved modulo interface* with this interface, and it is closed with the construction of the measure as its remainder.
 
 **Proof status.** `flat_lorentzGenerator`, `orbitalMoment_eq_of_stationary`, `totalMoment_freeMotion`, `sum_orbitalMoment_same_event`, `centreOfEnergy_freeMotion`, `fluxFactor_sq`, `measurePreserving_action_prod` and `crossSection_covariant` are proved. [Orbital charges](../ProjectAinos/SpecialRelativity/OrbitalCharges.lean) · [Cross-section](../ProjectAinos/SpecialRelativity/CrossSection.lean)
+
+## SR18. The universal cotangent module is a quotient by the full chain rule
+
+**Observation.** With the relations `dΦ_f(a) − Σ Φ_{∂ᵢf}(a) daᵢ` for every smooth operation, additivity, the Leibniz rule and the vanishing on constants are instances (`f = x₁ + x₂`, `f = x₁x₂`, nullary constants), so no separate relations are needed. A semilinear universal property over a ring homomorphism gives the lift (identity), the pullback (a smooth ring homomorphism) and the evaluation at a point (the evaluation homomorphism) at once. On `C∞(ℝⁿ)` the coordinate derivations show that the `dxᵢ` are independent, and evaluation identifies the fibre with the dual of the tangent space.
+
+**Interface decision.** `CotangentModule A` lives in the shared smooth algebra, with `d A` taking `A` explicitly as Mathlib's `KaehlerDifferential.D` does. `map` is semilinear over the homomorphism, without base change. The comparison with covectors is for space-time `ℝ^{1+d}` in global co-ordinates; the general manifold and the germs are not stated.
+
+**Proof status.** Proved and built. The ledger row of §6 is *proved* in this scope, which closes the special-relativity ledger (13 proved, §12 closed with a stated remainder). [CotangentModule](../ProjectAinos/SmoothAlgebra/CotangentModule.lean) · [Cotangent](../ProjectAinos/SpecialRelativity/Cotangent.lean)

@@ -48,6 +48,8 @@ public import ProjectAinos.Electrodynamics.PlaneWave
 public import ProjectAinos.Electrodynamics.PolynomialBridge
 public import ProjectAinos.Electrodynamics.PolynomialExamples
 public import ProjectAinos.Electrodynamics.PolynomialRadial
+public import ProjectAinos.Electrodynamics.RetardedPotential
+public import ProjectAinos.Electrodynamics.RetardedSpectrum
 public import ProjectAinos.Electrodynamics.SourceCovariance
 public import ProjectAinos.Electrodynamics.SourcedAction
 public import ProjectAinos.Electrodynamics.SourcedActionExamples
@@ -298,6 +300,7 @@ public import ProjectAinos.QuantumMechanics.Qubit
 public import ProjectAinos.SmoothAlgebra.Basic
 public import ProjectAinos.SmoothAlgebra.Category
 public import ProjectAinos.SmoothAlgebra.Congruence
+public import ProjectAinos.SmoothAlgebra.CotangentModule
 public import ProjectAinos.SmoothAlgebra.Derivation
 public import ProjectAinos.SmoothAlgebra.Differential
 public import ProjectAinos.SmoothAlgebra.DividedDifference
@@ -595,8 +598,10 @@ public import ProjectAinos.SmoothGeometry.Tensor.Regularity
 public import ProjectAinos.SmoothGeometry.Tensor.Tensoriality
 public import ProjectAinos.SmoothGeometry.Tensor.TrilinearDerivative
 public import ProjectAinos.SmoothGeometry.Tensor.TrilinearTensoriality
+public import ProjectAinos.SmoothGeometry.Wave.RetardedIntegral
 public import ProjectAinos.SpecialRelativity.Boost
 public import ProjectAinos.SpecialRelativity.Causality
+public import ProjectAinos.SpecialRelativity.Cotangent
 public import ProjectAinos.SpecialRelativity.CrossSection
 public import ProjectAinos.SpecialRelativity.Decay
 public import ProjectAinos.SpecialRelativity.Einbein

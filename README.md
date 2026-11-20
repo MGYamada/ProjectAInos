@@ -166,6 +166,9 @@ number of particles through a hypersurface is invariant, and for a system of
 particles the orbital moment is conserved and the centre of energy moves
 uniformly.
 [Guide](docs/special-relativity.md#measures-and-charges)
+The universal C∞ cotangent module, with the full chain rule and its universal property, matches
+the covectors of space-time, which completes the special-relativity ledger.
+[Guide](docs/special-relativity.md#four-vectors-and-the-universal-cotangent-module-6)
 
 For electrodynamics, a charge in static potentials has the Hamiltonian
 `√(m² + Σ (pᵢ − e aᵢ)²) + e φ`; its equations are the equation of the Lorentz
@@ -210,6 +213,9 @@ current has a unique static magnetic field with a magnetic moment of `e/2m` time
 momentum, the wave equation and the Coulomb field are resolved in Fourier components, and the field
 in a periodic box is a sum of modes.
 [Guide](docs/electrodynamics.md#multipoles-magnetostatics-and-the-fourier-resolution-4044-49-51-52)
+The retarded potentials of a conserved current are given by an explicit integral that solves
+Maxwell's equations with causal support, and their time transform solves the Helmholtz equation.
+[Guide](docs/electrodynamics.md#the-retarded-potentials-62-64)
 
 For general relativity, an observer with a timelike velocity measures
 distances with a spatial form whose square root is half the proper time of a

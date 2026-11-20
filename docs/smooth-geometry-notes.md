@@ -412,3 +412,11 @@ bundle.
 **Interface decision.** `Potential/Multipole.lean`, `Potential/KernelFourier.lean` and `Fourier/WaveSolution.lean` import only Mathlib and the potential layer. Names in the shared `Potential` namespace carry prefixes where helpers could clash.
 
 **Proof status.** Proved and built. [Multipole](../ProjectAinos/SmoothGeometry/Potential/Multipole.lean) · [KernelFourier](../ProjectAinos/SmoothGeometry/Potential/KernelFourier.lean) · [WaveSolution](../ProjectAinos/SmoothGeometry/Fourier/WaveSolution.lean)
+
+## G11. The retarded integral is a shared layer
+
+**Observation.** The retarded integral, its derivatives and its causal support concern functions on `ℝ × ℝ³` and need no field theory; the key identity is proved with a smooth cut-off and a peak function, the same pattern as the point-source pairing of the Newton kernel (G09).
+
+**Interface decision.** `SmoothGeometry/Wave/RetardedIntegral.lean` imports only Mathlib, with values in any normed space, and `timeSpaceEquiv` transports it to `MinkowskiModel 3`.
+
+**Proof status.** Proved and built. [RetardedIntegral](../ProjectAinos/SmoothGeometry/Wave/RetardedIntegral.lean)

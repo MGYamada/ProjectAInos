@@ -493,6 +493,26 @@ preserves the measure `ν` of the final states and the weight `W`
 momentum is not constructed. The [notes](special-relativity-notes.md)
 SR15–SR17 record the decisions.
 
+## Four-vectors and the universal cotangent module (§6)
+
+**The cotangent module (SR-F2).** For a C∞-ring `A`, `CotangentModule A` is the free `A`-module on
+the symbols `da` modulo the full chain rule `dΦ_f(a) = Σ Φ_{∂ᵢf}(a) daᵢ` (`d_op`); additivity, the
+Leibniz rule and constants are its instances (`d_add`, `d_mul`, `d_algebraMap`). Every smooth
+derivation factors uniquely through it (`liftEquiv`, an `A`-linear equivalence), and it is
+functorial along smooth ring homomorphisms (`map`, `map_d`). For a free ring and for `C∞(ℝⁿ)` the
+`dxᵢ` form a basis (`basisFree`, `coordinateBasis`), with `d f = Σ ∂ᵢf dxᵢ` (`d_eq_sum`).
+Evaluation at a point is `fderiv` (`evalAt_d`), onto the dual with the kernel `𝔪ₓΩ`
+(`evalAt_surjective`, `ker_evalAt`), and pullback becomes the transpose of the derivative
+(`evalAt_map_pullback`).
+
+**Covectors of space-time.** Lowering an index with `η` identifies vector fields with elements of
+`Ω` whose value at each event is `flat` (`cotangent_flat`, `musical_eq_iff`), and `sharp` inverts
+it (`cotangent_sharp`). Lorentz pullback is the dual action (`cotangent_map_lorentz`), and metric
+duality commutes with it as an identity in `Ω` (`map_lorentzFunctionPullback_musical`).
+
+**Scope.** The comparison with the cotangent bundle of a general manifold through its structure
+sheaf, and the germ version, are not stated.
+
 ## Verification
 
 The required **Lean build** CI job builds with warnings as errors, checks root
