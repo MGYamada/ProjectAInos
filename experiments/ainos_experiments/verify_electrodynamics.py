@@ -730,6 +730,123 @@ def verify_geometrical_optics():
         raise AssertionError("an inversion should have a varying ratio")
 
 
+def verify_diffraction_scattering_and_gravitational_radiation():
+    """Diffraction (§§59-61), scattering (§§78-80), focusing (§119), the charges at infinity
+    (§105) and the quadrupole formula (§110)."""
+    x, y, z, k = sp.symbols("x y z k", real=True)
+    rr = sp.sqrt(x**2 + y**2 + z**2)
+    green = sp.exp(sp.I * k * rr) / (4 * sp.pi * rr)
+    kernel = z * sp.exp(sp.I * k * rr) * (1 - sp.I * k * rr) / (2 * sp.pi * rr**3)
+    check_zero("Rayleigh-Sommerfeld kernel", sp.simplify(-2 * sp.diff(green, z) - kernel))
+    lap = sum(sp.diff(kernel, v, 2) for v in (x, y, z))
+    check_zero("Helmholtz equation of the kernel", sp.simplify(lap + k**2 * kernel))
+    r = sp.symbols("r", positive=True)
+    check_zero("Poisson kernel mass", sp.integrate(r * (r**2 + 1)**sp.Rational(-3, 2),
+                                                   (r, 0, sp.oo)) - 1)
+    s, zp, big_d = sp.symbols("s z_p D", positive=True)
+    radius = sp.sqrt(s**2 + zp**2)
+    primitive = -zp * sp.exp(sp.I * k * radius) / (2 * sp.pi * radius)
+    check_zero("primitive of the kernel on the plane",
+               sp.simplify(sp.diff(primitive, s)
+                           - s * zp * sp.exp(sp.I * k * radius) * (1 - sp.I * k * radius)
+                           / (2 * sp.pi * radius**3)))
+    nz = sp.symbols("n_z", positive=True)
+    point = big_d * sp.exp(-sp.I * k * big_d) * (big_d * nz) * sp.exp(sp.I * k * big_d) * (
+        1 - sp.I * k * big_d) / (2 * sp.pi * big_d**3)
+    check_zero("Fraunhofer field of a point aperture",
+               sp.simplify(point - nz * (1 - sp.I * k * big_d) / (2 * sp.pi * big_d)))
+    # §78: Thomson's cross section and its angular distribution.
+    e, m, e0, w, t = sp.symbols("e m E_0 omega t", positive=True)
+    accel = e / m * e0 * sp.cos(w * t)
+    mean = lambda f: w / (2 * sp.pi) * sp.integrate(f, (t, 0, 2 * sp.pi / w))
+    power = mean(sp.Rational(2, 3) * e**2 / (4 * sp.pi) * accel**2)
+    sigma_t = sp.Rational(8, 3) * sp.pi * (e**2 / (4 * sp.pi * m))**2
+    check_zero("Thomson cross section", sp.simplify(power / (e0**2 / 2) - sigma_t))
+    th, ph = sp.symbols("theta phi", real=True)
+    check_zero("angular distribution of Thomson scattering",
+               sp.integrate(sp.sin(th)**2 * sp.sin(th), (th, 0, sp.pi), (ph, 0, 2 * sp.pi))
+               - sp.Rational(8, 3) * sp.pi)
+    # §79: the steady response of the damped bound charge.
+    g, w0 = sp.symbols("gamma omega_0", positive=True)
+    amp_c, amp_s = sp.symbols("A B", real=True)
+    xs = amp_c * sp.cos(w * t) + amp_s * sp.sin(w * t)
+    eq = sp.expand(sp.diff(xs, t, 2) + 2 * g * sp.diff(xs, t) + w0**2 * xs - sp.cos(w * t))
+    sol = sp.solve([eq.coeff(sp.cos(w * t)), eq.coeff(sp.sin(w * t))], [amp_c, amp_s])
+    check_zero("bound-charge response", sp.simplify(sol[amp_c]**2 + sol[amp_s]**2
+                                                    - 1 / ((w0**2 - w**2)**2 + 4 * g**2 * w**2)))
+    # §§75, 76: the runaway solution, the damping of the reduced oscillator, the work of the
+    # damping force, and the Lorentz-Dirac force along u = (cosh f, sinh f, 0, 0).
+    kk = sp.Rational(2, 3) * e**2 / (4 * sp.pi)
+    vel_run = kk / m * (sp.exp(m / kk * t) - 1)
+    check_zero("runaway solution", sp.simplify(m * sp.diff(vel_run, t) - kk * sp.diff(vel_run, t, 2)))
+    check_zero("damping of the reduced oscillator",
+               sp.simplify(kk / m * w0**2 / 2 - e**2 * w0**2 / (12 * sp.pi * m)))
+    vt = t**3 - 2 * t + sp.sin(t)
+    lhs = sp.integrate(kk * sp.diff(vt, t, 2) * vt, (t, 0, 1))
+    rhs = (-kk * sp.integrate(sp.diff(vt, t)**2, (t, 0, 1))
+           + kk * (sp.diff(vt, t) * vt).subs(t, 1) - kk * (sp.diff(vt, t) * vt).subs(t, 0))
+    check_zero("work of the damping force", sp.simplify(lhs - rhs))
+    tau = sp.symbols("tau", real=True)
+    rap = sp.Function("f")(tau)
+    four_u = sp.Matrix([sp.cosh(rap), sp.sinh(rap), 0, 0])
+    eta = sp.diag(-1, 1, 1, 1)
+    acc2 = four_u.diff(tau, 2)
+    ld = kk * (acc2 + (acc2.T * eta * four_u)[0] * four_u)
+    check_zero("Lorentz-Dirac force is orthogonal", sp.simplify((ld.T * eta * four_u)[0]))
+    check_zero("Lorentz-Dirac force of a hyperbola", sp.simplify(ld.subs(rap, 3 * tau)))
+    # §119: Raychaudhuri for a diagonal Bianchi I metric, theta = sum H, shear = sum H^2 - theta^2/3.
+    tt = sp.symbols("t", real=True)
+    scales = [sp.Function(f"a{i}")(tt) for i in range(3)]
+    hub = [sp.diff(a, tt) / a for a in scales]
+    theta = sum(hub)
+    shear = sum(hh**2 for hh in hub) - theta**2 / 3
+    r00 = -sum(sp.diff(a, tt, 2) / a for a in scales)
+    check_zero("Raychaudhuri for Bianchi I", sp.simplify(sp.diff(theta, tt) + theta**2 / 3
+                                                         + shear + r00))
+    gam = sp.Matrix([[2, 1, 0], [1, 2, 1], [0, 1, 3]])
+    sym = sp.Matrix([[1, -2, 3], [-2, 0, 1], [3, 1, -1]])
+    kap = gam.inv() * sym
+    if (kap * kap).trace() - kap.trace()**2 / 3 < 0:
+        raise AssertionError("trace inequality failed")
+    # §105: the isotropic far metric diag(-(1 - 2M/r), (1 + 2M/r) δ) has
+    # lambda^{00ab} = -(1 + 2M/r)^2 δ_ab, h^{00a} = 4M(1 + 2M/r) x_a/r^3 and the surface charge
+    # (1/2) ∮ h^{00a} n_a dA = 8π M (1 + 2M/R).
+    mass, rad = sp.symbols("M R", positive=True)
+    cs = (x, y, z)
+    lam = -(1 + 2 * mass / rr)**2
+    h00 = [sp.diff(lam, v) for v in cs]
+    check_zero("superpotential of the isotropic metric",
+               (sp.Matrix(h00) - 4 * mass * (1 + 2 * mass / rr) * sp.Matrix(cs) / rr**3)
+               .applyfunc(sp.simplify))
+    flux_density = sp.simplify(sum(h00[i] * cs[i] / rr for i in range(3))).subs(
+        {x: rad, y: 0, z: 0})
+    check_zero("charge of the isotropic metric",
+               sp.simplify(flux_density * 4 * sp.pi * rad**2 / 2
+                           - 8 * sp.pi * mass * (1 + 2 * mass / rad)))
+    # §110: the sphere integral of the transverse-traceless square and the binary.
+    n = sp.Matrix(sp.symbols("n1:4", real=True))
+    smat = sp.Matrix(3, 3, lambda i, j: sp.Symbol(f"S{min(i, j)}{max(i, j)}", real=True))
+    proj = sp.eye(3) - n * n.T
+    tt_part = proj * smat * proj - proj * (proj * smat).trace() / 2
+    tt_sq = sum(tt_part[i, j]**2 for i in range(3) for j in range(3))
+    quad = 3 * smat - smat.trace() * sp.eye(3)
+    check_zero("sphere integral of the TT square",
+               sp.simplify(sphere_integral(tt_sq, n, th, ph)
+                           - sp.Rational(8, 45) * sp.pi * sum(quad[i, j]**2 for i in range(3)
+                                                              for j in range(3))))
+    mu, a_orb, om = sp.symbols("mu a Omega", positive=True)
+    orbit = sp.Matrix([a_orb * sp.cos(om * tt), a_orb * sp.sin(om * tt), 0])
+    moment = mu * orbit * orbit.T
+    third = moment.diff(tt, 3)
+    dq3 = 3 * third - third.trace() * sp.eye(3)
+    check_zero("binary quadrupole", sp.simplify(sum(dq3[i, j]**2 for i in range(3)
+                                                    for j in range(3))
+                                                - 288 * mu**2 * a_orb**4 * om**6))
+    kap_g = sp.symbols("kappa", positive=True)
+    check_zero("binary power", kap_g / (360 * sp.pi) * 288 - sp.Rational(32, 5)
+               * kap_g / (8 * sp.pi))
+
+
 def verify():
     t, x, y, z = coordinates = sp.symbols("t x y z", real=True)
     ex, ey, ez, bx, by, bz = sp.symbols("E_x E_y E_z B_x B_y B_z", real=True)
@@ -790,6 +907,7 @@ def verify():
     verify_radiation()
     verify_darwin_point_charge()
     verify_geometrical_optics()
+    verify_diffraction_scattering_and_gravitational_radiation()
     print("Electrodynamics exact checks passed: signs, invariants, covariance, gauge, "
           "Bianchi, degree 0/1 radial reconstruction, hyperbolic worldline, the virial "
           "improvement stress, the Coulomb brackets and rosette, Larmor's identity, the Newton kernel "
@@ -801,7 +919,9 @@ def verify():
           "sphere, Liénard's integral and the synchrotron reduction, the near-zone fields and flux, "
           "the multipole powers and their instances, the Darwin potentials, and the field of a slow "
           "point charge to second order, and geometrical optics: the eikonal expansion, rays, intensity, "
-          "the angular eikonal, the Riccati law, focal points, imaging and the error energy.")
+          "the angular eikonal, the Riccati law, focal points, imaging and the error energy, and the "
+          "diffraction kernel, Thomson and bound-charge scattering, radiation damping, Raychaudhuri, the "
+          "charge of the isotropic metric and the quadrupole formula.")
 
 
 def main():

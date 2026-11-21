@@ -740,6 +740,46 @@ ratio `n/n′` (`IsAbsoluteInstrument.isSimilarity`).
 families and given exact solutions. Not stated: a lower bound for the energy of a single real wave,
 and instruments limited to a cone of directions.
 
+## Diffraction (§§59–61)
+
+**The aperture field (§59).** For continuous aperture data `u₀` of compact support in the plane,
+the Rayleigh–Sommerfeld field `∫ u₀(y)(−2∂_z G_k)(x − y, z) dy` (`Diffraction.apertureField`) is
+smooth on `z > 0` (`contDiffOn_apertureField`), solves the Helmholtz equation
+(`helmholtz_apertureField`), takes the boundary values `u₀` (`tendsto_apertureField_boundary`) and
+satisfies the Sommerfeld condition with explicit rates (`apertureField_isRadiating`).
+
+**Fresnel and Fraunhofer (§§60, 61).** The Fresnel field approximates the aperture field with the
+remainder `(k/2πz)(kρ⁴/8z³ + ρ²/z² + 1/(kz))‖u₀‖₁` (`norm_apertureField_sub_fresnelField_le`). In
+a direction `n` with `n_z > 0`, `D e^{−ikD} u(Dn)` tends to the Fourier transform of the aperture
+(`tendsto_fraunhofer`) at an explicit rate (`norm_fraunhofer_sub_le`). Babinet's principle holds by
+linearity (`babinet`) and, for the plane wave, as an improper limit (`tendsto_babinet_planeWave`).
+
+**Scope.** The scalar aperture model; the relation to the Maxwell screen problem and the uniqueness
+of the half-space problem are the remainder of §59.
+
+## Radiation damping and scattering (§§75, 76, 78–80)
+
+**Radiation damping (§§75, 76).** The `κ³` term of the field of a slow source is the uniform
+`(2/3)(1/4π) d⃛` (`RadiationReaction.dampingField_expansion`); the self-force of a rigid charge on
+a prescribed slow path is `−δm v̇ + (2/3)(e²/4π) v̈ + O(κ⁴)` (`selfForce_expansion`), with
+`tr δm = 4U` (`trace_selfMass`). The damping force does the work `−(2/3)(e²/4π)∫|v̇|²` plus the
+Schott term (`work_dampingForce_eq`), the free equation has runaways (`runaway`), and the reduced
+oscillator is damped (`reducedOscillator`). The Lorentz–Dirac force is orthogonal to `u`
+(`lorentzDirac_orthogonal`), equals the Landau–Lifshitz force on the undamped motion
+(`lorentzDirac_eq_landauLifshitz`), and balances the radiated four-momentum with the Schott term
+(`integral_lorentzDirac_eq`).
+
+**Scattering (§§78–80).** A charge in a wave moves for all times (`Thomson.exists_trajectory`), with
+a first-order response up to `O(a²)` (`norm_trajectory_sub_firstOrder_le`), and Thomson's cross
+section is `(8π/3)(e²/4πm)²` (`crossSection_eq`). The bound charge gives
+`σ_T ω⁴/((ω₀² − ω²)² + 4γ²ω²)` (`LowFrequency.crossSection_oscillator`), Rayleigh's law
+(`abs_crossSection_sub_le`) and the Thomson limit (`HighFrequency.crossSection_tendsto_thomson`);
+several charges scatter incoherently at short wavelengths (`tendsto_coherentFactor`).
+
+**Scope.** Prescribed motion for the self-force; nonrelativistic response models for scattering.
+The self-consistent damped dynamics and the selection of physical solutions are the remainders of
+§§75 and 76.
+
 ## Radiation (§§63, 65–67, 71–74, 77)
 
 **The Liénard–Wiechert potentials (§63).** A `SubluminalWorldline` is a smooth path with
@@ -813,6 +853,9 @@ All names below are under `ProjectAinos`, except imported `YM` names.
 | --- | --- | --- |
 | The retarded potentials | `Wave.retardedIntegral`, `integral_wave_div_norm`, `wave_retardedIntegral`, `retardedIntegral_eq_zero_of_support`, `retardedPotential`, `maxwell_retardedPotential`, `eq_retardedScalar` | [RetardedIntegral](../ProjectAinos/SmoothGeometry/Wave/RetardedIntegral.lean), [RetardedPotential](../ProjectAinos/Electrodynamics/RetardedPotential.lean) |
 | The spectral resolution of the retarded potentials | `fourier_retardedPotential`, `helmholtz_fourier_retardedPotential` | [RetardedSpectrum](../ProjectAinos/Electrodynamics/RetardedSpectrum.lean) |
+| Diffraction | `Diffraction.apertureField`, `contDiffOn_apertureField`, `helmholtz_apertureField`, `tendsto_apertureField_boundary`, `apertureField_isRadiating`, `norm_apertureField_sub_fresnelField_le`, `tendsto_fraunhofer`, `norm_fraunhofer_sub_le`, `babinet` | [Aperture](../ProjectAinos/Electrodynamics/Diffraction/Aperture.lean), [Fresnel](../ProjectAinos/Electrodynamics/Diffraction/Fresnel.lean), [Fraunhofer](../ProjectAinos/Electrodynamics/Diffraction/Fraunhofer.lean) |
+| Radiation damping | `RadiationReaction.dampingField_expansion`, `selfForce_expansion`, `trace_selfMass`, `work_dampingForce_eq`, `runaway`, `reducedOscillator`, `lorentzDirac_orthogonal`, `lorentzDirac_eq_landauLifshitz`, `integral_lorentzDirac_eq` | [RadiationReaction](../ProjectAinos/Electrodynamics/RadiationReaction.lean) |
+| Scattering | `Scattering.Thomson.exists_trajectory`, `norm_trajectory_sub_firstOrder_le`, `crossSection_eq`, `differentialCrossSection_eq`, `LowFrequency.crossSection_oscillator`, `abs_crossSection_sub_le`, `orientationAverage`, `HighFrequency.crossSection_tendsto_thomson`, `tendsto_coherentFactor` | [Thomson](../ProjectAinos/Electrodynamics/Scattering/Thomson.lean), [LowFrequency](../ProjectAinos/Electrodynamics/Scattering/LowFrequency.lean), [HighFrequency](../ProjectAinos/Electrodynamics/Scattering/HighFrequency.lean) |
 | Geometrical optics | `Wave.waveOperator_highFrequencyWave`, `Optics.Eikonal.box_highFrequencyPotential`, `leading_eq_zero_iff`, `lightlike_of_isRay`, `maxwell_highFrequencyPotential_iff_of_eikonal`, `RayOptics.isRay_of_isHamiltonJacobi`, `RayOptics.fermat` | [HighFrequency](../ProjectAinos/SmoothGeometry/Wave/HighFrequency.lean), [Eikonal](../ProjectAinos/Electrodynamics/Optics/Eikonal.lean), [RayOptics](../ProjectAinos/Electrodynamics/Optics/RayOptics.lean) |
 | Intensity | `Eikonal.subleading_eq_zero_iff_transport`, `divergence_intensityCurrent_eq_zero`, `intensity_mul_det_eq` | [Eikonal](../ProjectAinos/Electrodynamics/Optics/Eikonal.lean) |
 | The angular eikonal | `AngularEikonal.exists_angularEikonal`, `fderiv_angularEikonal`, `rayMap_symplectic`, `exists_rayMap_symplectic`, `Free.rayMap_isPoissonHom` | [AngularEikonal](../ProjectAinos/Electrodynamics/Optics/AngularEikonal.lean) |

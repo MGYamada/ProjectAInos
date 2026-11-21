@@ -225,6 +225,11 @@ High-frequency fields satisfy the eikonal and transport equations at their leadi
 null rays, conserved intensity and Fermat's principle; wave fronts focus by a Riccati law, ideal
 instruments are similarities, and the error of geometrical optics is bounded by the wave energy.
 [Guide](docs/electrodynamics.md#geometrical-optics-5358)
+Light diffracted by an aperture has the Fresnel and Fraunhofer forms with explicit remainders, a
+radiating charge feels a damping force, and free and bound charges scatter waves with the Thomson
+and Rayleigh cross sections.
+[Guide](docs/electrodynamics.md#diffraction-5961) ·
+[Guide](docs/electrodynamics.md#radiation-damping-and-scattering-75-76-7880)
 
 For general relativity, an observer with a timelike velocity measures
 distances with a spatial form whose square root is half the proper time of a
@@ -293,6 +298,10 @@ the derivative of an actual family of metrics with two polarizations for every n
 and exact plane waves solve `L'' + β'²L = 0`, with a curved strong wave and a second-order residual
 of a first-order solution.
 [Guide](docs/general-relativity.md#the-newtonian-limit-and-gravitational-waves-99-107-109)
+The energy and momentum of an isolated system are surface integrals at infinity, a localized source
+radiates gravitational waves by the quadrupole formula, short waves travel along null geodesics of a
+curved background, and the time lines of a synchronous system focus under the energy condition.
+[Guide](docs/general-relativity.md#charges-at-infinity-gravitational-radiation-and-focusing-105-108-110-119)
 
 Topic 6 follows the provisional Boltzmannian typicality plan in
 [issue #55](https://github.com/MGYamada/ProjectAinos/issues/55). Its guiding references are
