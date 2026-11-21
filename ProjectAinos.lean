@@ -660,11 +660,14 @@ public import ProjectAinos.SmoothGeometry.Wave.HighFrequency
 public import ProjectAinos.SmoothGeometry.Wave.RetardedIntegral
 public import ProjectAinos.SmoothGeometry.Wave.SlowSource
 public import ProjectAinos.SmoothGeometry.Wave.TransverseTraceless
+public import ProjectAinos.SpecialFunctions.Airy
+public import ProjectAinos.SpecialFunctions.AiryIntegral
 public import ProjectAinos.SpecialFunctions.Bessel
 public import ProjectAinos.SpecialFunctions.BesselAsymptotic
 public import ProjectAinos.SpecialFunctions.BesselGenerating
 public import ProjectAinos.SpecialFunctions.BesselIntegral
 public import ProjectAinos.SpecialFunctions.BesselZeros
+public import ProjectAinos.SpecialFunctions.CubicPhase
 public import ProjectAinos.SpecialFunctions.Fresnel
 public import ProjectAinos.SpecialFunctions.Hankel
 public import ProjectAinos.SpecialFunctions.HarmonicExtension
