@@ -227,6 +227,8 @@ charge radiates with Liénard's power, concentrated in a narrow cone.
 High-frequency fields satisfy the eikonal and transport equations at their leading orders, with
 null rays, conserved intensity and Fermat's principle; wave fronts focus by a Riccati law, ideal
 instruments are similarities, and the error of geometrical optics is bounded by the wave energy.
+For a single real wave with a nonstationary spatial phase on the amplitude supports, ε² times its
+energy tends to half the leading intensity of the quadrature pair.
 [Guide](docs/electrodynamics.md#geometrical-optics-5358)
 The straight-edge Fresnel intensity equals one quarter on the shadow boundary.
 Light diffracted by an aperture has the Fresnel and Fraunhofer forms with explicit remainders, a

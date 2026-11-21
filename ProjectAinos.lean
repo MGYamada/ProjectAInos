@@ -60,6 +60,7 @@ public import ProjectAinos.Electrodynamics.Optics.Error
 public import ProjectAinos.Electrodynamics.Optics.Imaging
 public import ProjectAinos.Electrodynamics.Optics.NarrowBundle
 public import ProjectAinos.Electrodynamics.Optics.RayOptics
+public import ProjectAinos.Electrodynamics.Optics.SingleWave
 public import ProjectAinos.Electrodynamics.ParticleAction
 public import ProjectAinos.Electrodynamics.PlaneWave
 public import ProjectAinos.Electrodynamics.PolynomialBridge
@@ -681,6 +682,7 @@ public import ProjectAinos.SpecialFunctions.Macdonald
 public import ProjectAinos.SpecialFunctions.ModifiedBessel
 public import ProjectAinos.SpecialFunctions.NewtonHarmonics
 public import ProjectAinos.SpecialFunctions.NonstationaryPhase
+public import ProjectAinos.SpecialFunctions.OscillatoryAverage
 public import ProjectAinos.SpecialFunctions.QuadraticPhase
 public import ProjectAinos.SpecialFunctions.Schlaefli
 public import ProjectAinos.SpecialFunctions.SchlaefliArc

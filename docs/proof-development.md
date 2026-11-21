@@ -1060,6 +1060,8 @@ so focal points are the zeros of `det(1 + lH₀)`, where the amplitude diverges.
 conjugate points have equal optical lengths, stigmatic bundles satisfy the sine condition, and an
 absolute instrument is a similarity. The energy inequality bounds the error of the approximation,
 with relative size `O(ε)`. The ledger rows ED §§53–58 are *proved* in their scopes (ED 53 of 66).
+For ED §58, a single real wave has ε²E → L/2 when its spatial phase is nonstationary on the
+amplitude supports. The transported bump realizes the positive lower bound L/(4ε²).
 [Guide](electrodynamics.md#geometrical-optics-5358)
 
 The Rayleigh–Sommerfeld field of an aperture solves the Helmholtz equation with its boundary values

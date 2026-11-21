@@ -750,8 +750,12 @@ ratio `n/n′` (`IsAbsoluteInstrument.isSimilarity`).
 `O(ε)` (`energy_sub_add_energy_sub_le`). The estimate is lost at focal points (§56).
 
 **Scope.** Flat vacuum for the wave statements, media through the ray Hamiltonian, given ray
-families and given exact solutions. Not stated: a lower bound for the energy of a single real wave,
-and instruments limited to a cone of directions.
+families and given exact solutions. Instruments limited to a cone of directions remain open.
+
+For smooth amplitudes supported in a fixed spatial ball, `tendsto_sq_mul_energy_single`
+gives ε²E → L/2 at each time where the spatial phase gradient stays nonzero on the closed
+amplitude supports. For L > 0 the single wave has energy at least L/(4ε²) at sufficiently
+short wavelength, as realized by a transported bump. [Single-wave energy](../ProjectAinos/Electrodynamics/Optics/SingleWave.lean)
 
 ## Radiation in collisions (§§68–70)
 
