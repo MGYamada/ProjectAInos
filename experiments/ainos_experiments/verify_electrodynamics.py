@@ -567,6 +567,169 @@ def verify_darwin_point_charge():
         raise AssertionError("the Darwin comparison did not see the third order")
 
 
+def verify_geometrical_optics():
+    """The eikonal expansion, the intensity of a spherical wave, the Riccati law of the curvature
+    and the amplitude at a focal point (§§53–58)."""
+    t, x, y, z, eps = sp.symbols("t x y z epsilon", real=True)
+    coords = (t, x, y, z)
+    a, b, psi = [sp.Function(name)(*coords) for name in ("a", "b", "psi")]
+
+    def wave(f):
+        return sp.diff(f, t, 2) - sum(sp.diff(f, v, 2) for v in (x, y, z))
+
+    def pair(f, g):
+        return sp.diff(f, t) * sp.diff(g, t) - sum(sp.diff(f, v) * sp.diff(g, v) for v in (x, y, z))
+
+    c, s = sp.cos(psi / eps), sp.sin(psi / eps)
+    check_zero("high-frequency expansion of a cos", wave(a * c)
+               - (-(pair(psi, psi) * a * c) / eps**2
+                  - (2 * pair(a, psi) + a * wave(psi)) * s / eps + wave(a) * c))
+    check_zero("high-frequency expansion of b sin", wave(b * s)
+               - (-(pair(psi, psi) * b * s) / eps**2
+                  + (2 * pair(b, psi) + b * wave(psi)) * c / eps + wave(b) * s))
+    # §§53, 58: the outgoing spherical phase t - r is null with box (t - r) = 2/r, the shell
+    # g(t - r)/r is exact and transported; the quarter shift exchanges the pair of waves, whose
+    # gradient energies add without oscillating terms; a localized plane wave has box a = -Δ⊥ f.
+    g = sp.Function("g")
+    rr = sp.sqrt(x**2 + y**2 + z**2)
+    phase = t - rr
+    shell = g(t - rr) / rr
+    check_zero("null spherical phase", sp.simplify(pair(phase, phase)))
+    check_zero("box of the spherical phase", sp.simplify(wave(phase) - 2 / rr))
+    check_zero("exact spherical shell", sp.simplify(wave(shell)))
+    check_zero("transport of the spherical shell",
+               sp.simplify(2 * pair(shell, phase) + shell * wave(phase)))
+    check_zero("quarter shift of the phase",
+               sp.simplify(a * sp.cos((psi + eps * sp.pi / 2) / eps)
+                           + b * sp.sin((psi + eps * sp.pi / 2) / eps) - (b * c - a * s)))
+    w1 = a * c + b * s
+    w2 = b * c - a * s
+    for v in coords:
+        lhs = sp.diff(w1, v)**2 + sp.diff(w2, v)**2
+        rhs = ((a**2 + b**2) * sp.diff(psi, v)**2 / eps**2
+               + 2 * (b * sp.diff(a, v) - a * sp.diff(b, v)) * sp.diff(psi, v) / eps
+               + sp.diff(a, v)**2 + sp.diff(b, v)**2)
+        check_zero(f"pair energy along {v}", sp.simplify(sp.expand(lhs - rhs)))
+    f3 = sp.Function("f")
+    plane = f3(x - t, y, z)
+    check_zero("transport of a plane wave", sp.simplify(sp.diff(plane, t) + sp.diff(plane, x)))
+    check_zero("diffraction source of a plane wave",
+               sp.simplify(wave(plane) + sp.diff(plane, y, 2) + sp.diff(plane, z, 2)))
+    # §53: the complete integral of the linear-gradient medium n^2 = n0^2 + 2 g z solves
+    # S_sigma + (|grad S|^2 - n^2)/2 = 0, with rays q = beta + alpha sigma + g sigma^2 e3/2.
+    al = sp.Matrix(sp.symbols("alpha1:4", real=True))
+    sg, n0s, gg = sp.symbols("sigma n0sq g", real=True)
+    qv = sp.Matrix([x, y, z])
+    action = (al.dot(qv) + gg * sg * z - (al.dot(al) - n0s) * sg / 2 - gg * al[2] * sg**2 / 2
+              - gg**2 * sg**3 / 6)
+    grad_s = sp.Matrix([sp.diff(action, v) for v in (x, y, z)])
+    check_zero("Hamilton-Jacobi equation of the linear-gradient medium",
+               sp.expand(sp.diff(action, sg) + (grad_s.dot(grad_s) - n0s - 2 * gg * z) / 2))
+    # §54: a spherical wave psi = |x| (static eikonal |grad psi| = 1) has intensity 1/|x|^2,
+    # and transport 2 grad a . grad psi + a Laplacian psi = 0 holds for a = 1/|x|.
+    r = sp.sqrt(x**2 + y**2 + z**2)
+    grad = lambda f: sp.Matrix([sp.diff(f, v) for v in (x, y, z)])
+    lap = lambda f: sum(sp.diff(f, v, 2) for v in (x, y, z))
+    check_zero("static eikonal of a spherical wave", grad(r).dot(grad(r)) - 1)
+    flux = grad(r) / r**2
+    check_zero("intensity of a spherical wave", sum(sp.diff(flux[i], v)
+                                                    for i, v in enumerate((x, y, z))))
+    check_zero("transport of a spherical wave", 2 * grad(1 / r).dot(grad(r)) + lap(r) / r)
+    # §56: the curvature of the front obeys H' = -H^2 with H(l) = H0 (1 + l H0)^(-1), and the
+    # Hessian of |x| along the ray x0 + l n is that law with H0 the Hessian at x0.
+    l = sp.symbols("l", positive=True)
+    h0 = sp.Matrix(3, 3, lambda i, j: sp.Symbol(f"h{min(i, j)}{max(i, j)}", real=True))
+    hl = h0 * (sp.eye(3) + l * h0).inv()
+    check_zero("Riccati law of the curvature", sp.simplify(hl.diff(l) + hl * hl))
+    hess = sp.Matrix(3, 3, lambda i, j: sp.diff(r, (x, y, z)[i], (x, y, z)[j]))
+    x0 = sp.Matrix([sp.Rational(3, 13), sp.Rational(4, 13), sp.Rational(12, 13)])
+    ray = {x: x0[0] * (1 + l), y: x0[1] * (1 + l), z: x0[2] * (1 + l)}
+    h_at = hess.subs({x: x0[0], y: x0[1], z: x0[2]})
+    check_zero("Hessian of the eikonal along a ray",
+               (hess.subs(ray) - h_at * (sp.eye(3) + l * h_at).inv()).applyfunc(sp.simplify))
+    # The amplitude a(l) = det(1 + l H0)^(-1/2) solves 2 a' + tr(H) a = 0, and for a converging
+    # spherical front (H0 = -(1/R) on the transverse plane) it diverges at l = R.
+    rad = sp.symbols("R", positive=True)
+    h_conv = sp.diag(-1 / rad, -1 / rad, 0)
+    det = (sp.eye(3) + l * h_conv).det()
+    amp = det**sp.Rational(-1, 2)
+    h_l = h_conv * (sp.eye(3) + l * h_conv).inv()
+    check_zero("transport of the amplitude along a ray", sp.simplify(2 * amp.diff(l)
+                                                                      + h_l.trace() * amp))
+    check_zero("amplitude of a converging front", sp.simplify(amp**2 * (1 - l / rad)**2 - 1))
+    if sp.limit(1 / (1 - l / rad)**2, l, rad, dir="-") != sp.oo:
+        raise AssertionError("the amplitude should diverge at the focal point")
+
+    # §56: Jacobi's formula d/dl log det(1 + l H0) = tr(H0 (1 + l H0)^(-1)), and the cylinder
+    # psi = -|P(x - c)| (P the projection across the axis e3) has det(1 + l H0) = 1 - l/rho.
+    hq = sp.Matrix([[sp.Rational(1, 2), sp.Rational(1, 3), 0], [sp.Rational(1, 3), -1, 2],
+                    [0, 2, sp.Rational(1, 5)]])
+    check_zero("Jacobi's formula", sp.simplify(sp.diff(sp.log((sp.eye(3) + l * hq).det()), l)
+                                               - (hq * (sp.eye(3) + l * hq).inv()).trace()))
+    cyl = -sp.sqrt(x**2 + y**2)
+    hess_c = sp.Matrix(3, 3, lambda i, j: sp.diff(cyl, (x, y, z)[i], (x, y, z)[j]))
+    pt = {x: sp.Rational(3, 5), y: sp.Rational(4, 5), z: 7}
+    check_zero("focal line of a cylindrical front",
+               sp.simplify((sp.eye(3) + l * hess_c.subs(pt)).det() - (1 - l)))
+    check_zero("Laplacian of a cylindrical front", sp.simplify(lap(cyl).subs(pt) + 1))
+    # §55: the paraxial point eikonal psi = (a r^2 - 2b r r' + c r'^2)/2 has the momenta
+    # p = b r' - a r, p' = c r' - b r; its angular eikonal f = (c p^2 - 2b p p' + a p'^2)/(2D),
+    # D = b^2 - ac, has df/dp = r and df/dp' = -r'; the ray-transfer matrix has determinant 1;
+    # and the exact free propagation (r, p) -> (r + L p/sqrt(1 - p^2), p) is symplectic.
+    pa, pb, pc = sp.symbols("a_p b_p c_p", real=True)
+    r1, r2 = sp.symbols("r r'", real=True)
+    p1, p2 = sp.symbols("p p'", real=True)
+    dd = pb**2 - pa * pc
+    sol = sp.solve([sp.Eq(p1, pb * r2 - pa * r1), sp.Eq(p2, pc * r2 - pb * r1)], [r1, r2],
+                   dict=True)[0]
+    f_ang = (pc * p1**2 - 2 * pb * p1 * p2 + pa * p2**2) / (2 * dd)
+    check_zero("angular eikonal, entry", sp.simplify(sp.diff(f_ang, p1) - sol[r1]))
+    check_zero("angular eikonal, exit", sp.simplify(sp.diff(f_ang, p2) + sol[r2]))
+    psi_pt = (pa * r1**2 - 2 * pb * r1 * r2 + pc * r2**2) / 2
+    check_zero("angular eikonal is the Legendre transform",
+               sp.simplify((psi_pt - p2 * r2 + p1 * r1).subs(sol) - f_ang))
+    abcd = sp.Matrix([[pa / pb, 1 / pb], [(pa * pc - pb**2) / pb, pc / pb]])
+    check_zero("ray-transfer matrix is unimodular", sp.simplify(abcd.det() - 1))
+    big_l = sp.symbols("L", positive=True)
+    q1, q2, m1, m2 = sp.symbols("q1 q2 m1 m2", real=True)
+    root = sp.sqrt(1 - m1**2 - m2**2)
+    image = sp.Matrix([q1 + big_l * m1 / root, q2 + big_l * m2 / root, m1, m2])
+    jfree = image.jacobian([q1, q2, m1, m2])
+    omega = sp.Matrix([[0, 0, -1, 0], [0, 0, 0, -1], [1, 0, 0, 0], [0, 1, 0, 0]])
+    check_zero("free propagation is symplectic", (jfree.T * omega * jfree - omega)
+               .applyfunc(sp.simplify))
+    # §57: the optical Lagrangian n|v| has momentum n v/|v| and vanishing energy p.v - L; the
+    # reparametrized segments have a constant unit tangent and the length n0 |P' - P|; a
+    # similarity x -> k R x + c has |D phi v| = k |v|, and an inversion does not.
+    vs = sp.Matrix(sp.symbols("v1:4", real=True))
+    n0 = sp.symbols("n0", positive=True)
+    speed = sp.sqrt(vs.dot(vs))
+    lag = n0 * speed
+    mom = sp.Matrix([sp.diff(lag, v) for v in vs])
+    check_zero("optical momentum", mom - n0 * vs / speed)
+    check_zero("optical energy", sp.simplify(mom.dot(vs) - lag))
+    ep, tt = sp.symbols("varepsilon tau", real=True)
+    pp = sp.Matrix([1, 2, 2])
+    seg = (tt + ep * tt * (1 - tt)) * pp
+    vel = seg.diff(tt)
+    check_zero("segment unit tangent", (vel / (1 + ep * (1 - 2 * tt)) - pp))
+    length = sp.integrate(n0 * 3 * (1 + ep * (1 - 2 * tt)), (tt, 0, 1))
+    check_zero("segment optical length", length - 3 * n0)
+    k = sp.symbols("k", positive=True)
+    th = sp.symbols("theta", real=True)
+    rot = sp.Matrix([[sp.cos(th), -sp.sin(th), 0], [sp.sin(th), sp.cos(th), 0], [0, 0, 1]])
+    xs3 = sp.Matrix(sp.symbols("q1:4", real=True))
+    sim = k * rot * xs3 + sp.Matrix([1, 2, 3])
+    jac = sim.jacobian(xs3)
+    check_zero("similarity scales lengths", sp.simplify((jac * vs).dot(jac * vs)
+                                                        - k**2 * vs.dot(vs)))
+    inv = xs3 / xs3.dot(xs3)
+    jinv = inv.jacobian(xs3)
+    ratio = sp.simplify((jinv * vs).dot(jinv * vs) / vs.dot(vs))
+    if sp.simplify(sp.diff(ratio, xs3[0])) == 0:
+        raise AssertionError("an inversion should have a varying ratio")
+
+
 def verify():
     t, x, y, z = coordinates = sp.symbols("t x y z", real=True)
     ex, ey, ez, bx, by, bz = sp.symbols("E_x E_y E_z B_x B_y B_z", real=True)
@@ -626,6 +789,7 @@ def verify():
     verify_retarded_potentials()
     verify_radiation()
     verify_darwin_point_charge()
+    verify_geometrical_optics()
     print("Electrodynamics exact checks passed: signs, invariants, covariance, gauge, "
           "Bianchi, degree 0/1 radial reconstruction, hyperbolic worldline, the virial "
           "improvement stress, the Coulomb brackets and rosette, Larmor's identity, the Newton kernel "
@@ -636,7 +800,8 @@ def verify():
           "Helmholtz sign, the Liénard–Wiechert fields and the light-cone Jacobian, the moments of the "
           "sphere, Liénard's integral and the synchrotron reduction, the near-zone fields and flux, "
           "the multipole powers and their instances, the Darwin potentials, and the field of a slow "
-          "point charge to second order.")
+          "point charge to second order, and geometrical optics: the eikonal expansion, rays, intensity, "
+          "the angular eikonal, the Riccati law, focal points, imaging and the error energy.")
 
 
 def main():

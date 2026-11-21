@@ -436,3 +436,19 @@ bundle.
 **Interface decision.** `SmoothGeometry/Wave/FarField.lean` and `SmoothGeometry/Wave/SlowSource.lean` import only Mathlib, the potential layer and the retarded integral.
 
 **Proof status.** Proved and built. [FarField](../ProjectAinos/SmoothGeometry/Wave/FarField.lean) · [SlowSource](../ProjectAinos/SmoothGeometry/Wave/SlowSource.lean)
+
+## G14. The Riccati law and the rigidity of similarities are shared layers
+
+**Observation.** The matrix Riccati equation `H′ = −H²`, its explicit solution, Jacobi's formula for `log det(1 + sH₀)`, and a uniform second-order Taylor bound for a `C²` family over a compact set of times concern linear maps and flows and need no optics. So does Carathéodory's theorem that a `C²` map with `|Dφ v| = k|v|` on a connected open set is a similarity.
+
+**Interface decision.** `SmoothGeometry/ODE/Riccati.lean` and `SmoothGeometry/Euclidean/Similarity.lean` import only Mathlib and the flow layer.
+
+**Proof status.** Proved and built. [Riccati](../ProjectAinos/SmoothGeometry/ODE/Riccati.lean) · [Similarity](../ProjectAinos/SmoothGeometry/Euclidean/Similarity.lean)
+
+## G15. The high-frequency expansion and the wave energy are shared layers
+
+**Observation.** The exact expansion of `□(a cos(ψ/ε) + b sin(ψ/ε))` and the energy inequality `√E(t) ≤ √E(0) + ∫ ‖□w‖` concern functions on `ℝ × ℝ³` and need no field theory.
+
+**Interface decision.** `SmoothGeometry/Wave/HighFrequency.lean` and `SmoothGeometry/Wave/Energy.lean` import only Mathlib and the retarded-integral and far-field layers.
+
+**Proof status.** Proved and built. [HighFrequency](../ProjectAinos/SmoothGeometry/Wave/HighFrequency.lean) · [Energy](../ProjectAinos/SmoothGeometry/Wave/Energy.lean)

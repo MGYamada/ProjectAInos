@@ -696,6 +696,50 @@ transform of the retarded potential is `∫ e^{−2πiν|y|} k̂(ν, x − y)/(4
 **Scope.** Flat space-time. The uniqueness class consists of solutions that vanish in the past, so
 it covers sources that vanish in the past. The point charge is treated in the next section (§63).
 
+## Geometrical optics (§§53–58)
+
+**The eikonal (§53).** For `a cos(ψ/ε) + b sin(ψ/ε)` the wave operator is exactly
+`ε⁻²R₂ + ε⁻¹R₁ + R₀` (`Wave.waveOperator_highFrequencyWave`). For a high-frequency potential the
+leading coefficient vanishes iff `⟨dψ, dψ⟩ = 0` (`Eikonal.leading_eq_zero_iff`), the Lorenz
+condition at leading order is transversality, the rays are straight null lines
+(`lightlike_of_isRay`), and the vacuum equations hold at the two leading orders iff the eikonal and
+transport equations hold (`maxwell_highFrequencyPotential_iff_of_eikonal`). In a medium the rays of
+`(|p|² − n²)/2` come from a complete integral (`RayOptics.isRay_of_isHamiltonJacobi`, with the
+linear-gradient index), and Fermat's principle is the ray equation `γ″ = ∇(n²/2)`
+(`RayOptics.fermat`).
+
+**Intensity (§54).** The `ε⁻¹` coefficient vanishes iff the amplitudes are transported
+(`subleading_eq_zero_iff_transport`), transport conserves the intensity current
+(`divergence_intensityCurrent_eq_zero`), and the intensity times the Jacobian of a ray tube is
+constant (`intensity_mul_det_eq`).
+
+**The angular eikonal (§55).** In transverse planes, where the derivative of the momentum map is
+invertible the angular eikonal exists with `∂f/∂p = r`, `∂f/∂p′ = −r′`
+(`AngularEikonal.exists_angularEikonal`, `fderiv_angularEikonal`); where the mixed Hessian is
+invertible the ray map is canonical (`exists_rayMap_symplectic`), and for a free generating
+function it is a Poisson morphism (`Free.rayMap_isPoissonHom`). The thin lens is an instance.
+
+**Narrow bundles (§56).** Along a ray the Hessian of the eikonal obeys `H′ = −H²`, so
+`H(l) = H₀(1 + lH₀)⁻¹` and the principal radii become `R + l` (`NarrowBundle.hessian_ray`,
+`principalRadius_add`); the focal points are the zeros of `det(1 + lH₀)` (`focal_iff`), where the
+transported amplitude `a₀ det(1 + lH₀)^{−1/2}` diverges (`amplitude_tendsto_focal`). A narrow beam
+deviates from the linearized ray map by `O(δ²)` (`norm_beam_sub_linear_le`).
+
+**Image formation (§57).** The first variation of the optical length with moving ends is
+`n⟨t̂, δr⟩` (`Imaging.hasDerivAt_opticalLength`), so rays between conjugate points have equal
+optical lengths (`opticalLength_eq`) and a stigmatic bundle satisfies the sine condition
+(`sine_condition`). An absolute instrument preserves optical lengths and is a similarity with
+ratio `n/n′` (`IsAbsoluteInstrument.isSimilarity`).
+
+**The limits of geometrical optics (§58).** The energy inequality `√E(t) ≤ √E(0) + ∫ ‖□w‖`
+(`Wave.sqrt_energy_le`) bounds the error of the approximation independently of `ε`
+(`Limits.sqrt_energy_sub_le`); for the pair of phases `ψ`, `ψ + επ/2` the relative error is
+`O(ε)` (`energy_sub_add_energy_sub_le`). The estimate is lost at focal points (§56).
+
+**Scope.** Flat vacuum for the wave statements, media through the ray Hamiltonian, given ray
+families and given exact solutions. Not stated: a lower bound for the energy of a single real wave,
+and instruments limited to a cone of directions.
+
 ## Radiation (§§63, 65–67, 71–74, 77)
 
 **The Liénard–Wiechert potentials (§63).** A `SubluminalWorldline` is a smooth path with
@@ -769,6 +813,12 @@ All names below are under `ProjectAinos`, except imported `YM` names.
 | --- | --- | --- |
 | The retarded potentials | `Wave.retardedIntegral`, `integral_wave_div_norm`, `wave_retardedIntegral`, `retardedIntegral_eq_zero_of_support`, `retardedPotential`, `maxwell_retardedPotential`, `eq_retardedScalar` | [RetardedIntegral](../ProjectAinos/SmoothGeometry/Wave/RetardedIntegral.lean), [RetardedPotential](../ProjectAinos/Electrodynamics/RetardedPotential.lean) |
 | The spectral resolution of the retarded potentials | `fourier_retardedPotential`, `helmholtz_fourier_retardedPotential` | [RetardedSpectrum](../ProjectAinos/Electrodynamics/RetardedSpectrum.lean) |
+| Geometrical optics | `Wave.waveOperator_highFrequencyWave`, `Optics.Eikonal.box_highFrequencyPotential`, `leading_eq_zero_iff`, `lightlike_of_isRay`, `maxwell_highFrequencyPotential_iff_of_eikonal`, `RayOptics.isRay_of_isHamiltonJacobi`, `RayOptics.fermat` | [HighFrequency](../ProjectAinos/SmoothGeometry/Wave/HighFrequency.lean), [Eikonal](../ProjectAinos/Electrodynamics/Optics/Eikonal.lean), [RayOptics](../ProjectAinos/Electrodynamics/Optics/RayOptics.lean) |
+| Intensity | `Eikonal.subleading_eq_zero_iff_transport`, `divergence_intensityCurrent_eq_zero`, `intensity_mul_det_eq` | [Eikonal](../ProjectAinos/Electrodynamics/Optics/Eikonal.lean) |
+| The angular eikonal | `AngularEikonal.exists_angularEikonal`, `fderiv_angularEikonal`, `rayMap_symplectic`, `exists_rayMap_symplectic`, `Free.rayMap_isPoissonHom` | [AngularEikonal](../ProjectAinos/Electrodynamics/Optics/AngularEikonal.lean) |
+| Narrow bundles of rays | `Riccati.matrix_eq_of_hasDerivAt`, `NarrowBundle.hessian_ray`, `principalRadius_add`, `focal_iff`, `amplitude_tendsto_focal`, `norm_beam_sub_linear_le` | [Riccati](../ProjectAinos/SmoothGeometry/ODE/Riccati.lean), [NarrowBundle](../ProjectAinos/Electrodynamics/Optics/NarrowBundle.lean) |
+| Image formation | `Imaging.hasDerivAt_opticalLength`, `opticalLength_eq`, `sine_condition`, `IsAbsoluteInstrument.isSimilarity`, `Similarity.exists_linearIsometryEquiv_of_norm_fderiv` | [Imaging](../ProjectAinos/Electrodynamics/Optics/Imaging.lean), [Similarity](../ProjectAinos/SmoothGeometry/Euclidean/Similarity.lean) |
+| The limits of geometrical optics | `Wave.sqrt_energy_le`, `Limits.sqrt_energy_sub_le`, `energy_sub_add_energy_sub_le`, `sqrt_energy_potentialComponent_sub_le` | [Energy](../ProjectAinos/SmoothGeometry/Wave/Energy.lean), [Error](../ProjectAinos/Electrodynamics/Optics/Error.lean) |
 | The Liénard–Wiechert potentials | `SubluminalWorldline.existsUnique_retardedTime`, `contDiffOn_retardedTime`, `lienardWiechert`, `maxwell_lienardWiechert`, `electricVector_lienardWiechert`, `magneticVector_lienardWiechert`, `lienardWiechert_axisWorldline`, `integral_lightCone`, `integral_potentialComponent_mul_box` | [RetardedTime](../ProjectAinos/Electrodynamics/RetardedTime.lean), [LienardWiechert](../ProjectAinos/Electrodynamics/LienardWiechert.lean), [LienardWiechertSource](../ProjectAinos/Electrodynamics/LienardWiechertSource.lean) |
 | The Lagrangian to second order | `Wave.retardedIntegral_slow_expansion`, `SlowSource.scalar_expansion`, `SlowSource.vector_expansion`, `eulerLagrange_rigidLagrangian`, `SlowSource.force_eq_darwin`, `darwinInteraction_pointLimit`, `darwinLagrangian`, `darwinLagrangian_pointLimit`, `lienardWiechert_sub_darwin`, `eulerLagrange_darwinLagrangian`, `force_eq_darwinLagrangian` | [SlowSource](../ProjectAinos/SmoothGeometry/Wave/SlowSource.lean), [DarwinLagrangian](../ProjectAinos/Electrodynamics/DarwinLagrangian.lean), [DarwinPointCharge](../ProjectAinos/Electrodynamics/DarwinPointCharge.lean) |
 | The field at large distances | `Sphere.integral_inner_mul_inner`, `Sphere.integral_comp_inner`, `Wave.tendstoUniformlyOn_mul_retardedIntegral`, `Radiation.radiationAmplitude`, `radiatedPower`, `tendstoUniformlyOn_mul_electricField`, `tendsto_sphereFlux_poynting`, `exists_bound_electricField_sub_cross` | [SphereIntegral](../ProjectAinos/SmoothGeometry/Euclidean/SphereIntegral.lean), [FarField](../ProjectAinos/SmoothGeometry/Wave/FarField.lean), [Radiation/Basic](../ProjectAinos/Electrodynamics/Radiation/Basic.lean), [FarZone](../ProjectAinos/Electrodynamics/Radiation/FarZone.lean) |
