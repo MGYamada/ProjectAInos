@@ -4,7 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 module
 
-import ProjectAinos.SpecialFunctions.SphericalAddition
+import ProjectAinos.SpecialFunctions.NewtonHarmonics
+import ProjectAinos.SpecialFunctions.SphericalBasis
 
 open MvPolynomial ProjectAinos.SpecialFunctions
 open ProjectAinos.SpecialFunctions.HarmonicPolynomial
@@ -96,3 +97,63 @@ example {n : ℕ} (b : OrthonormalBasis (Fin (2 * n + 1)) ℝ (l2Space 3 n)) (u 
     ∑ i, representative 3 n (b i) u * representative 3 n (b i) v =
       (2 * (n : ℝ) + 1) / (4 * Real.pi) * (Legendre.polynomial n).eval (inner ℝ u.val v.val) :=
   addition b u v
+
+example {d : ℕ} (hd : 0 < d) (k : ℕ) : harmonics d k ≃ₗ[ℝ] l2Space d k := harmonicsEquivL2 hd k
+
+example {d : ℕ} (hd : 0 < d) (k : ℕ) (p : harmonics d k) :
+    representative d k (harmonicsEquivL2 hd k p) = onSphere d p.val.val :=
+  representative_harmonicsEquivL2 hd k p
+
+example (n b : ℕ) (p : MvPolynomial (Fin 2) ℝ) : MvPolynomial (Fin 3) ℝ := extension n b p
+
+example (n b : ℕ) {p : MvPolynomial (Fin 2) ℝ} (hp : p.IsHomogeneous n) :
+    (extension n b p).IsHomogeneous (b + n) := homogeneous_extension n b hp
+
+example (n b : ℕ) (hb : b ≤ 1) {p : MvPolynomial (Fin 2) ℝ} (hp : p.IsHomogeneous n) :
+    laplacian 3 (extension n b p) = 0 := harmonic_extension n hb hp
+
+example (j : ℕ) : MvPolynomial (Fin 3) ℝ →ₗ[ℝ] MvPolynomial (Fin 2) ℝ := normalCoeff j
+
+example (n b j : ℕ) (p : MvPolynomial (Fin 2) ℝ) (hj : j < b + 2) :
+    normalCoeff j (extension n b p) = if b = j then p else 0 := normalCoeff_extension n b j p hj
+
+example (n : ℕ) (i : Fin (2 * n + 1)) : ℕ × (Fin 2 →₀ ℕ) := cauchyExponents n i
+
+example (n : ℕ) (i : Fin (2 * n + 1)) : (cauchyExponents n i).1 ≤ min 1 n ∧
+    (cauchyExponents n i).2.degree = n - (cauchyExponents n i).1 := cauchyExponents_spec n i
+
+example (n : ℕ) (i : Fin (2 * n + 1)) : harmonics 3 n := solidBasisVector n i
+
+example (n : ℕ) : LinearIndependent ℝ (solidBasisVector n) := linearIndependent_solidBasisVector n
+
+example (n : ℕ) : Module.Basis (Fin (2 * n + 1)) ℝ (harmonics 3 n) := solidBasis n
+
+example (n : ℕ) (i : Fin (2 * n + 1)) : solidBasis n i = solidBasisVector n i :=
+  solidBasis_apply n i
+
+example (n : ℕ) : OrthonormalBasis (Fin (2 * n + 1)) ℝ (l2Space 3 n) := realBasis n
+
+example (n : ℕ) (i : Fin (2 * n + 1)) : realBasis n i = InnerProductSpace.gramSchmidtNormed ℝ
+    (fun j => harmonicsEquivL2 (by decide : 0 < 3) n (solidBasisVector n j)) i :=
+  realBasis_apply n i
+
+open ProjectAinos.SmoothGeometry.Potential
+
+example (n : ℕ) (u v : UnitSphere 3) :
+    (n.factorial : ℝ)⁻¹ * iteratedFDeriv ℝ n newtonKernel u.val (fun _ => -v.val) =
+      (4 * Real.pi)⁻¹ * (Legendre.polynomial n).eval (inner ℝ u.val v.val) :=
+  newtonKernel_unit_derivative n u v
+
+example (n : ℕ) (f : l2Space 3 n) : harmonics 3 n := solidRepresentative n f
+
+example {n : ℕ} (b : OrthonormalBasis (Fin (2 * n + 1)) ℝ (l2Space 3 n)) (u : UnitSphere 3)
+    {r : ℝ} (hr : 0 < r) (y : EuclideanSpace ℝ (Fin 3)) :
+    (n.factorial : ℝ)⁻¹ * iteratedFDeriv ℝ n newtonKernel (r • u.val) (fun _ => -y) =
+      ((2 * (n : ℝ) + 1) * r ^ (n + 1))⁻¹ *
+        ∑ i, representative 3 n (b i) u * eval y (solidRepresentative n (b i)).val.val :=
+  newtonKernel_derivative_addition b u hr y
+
+example (n : ℕ) {x : EuclideanSpace ℝ (Fin 3)} (hx : x ≠ 0) (y : EuclideanSpace ℝ (Fin 3)) :
+    (n.factorial : ℝ)⁻¹ * iteratedFDeriv ℝ n newtonKernel x (fun _ => -y) =
+      newtonKernel x * ((Legendre.polynomial n).eval (inner ℝ x y / (‖x‖ * ‖y‖)) *
+        (‖y‖ / ‖x‖) ^ n) := newtonKernel_derivative_legendre n hx y

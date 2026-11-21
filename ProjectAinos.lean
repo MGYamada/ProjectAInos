@@ -29,6 +29,7 @@ public import ProjectAinos.Electrodynamics.Electrostatics
 public import ProjectAinos.Electrodynamics.EnergyMomentum
 public import ProjectAinos.Electrodynamics.Examples
 public import ProjectAinos.Electrodynamics.ExcitationChart
+public import ProjectAinos.Electrodynamics.ExtendedChargeInteraction
 public import ProjectAinos.Electrodynamics.Field
 public import ProjectAinos.Electrodynamics.FieldClassification
 public import ProjectAinos.Electrodynamics.FieldTransformation
@@ -84,6 +85,7 @@ public import ProjectAinos.Electrodynamics.SourceCovariance
 public import ProjectAinos.Electrodynamics.SourcedAction
 public import ProjectAinos.Electrodynamics.SourcedActionExamples
 public import ProjectAinos.Electrodynamics.Spectral
+public import ProjectAinos.Electrodynamics.SphericalMultipole
 public import ProjectAinos.Electrodynamics.StaticField
 public import ProjectAinos.Electrodynamics.StressTensor
 public import ProjectAinos.Electrodynamics.ThreePlusOne
@@ -652,6 +654,7 @@ public import ProjectAinos.SmoothGeometry.Wave.HighFrequency
 public import ProjectAinos.SmoothGeometry.Wave.RetardedIntegral
 public import ProjectAinos.SmoothGeometry.Wave.SlowSource
 public import ProjectAinos.SmoothGeometry.Wave.TransverseTraceless
+public import ProjectAinos.SpecialFunctions.HarmonicExtension
 public import ProjectAinos.SpecialFunctions.HarmonicPolynomial
 public import ProjectAinos.SpecialFunctions.JacobiCurves
 public import ProjectAinos.SpecialFunctions.JacobiElliptic
@@ -660,7 +663,9 @@ public import ProjectAinos.SpecialFunctions.LegendreAssociated
 public import ProjectAinos.SpecialFunctions.LegendreGenerating
 public import ProjectAinos.SpecialFunctions.LegendreNewton
 public import ProjectAinos.SpecialFunctions.LegendreOrthogonality
+public import ProjectAinos.SpecialFunctions.NewtonHarmonics
 public import ProjectAinos.SpecialFunctions.SphericalAddition
+public import ProjectAinos.SpecialFunctions.SphericalBasis
 public import ProjectAinos.SpecialFunctions.SphericalCompleteness
 public import ProjectAinos.SpecialFunctions.SphericalHarmonics
 public import ProjectAinos.SpecialFunctions.SphericalOrthogonality

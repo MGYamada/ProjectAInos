@@ -615,7 +615,16 @@ the potential is `Q/(4π|x|) + ⟪d, x⟫/(4π|x|³)` up to `(∫|ρ|y²)/(4π(|
 (`abs_newtonPotential_sub_multipole_le`). The dipole changes by `−Qb` under a translation
 (`dipoleMoment_translate`), and the first multipole that does not vanish is independent of the
 origin (`multipoleTerm_translate`). The dipole field is `(3⟪n, d⟫n − d)/(4π|x|³)`
-(`neg_gradient_dipolePotential`).
+(`neg_gradient_dipolePotential`). In order ℓ, a real orthonormal basis on S² gives exactly
+2ℓ + 1 components. Each coefficient is the integral of the solid harmonic against the charge.
+At radius r their angular sum divided by (2ℓ + 1)r^(ℓ + 1) equals the Cartesian Taylor term.
+[Spherical moments](../ProjectAinos/Electrodynamics/SphericalMultipole.lean)
+
+For two continuous densities supported in balls of radii a and b at centre separation r > a + b,
+`hasSum_interactionEnergy` sums the mutual energy of the distributions. Each coefficient
+integrates a solid harmonic of the relative displacement against both densities. The ratio
+(a + b)/r bounds the geometric series throughout the support.
+[Extended charge interaction](../ProjectAinos/Electrodynamics/ExtendedChargeInteraction.lean)
 
 **A system in an external field (§42).** For an external potential harmonic at the centre,
 the energy of a localized charge is `Qψ(0) + d·∇ψ(0) + (1/6)ΣDᵢⱼ∂ᵢ∂ⱼψ(0)`
@@ -662,7 +671,7 @@ of a perfectly conducting rectangular cavity solve Maxwell's equations, with `n 
 `n·B = 0` on the walls (`conductingMode_maxwell`, `conductingMode_boundary_cross`), with an
 instance in the unit cube.
 
-**Scope.** Spherical harmonics, two extended sources in interaction, the field of a line current,
+**Scope.** The field of a line current,
 the solution as a Schwartz function, the classification of tempered solutions, the completeness of
 the conductor modes and cavities of other shapes are not stated (decisions 8 and 9 on #135).
 

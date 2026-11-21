@@ -88,6 +88,10 @@ harmonics. The sum of squared infinitesimal rotations gives their angular eigenv
 between distinct degrees. Polynomial restrictions separate points, so Stone–Weierstrass and
 Fischer decomposition give uniform density, then the orthogonal Hilbert sum in real L². On S², the trace of the
 evaluation kernel and the norm of a solid zonal harmonic determine the addition theorem.
+The polynomial extension of equatorial Cauchy data gives an explicit basis. Uniqueness of
+Taylor coefficients on a radial line then identifies the Newton derivatives with the Legendre
+coefficients, yielding all 2ℓ + 1 charge moments of ED §41. A geometric bound on the relative
+displacement justifies integrating the expansion over both separated charges to obtain their energy.
 [Chapter correspondence and proof map](courant-hilbert.md)
 
 ## Shared Smooth Algebra and Geometry

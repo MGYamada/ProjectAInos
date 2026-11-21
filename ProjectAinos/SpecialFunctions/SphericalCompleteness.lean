@@ -108,18 +108,30 @@ def representative (d k : ℕ) : l2Space d k →ₗ[ℝ] C(UnitSphere d, ℝ) :=
   Submodule.map_equivMapOfInjective_symm_apply _
     (ContinuousMap.toLp_injective (surfaceMeasure d)) _ _
 
-/-- Passage to L² retains the full dimension of the harmonic polynomials in positive dimension. -/
-theorem finrank_l2Space {d : ℕ} (hd : 0 < d) (k : ℕ) :
-    Module.finrank ℝ (l2Space d k) = Module.finrank ℝ (harmonics d k) := by
+/-- Identify a homogeneous harmonic polynomial with its L² mode by restriction. -/
+def harmonicsEquivL2 {d : ℕ} (hd : 0 < d) (k : ℕ) :
+    harmonics d k ≃ₗ[ℝ] l2Space d k := by
   let F := (onSphere d).toLinearMap.comp (homogeneousSubmodule (Fin d) ℝ k).subtype
   have hi : Function.Injective F := by
     intro p q h
     apply restrict_injective hd k
     exact funext fun u => DFunLike.congr_fun h u
-  exact (((harmonics d k).equivMapOfInjective F hi).trans
+  exact ((harmonics d k).equivMapOfInjective F hi).trans
     ((continuousSpace d k).equivMapOfInjective
       (ContinuousMap.toLp 2 (surfaceMeasure d) ℝ).toLinearMap
-      (ContinuousMap.toLp_injective (surfaceMeasure d)))).finrank_eq.symm
+      (ContinuousMap.toLp_injective (surfaceMeasure d)))
+
+/-- The canonical representative of the L² mode is polynomial evaluation on the sphere. -/
+theorem representative_harmonicsEquivL2 {d : ℕ} (hd : 0 < d) (k : ℕ) (p : harmonics d k) :
+    representative d k (harmonicsEquivL2 hd k p) = onSphere d p.val.val := by
+  apply ContinuousMap.toLp_injective (p := 2) (𝕜 := ℝ) (surfaceMeasure d)
+  rw [toLp_representative]
+  rfl
+
+/-- Passage to L² retains the full dimension of the harmonic polynomials in positive dimension. -/
+theorem finrank_l2Space {d : ℕ} (hd : 0 < d) (k : ℕ) :
+    Module.finrank ℝ (l2Space d k) = Module.finrank ℝ (harmonics d k) :=
+  (harmonicsEquivL2 hd k).finrank_eq.symm
 
 /-- The closed span of all spherical harmonic degrees is real L² of the sphere. -/
 theorem l2Space_dense {d : ℕ} (hd : 0 < d) :

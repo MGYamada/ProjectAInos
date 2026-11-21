@@ -208,7 +208,9 @@ A smooth charge has a unique decaying potential with `−Δφ = ρ` and a finite
 has the boosted field, in Lorenz gauge the field equations are wave equations, plane waves have
 two polarizations, and the coherency matrix of partially polarized light is positive.
 [Guide](docs/electrodynamics.md#static-fields-the-moving-charge-and-waves-3638-4648-50)
-Localized charges and currents have multipole expansions with uniform remainders, a conserved
+Localized charges and currents have multipole expansions with uniform remainders. In order ℓ,
+the electric potential has exactly 2ℓ + 1 real spherical components. The corresponding series
+for the mutual energy converges when the enclosing charge balls are disjoint. A conserved
 current has a unique static magnetic field with a magnetic moment of `e/2m` times the angular
 momentum, the wave equation and the Coulomb field are resolved in Fourier components, and the field
 in a periodic box is a sum of modes.

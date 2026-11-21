@@ -92,7 +92,8 @@ private theorem diagonal {n : ℕ} (b : Basis n) (v : UnitSphere 3) :
     intro u
     obtain ⟨z, hz, hnorm⟩ := exists_zonal_mode n u
     have hval : representative 3 n z u = 1 := by
-      rw [hz, real_inner_self_eq_norm_sq, norm_eq_of_mem_sphere, one_pow, Legendre.polynomial_eval_one]
+      rw [hz, real_inner_self_eq_norm_sq, norm_eq_of_mem_sphere, one_pow,
+        Legendre.polynomial_eval_one]
     exact le_of_le_of_eq (sq_nonneg _) (residual b u hval hnorm)
   have hi : ∫ u, F u ∂sphereMeasure = 0 := by
     unfold F
@@ -116,7 +117,8 @@ theorem addition {n : ℕ} (b : OrthonormalBasis (Fin (2 * n + 1)) ℝ (l2Space 
       (2 * (n : ℝ) + 1) / (4 * Real.pi) * (Legendre.polynomial n).eval (inner ℝ u.val v.val) := by
   obtain ⟨z, hz, hnorm⟩ := exists_zonal_mode n v
   have hval : representative 3 n z v = 1 := by
-    rw [hz, real_inner_self_eq_norm_sq, norm_eq_of_mem_sphere, one_pow, Legendre.polynomial_eval_one]
+    rw [hz, real_inner_self_eq_norm_sq, norm_eq_of_mem_sphere, one_pow,
+        Legendre.polynomial_eval_one]
   have h := (residual b v hval hnorm).trans (diagonal b v)
   have hk : kernel b v = scale n • z := sub_eq_zero.mp (norm_eq_zero.mp (by simpa using h))
   have he := congrArg (fun f => representative 3 n f u) hk
