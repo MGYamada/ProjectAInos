@@ -24,6 +24,7 @@ public import ProjectAinos.Electrodynamics.DarwinPointCharge
 public import ProjectAinos.Electrodynamics.Diffraction.Aperture
 public import ProjectAinos.Electrodynamics.Diffraction.Fraunhofer
 public import ProjectAinos.Electrodynamics.Diffraction.Fresnel
+public import ProjectAinos.Electrodynamics.Diffraction.StraightEdge
 public import ProjectAinos.Electrodynamics.DivergenceExamples
 public import ProjectAinos.Electrodynamics.ElectrostaticEnergy
 public import ProjectAinos.Electrodynamics.Electrostatics
@@ -656,9 +657,11 @@ public import ProjectAinos.SmoothGeometry.Wave.RetardedIntegral
 public import ProjectAinos.SmoothGeometry.Wave.SlowSource
 public import ProjectAinos.SmoothGeometry.Wave.TransverseTraceless
 public import ProjectAinos.SpecialFunctions.Bessel
+public import ProjectAinos.SpecialFunctions.BesselAsymptotic
 public import ProjectAinos.SpecialFunctions.BesselGenerating
 public import ProjectAinos.SpecialFunctions.BesselIntegral
 public import ProjectAinos.SpecialFunctions.BesselZeros
+public import ProjectAinos.SpecialFunctions.Fresnel
 public import ProjectAinos.SpecialFunctions.HarmonicExtension
 public import ProjectAinos.SpecialFunctions.HarmonicPolynomial
 public import ProjectAinos.SpecialFunctions.JacobiCurves
@@ -670,6 +673,8 @@ public import ProjectAinos.SpecialFunctions.LegendreMonomials
 public import ProjectAinos.SpecialFunctions.LegendreNewton
 public import ProjectAinos.SpecialFunctions.LegendreOrthogonality
 public import ProjectAinos.SpecialFunctions.NewtonHarmonics
+public import ProjectAinos.SpecialFunctions.NonstationaryPhase
+public import ProjectAinos.SpecialFunctions.QuadraticPhase
 public import ProjectAinos.SpecialFunctions.SphericalAddition
 public import ProjectAinos.SpecialFunctions.SphericalBasis
 public import ProjectAinos.SpecialFunctions.SphericalBessel

@@ -5,6 +5,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 module
 
 import ProjectAinos.SpecialFunctions.BesselZeros
+import ProjectAinos.SpecialFunctions.BesselAsymptotic
 
 open ProjectAinos.SpecialFunctions.Bessel Complex
 
@@ -65,3 +66,9 @@ example (b k s : ℝ) :
 
 example (k r : ℝ) : radialProfile 1 k (r ^ 2) = (besselJ 0 (k * r)).re :=
   radialProfile_one_sq k r
+
+open Filter
+open scoped Topology Real
+
+example (n : ℤ) : Tendsto (fun x : ℝ => √x * (besselJ n (x : ℂ)).re -
+    √(2 / π) * Real.cos (x - n * (π / 2) - π / 4)) atTop (𝓝 0) := tendsto_large_argument n

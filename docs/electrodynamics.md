@@ -789,6 +789,9 @@ remainder `(k/2πz)(kρ⁴/8z³ + ρ²/z² + 1/(kz))‖u₀‖₁` (`norm_apertu
 a direction `n` with `n_z > 0`, `D e^{−ikD} u(Dn)` tends to the Fourier transform of the aperture
 (`tendsto_fraunhofer`) at an explicit rate (`norm_fraunhofer_sub_le`). Babinet's principle holds by
 linearity (`babinet`) and, for the plane wave, as an improper limit (`tendsto_babinet_planeWave`).
+For a straight edge, uniformly illuminated rectangular apertures tend to the half-plane Fresnel
+field. Its intensity in Fresnel units is [(½ + C(u))² + (½ + S(u))²]/2, including ¼ on the
+shadow boundary. [Straight-edge limit](../ProjectAinos/Electrodynamics/Diffraction/StraightEdge.lean)
 
 **Scope.** The scalar aperture model; the relation to the Maxwell screen problem and the uniqueness
 of the half-space problem are the remainder of §59.

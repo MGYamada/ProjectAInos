@@ -105,6 +105,13 @@ modes have Wronskian 1/z². In ED §52, the squared-radius Bessel equation verif
 Maxwell mode in the entire cylinder, and the positive zeros give an unbounded family satisfying
 the conducting conditions at the side and ends. [Plane waves](../ProjectAinos/SpecialFunctions/SphericalBessel.lean) · [Cylinder](../ProjectAinos/Electrodynamics/CylindricalCavity.lean)
 
+The Gaussian primitive on the ray (1 − i)R evaluates both Fresnel integrals at positive
+infinity. This gives the limit of the rectangular Fresnel fields at a straight edge in ED §60.
+Integrating a smooth amplitude against the scaled Fresnel primitive gives the quadratic
+stationary-phase limit and hence the leading term of each integer-order cylindrical Bessel
+function for large positive argument. Integration by parts along the gradient gives decay to
+every order in any finite dimension where the phase is nonstationary on the amplitude support.
+
 ## Shared Smooth Algebra and Geometry
 
 The shared mathematical layers for Mechanics, Special Relativity, Electrodynamics, and General Relativity (research-plan topics 2–5) live in `ProjectAinos/SmoothAlgebra` and `ProjectAinos/SmoothGeometry`, independently of the physics. Together with the shared `Variational` layer, they have an acyclic import graph excluding project physics and vendored Yang–Mills. C∞-rings have finite smooth operations, substitution laws, and compatibility with a commutative real algebra. Morphisms preserve every smooth operation; their real-algebra homomorphisms are derived. The concrete models are ℝ, products, and C∞(ℝⁿ), including dimension zero. The smooth-function ring is proved free on its coordinate functions, with evaluation and pullback as morphisms. A nonpolynomial check proves `exp(a + b) = exp(a) * exp(b)` in every C∞-ring.

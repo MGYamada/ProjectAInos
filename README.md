@@ -228,6 +228,7 @@ High-frequency fields satisfy the eikonal and transport equations at their leadi
 null rays, conserved intensity and Fermat's principle; wave fronts focus by a Riccati law, ideal
 instruments are similarities, and the error of geometrical optics is bounded by the wave energy.
 [Guide](docs/electrodynamics.md#geometrical-optics-5358)
+The straight-edge Fresnel intensity equals one quarter on the shadow boundary.
 Light diffracted by an aperture has the Fresnel and Fraunhofer forms with explicit remainders, a
 radiating charge feels a damping force, and free and bound charges scatter waves with the Thomson
 and Rayleigh cross sections.
