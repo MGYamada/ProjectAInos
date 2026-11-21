@@ -740,6 +740,29 @@ ratio `n/n′` (`IsAbsoluteInstrument.isSimilarity`).
 families and given exact solutions. Not stated: a lower bound for the energy of a single real wave,
 and instruments limited to a cone of directions.
 
+## Radiation in collisions (§§68–70)
+
+**Collisions (§68).** Along the Coulomb scattering orbit the dipole acceleration is integrable and
+square integrable (`Collision.integrable_dipoleAcceleration_coulomb`), the radiated energy is a
+radial quadrature (`integral_dipolePower_eq`) and, by Plancherel, the integral of the spectral
+density (`spectral_eq_coulomb`). The effective radiation is `(2/9)e²v∞³a` for repulsion and
+diverges for attraction (`CoulombRadiation.effectiveRadiation_repulsive`,
+`not_isEffectiveFinite_attractive`).
+
+**Low frequencies (§69).** The far-zone amplitude of a point charge is the derivative in the
+observer time of `(e/4π) n × (n × v)/(1 − n·v)` (`CollisionSpectrum.radiationAmplitude_eq_deriv`),
+so its time transform (`fourier_radiationAmplitude`) tends at zero frequency to the jump of that
+quantity (`tendsto_relativisticSpectrum`, (69.2)); the dipole spectrum tends to
+`(2/3)(e²/4π)|Δv|²` (`tendsto_dipoleSpectrum`, (69.1)).
+
+**Coulomb orbits (§70).** On a Kepler ellipse the period average of the dipole power is explicit
+(`average_dipolePower_kepler`) and is the Parseval sum of its harmonics (`harmonic_decomposition`);
+the energy radiated in a hyperbolic collision is explicit (`totalEnergy_hyperbolic`), and its
+spectrum is an integral over the orbit (`spectrum_hyperbolic`).
+
+**Scope.** Given orbits, the dipole power of §67 as the model of emission (decision 15 on #135).
+The Bessel and Hankel closed forms of the spectra are the remainder of §70.
+
 ## Diffraction (§§59–61)
 
 **The aperture field (§59).** For continuous aperture data `u₀` of compact support in the plane,
@@ -853,6 +876,7 @@ All names below are under `ProjectAinos`, except imported `YM` names.
 | --- | --- | --- |
 | The retarded potentials | `Wave.retardedIntegral`, `integral_wave_div_norm`, `wave_retardedIntegral`, `retardedIntegral_eq_zero_of_support`, `retardedPotential`, `maxwell_retardedPotential`, `eq_retardedScalar` | [RetardedIntegral](../ProjectAinos/SmoothGeometry/Wave/RetardedIntegral.lean), [RetardedPotential](../ProjectAinos/Electrodynamics/RetardedPotential.lean) |
 | The spectral resolution of the retarded potentials | `fourier_retardedPotential`, `helmholtz_fourier_retardedPotential` | [RetardedSpectrum](../ProjectAinos/Electrodynamics/RetardedSpectrum.lean) |
+| Radiation in collisions | `Collision.integrable_dipoleAcceleration_coulomb`, `integral_dipolePower_eq`, `spectral_eq_coulomb`, `CoulombRadiation.effectiveRadiation_repulsive`, `average_dipolePower_kepler`, `totalEnergy_hyperbolic`, `harmonic_decomposition`, `spectrum_hyperbolic`, `CollisionSpectrum.fourier_radiationAmplitude`, `tendsto_dipoleSpectrum`, `tendsto_relativisticSpectrum` | [Collision](../ProjectAinos/Electrodynamics/Radiation/Collision.lean), [CoulombRadiation](../ProjectAinos/Electrodynamics/Radiation/CoulombRadiation.lean), [CollisionSpectrum](../ProjectAinos/Electrodynamics/Radiation/CollisionSpectrum.lean) |
 | Diffraction | `Diffraction.apertureField`, `contDiffOn_apertureField`, `helmholtz_apertureField`, `tendsto_apertureField_boundary`, `apertureField_isRadiating`, `norm_apertureField_sub_fresnelField_le`, `tendsto_fraunhofer`, `norm_fraunhofer_sub_le`, `babinet` | [Aperture](../ProjectAinos/Electrodynamics/Diffraction/Aperture.lean), [Fresnel](../ProjectAinos/Electrodynamics/Diffraction/Fresnel.lean), [Fraunhofer](../ProjectAinos/Electrodynamics/Diffraction/Fraunhofer.lean) |
 | Radiation damping | `RadiationReaction.dampingField_expansion`, `selfForce_expansion`, `trace_selfMass`, `work_dampingForce_eq`, `runaway`, `reducedOscillator`, `lorentzDirac_orthogonal`, `lorentzDirac_eq_landauLifshitz`, `integral_lorentzDirac_eq` | [RadiationReaction](../ProjectAinos/Electrodynamics/RadiationReaction.lean) |
 | Scattering | `Scattering.Thomson.exists_trajectory`, `norm_trajectory_sub_firstOrder_le`, `crossSection_eq`, `differentialCrossSection_eq`, `LowFrequency.crossSection_oscillator`, `abs_crossSection_sub_le`, `orientationAverage`, `HighFrequency.crossSection_tendsto_thomson`, `tendsto_coherentFactor` | [Thomson](../ProjectAinos/Electrodynamics/Scattering/Thomson.lean), [LowFrequency](../ProjectAinos/Electrodynamics/Scattering/LowFrequency.lean), [HighFrequency](../ProjectAinos/Electrodynamics/Scattering/HighFrequency.lean) |

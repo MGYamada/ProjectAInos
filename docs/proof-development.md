@@ -874,6 +874,15 @@ A synchronous congruence focuses under the strong energy condition and `Λ ≤ 0
 is *proved* and §§105, 108, 119 are closed with stated remainders (GR 29 of 39).
 [Guide](general-relativity.md#charges-at-infinity-gravitational-radiation-and-focusing-105-108-110-119)
 
+A body falling radially reaches the horizon in a finite proper time, and a flat dust interior
+matches the Lemaître exterior; Tolman's dust collapse is equivalent to the equations of Tolman,
+with a smooth dust ball matching its exterior. Test bodies move by the 1PN acceleration to
+`O(c⁻⁴)`; single modes of a flat dust universe grow like `t^{2/3}`; and one Kasner transition is
+exact in Bianchi II. The ledger rows §§103, 118 are *proved* and §§102, 106, 115 are closed with
+stated remainders (GR 31 of 39). Every row of the three ledgers is now *proved* or closed with a
+stated remainder.
+[Guide](general-relativity.md#collapse-post-newtonian-motion-perturbations-and-the-oscillating-regime-102-103-106-115-118)
+
 ## Shared Variational Foundation
 
 The electrodynamics development adds compact localization for C² Lagrangians
@@ -1028,6 +1037,12 @@ response. The ledger rows ED §§60, 61, 78–80 are *proved* in their scopes an
 with stated remainders (ED 58 of 66).
 [Guide](electrodynamics.md#diffraction-5961) ·
 [Guide](electrodynamics.md#radiation-damping-and-scattering-75-76-7880)
+
+The radiated energy and spectrum of a Coulomb collision follow from the dipole power by Plancherel,
+the low-frequency spectrum of a point charge is the jump of its velocity term, and on Kepler orbits
+the power decomposes into harmonics. The ledger rows ED §§68, 69 are *proved* in their scopes and
+§70 is closed with a stated remainder (ED 60 of 66).
+[Guide](electrodynamics.md#radiation-in-collisions-6870)
 
 
 ## GR 5.1 native differential-form foundation

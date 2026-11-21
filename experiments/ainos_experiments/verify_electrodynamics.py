@@ -847,6 +847,88 @@ def verify_diffraction_scattering_and_gravitational_radiation():
                * kap_g / (8 * sp.pi))
 
 
+def verify_collisions_collapse_and_post_newtonian():
+    """Collision radiation (§§68, 70), Tolman's collapse (§103), the 1PN Lagrangian (§106), the
+    scalar modes of the flat dust universe (§115) and the Bianchi II bounce (§118)."""
+    # §70: the period average of |a|^2 = k^2/r^4 on the Kepler ellipse r = p/(1 + e cos φ),
+    # p = ℓ^2/k, with dt = r^2 dφ/ℓ and T = 2πℓ^3/(k^2 (1 - e^2)^(3/2)).
+    k, ell, ecc, phi = sp.symbols("k ell epsilon phi", positive=True)
+    semi = ell**2 / k
+    radius = semi / (1 + ecc * sp.cos(phi))
+    period = 2 * sp.pi * ell**3 / (k**2 * (1 - ecc**2)**sp.Rational(3, 2))
+    average = sp.integrate(sp.expand((k**2 / radius**4) * radius**2 / ell), (phi, 0, 2 * sp.pi))
+    check_zero("Kepler average of the squared acceleration",
+               sp.simplify(average / period
+                           - k**6 * (2 + ecc**2) * (1 - ecc**2)**sp.Rational(3, 2) / (2 * ell**8)))
+    # §68: the effective radiation for repulsion, (2/9) e^2 v^3 a: with ρ = a s the integrand of
+    # ∫ ΔE 2πρ dρ is e^2 v^3 a (−s + (s^2 + 3) arctan(s)/3)/s^4, whose primitive is
+    # e^2 v^3 a (1/(3 s^2) − arctan(s)(1/(3s) + 1/(3 s^3))), from −(2/9) e^2 v^3 a at 0 to 0 at ∞.
+    e, a, v, s = sp.symbols("e a v s", positive=True)
+    check_zero("arccos form of the asymptotic angle",
+               sp.simplify(sp.diff(sp.acos(1 / sp.sqrt(1 + s**2)), s) - sp.diff(sp.atan(s), s)))
+    energy_s = (sp.Rational(2, 3) / (4 * sp.pi) * e**2 * v**3 * a**2
+                * ((3 * a**2 + a**2 * s**2) * sp.atan(s) - 3 * a**2 * s) / (a * s)**5)
+    integrand = energy_s * 2 * sp.pi * (a * s) * a
+    primitive = e**2 * v**3 * a * (1 / (3 * s**2) - sp.atan(s) * (1 / (3 * s) + 1 / (3 * s**3)))
+    check_zero("primitive of the effective radiation", sp.simplify(sp.diff(primitive, s) - integrand))
+    eff = sp.limit(primitive, s, sp.oo) - sp.limit(primitive, s, 0, dir="+")
+    check_zero("effective radiation for repulsion", sp.simplify(eff - sp.Rational(2, 9) * e**2
+                                                                * v**3 * a))
+    # §103: the parabolic solution r = (9F/4)^(1/3) (τ0 - τ)^(2/3) has ṙ^2 = F/r, r̈ = -F/(2r^2),
+    # and the Lemaître radius has r'^2 = r_g/r.
+    tau, tau0, big_f = sp.symbols("tau tau_0 F", positive=True)
+    r_par = (sp.Rational(9, 4) * big_f)**sp.Rational(1, 3) * (tau0 - tau)**sp.Rational(2, 3)
+    check_zero("parabolic first integral", sp.simplify(sp.diff(r_par, tau)**2 - big_f / r_par))
+    check_zero("parabolic acceleration", sp.simplify(sp.diff(r_par, tau, 2) + big_f / (2 * r_par**2)))
+    rg, big_r = sp.symbols("r_g R", positive=True)
+    r_lem = (sp.Rational(9, 4) * rg)**sp.Rational(1, 3) * (big_r - tau)**sp.Rational(2, 3)
+    check_zero("Lemaitre radius", sp.simplify(sp.diff(r_lem, big_r)**2 - rg / r_lem))
+    # §106: -m c^2 sqrt(1 + X/c^2) for the 1PN metric is the test-body Lagrangian to order c^-2.
+    m, c, pot, psi, bv, v2 = sp.symbols("m c Phi psi Bv v2", real=True)
+    eps = sp.symbols("varepsilon", positive=True)
+    radicand = 2 * pot - v2 + eps * (2 * pot**2 + 2 * psi - 2 * bv + 2 * pot * v2)
+    lag = -m * sp.sqrt(1 + eps * radicand) / eps
+    series = sp.series(lag, eps, 0, 2).removeO()
+    target = (-m / eps + m * v2 / 2 - m * pot
+              + eps * (m * v2**2 / 8 - sp.Rational(3, 2) * m * pot * v2 - m * pot**2 / 2 - m * psi
+                       + m * bv))
+    check_zero("post-Newtonian test-body Lagrangian", sp.expand(series - target))
+    # §115: on the flat dust universe a = t^(2/3), κρ = 4/(3t^2), the scalar-mode equations
+    # λ'' + 3(a'/a)λ' + n²(μ − λ)/(3a²) = 0 = μ'' + 3(a'/a)μ' + n²(μ − λ)/(3a²) hold for the growing
+    # mode (δ ∝ t^(2/3)) and the decaying mode (δ ∝ 1/t), with κρδ = −(μ'' + 2(a'/a)μ').
+    tt_, cc, nn2 = sp.symbols("t c n2", positive=True)
+    scale = tt_**sp.Rational(2, 3)
+    hub = sp.diff(scale, tt_) / scale
+    kap_rho = 4 / (3 * tt_**2)
+    check_zero("flat dust Friedmann equation", sp.simplify(hub**2 - kap_rho / 3))
+    for name, lam, mu, delta in [
+            ("growing", -2 * cc * scale - 20 * cc / (3 * nn2), -2 * cc * scale, cc * scale),
+            ("decaying", -2 * cc / tt_, -2 * cc / tt_, cc / tt_)]:
+        for f in (lam, mu):
+            check_zero(f"{name} scalar mode",
+                       sp.simplify(sp.diff(f, tt_, 2) + 3 * hub * sp.diff(f, tt_)
+                                   + nn2 * (mu - lam) / (3 * scale**2)))
+        check_zero(f"{name} density contrast",
+                   sp.simplify(kap_rho * delta + sp.diff(mu, tt_, 2) + 2 * hub * sp.diff(mu, tt_)))
+    # §118: the Taub solution solves the one-wall system and its rates tend to p(u) and p(u - 1).
+    u = sp.symbols("u", positive=True)
+    t = sp.symbols("t", real=True)
+    alpha = (sp.log(2 * u) - sp.log(sp.cosh(2 * u * t))) / 2
+    beta = sp.log(sp.cosh(2 * u * t)) / 2 + t
+    gamma = sp.log(sp.cosh(2 * u * t)) / 2 + u**2 * t
+    a4 = sp.exp(4 * alpha)
+    check_zero("one-wall equation for alpha", sp.simplify(sp.diff(alpha, t, 2) + a4 / 2))
+    check_zero("one-wall equation for beta", sp.simplify(sp.diff(beta, t, 2) - a4 / 2))
+    check_zero("one-wall equation for gamma", sp.simplify(sp.diff(gamma, t, 2) - a4 / 2))
+    da, db, dg = sp.diff(alpha, t), sp.diff(beta, t), sp.diff(gamma, t)
+    check_zero("one-wall constraint", sp.simplify(da * db + da * dg + db * dg - a4 / 4))
+    vol = da + db + dg
+    kasner = [-u / (1 + u + u**2), (1 + u) / (1 + u + u**2), u * (1 + u) / (1 + u + u**2)]
+    limits = [sp.limit(w / vol, t, sp.oo) for w in (da, db, dg)]
+    check_zero("Kasner exponents as the time tends to infinity", sp.Matrix(limits)
+               - sp.Matrix(kasner))
+
+
 def verify():
     t, x, y, z = coordinates = sp.symbols("t x y z", real=True)
     ex, ey, ez, bx, by, bz = sp.symbols("E_x E_y E_z B_x B_y B_z", real=True)
@@ -908,6 +990,7 @@ def verify():
     verify_darwin_point_charge()
     verify_geometrical_optics()
     verify_diffraction_scattering_and_gravitational_radiation()
+    verify_collisions_collapse_and_post_newtonian()
     print("Electrodynamics exact checks passed: signs, invariants, covariance, gauge, "
           "Bianchi, degree 0/1 radial reconstruction, hyperbolic worldline, the virial "
           "improvement stress, the Coulomb brackets and rosette, Larmor's identity, the Newton kernel "
@@ -921,7 +1004,9 @@ def verify():
           "point charge to second order, and geometrical optics: the eikonal expansion, rays, intensity, "
           "the angular eikonal, the Riccati law, focal points, imaging and the error energy, and the "
           "diffraction kernel, Thomson and bound-charge scattering, radiation damping, Raychaudhuri, the "
-          "charge of the isotropic metric and the quadrupole formula.")
+          "charge of the isotropic metric and the quadrupole formula, and the Kepler and collision "
+          "radiation, Tolman's collapse, the post-Newtonian Lagrangian, the modes of a dust universe "
+          "and the Bianchi II bounce.")
 
 
 def main():

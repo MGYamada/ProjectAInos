@@ -230,6 +230,9 @@ radiating charge feels a damping force, and free and bound charges scatter waves
 and Rayleigh cross sections.
 [Guide](docs/electrodynamics.md#diffraction-5961) ·
 [Guide](docs/electrodynamics.md#radiation-damping-and-scattering-75-76-7880)
+Colliding charges radiate with the dipole spectrum, whose low-frequency end is fixed by the
+change of velocity.
+[Guide](docs/electrodynamics.md#radiation-in-collisions-6870)
 
 For general relativity, an observer with a timelike velocity measures
 distances with a spatial form whose square root is half the proper time of a
@@ -302,6 +305,10 @@ The energy and momentum of an isolated system are surface integrals at infinity,
 radiates gravitational waves by the quadrupole formula, short waves travel along null geodesics of a
 curved background, and the time lines of a synchronous system focus under the energy condition.
 [Guide](docs/general-relativity.md#charges-at-infinity-gravitational-radiation-and-focusing-105-108-110-119)
+A star collapses through its horizon in a finite proper time, test bodies follow the
+post-Newtonian equations of motion, density perturbations of a flat universe grow like `t^{2/3}`,
+and the approach to a cosmological singularity passes between Kasner epochs.
+[Guide](docs/general-relativity.md#collapse-post-newtonian-motion-perturbations-and-the-oscillating-regime-102-103-106-115-118)
 
 Topic 6 follows the provisional Boltzmannian typicality plan in
 [issue #55](https://github.com/MGYamada/ProjectAinos/issues/55). Its guiding references are

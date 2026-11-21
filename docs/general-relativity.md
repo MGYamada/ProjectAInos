@@ -1456,3 +1456,43 @@ The typed examples are in `checks/AsymptoticChargeAPI.lean`, `checks/CurvedWaves
 `checks/GravitationalRadiationAPI.lean` and `checks/FocusingAPI.lean`. The decisions are recorded
 in GR30–GR33 of the [notes](general-relativity-notes.md) and in G16 of the
 [smooth-geometry notes](smooth-geometry-notes.md).
+
+## Collapse, post-Newtonian motion, perturbations and the oscillating regime (§§102, 103, 106, 115, 118)
+
+**Collapse (§§102, 103).** A body falling radially from rest follows the cycloid geodesic and
+reaches the horizon in a finite proper time (`Collapse.radialInfall_properTime`) while the
+Schwarzschild time diverges (`tendsto_coordinateTime`) and its signals are red-shifted to zero
+(`tendsto_observedFrequency`); inside `r < 2M` every future causal vector decreases `r`
+(`radius_deriv_neg_of_causal`), and a flat dust interior matches the Lemaître exterior
+(`junction_oppenheimerSnyder`). Tolman's metric satisfies the Einstein equations with dust iff the
+equations of Tolman hold (`Tolman.isEinstein_iff`), with the parabolic, elliptic and hyperbolic
+solutions, the collapse at a finite time and the matching of a smooth dust ball to the exterior
+(`Tolman.matching_exterior`).
+
+**Post-Newtonian motion (§106).** For a 1PN metric family the geodesic acceleration equals the
+explicit 1PN acceleration up to `O(c⁻⁴)` (`PostNewtonian.acceleration_error`), and so does the
+acceleration of the Euler–Lagrange paths of the test-body Lagrangian
+(`eulerLagrange_acceleration_error`).
+
+**Perturbations of a flat universe (§115).** For single modes on the flat dust universe the
+linearized Einstein equations reduce to ordinary differential equations
+(`CosmologicalPerturbation.scalarMode_iff`, `tensorMode_iff`, `vectorMode_iff`), with the growing and
+decaying density contrasts (`densityContrast_growing`, `densityContrast_decaying`), the fictitious
+gauge mode (`gaugeMode`) and the decay of the vector modes (`vectorMode_decay`).
+
+**The oscillating regime (§118).** The vacuum Bianchi II metric is vacuum iff the one-wall system
+holds (`BKL.TypeII.Data.isVacuum_iff`), and its exact one-bounce solution passes from one Kasner
+epoch to the next with explicit rates (`TypeII.tendsto_exponents`, `TypeII.abs_exponents_sub_le`).
+
+| Result | Declarations | Source |
+| --- | --- | --- |
+| Collapse of a spherical body | `CoordinateMetric.IsOrthogonalSlicing`, `secondFundamental`, `Collapse.radialInfall_properTime`, `tendsto_coordinateTime`, `tendsto_observedFrequency`, `radius_deriv_neg_of_causal`, `junction_oppenheimerSnyder`, `secondFundamental_closedInterior_ne_lemaitre` | [OrthogonalSlicing](../ProjectAinos/SmoothGeometry/Lorentzian/OrthogonalSlicing.lean), [Collapse](../ProjectAinos/GeneralRelativity/Collapse.lean) |
+| Dust collapse | `Tolman.metric`, `isEinstein_iff`, `Equations.density_nonneg_iff`, `solution_parabolic`, `solution_elliptic`, `solution_hyperbolic`, `tendsto_radius_zero`, `lemaitre_eq`, `matching_exterior` | [Tolman](../ProjectAinos/GeneralRelativity/Tolman.lean) |
+| Post-Newtonian motion | `PostNewtonian.PostNewtonianMetricFamily`, `postNewtonianAcceleration`, `acceleration_error`, `geodesic_acceleration_error`, `lagrangian`, `eulerLagrange_acceleration_error` | [PostNewtonian](../ProjectAinos/GeneralRelativity/PostNewtonian.lean) |
+| Cosmological perturbations | `CosmologicalPerturbation.ricci_synchronous_deriv`, `scalarMode_iff`, `densityContrast_growing`, `densityContrast_decaying`, `gaugeMode`, `tensorMode_iff`, `vectorMode_decay` | [CosmologicalPerturbation](../ProjectAinos/GeneralRelativity/CosmologicalPerturbation.lean) |
+| The oscillating regime | `BKL.bounce_kasnerExponents`, `bklMap`, `TypeII.Data.isVacuum_iff`, `TypeII.solution`, `TypeII.tendsto_exponents`, `TypeII.abs_exponents_sub_le` | [BKL](../ProjectAinos/GeneralRelativity/BKL.lean) |
+
+The typed examples are in `checks/CollapseAPI.lean`, `checks/TolmanAPI.lean`,
+`checks/PostNewtonianAPI.lean`, `checks/CosmologicalPerturbationAPI.lean` and `checks/BKLAPI.lean`.
+The decisions are recorded in GR34–GR38 of the [notes](general-relativity-notes.md) and in G17 of
+the [smooth-geometry notes](smooth-geometry-notes.md).
