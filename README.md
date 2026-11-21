@@ -221,6 +221,10 @@ slow charges interact through the Darwin Lagrangian to second order, a localized
 the power of its far-field amplitude with dipole, quadrupole and magnetic-dipole terms, and a fast
 charge radiates with Liénard's power, concentrated in a narrow cone.
 [Guide](docs/electrodynamics.md#radiation-63-6567-7174-77)
+High-frequency fields satisfy the eikonal and transport equations at their leading orders, with
+null rays, conserved intensity and Fermat's principle; wave fronts focus by a Riccati law, ideal
+instruments are similarities, and the error of geometrical optics is bounded by the wave energy.
+[Guide](docs/electrodynamics.md#geometrical-optics-5358)
 
 For general relativity, an observer with a timelike velocity measures
 distances with a spatial form whose square root is half the proper time of a

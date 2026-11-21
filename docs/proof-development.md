@@ -999,6 +999,17 @@ is explicit. The ledger rows ED §§63, 65–67, 71–73 are *proved* in their s
 closed with stated remainders (ED 47 of 66).
 [Guide](electrodynamics.md#radiation-63-6567-7174-77)
 
+For a high-frequency potential the wave operator expands exactly in powers of `1/ε`: the two
+leading orders are the null eikonal and the transport equations, the rays are straight null lines,
+and transport conserves the intensity current. In a medium the rays follow from a complete
+integral and Fermat's principle. The angular eikonal exists where the momentum map is invertible,
+and the ray map is canonical. Along a ray the curvature of the wave front obeys a Riccati equation,
+so focal points are the zeros of `det(1 + lH₀)`, where the amplitude diverges. Rays between
+conjugate points have equal optical lengths, stigmatic bundles satisfy the sine condition, and an
+absolute instrument is a similarity. The energy inequality bounds the error of the approximation,
+with relative size `O(ε)`. The ledger rows ED §§53–58 are *proved* in their scopes (ED 53 of 66).
+[Guide](electrodynamics.md#geometrical-optics-5358)
+
 
 ## GR 5.1 native differential-form foundation
 
