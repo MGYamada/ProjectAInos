@@ -774,7 +774,11 @@ the energy radiated in a hyperbolic collision is explicit (`totalEnergy_hyperbol
 spectrum is an integral over the orbit (`spectrum_hyperbolic`).
 
 **Scope.** Given orbits, the dipole power of §67 as the model of emission (decision 15 on #135).
-The Bessel and Hankel closed forms of the spectra are the remainder of §70.
+For every 0 < ε < 1, the inverse of Kepler’s equation gives the same Cartesian position as the
+polar-angle flow. At each nonzero integer n its two acceleration coefficients are
+−Aω²n J′ₙ(nε) and iA√(1−ε²)ω²n Jₙ(nε)/ε, in the Fourier convention of
+`harmonic_decomposition`. The Hankel evaluation of the hyperbolic orbit integral remains open.
+[Eccentric anomaly](../ProjectAinos/Electrodynamics/Radiation/EccentricOrbit.lean) · [Radiation harmonics](../ProjectAinos/Electrodynamics/Radiation/KeplerHarmonics.lean)
 
 ## Diffraction (§§59–61)
 

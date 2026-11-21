@@ -70,7 +70,9 @@ public import ProjectAinos.Electrodynamics.Radiation.Collision
 public import ProjectAinos.Electrodynamics.Radiation.CollisionSpectrum
 public import ProjectAinos.Electrodynamics.Radiation.CoulombRadiation
 public import ProjectAinos.Electrodynamics.Radiation.Dipole
+public import ProjectAinos.Electrodynamics.Radiation.EccentricOrbit
 public import ProjectAinos.Electrodynamics.Radiation.FarZone
+public import ProjectAinos.Electrodynamics.Radiation.KeplerHarmonics
 public import ProjectAinos.Electrodynamics.Radiation.Multipole
 public import ProjectAinos.Electrodynamics.Radiation.NearZone
 public import ProjectAinos.Electrodynamics.Radiation.Relativistic
@@ -424,6 +426,7 @@ public import ProjectAinos.SmoothGeometry.Euclidean.PolarIntegral
 public import ProjectAinos.SmoothGeometry.Euclidean.Similarity
 public import ProjectAinos.SmoothGeometry.Euclidean.SphereIntegral
 public import ProjectAinos.SmoothGeometry.Examples
+public import ProjectAinos.SmoothGeometry.Fourier.PeriodicSeries
 public import ProjectAinos.SmoothGeometry.Fourier.WaveSolution
 public import ProjectAinos.SmoothGeometry.Gluing
 public import ProjectAinos.SmoothGeometry.GluingExample
@@ -667,6 +670,7 @@ public import ProjectAinos.SpecialFunctions.HarmonicExtension
 public import ProjectAinos.SpecialFunctions.HarmonicPolynomial
 public import ProjectAinos.SpecialFunctions.JacobiCurves
 public import ProjectAinos.SpecialFunctions.JacobiElliptic
+public import ProjectAinos.SpecialFunctions.Kapteyn
 public import ProjectAinos.SpecialFunctions.Legendre
 public import ProjectAinos.SpecialFunctions.LegendreAssociated
 public import ProjectAinos.SpecialFunctions.LegendreGenerating

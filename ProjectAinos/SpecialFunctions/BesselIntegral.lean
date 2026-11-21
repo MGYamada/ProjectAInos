@@ -85,6 +85,11 @@ private theorem fourier (k : ℤ) (x : ℝ) :
   simp_rw [intervalIntegral.integral_const_mul, integral_wave, sub_eq_zero, mul_ite, mul_zero]
   simp [mul_comm]
 
+/-- Fourier integral on one symmetric period for every integer order and real argument. -/
+theorem integral_exponential (k : ℤ) (x : ℝ) :
+    (∫ t in -π..π, exp (-(((k : ℝ) * t - x * Real.sin t : ℝ) : ℂ) * I)) =
+      2 * π * besselJ k x := fourier k x
+
 /-- Bessel's real integral representation for every integer order and real argument. -/
 theorem integral (k : ℤ) (x : ℝ) :
     besselJ k (x : ℂ) =
@@ -109,10 +114,9 @@ theorem integral (k : ℤ) (x : ℝ) :
   field_simp at h ⊢
   linear_combination -h
 
-/-- The derivative integral also holds at the origin and on the negative real axis. -/
-theorem deriv_integral (k : ℤ) (x : ℝ) :
-    deriv (besselJ k) (x : ℂ) = ((1 / π * ∫ t in 0..π,
-      Real.sin ((k : ℝ) * t - x * Real.sin t) * Real.sin t : ℝ) : ℂ) := by
+/-- Integer orders have the adjacent-order derivative identity on the whole complex plane. -/
+theorem twice_deriv_int (k : ℤ) (z : ℂ) :
+    2 * deriv (besselJ k) z = besselJ (k - 1 : ℤ) z - besselJ (k + 1 : ℤ) z := by
   have hl : AnalyticOnNhd ℂ (fun z => 2 * deriv (besselJ k) z) Set.univ :=
     fun z _ => analyticAt_const.mul (analyticAt_besselJ_int k z).deriv
   have hr : AnalyticOnNhd ℂ (fun z => besselJ (k - 1 : ℤ) z - besselJ (k + 1 : ℤ) z) Set.univ :=
@@ -120,7 +124,29 @@ theorem deriv_integral (k : ℤ) (x : ℝ) :
   have h := hl.eq_of_eventuallyEq hr (z₀ := 1) (Filter.eventually_of_mem
     (isOpen_slitPlane.mem_nhds (by simp [mem_slitPlane_iff])) fun z hz => by
       simpa using twice_deriv k z hz)
-  have he := congrFun h (x : ℂ)
+  exact congrFun h z
+
+/-- The polynomial form of the integer-order recurrence holds on the whole complex plane. -/
+theorem recurrence_int (k : ℤ) (z : ℂ) : z * (besselJ (k - 1 : ℤ) z + besselJ (k + 1 : ℤ) z) =
+    2 * k * besselJ k z := by
+  have hl : AnalyticOnNhd ℂ (fun w => w * (besselJ (k - 1 : ℤ) w + besselJ (k + 1 : ℤ) w))
+      Set.univ := fun w _ => analyticAt_id.mul ((analyticAt_besselJ_int _ w).add
+        (analyticAt_besselJ_int _ w))
+  have hr : AnalyticOnNhd ℂ (fun w => 2 * k * besselJ k w) Set.univ :=
+    fun w _ => analyticAt_const.mul (analyticAt_besselJ_int _ w)
+  have h := hl.eq_of_eventuallyEq hr (z₀ := 1) (Filter.eventually_of_mem
+    (isOpen_slitPlane.mem_nhds (by simp [mem_slitPlane_iff])) fun w hw => by
+      change w * _ = _
+      rw [show besselJ (↑(k - 1 : ℤ)) w + besselJ (↑(k + 1 : ℤ)) w =
+        2 * k / w * besselJ k w by simpa using recurrence k w hw]
+      field_simp [slitPlane_ne_zero hw])
+  exact congrFun h z
+
+/-- The derivative integral also holds at the origin and on the negative real axis. -/
+theorem deriv_integral (k : ℤ) (x : ℝ) :
+    deriv (besselJ k) (x : ℂ) = ((1 / π * ∫ t in 0..π,
+      Real.sin ((k : ℝ) * t - x * Real.sin t) * Real.sin t : ℝ) : ℂ) := by
+  have he := twice_deriv_int k (x : ℂ)
   rw [integral (k - 1), integral (k + 1), ← Complex.ofReal_sub, ← mul_sub,
     ← intervalIntegral.integral_sub (Continuous.intervalIntegrable (by fun_prop) ..)
       (Continuous.intervalIntegrable (by fun_prop) ..)] at he
