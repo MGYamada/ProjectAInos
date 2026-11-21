@@ -233,3 +233,59 @@ These notes record mathematical distinctions and interface decisions in `Project
 **Interface decision.** The retarded integral is shared mathematics on `ℝ × ℝ³` with the Euclidean norm, with a continuous linear equivalence to the electrodynamics space-time. Sources are required to have support moving slower than light (`SubluminalSupport`), of which compact support is an instance. Uniqueness is among solutions that vanish in the past with bounded spatial support. For §64 the transform is taken in time at fixed position, in Mathlib's normalization.
 
 **Proof status.** Proved and built. The ledger rows of §§62 and 64 are *proved* in this scope. [RetardedIntegral](../ProjectAinos/SmoothGeometry/Wave/RetardedIntegral.lean) · [RetardedPotential](../ProjectAinos/Electrodynamics/RetardedPotential.lean) · [RetardedSpectrum](../ProjectAinos/Electrodynamics/RetardedSpectrum.lean)
+
+## ED30. The retarded time is smooth off the world line, and its gradient is null
+
+**Observation.** For a world line slower than light, `s ↦ t − s − |x − r(s)|` decreases with slope at most `−1 + v₀`, so the retarded time exists and is unique, and it is smooth off the world line by Mathlib's implicit function theorem; the global retarded time agrees with the implicit function because the solution is unique. Its gradient is null, `⟨∂τ, ∂τ⟩ = 0`, so the third derivative of the world line, which multiplies `⟨∂τ, ∂τ⟩`, never appears in `□φ` and `□𝐚`. With `□τ = −2/(R − R·v)` both vanish off the world line, and the Lorenz condition gives the vacuum equations there. The fields (63.8)–(63.9) follow, and the uniform motion is exactly the boosted Coulomb field of §38.
+
+**Interface decision.** `SubluminalWorldline` is a smooth path with `|ṙ| ≤ v₀ < 1` for all times, with the uniform, rest and circular instances. The retarded quantities are functions of `(t, x)` in the namespace of the world line. The fields are split into the velocity field (`∝ 1/R²`) and the acceleration field (`∝ 1/R`), with light-cone forms at the event `(τ + ρ, r(τ) + ρn)` for §73.
+
+**Proof status.** Proved and built. [RetardedTime](../ProjectAinos/Electrodynamics/RetardedTime.lean) · [LienardWiechert](../ProjectAinos/Electrodynamics/LienardWiechert.lean)
+
+## ED31. The point charge is the source of its field by a light-cone change of variables
+
+**Observation.** In the co-ordinates `(τ, y) ↦ (τ + |y|, r(τ) + y)` the Jacobian is `1 − ŷ·ṙ(τ)`, which cancels the denominator of the Liénard–Wiechert potentials: `φ dt d³x = e dτ d³y/(4π|y|)`. The map is a bijection from `ℝ × (ℝ³ ∖ 0)` onto the complement of the world line, a null set, by the uniqueness of the retarded time. The advanced identity `∫ □u(τ + |y|, x + y)/(4π|y|) dy = u(τ, x)` follows from the retarded one by `(t, x) ↦ (−t, −x)`. Pairing the potential with `box χ` gives `∫ φ box χ = −e ∫ χ(t, r(t)) dt`, so `box A_μ = −k_μ` for the current of the point charge, as for smooth currents. This replaces the δ-function step `∫ δ(t′ − t + R(t′)) dt′ = 1/(1 − n·v)` of Landau–Lifshitz by a change of variables.
+
+**Interface decision.** The identity is stated against `C²` test functions of compact support on space-time, with no distribution type. The work is done on `ℝ × ℝ³` and transported by the measure-preserving splitting of space-time. The potentials are locally integrable.
+
+**Proof status.** Proved and built, for every world line slower than light. [LienardWiechertSource](../ProjectAinos/Electrodynamics/LienardWiechertSource.lean)
+
+## ED32. The flux at infinity needs charge conservation for the transversality of `E`
+
+**Observation.** For a source localized in a fixed ball for all times, `R` times the retarded integral at `(u + R, Rn)` tends to the amplitude `(4π)⁻¹ ∫ f(u + ⟨n, y⟩, y) dy`, uniformly on the sphere, with a rate `C/R`. A spatial derivative of the amplitude is `−n` times its time derivative. The magnetic limit is `R B → ∂ᵤÃ × n` without further hypotheses. The electric limit is `R E → n⟨n, ∂ᵤÃ⟩ − ∂ᵤÃ` only because charge conservation gives `∂ᵤφ̃ = ⟨n, ∂ᵤÃ⟩`; otherwise a longitudinal term remains. The radial Poynting flux is then `|∂ᵤÃ|² − ⟨n, ∂ᵤÃ⟩²`, and the flux through large spheres at fixed retarded time tends to the radiated power by dominated convergence.
+
+**Interface decision.** `LocalizedSupport a f` (support in `|y| ≤ a` for all times) is shared mathematics and is equivalent to `SubluminalSupport a 0 f`. The amplitude, the flux through a sphere and the radiated power are defined once in `Radiation/Basic.lean` and used by the far zone, the near zone and the multipole expansions.
+
+**Proof status.** Proved and built for `C²` conserved currents. [FarField](../ProjectAinos/SmoothGeometry/Wave/FarField.lean) · [Radiation/Basic](../ProjectAinos/Electrodynamics/Radiation/Basic.lean) · [FarZone](../ProjectAinos/Electrodynamics/Radiation/FarZone.lean)
+
+## ED33. The near-zone split of the dipole flux is exact at every radius
+
+**Observation.** The outline asked for a controlled expansion separating the near-zone energy from the outgoing flux. For a point dipole with a smooth moment the split is exact at every radius `R > 0`: the flux through the sphere is `|d̈(t − R)|²/(6π) + dQ_R/dt` with `Q_R = (|d + Rḋ|² + R²|ḋ|²)/(12πR³) ≥ 0` at the retarded time. The radial part of `E` does not contribute to the radial flux. Over a pulse the near-zone term integrates out, so the radiated energy does not depend on `R`. This corrects the outline's expectation of an approximate statement.
+
+**Interface decision.** The point-dipole potential is a global potential with Lean's `x/0 = 0`; the field equations are stated pointwise off the origin, and the fields at points `(t, r n)` with `r > 0`, `|n| = 1`, the parametrization of the flux.
+
+**Proof status.** Proved and built. [NearZone](../ProjectAinos/Electrodynamics/Radiation/NearZone.lean)
+
+## ED34. The multipole powers are Taylor expansions of the amplitude in the delay
+
+**Observation.** For the slow family `k_κ(t, x) = (ρ(κt, x), κ𝐣(κt, x))` the amplitude of the far field is exactly `(κ²/4π) ∫ ∂ₛ𝐣(κu + κ⟨n, y⟩, y) dy`, so the expansion of the radiated power needs only Taylor's formula in the delay `κ⟨n, y⟩`, not an expansion of the retarded integral. The `κ⁵` term is odd in `n` and vanishes after the angular integration, which is why the dipole formula `κ⁴|d̈|²/(6π)` has an `O(κ⁶)` remainder while the angular density has only `O(κ⁵)`. The moment tensor `M_{ki} = ∫ y_k ∂ₛ²j_i` splits into the symmetric part `Q'''/2` and the antisymmetric part `ε m̈`, and the angular integral gives `(1/4π)[(1/180) Σ D'''² + (2/3)|m̈|²]`, with no cross term between the two. Charge conservation enters only through the identities `∫ 𝐣 = ḋ` and `∫ (yᵢjₖ + yₖjᵢ) = d/ds ∫ ρ yᵢyₖ`.
+
+**Interface decision.** `LocalizedSource k a M N` bounds the spatial current and its first `N` time derivatives; the density is controlled by conservation. The quadrupole formula assumes `d̈ = 0` at the retarded time, as in Landau–Lifshitz; without it `power_general` gives the `κ⁶` coefficient with the explicit cross term between the dipole amplitude and its second-order correction. The oscillating current `(cos s ∂₁χ, sin s χ e₁)` and its derivative in `x₁` are the dipole and quadrupole instances.
+
+**Proof status.** Proved and built, with explicit constants. [Dipole](../ProjectAinos/Electrodynamics/Radiation/Dipole.lean) · [Multipole](../ProjectAinos/Electrodynamics/Radiation/Multipole.lean)
+
+## ED35. The radiation of a fast charge is taken along the light cone of its retarded position
+
+**Observation.** At the event `(τ + ρ, r(τ) + ρn)` the retarded time is `τ`, so the Liénard–Wiechert field is explicit and the radial Poynting flux times `ρ²` is a polynomial in `1/ρ`; its limit is the angular distribution per unit time of the observer, and the factor `1 − n·v` of (73.9) is the exact derivative `∂τ/∂t`. Liénard's integral reduces, by Archimedes and the moments orthogonal to `v`, to `∫ (1 − s²)/(1 − βs)⁵ ds` and `∫ 1/(1 − βs)³ ds`, which have explicit antiderivatives. The same reduction gives `∫ (n·v) dI = |v|² ∫ dI` for every acceleration: the mean of `1 − cos θ` over the radiated power is exactly `1 − β`, and Markov's inequality bounds the fraction outside the cone of half-angle `c/γ` by `π²/(2c²)`, uniformly in the speed and the direction of the acceleration.
+
+**Interface decision.** The far zone of §73 is the light cone of the retarded position, not a fixed sphere about the origin as in §66. The synchrotron orbit is the prescribed circular world line; its relation to a uniform magnetic field is the three-vector equation `d(mγv)/dt = e v × B` with `mγΩ = −eB`. `Relativistic.cross` is the cross product on `EuclideanSpace ℝ (Fin 3)`, whose norm is the Euclidean one.
+
+**Proof status.** §73 is proved in this scope. §§74 and 77 are closed with stated remainders: the Bessel and Macdonald closed forms of the spectra, and the spectral asymptotics with Airy-type stationary phase, are absent from Mathlib. The harmonic decomposition of §74 with Fourier coefficients and Parseval is within reach and is not stated. [Relativistic](../ProjectAinos/Electrodynamics/Radiation/Relativistic.lean) · [Synchrotron](../ProjectAinos/Electrodynamics/Radiation/Synchrotron.lean) · [Ultrarelativistic](../ProjectAinos/Electrodynamics/Radiation/Ultrarelativistic.lean)
+
+## ED36. The Darwin Lagrangian is reached for point charges through retarded co-ordinates
+
+**Observation.** For smooth slow sources the retarded integral expands in the slowness `κ` with an explicit remainder, the Darwin gauge turns the potentials into (65.6), and the force on a rigid charge is the Euler–Lagrange expression of the Darwin interaction to order `κ²`. No separation is needed there: the second derivatives of `|x − z|` act with no point term. The `O(κ²)` error of the vector potential contains a spatially constant term, which has no curl and whose time derivative is `O(κ³)`, so the force error is `O(κ³)`. Smearing a point charge does not give the point limit of the force, because the constants grow as the smearing radius shrinks. For point charges the Liénard–Wiechert field is therefore expanded directly, in the retarded distance, direction, velocity and acceleration with Taylor remainders to the present time, which avoids solving for the retarded time: it agrees with the field of the point Darwin potentials to `O(κ³)` in `E` and `O(κ²)` in `B` at separated points. The Euler–Lagrange expression of (65.7) for one charge, the others prescribed, is exactly its kinetic term plus the Lorentz force of the point Darwin potentials of the others, which gives the force to order `κ²`.
+
+**Interface decision.** The motions are prescribed (decision 9 on #135): slow paths `R(κt)` with bounded derivatives up to order three and separations in `[δ, ρ]`, with constants uniform in `κ ≤ 1`. The library's Euler–Lagrange residual is `∂L/∂q − d/dt ∂L/∂v`, so it equals plus the force. The smeared interaction tends to the pair term of (65.7) as the charges shrink to points.
+
+**Proof status.** Proved and built; the ledger row of §65 is *proved* in this scope. [SlowSource](../ProjectAinos/SmoothGeometry/Wave/SlowSource.lean) · [DarwinLagrangian](../ProjectAinos/Electrodynamics/DarwinLagrangian.lean) · [DarwinPointCharge](../ProjectAinos/Electrodynamics/DarwinPointCharge.lean)

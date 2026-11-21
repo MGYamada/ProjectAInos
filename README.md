@@ -216,6 +216,11 @@ in a periodic box is a sum of modes.
 The retarded potentials of a conserved current are given by an explicit integral that solves
 Maxwell's equations with causal support, and their time transform solves the Helmholtz equation.
 [Guide](docs/electrodynamics.md#the-retarded-potentials-62-64)
+A point charge on a world line slower than light has the Liénard–Wiechert field and is its source,
+slow charges interact through the Darwin Lagrangian to second order, a localized source radiates
+the power of its far-field amplitude with dipole, quadrupole and magnetic-dipole terms, and a fast
+charge radiates with Liénard's power, concentrated in a narrow cone.
+[Guide](docs/electrodynamics.md#radiation-63-6567-7174-77)
 
 For general relativity, an observer with a timelike velocity measures
 distances with a spatial form whose square root is half the proper time of a

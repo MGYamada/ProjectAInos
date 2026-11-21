@@ -420,3 +420,19 @@ bundle.
 **Interface decision.** `SmoothGeometry/Wave/RetardedIntegral.lean` imports only Mathlib, with values in any normed space, and `timeSpaceEquiv` transports it to `MinkowskiModel 3`.
 
 **Proof status.** Proved and built. [RetardedIntegral](../ProjectAinos/SmoothGeometry/Wave/RetardedIntegral.lean)
+
+## G12. Integrals over the unit sphere come from Gaussian moments
+
+**Observation.** Mathlib's `volume.toSphere` is three times the volume of the cone over a set, which is the surface measure. Its invariance under linear isometries follows from the cone formula. The moments `∫ n₃^{2m} dσ = 4π/(2m + 1)` come from computing `∫ x₃^{2m} e^{−|x|²}` once in polar co-ordinates and once by Fubini, and Archimedes' formula `∫ g(⟨n, e⟩) dσ = 2π ∫_{−1}^{1} g` extends from polynomials to continuous `g` by Weierstrass. The moments of directions orthogonal to `e` against `g(⟨n, e⟩)` follow by reflections.
+
+**Interface decision.** `SmoothGeometry/Euclidean/SphereIntegral.lean` imports only Mathlib, and Archimedes is stated for `g` continuous on `[−1, 1]`, so profiles `(1 − βs)^{−k}` with `|β| < 1` qualify.
+
+**Proof status.** Proved and built. [SphereIntegral](../ProjectAinos/SmoothGeometry/Euclidean/SphereIntegral.lean)
+
+## G13. The far field and the slow expansion of the retarded integral are shared layers
+
+**Observation.** The far-field limit and the expansion of the retarded integral of a slowly varying source in powers of the slowness concern functions on `ℝ × ℝ³` and need no field theory. The second derivatives of `|x − z|` act on test functions with no point term, `∂ᵢ∂ₖ|y| = (δᵢₖ − ŷᵢŷₖ)/|y|`, which is proved by regularizing to `√(|y|² + δ²)`.
+
+**Interface decision.** `SmoothGeometry/Wave/FarField.lean` and `SmoothGeometry/Wave/SlowSource.lean` import only Mathlib, the potential layer and the retarded integral.
+
+**Proof status.** Proved and built. [FarField](../ProjectAinos/SmoothGeometry/Wave/FarField.lean) · [SlowSource](../ProjectAinos/SmoothGeometry/Wave/SlowSource.lean)

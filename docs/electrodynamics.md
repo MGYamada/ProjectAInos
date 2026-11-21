@@ -694,8 +694,72 @@ transform of the retarded potential is `∫ e^{−2πiν|y|} k̂(ν, x − y)/(4
 `(Δ + (2πν)²)Â_μ = −k̂_μ` (`helmholtz_fourier_retardedPotential`).
 
 **Scope.** Flat space-time. The uniqueness class consists of solutions that vanish in the past, so
-it covers sources that vanish in the past. The far-zone amplitude of a point charge is the next
-wave (§63).
+it covers sources that vanish in the past. The point charge is treated in the next section (§63).
+
+## Radiation (§§63, 65–67, 71–74, 77)
+
+**The Liénard–Wiechert potentials (§63).** A `SubluminalWorldline` is a smooth path with
+`|ṙ| ≤ v₀ < 1` for all times; the uniform, rest and circular motions are instances. The retarded
+time exists, is unique (`existsUnique_retardedTime`) and is smooth off the world line
+(`contDiffOn_retardedTime`), with `∂ₜτ = R/(R − R·v)` and `∇τ = −R/(R − R·v)`. The potentials
+`lienardWiechert e w` satisfy the Lorenz condition and the vacuum equations off the world line
+(`maxwell_lienardWiechert`); the gradient of the retarded time is null, so the third derivative of
+the path never appears. The fields (63.8)–(63.9) are the velocity field plus the acceleration field,
+with `B = n × E` (`electricVector_lienardWiechert`, `magneticVector_lienardWiechert`), and uniform
+motion gives the moving Coulomb field of §38 (`lienardWiechert_axisWorldline`). The point charge is
+the source of the field: in the light-cone co-ordinates `(τ, y) ↦ (τ + |y|, r(τ) + y)` the Jacobian
+`1 − ŷ·ṙ` cancels the denominator (`integral_lightCone`), and
+`∫ φ box χ = −e ∫ χ(t, r(t)) dt` for every `C²` test function of compact support
+(`integral_scalarPotential_mul_box`, `integral_potentialComponent_mul_box`).
+
+**The Lagrangian to second order (§65).** For a source varying slowly in time,
+`f_κ(t, x) = f(κt, x)`, the retarded integral is the Newton integral plus explicit corrections in
+powers of `κ` with an `O(κ^{n+1})` remainder (`Wave.retardedIntegral_slow_expansion`). In the Darwin
+gauge the potentials of a slow conserved source are the Newton potential of the density and
+`(κ/8π) ∫ [𝐣 + ⟨𝐣, n⟩n]/R` (`SlowSource.scalar_expansion`, `vector_expansion`), and the force of the
+retarded field on a rigid charge is the Euler–Lagrange expression of the Darwin interaction to order
+`κ²` (`SlowSource.force_eq_darwin`). The smeared interaction tends to the interaction of (65.7) as
+the charges shrink to points (`darwinInteraction_pointLimit`, `darwinLagrangian_pointLimit`).
+For point charges on slow paths the Liénard–Wiechert field is the field of the point Darwin
+potentials to `O(κ³)` (`lienardWiechert_sub_darwin`), and the force on each charge from the fields
+of the others is the interaction part of the Euler–Lagrange expression of (65.7) to order `κ²`
+(`eulerLagrange_darwinLagrangian`, `force_eq_darwinLagrangian`).
+
+**The field at large distances (§66).** For a conserved current supported in a fixed ball,
+`R` times the retarded potential at `(u + R, Rn)` tends to the amplitude
+`Ã(u, n) = (4π)⁻¹ ∫ k(u + ⟨n, y⟩, y) dy` (`radiationAmplitude`), uniformly on the sphere and with
+a rate `C/R`. The fields are transverse to leading order, `R B → ∂ᵤÃ × n` and
+`R E → n⟨n, ∂ᵤÃ⟩ − ∂ᵤÃ`, which needs charge conservation, and the Poynting flux through the sphere
+of radius `R` at the time `u + R` tends to the radiated power `∫ |n × ∂ᵤÃ|² dσ`
+(`tendsto_sphereFlux_poynting`). The integrals over the sphere (moments, Archimedes) are shared
+(`Sphere.integral_inner_mul_inner`, `Sphere.integral_comp_inner`).
+
+**Dipole, quadrupole and magnetic-dipole radiation (§§67, 71).** For the slow family of a localized
+current, the radiated power is `κ⁴|d̈|²/(6π) + O(κ⁶)` (`dipolePower_sub_le`), and where `d̈`
+vanishes it is `κ⁶(1/4π)[(1/180) Σ D'''ᵢⱼ² + (2/3)|m̈|²] + O(κ⁷)` (`power_sub_le`); the general
+`κ⁶` coefficient has an explicit cross term (`power_general`). Oscillating dipole and quadrupole
+currents are instances with nonzero leading terms.
+
+**The field at near distances (§72).** For a point dipole with a smooth moment the fields have all
+three orders in `1/r`, and the flux through the sphere of radius `R` is exactly
+`|d̈(t − R)|²/(6π) + dQ_R/dt` with a non-negative near-zone energy `Q_R`
+(`NearZone.sphereFlux_eq`, `nearZoneEnergy_eq`); over a pulse the radiated energy does not depend
+on `R` (`integral_sphereFlux_eq`).
+
+**A fast charge (§§73, 74, 77).** Along the light cone of the retarded position, `ρ²` times the radial
+Poynting flux tends to `e²|n × ((n − v) × v̇)|²/(16π²(1 − n·v)⁶)`, and to (73.9) per unit retarded
+time (`tendsto_sq_mul_inner_poyntingVector_mul_lightCone`). Liénard's formula gives the power
+`(2/3)(e²/4π)γ⁶(|v̇|² − |v × v̇|²)` (`integral_lienard`, `integral_angularPower`). On a circular orbit
+the power is `(2/3)(e²/4π)γ⁴v²Ω²`, with the loss per turn and its ratio to the energy
+(`Synchrotron.integral_angularPower_circular`, `lossPerTurn_div_energy`). For every acceleration the
+fraction of the power outside the cone of half-angle `c/γ` about `v` is at most `π²/(2c²)`
+(`Ultrarelativistic.integral_indicator_outsideCone_le_uniform`).
+
+**Scope.** Flat space-time, prescribed motions, Heaviside–Lorentz units. Not stated: the time
+transform of the far-zone amplitude of a point charge (with the collision spectra, F22b), the
+harmonics of synchrotron radiation with Bessel functions, and the spectral asymptotics of the
+ultrarelativistic case, which need stationary phase and Airy functions (§§74, 77 are closed with
+these remainders).
 
 ## Proof and API map
 
@@ -705,6 +769,12 @@ All names below are under `ProjectAinos`, except imported `YM` names.
 | --- | --- | --- |
 | The retarded potentials | `Wave.retardedIntegral`, `integral_wave_div_norm`, `wave_retardedIntegral`, `retardedIntegral_eq_zero_of_support`, `retardedPotential`, `maxwell_retardedPotential`, `eq_retardedScalar` | [RetardedIntegral](../ProjectAinos/SmoothGeometry/Wave/RetardedIntegral.lean), [RetardedPotential](../ProjectAinos/Electrodynamics/RetardedPotential.lean) |
 | The spectral resolution of the retarded potentials | `fourier_retardedPotential`, `helmholtz_fourier_retardedPotential` | [RetardedSpectrum](../ProjectAinos/Electrodynamics/RetardedSpectrum.lean) |
+| The Liénard–Wiechert potentials | `SubluminalWorldline.existsUnique_retardedTime`, `contDiffOn_retardedTime`, `lienardWiechert`, `maxwell_lienardWiechert`, `electricVector_lienardWiechert`, `magneticVector_lienardWiechert`, `lienardWiechert_axisWorldline`, `integral_lightCone`, `integral_potentialComponent_mul_box` | [RetardedTime](../ProjectAinos/Electrodynamics/RetardedTime.lean), [LienardWiechert](../ProjectAinos/Electrodynamics/LienardWiechert.lean), [LienardWiechertSource](../ProjectAinos/Electrodynamics/LienardWiechertSource.lean) |
+| The Lagrangian to second order | `Wave.retardedIntegral_slow_expansion`, `SlowSource.scalar_expansion`, `SlowSource.vector_expansion`, `eulerLagrange_rigidLagrangian`, `SlowSource.force_eq_darwin`, `darwinInteraction_pointLimit`, `darwinLagrangian`, `darwinLagrangian_pointLimit`, `lienardWiechert_sub_darwin`, `eulerLagrange_darwinLagrangian`, `force_eq_darwinLagrangian` | [SlowSource](../ProjectAinos/SmoothGeometry/Wave/SlowSource.lean), [DarwinLagrangian](../ProjectAinos/Electrodynamics/DarwinLagrangian.lean), [DarwinPointCharge](../ProjectAinos/Electrodynamics/DarwinPointCharge.lean) |
+| The field at large distances | `Sphere.integral_inner_mul_inner`, `Sphere.integral_comp_inner`, `Wave.tendstoUniformlyOn_mul_retardedIntegral`, `Radiation.radiationAmplitude`, `radiatedPower`, `tendstoUniformlyOn_mul_electricField`, `tendsto_sphereFlux_poynting`, `exists_bound_electricField_sub_cross` | [SphereIntegral](../ProjectAinos/SmoothGeometry/Euclidean/SphereIntegral.lean), [FarField](../ProjectAinos/SmoothGeometry/Wave/FarField.lean), [Radiation/Basic](../ProjectAinos/Electrodynamics/Radiation/Basic.lean), [FarZone](../ProjectAinos/Electrodynamics/Radiation/FarZone.lean) |
+| Multipole radiation | `Radiation.dipolePower_sub_le`, `dipoleAngular`, `power_sub_le`, `power_general`, `dipolePower_oscillatingDipole`, `power_oscillatingQuadrupole` | [Dipole](../ProjectAinos/Electrodynamics/Radiation/Dipole.lean), [Multipole](../ProjectAinos/Electrodynamics/Radiation/Multipole.lean) |
+| The field at near distances | `NearZone.dipolePotential`, `maxwell_dipolePotential`, `electricField_dipolePotential`, `sphereFlux_eq`, `integral_sphereFlux_eq` | [NearZone](../ProjectAinos/Electrodynamics/Radiation/NearZone.lean) |
+| A fast charge | `Relativistic.tendsto_sq_mul_inner_poyntingVector_mul_lightCone`, `integral_lienard`, `integral_angularPower`, `Synchrotron.integral_angularPower_circular`, `lossPerTurn_div_energy`, `Ultrarelativistic.integral_indicator_outsideCone_le_uniform` | [Relativistic](../ProjectAinos/Electrodynamics/Radiation/Relativistic.lean), [Synchrotron](../ProjectAinos/Electrodynamics/Radiation/Synchrotron.lean), [Ultrarelativistic](../ProjectAinos/Electrodynamics/Radiation/Ultrarelativistic.lean) |
 | Multipoles | `Potential.abs_newtonKernel_sub_dipole_le`, `newtonKernel_taylor_le`, `Multipole.abs_newtonPotential_sub_dipole_le`, `abs_newtonPotential_sub_multipole_le`, `abs_newtonPotential_sub_moments_le`, `multipoleTerm_translate`, `quadrupoleMoment_trace` | [Potential multipoles](../ProjectAinos/SmoothGeometry/Potential/Multipole.lean), [Multipole](../ProjectAinos/Electrodynamics/Multipole.lean) |
 | A system in an external field | `Multipole.abs_externalEnergy_sub_le`, `norm_externalForce_sub_le`, `norm_externalTorque_sub_le` | [Multipole](../ProjectAinos/Electrodynamics/Multipole.lean) |
 | Magnetostatics | `Magnetostatics.vectorPotential`, `curl3_magneticField3`, `magneticField3_unique`, `magneticField3_eq_biotSavart`, `maxwell_staticVector`, `MagneticMoment.norm_vectorPotential_sub_dipole_le`, `magneticMoment_flow`, `torque_uniformField` | [Magnetostatics](../ProjectAinos/Electrodynamics/Magnetostatics.lean), [MagneticMoment](../ProjectAinos/Electrodynamics/MagneticMoment.lean) |
