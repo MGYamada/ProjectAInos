@@ -1,0 +1,76 @@
+# Courant–Hilbert 2.0
+
+The chapter and section numbers below follow the first German editions of Courant and Hilbert's
+*Methoden der mathematischen Physik*. Each volume has seven numbered chapters. Volume I moves
+from finite linear algebra through expansions and variational methods to eigenfunctions. Volume II
+organizes PDEs by type and ends with variational solutions of boundary and eigenvalue problems.
+The page ranges cover whole chapters. Section numbers identify the corresponding topic.
+Volume I, chapter VII starts on p. 381 in 1924 and on p. 405 in the revised 1931 edition. [Volume I (1924)](https://link.springer.com/book/10.1007/978-3-662-36445-1)
+· [Volume II (1937)](https://link.springer.com/book/10.1007/978-3-642-47434-7)
+· [Revised volume I](https://link.springer.com/book/10.1007/978-3-642-47436-1)
+
+## Volume I (1924)
+
+Project names below omit the common `ProjectAinos` prefix. In the Legendre rows, `Legendre` means
+`SpecialFunctions.Legendre`. The last column gives a mathematical target still to be covered.
+[Printed contents of volume I](https://link.springer.com/content/pdf/bfm:978-3-662-36445-1/1) · [Göttingen facsimile](https://gdz.sub.uni-goettingen.de/id/PPN380672502)
+
+| Chapter and pages | Lean declaration and scope | Remaining target |
+| --- | --- | --- |
+| I. Linear transformations and quadratic forms, §3, pp. 1–31 | `Mechanics.NormalModes.exists_orthogonal_diagonalization` diagonalizes a real symmetric matrix with an orthogonal change of coordinates in finite dimension. | Canonical forms for pairs of indefinite quadratic forms. |
+| II. Series expansions of arbitrary functions, §8, pp. 32–98 | `Legendre.integral_mul` gives every entry of the Legendre Gram matrix for Lebesgue measure on the symmetric interval. | Expansion of arbitrary square-integrable functions in this basis. |
+| III. Linear integral equations, §§2–4, pp. 99–141 | Mathlib's `ContinuousLinearMap.finite_dimensional_eigenspace` gives finite-dimensional eigenspaces of a compact operator at nonzero eigenvalues. | Construct the integral operators from kernels and derive Fredholm solvability for them. |
+| IV. Calculus of variations, §3, pp. 142–220 | `Variational.stationary_iff_eulerLagrange` equates stationarity under smooth compactly supported interior variations with the pointwise Euler–Lagrange equation, for an open domain, a C² density function and field, and integrable action density with respect to additive Haar measure. [First variation](../ProjectAinos/Variational/EulerLagrange.lean) | Existence of minimizers and sufficient conditions for a minimum. |
+| V. Vibrations and eigenvalue problems, §3, pp. 221–320 | `Mechanics.NormalModes.exists_simultaneous_diagonalization` gives coordinates with mass matrix equal to the identity and stiffness matrix diagonal for a positive definite mass matrix and symmetric stiffness matrix. | Spectra of continuous vibrating systems with general boundary conditions. |
+| VI. Variational methods for eigenvalues, §1, pp. 321–380 | Mathlib's `IsSelfAdjoint.hasEigenvector_of_isMaxOn` turns an attained maximum on a sphere into an eigenvector for the supremum of the Rayleigh quotient. | Minimax characterization of higher eigenvalues for differential operators on bounded domains. |
+| VII. Special functions defined by eigenvalue problems, §§3–4, pp. 381–443 | `Legendre.rodrigues`, `recurrence` and `equation` give the normalized polynomial eigenfunctions in every degree. `SmoothGeometry.Sphere.integral_comp_inner` reduces a continuous zonal integral on the unit two-sphere to an interval integral with factor 2π. [Sphere measure](../ProjectAinos/SmoothGeometry/Euclidean/SphereIntegral.lean) | Prove the spherical addition theorem and L² completeness (§4), Bessel theory (§2), and asymptotic expansions (§5). |
+
+## Volume II (1937)
+
+The wave results below concern time and three spatial variables. This distinction matters for the
+two chapters on hyperbolic equations. [Printed contents of volume II](https://link.springer.com/content/pdf/bfm:978-3-642-47434-7/1) · [Göttingen facsimile](https://gdz.sub.uni-goettingen.de/id/PPN380673029)
+
+| Chapter and pages | Lean declaration and scope | Remaining target |
+| --- | --- | --- |
+| I. Preliminaries and fundamental concepts, §7, pp. 1–50 | `SmoothGeometry.Fourier.waveSolution_zero` and `deriv_waveSolution_zero` recover both Cauchy data for the Fourier solution with complex Schwartz data on ℝ³. | A general formulation of non-characteristic initial hypersurfaces. |
+| II. First-order PDEs, §8, pp. 51–122 | `Mechanics.CompleteIntegral.isTrajectory_of_isHamiltonJacobi` constructs a Hamiltonian trajectory from a given complete integral, constant parameter derivatives along a curve and a nondegenerate mixed derivative. | Local construction of general first-order solutions from characteristic data. |
+| III. Higher-order linear equations, §§1–3, pp. 123–222 | `SmoothGeometry.Potential.coordLaplacian_eq_laplacian` identifies the coordinate sum of second derivatives with the Euclidean Laplacian at a C² point. | General principal symbols, characteristics and classification. |
+| IV. Elliptic equations and potential theory, §§1–4, pp. 223–289 | `SmoothGeometry.Potential.laplacian_newtonPotential` proves Δφ = −ρ for C² compactly supported densities in ℝ³. `newtonKernel_taylor_le` bounds the exterior Taylor remainder at every finite order when the source radius is smaller than the field radius. [Newton potential](../ProjectAinos/SmoothGeometry/Potential/NewtonPotential.lean) · [Taylor estimate](../ProjectAinos/SmoothGeometry/Potential/Multipole.lean) | Boundary Green functions and Dirichlet problems on general domains. |
+| V. Hyperbolic equations in two variables, §§1–3, pp. 290–345 | `Electrodynamics.Optics.Limits.waveOperator_planePhase` verifies the particular characteristic phase t − x₁ in the flat wave operator, constant in the transverse variables. | The characteristic initial-value problem for variable-coefficient equations in 1+1 dimensions. |
+| VI. Hyperbolic equations in more than two variables, §6, pp. 346–470 | `SmoothGeometry.Fourier.wave_waveSolution` gives the homogeneous wave equation for the same Schwartz data as chapter I, at every real time and point of ℝ³. `SmoothGeometry.Wave.sqrt_energy_le` gives a forced-wave energy bound for C² fields supported in a fixed ball on the time interval. [Fourier solution](../ProjectAinos/SmoothGeometry/Fourier/WaveSolution.lean) · [Energy estimate](../ProjectAinos/SmoothGeometry/Wave/Energy.lean) | General variable-coefficient hyperbolic operators. |
+| VII. Variational solution of boundary and eigenvalue problems, §§1–2, pp. 471–544 | `SmoothGeometry.Potential.integral_mul_coordLaplacian_eq_neg_sum` identifies the tested Laplacian with the negative gradient pairing. Together with the stationarity equation in I.IV this supplies the classical first-variation calculation. | Construct a weak solution with prescribed boundary data and prove existence of boundary eigenfunctions. |
+
+## Special functions and issue #171
+
+Volume I treats Legendre polynomials twice. Chapter II §8 (p. 66) constructs them by
+orthogonalizing monomials and also treats their differential equation, generating function
+and completeness.
+Chapter VII goes from second-order linear ODEs (§1) to Bessel functions (§2), Legendre functions
+(§3, p. 416), Laplace's spherical harmonics (§4, p. 420) and asymptotic expansions (§5, p. 430).
+These two entries connect the interval normalization to the later spherical problem. [1924 section index](https://gdz.sub.uni-goettingen.de/id/PPN380672502)
+
+* **Interval normalization (I.II §8).** The substitution (1 − X)/2 in Mathlib's
+  `Polynomial.shiftedLegendre` gives P₀ = 1, P₁ = X and Pₙ(1) = 1. The theorem
+  `Legendre.integral_mul` gives zero for distinct degrees and 2/(2n + 1) on the diagonal.
+  [Shifted polynomial in the pinned Mathlib](https://github.com/leanprover-community/mathlib4/blob/56a005855ea17e0b0958f73ec801ae140b0a1679/Mathlib/RingTheory/Polynomial/ShiftedLegendre.lean#L40) · [Polynomial identities](../ProjectAinos/SpecialFunctions/Legendre.lean) · [Orthogonality](../ProjectAinos/SpecialFunctions/LegendreOrthogonality.lean)
+* **Differential equation (I.VII §3).** In every degree n, the derivative of
+  (x² − 1)P′ₙ equals n(n + 1)Pₙ. The endpoint normalization and this polynomial identity
+  give the three-term recurrence. [Legendre equation](../ProjectAinos/SpecialFunctions/Legendre.lean)
+* **Real Jacobi elliptic functions.** The shared library contains the amplitude, sn, cn and dn,
+  their derivative and half-period formulas for k² < 1, and the two three-coordinate Jacobi
+  curves. The rigid-body application supplies the moments of inertia and checks the Euler
+  equations. [Elliptic functions](../ProjectAinos/SpecialFunctions/JacobiElliptic.lean) · [Parametrized curves](../ProjectAinos/SpecialFunctions/JacobiCurves.lean) · [Asymmetric top](../ProjectAinos/Mechanics/Poisson/AsymmetricTop.lean)
+
+The typed regression examples check P₁ = X, P₂ = (3X² − 1)/2, and the integral of P₁²
+over the interval equals 2/3. The asymmetric-top checks exercise the original Jacobi names.
+[Legendre API](../checks/LegendreAPI.lean) · [Jacobi and asymmetric-top API](../checks/JacobiEllipticAPI.lean)
+
+The following order tracks the dependencies of the applications. [Issue #171](https://github.com/MGYamada/ProjectAinos/issues/171)
+
+| Order | Formalization and application |
+| --- | --- |
+| 1 | `Legendre.hasSum_generating` sums the real generating series for −1 ≤ x ≤ 1 and −1 < t < 1. `hasSum_newtonKernel` specializes it to the convergent exterior expansion of 1/(4π‖x − y‖). `associated` uses the Condon–Shortley phase for nonnegative integral order. `associated_equation` gives its differential equation on the open interval. [Generating series](../ProjectAinos/SpecialFunctions/LegendreGenerating.lean) · [Exterior kernel](../ProjectAinos/SpecialFunctions/LegendreNewton.lean) · [Associated functions](../ProjectAinos/SpecialFunctions/LegendreAssociated.lean) |
+| 2 | `HarmonicPolynomial.existsUnique_fischer` gives the unique harmonic remainder after removing a squared-radius multiple in every positive ambient dimension. `SphericalHarmonics.finrank_space_three` counts 2ℓ + 1 independent restrictions on S². `angular_eigenvalue` evaluates the sum of squared rotation generators on these representatives, with eigenvalue −ℓ(ℓ + d − 2), including −ℓ(ℓ + 2) on S³. `integral_zonal_mul` proves orthogonality on S² for the zonal functions about any one fixed unit axis. Orthogonality of the full spaces, the addition theorem, an explicit basis, L² completeness and the identification with `Electrodynamics.Multipole.multipoleTerm` in §41 remain open. [Homogeneous polynomials](../ProjectAinos/SpecialFunctions/HarmonicPolynomial.lean) · [Spherical harmonics](../ProjectAinos/SpecialFunctions/SphericalHarmonics.lean) |
+| 3 | Prove Bessel's equation, integral, recurrences, zeros and asymptotics. Extend to second-kind, modified, Hankel and imaginary-order functions, spherical Bessel functions, the plane-wave expansion and Kapteyn series. |
+| 4 | Develop Airy functions, non-stationary and stationary phase, uniform asymptotics at coalescing stationary points, Fresnel integrals and the error function. Apply these to diffraction and radiation. |
+| 5 | Develop the complete elliptic integrals K and E, confluent hypergeometric functions, Laguerre, Gegenbauer and Jacobi polynomials, and the continuous spectrum on hyperbolic three-space. |

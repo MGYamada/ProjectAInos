@@ -651,6 +651,15 @@ public import ProjectAinos.SmoothGeometry.Wave.HighFrequency
 public import ProjectAinos.SmoothGeometry.Wave.RetardedIntegral
 public import ProjectAinos.SmoothGeometry.Wave.SlowSource
 public import ProjectAinos.SmoothGeometry.Wave.TransverseTraceless
+public import ProjectAinos.SpecialFunctions.HarmonicPolynomial
+public import ProjectAinos.SpecialFunctions.JacobiCurves
+public import ProjectAinos.SpecialFunctions.JacobiElliptic
+public import ProjectAinos.SpecialFunctions.Legendre
+public import ProjectAinos.SpecialFunctions.LegendreAssociated
+public import ProjectAinos.SpecialFunctions.LegendreGenerating
+public import ProjectAinos.SpecialFunctions.LegendreNewton
+public import ProjectAinos.SpecialFunctions.LegendreOrthogonality
+public import ProjectAinos.SpecialFunctions.SphericalHarmonics
 public import ProjectAinos.SpecialRelativity.Boost
 public import ProjectAinos.SpecialRelativity.Causality
 public import ProjectAinos.SpecialRelativity.Cotangent

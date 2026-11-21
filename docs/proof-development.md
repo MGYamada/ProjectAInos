@@ -78,6 +78,15 @@ Every completed stage must pass the warning-free Lean build, root-import check, 
 
 See the [Landau–Lifshitz correspondence](landau-lifshitz.md) for the Mechanics proof targets and reference volumes for the other subjects.
 
+## Courant–Hilbert and special functions
+
+The shared library collects Jacobi elliptic functions and their parametrized curves. Legendre
+orthogonality and the differential equation give the interval and eigenfunction treatments
+in volume I. The convergent generating series yields the exterior Newton expansion. Fischer
+decomposition and injective restriction to the sphere give the dimension of the spherical
+harmonics. The sum of squared infinitesimal rotations gives their angular eigenvalue.
+[Chapter correspondence and proof map](courant-hilbert.md)
+
 ## Shared Smooth Algebra and Geometry
 
 The shared mathematical layers for Mechanics, Special Relativity, Electrodynamics, and General Relativity (research-plan topics 2–5) live in `ProjectAinos/SmoothAlgebra` and `ProjectAinos/SmoothGeometry`, independently of the physics. Together with the shared `Variational` layer, they have an acyclic import graph excluding project physics and vendored Yang–Mills. C∞-rings have finite smooth operations, substitution laws, and compatibility with a commutative real algebra. Morphisms preserve every smooth operation; their real-algebra homomorphisms are derived. The concrete models are ℝ, products, and C∞(ℝⁿ), including dimension zero. The smooth-function ring is proved free on its coordinate functions, with evaluation and pullback as morphisms. A nonpolynomial check proves `exp(a + b) = exp(a) * exp(b)` in every C∞-ring.

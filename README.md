@@ -339,6 +339,13 @@ electrodynamics, and general relativity. The foundation’s implementation
 plan and the Lean results for these subjects are documented in
 [Shared smooth algebra and geometry](docs/shared-smooth-algebra-and-geometry.md).
 
+The [Courant–Hilbert 2.0 correspondence](docs/courant-hilbert.md) maps the fourteen
+chapters of the German first editions to Lean proofs and open problems. The shared
+special-functions library starts with Jacobi elliptic functions and the Legendre
+polynomials used in orthogonal expansions and the exterior Newton kernel. Fischer
+decomposition gives harmonic polynomials in every positive dimension, with
+2ℓ + 1 independent restrictions of degree ℓ on the two-sphere.
+
 See the [proof development record](docs/proof-development.md) for the history of the Lean formalization.
 
 ## Quantum prototypes

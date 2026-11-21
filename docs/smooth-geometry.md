@@ -1119,7 +1119,8 @@ strictly increasing bijection of the line. If `g` has the period `P`, the
 solution advances by `P` in the time `scalarTime g P`
 (`flow_add_scalarTime_of_periodic`).
 
-`ODE.JacobiElliptic`: for `k² < 1` the amplitude `am k` is the solution
+The shared module `SpecialFunctions.JacobiElliptic` applies this flow theorem.
+The historical import `SmoothGeometry.ODE.JacobiElliptic` exports its declarations. For `k² < 1` the amplitude `am k` is the solution
 through `0` of `φ′ = √(1 − k² sin² φ)`, and `sn = sin ∘ am`, `cn = cos ∘ am`,
 `dn = √(1 − k² sn²)`. Mathlib has Weierstrass's `℘` and no Jacobi functions.
 

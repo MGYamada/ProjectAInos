@@ -2,6 +2,7 @@
 
 - [Research plan](../README.md)
 - [Proof development record](proof-development.md)
+- [Courant–Hilbert 2.0 correspondence](courant-hilbert.md)
 - [Landau–Lifshitz correspondence](landau-lifshitz.md)
 - [Axiomatic thermodynamics: mathematical guide and proof map](thermodynamics.md)
 - [The algebraic entropy theorem](thermodynamics-algebra.md)

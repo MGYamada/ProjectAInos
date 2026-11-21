@@ -14,7 +14,7 @@ SUBJECTS = {
     "mechanics": ("Mechanics", "SmoothAlgebra", "Variational"),
     "classical-fields": (
         "SpecialRelativity", "Electrodynamics", "GeneralRelativity", "SmoothGeometry",
-        "External", "Integrations", "QuantumMechanics", "QuantumFieldTheory",
+        "SpecialFunctions", "External", "Integrations", "QuantumMechanics", "QuantumFieldTheory",
     ),
 }
 FAMILY_OWNERS = {family: subject for subject, families in SUBJECTS.items() for family in families}
