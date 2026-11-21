@@ -460,3 +460,11 @@ bundle.
 **Interface decision.** `SmoothGeometry/Lorentzian/{Focusing, PseudotensorFlux, CurvedLinearization}.lean`, `SmoothGeometry/ODE/RiccatiComparison.lean` and `SmoothGeometry/Wave/TransverseTraceless.lean` import only Mathlib and shared modules.
 
 **Proof status.** Proved and built. [Focusing](../ProjectAinos/SmoothGeometry/Lorentzian/Focusing.lean) · [PseudotensorFlux](../ProjectAinos/SmoothGeometry/Lorentzian/PseudotensorFlux.lean) · [CurvedLinearization](../ProjectAinos/SmoothGeometry/Lorentzian/CurvedLinearization.lean) · [RiccatiComparison](../ProjectAinos/SmoothGeometry/ODE/RiccatiComparison.lean) · [TransverseTraceless](../ProjectAinos/SmoothGeometry/Wave/TransverseTraceless.lean)
+
+## G17. Orthogonal slicings are a shared layer
+
+**Observation.** Coordinate hypersurfaces `x^k = c` with `g_kμ = 0` for `μ ≠ k` have an induced metric, a unit normal of either causal type and the second fundamental form `K_ab = −g(n, Γ_ab)`; synchronous metrics are the instance with `k = 0`, where `K_αβ = (ε/2)∂ₜγ_αβ`.
+
+**Interface decision.** `SmoothGeometry/Lorentzian/OrthogonalSlicing.lean` imports only the synchronous and diagonal-metric layers.
+
+**Proof status.** Proved and built. [OrthogonalSlicing](../ProjectAinos/SmoothGeometry/Lorentzian/OrthogonalSlicing.lean)
