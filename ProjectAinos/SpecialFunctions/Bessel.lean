@@ -65,6 +65,14 @@ private theorem contiguous (b z : ℂ) : F b z = b * F (b + 1) z + z * F (b + 1 
   apply (series b z).unique
   exact (((series (b + 1) z).mul_left b).add h).congr_fun fun n => by rw [lower_coeff b]; ring
 
+/-- Differentiating the entire regularized ₀F₁ raises its lower parameter by one. -/
+theorem hasDerivAt_zeroFone (b z : ℂ) :
+    HasDerivAt (regularizedHGFun 0 {b}) (regularizedHGFun 0 {b + 1} z) z := deriv_F b z
+
+/-- The contiguous identity for regularized ₀F₁ also holds at gamma poles. -/
+theorem zeroFone_contiguous (b z : ℂ) : regularizedHGFun 0 {b} z =
+    b * regularizedHGFun 0 {b + 1} z + z * regularizedHGFun 0 {b + 1 + 1} z := contiguous b z
+
 private theorem half_slit {z : ℂ} (hz : z ∈ slitPlane) : z / 2 ∈ slitPlane := by
   simpa [mem_slitPlane_iff, div_ofNat_re, div_ofNat_im] using hz
 

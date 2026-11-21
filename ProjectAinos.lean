@@ -662,6 +662,7 @@ public import ProjectAinos.SpecialFunctions.BesselGenerating
 public import ProjectAinos.SpecialFunctions.BesselIntegral
 public import ProjectAinos.SpecialFunctions.BesselZeros
 public import ProjectAinos.SpecialFunctions.Fresnel
+public import ProjectAinos.SpecialFunctions.Hankel
 public import ProjectAinos.SpecialFunctions.HarmonicExtension
 public import ProjectAinos.SpecialFunctions.HarmonicPolynomial
 public import ProjectAinos.SpecialFunctions.JacobiCurves
@@ -672,9 +673,13 @@ public import ProjectAinos.SpecialFunctions.LegendreGenerating
 public import ProjectAinos.SpecialFunctions.LegendreMonomials
 public import ProjectAinos.SpecialFunctions.LegendreNewton
 public import ProjectAinos.SpecialFunctions.LegendreOrthogonality
+public import ProjectAinos.SpecialFunctions.Macdonald
+public import ProjectAinos.SpecialFunctions.ModifiedBessel
 public import ProjectAinos.SpecialFunctions.NewtonHarmonics
 public import ProjectAinos.SpecialFunctions.NonstationaryPhase
 public import ProjectAinos.SpecialFunctions.QuadraticPhase
+public import ProjectAinos.SpecialFunctions.Schlaefli
+public import ProjectAinos.SpecialFunctions.SchlaefliArc
 public import ProjectAinos.SpecialFunctions.SphericalAddition
 public import ProjectAinos.SpecialFunctions.SphericalBasis
 public import ProjectAinos.SpecialFunctions.SphericalBessel
