@@ -92,6 +92,11 @@ The polynomial extension of equatorial Cauchy data gives an explicit basis. Uniq
 Taylor coefficients on a radial line then identifies the Newton derivatives with the Legendre
 coefficients, yielding all 2ℓ + 1 charge moments of ED §41. A geometric bound on the relative
 displacement justifies integrating the expansion over both separated charges to obtain their energy.
+For the first-kind Bessel family the regularized hypergeometric series gives the complex-order
+ODE and derivative identities. Grouping two exponential series by integer order gives the
+Laurent generating function, Bessel’s cosine integral and its derivative integral. The order
+recurrence proves simplicity of positive integer-order zeros, and Rolle’s theorem applied to a
+weighted Wronskian gives zeros at arbitrarily large positive arguments.
 [Chapter correspondence and proof map](courant-hilbert.md)
 
 ## Shared Smooth Algebra and Geometry

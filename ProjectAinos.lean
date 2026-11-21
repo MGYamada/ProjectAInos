@@ -654,6 +654,10 @@ public import ProjectAinos.SmoothGeometry.Wave.HighFrequency
 public import ProjectAinos.SmoothGeometry.Wave.RetardedIntegral
 public import ProjectAinos.SmoothGeometry.Wave.SlowSource
 public import ProjectAinos.SmoothGeometry.Wave.TransverseTraceless
+public import ProjectAinos.SpecialFunctions.Bessel
+public import ProjectAinos.SpecialFunctions.BesselGenerating
+public import ProjectAinos.SpecialFunctions.BesselIntegral
+public import ProjectAinos.SpecialFunctions.BesselZeros
 public import ProjectAinos.SpecialFunctions.HarmonicExtension
 public import ProjectAinos.SpecialFunctions.HarmonicPolynomial
 public import ProjectAinos.SpecialFunctions.JacobiCurves
