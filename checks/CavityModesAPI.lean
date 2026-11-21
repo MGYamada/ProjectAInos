@@ -3,7 +3,7 @@ Copyright (c) 2026 Masahiko G. Yamada. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 module
-import ProjectAinos.Electrodynamics.CavityModes
+import ProjectAinos.Electrodynamics.CylindricalCavity
 
 /-! Public consumers of the characteristic vibrations of the field (Landau–Lifshitz §52): the
 explicit modes of a perfectly conducting rectangular cavity with Maxwell's equations and the wall
@@ -534,6 +534,25 @@ example {L : Fin 3 → ℝ} (hL : ∀ i, 0 < L i) (n : Fin 3 → ℕ) {c : Fin 3
       (∫ x in boxSet (fun i => 2 * L i),
         energyDensity (fieldTensor (conductingMode L n c freq)) (Fin.cons t x)) :=
   hasSum_fieldEnergy_conductingMode hL n freq hc t
+
+example (k : ℝ) (x : Spacetime) : VacuumMaxwellAt (cylinderMode k) x :=
+  cylinderMode_maxwell k x
+
+example (k : ℝ) (x : Spacetime) :
+    electricField (fieldTensor (cylinderMode k)) 0 x = 0 ∧
+    electricField (fieldTensor (cylinderMode k)) 1 x = 0 ∧
+    magneticField (fieldTensor (cylinderMode k)) 2 x = 0 := cylinderMode_endPlates k x
+
+example {k R : ℝ} (hk : Complex.besselJ 0 ((k * R : ℝ) : ℂ) = 0) (x : Spacetime)
+    (hx : x 1 ^ 2 + x 2 ^ 2 = R ^ 2) :
+    (∀ i, electricField (fieldTensor (cylinderMode k)) i x = 0) ∧
+      x 1 * magneticField (fieldTensor (cylinderMode k)) 0 x +
+      x 2 * magneticField (fieldTensor (cylinderMode k)) 1 x = 0 := cylinderMode_side hk x hx
+
+example {R : ℝ} (hR : 0 < R) (a : ℝ) :
+    ∃ k : ℝ, a < k ∧ 0 < k ∧ Complex.besselJ 0 ((k * R : ℝ) : ℂ) = 0 ∧
+      electricField (fieldTensor (cylinderMode k)) 2 ![Real.pi / (2 * k), 0, 0, 0] = k :=
+  exists_cylinderMode hR a
 
 end ProjectAinos.Electrodynamics.CavityModes
 

@@ -50,3 +50,18 @@ example (n : ℤ) {a : ℝ} (ha : 2 * |(n : ℝ)| + 2 < a) :
 
 example : ∃ t ∈ Set.Ioo 3 (3 + 2 * Real.pi), besselJ 0 (t : ℂ) = 0 := by
   simpa using exists_zero_Ioo (0 : ℤ) (a := 3) (by norm_num)
+
+open scoped ContDiff
+
+example (b k : ℝ) : ContDiff ℝ ∞ (radialProfile b k) := contDiff_radialProfile b k
+
+example (b k s : ℝ) :
+    HasDerivAt (radialProfile b k) (-(k ^ 2) / 4 * radialProfile (b + 1) k s) s :=
+  hasDerivAt_radialProfile b k s
+
+example (b k s : ℝ) :
+    4 * s * deriv (deriv (radialProfile b k)) s + 4 * b * deriv (radialProfile b k) s +
+      k ^ 2 * radialProfile b k s = 0 := radialProfile_equation b k s
+
+example (k r : ℝ) : radialProfile 1 k (r ^ 2) = (besselJ 0 (k * r)).re :=
+  radialProfile_one_sq k r

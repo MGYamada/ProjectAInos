@@ -57,7 +57,7 @@ the rescaling `toTorus L : x ↦ (xᵢ/Lᵢ mod 1)ᵢ`.
 The energy density is `½(E² + B²)` of `energyDensity`, in the units of Heaviside and Lorentz with
 `c = 1`; Landau–Lifshitz write `(E² + H²)/8π`. The completeness of the modes of the conducting
 box, by the even and odd reflection of a field to the doubled periodic box, is not proved here;
-neither are the modes of a conducting cavity of another shape.
+the module `CylindricalCavity` treats the axisymmetric modes of a conducting cylinder.
 -/
 
 @[expose] public section

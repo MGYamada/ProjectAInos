@@ -669,11 +669,15 @@ gauge, each Fourier coefficient oscillates with `ω_k = |K|` and is transverse
 `V(|ȧ_k|² + ω_k²|a_k|²)/2` (`fieldEnergy_eq_tsum`). The modes `cᵢ cos(Ωt) cos(kᵢxᵢ) Π sin(kⱼxⱼ)`
 of a perfectly conducting rectangular cavity solve Maxwell's equations, with `n × E = 0` and
 `n·B = 0` on the walls (`conductingMode_maxwell`, `conductingMode_boundary_cross`), with an
-instance in the unit cube.
+instance in the unit cube. In a conducting cylinder, the axial potential is J₀(kr) cos(kt).
+A smooth function of the squared radius gives Maxwell’s equations through the axis and the
+end-plate conditions. At a zero of J₀(kR) the electric field and normal magnetic field vanish
+on the side wall. Every positive radius has unbounded such frequencies with nonzero axial field
+(`cylinderMode_maxwell`, `cylinderMode_side`, `cylinderMode_endPlates`, `exists_cylinderMode`).
 
 **Scope.** The field of a line current,
 the solution as a Schwartz function, the classification of tempered solutions, the completeness of
-the conductor modes and cavities of other shapes are not stated (decisions 8 and 9 on #135).
+the conductor modes and the spectrum of general cavity domains remain open (decisions 8 and 9 on #135).
 
 ## The retarded potentials (§§62, 64)
 

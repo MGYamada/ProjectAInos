@@ -21,6 +21,7 @@ the slit plane, where both order recurrences and the differential equation follo
 noncomputable section
 
 open Complex FormalMultilinearSeries
+open scoped ContDiff
 namespace ProjectAinos.SpecialFunctions.Bessel
 
 private abbrev F (b : ℂ) := regularizedHGFun 0 {b}
@@ -117,5 +118,49 @@ theorem equation (a z : ℂ) (hz : z ∈ slitPlane) :
   dsimp only [id_eq, Pi.div_apply]
   field_simp [hz0] at hr ⊢
   linear_combination z * hr
+
+/-- Entire radial Helmholtz profile in the squared radius, regular through the center.
+The parameter `b` is half the effective spatial dimension. -/
+def radialProfile (b k s : ℝ) : ℝ :=
+  (regularizedHGFun 0 {(b : ℂ)} ((-(k ^ 2) / 4 * s : ℝ) : ℂ)).re
+
+/-- The squared-radius profile is smooth on the whole real line. -/
+theorem contDiff_radialProfile (b k : ℝ) : ContDiff ℝ ∞ (radialProfile b k) := by
+  have h : ContDiff ℂ ∞ (F (b : ℂ)) :=
+    contDiff_iff_contDiffAt.mpr fun z => (analyticAt_regularizedHGFun_zero z).contDiffAt
+  exact h.real_of_complex.comp (contDiff_const.mul contDiff_id)
+
+/-- Radial differentiation raises the half-dimension parameter by one. -/
+theorem hasDerivAt_radialProfile (b k s : ℝ) :
+    HasDerivAt (radialProfile b k) (-(k ^ 2) / 4 * radialProfile (b + 1) k s) s := by
+  let c := -(k ^ 2) / 4
+  have h := (deriv_F (b : ℂ) ((c * s : ℝ) : ℂ)).real_of_complex.comp s
+    ((hasDerivAt_id s).const_mul c)
+  convert h using 1
+  · rfl
+  · simp [radialProfile, F, c, mul_comm _ (-(k ^ 2) / 4)]
+
+/-- The radial Helmholtz equation has no singular coefficient in the squared-radius variable. -/
+theorem radialProfile_equation (b k s : ℝ) :
+    4 * s * deriv (deriv (radialProfile b k)) s + 4 * b * deriv (radialProfile b k) s +
+      k ^ 2 * radialProfile b k s = 0 := by
+  let c := -(k ^ 2) / 4
+  have hd : deriv (radialProfile b k) = fun t => c * radialProfile (b + 1) k t :=
+    funext fun t => (hasDerivAt_radialProfile b k t).deriv
+  have he := congrArg Complex.re (contiguous (b : ℂ) ((c * s : ℝ) : ℂ))
+  simp only [Complex.add_re, Complex.re_ofReal_mul] at he
+  have hr : radialProfile b k s = b * radialProfile (b + 1) k s +
+      c * s * radialProfile (b + 1 + 1) k s := by simpa [radialProfile, F, c] using he
+  rw [hd, ((hasDerivAt_radialProfile (b + 1) k s).const_mul c).deriv, hr]
+  unfold c
+  ring
+
+/-- In two dimensions the squared-radius solution is Mathlib's ordinary Bessel mode `J₀(kr)`. -/
+theorem radialProfile_one_sq (k r : ℝ) : radialProfile 1 k (r ^ 2) = (besselJ 0 (k * r)).re := by
+  unfold radialProfile besselJ
+  simp only [Complex.ofReal_one, Complex.cpow_zero, one_mul, zero_add]
+  congr 2
+  push_cast
+  ring
 
 end ProjectAinos.SpecialFunctions.Bessel

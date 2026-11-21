@@ -18,6 +18,7 @@ public import ProjectAinos.Electrodynamics.CurvedAction
 public import ProjectAinos.Electrodynamics.CurvedComponents
 public import ProjectAinos.Electrodynamics.CurvedExamples
 public import ProjectAinos.Electrodynamics.CurvedPotential
+public import ProjectAinos.Electrodynamics.CylindricalCavity
 public import ProjectAinos.Electrodynamics.DarwinLagrangian
 public import ProjectAinos.Electrodynamics.DarwinPointCharge
 public import ProjectAinos.Electrodynamics.Diffraction.Aperture
@@ -665,12 +666,17 @@ public import ProjectAinos.SpecialFunctions.JacobiElliptic
 public import ProjectAinos.SpecialFunctions.Legendre
 public import ProjectAinos.SpecialFunctions.LegendreAssociated
 public import ProjectAinos.SpecialFunctions.LegendreGenerating
+public import ProjectAinos.SpecialFunctions.LegendreMonomials
 public import ProjectAinos.SpecialFunctions.LegendreNewton
 public import ProjectAinos.SpecialFunctions.LegendreOrthogonality
 public import ProjectAinos.SpecialFunctions.NewtonHarmonics
 public import ProjectAinos.SpecialFunctions.SphericalAddition
 public import ProjectAinos.SpecialFunctions.SphericalBasis
+public import ProjectAinos.SpecialFunctions.SphericalBessel
+public import ProjectAinos.SpecialFunctions.SphericalBesselEquation
+public import ProjectAinos.SpecialFunctions.SphericalBesselRecurrence
 public import ProjectAinos.SpecialFunctions.SphericalCompleteness
+public import ProjectAinos.SpecialFunctions.SphericalComplex
 public import ProjectAinos.SpecialFunctions.SphericalHarmonics
 public import ProjectAinos.SpecialFunctions.SphericalOrthogonality
 public import ProjectAinos.SpecialFunctions.ZonalHarmonics

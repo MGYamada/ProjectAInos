@@ -5,7 +5,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 module
 
 import ProjectAinos.SpecialFunctions.NewtonHarmonics
-import ProjectAinos.SpecialFunctions.SphericalBasis
+import ProjectAinos.SpecialFunctions.SphericalComplex
 
 open MvPolynomial ProjectAinos.SpecialFunctions
 open ProjectAinos.SpecialFunctions.HarmonicPolynomial
@@ -157,3 +157,19 @@ example (n : ℕ) {x : EuclideanSpace ℝ (Fin 3)} (hx : x ≠ 0) (y : Euclidean
     (n.factorial : ℝ)⁻¹ * iteratedFDeriv ℝ n newtonKernel x (fun _ => -y) =
       newtonKernel x * ((Legendre.polynomial n).eval (inner ℝ x y / (‖x‖ * ‖y‖)) *
         (‖y‖ / ‖x‖) ^ n) := newtonKernel_derivative_legendre n hx y
+
+open scoped ComplexConjugate
+
+example {n : ℕ} (c : EuclideanSpace ℂ (Fin (2 * n + 1))) (u : UnitSphere 3) :
+    complexMode c u = ∑ i, c i * (representative 3 n (realBasis n i) u : ℂ) := rfl
+
+example {n : ℕ} (c d : EuclideanSpace ℂ (Fin (2 * n + 1))) :
+    ∫ u, conj (complexMode c u) * complexMode d u ∂sphereMeasure = inner ℂ c d :=
+  integral_complexMode c d
+
+example {n : ℕ}
+    (b : OrthonormalBasis (Fin (2 * n + 1)) ℂ (EuclideanSpace ℂ (Fin (2 * n + 1))))
+    (u v : UnitSphere 3) :
+    ∑ i, complexMode (b i) u * conj (complexMode (b i) v) =
+      (((2 * (n : ℝ) + 1) / (4 * Real.pi) *
+        (Legendre.polynomial n).eval (inner ℝ u.val v.val) : ℝ) : ℂ) := addition_complex b u v

@@ -99,6 +99,12 @@ recurrence proves simplicity of positive integer-order zeros, and Rolle’s theo
 weighted Wronskian gives zeros at arbitrarily large positive arguments.
 [Chapter correspondence and proof map](courant-hilbert.md)
 
+Rayleigh’s expansion of a complex plane wave follows by interchanging its Taylor series with
+the finite Legendre expansions of the monomials. The regular and singular spherical Bessel
+modes have Wronskian 1/z². In ED §52, the squared-radius Bessel equation verifies the axial
+Maxwell mode in the entire cylinder, and the positive zeros give an unbounded family satisfying
+the conducting conditions at the side and ends. [Plane waves](../ProjectAinos/SpecialFunctions/SphericalBessel.lean) · [Cylinder](../ProjectAinos/Electrodynamics/CylindricalCavity.lean)
+
 ## Shared Smooth Algebra and Geometry
 
 The shared mathematical layers for Mechanics, Special Relativity, Electrodynamics, and General Relativity (research-plan topics 2–5) live in `ProjectAinos/SmoothAlgebra` and `ProjectAinos/SmoothGeometry`, independently of the physics. Together with the shared `Variational` layer, they have an acyclic import graph excluding project physics and vendored Yang–Mills. C∞-rings have finite smooth operations, substitution laws, and compatibility with a commutative real algebra. Morphisms preserve every smooth operation; their real-algebra homomorphisms are derived. The concrete models are ℝ, products, and C∞(ℝⁿ), including dimension zero. The smooth-function ring is proved free on its coordinate functions, with evaluation and pullback as morphisms. A nonpolynomial check proves `exp(a + b) = exp(a) * exp(b)` in every C∞-ring.

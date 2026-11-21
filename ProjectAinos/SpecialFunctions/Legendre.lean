@@ -168,4 +168,14 @@ theorem recurrence (n : ℕ) :
   dsimp [q] at h g
   linear_combination h - X * g
 
+/-- The difference of degrees `n+2` and `n` is an antiderivative of `(2n+3) Pₙ₊₁`. -/
+theorem derivative_sub_two (n : ℕ) :
+    derivative (polynomial (n + 2) - polynomial n) =
+      C (2 * (n : ℝ) + 3) * polynomial (n + 1) := by
+  rw [derivative_sub, derivative_succ (n + 1), derivative_succ n]
+  have h := raising n (equation n)
+  simp only [q] at h
+  simp only [map_add, map_mul, map_ofNat, C_eq_natCast, Nat.cast_succ]
+  linear_combination -h
+
 end ProjectAinos.SpecialFunctions.Legendre
