@@ -615,7 +615,16 @@ the potential is `Q/(4π|x|) + ⟪d, x⟫/(4π|x|³)` up to `(∫|ρ|y²)/(4π(|
 (`abs_newtonPotential_sub_multipole_le`). The dipole changes by `−Qb` under a translation
 (`dipoleMoment_translate`), and the first multipole that does not vanish is independent of the
 origin (`multipoleTerm_translate`). The dipole field is `(3⟪n, d⟫n − d)/(4π|x|³)`
-(`neg_gradient_dipolePotential`).
+(`neg_gradient_dipolePotential`). In order ℓ, a real orthonormal basis on S² gives exactly
+2ℓ + 1 components. Each coefficient is the integral of the solid harmonic against the charge.
+At radius r their angular sum divided by (2ℓ + 1)r^(ℓ + 1) equals the Cartesian Taylor term.
+[Spherical moments](../ProjectAinos/Electrodynamics/SphericalMultipole.lean)
+
+For two continuous densities supported in balls of radii a and b at centre separation r > a + b,
+`hasSum_interactionEnergy` sums the mutual energy of the distributions. Each coefficient
+integrates a solid harmonic of the relative displacement against both densities. The ratio
+(a + b)/r bounds the geometric series throughout the support.
+[Extended charge interaction](../ProjectAinos/Electrodynamics/ExtendedChargeInteraction.lean)
 
 **A system in an external field (§42).** For an external potential harmonic at the centre,
 the energy of a localized charge is `Qψ(0) + d·∇ψ(0) + (1/6)ΣDᵢⱼ∂ᵢ∂ⱼψ(0)`
@@ -660,11 +669,15 @@ gauge, each Fourier coefficient oscillates with `ω_k = |K|` and is transverse
 `V(|ȧ_k|² + ω_k²|a_k|²)/2` (`fieldEnergy_eq_tsum`). The modes `cᵢ cos(Ωt) cos(kᵢxᵢ) Π sin(kⱼxⱼ)`
 of a perfectly conducting rectangular cavity solve Maxwell's equations, with `n × E = 0` and
 `n·B = 0` on the walls (`conductingMode_maxwell`, `conductingMode_boundary_cross`), with an
-instance in the unit cube.
+instance in the unit cube. In a conducting cylinder, the axial potential is J₀(kr) cos(kt).
+A smooth function of the squared radius gives Maxwell’s equations through the axis and the
+end-plate conditions. At a zero of J₀(kR) the electric field and normal magnetic field vanish
+on the side wall. Every positive radius has unbounded such frequencies with nonzero axial field
+(`cylinderMode_maxwell`, `cylinderMode_side`, `cylinderMode_endPlates`, `exists_cylinderMode`).
 
-**Scope.** Spherical harmonics, two extended sources in interaction, the field of a line current,
+**Scope.** The field of a line current,
 the solution as a Schwartz function, the classification of tempered solutions, the completeness of
-the conductor modes and cavities of other shapes are not stated (decisions 8 and 9 on #135).
+the conductor modes and the spectrum of general cavity domains remain open (decisions 8 and 9 on #135).
 
 ## The retarded potentials (§§62, 64)
 
@@ -737,8 +750,12 @@ ratio `n/n′` (`IsAbsoluteInstrument.isSimilarity`).
 `O(ε)` (`energy_sub_add_energy_sub_le`). The estimate is lost at focal points (§56).
 
 **Scope.** Flat vacuum for the wave statements, media through the ray Hamiltonian, given ray
-families and given exact solutions. Not stated: a lower bound for the energy of a single real wave,
-and instruments limited to a cone of directions.
+families and given exact solutions. Instruments limited to a cone of directions remain open.
+
+For smooth amplitudes supported in a fixed spatial ball, `tendsto_sq_mul_energy_single`
+gives ε²E → L/2 at each time where the spatial phase gradient stays nonzero on the closed
+amplitude supports. For L > 0 the single wave has energy at least L/(4ε²) at sufficiently
+short wavelength, as realized by a transported bump. [Single-wave energy](../ProjectAinos/Electrodynamics/Optics/SingleWave.lean)
 
 ## Radiation in collisions (§§68–70)
 
@@ -761,7 +778,11 @@ the energy radiated in a hyperbolic collision is explicit (`totalEnergy_hyperbol
 spectrum is an integral over the orbit (`spectrum_hyperbolic`).
 
 **Scope.** Given orbits, the dipole power of §67 as the model of emission (decision 15 on #135).
-The Bessel and Hankel closed forms of the spectra are the remainder of §70.
+For every 0 < ε < 1, the inverse of Kepler’s equation gives the same Cartesian position as the
+polar-angle flow. At each nonzero integer n its two acceleration coefficients are
+−Aω²n J′ₙ(nε) and iA√(1−ε²)ω²n Jₙ(nε)/ε, in the Fourier convention of
+`harmonic_decomposition`. The Hankel evaluation of the hyperbolic orbit integral remains open.
+[Eccentric anomaly](../ProjectAinos/Electrodynamics/Radiation/EccentricOrbit.lean) · [Radiation harmonics](../ProjectAinos/Electrodynamics/Radiation/KeplerHarmonics.lean)
 
 ## Diffraction (§§59–61)
 
@@ -776,6 +797,9 @@ remainder `(k/2πz)(kρ⁴/8z³ + ρ²/z² + 1/(kz))‖u₀‖₁` (`norm_apertu
 a direction `n` with `n_z > 0`, `D e^{−ikD} u(Dn)` tends to the Fourier transform of the aperture
 (`tendsto_fraunhofer`) at an explicit rate (`norm_fraunhofer_sub_le`). Babinet's principle holds by
 linearity (`babinet`) and, for the plane wave, as an improper limit (`tendsto_babinet_planeWave`).
+For a straight edge, uniformly illuminated rectangular apertures tend to the half-plane Fresnel
+field. Its intensity in Fresnel units is [(½ + C(u))² + (½ + S(u))²]/2, including ¼ on the
+shadow boundary. [Straight-edge limit](../ProjectAinos/Electrodynamics/Diffraction/StraightEdge.lean)
 
 **Scope.** The scalar aperture model; the relation to the Maxwell screen problem and the uniqueness
 of the half-space problem are the remainder of §59.

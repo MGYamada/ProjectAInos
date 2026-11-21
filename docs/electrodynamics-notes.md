@@ -369,3 +369,19 @@ These notes record mathematical distinctions and interface decisions in `Project
 **Interface decision.** Real vector functions are transformed through the norm-preserving complexification `ℝ³ → ℂ³`; the observer time is inverted by `Function.invFun`, so the definitions carry no proof arguments. The sphere integral of the limit is evaluated for a sudden start by Archimedes; for two nonzero asymptotic velocities the integrand is not axially symmetric and needs a Feynman-parameter reduction, not stated.
 
 **Proof status.** Proved and built; the ledger row of §69 is *proved* in the scope of decision 15. [CollisionSpectrum](../ProjectAinos/Electrodynamics/Radiation/CollisionSpectrum.lean)
+
+## ED47. Nonstationary spatial phase fixes the energy of one real wave
+
+**Observation.** The doubled phase in the square of a real wave contributes zero in the short-wavelength limit if the spatial gradient is nonzero on the closed amplitude supports at the observation time. The other half of the square is the nonoscillating intensity.
+
+**Interface decision.** The regularity and support assumptions concern the given wave. Its phase may have critical points elsewhere. A transported bump supplies a positive-intensity instance.
+
+**Proof status.** For ED §58 the normalized energy of a single wave tends to L/2, where L is the leading energy of the quadrature pair in ED41. For positive L this gives E ≥ L/(4ε²) at sufficiently short wavelength. [Single-wave energy](../ProjectAinos/Electrodynamics/Optics/SingleWave.lean)
+
+## ED48. Eccentric anomaly identifies the harmonics of the existing elliptic orbit
+
+**Observation.** The angular Jacobian lifts the eccentric anomaly along the polar-angle flow of ED45 through every period. The mean anomaly grows at the constant rate 2π/T. Its inverse Jacobian cancels the change of variables in the Fourier coefficient.
+
+**Interface decision.** The elliptic radiation calculation uses the same Cartesian acceleration, orbital period and Fourier convention as the Parseval power sum.
+
+**Proof status.** For every nonzero integer harmonic and 0 < ε < 1, the two acceleration coefficients equal the stated multiples of J′ₙ(nε) and Jₙ(nε). The hyperbolic orbit integral still needs its own transform. [Kepler harmonics](../ProjectAinos/Electrodynamics/Radiation/KeplerHarmonics.lean)

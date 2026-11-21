@@ -20,6 +20,13 @@ open scoped Real ContDiff
 
 noncomputable section
 
+-- Existing clients can use the historical names together with the shared implementation.
+example (k u : ℝ) : ProjectAinos.SmoothGeometry.JacobiElliptic.sn k u =
+    ProjectAinos.SpecialFunctions.JacobiElliptic.sn k u := rfl
+
+example (A B C p k : ℝ) : ProjectAinos.Mechanics.RigidBody.jacobiCurve A B C p k =
+    ProjectAinos.SpecialFunctions.JacobiElliptic.jacobiCurve A B C p k := rfl
+
 section ScalarFlow
 
 variable {g : ℝ → ℝ}

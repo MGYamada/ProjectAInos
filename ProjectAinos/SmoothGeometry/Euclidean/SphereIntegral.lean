@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 module
 
-public import Mathlib.MeasureTheory.Constructions.HaarToSphere
+public import ProjectAinos.SmoothGeometry.Euclidean.PolarIntegral
 public import Mathlib.MeasureTheory.Integral.IntervalIntegral.Basic
 public import Mathlib.Analysis.InnerProductSpace.PiL2
 public import Mathlib.MeasureTheory.Measure.Lebesgue.VolumeOfBalls
@@ -190,31 +190,7 @@ sphere, then `∫ F = (∫ f dσ) ∫₀^∞ r² h(r) dr`. -/
 theorem integral_eq_integral_sphere_mul (F : E3 → ℝ) (f : sphere (0 : E3) 1 → ℝ) (h : ℝ → ℝ)
     (hF : ∀ (n : sphere (0 : E3) 1) (r : ℝ), 0 < r → F (r • (n : E3)) = f n * h r) :
     ∫ x, F x = (∫ n, f n ∂sphereMeasure) * ∫ r in Ioi (0 : ℝ), r ^ 2 * h r := by
-  have h1 : ∫ x, F x =
-      ∫ x : ({(0 : E3)}ᶜ : Set E3), F x ∂((volume : Measure E3).comap (↑)) := by
-    rw [integral_subtype_comap (measurableSet_singleton _).compl fun x ↦ F x,
-      restrict_compl_singleton]
-  have h2 := (Measure.measurePreserving_homeomorphUnitSphereProd
-    (volume : Measure E3)).integral_comp (Homeomorph.measurableEmbedding _)
-    (fun p : sphere (0 : E3) 1 × Ioi (0 : ℝ) => f p.1 * h p.2.1)
-  have h3 : ∫ x : ({(0 : E3)}ᶜ : Set E3), F x ∂((volume : Measure E3).comap (↑)) =
-      ∫ x : ({(0 : E3)}ᶜ : Set E3), (fun p : sphere (0 : E3) 1 × Ioi (0 : ℝ) => f p.1 * h p.2.1)
-        (homeomorphUnitSphereProd E3 x) ∂((volume : Measure E3).comap (↑)) := by
-    refine integral_congr_ae (Filter.Eventually.of_forall fun x => ?_)
-    simp only
-    rw [← hF _ _ (homeomorphUnitSphereProd E3 x).2.2]
-    have hx0 : (x : E3) ≠ 0 := x.2
-    have hx : 0 < ‖(x : E3)‖ := norm_pos_iff.mpr hx0
-    congr 1
-    simp [smul_smul, hx.ne']
-  rw [h1, h3, h2, integral_prod_mul f (fun r : Ioi (0 : ℝ) => h r)]
-  congr 1
-  simp only [Measure.volumeIoiPow, ENNReal.ofReal, finrank_euclideanSpace_fin, Nat.reduceSub]
-  rw [integral_withDensity_eq_integral_smul
-      ((measurable_subtype_coe.pow_const _).real_toNNReal),
-    integral_subtype_comap measurableSet_Ioi (fun a => Real.toNNReal (a ^ 2) • h a)]
-  refine setIntegral_congr_fun measurableSet_Ioi fun r hr => ?_
-  rw [NNReal.smul_def, Real.coe_toNNReal _ (pow_nonneg (le_of_lt hr) _), smul_eq_mul]
+  simpa using integral_polar_mul volume F f h hF
 
 /-- Fubini for a Gaussian weight: `∫ x₃ᵏ e^{−|x|²} dx = (∫ e^{−z²} dz)² ∫ zᵏ e^{−z²} dz`. -/
 private theorem integral_coord_pow_mul_gaussian (k : ℕ) :

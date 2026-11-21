@@ -48,12 +48,9 @@ The elliptic orbit of an attractive field `𝐫̈ = −k 𝐫/r³` (`k = α/m`),
   Fourier coefficients `c_n = (1/T) ∫₀ᵀ e^{−2πint/T} 𝐝̈ dt` (`harmonicCoeff`) the mean power is
   `Σ_n (2/3)(1/4π)|c_n|²` (Parseval), and `tsum_harmonic` evaluates the sum.
 
-Not proved here: the closed forms of the spectral resolution. With the eccentric anomaly
-`2πt/T = ξ − ε sin ξ` the harmonic coefficients become Bessel's integrals
-`J_n(x) = (1/π) ∫₀^π cos (nτ − x sin τ) dτ`, i.e. `J_n(nε)` and `J′_n(nε)`, and the hyperbolic
-spectrum is expressed by Hankel functions of imaginary order and argument. Mathlib's
-`Complex.besselJ` is defined by its series and has neither Bessel's integral nor the derivative
-relations, and Mathlib has no Hankel functions.
+The companion module `KeplerHarmonics` evaluates the elliptic acceleration coefficients in terms
+of Jₙ(nε) and J′ₙ(nε) through the eccentric anomaly. The hyperbolic spectrum below is given by
+its orbit integral.
 -/
 
 @[expose] public section

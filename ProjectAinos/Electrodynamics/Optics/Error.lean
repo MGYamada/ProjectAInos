@@ -62,10 +62,9 @@ equation `□u = 0` (§58).
   `maxwell_iff_box_of_lorenz` and `box_comp_timeSpaceEquiv`), and
   `sqrt_energy_potentialComponent_sub_le` applies the error estimate to each component.
 
-A single real wave `w` has the oscillating leading term `½ ∫ ((a² + b²) + (b² − a²) cos(2ψ/ε) −
-2ab sin(2ψ/ε)) |∂ψ|²`, whose oscillating part tends to zero by a stationary-phase argument where
-`∇ψ ≠ 0`; that estimate is not proved here, and the lower bound is stated for the pair of phases,
-the real and imaginary parts of the complex wave `(a − ib) e^{iψ/ε}`.
+The companion module `SingleWave` proves the short-wavelength limit for one real wave. At a
+nonstationary spatial phase the doubled-phase terms average to zero, so the normalized energy
+converges to half the leading energy of the pair.
 -/
 
 @[expose] public section

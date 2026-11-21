@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 module
 import ProjectAinos.SmoothGeometry.Potential.Multipole
-import ProjectAinos.Electrodynamics.Multipole
+import ProjectAinos.Electrodynamics.ExtendedChargeInteraction
 
 /-! Public consumers of multipoles (Landau–Lifshitz §§40–42): the Taylor bounds of the Newton
 kernel with explicit constants through order two and existential ones at every order, the
@@ -641,3 +641,41 @@ example (c : E3) :
 end ProjectAinos.Electrodynamics.Multipole
 
 end Multipole
+
+open ProjectAinos.Electrodynamics.Multipole ProjectAinos.SpecialFunctions.SphericalHarmonics
+
+example (ρ : EuclideanSpace ℝ (Fin 3) → ℝ) (n : ℕ) (i : Fin (2 * n + 1)) :
+    sphericalMoment ρ n i = ∫ y, ρ y * MvPolynomial.eval y
+      (solidRepresentative n (realBasis n i)).val.val := rfl
+
+example {ρ : EuclideanSpace ℝ (Fin 3) → ℝ} (hρ : Continuous ρ) (hcomp : HasCompactSupport ρ)
+    (n : ℕ) (u : UnitSphere 3) {r : ℝ} (hr : 0 < r) :
+    multipoleTerm ρ n (r • u.val) = ((2 * (n : ℝ) + 1) * r ^ (n + 1))⁻¹ *
+      ∑ i, representative 3 n (realBasis n i) u * sphericalMoment ρ n i :=
+  multipoleTerm_eq_sphericalMoments hρ hcomp n u hr
+
+open Metric MeasureTheory ProjectAinos.SmoothGeometry.Potential
+local notation "Space3" => EuclideanSpace ℝ (Fin 3)
+
+example (ρ σ : Space3 → ℝ) (n : ℕ) (i : Fin (2 * n + 1)) : interactionMoment ρ σ n i =
+    ∫ p : Space3 × Space3, σ p.1 * ρ p.2 * MvPolynomial.eval (p.2 - p.1)
+      (solidRepresentative n (realBasis n i)).val.val ∂(volume.prod volume) := rfl
+
+example {ρ σ : Space3 → ℝ} (hρ : Continuous ρ) (hσ : Continuous σ)
+    {a b r : ℝ} (ha : 0 ≤ a) (hb : 0 ≤ b) (hsa : tsupport ρ ⊆ closedBall 0 a)
+    (hsb : tsupport σ ⊆ closedBall 0 b) (hr : a + b < r) (u : UnitSphere 3) :
+    HasSum (fun n : ℕ => ((2 * (n : ℝ) + 1) * r ^ (n + 1))⁻¹ *
+      ∑ i, representative 3 n (realBasis n i) u * interactionMoment ρ σ n i)
+      (externalEnergy σ (fun z => newtonPotential ρ (r • u.val + z))) :=
+  hasSum_interactionEnergy hρ hσ ha hb hsa hsb hr u
+
+example {r : ℝ} (hr : 4 < r) (u : UnitSphere 3) :
+    HasSum (fun n : ℕ => ((2 * (n : ℝ) + 1) * r ^ (n + 1))⁻¹ *
+      ∑ i, representative 3 n (realBasis n i) u *
+        interactionMoment ProjectAinos.Electrodynamics.Electrostatics.bumpCharge
+          ProjectAinos.Electrodynamics.Electrostatics.bumpCharge n i)
+      (externalEnergy ProjectAinos.Electrodynamics.Electrostatics.bumpCharge
+        (fun z => newtonPotential ProjectAinos.Electrodynamics.Electrostatics.bumpCharge
+          (r • u.val + z))) :=
+  hasSum_interactionEnergy continuous_bumpCharge continuous_bumpCharge (by norm_num : (0 : ℝ) ≤ 2)
+    (by norm_num : (0 : ℝ) ≤ 2) tsupport_bumpCharge tsupport_bumpCharge (by linarith) u

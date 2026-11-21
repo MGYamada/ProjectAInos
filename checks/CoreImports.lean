@@ -6,7 +6,8 @@ allowed cores. Checking all source modules also covers transitive imports. -/
 open Lean
 
 private def sharedCores : List Name :=
-  [`ProjectAinos.SmoothAlgebra, `ProjectAinos.SmoothGeometry, `ProjectAinos.Variational]
+  [`ProjectAinos.SmoothAlgebra, `ProjectAinos.SmoothGeometry, `ProjectAinos.Variational,
+   `ProjectAinos.SpecialFunctions]
 
 private def checkImports (path : System.FilePath) (allowed : List Name) : IO Unit := do
   let (imports, _, messages) ← Elab.parseImports (← IO.FS.readFile path) (some path.toString)
@@ -19,7 +20,7 @@ private def checkImports (path : System.FilePath) (allowed : List Name) : IO Uni
       throw (IO.userError s!"{path} imports {imp.module} across the shared-core boundary")
 
 def main : IO Unit := do
-  for core in ["SmoothAlgebra", "SmoothGeometry", "Variational"] do
+  for core in ["SmoothAlgebra", "SmoothGeometry", "Variational", "SpecialFunctions"] do
     let root : System.FilePath := "ProjectAinos"
     let entry := root / (core ++ ".lean")
     if ← entry.pathExists then

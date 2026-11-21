@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 module
 import ProjectAinos.Electrodynamics.Diffraction.Aperture
-import ProjectAinos.Electrodynamics.Diffraction.Fresnel
+import ProjectAinos.Electrodynamics.Diffraction.StraightEdge
 import ProjectAinos.Electrodynamics.Diffraction.Fraunhofer
 
 /-! Public consumers of diffraction in the scalar aperture model (Landau–Lifshitz §§59–61): the
@@ -586,3 +586,21 @@ example {k : ℝ} (hk : 0 < k) {D : ℝ} (hD : 2 ≤ D) :
 end ProjectAinos.Electrodynamics.Diffraction
 
 end Fraunhofer
+
+section StraightEdge
+
+open ProjectAinos.Electrodynamics.Diffraction ProjectAinos.SpecialFunctions Filter Complex
+open scoped Topology Real
+
+example {L z : ℝ} (hL : 0 < L) (hz : 0 < z) (u : ℝ) :
+    Tendsto (fun R => fresnelField (π * z / L ^ 2) (edgeAperture L u R) 0 z) atTop
+      (𝓝 (cexp (I * (π * z / L ^ 2 : ℝ) * z) * edgeAmplitude u)) :=
+  tendsto_fresnelField_edge hL hz u
+
+example (u : ℝ) : Complex.normSq (edgeAmplitude u) =
+    ((1 / 2 + Fresnel.cosine u) ^ 2 + (1 / 2 + Fresnel.sine u) ^ 2) / 2 :=
+  normSq_edgeAmplitude u
+
+example : Complex.normSq (edgeAmplitude 0) = 1 / 4 := normSq_edgeAmplitude_zero
+
+end StraightEdge

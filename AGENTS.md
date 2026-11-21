@@ -6,7 +6,8 @@
 - Put definitions and machine-checked proofs in the Lean library. Keep
   `ProjectAinos.lean` current with the library modules.
 - Put shared mathematics in `ProjectAinos/SmoothAlgebra/`,
-  `ProjectAinos/SmoothGeometry/` and `ProjectAinos/Variational/`. These
+  `ProjectAinos/SmoothGeometry/`, `ProjectAinos/Variational/` and
+  `ProjectAinos/SpecialFunctions/`. These
   directories import no physics module; `checks/CoreImports.lean` enforces it.
 - Use the plans `docs/cinfty-*.md` for the targets of each textbook section
   and their ledgers, the guides `docs/<subject>.md` for the implemented

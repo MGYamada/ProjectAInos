@@ -78,6 +78,40 @@ Every completed stage must pass the warning-free Lean build, root-import check, 
 
 See the [Landau–Lifshitz correspondence](landau-lifshitz.md) for the Mechanics proof targets and reference volumes for the other subjects.
 
+## Courant–Hilbert and special functions
+
+The shared library collects Jacobi elliptic functions and their parametrized curves. Legendre
+orthogonality and the differential equation give the interval and eigenfunction treatments
+in volume I. The convergent generating series yields the exterior Newton expansion. Fischer
+decomposition and injective restriction to the sphere give the dimension of the spherical
+harmonics. The sum of squared infinitesimal rotations gives their angular eigenvalue. Green’s identity with a compact radial cutoff gives orthogonality
+between distinct degrees. Polynomial restrictions separate points, so Stone–Weierstrass and
+Fischer decomposition give uniform density, then the orthogonal Hilbert sum in real L². On S², the trace of the
+evaluation kernel and the norm of a solid zonal harmonic determine the addition theorem.
+The polynomial extension of equatorial Cauchy data gives an explicit basis. Uniqueness of
+Taylor coefficients on a radial line then identifies the Newton derivatives with the Legendre
+coefficients, yielding all 2ℓ + 1 charge moments of ED §41. A geometric bound on the relative
+displacement justifies integrating the expansion over both separated charges to obtain their energy.
+For the first-kind Bessel family the regularized hypergeometric series gives the complex-order
+ODE and derivative identities. Grouping two exponential series by integer order gives the
+Laurent generating function, Bessel’s cosine integral and its derivative integral. The order
+recurrence proves simplicity of positive integer-order zeros, and Rolle’s theorem applied to a
+weighted Wronskian gives zeros at arbitrarily large positive arguments.
+[Chapter correspondence and proof map](courant-hilbert.md)
+
+Rayleigh’s expansion of a complex plane wave follows by interchanging its Taylor series with
+the finite Legendre expansions of the monomials. The regular and singular spherical Bessel
+modes have Wronskian 1/z². In ED §52, the squared-radius Bessel equation verifies the axial
+Maxwell mode in the entire cylinder, and the positive zeros give an unbounded family satisfying
+the conducting conditions at the side and ends. [Plane waves](../ProjectAinos/SpecialFunctions/SphericalBessel.lean) · [Cylinder](../ProjectAinos/Electrodynamics/CylindricalCavity.lean)
+
+The Gaussian primitive on the ray (1 − i)R evaluates both Fresnel integrals at positive
+infinity. This gives the limit of the rectangular Fresnel fields at a straight edge in ED §60.
+Integrating a smooth amplitude against the scaled Fresnel primitive gives the quadratic
+stationary-phase limit and hence the leading term of each integer-order cylindrical Bessel
+function for large positive argument. Integration by parts along the gradient gives decay to
+every order in any finite dimension where the phase is nonstationary on the amplitude support.
+
 ## Shared Smooth Algebra and Geometry
 
 The shared mathematical layers for Mechanics, Special Relativity, Electrodynamics, and General Relativity (research-plan topics 2–5) live in `ProjectAinos/SmoothAlgebra` and `ProjectAinos/SmoothGeometry`, independently of the physics. Together with the shared `Variational` layer, they have an acyclic import graph excluding project physics and vendored Yang–Mills. C∞-rings have finite smooth operations, substitution laws, and compatibility with a commutative real algebra. Morphisms preserve every smooth operation; their real-algebra homomorphisms are derived. The concrete models are ℝ, products, and C∞(ℝⁿ), including dimension zero. The smooth-function ring is proved free on its coordinate functions, with evaluation and pullback as morphisms. A nonpolynomial check proves `exp(a + b) = exp(a) * exp(b)` in every C∞-ring.
@@ -1026,6 +1060,8 @@ so focal points are the zeros of `det(1 + lH₀)`, where the amplitude diverges.
 conjugate points have equal optical lengths, stigmatic bundles satisfy the sine condition, and an
 absolute instrument is a similarity. The energy inequality bounds the error of the approximation,
 with relative size `O(ε)`. The ledger rows ED §§53–58 are *proved* in their scopes (ED 53 of 66).
+For ED §58, a single real wave has ε²E → L/2 when its spatial phase is nonstationary on the
+amplitude supports. The transported bump realizes the positive lower bound L/(4ε²).
 [Guide](electrodynamics.md#geometrical-optics-5358)
 
 The Rayleigh–Sommerfeld field of an aperture solves the Helmholtz equation with its boundary values
@@ -1040,7 +1076,8 @@ with stated remainders (ED 58 of 66).
 
 The radiated energy and spectrum of a Coulomb collision follow from the dipole power by Plancherel,
 the low-frequency spectrum of a point charge is the jump of its velocity term, and on Kepler orbits
-the power decomposes into harmonics. The ledger rows ED §§68, 69 are *proved* in their scopes and
+the power decomposes into harmonics whose Cartesian coefficients are given by Jₙ(nε) and
+J′ₙ(nε). The Hankel evaluation for hyperbolic motion remains open. The ledger rows ED §§68, 69 are *proved* in their scopes and
 §70 is closed with a stated remainder (ED 60 of 66).
 [Guide](electrodynamics.md#radiation-in-collisions-6870)
 
