@@ -1,6 +1,9 @@
 module
 
+import ProjectAinos.SpecialFunctions.AiryMacdonald
+import ProjectAinos.SpecialFunctions.AiryVertical
 import ProjectAinos.SpecialFunctions.CubicPhase
+import ProjectAinos.SpecialFunctions.BesselContour
 
 noncomputable section
 open Complex Filter MeasureTheory Set
@@ -95,3 +98,47 @@ example {b B : ℝ} (hb : 0 < b) {u : ℝ → ℝ}
       A t * exp ((((r*t)^3/3+u r*(r*t) : ℝ) : ℂ) * I)) - A 0 * (2*π*ai (u r)))
       atTop (𝓝 0) :=
   cubic_coalescence hb hu hA hD
+
+example : upper ^ 3 = -1 :=
+  upper_cube
+
+example (z w : ℂ) : HasDerivAt (primitive z) (integrand z w) w :=
+  deriv_primitive z w
+
+example (z a b : ℂ) (R : ℝ) :
+    primitive z (a+b*R) - primitive z a = ∫ t in 0..R, b * integrand z (a+b*t) :=
+  segment z a b R
+
+example (w z : ℂ) (hc : w^3 = -1) : Tendsto (fun R : ℝ => primitive z (w * R)) atTop
+    (𝓝 (ray w z)) :=
+  ray_limit w z hc
+
+example (x S : ℝ) (hS : 0 ≤ S) :
+    Tendsto (fun R : ℝ => primitive x (I*R + S)) atTop (𝓝 (ray upper x)) :=
+  shifted_vertical_limit x S hS
+
+open ProjectAinos.SpecialFunctions.Bessel
+
+example {b : ℝ} (hb : 0 < b) :
+    ai (b^2 : ℝ) = b / ((√3 : ℝ) * π) * macdonald (1/3) (2*b^3/3 : ℝ) :=
+  ai_sq_macdonald hb
+
+example {b : ℝ} (hb : 0 < b) :
+    deriv ai (b^2 : ℝ) = -(b^2 : ℝ) / ((√3 : ℝ) * π) * macdonald (2/3) (2*b^3/3 : ℝ) :=
+  deriv_ai_sq_macdonald hb
+
+example (u : ℝ) :
+    (∫ t : ℝ, integrand u (1+t*I)) = 2*π*ai u :=
+  integral_vertical u
+
+example (u : ℝ) :
+    (∫ t : ℝ, -(1+t*I) * integrand u (1+t*I)) = 2*π*deriv ai u :=
+  integral_vertical_deriv u
+
+example (n : ℤ) (x h : ℝ) :
+    (∫ t in -π..π, fourierKernel n x (t-h*I)) = 2*π*besselJ n x :=
+  integral_shift n x h
+
+example (n : ℤ) (x h : ℝ) :
+    (∫ t in -π..π, I*sin (t-h*I)*fourierKernel n x (t-h*I)) = 2*π*deriv (besselJ n) x :=
+  integral_shift_deriv n x h

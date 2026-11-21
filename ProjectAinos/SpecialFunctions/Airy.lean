@@ -139,7 +139,8 @@ theorem upper_eq : upper = (1 + (√3 : ℝ) * I) / 2 := by
   push_cast
   ring
 
-private theorem upper_cube : upper ^ 3 = -1 := by
+/-- The upper ray has cubic direction −1. -/
+theorem upper_cube : upper ^ 3 = -1 := by
   rw [upper, ← exp_nat_mul, ← exp_pi_mul_I]
   congr 1
   push_cast

@@ -662,8 +662,11 @@ public import ProjectAinos.SmoothGeometry.Wave.SlowSource
 public import ProjectAinos.SmoothGeometry.Wave.TransverseTraceless
 public import ProjectAinos.SpecialFunctions.Airy
 public import ProjectAinos.SpecialFunctions.AiryIntegral
+public import ProjectAinos.SpecialFunctions.AiryMacdonald
+public import ProjectAinos.SpecialFunctions.AiryVertical
 public import ProjectAinos.SpecialFunctions.Bessel
 public import ProjectAinos.SpecialFunctions.BesselAsymptotic
+public import ProjectAinos.SpecialFunctions.BesselContour
 public import ProjectAinos.SpecialFunctions.BesselGenerating
 public import ProjectAinos.SpecialFunctions.BesselIntegral
 public import ProjectAinos.SpecialFunctions.BesselZeros
@@ -698,6 +701,7 @@ public import ProjectAinos.SpecialFunctions.SphericalCompleteness
 public import ProjectAinos.SpecialFunctions.SphericalComplex
 public import ProjectAinos.SpecialFunctions.SphericalHarmonics
 public import ProjectAinos.SpecialFunctions.SphericalOrthogonality
+public import ProjectAinos.SpecialFunctions.StationaryPhase
 public import ProjectAinos.SpecialFunctions.ZonalHarmonics
 public import ProjectAinos.SpecialRelativity.Boost
 public import ProjectAinos.SpecialRelativity.Causality

@@ -5,7 +5,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 module
 
 public import ProjectAinos.SpecialFunctions.Airy
-import Mathlib.Analysis.Complex.HasPrimitives
+public import Mathlib.Analysis.Complex.HasPrimitives
 import Mathlib.Tactic
 
 /-! # Ordinary improper Airy integrals on the real axis
@@ -23,17 +23,22 @@ open scoped Topology Real ComplexConjugate
 
 namespace ProjectAinos.SpecialFunctions.Airy
 
-private def integrand (z w : ℂ) := exp (w^3/3 - z*w)
-private def primitive (z w : ℂ) := Complex.wedgeIntegral 0 w (integrand z)
+/-- Entire cubic contour integrand for the Airy parameter z. -/
+def integrand (z w : ℂ) := exp (w^3/3 - z*w)
+
+/-- Entire primitive of the cubic contour integrand, based at zero. -/
+def primitive (z w : ℂ) := Complex.wedgeIntegral 0 w (integrand z)
 
 private theorem zero_primitive (z : ℂ) : primitive z 0 = 0 := by simp [primitive, wedgeIntegral]
 
-private theorem deriv_primitive (z w : ℂ) : HasDerivAt (primitive z) (integrand z w) w := by
+/-- Complex derivative of the cubic contour primitive. -/
+theorem deriv_primitive (z w : ℂ) : HasDerivAt (primitive z) (integrand z w) w := by
   have h : Differentiable ℂ (integrand z) := by unfold integrand; fun_prop
   exact (h.differentiableOn.isConservativeOn (U := Metric.ball 0 (‖w‖+1))).hasDerivAt_wedgeIntegral
     h.continuous.continuousOn (by simp)
 
-private theorem segment (z a b : ℂ) (R : ℝ) :
+/-- Primitive increment along a finite straight contour. -/
+theorem segment (z a b : ℂ) (R : ℝ) :
     primitive z (a+b*R) - primitive z a = ∫ t in 0..R, b * integrand z (a+b*t) := by
   have hd (t : ℝ) : HasDerivAt (fun s : ℝ => primitive z (a+b*s)) (b*integrand z (a+b*t)) t := by
     have h := ((hasDerivAt_id (t : ℂ)).const_mul b).const_add a
@@ -43,41 +48,35 @@ private theorem segment (z a b : ℂ) (R : ℝ) :
     (Continuous.intervalIntegrable (by unfold integrand; fun_prop) ..) using 1
   simp
 
-private theorem on_ray (z : ℂ) (R : ℝ) : primitive z (upper*R) =
-    upper * ∫ t in 0..R, exp (-(t : ℂ)^3/3 - upper*z*t) := by
-  have hc : upper ^ 3 = -1 := by
-    rw [upper, ← exp_nat_mul, ← exp_pi_mul_I]
-    congr 1
-    push_cast
-    ring
-  have he (t : ℝ) : integrand z (upper*t) = exp (-(t : ℂ)^3/3 - upper*z*t) := by
+private theorem on_ray (w z : ℂ) (hc : w^3 = -1) (R : ℝ) : primitive z (w*R) =
+    w * ∫ t in 0..R, exp (-(t : ℂ)^3/3 - w*z*t) := by
+  have he (t : ℝ) : integrand z (w*t) = exp (-(t : ℂ)^3/3 - w*z*t) := by
     unfold integrand
     rw [mul_pow, hc]
     congr 1
     ring
-  have h := segment z 0 upper R
+  have h := segment z 0 w R
   simpa only [zero_add, zero_primitive, sub_zero, he, pow_zero, one_mul,
     intervalIntegral.integral_const_mul] using h
 
-private theorem ray_limit (z : ℂ) : Tendsto (fun R : ℝ => primitive z (upper * R)) atTop
-    (𝓝 (ray upper z)) := by
-  simp_rw [on_ray]
-  simpa only [pow_zero, one_mul, ray] using (tendsto_moment 0 (upper*z)).const_mul upper
+/-- Limit of the primitive along any oriented cubic decay ray. -/
+theorem ray_limit (w z : ℂ) (hc : w^3 = -1) : Tendsto (fun R : ℝ => primitive z (w * R)) atTop
+    (𝓝 (ray w z)) := by
+  simp_rw [on_ray w z hc]
+  simpa only [pow_zero, one_mul, ray] using (tendsto_moment 0 (w*z)).const_mul w
 
-private theorem horizontal (x R : ℝ) (hR : 0 < R) (hx : 3 * |x| ≤ R^2) :
-    ‖primitive x (I*R + (R/√3 : ℝ)) - primitive x (I*R)‖ ≤ 3/R^2 := by
-  have hs : 0 < √(3 : ℝ) := by positivity
-  have hq : 1 ≤ √(3 : ℝ) := by nlinarith [Real.sq_sqrt (by norm_num : (0 : ℝ) ≤ 3)]
-  have ht : 0 ≤ R / √3 := by positivity
-  have he (t : ℝ) (h : t ∈ Ioc 0 (R/√3)) :
+private theorem horizontal (x R S : ℝ) (hR : 0 < R) (hx : 3 * |x| ≤ R^2) (ht : 0 ≤ S)
+    (hS : S ≤ R) :
+    ‖primitive x (I*R + (S : ℂ)) - primitive x (I*R)‖ ≤ 3/R^2 := by
+  have he (t : ℝ) (h : t ∈ Ioc 0 S) :
       ‖integrand x (I*R + t)‖ ≤ Real.exp (-(R^2/3)*t) := by
     rw [integrand, norm_exp, Real.exp_le_exp]
-    have htR : t ≤ R := h.2.trans (div_le_self hR.le hq)
+    have htR : t ≤ R := h.2.trans hS
     have hsq := pow_le_pow_left₀ h.1.le htR 2
     simp [pow_succ, Complex.mul_re, Complex.mul_im, div_ofNat_re]
     nlinarith [mul_nonneg h.1.le (sub_nonneg.mpr hsq),
       mul_nonneg h.1.le (show 0 ≤ R^2+3*x by linarith [neg_abs_le x])]
-  have h := segment x (I*R) 1 (R/√3)
+  have h := segment x (I*R) 1 S
   simp only [one_mul] at h
   rw [h]
   apply (intervalIntegral.norm_integral_le_of_norm_le ht (ae_of_all _ he)
@@ -95,7 +94,7 @@ private theorem horizontal (x R : ℝ) (hR : 0 < R) (hx : 3 * |x| ≤ R^2) :
   have hj : 1/c = 3/R^2 := by unfold c; ring
   rw [← hj]
   simp only [neg_div, sub_neg_eq_add]
-  linarith [div_nonneg (Real.exp_pos (-c*(R/√3))).le hc.le]
+  linarith [div_nonneg (Real.exp_pos (-c*S)).le hc.le]
 
 private theorem rescale (R : ℝ) :
     upper * ((2 / √3 * R : ℝ) : ℂ) = I*R + ((R/√3 : ℝ) : ℂ) := by
@@ -111,15 +110,28 @@ private theorem segment_vanishes (x : ℝ) :
   have hbound : Tendsto (fun R : ℝ => 3/R^2) atTop (𝓝 0) := tendsto_const_nhds.div_atTop hpow
   apply squeeze_zero_norm' _ hbound
   filter_upwards [eventually_gt_atTop (0 : ℝ), hpow.eventually_ge_atTop (3*|x|)] with R hR h
-  exact horizontal x R hR h
+  exact horizontal x R _ hR h (by positivity)
+    (div_le_self hR.le (Real.one_le_sqrt.mpr (by norm_num)))
 
 private theorem vertical_limit (x : ℝ) : Tendsto (fun R : ℝ => primitive x (I*R)) atTop
     (𝓝 (ray upper x)) := by
   have hs : 0 < 2 / √(3 : ℝ) := by positivity
-  have hr := (ray_limit x).comp (tendsto_id.const_mul_atTop hs)
+  have hr := (ray_limit upper x upper_cube).comp (tendsto_id.const_mul_atTop hs)
   change Tendsto (fun R : ℝ => primitive x (upper * ((2/√3 * R : ℝ) : ℂ))) _ _ at hr
   simp_rw [rescale] at hr
   simpa only [sub_sub_cancel, sub_zero] using hr.sub (segment_vanishes x)
+
+/-- A fixed nonnegative shift of the imaginary axis yields the same upper decay ray limit. -/
+theorem shifted_vertical_limit (x S : ℝ) (hS : 0 ≤ S) :
+    Tendsto (fun R : ℝ => primitive x (I*R + S)) atTop (𝓝 (ray upper x)) := by
+  have hp : Tendsto (fun R : ℝ => R^2) atTop atTop := tendsto_pow_atTop two_ne_zero
+  have hbound : Tendsto (fun R : ℝ => 3/R^2) atTop (𝓝 0) := tendsto_const_nhds.div_atTop hp
+  have h : Tendsto (fun R : ℝ => primitive x (I*R+S) - primitive x (I*R)) atTop (𝓝 0) := by
+    apply squeeze_zero_norm' _ hbound
+    filter_upwards [eventually_gt_atTop (0 : ℝ), hp.eventually_ge_atTop (3*|x|),
+      eventually_ge_atTop S] with R hR hx h
+    exact horizontal x R S hR hx hS h
+  simpa only [sub_add_cancel, zero_add] using h.add (vertical_limit x)
 
 private theorem axis (x R : ℝ) : primitive x (I*R) =
     ↑(∫ t in 0..R, Real.sin (t^3/3+x*t)) + ↑(∫ t in 0..R, Real.cos (t^3/3+x*t)) * I := by
@@ -217,8 +229,10 @@ theorem cubic_tail {x R B : ℝ} (hx : |x| ≤ B) (hR : 0 < R) (hB : 3*B ≤ R^2
     (ray upper x)).trans
   apply add_le_add
   · rw [rescale, dist_comm, dist_eq_norm]
-    exact horizontal x R hR (by linarith)
-  · rw [dist_eq_norm, on_ray, ray, ← mul_sub, norm_mul, hw, one_mul, norm_sub_rev]
+    exact horizontal x R _ hR (by linarith) (by positivity)
+      (div_le_self hR.le (Real.one_le_sqrt.mpr (by norm_num)))
+  · rw [dist_eq_norm, on_ray upper _ upper_cube, ray, ← mul_sub, norm_mul, hw, one_mul,
+      norm_sub_rev]
     exact hm
 
 end ProjectAinos.SpecialFunctions.Airy
