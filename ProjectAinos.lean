@@ -20,6 +20,9 @@ public import ProjectAinos.Electrodynamics.CurvedExamples
 public import ProjectAinos.Electrodynamics.CurvedPotential
 public import ProjectAinos.Electrodynamics.DarwinLagrangian
 public import ProjectAinos.Electrodynamics.DarwinPointCharge
+public import ProjectAinos.Electrodynamics.Diffraction.Aperture
+public import ProjectAinos.Electrodynamics.Diffraction.Fraunhofer
+public import ProjectAinos.Electrodynamics.Diffraction.Fresnel
 public import ProjectAinos.Electrodynamics.DivergenceExamples
 public import ProjectAinos.Electrodynamics.ElectrostaticEnergy
 public import ProjectAinos.Electrodynamics.Electrostatics
@@ -67,9 +70,13 @@ public import ProjectAinos.Electrodynamics.Radiation.NearZone
 public import ProjectAinos.Electrodynamics.Radiation.Relativistic
 public import ProjectAinos.Electrodynamics.Radiation.Synchrotron
 public import ProjectAinos.Electrodynamics.Radiation.Ultrarelativistic
+public import ProjectAinos.Electrodynamics.RadiationReaction
 public import ProjectAinos.Electrodynamics.RetardedPotential
 public import ProjectAinos.Electrodynamics.RetardedSpectrum
 public import ProjectAinos.Electrodynamics.RetardedTime
+public import ProjectAinos.Electrodynamics.Scattering.HighFrequency
+public import ProjectAinos.Electrodynamics.Scattering.LowFrequency
+public import ProjectAinos.Electrodynamics.Scattering.Thomson
 public import ProjectAinos.Electrodynamics.SourceCovariance
 public import ProjectAinos.Electrodynamics.SourcedAction
 public import ProjectAinos.Electrodynamics.SourcedActionExamples
@@ -108,6 +115,7 @@ public import ProjectAinos.External.YM.Space.Orthogonal
 public import ProjectAinos.External.YM.Wilson.Law
 public import ProjectAinos.External.YM.Wilson.Symmetry
 public import ProjectAinos.External.YM.WilsonLawBridge
+public import ProjectAinos.GeneralRelativity.AsymptoticCharge
 public import ProjectAinos.GeneralRelativity.BianchiClassA
 public import ProjectAinos.GeneralRelativity.BianchiExamples
 public import ProjectAinos.GeneralRelativity.BianchiFrames
@@ -122,6 +130,7 @@ public import ProjectAinos.GeneralRelativity.DeflectionIntegral
 public import ProjectAinos.GeneralRelativity.EddingtonFinkelstein
 public import ProjectAinos.GeneralRelativity.EinsteinEquations
 public import ProjectAinos.GeneralRelativity.EinsteinHilbertAction
+public import ProjectAinos.GeneralRelativity.EnergyCondition
 public import ProjectAinos.GeneralRelativity.EquatorialComparison
 public import ProjectAinos.GeneralRelativity.ExactPlaneWave
 public import ProjectAinos.GeneralRelativity.FLRW
@@ -134,6 +143,7 @@ public import ProjectAinos.GeneralRelativity.HomogeneousSpace
 public import ProjectAinos.GeneralRelativity.Kasner
 public import ProjectAinos.GeneralRelativity.Kerr
 public import ProjectAinos.GeneralRelativity.LightDeflection
+public import ProjectAinos.GeneralRelativity.LinearizedRadiation
 public import ProjectAinos.GeneralRelativity.ManifoldMotion
 public import ProjectAinos.GeneralRelativity.ManifoldStationary
 public import ProjectAinos.GeneralRelativity.NewtonianAccelerationBounds
@@ -165,6 +175,7 @@ public import ProjectAinos.GeneralRelativity.SchwarzschildExterior
 public import ProjectAinos.GeneralRelativity.SchwarzschildOrbit
 public import ProjectAinos.GeneralRelativity.SchwarzschildRotations
 public import ProjectAinos.GeneralRelativity.SchwarzschildVacuum
+public import ProjectAinos.GeneralRelativity.ShortWave
 public import ProjectAinos.GeneralRelativity.SpecialRelativity
 public import ProjectAinos.GeneralRelativity.SphericalAnsatz
 public import ProjectAinos.GeneralRelativity.StructureConstants
@@ -447,6 +458,7 @@ public import ProjectAinos.SmoothGeometry.Lorentzian.CurvatureNaturality
 public import ProjectAinos.SmoothGeometry.Lorentzian.CurvatureRegularity
 public import ProjectAinos.SmoothGeometry.Lorentzian.CurvatureSymmetry
 public import ProjectAinos.SmoothGeometry.Lorentzian.CurveFamily
+public import ProjectAinos.SmoothGeometry.Lorentzian.CurvedLinearization
 public import ProjectAinos.SmoothGeometry.Lorentzian.DensityDerivative
 public import ProjectAinos.SmoothGeometry.Lorentzian.DiagonalMetric
 public import ProjectAinos.SmoothGeometry.Lorentzian.Divergence
@@ -459,6 +471,7 @@ public import ProjectAinos.SmoothGeometry.Lorentzian.ExponentialConformalExample
 public import ProjectAinos.SmoothGeometry.Lorentzian.FlatConnection
 public import ProjectAinos.SmoothGeometry.Lorentzian.FlatFrameExamples
 public import ProjectAinos.SmoothGeometry.Lorentzian.FlatTransport
+public import ProjectAinos.SmoothGeometry.Lorentzian.Focusing
 public import ProjectAinos.SmoothGeometry.Lorentzian.Geodesic
 public import ProjectAinos.SmoothGeometry.Lorentzian.HodgeCoordinates
 public import ProjectAinos.SmoothGeometry.Lorentzian.HodgeCurrent
@@ -495,6 +508,7 @@ public import ProjectAinos.SmoothGeometry.Lorentzian.PiecewisePath
 public import ProjectAinos.SmoothGeometry.Lorentzian.Pseudotensor
 public import ProjectAinos.SmoothGeometry.Lorentzian.PseudotensorAlgebra
 public import ProjectAinos.SmoothGeometry.Lorentzian.PseudotensorChristoffel
+public import ProjectAinos.SmoothGeometry.Lorentzian.PseudotensorFlux
 public import ProjectAinos.SmoothGeometry.Lorentzian.PseudotensorQuadratic
 public import ProjectAinos.SmoothGeometry.Lorentzian.Pullback
 public import ProjectAinos.SmoothGeometry.Lorentzian.PullbackExamples
@@ -580,6 +594,7 @@ public import ProjectAinos.SmoothGeometry.ODE.Radial
 public import ProjectAinos.SmoothGeometry.ODE.RadialExamples
 public import ProjectAinos.SmoothGeometry.ODE.RadialReparam
 public import ProjectAinos.SmoothGeometry.ODE.Riccati
+public import ProjectAinos.SmoothGeometry.ODE.RiccatiComparison
 public import ProjectAinos.SmoothGeometry.ODE.ScalarFlow
 public import ProjectAinos.SmoothGeometry.ODE.SlowParameter
 public import ProjectAinos.SmoothGeometry.ODE.Superposition
@@ -626,6 +641,7 @@ public import ProjectAinos.SmoothGeometry.Wave.FarField
 public import ProjectAinos.SmoothGeometry.Wave.HighFrequency
 public import ProjectAinos.SmoothGeometry.Wave.RetardedIntegral
 public import ProjectAinos.SmoothGeometry.Wave.SlowSource
+public import ProjectAinos.SmoothGeometry.Wave.TransverseTraceless
 public import ProjectAinos.SpecialRelativity.Boost
 public import ProjectAinos.SpecialRelativity.Causality
 public import ProjectAinos.SpecialRelativity.Cotangent

@@ -865,6 +865,15 @@ curved, and a first-order solution has an exact residual of second order. The le
 §§99, 107 and 109 are *proved* in their scopes (28 of 39).
 [Guide](general-relativity.md#the-newtonian-limit-and-gravitational-waves-99-107-109)
 
+For co-ordinates Galilean at infinity the energy and momentum are limits of surface integrals of the
+superpotential, with `P⁰ = M` and conservation when the flux vanishes. On a curved background the
+first variation of the Ricci tensor is the Palatini form, gauge invariant on Ricci-flat backgrounds,
+and short waves have null phases and null-geodesic rays. The retarded perturbation of a localized
+stress radiates with the quadrupole formula `(G/45) Σ D⃛²` as the flux of the quadratic pseudotensor.
+A synchronous congruence focuses under the strong energy condition and `Λ ≤ 0`. The ledger row §110
+is *proved* and §§105, 108, 119 are closed with stated remainders (GR 29 of 39).
+[Guide](general-relativity.md#charges-at-infinity-gravitational-radiation-and-focusing-105-108-110-119)
+
 ## Shared Variational Foundation
 
 The electrodynamics development adds compact localization for C² Lagrangians
@@ -1009,6 +1018,16 @@ conjugate points have equal optical lengths, stigmatic bundles satisfy the sine 
 absolute instrument is a similarity. The energy inequality bounds the error of the approximation,
 with relative size `O(ε)`. The ledger rows ED §§53–58 are *proved* in their scopes (ED 53 of 66).
 [Guide](electrodynamics.md#geometrical-optics-5358)
+
+The Rayleigh–Sommerfeld field of an aperture solves the Helmholtz equation with its boundary values
+and the radiation condition, and the Fresnel and Fraunhofer approximations hold with explicit
+remainders. The damping field of a slow source and the self-force of a rigid charge on a prescribed
+path are expanded with exact coefficients, and the Lorentz–Dirac and Landau–Lifshitz forces satisfy
+their identities. Thomson, Rayleigh and high-frequency scattering follow from the Larmor power of the
+response. The ledger rows ED §§60, 61, 78–80 are *proved* in their scopes and §§59, 75, 76 are closed
+with stated remainders (ED 58 of 66).
+[Guide](electrodynamics.md#diffraction-5961) ·
+[Guide](electrodynamics.md#radiation-damping-and-scattering-75-76-7880)
 
 
 ## GR 5.1 native differential-form foundation

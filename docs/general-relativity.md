@@ -1416,3 +1416,43 @@ Rosen-wave Ricci tensor and its two examples, the linearized Ricci tensor agains
 derivative for a polynomial perturbation, gauge invariance, the plane-wave vacuum and the static
 `R₀₀`. The decisions are recorded in GR26–GR28 of the [notes](general-relativity-notes.md) and
 in G08 of the [smooth-geometry notes](smooth-geometry-notes.md).
+
+## Charges at infinity, gravitational radiation and focusing (§§105, 108, 110, 119)
+
+**Charges at infinity (§105, with §96).** For co-ordinates Galilean at spatial infinity the
+pseudotensor is `O(1/r⁴)` (`IsAsymptoticallyGalileanAt.abs_pseudotensor_le`), the superpotential
+flux through spheres changes by the integral of the conserved total over shells
+(`surfaceCharge_sub_surfaceCharge_eq`), and the charges are the limits of the surface integrals with
+their volume form (`tendsto_surfaceCharge`, `charge_eq_integral`); `P⁰ = M` for the isotropic far
+metric (`charge_zero_eq_mass`), and the charges are conserved when the flux vanishes
+(`charge_const_of_flux`). The four-vector character is the remainder.
+
+**Waves on a curved background (§108).** The derivative of the Ricci tensor along `g + εh` is the
+Palatini form (`familyRicciDeriv_eq`), gauge invariant on Ricci-flat backgrounds
+(`familyRicciDeriv_lie_eq_zero`); a short wave has the exact expansion `familyRicciDeriv_shortWave`,
+whose symbol in the gauge vanishes iff the phase is null (`shortWaveSymbol_eq_zero_iff`), and the
+rays are null geodesics (`isGeodesicOn_ray`).
+
+**The radiation of gravitational waves (§110).** The retarded perturbation `h̄ = 2κRT` of a
+localized conserved stress is harmonic and solves the linearized equations
+(`linearizedEinstein_retardedPerturbation`); its far zone is the quadrupole amplitude
+(`farZone_quadrupole`), and the flux of the quadratic pseudotensor through large spheres tends to
+the radiated power (`tendsto_pseudotensorFlux`), which for slow sources is `(G/45) Σ D⃛²`
+(`gravitationalPower_slow`); the circular binary radiates `(32/5)Gμ²a⁴Ω⁶` (`binary_power_smooth`).
+
+**Focusing (§119).** For a synchronous congruence `∂ₜθ = −θ²/d − σ² − R₀₀` (`IsSynchronous.raychaudhuri`),
+the strong energy condition with Einstein's equations and `Λ ≤ 0` gives `R₀₀ ≥ 0`
+(`SatisfiesEinstein.ricci_timelike_nonneg`), and the synchronous system breaks down within `3/|θ|`
+(`IsSynchronous.exists_notMem_of_focusing`). Geodesic incompleteness is the remainder.
+
+| Result | Declarations | Source |
+| --- | --- | --- |
+| Charges at infinity | `CoordinateMetric.surfaceCharge`, `Sphere.flux_sub_flux`, `surfaceCharge_sub_surfaceCharge_eq`, `IsAsymptoticallyGalilean`, `abs_pseudotensor_le`, `tendsto_surfaceCharge`, `charge_eq_integral`, `charge_zero_eq_mass`, `charge_const_of_flux` | [PseudotensorFlux](../ProjectAinos/SmoothGeometry/Lorentzian/PseudotensorFlux.lean), [AsymptoticCharge](../ProjectAinos/GeneralRelativity/AsymptoticCharge.lean) |
+| Waves on a curved background | `CoordinateMetric.curvedChristoffel`, `palatini`, `familyChristoffelDeriv_eq`, `familyRicciDeriv_eq`, `familyRicciDeriv_lie_eq_zero`, `ShortWave.familyRicciDeriv_shortWave`, `shortWaveSymbol_eq_zero_iff`, `isGeodesicOn_ray` | [CurvedLinearization](../ProjectAinos/SmoothGeometry/Lorentzian/CurvedLinearization.lean), [ShortWave](../ProjectAinos/GeneralRelativity/ShortWave.lean) |
+| Gravitational radiation | `LinearizedRadiation.retardedPerturbation`, `linearizedEinstein_retardedPerturbation`, `farZone_quadrupole`, `tendsto_pseudotensorFlux`, `gravitationalPower_slow`, `binary_power_smooth`, `Wave.integral_ttSquare` | [TransverseTraceless](../ProjectAinos/SmoothGeometry/Wave/TransverseTraceless.lean), [LinearizedRadiation](../ProjectAinos/GeneralRelativity/LinearizedRadiation.lean) |
+| Focusing | `Focusing.trace_sq_ge`, `IsSynchronous.raychaudhuri`, `RiccatiComparison.lt_div_abs`, `StrongEnergyCondition`, `SatisfiesEinstein.ricci_timelike_nonneg`, `IsSynchronous.exists_notMem_of_focusing`, `deSitter_not_focusing` | [RiccatiComparison](../ProjectAinos/SmoothGeometry/ODE/RiccatiComparison.lean), [Focusing](../ProjectAinos/SmoothGeometry/Lorentzian/Focusing.lean), [EnergyCondition](../ProjectAinos/GeneralRelativity/EnergyCondition.lean) |
+
+The typed examples are in `checks/AsymptoticChargeAPI.lean`, `checks/CurvedWavesAPI.lean`,
+`checks/GravitationalRadiationAPI.lean` and `checks/FocusingAPI.lean`. The decisions are recorded
+in GR30–GR33 of the [notes](general-relativity-notes.md) and in G16 of the
+[smooth-geometry notes](smooth-geometry-notes.md).

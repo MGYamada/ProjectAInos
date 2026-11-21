@@ -452,3 +452,11 @@ bundle.
 **Interface decision.** `SmoothGeometry/Wave/HighFrequency.lean` and `SmoothGeometry/Wave/Energy.lean` import only Mathlib and the retarded-integral and far-field layers.
 
 **Proof status.** Proved and built. [HighFrequency](../ProjectAinos/SmoothGeometry/Wave/HighFrequency.lean) · [Energy](../ProjectAinos/SmoothGeometry/Wave/Energy.lean)
+
+## G16. Focusing, the flux of the superpotential, the TT projection and the curved linearization are shared layers
+
+**Observation.** The equation of Raychaudhuri for a synchronous congruence, the scalar Riccati comparison, the divergence theorem on spheres and shells with the superpotential flux, the transverse-traceless projection with its sphere integral, and the Palatini first variation on a curved background concern coordinate metrics, spheres and arrays, and need no physics.
+
+**Interface decision.** `SmoothGeometry/Lorentzian/{Focusing, PseudotensorFlux, CurvedLinearization}.lean`, `SmoothGeometry/ODE/RiccatiComparison.lean` and `SmoothGeometry/Wave/TransverseTraceless.lean` import only Mathlib and shared modules.
+
+**Proof status.** Proved and built. [Focusing](../ProjectAinos/SmoothGeometry/Lorentzian/Focusing.lean) · [PseudotensorFlux](../ProjectAinos/SmoothGeometry/Lorentzian/PseudotensorFlux.lean) · [CurvedLinearization](../ProjectAinos/SmoothGeometry/Lorentzian/CurvedLinearization.lean) · [RiccatiComparison](../ProjectAinos/SmoothGeometry/ODE/RiccatiComparison.lean) · [TransverseTraceless](../ProjectAinos/SmoothGeometry/Wave/TransverseTraceless.lean)
