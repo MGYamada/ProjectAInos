@@ -344,7 +344,9 @@ chapters of the German first editions to Lean proofs and open problems. The shar
 special-functions library starts with Jacobi elliptic functions and the Legendre
 polynomials used in orthogonal expansions and the exterior Newton kernel. Fischer
 decomposition gives harmonic polynomials in every positive dimension, with
-2ℓ + 1 independent restrictions of degree ℓ on the two-sphere.
+2ℓ + 1 independent restrictions of degree ℓ on the two-sphere. In every positive
+ambient dimension these degree spaces form the orthogonal Hilbert sum of real L²
+for surface measure.
 
 See the [proof development record](docs/proof-development.md) for the history of the Lean formalization.
 

@@ -84,7 +84,10 @@ The shared library collects Jacobi elliptic functions and their parametrized cur
 orthogonality and the differential equation give the interval and eigenfunction treatments
 in volume I. The convergent generating series yields the exterior Newton expansion. Fischer
 decomposition and injective restriction to the sphere give the dimension of the spherical
-harmonics. The sum of squared infinitesimal rotations gives their angular eigenvalue.
+harmonics. The sum of squared infinitesimal rotations gives their angular eigenvalue. Green’s identity with a compact radial cutoff gives orthogonality
+between distinct degrees. Polynomial restrictions separate points, so Stone–Weierstrass and
+Fischer decomposition give uniform density, then the orthogonal Hilbert sum in real L². On S², the trace of the
+evaluation kernel and the norm of a solid zonal harmonic determine the addition theorem.
 [Chapter correspondence and proof map](courant-hilbert.md)
 
 ## Shared Smooth Algebra and Geometry

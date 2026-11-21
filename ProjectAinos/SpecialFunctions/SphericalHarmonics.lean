@@ -28,7 +28,8 @@ def restrict (d k : ℕ) : homogeneousSubmodule (Fin d) ℝ k →ₗ[ℝ] (UnitS
   map_add' p q := by ext u; simp
   map_smul' a p := by ext u; simp [smul_eq_C_mul]
 
-private theorem eval_smul {d k : ℕ} {p : MvPolynomial (Fin d) ℝ} (hp : p.IsHomogeneous k)
+/-- A homogeneous polynomial evaluated along a ray scales by its degree. -/
+theorem eval_smul {d k : ℕ} {p : MvPolynomial (Fin d) ℝ} (hp : p.IsHomogeneous k)
     (a : ℝ) (u : EuclideanSpace ℝ (Fin d)) :
     eval (a • u) p = a ^ k * eval u p := by
   classical

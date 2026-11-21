@@ -416,6 +416,7 @@ public import ProjectAinos.SmoothGeometry.DifferentialForm.OneForm
 public import ProjectAinos.SmoothGeometry.DifferentialForm.TwoForm
 public import ProjectAinos.SmoothGeometry.DifferentialForm.VolumeNormalization
 public import ProjectAinos.SmoothGeometry.DifferentialForm.WedgeAlgebra
+public import ProjectAinos.SmoothGeometry.Euclidean.PolarIntegral
 public import ProjectAinos.SmoothGeometry.Euclidean.Similarity
 public import ProjectAinos.SmoothGeometry.Euclidean.SphereIntegral
 public import ProjectAinos.SmoothGeometry.Examples
@@ -659,7 +660,11 @@ public import ProjectAinos.SpecialFunctions.LegendreAssociated
 public import ProjectAinos.SpecialFunctions.LegendreGenerating
 public import ProjectAinos.SpecialFunctions.LegendreNewton
 public import ProjectAinos.SpecialFunctions.LegendreOrthogonality
+public import ProjectAinos.SpecialFunctions.SphericalAddition
+public import ProjectAinos.SpecialFunctions.SphericalCompleteness
 public import ProjectAinos.SpecialFunctions.SphericalHarmonics
+public import ProjectAinos.SpecialFunctions.SphericalOrthogonality
+public import ProjectAinos.SpecialFunctions.ZonalHarmonics
 public import ProjectAinos.SpecialRelativity.Boost
 public import ProjectAinos.SpecialRelativity.Causality
 public import ProjectAinos.SpecialRelativity.Cotangent
