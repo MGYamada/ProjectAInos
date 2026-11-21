@@ -47,6 +47,13 @@ public import ProjectAinos.Electrodynamics.Monochromatic
 public import ProjectAinos.Electrodynamics.MovingCharge
 public import ProjectAinos.Electrodynamics.MovingSource
 public import ProjectAinos.Electrodynamics.Multipole
+public import ProjectAinos.Electrodynamics.Optics.AngularEikonal
+public import ProjectAinos.Electrodynamics.Optics.Basic
+public import ProjectAinos.Electrodynamics.Optics.Eikonal
+public import ProjectAinos.Electrodynamics.Optics.Error
+public import ProjectAinos.Electrodynamics.Optics.Imaging
+public import ProjectAinos.Electrodynamics.Optics.NarrowBundle
+public import ProjectAinos.Electrodynamics.Optics.RayOptics
 public import ProjectAinos.Electrodynamics.ParticleAction
 public import ProjectAinos.Electrodynamics.PlaneWave
 public import ProjectAinos.Electrodynamics.PolynomialBridge
@@ -390,6 +397,7 @@ public import ProjectAinos.SmoothGeometry.DifferentialForm.OneForm
 public import ProjectAinos.SmoothGeometry.DifferentialForm.TwoForm
 public import ProjectAinos.SmoothGeometry.DifferentialForm.VolumeNormalization
 public import ProjectAinos.SmoothGeometry.DifferentialForm.WedgeAlgebra
+public import ProjectAinos.SmoothGeometry.Euclidean.Similarity
 public import ProjectAinos.SmoothGeometry.Euclidean.SphereIntegral
 public import ProjectAinos.SmoothGeometry.Examples
 public import ProjectAinos.SmoothGeometry.Fourier.WaveSolution
@@ -571,6 +579,7 @@ public import ProjectAinos.SmoothGeometry.ODE.PropagatorExpansion
 public import ProjectAinos.SmoothGeometry.ODE.Radial
 public import ProjectAinos.SmoothGeometry.ODE.RadialExamples
 public import ProjectAinos.SmoothGeometry.ODE.RadialReparam
+public import ProjectAinos.SmoothGeometry.ODE.Riccati
 public import ProjectAinos.SmoothGeometry.ODE.ScalarFlow
 public import ProjectAinos.SmoothGeometry.ODE.SlowParameter
 public import ProjectAinos.SmoothGeometry.ODE.Superposition
@@ -612,7 +621,9 @@ public import ProjectAinos.SmoothGeometry.Tensor.Regularity
 public import ProjectAinos.SmoothGeometry.Tensor.Tensoriality
 public import ProjectAinos.SmoothGeometry.Tensor.TrilinearDerivative
 public import ProjectAinos.SmoothGeometry.Tensor.TrilinearTensoriality
+public import ProjectAinos.SmoothGeometry.Wave.Energy
 public import ProjectAinos.SmoothGeometry.Wave.FarField
+public import ProjectAinos.SmoothGeometry.Wave.HighFrequency
 public import ProjectAinos.SmoothGeometry.Wave.RetardedIntegral
 public import ProjectAinos.SmoothGeometry.Wave.SlowSource
 public import ProjectAinos.SpecialRelativity.Boost
